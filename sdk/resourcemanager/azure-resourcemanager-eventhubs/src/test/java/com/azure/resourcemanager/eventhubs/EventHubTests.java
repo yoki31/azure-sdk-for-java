@@ -10,6 +10,8 @@ import com.azure.core.http.policy.HttpLogOptions;
 import com.azure.core.http.policy.HttpPipelinePolicy;
 import com.azure.core.http.policy.RetryPolicy;
 import com.azure.core.http.rest.PagedIterable;
+import com.azure.core.management.Region;
+import com.azure.core.management.profile.AzureProfile;
 import com.azure.resourcemanager.eventhubs.models.AccessRights;
 import com.azure.resourcemanager.eventhubs.models.DisasterRecoveryPairingAuthorizationKey;
 import com.azure.resourcemanager.eventhubs.models.DisasterRecoveryPairingAuthorizationRule;
@@ -22,18 +24,17 @@ import com.azure.resourcemanager.eventhubs.models.EventHubNamespace;
 import com.azure.resourcemanager.eventhubs.models.EventHubNamespaceAuthorizationRule;
 import com.azure.resourcemanager.eventhubs.models.EventHubNamespaceSkuType;
 import com.azure.resourcemanager.eventhubs.models.ProvisioningStateDR;
+import com.azure.resourcemanager.eventhubs.models.TlsVersion;
 import com.azure.resourcemanager.resources.ResourceManager;
-import com.azure.resourcemanager.test.utils.TestUtilities;
-import com.azure.core.management.Region;
 import com.azure.resourcemanager.resources.fluentcore.model.Creatable;
-import com.azure.core.management.profile.AzureProfile;
 import com.azure.resourcemanager.resources.fluentcore.utils.HttpPipelineProvider;
 import com.azure.resourcemanager.resources.fluentcore.utils.ResourceManagerUtils;
 import com.azure.resourcemanager.storage.StorageManager;
 import com.azure.resourcemanager.storage.models.StorageAccount;
 import com.azure.resourcemanager.storage.models.StorageAccountSkuType;
-import com.azure.resourcemanager.test.ResourceManagerTestBase;
+import com.azure.resourcemanager.test.ResourceManagerTestProxyTestBase;
 import com.azure.resourcemanager.test.utils.TestDelayProvider;
+import com.azure.resourcemanager.test.utils.TestUtilities;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import reactor.core.Exceptions;
@@ -46,7 +47,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-public class EventHubTests extends ResourceManagerTestBase {
+public class EventHubTests extends ResourceManagerTestProxyTestBase {
     protected EventHubsManager eventHubsManager;
     protected StorageManager storageManager;
     protected ResourceManager resourceManager;
@@ -548,7 +549,7 @@ public class EventHubTests extends ResourceManagerTestBase {
             Assertions.assertTrue(pairing.name().equalsIgnoreCase(geodrName));
             Assertions.assertTrue(pairing.primaryNamespaceResourceGroupName().equalsIgnoreCase(rgName));
             Assertions.assertTrue(pairing.primaryNamespaceName().equalsIgnoreCase(primaryNamespace.name()));
-            Assertions.assertTrue(pairing.secondaryNamespaceId().equalsIgnoreCase(secondaryNamespace.id()));
+            assertResourceIdEquals(pairing.secondaryNamespaceId(), secondaryNamespace.id());
 
             PagedIterable<DisasterRecoveryPairingAuthorizationRule> rules = pairing.listAuthorizationRules();
             Assertions.assertTrue(TestUtilities.getSize(rules) > 0);
@@ -572,7 +573,7 @@ public class EventHubTests extends ResourceManagerTestBase {
                     found = true;
                     Assertions.assertTrue(pairing1.primaryNamespaceResourceGroupName().equalsIgnoreCase(rgName));
                     Assertions.assertTrue(pairing1.primaryNamespaceName().equalsIgnoreCase(primaryNamespace.name()));
-                    Assertions.assertTrue(pairing1.secondaryNamespaceId().equalsIgnoreCase(secondaryNamespace.id()));
+                    assertResourceIdEquals(pairing.secondaryNamespaceId(), secondaryNamespace.id());
                 }
             }
             Assertions.assertTrue(found);
@@ -600,5 +601,51 @@ public class EventHubTests extends ResourceManagerTestBase {
         }
         pairing.refresh();
         pairing.failOver();
+    }
+
+    @Test
+    public void testWithMinimumTlsVersion() {
+        rgName = generateRandomResourceName("javacsmrg", 15);
+        final String namespaceName = generateRandomResourceName("ns", 14);
+
+        EventHubNamespace namespace = eventHubsManager.namespaces()
+            .define(namespaceName)
+            .withRegion(region)
+            .withNewResourceGroup(rgName)
+            // SDK should use Sku as 'Standard' and set capacity.capacity in it as 1
+            .withAutoScaling()
+            .withMinimumTlsVersion(TlsVersion.ONE_ONE)
+            .create();
+        Assertions.assertEquals(TlsVersion.ONE_ONE, namespace.minimumTlsVersion());
+
+        namespace.update().withMinimumTlsVersion(TlsVersion.ONE_TWO).apply();
+        Assertions.assertEquals(TlsVersion.ONE_TWO, namespace.minimumTlsVersion());
+    }
+
+    @Test
+    public void testWithZoneRedundant() {
+        rgName = generateRandomResourceName("javacsmrg", 15);
+        final String namespaceName1 = generateRandomResourceName("ns", 14);
+        final String namespaceName2 = generateRandomResourceName("ns", 14);
+
+        resourceManager.resourceGroups().define(rgName).withRegion(region).create();
+        EventHubNamespace namespace1 = eventHubsManager.namespaces()
+            .define(namespaceName1)
+            .withRegion(region)
+            .withExistingResourceGroup(rgName)
+            // SDK should use Sku as 'Standard' and set capacity.capacity in it as 1
+            .withAutoScaling()
+            .create();
+        Assertions.assertFalse(namespace1.zoneRedundant());
+
+        EventHubNamespace namespace2 = eventHubsManager.namespaces()
+            .define(namespaceName2)
+            .withRegion(region)
+            .withExistingResourceGroup(rgName)
+            // SDK should use Sku as 'Standard' and set capacity.capacity in it as 1
+            .withAutoScaling()
+            .enableZoneRedundant()
+            .create();
+        Assertions.assertTrue(namespace2.zoneRedundant());
     }
 }

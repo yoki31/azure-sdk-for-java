@@ -10,14 +10,21 @@ import com.azure.core.http.rest.SimpleResponse;
 import com.azure.core.util.Context;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.mediaservices.fluent.LiveEventsClient;
+import com.azure.resourcemanager.mediaservices.fluent.models.AsyncOperationResultInner;
 import com.azure.resourcemanager.mediaservices.fluent.models.LiveEventInner;
+import com.azure.resourcemanager.mediaservices.fluent.models.LiveEventStatusInner;
+import com.azure.resourcemanager.mediaservices.fluent.models.LiveEventStreamEventInner;
+import com.azure.resourcemanager.mediaservices.fluent.models.LiveEventTrackEventInner;
+import com.azure.resourcemanager.mediaservices.models.AsyncOperationResult;
 import com.azure.resourcemanager.mediaservices.models.LiveEvent;
 import com.azure.resourcemanager.mediaservices.models.LiveEventActionInput;
+import com.azure.resourcemanager.mediaservices.models.LiveEventStatus;
+import com.azure.resourcemanager.mediaservices.models.LiveEventStreamEvent;
+import com.azure.resourcemanager.mediaservices.models.LiveEventTrackEvent;
 import com.azure.resourcemanager.mediaservices.models.LiveEvents;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class LiveEventsImpl implements LiveEvents {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(LiveEventsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(LiveEventsImpl.class);
 
     private final LiveEventsClient innerClient;
 
@@ -39,15 +46,6 @@ public final class LiveEventsImpl implements LiveEvents {
         return Utils.mapPage(inner, inner1 -> new LiveEventImpl(inner1, this.manager()));
     }
 
-    public LiveEvent get(String resourceGroupName, String accountName, String liveEventName) {
-        LiveEventInner inner = this.serviceClient().get(resourceGroupName, accountName, liveEventName);
-        if (inner != null) {
-            return new LiveEventImpl(inner, this.manager());
-        } else {
-            return null;
-        }
-    }
-
     public Response<LiveEvent> getWithResponse(
         String resourceGroupName, String accountName, String liveEventName, Context context) {
         Response<LiveEventInner> inner =
@@ -58,6 +56,15 @@ public final class LiveEventsImpl implements LiveEvents {
                 inner.getStatusCode(),
                 inner.getHeaders(),
                 new LiveEventImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
+    }
+
+    public LiveEvent get(String resourceGroupName, String accountName, String liveEventName) {
+        LiveEventInner inner = this.serviceClient().get(resourceGroupName, accountName, liveEventName);
+        if (inner != null) {
+            return new LiveEventImpl(inner, this.manager());
         } else {
             return null;
         }
@@ -109,10 +116,105 @@ public final class LiveEventsImpl implements LiveEvents {
         this.serviceClient().reset(resourceGroupName, accountName, liveEventName, context);
     }
 
+    public PagedIterable<LiveEventStatus> listGetStatus(
+        String resourceGroupName, String accountName, String liveEventName) {
+        PagedIterable<LiveEventStatusInner> inner =
+            this.serviceClient().listGetStatus(resourceGroupName, accountName, liveEventName);
+        return Utils.mapPage(inner, inner1 -> new LiveEventStatusImpl(inner1, this.manager()));
+    }
+
+    public PagedIterable<LiveEventStatus> listGetStatus(
+        String resourceGroupName, String accountName, String liveEventName, Context context) {
+        PagedIterable<LiveEventStatusInner> inner =
+            this.serviceClient().listGetStatus(resourceGroupName, accountName, liveEventName, context);
+        return Utils.mapPage(inner, inner1 -> new LiveEventStatusImpl(inner1, this.manager()));
+    }
+
+    public PagedIterable<LiveEventStreamEvent> listGetStreamEvents(
+        String resourceGroupName, String accountName, String liveEventName) {
+        PagedIterable<LiveEventStreamEventInner> inner =
+            this.serviceClient().listGetStreamEvents(resourceGroupName, accountName, liveEventName);
+        return Utils.mapPage(inner, inner1 -> new LiveEventStreamEventImpl(inner1, this.manager()));
+    }
+
+    public PagedIterable<LiveEventStreamEvent> listGetStreamEvents(
+        String resourceGroupName, String accountName, String liveEventName, Context context) {
+        PagedIterable<LiveEventStreamEventInner> inner =
+            this.serviceClient().listGetStreamEvents(resourceGroupName, accountName, liveEventName, context);
+        return Utils.mapPage(inner, inner1 -> new LiveEventStreamEventImpl(inner1, this.manager()));
+    }
+
+    public PagedIterable<LiveEventTrackEvent> listGetTrackIngestHeartbeats(
+        String resourceGroupName, String accountName, String liveEventName) {
+        PagedIterable<LiveEventTrackEventInner> inner =
+            this.serviceClient().listGetTrackIngestHeartbeats(resourceGroupName, accountName, liveEventName);
+        return Utils.mapPage(inner, inner1 -> new LiveEventTrackEventImpl(inner1, this.manager()));
+    }
+
+    public PagedIterable<LiveEventTrackEvent> listGetTrackIngestHeartbeats(
+        String resourceGroupName, String accountName, String liveEventName, Context context) {
+        PagedIterable<LiveEventTrackEventInner> inner =
+            this.serviceClient().listGetTrackIngestHeartbeats(resourceGroupName, accountName, liveEventName, context);
+        return Utils.mapPage(inner, inner1 -> new LiveEventTrackEventImpl(inner1, this.manager()));
+    }
+
+    public Response<AsyncOperationResult> asyncOperationWithResponse(
+        String resourceGroupName, String accountName, String operationId, Context context) {
+        Response<AsyncOperationResultInner> inner =
+            this.serviceClient().asyncOperationWithResponse(resourceGroupName, accountName, operationId, context);
+        if (inner != null) {
+            return new SimpleResponse<>(
+                inner.getRequest(),
+                inner.getStatusCode(),
+                inner.getHeaders(),
+                new AsyncOperationResultImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
+    }
+
+    public AsyncOperationResult asyncOperation(String resourceGroupName, String accountName, String operationId) {
+        AsyncOperationResultInner inner =
+            this.serviceClient().asyncOperation(resourceGroupName, accountName, operationId);
+        if (inner != null) {
+            return new AsyncOperationResultImpl(inner, this.manager());
+        } else {
+            return null;
+        }
+    }
+
+    public Response<LiveEvent> operationLocationWithResponse(
+        String resourceGroupName, String accountName, String liveEventName, String operationId, Context context) {
+        Response<LiveEventInner> inner =
+            this
+                .serviceClient()
+                .operationLocationWithResponse(resourceGroupName, accountName, liveEventName, operationId, context);
+        if (inner != null) {
+            return new SimpleResponse<>(
+                inner.getRequest(),
+                inner.getStatusCode(),
+                inner.getHeaders(),
+                new LiveEventImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
+    }
+
+    public LiveEvent operationLocation(
+        String resourceGroupName, String accountName, String liveEventName, String operationId) {
+        LiveEventInner inner =
+            this.serviceClient().operationLocation(resourceGroupName, accountName, liveEventName, operationId);
+        if (inner != null) {
+            return new LiveEventImpl(inner, this.manager());
+        } else {
+            return null;
+        }
+    }
+
     public LiveEvent getById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -120,14 +222,14 @@ public final class LiveEventsImpl implements LiveEvents {
         }
         String accountName = Utils.getValueFromIdByName(id, "mediaservices");
         if (accountName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'mediaservices'.", id)));
         }
         String liveEventName = Utils.getValueFromIdByName(id, "liveEvents");
         if (liveEventName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'liveEvents'.", id)));
@@ -138,7 +240,7 @@ public final class LiveEventsImpl implements LiveEvents {
     public Response<LiveEvent> getByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -146,14 +248,14 @@ public final class LiveEventsImpl implements LiveEvents {
         }
         String accountName = Utils.getValueFromIdByName(id, "mediaservices");
         if (accountName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'mediaservices'.", id)));
         }
         String liveEventName = Utils.getValueFromIdByName(id, "liveEvents");
         if (liveEventName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'liveEvents'.", id)));
@@ -164,7 +266,7 @@ public final class LiveEventsImpl implements LiveEvents {
     public void deleteById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -172,14 +274,14 @@ public final class LiveEventsImpl implements LiveEvents {
         }
         String accountName = Utils.getValueFromIdByName(id, "mediaservices");
         if (accountName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'mediaservices'.", id)));
         }
         String liveEventName = Utils.getValueFromIdByName(id, "liveEvents");
         if (liveEventName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'liveEvents'.", id)));
@@ -190,7 +292,7 @@ public final class LiveEventsImpl implements LiveEvents {
     public void deleteByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -198,14 +300,14 @@ public final class LiveEventsImpl implements LiveEvents {
         }
         String accountName = Utils.getValueFromIdByName(id, "mediaservices");
         if (accountName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'mediaservices'.", id)));
         }
         String liveEventName = Utils.getValueFromIdByName(id, "liveEvents");
         if (liveEventName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'liveEvents'.", id)));

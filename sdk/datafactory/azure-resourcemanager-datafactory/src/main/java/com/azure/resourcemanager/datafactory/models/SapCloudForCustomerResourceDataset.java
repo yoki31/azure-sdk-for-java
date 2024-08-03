@@ -7,79 +7,120 @@ package com.azure.resourcemanager.datafactory.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.fluent.models.SapCloudForCustomerResourceDatasetTypeProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.List;
 import java.util.Map;
 
-/** The path of the SAP Cloud for Customer OData entity. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * The path of the SAP Cloud for Customer OData entity.
+ */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "type",
+    defaultImpl = SapCloudForCustomerResourceDataset.class,
+    visible = true)
 @JsonTypeName("SapCloudForCustomerResource")
 @Fluent
 public final class SapCloudForCustomerResourceDataset extends Dataset {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SapCloudForCustomerResourceDataset.class);
+    /*
+     * Type of dataset.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "SapCloudForCustomerResource";
 
     /*
      * SAP Cloud For Customer OData resource dataset properties.
      */
     @JsonProperty(value = "typeProperties", required = true)
-    private SapCloudForCustomerResourceDatasetTypeProperties innerTypeProperties =
-        new SapCloudForCustomerResourceDatasetTypeProperties();
+    private SapCloudForCustomerResourceDatasetTypeProperties innerTypeProperties
+        = new SapCloudForCustomerResourceDatasetTypeProperties();
+
+    /**
+     * Creates an instance of SapCloudForCustomerResourceDataset class.
+     */
+    public SapCloudForCustomerResourceDataset() {
+    }
+
+    /**
+     * Get the type property: Type of dataset.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
 
     /**
      * Get the innerTypeProperties property: SAP Cloud For Customer OData resource dataset properties.
-     *
+     * 
      * @return the innerTypeProperties value.
      */
     private SapCloudForCustomerResourceDatasetTypeProperties innerTypeProperties() {
         return this.innerTypeProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SapCloudForCustomerResourceDataset withDescription(String description) {
         super.withDescription(description);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SapCloudForCustomerResourceDataset withStructure(Object structure) {
         super.withStructure(structure);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SapCloudForCustomerResourceDataset withSchema(Object schema) {
         super.withSchema(schema);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SapCloudForCustomerResourceDataset withLinkedServiceName(LinkedServiceReference linkedServiceName) {
         super.withLinkedServiceName(linkedServiceName);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SapCloudForCustomerResourceDataset withParameters(Map<String, ParameterSpecification> parameters) {
         super.withParameters(parameters);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SapCloudForCustomerResourceDataset withAnnotations(List<Object> annotations) {
         super.withAnnotations(annotations);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SapCloudForCustomerResourceDataset withFolder(DatasetFolder folder) {
         super.withFolder(folder);
@@ -89,7 +130,7 @@ public final class SapCloudForCustomerResourceDataset extends Dataset {
     /**
      * Get the path property: The path of the SAP Cloud for Customer OData entity. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the path value.
      */
     public Object path() {
@@ -99,7 +140,7 @@ public final class SapCloudForCustomerResourceDataset extends Dataset {
     /**
      * Set the path property: The path of the SAP Cloud for Customer OData entity. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param path the path value to set.
      * @return the SapCloudForCustomerResourceDataset object itself.
      */
@@ -113,19 +154,20 @@ public final class SapCloudForCustomerResourceDataset extends Dataset {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
         if (innerTypeProperties() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property innerTypeProperties in model SapCloudForCustomerResourceDataset"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property innerTypeProperties in model SapCloudForCustomerResourceDataset"));
         } else {
             innerTypeProperties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(SapCloudForCustomerResourceDataset.class);
 }

@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.cosmos.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cosmos.models.MetricName;
 import com.azure.resourcemanager.cosmos.models.UnitType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The usage data for a usage request. */
+/**
+ * The usage data for a usage request.
+ */
 @Immutable
 public class UsageInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(UsageInner.class);
-
     /*
      * The unit of the metric.
      */
@@ -47,8 +45,14 @@ public class UsageInner {
     private Long currentValue;
 
     /**
+     * Creates an instance of UsageInner class.
+     */
+    public UsageInner() {
+    }
+
+    /**
      * Get the unit property: The unit of the metric.
-     *
+     * 
      * @return the unit value.
      */
     public UnitType unit() {
@@ -57,7 +61,7 @@ public class UsageInner {
 
     /**
      * Get the name property: The name information for the metric.
-     *
+     * 
      * @return the name value.
      */
     public MetricName name() {
@@ -66,7 +70,7 @@ public class UsageInner {
 
     /**
      * Get the quotaPeriod property: The quota period used to summarize the usage values.
-     *
+     * 
      * @return the quotaPeriod value.
      */
     public String quotaPeriod() {
@@ -75,7 +79,7 @@ public class UsageInner {
 
     /**
      * Get the limit property: Maximum value for this metric.
-     *
+     * 
      * @return the limit value.
      */
     public Long limit() {
@@ -84,7 +88,7 @@ public class UsageInner {
 
     /**
      * Get the currentValue property: Current value for this metric.
-     *
+     * 
      * @return the currentValue value.
      */
     public Long currentValue() {
@@ -93,7 +97,7 @@ public class UsageInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

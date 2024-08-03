@@ -5,20 +5,17 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.ArmIdWrapper;
 import com.azure.resourcemanager.appservice.models.PrivateLinkConnectionState;
 import com.azure.resourcemanager.appservice.models.ProxyOnlyResource;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Remote Private Endpoint Connection ARM resource. */
+/**
+ * Remote Private Endpoint Connection ARM resource.
+ */
 @Fluent
 public final class RemotePrivateEndpointConnectionArmResourceInner extends ProxyOnlyResource {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(RemotePrivateEndpointConnectionArmResourceInner.class);
-
     /*
      * RemotePrivateEndpointConnectionARMResource resource specific properties
      */
@@ -26,15 +23,23 @@ public final class RemotePrivateEndpointConnectionArmResourceInner extends Proxy
     private RemotePrivateEndpointConnectionArmResourceProperties innerProperties;
 
     /**
+     * Creates an instance of RemotePrivateEndpointConnectionArmResourceInner class.
+     */
+    public RemotePrivateEndpointConnectionArmResourceInner() {
+    }
+
+    /**
      * Get the innerProperties property: RemotePrivateEndpointConnectionARMResource resource specific properties.
-     *
+     * 
      * @return the innerProperties value.
      */
     private RemotePrivateEndpointConnectionArmResourceProperties innerProperties() {
         return this.innerProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RemotePrivateEndpointConnectionArmResourceInner withKind(String kind) {
         super.withKind(kind);
@@ -43,7 +48,7 @@ public final class RemotePrivateEndpointConnectionArmResourceInner extends Proxy
 
     /**
      * Get the provisioningState property: The provisioningState property.
-     *
+     * 
      * @return the provisioningState value.
      */
     public String provisioningState() {
@@ -52,7 +57,7 @@ public final class RemotePrivateEndpointConnectionArmResourceInner extends Proxy
 
     /**
      * Get the privateEndpoint property: PrivateEndpoint of a remote private endpoint connection.
-     *
+     * 
      * @return the privateEndpoint value.
      */
     public ArmIdWrapper privateEndpoint() {
@@ -61,7 +66,7 @@ public final class RemotePrivateEndpointConnectionArmResourceInner extends Proxy
 
     /**
      * Set the privateEndpoint property: PrivateEndpoint of a remote private endpoint connection.
-     *
+     * 
      * @param privateEndpoint the privateEndpoint value to set.
      * @return the RemotePrivateEndpointConnectionArmResourceInner object itself.
      */
@@ -75,7 +80,7 @@ public final class RemotePrivateEndpointConnectionArmResourceInner extends Proxy
 
     /**
      * Get the privateLinkServiceConnectionState property: The state of a private link connection.
-     *
+     * 
      * @return the privateLinkServiceConnectionState value.
      */
     public PrivateLinkConnectionState privateLinkServiceConnectionState() {
@@ -84,12 +89,12 @@ public final class RemotePrivateEndpointConnectionArmResourceInner extends Proxy
 
     /**
      * Set the privateLinkServiceConnectionState property: The state of a private link connection.
-     *
+     * 
      * @param privateLinkServiceConnectionState the privateLinkServiceConnectionState value to set.
      * @return the RemotePrivateEndpointConnectionArmResourceInner object itself.
      */
-    public RemotePrivateEndpointConnectionArmResourceInner withPrivateLinkServiceConnectionState(
-        PrivateLinkConnectionState privateLinkServiceConnectionState) {
+    public RemotePrivateEndpointConnectionArmResourceInner
+        withPrivateLinkServiceConnectionState(PrivateLinkConnectionState privateLinkServiceConnectionState) {
         if (this.innerProperties() == null) {
             this.innerProperties = new RemotePrivateEndpointConnectionArmResourceProperties();
         }
@@ -99,7 +104,7 @@ public final class RemotePrivateEndpointConnectionArmResourceInner extends Proxy
 
     /**
      * Get the ipAddresses property: Private IPAddresses mapped to the remote private endpoint.
-     *
+     * 
      * @return the ipAddresses value.
      */
     public List<String> ipAddresses() {
@@ -108,7 +113,7 @@ public final class RemotePrivateEndpointConnectionArmResourceInner extends Proxy
 
     /**
      * Set the ipAddresses property: Private IPAddresses mapped to the remote private endpoint.
-     *
+     * 
      * @param ipAddresses the ipAddresses value to set.
      * @return the RemotePrivateEndpointConnectionArmResourceInner object itself.
      */
@@ -122,7 +127,7 @@ public final class RemotePrivateEndpointConnectionArmResourceInner extends Proxy
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

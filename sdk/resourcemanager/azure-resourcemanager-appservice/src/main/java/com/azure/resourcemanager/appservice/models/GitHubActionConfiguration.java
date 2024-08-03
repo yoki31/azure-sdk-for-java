@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The GitHub action configuration. */
+/**
+ * The GitHub action configuration.
+ */
 @Fluent
 public final class GitHubActionConfiguration {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GitHubActionConfiguration.class);
-
     /*
      * GitHub Action code configuration.
      */
@@ -33,15 +31,20 @@ public final class GitHubActionConfiguration {
     private Boolean isLinux;
 
     /*
-     * Workflow option to determine whether the workflow file should be
-     * generated and written to the repository.
+     * Workflow option to determine whether the workflow file should be generated and written to the repository.
      */
     @JsonProperty(value = "generateWorkflowFile")
     private Boolean generateWorkflowFile;
 
     /**
+     * Creates an instance of GitHubActionConfiguration class.
+     */
+    public GitHubActionConfiguration() {
+    }
+
+    /**
      * Get the codeConfiguration property: GitHub Action code configuration.
-     *
+     * 
      * @return the codeConfiguration value.
      */
     public GitHubActionCodeConfiguration codeConfiguration() {
@@ -50,7 +53,7 @@ public final class GitHubActionConfiguration {
 
     /**
      * Set the codeConfiguration property: GitHub Action code configuration.
-     *
+     * 
      * @param codeConfiguration the codeConfiguration value to set.
      * @return the GitHubActionConfiguration object itself.
      */
@@ -61,7 +64,7 @@ public final class GitHubActionConfiguration {
 
     /**
      * Get the containerConfiguration property: GitHub Action container configuration.
-     *
+     * 
      * @return the containerConfiguration value.
      */
     public GitHubActionContainerConfiguration containerConfiguration() {
@@ -70,19 +73,19 @@ public final class GitHubActionConfiguration {
 
     /**
      * Set the containerConfiguration property: GitHub Action container configuration.
-     *
+     * 
      * @param containerConfiguration the containerConfiguration value to set.
      * @return the GitHubActionConfiguration object itself.
      */
-    public GitHubActionConfiguration withContainerConfiguration(
-        GitHubActionContainerConfiguration containerConfiguration) {
+    public GitHubActionConfiguration
+        withContainerConfiguration(GitHubActionContainerConfiguration containerConfiguration) {
         this.containerConfiguration = containerConfiguration;
         return this;
     }
 
     /**
      * Get the isLinux property: This will help determine the workflow configuration to select.
-     *
+     * 
      * @return the isLinux value.
      */
     public Boolean isLinux() {
@@ -91,7 +94,7 @@ public final class GitHubActionConfiguration {
 
     /**
      * Set the isLinux property: This will help determine the workflow configuration to select.
-     *
+     * 
      * @param isLinux the isLinux value to set.
      * @return the GitHubActionConfiguration object itself.
      */
@@ -103,7 +106,7 @@ public final class GitHubActionConfiguration {
     /**
      * Get the generateWorkflowFile property: Workflow option to determine whether the workflow file should be generated
      * and written to the repository.
-     *
+     * 
      * @return the generateWorkflowFile value.
      */
     public Boolean generateWorkflowFile() {
@@ -113,7 +116,7 @@ public final class GitHubActionConfiguration {
     /**
      * Set the generateWorkflowFile property: Workflow option to determine whether the workflow file should be generated
      * and written to the repository.
-     *
+     * 
      * @param generateWorkflowFile the generateWorkflowFile value to set.
      * @return the GitHubActionConfiguration object itself.
      */
@@ -124,7 +127,7 @@ public final class GitHubActionConfiguration {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

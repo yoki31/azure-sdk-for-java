@@ -6,8 +6,6 @@ package com.azure.resourcemanager.applicationinsights.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.Resource;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
@@ -15,8 +13,6 @@ import java.util.Map;
 /** An azure resource object. */
 @Fluent
 public class MyWorkbookResource extends Resource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MyWorkbookResource.class);
-
     /*
      * Identity used for BYOS
      */
@@ -47,6 +43,10 @@ public class MyWorkbookResource extends Resource {
     @JsonProperty(value = "etag")
     @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
     private Map<String, String> etag;
+
+    /** Creates an instance of MyWorkbookResource class. */
+    public MyWorkbookResource() {
+    }
 
     /**
      * Get the identity property: Identity used for BYOS.

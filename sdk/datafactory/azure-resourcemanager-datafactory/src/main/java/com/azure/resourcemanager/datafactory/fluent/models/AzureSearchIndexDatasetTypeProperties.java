@@ -6,25 +6,29 @@ package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Properties specific to this dataset type. */
+/**
+ * Properties specific to this dataset type.
+ */
 @Fluent
 public final class AzureSearchIndexDatasetTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureSearchIndexDatasetTypeProperties.class);
-
     /*
-     * The name of the Azure Search Index. Type: string (or Expression with
-     * resultType string).
+     * The name of the Azure Search Index. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "indexName", required = true)
     private Object indexName;
 
     /**
+     * Creates an instance of AzureSearchIndexDatasetTypeProperties class.
+     */
+    public AzureSearchIndexDatasetTypeProperties() {
+    }
+
+    /**
      * Get the indexName property: The name of the Azure Search Index. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @return the indexName value.
      */
     public Object indexName() {
@@ -34,7 +38,7 @@ public final class AzureSearchIndexDatasetTypeProperties {
     /**
      * Set the indexName property: The name of the Azure Search Index. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @param indexName the indexName value to set.
      * @return the AzureSearchIndexDatasetTypeProperties object itself.
      */
@@ -45,15 +49,16 @@ public final class AzureSearchIndexDatasetTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (indexName() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property indexName in model AzureSearchIndexDatasetTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property indexName in model AzureSearchIndexDatasetTypeProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(AzureSearchIndexDatasetTypeProperties.class);
 }

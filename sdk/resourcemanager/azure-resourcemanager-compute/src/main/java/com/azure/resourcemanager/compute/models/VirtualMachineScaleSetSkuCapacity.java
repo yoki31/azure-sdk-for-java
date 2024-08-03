@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Describes scaling information of a sku. */
+/**
+ * Describes scaling information of a sku.
+ */
 @Immutable
 public final class VirtualMachineScaleSetSkuCapacity {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VirtualMachineScaleSetSkuCapacity.class);
-
     /*
      * The minimum capacity.
      */
@@ -39,8 +37,14 @@ public final class VirtualMachineScaleSetSkuCapacity {
     private VirtualMachineScaleSetSkuScaleType scaleType;
 
     /**
+     * Creates an instance of VirtualMachineScaleSetSkuCapacity class.
+     */
+    public VirtualMachineScaleSetSkuCapacity() {
+    }
+
+    /**
      * Get the minimum property: The minimum capacity.
-     *
+     * 
      * @return the minimum value.
      */
     public Long minimum() {
@@ -49,7 +53,7 @@ public final class VirtualMachineScaleSetSkuCapacity {
 
     /**
      * Get the maximum property: The maximum capacity that can be set.
-     *
+     * 
      * @return the maximum value.
      */
     public Long maximum() {
@@ -58,7 +62,7 @@ public final class VirtualMachineScaleSetSkuCapacity {
 
     /**
      * Get the defaultCapacity property: The default capacity.
-     *
+     * 
      * @return the defaultCapacity value.
      */
     public Long defaultCapacity() {
@@ -67,7 +71,7 @@ public final class VirtualMachineScaleSetSkuCapacity {
 
     /**
      * Get the scaleType property: The scale type applicable to the sku.
-     *
+     * 
      * @return the scaleType value.
      */
     public VirtualMachineScaleSetSkuScaleType scaleType() {
@@ -76,7 +80,7 @@ public final class VirtualMachineScaleSetSkuCapacity {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -6,18 +6,17 @@ package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The LoadBalancerFrontendIpConfiguration model. */
+/**
+ * Specifies the frontend IP to be used for the load balancer. Only IPv4 frontend IP address is supported. Each load
+ * balancer configuration must have exactly one frontend IP configuration.
+ */
 @Fluent
 public final class LoadBalancerFrontendIpConfiguration {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(LoadBalancerFrontendIpConfiguration.class);
-
     /*
-     * The name of the resource that is unique within the set of frontend IP
-     * configurations used by the load balancer. This name can be used to
-     * access the resource.
+     * The name of the resource that is unique within the set of frontend IP configurations used by the load balancer.
+     * This name can be used to access the resource.
      */
     @JsonProperty(value = "name", required = true)
     private String name;
@@ -29,9 +28,15 @@ public final class LoadBalancerFrontendIpConfiguration {
     private LoadBalancerFrontendIpConfigurationProperties properties;
 
     /**
+     * Creates an instance of LoadBalancerFrontendIpConfiguration class.
+     */
+    public LoadBalancerFrontendIpConfiguration() {
+    }
+
+    /**
      * Get the name property: The name of the resource that is unique within the set of frontend IP configurations used
      * by the load balancer. This name can be used to access the resource.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -41,7 +46,7 @@ public final class LoadBalancerFrontendIpConfiguration {
     /**
      * Set the name property: The name of the resource that is unique within the set of frontend IP configurations used
      * by the load balancer. This name can be used to access the resource.
-     *
+     * 
      * @param name the name value to set.
      * @return the LoadBalancerFrontendIpConfiguration object itself.
      */
@@ -52,7 +57,7 @@ public final class LoadBalancerFrontendIpConfiguration {
 
     /**
      * Get the properties property: Properties of load balancer frontend ip configuration.
-     *
+     * 
      * @return the properties value.
      */
     public LoadBalancerFrontendIpConfigurationProperties properties() {
@@ -61,35 +66,35 @@ public final class LoadBalancerFrontendIpConfiguration {
 
     /**
      * Set the properties property: Properties of load balancer frontend ip configuration.
-     *
+     * 
      * @param properties the properties value to set.
      * @return the LoadBalancerFrontendIpConfiguration object itself.
      */
-    public LoadBalancerFrontendIpConfiguration withProperties(
-        LoadBalancerFrontendIpConfigurationProperties properties) {
+    public LoadBalancerFrontendIpConfiguration
+        withProperties(LoadBalancerFrontendIpConfigurationProperties properties) {
         this.properties = properties;
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (name() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property name in model LoadBalancerFrontendIpConfiguration"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property name in model LoadBalancerFrontendIpConfiguration"));
         }
         if (properties() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property properties in model LoadBalancerFrontendIpConfiguration"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property properties in model LoadBalancerFrontendIpConfiguration"));
         } else {
             properties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(LoadBalancerFrontendIpConfiguration.class);
 }

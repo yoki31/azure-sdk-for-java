@@ -28,7 +28,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.GroupUsersClient;
 import com.azure.resourcemanager.apimanagement.fluent.models.UserContractInner;
 import com.azure.resourcemanager.apimanagement.models.UserCollection;
@@ -36,8 +35,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in GroupUsersClient. */
 public final class GroupUsersClientImpl implements GroupUsersClient {
-    private final ClientLogger logger = new ClientLogger(GroupUsersClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final GroupUsersService service;
 
@@ -61,11 +58,10 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApiManagementClientG")
-    private interface GroupUsersService {
+    public interface GroupUsersService {
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/groups/{groupId}/users")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/groups/{groupId}/users")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<UserCollection>> list(
@@ -83,8 +79,7 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
 
         @Headers({"Content-Type: application/json"})
         @Head(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/groups/{groupId}/users/{userId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/groups/{groupId}/users/{userId}")
         @ExpectedResponses({204, 404})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Boolean>> checkEntityExists(
@@ -100,8 +95,7 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
 
         @Headers({"Content-Type: application/json"})
         @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/groups/{groupId}/users/{userId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/groups/{groupId}/users/{userId}")
         @ExpectedResponses({200, 201})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<UserContractInner>> create(
@@ -117,8 +111,7 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
 
         @Headers({"Content-Type: application/json"})
         @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/groups/{groupId}/users/{userId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/groups/{groupId}/users/{userId}")
         @ExpectedResponses({200, 204})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Void>> delete(
@@ -146,7 +139,7 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
     /**
      * Lists a collection of user entities associated with the group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -162,7 +155,8 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Users list representation.
+     * @return paged Users list representation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<UserContractInner>> listSinglePageAsync(
@@ -221,7 +215,7 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
     /**
      * Lists a collection of user entities associated with the group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -238,7 +232,8 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Users list representation.
+     * @return paged Users list representation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<UserContractInner>> listSinglePageAsync(
@@ -300,7 +295,7 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
     /**
      * Lists a collection of user entities associated with the group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -316,7 +311,7 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Users list representation.
+     * @return paged Users list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<UserContractInner> listAsync(
@@ -329,13 +324,13 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
     /**
      * Lists a collection of user entities associated with the group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Users list representation.
+     * @return paged Users list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<UserContractInner> listAsync(String resourceGroupName, String serviceName, String groupId) {
@@ -350,7 +345,7 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
     /**
      * Lists a collection of user entities associated with the group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -367,7 +362,7 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Users list representation.
+     * @return paged Users list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<UserContractInner> listAsync(
@@ -386,13 +381,13 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
     /**
      * Lists a collection of user entities associated with the group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Users list representation.
+     * @return paged Users list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<UserContractInner> list(String resourceGroupName, String serviceName, String groupId) {
@@ -405,7 +400,7 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
     /**
      * Lists a collection of user entities associated with the group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -422,7 +417,7 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Users list representation.
+     * @return paged Users list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<UserContractInner> list(
@@ -439,14 +434,14 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
     /**
      * Checks that user entity specified by identifier is associated with the group entity.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return whether resource exists.
+     * @return whether resource exists along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Boolean>> checkEntityExistsWithResponseAsync(
@@ -497,7 +492,7 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
     /**
      * Checks that user entity specified by identifier is associated with the group entity.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @param userId User identifier. Must be unique in the current API Management service instance.
@@ -505,7 +500,7 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return whether resource exists.
+     * @return whether resource exists along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Boolean>> checkEntityExistsWithResponseAsync(
@@ -553,33 +548,45 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
     /**
      * Checks that user entity specified by identifier is associated with the group entity.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return whether resource exists.
+     * @return whether resource exists on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Boolean> checkEntityExistsAsync(
         String resourceGroupName, String serviceName, String groupId, String userId) {
         return checkEntityExistsWithResponseAsync(resourceGroupName, serviceName, groupId, userId)
-            .flatMap(
-                (Response<Boolean> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Checks that user entity specified by identifier is associated with the group entity.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param groupId Group identifier. Must be unique in the current API Management service instance.
+     * @param userId User identifier. Must be unique in the current API Management service instance.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return whether resource exists along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Boolean> checkEntityExistsWithResponse(
+        String resourceGroupName, String serviceName, String groupId, String userId, Context context) {
+        return checkEntityExistsWithResponseAsync(resourceGroupName, serviceName, groupId, userId, context).block();
+    }
+
+    /**
+     * Checks that user entity specified by identifier is associated with the group entity.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @param userId User identifier. Must be unique in the current API Management service instance.
@@ -590,44 +597,20 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public boolean checkEntityExists(String resourceGroupName, String serviceName, String groupId, String userId) {
-        Boolean value = checkEntityExistsAsync(resourceGroupName, serviceName, groupId, userId).block();
-        if (value != null) {
-            return value;
-        } else {
-            throw logger.logExceptionAsError(new NullPointerException());
-        }
-    }
-
-    /**
-     * Checks that user entity specified by identifier is associated with the group entity.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param groupId Group identifier. Must be unique in the current API Management service instance.
-     * @param userId User identifier. Must be unique in the current API Management service instance.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Boolean> checkEntityExistsWithResponse(
-        String resourceGroupName, String serviceName, String groupId, String userId, Context context) {
-        return checkEntityExistsWithResponseAsync(resourceGroupName, serviceName, groupId, userId, context).block();
+        return checkEntityExistsWithResponse(resourceGroupName, serviceName, groupId, userId, Context.NONE).getValue();
     }
 
     /**
      * Add existing user to existing group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return user details.
+     * @return user details along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<UserContractInner>> createWithResponseAsync(
@@ -678,7 +661,7 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
     /**
      * Add existing user to existing group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @param userId User identifier. Must be unique in the current API Management service instance.
@@ -686,7 +669,7 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return user details.
+     * @return user details along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<UserContractInner>> createWithResponseAsync(
@@ -734,33 +717,45 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
     /**
      * Add existing user to existing group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return user details.
+     * @return user details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<UserContractInner> createAsync(
         String resourceGroupName, String serviceName, String groupId, String userId) {
         return createWithResponseAsync(resourceGroupName, serviceName, groupId, userId)
-            .flatMap(
-                (Response<UserContractInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Add existing user to existing group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param groupId Group identifier. Must be unique in the current API Management service instance.
+     * @param userId User identifier. Must be unique in the current API Management service instance.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return user details along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<UserContractInner> createWithResponse(
+        String resourceGroupName, String serviceName, String groupId, String userId, Context context) {
+        return createWithResponseAsync(resourceGroupName, serviceName, groupId, userId, context).block();
+    }
+
+    /**
+     * Add existing user to existing group.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @param userId User identifier. Must be unique in the current API Management service instance.
@@ -771,39 +766,20 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public UserContractInner create(String resourceGroupName, String serviceName, String groupId, String userId) {
-        return createAsync(resourceGroupName, serviceName, groupId, userId).block();
-    }
-
-    /**
-     * Add existing user to existing group.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param groupId Group identifier. Must be unique in the current API Management service instance.
-     * @param userId User identifier. Must be unique in the current API Management service instance.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return user details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<UserContractInner> createWithResponse(
-        String resourceGroupName, String serviceName, String groupId, String userId, Context context) {
-        return createWithResponseAsync(resourceGroupName, serviceName, groupId, userId, context).block();
+        return createWithResponse(resourceGroupName, serviceName, groupId, userId, Context.NONE).getValue();
     }
 
     /**
      * Remove existing user from existing group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -854,7 +830,7 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
     /**
      * Remove existing user from existing group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @param userId User identifier. Must be unique in the current API Management service instance.
@@ -862,7 +838,7 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -910,25 +886,44 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
     /**
      * Remove existing user from existing group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(String resourceGroupName, String serviceName, String groupId, String userId) {
         return deleteWithResponseAsync(resourceGroupName, serviceName, groupId, userId)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Remove existing user from existing group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param groupId Group identifier. Must be unique in the current API Management service instance.
+     * @param userId User identifier. Must be unique in the current API Management service instance.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> deleteWithResponse(
+        String resourceGroupName, String serviceName, String groupId, String userId, Context context) {
+        return deleteWithResponseAsync(resourceGroupName, serviceName, groupId, userId, context).block();
+    }
+
+    /**
+     * Remove existing user from existing group.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @param userId User identifier. Must be unique in the current API Management service instance.
@@ -938,36 +933,19 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public void delete(String resourceGroupName, String serviceName, String groupId, String userId) {
-        deleteAsync(resourceGroupName, serviceName, groupId, userId).block();
-    }
-
-    /**
-     * Remove existing user from existing group.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param groupId Group identifier. Must be unique in the current API Management service instance.
-     * @param userId User identifier. Must be unique in the current API Management service instance.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> deleteWithResponse(
-        String resourceGroupName, String serviceName, String groupId, String userId, Context context) {
-        return deleteWithResponseAsync(resourceGroupName, serviceName, groupId, userId, context).block();
+        deleteWithResponse(resourceGroupName, serviceName, groupId, userId, Context.NONE);
     }
 
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Users list representation.
+     * @return paged Users list representation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<UserContractInner>> listNextSinglePageAsync(String nextLink) {
@@ -998,12 +976,14 @@ public final class GroupUsersClientImpl implements GroupUsersClient {
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Users list representation.
+     * @return paged Users list representation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<UserContractInner>> listNextSinglePageAsync(String nextLink, Context context) {

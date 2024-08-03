@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.cosmos.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cosmos.models.SqlTriggerGetPropertiesResource;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The properties of an Azure Cosmos DB trigger. */
+/**
+ * The properties of an Azure Cosmos DB trigger.
+ */
 @Fluent
 public final class SqlTriggerGetProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SqlTriggerGetProperties.class);
-
     /*
      * The resource property.
      */
@@ -22,8 +20,14 @@ public final class SqlTriggerGetProperties {
     private SqlTriggerGetPropertiesResource resource;
 
     /**
+     * Creates an instance of SqlTriggerGetProperties class.
+     */
+    public SqlTriggerGetProperties() {
+    }
+
+    /**
      * Get the resource property: The resource property.
-     *
+     * 
      * @return the resource value.
      */
     public SqlTriggerGetPropertiesResource resource() {
@@ -32,7 +36,7 @@ public final class SqlTriggerGetProperties {
 
     /**
      * Set the resource property: The resource property.
-     *
+     * 
      * @param resource the resource value to set.
      * @return the SqlTriggerGetProperties object itself.
      */
@@ -43,7 +47,7 @@ public final class SqlTriggerGetProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

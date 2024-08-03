@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Reference objects for custom activity. */
+/**
+ * Reference objects for custom activity.
+ */
 @Fluent
 public final class CustomActivityReferenceObject {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CustomActivityReferenceObject.class);
-
     /*
      * Linked service references.
      */
@@ -28,8 +26,14 @@ public final class CustomActivityReferenceObject {
     private List<DatasetReference> datasets;
 
     /**
+     * Creates an instance of CustomActivityReferenceObject class.
+     */
+    public CustomActivityReferenceObject() {
+    }
+
+    /**
      * Get the linkedServices property: Linked service references.
-     *
+     * 
      * @return the linkedServices value.
      */
     public List<LinkedServiceReference> linkedServices() {
@@ -38,7 +42,7 @@ public final class CustomActivityReferenceObject {
 
     /**
      * Set the linkedServices property: Linked service references.
-     *
+     * 
      * @param linkedServices the linkedServices value to set.
      * @return the CustomActivityReferenceObject object itself.
      */
@@ -49,7 +53,7 @@ public final class CustomActivityReferenceObject {
 
     /**
      * Get the datasets property: Dataset references.
-     *
+     * 
      * @return the datasets value.
      */
     public List<DatasetReference> datasets() {
@@ -58,7 +62,7 @@ public final class CustomActivityReferenceObject {
 
     /**
      * Set the datasets property: Dataset references.
-     *
+     * 
      * @param datasets the datasets value to set.
      * @return the CustomActivityReferenceObject object itself.
      */
@@ -69,7 +73,7 @@ public final class CustomActivityReferenceObject {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

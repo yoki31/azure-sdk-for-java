@@ -7,15 +7,14 @@ package com.azure.resourcemanager.compute.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.compute.fluent.models.VirtualMachineScaleSetSkuInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The Virtual Machine Scale Set List Skus operation response. */
+/**
+ * The Virtual Machine Scale Set List Skus operation response.
+ */
 @Fluent
 public final class VirtualMachineScaleSetListSkusResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VirtualMachineScaleSetListSkusResult.class);
-
     /*
      * The list of skus available for the virtual machine scale set.
      */
@@ -23,15 +22,21 @@ public final class VirtualMachineScaleSetListSkusResult {
     private List<VirtualMachineScaleSetSkuInner> value;
 
     /*
-     * The uri to fetch the next page of Virtual Machine Scale Set Skus. Call
-     * ListNext() with this to fetch the next page of VMSS Skus.
+     * The uri to fetch the next page of Virtual Machine Scale Set Skus. Call ListNext() with this to fetch the next
+     * page of VMSS Skus.
      */
     @JsonProperty(value = "nextLink")
     private String nextLink;
 
     /**
+     * Creates an instance of VirtualMachineScaleSetListSkusResult class.
+     */
+    public VirtualMachineScaleSetListSkusResult() {
+    }
+
+    /**
      * Get the value property: The list of skus available for the virtual machine scale set.
-     *
+     * 
      * @return the value value.
      */
     public List<VirtualMachineScaleSetSkuInner> value() {
@@ -40,7 +45,7 @@ public final class VirtualMachineScaleSetListSkusResult {
 
     /**
      * Set the value property: The list of skus available for the virtual machine scale set.
-     *
+     * 
      * @param value the value value to set.
      * @return the VirtualMachineScaleSetListSkusResult object itself.
      */
@@ -52,7 +57,7 @@ public final class VirtualMachineScaleSetListSkusResult {
     /**
      * Get the nextLink property: The uri to fetch the next page of Virtual Machine Scale Set Skus. Call ListNext() with
      * this to fetch the next page of VMSS Skus.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -62,7 +67,7 @@ public final class VirtualMachineScaleSetListSkusResult {
     /**
      * Set the nextLink property: The uri to fetch the next page of Virtual Machine Scale Set Skus. Call ListNext() with
      * this to fetch the next page of VMSS Skus.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the VirtualMachineScaleSetListSkusResult object itself.
      */
@@ -73,17 +78,18 @@ public final class VirtualMachineScaleSetListSkusResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property value in model VirtualMachineScaleSetListSkusResult"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property value in model VirtualMachineScaleSetListSkusResult"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(VirtualMachineScaleSetListSkusResult.class);
 }

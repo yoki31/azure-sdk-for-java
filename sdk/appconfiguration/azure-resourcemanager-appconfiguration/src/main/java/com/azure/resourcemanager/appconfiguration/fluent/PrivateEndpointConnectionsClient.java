@@ -23,7 +23,7 @@ public interface PrivateEndpointConnectionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of private endpoint connections.
+     * @return a list of private endpoint connections as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<PrivateEndpointConnectionInner> listByConfigurationStore(
@@ -38,11 +38,28 @@ public interface PrivateEndpointConnectionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of private endpoint connections.
+     * @return a list of private endpoint connections as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<PrivateEndpointConnectionInner> listByConfigurationStore(
         String resourceGroupName, String configStoreName, Context context);
+
+    /**
+     * Gets the specified private endpoint connection associated with the configuration store.
+     *
+     * @param resourceGroupName The name of the resource group to which the container registry belongs.
+     * @param configStoreName The name of the configuration store.
+     * @param privateEndpointConnectionName Private endpoint connection name.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the specified private endpoint connection associated with the configuration store along with {@link
+     *     Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<PrivateEndpointConnectionInner> getWithResponse(
+        String resourceGroupName, String configStoreName, String privateEndpointConnectionName, Context context);
 
     /**
      * Gets the specified private endpoint connection associated with the configuration store.
@@ -60,23 +77,9 @@ public interface PrivateEndpointConnectionsClient {
         String resourceGroupName, String configStoreName, String privateEndpointConnectionName);
 
     /**
-     * Gets the specified private endpoint connection associated with the configuration store.
-     *
-     * @param resourceGroupName The name of the resource group to which the container registry belongs.
-     * @param configStoreName The name of the configuration store.
-     * @param privateEndpointConnectionName Private endpoint connection name.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the specified private endpoint connection associated with the configuration store.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<PrivateEndpointConnectionInner> getWithResponse(
-        String resourceGroupName, String configStoreName, String privateEndpointConnectionName, Context context);
-
-    /**
-     * Update the state of the specified private endpoint connection associated with the configuration store.
+     * Update the state of the specified private endpoint connection associated with the configuration store. This
+     * operation cannot be used to create a private endpoint connection. Private endpoint connections must be created
+     * with the Network resource provider.
      *
      * @param resourceGroupName The name of the resource group to which the container registry belongs.
      * @param configStoreName The name of the configuration store.
@@ -85,9 +88,9 @@ public interface PrivateEndpointConnectionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a private endpoint connection.
+     * @return the {@link SyncPoller} for polling of a private endpoint connection.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<PrivateEndpointConnectionInner>, PrivateEndpointConnectionInner> beginCreateOrUpdate(
         String resourceGroupName,
         String configStoreName,
@@ -95,7 +98,9 @@ public interface PrivateEndpointConnectionsClient {
         PrivateEndpointConnectionInner privateEndpointConnection);
 
     /**
-     * Update the state of the specified private endpoint connection associated with the configuration store.
+     * Update the state of the specified private endpoint connection associated with the configuration store. This
+     * operation cannot be used to create a private endpoint connection. Private endpoint connections must be created
+     * with the Network resource provider.
      *
      * @param resourceGroupName The name of the resource group to which the container registry belongs.
      * @param configStoreName The name of the configuration store.
@@ -105,9 +110,9 @@ public interface PrivateEndpointConnectionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a private endpoint connection.
+     * @return the {@link SyncPoller} for polling of a private endpoint connection.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<PrivateEndpointConnectionInner>, PrivateEndpointConnectionInner> beginCreateOrUpdate(
         String resourceGroupName,
         String configStoreName,
@@ -116,7 +121,9 @@ public interface PrivateEndpointConnectionsClient {
         Context context);
 
     /**
-     * Update the state of the specified private endpoint connection associated with the configuration store.
+     * Update the state of the specified private endpoint connection associated with the configuration store. This
+     * operation cannot be used to create a private endpoint connection. Private endpoint connections must be created
+     * with the Network resource provider.
      *
      * @param resourceGroupName The name of the resource group to which the container registry belongs.
      * @param configStoreName The name of the configuration store.
@@ -135,7 +142,9 @@ public interface PrivateEndpointConnectionsClient {
         PrivateEndpointConnectionInner privateEndpointConnection);
 
     /**
-     * Update the state of the specified private endpoint connection associated with the configuration store.
+     * Update the state of the specified private endpoint connection associated with the configuration store. This
+     * operation cannot be used to create a private endpoint connection. Private endpoint connections must be created
+     * with the Network resource provider.
      *
      * @param resourceGroupName The name of the resource group to which the container registry belongs.
      * @param configStoreName The name of the configuration store.
@@ -164,9 +173,9 @@ public interface PrivateEndpointConnectionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginDelete(
         String resourceGroupName, String configStoreName, String privateEndpointConnectionName);
 
@@ -180,9 +189,9 @@ public interface PrivateEndpointConnectionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginDelete(
         String resourceGroupName, String configStoreName, String privateEndpointConnectionName, Context context);
 

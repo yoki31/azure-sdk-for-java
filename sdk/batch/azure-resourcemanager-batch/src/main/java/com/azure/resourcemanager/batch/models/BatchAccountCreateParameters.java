@@ -7,17 +7,16 @@ package com.azure.resourcemanager.batch.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.batch.fluent.models.BatchAccountCreateProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;
 
-/** Parameters supplied to the Create operation. */
+/**
+ * Parameters supplied to the Create operation.
+ */
 @Fluent
 public final class BatchAccountCreateParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(BatchAccountCreateParameters.class);
-
     /*
      * The region in which to create the account.
      */
@@ -44,8 +43,14 @@ public final class BatchAccountCreateParameters {
     private BatchAccountIdentity identity;
 
     /**
+     * Creates an instance of BatchAccountCreateParameters class.
+     */
+    public BatchAccountCreateParameters() {
+    }
+
+    /**
      * Get the location property: The region in which to create the account.
-     *
+     * 
      * @return the location value.
      */
     public String location() {
@@ -54,7 +59,7 @@ public final class BatchAccountCreateParameters {
 
     /**
      * Set the location property: The region in which to create the account.
-     *
+     * 
      * @param location the location value to set.
      * @return the BatchAccountCreateParameters object itself.
      */
@@ -65,7 +70,7 @@ public final class BatchAccountCreateParameters {
 
     /**
      * Get the tags property: The user-specified tags associated with the account.
-     *
+     * 
      * @return the tags value.
      */
     public Map<String, String> tags() {
@@ -74,7 +79,7 @@ public final class BatchAccountCreateParameters {
 
     /**
      * Set the tags property: The user-specified tags associated with the account.
-     *
+     * 
      * @param tags the tags value to set.
      * @return the BatchAccountCreateParameters object itself.
      */
@@ -85,7 +90,7 @@ public final class BatchAccountCreateParameters {
 
     /**
      * Get the innerProperties property: The properties of the Batch account.
-     *
+     * 
      * @return the innerProperties value.
      */
     private BatchAccountCreateProperties innerProperties() {
@@ -94,7 +99,7 @@ public final class BatchAccountCreateParameters {
 
     /**
      * Get the identity property: The identity of the Batch account.
-     *
+     * 
      * @return the identity value.
      */
     public BatchAccountIdentity identity() {
@@ -103,7 +108,7 @@ public final class BatchAccountCreateParameters {
 
     /**
      * Set the identity property: The identity of the Batch account.
-     *
+     * 
      * @param identity the identity value to set.
      * @return the BatchAccountCreateParameters object itself.
      */
@@ -114,7 +119,7 @@ public final class BatchAccountCreateParameters {
 
     /**
      * Get the autoStorage property: The properties related to the auto-storage account.
-     *
+     * 
      * @return the autoStorage value.
      */
     public AutoStorageBaseProperties autoStorage() {
@@ -123,7 +128,7 @@ public final class BatchAccountCreateParameters {
 
     /**
      * Set the autoStorage property: The properties related to the auto-storage account.
-     *
+     * 
      * @param autoStorage the autoStorage value to set.
      * @return the BatchAccountCreateParameters object itself.
      */
@@ -137,9 +142,9 @@ public final class BatchAccountCreateParameters {
 
     /**
      * Get the poolAllocationMode property: The pool allocation mode also affects how clients may authenticate to the
-     * Batch Service API. If the mode is BatchService, clients may authenticate using access keys or Azure Active
-     * Directory. If the mode is UserSubscription, clients must use Azure Active Directory. The default is BatchService.
-     *
+     * Batch Service API. If the mode is BatchService, clients may authenticate using access keys or Microsoft Entra
+     * ID. If the mode is UserSubscription, clients must use Microsoft Entra ID. The default is BatchService.
+     * 
      * @return the poolAllocationMode value.
      */
     public PoolAllocationMode poolAllocationMode() {
@@ -148,9 +153,9 @@ public final class BatchAccountCreateParameters {
 
     /**
      * Set the poolAllocationMode property: The pool allocation mode also affects how clients may authenticate to the
-     * Batch Service API. If the mode is BatchService, clients may authenticate using access keys or Azure Active
-     * Directory. If the mode is UserSubscription, clients must use Azure Active Directory. The default is BatchService.
-     *
+     * Batch Service API. If the mode is BatchService, clients may authenticate using access keys or Microsoft Entra
+     * ID. If the mode is UserSubscription, clients must use Microsoft Entra ID. The default is BatchService.
+     * 
      * @param poolAllocationMode the poolAllocationMode value to set.
      * @return the BatchAccountCreateParameters object itself.
      */
@@ -164,7 +169,7 @@ public final class BatchAccountCreateParameters {
 
     /**
      * Get the keyVaultReference property: A reference to the Azure key vault associated with the Batch account.
-     *
+     * 
      * @return the keyVaultReference value.
      */
     public KeyVaultReference keyVaultReference() {
@@ -173,7 +178,7 @@ public final class BatchAccountCreateParameters {
 
     /**
      * Set the keyVaultReference property: A reference to the Azure key vault associated with the Batch account.
-     *
+     * 
      * @param keyVaultReference the keyVaultReference value to set.
      * @return the BatchAccountCreateParameters object itself.
      */
@@ -187,7 +192,7 @@ public final class BatchAccountCreateParameters {
 
     /**
      * Get the publicNetworkAccess property: If not specified, the default value is 'enabled'.
-     *
+     * 
      * @return the publicNetworkAccess value.
      */
     public PublicNetworkAccessType publicNetworkAccess() {
@@ -196,7 +201,7 @@ public final class BatchAccountCreateParameters {
 
     /**
      * Set the publicNetworkAccess property: If not specified, the default value is 'enabled'.
-     *
+     * 
      * @param publicNetworkAccess the publicNetworkAccess value to set.
      * @return the BatchAccountCreateParameters object itself.
      */
@@ -209,10 +214,33 @@ public final class BatchAccountCreateParameters {
     }
 
     /**
+     * Get the networkProfile property: The network profile only takes effect when publicNetworkAccess is enabled.
+     * 
+     * @return the networkProfile value.
+     */
+    public NetworkProfile networkProfile() {
+        return this.innerProperties() == null ? null : this.innerProperties().networkProfile();
+    }
+
+    /**
+     * Set the networkProfile property: The network profile only takes effect when publicNetworkAccess is enabled.
+     * 
+     * @param networkProfile the networkProfile value to set.
+     * @return the BatchAccountCreateParameters object itself.
+     */
+    public BatchAccountCreateParameters withNetworkProfile(NetworkProfile networkProfile) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new BatchAccountCreateProperties();
+        }
+        this.innerProperties().withNetworkProfile(networkProfile);
+        return this;
+    }
+
+    /**
      * Get the encryption property: Configures how customer data is encrypted inside the Batch account. By default,
      * accounts are encrypted using a Microsoft managed key. For additional control, a customer-managed key can be used
      * instead.
-     *
+     * 
      * @return the encryption value.
      */
     public EncryptionProperties encryption() {
@@ -223,7 +251,7 @@ public final class BatchAccountCreateParameters {
      * Set the encryption property: Configures how customer data is encrypted inside the Batch account. By default,
      * accounts are encrypted using a Microsoft managed key. For additional control, a customer-managed key can be used
      * instead.
-     *
+     * 
      * @param encryption the encryption value to set.
      * @return the BatchAccountCreateParameters object itself.
      */
@@ -238,7 +266,7 @@ public final class BatchAccountCreateParameters {
     /**
      * Get the allowedAuthenticationModes property: List of allowed authentication modes for the Batch account that can
      * be used to authenticate with the data plane. This does not affect authentication with the control plane.
-     *
+     * 
      * @return the allowedAuthenticationModes value.
      */
     public List<AuthenticationMode> allowedAuthenticationModes() {
@@ -248,12 +276,12 @@ public final class BatchAccountCreateParameters {
     /**
      * Set the allowedAuthenticationModes property: List of allowed authentication modes for the Batch account that can
      * be used to authenticate with the data plane. This does not affect authentication with the control plane.
-     *
+     * 
      * @param allowedAuthenticationModes the allowedAuthenticationModes value to set.
      * @return the BatchAccountCreateParameters object itself.
      */
-    public BatchAccountCreateParameters withAllowedAuthenticationModes(
-        List<AuthenticationMode> allowedAuthenticationModes) {
+    public BatchAccountCreateParameters
+        withAllowedAuthenticationModes(List<AuthenticationMode> allowedAuthenticationModes) {
         if (this.innerProperties() == null) {
             this.innerProperties = new BatchAccountCreateProperties();
         }
@@ -263,15 +291,13 @@ public final class BatchAccountCreateParameters {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (location() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property location in model BatchAccountCreateParameters"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property location in model BatchAccountCreateParameters"));
         }
         if (innerProperties() != null) {
             innerProperties().validate();
@@ -280,4 +306,6 @@ public final class BatchAccountCreateParameters {
             identity().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(BatchAccountCreateParameters.class);
 }

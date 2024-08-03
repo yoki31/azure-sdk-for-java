@@ -5,8 +5,6 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
@@ -16,8 +14,6 @@ import java.util.List;
  */
 @Fluent
 public final class DedicatedHostInstanceViewWithName extends DedicatedHostInstanceView {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DedicatedHostInstanceViewWithName.class);
-
     /*
      * The name of the dedicated host.
      */
@@ -25,22 +21,32 @@ public final class DedicatedHostInstanceViewWithName extends DedicatedHostInstan
     private String name;
 
     /**
+     * Creates an instance of DedicatedHostInstanceViewWithName class.
+     */
+    public DedicatedHostInstanceViewWithName() {
+    }
+
+    /**
      * Get the name property: The name of the dedicated host.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
         return this.name;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DedicatedHostInstanceViewWithName withAvailableCapacity(DedicatedHostAvailableCapacity availableCapacity) {
         super.withAvailableCapacity(availableCapacity);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DedicatedHostInstanceViewWithName withStatuses(List<InstanceViewStatus> statuses) {
         super.withStatuses(statuses);
@@ -49,7 +55,7 @@ public final class DedicatedHostInstanceViewWithName extends DedicatedHostInstan
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

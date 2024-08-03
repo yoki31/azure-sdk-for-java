@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Describes automatic OS upgrade properties on the image. */
+/**
+ * Describes automatic OS upgrade properties on the image.
+ */
 @Fluent
 public final class AutomaticOSUpgradeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AutomaticOSUpgradeProperties.class);
-
     /*
      * Specifies whether automatic OS upgrade is supported on the image.
      */
@@ -21,8 +19,14 @@ public final class AutomaticOSUpgradeProperties {
     private boolean automaticOSUpgradeSupported;
 
     /**
+     * Creates an instance of AutomaticOSUpgradeProperties class.
+     */
+    public AutomaticOSUpgradeProperties() {
+    }
+
+    /**
      * Get the automaticOSUpgradeSupported property: Specifies whether automatic OS upgrade is supported on the image.
-     *
+     * 
      * @return the automaticOSUpgradeSupported value.
      */
     public boolean automaticOSUpgradeSupported() {
@@ -31,7 +35,7 @@ public final class AutomaticOSUpgradeProperties {
 
     /**
      * Set the automaticOSUpgradeSupported property: Specifies whether automatic OS upgrade is supported on the image.
-     *
+     * 
      * @param automaticOSUpgradeSupported the automaticOSUpgradeSupported value to set.
      * @return the AutomaticOSUpgradeProperties object itself.
      */
@@ -42,7 +46,7 @@ public final class AutomaticOSUpgradeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

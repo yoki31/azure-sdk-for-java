@@ -4,19 +4,20 @@
 
 package com.azure.resourcemanager.netapp.generated;
 
-import com.azure.core.util.Context;
-
-/** Samples for Pools Get. */
+/**
+ * Samples for Pools Get.
+ */
 public final class PoolsGetSamples {
     /*
-     * x-ms-original-file: specification/netapp/resource-manager/Microsoft.NetApp/stable/2021-08-01/examples/Pools_Get.json
+     * x-ms-original-file:
+     * specification/netapp/resource-manager/Microsoft.NetApp/stable/2023-11-01/examples/Pools_Get.json
      */
     /**
      * Sample code: Pools_Get.
-     *
+     * 
      * @param manager Entry point to NetAppFilesManager.
      */
     public static void poolsGet(com.azure.resourcemanager.netapp.NetAppFilesManager manager) {
-        manager.pools().getWithResponse("myRG", "account1", "pool1", Context.NONE);
+        manager.pools().getWithResponse("myRG", "account1", "pool1", com.azure.core.util.Context.NONE);
     }
 }

@@ -18,17 +18,36 @@ cd <swagger-folder>
 autorest --java --use=C:/work/autorest.java
 ```
 
-### Code generation settings
-``` yaml
-use: '@autorest/java@4.0.16'
-input-file: https://raw.githubusercontent.com/Azure/azure-rest-api-specs/master/specification/deviceupdate/data-plane/Microsoft.DeviceUpdate/preview/2020-09-01/deviceupdate.json
+## Generate autorest code
+```yaml
+use: '@autorest/java@4.1.17'
+input-file: https://github.com/Azure/azure-rest-api-specs/blob/main/specification/deviceupdate/data-plane/Microsoft.DeviceUpdate/stable/2022-10-01/deviceupdate.json
 java: true
-output-folder: ../
-namespace: com.azure.iot.deviceupdate
-generate-client-interfaces: false
-sync-methods: all
-license-header: MICROSOFT_MIT_SMALL
-add-context-parameter: true
+output-folder: ./
+enable-sync-stack: true
+generate-tests: true
+regenerate-pom: false
+title: DeviceUpdateClient
 generate-sync-async-clients: true
+generate-client-as-impl: true
+generate-client-interfaces: false
+service-interface-as-public: true
+add-context-parameter: true
+artifact-id: azure-iot-deviceupdate
+data-plane: true
+sync-methods: all
+generate-samples: true
+license-header: MICROSOFT_MIT_SMALL
+namespace: com.azure.iot.deviceupdate
+service-name: DeviceUpdate
 context-client-method-parameter: true
+azure-arm: false
+credential-types: tokencredential
+credential-scopes: https://api.adu.microsoft.com/.default
+service-versions:
+    - '2022-10-01'
+polling:
+    default:
+        strategy: >-
+            new OperationResourcePollingStrategyWithEndpoint<>({httpPipeline}, "https://" + this.client.getEndpoint(), null, null, {context})
 ```

@@ -4,6 +4,7 @@ package com.azure.resourcemanager.compute.implementation;
 
 import com.azure.core.http.rest.PagedFlux;
 import com.azure.core.http.rest.PagedIterable;
+import com.azure.core.http.rest.Response;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
 import com.azure.core.util.logging.ClientLogger;
@@ -15,6 +16,7 @@ import com.azure.resourcemanager.compute.models.Disk;
 import com.azure.resourcemanager.compute.models.DiskCreateOptionTypes;
 import com.azure.resourcemanager.compute.models.DiskState;
 import com.azure.resourcemanager.compute.models.ImageReference;
+import com.azure.resourcemanager.compute.models.InstanceViewTypes;
 import com.azure.resourcemanager.compute.models.ManagedDiskParameters;
 import com.azure.resourcemanager.compute.models.NetworkInterfaceReference;
 import com.azure.resourcemanager.compute.models.OSProfile;
@@ -45,6 +47,7 @@ import com.azure.resourcemanager.resources.fluentcore.arm.models.implementation.
 import com.azure.resourcemanager.resources.fluentcore.utils.ResourceManagerUtils;
 import reactor.core.publisher.Mono;
 
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -76,17 +79,7 @@ class VirtualMachineScaleSetVMImpl
         this.computeManager = computeManager;
         VirtualMachineScaleSetVMInstanceViewInner instanceViewInner = this.innerModel().instanceView();
         if (instanceViewInner != null) {
-            this.virtualMachineInstanceView =
-                new VirtualMachineInstanceViewImpl(
-                    new VirtualMachineInstanceViewInner()
-                        .withBootDiagnostics(instanceViewInner.bootDiagnostics())
-                        .withDisks(instanceViewInner.disks())
-                        .withExtensions(instanceViewInner.extensions())
-                        .withPlatformFaultDomain(instanceViewInner.platformFaultDomain())
-                        .withPlatformUpdateDomain(instanceViewInner.platformUpdateDomain())
-                        .withRdpThumbPrint(instanceViewInner.rdpThumbPrint())
-                        .withStatuses(instanceViewInner.statuses())
-                        .withVmAgent(instanceViewInner.vmAgent()));
+            updateInstanceView(instanceViewInner);
         } else {
             this.virtualMachineInstanceView = null;
         }
@@ -407,6 +400,23 @@ class VirtualMachineScaleSetVMImpl
         return this.innerModel().diagnosticsProfile();
     }
 
+    private void updateInstanceView(VirtualMachineScaleSetVMInstanceViewInner instanceViewInner) {
+        this.virtualMachineInstanceView =
+            new VirtualMachineInstanceViewImpl(
+                new VirtualMachineInstanceViewInner()
+                    .withBootDiagnostics(instanceViewInner.bootDiagnostics())
+                    .withDisks(instanceViewInner.disks())
+                    .withExtensions(instanceViewInner.extensions())
+                    .withPlatformFaultDomain(instanceViewInner.platformFaultDomain())
+                    .withPlatformUpdateDomain(instanceViewInner.platformUpdateDomain())
+                    .withRdpThumbPrint(instanceViewInner.rdpThumbPrint())
+                    .withStatuses(instanceViewInner.statuses())
+                    .withVmAgent(instanceViewInner.vmAgent())
+                    .withMaintenanceRedeployStatus(instanceViewInner.maintenanceRedeployStatus()));
+        // hyperVGeneration is not in spec
+        // vmHealth and assignedHost
+    }
+
     @Override
     public VirtualMachineInstanceView instanceView() {
         if (this.virtualMachineInstanceView == null) {
@@ -426,17 +436,7 @@ class VirtualMachineScaleSetVMImpl
             .getInstanceViewAsync(this.parent().resourceGroupName(), this.parent().name(), this.instanceId())
             .map(
                 instanceViewInner -> {
-                    virtualMachineInstanceView =
-                        new VirtualMachineInstanceViewImpl(
-                            new VirtualMachineInstanceViewInner()
-                                .withBootDiagnostics(instanceViewInner.bootDiagnostics())
-                                .withDisks(instanceViewInner.disks())
-                                .withExtensions(instanceViewInner.extensions())
-                                .withPlatformFaultDomain(instanceViewInner.platformFaultDomain())
-                                .withPlatformUpdateDomain(instanceViewInner.platformUpdateDomain())
-                                .withRdpThumbPrint(instanceViewInner.rdpThumbPrint())
-                                .withStatuses(instanceViewInner.statuses())
-                                .withVmAgent(instanceViewInner.vmAgent()));
+                    updateInstanceView(instanceViewInner);
                     return virtualMachineInstanceView;
                 })
             .switchIfEmpty(Mono.defer(() -> Mono.empty()));
@@ -445,6 +445,16 @@ class VirtualMachineScaleSetVMImpl
     @Override
     public PowerState powerState() {
         return PowerState.fromInstanceView(this.instanceView());
+    }
+
+    @Override
+    public void redeploy() {
+        this.redeployAsync().block();
+    }
+
+    @Override
+    public Mono<Void> redeployAsync() {
+        return client.redeployAsync(this.parent().resourceGroupName(), this.parent().name(), this.instanceId());
     }
 
     @Override
@@ -479,6 +489,17 @@ class VirtualMachineScaleSetVMImpl
         return this
             .client
             .powerOffAsync(this.parent().resourceGroupName(), this.parent().name(), this.instanceId(), null);
+    }
+
+    @Override
+    public void powerOff(boolean skipShutdown) {
+        this.powerOffAsync(skipShutdown).block();
+    }
+
+    @Override
+    public Mono<Void> powerOffAsync(boolean skipShutdown) {
+        return this.client
+            .powerOffAsync(this.parent().resourceGroupName(), this.parent().name(), this.instanceId(), skipShutdown);
     }
 
     @Override
@@ -518,16 +539,21 @@ class VirtualMachineScaleSetVMImpl
 
     @Override
     public Mono<VirtualMachineScaleSetVM> refreshAsync() {
-        final VirtualMachineScaleSetVMImpl self = this;
         return this
             .client
-            .getAsync(this.parent().resourceGroupName(), this.parent().name(), this.instanceId())
+            .getWithResponseAsync(this.parent().resourceGroupName(), this.parent().name(), this.instanceId(),
+                InstanceViewTypes.INSTANCE_VIEW)
+            .map(Response::getValue)
             .map(
                 vmInner -> {
-                    self.setInner(vmInner);
-                    self.clearCachedRelatedResources();
-                    self.initializeDataDisks();
-                    return self;
+                    this.setInner(vmInner);
+                    this.clearCachedRelatedResources();
+                    if (vmInner.instanceView() != null) {
+                        // load instance view
+                        updateInstanceView(vmInner.instanceView());
+                    }
+                    this.initializeDataDisks();
+                    return this;
                 });
     }
 
@@ -564,6 +590,11 @@ class VirtualMachineScaleSetVMImpl
     @Override
     public VirtualMachineScaleSetVMNetworkProfileConfiguration networkProfileConfiguration() {
         return this.innerModel().networkProfileConfiguration();
+    }
+
+    @Override
+    public OffsetDateTime timeCreated() {
+        return this.innerModel().timeCreated();
     }
 
     private void clearCachedRelatedResources() {

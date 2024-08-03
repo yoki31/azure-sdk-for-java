@@ -5,22 +5,21 @@
 package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.models.EncryptionConfiguration;
 import com.azure.resourcemanager.datafactory.models.FactoryRepoConfiguration;
 import com.azure.resourcemanager.datafactory.models.GlobalParameterSpecification;
 import com.azure.resourcemanager.datafactory.models.PublicNetworkAccess;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.azure.resourcemanager.datafactory.models.PurviewConfiguration;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 import java.util.Map;
 
-/** Factory resource properties. */
+/**
+ * Factory resource properties.
+ */
 @Fluent
 public final class FactoryProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(FactoryProperties.class);
-
     /*
      * Factory provisioning state, example Succeeded.
      */
@@ -38,6 +37,12 @@ public final class FactoryProperties {
      */
     @JsonProperty(value = "version", access = JsonProperty.Access.WRITE_ONLY)
     private String version;
+
+    /*
+     * Purview information of the factory.
+     */
+    @JsonProperty(value = "purviewConfiguration")
+    private PurviewConfiguration purviewConfiguration;
 
     /*
      * Git repo information of the factory.
@@ -65,8 +70,14 @@ public final class FactoryProperties {
     private PublicNetworkAccess publicNetworkAccess;
 
     /**
+     * Creates an instance of FactoryProperties class.
+     */
+    public FactoryProperties() {
+    }
+
+    /**
      * Get the provisioningState property: Factory provisioning state, example Succeeded.
-     *
+     * 
      * @return the provisioningState value.
      */
     public String provisioningState() {
@@ -75,7 +86,7 @@ public final class FactoryProperties {
 
     /**
      * Get the createTime property: Time the factory was created in ISO8601 format.
-     *
+     * 
      * @return the createTime value.
      */
     public OffsetDateTime createTime() {
@@ -84,7 +95,7 @@ public final class FactoryProperties {
 
     /**
      * Get the version property: Version of the factory.
-     *
+     * 
      * @return the version value.
      */
     public String version() {
@@ -92,8 +103,28 @@ public final class FactoryProperties {
     }
 
     /**
+     * Get the purviewConfiguration property: Purview information of the factory.
+     * 
+     * @return the purviewConfiguration value.
+     */
+    public PurviewConfiguration purviewConfiguration() {
+        return this.purviewConfiguration;
+    }
+
+    /**
+     * Set the purviewConfiguration property: Purview information of the factory.
+     * 
+     * @param purviewConfiguration the purviewConfiguration value to set.
+     * @return the FactoryProperties object itself.
+     */
+    public FactoryProperties withPurviewConfiguration(PurviewConfiguration purviewConfiguration) {
+        this.purviewConfiguration = purviewConfiguration;
+        return this;
+    }
+
+    /**
      * Get the repoConfiguration property: Git repo information of the factory.
-     *
+     * 
      * @return the repoConfiguration value.
      */
     public FactoryRepoConfiguration repoConfiguration() {
@@ -102,7 +133,7 @@ public final class FactoryProperties {
 
     /**
      * Set the repoConfiguration property: Git repo information of the factory.
-     *
+     * 
      * @param repoConfiguration the repoConfiguration value to set.
      * @return the FactoryProperties object itself.
      */
@@ -113,7 +144,7 @@ public final class FactoryProperties {
 
     /**
      * Get the globalParameters property: List of parameters for factory.
-     *
+     * 
      * @return the globalParameters value.
      */
     public Map<String, GlobalParameterSpecification> globalParameters() {
@@ -122,7 +153,7 @@ public final class FactoryProperties {
 
     /**
      * Set the globalParameters property: List of parameters for factory.
-     *
+     * 
      * @param globalParameters the globalParameters value to set.
      * @return the FactoryProperties object itself.
      */
@@ -133,7 +164,7 @@ public final class FactoryProperties {
 
     /**
      * Get the encryption property: Properties to enable Customer Managed Key for the factory.
-     *
+     * 
      * @return the encryption value.
      */
     public EncryptionConfiguration encryption() {
@@ -142,7 +173,7 @@ public final class FactoryProperties {
 
     /**
      * Set the encryption property: Properties to enable Customer Managed Key for the factory.
-     *
+     * 
      * @param encryption the encryption value to set.
      * @return the FactoryProperties object itself.
      */
@@ -153,7 +184,7 @@ public final class FactoryProperties {
 
     /**
      * Get the publicNetworkAccess property: Whether or not public network access is allowed for the data factory.
-     *
+     * 
      * @return the publicNetworkAccess value.
      */
     public PublicNetworkAccess publicNetworkAccess() {
@@ -162,7 +193,7 @@ public final class FactoryProperties {
 
     /**
      * Set the publicNetworkAccess property: Whether or not public network access is allowed for the data factory.
-     *
+     * 
      * @param publicNetworkAccess the publicNetworkAccess value to set.
      * @return the FactoryProperties object itself.
      */
@@ -173,22 +204,22 @@ public final class FactoryProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
+        if (purviewConfiguration() != null) {
+            purviewConfiguration().validate();
+        }
         if (repoConfiguration() != null) {
             repoConfiguration().validate();
         }
         if (globalParameters() != null) {
-            globalParameters()
-                .values()
-                .forEach(
-                    e -> {
-                        if (e != null) {
-                            e.validate();
-                        }
-                    });
+            globalParameters().values().forEach(e -> {
+                if (e != null) {
+                    e.validate();
+                }
+            });
         }
         if (encryption() != null) {
             encryption().validate();

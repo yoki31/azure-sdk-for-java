@@ -5,37 +5,42 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** A copy activity Rest service Sink. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * A copy activity Rest service Sink.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = RestSink.class, visible = true)
 @JsonTypeName("RestSink")
 @Fluent
 public final class RestSink extends CopySink {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RestSink.class);
+    /*
+     * Copy sink type.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "RestSink";
 
     /*
-     * The HTTP method used to call the RESTful API. The default is POST. Type:
-     * string (or Expression with resultType string).
+     * The HTTP method used to call the RESTful API. The default is POST. Type: string (or Expression with resultType
+     * string).
      */
     @JsonProperty(value = "requestMethod")
     private Object requestMethod;
 
     /*
-     * The additional HTTP headers in the request to the RESTful API. Type:
-     * string (or Expression with resultType string).
+     * The additional HTTP headers in the request to the RESTful API. Type: key value pairs (value should be string
+     * type).
      */
     @JsonProperty(value = "additionalHeaders")
     private Object additionalHeaders;
 
     /*
-     * The timeout (TimeSpan) to get an HTTP response. It is the timeout to get
-     * a response, not the timeout to read response data. Default value:
-     * 00:01:40. Type: string (or Expression with resultType string), pattern:
+     * The timeout (TimeSpan) to get an HTTP response. It is the timeout to get a response, not the timeout to read
+     * response data. Default value: 00:01:40. Type: string (or Expression with resultType string), pattern:
      * ((\d+)\.)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
      */
     @JsonProperty(value = "httpRequestTimeout")
@@ -48,17 +53,32 @@ public final class RestSink extends CopySink {
     private Object requestInterval;
 
     /*
-     * Http Compression Type to Send data in compressed format with Optimal
-     * Compression Level, Default is None. And The Only Supported option is
-     * Gzip.
+     * Http Compression Type to Send data in compressed format with Optimal Compression Level, Default is None. And The
+     * Only Supported option is Gzip. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "httpCompressionType")
     private Object httpCompressionType;
 
     /**
+     * Creates an instance of RestSink class.
+     */
+    public RestSink() {
+    }
+
+    /**
+     * Get the type property: Copy sink type.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the requestMethod property: The HTTP method used to call the RESTful API. The default is POST. Type: string
      * (or Expression with resultType string).
-     *
+     * 
      * @return the requestMethod value.
      */
     public Object requestMethod() {
@@ -68,7 +88,7 @@ public final class RestSink extends CopySink {
     /**
      * Set the requestMethod property: The HTTP method used to call the RESTful API. The default is POST. Type: string
      * (or Expression with resultType string).
-     *
+     * 
      * @param requestMethod the requestMethod value to set.
      * @return the RestSink object itself.
      */
@@ -78,9 +98,9 @@ public final class RestSink extends CopySink {
     }
 
     /**
-     * Get the additionalHeaders property: The additional HTTP headers in the request to the RESTful API. Type: string
-     * (or Expression with resultType string).
-     *
+     * Get the additionalHeaders property: The additional HTTP headers in the request to the RESTful API. Type: key
+     * value pairs (value should be string type).
+     * 
      * @return the additionalHeaders value.
      */
     public Object additionalHeaders() {
@@ -88,9 +108,9 @@ public final class RestSink extends CopySink {
     }
 
     /**
-     * Set the additionalHeaders property: The additional HTTP headers in the request to the RESTful API. Type: string
-     * (or Expression with resultType string).
-     *
+     * Set the additionalHeaders property: The additional HTTP headers in the request to the RESTful API. Type: key
+     * value pairs (value should be string type).
+     * 
      * @param additionalHeaders the additionalHeaders value to set.
      * @return the RestSink object itself.
      */
@@ -103,7 +123,7 @@ public final class RestSink extends CopySink {
      * Get the httpRequestTimeout property: The timeout (TimeSpan) to get an HTTP response. It is the timeout to get a
      * response, not the timeout to read response data. Default value: 00:01:40. Type: string (or Expression with
      * resultType string), pattern: ((\d+)\.)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
-     *
+     * 
      * @return the httpRequestTimeout value.
      */
     public Object httpRequestTimeout() {
@@ -114,7 +134,7 @@ public final class RestSink extends CopySink {
      * Set the httpRequestTimeout property: The timeout (TimeSpan) to get an HTTP response. It is the timeout to get a
      * response, not the timeout to read response data. Default value: 00:01:40. Type: string (or Expression with
      * resultType string), pattern: ((\d+)\.)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
-     *
+     * 
      * @param httpRequestTimeout the httpRequestTimeout value to set.
      * @return the RestSink object itself.
      */
@@ -125,7 +145,7 @@ public final class RestSink extends CopySink {
 
     /**
      * Get the requestInterval property: The time to await before sending next request, in milliseconds.
-     *
+     * 
      * @return the requestInterval value.
      */
     public Object requestInterval() {
@@ -134,7 +154,7 @@ public final class RestSink extends CopySink {
 
     /**
      * Set the requestInterval property: The time to await before sending next request, in milliseconds.
-     *
+     * 
      * @param requestInterval the requestInterval value to set.
      * @return the RestSink object itself.
      */
@@ -145,8 +165,9 @@ public final class RestSink extends CopySink {
 
     /**
      * Get the httpCompressionType property: Http Compression Type to Send data in compressed format with Optimal
-     * Compression Level, Default is None. And The Only Supported option is Gzip.
-     *
+     * Compression Level, Default is None. And The Only Supported option is Gzip. Type: string (or Expression with
+     * resultType string).
+     * 
      * @return the httpCompressionType value.
      */
     public Object httpCompressionType() {
@@ -155,8 +176,9 @@ public final class RestSink extends CopySink {
 
     /**
      * Set the httpCompressionType property: Http Compression Type to Send data in compressed format with Optimal
-     * Compression Level, Default is None. And The Only Supported option is Gzip.
-     *
+     * Compression Level, Default is None. And The Only Supported option is Gzip. Type: string (or Expression with
+     * resultType string).
+     * 
      * @param httpCompressionType the httpCompressionType value to set.
      * @return the RestSink object itself.
      */
@@ -165,42 +187,54 @@ public final class RestSink extends CopySink {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RestSink withWriteBatchSize(Object writeBatchSize) {
         super.withWriteBatchSize(writeBatchSize);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RestSink withWriteBatchTimeout(Object writeBatchTimeout) {
         super.withWriteBatchTimeout(writeBatchTimeout);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RestSink withSinkRetryCount(Object sinkRetryCount) {
         super.withSinkRetryCount(sinkRetryCount);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RestSink withSinkRetryWait(Object sinkRetryWait) {
         super.withSinkRetryWait(sinkRetryWait);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RestSink withMaxConcurrentConnections(Object maxConcurrentConnections) {
         super.withMaxConcurrentConnections(maxConcurrentConnections);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RestSink withDisableMetricsCollection(Object disableMetricsCollection) {
         super.withDisableMetricsCollection(disableMetricsCollection);
@@ -209,7 +243,7 @@ public final class RestSink extends CopySink {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

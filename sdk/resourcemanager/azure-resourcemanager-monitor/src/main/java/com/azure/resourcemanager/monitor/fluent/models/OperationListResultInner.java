@@ -5,9 +5,7 @@
 package com.azure.resourcemanager.monitor.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.monitor.models.Operation;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
@@ -17,8 +15,6 @@ import java.util.List;
  */
 @Fluent
 public final class OperationListResultInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationListResultInner.class);
-
     /*
      * List of operations supported by the Microsoft.Insights provider.
      */
@@ -32,8 +28,14 @@ public final class OperationListResultInner {
     private String nextLink;
 
     /**
+     * Creates an instance of OperationListResultInner class.
+     */
+    public OperationListResultInner() {
+    }
+
+    /**
      * Get the value property: List of operations supported by the Microsoft.Insights provider.
-     *
+     * 
      * @return the value value.
      */
     public List<Operation> value() {
@@ -42,7 +44,7 @@ public final class OperationListResultInner {
 
     /**
      * Set the value property: List of operations supported by the Microsoft.Insights provider.
-     *
+     * 
      * @param value the value value to set.
      * @return the OperationListResultInner object itself.
      */
@@ -53,7 +55,7 @@ public final class OperationListResultInner {
 
     /**
      * Get the nextLink property: URL to get the next set of operation list results if there are any.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -62,7 +64,7 @@ public final class OperationListResultInner {
 
     /**
      * Set the nextLink property: URL to get the next set of operation list results if there are any.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the OperationListResultInner object itself.
      */
@@ -73,7 +75,7 @@ public final class OperationListResultInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

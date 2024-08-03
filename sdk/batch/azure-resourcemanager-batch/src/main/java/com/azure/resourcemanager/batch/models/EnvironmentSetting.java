@@ -6,14 +6,13 @@ package com.azure.resourcemanager.batch.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** An environment variable to be set on a task process. */
+/**
+ * An environment variable to be set on a task process.
+ */
 @Fluent
 public final class EnvironmentSetting {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(EnvironmentSetting.class);
-
     /*
      * The name of the environment variable.
      */
@@ -27,8 +26,14 @@ public final class EnvironmentSetting {
     private String value;
 
     /**
+     * Creates an instance of EnvironmentSetting class.
+     */
+    public EnvironmentSetting() {
+    }
+
+    /**
      * Get the name property: The name of the environment variable.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -37,7 +42,7 @@ public final class EnvironmentSetting {
 
     /**
      * Set the name property: The name of the environment variable.
-     *
+     * 
      * @param name the name value to set.
      * @return the EnvironmentSetting object itself.
      */
@@ -48,7 +53,7 @@ public final class EnvironmentSetting {
 
     /**
      * Get the value property: The value of the environment variable.
-     *
+     * 
      * @return the value value.
      */
     public String value() {
@@ -57,7 +62,7 @@ public final class EnvironmentSetting {
 
     /**
      * Set the value property: The value of the environment variable.
-     *
+     * 
      * @param value the value value to set.
      * @return the EnvironmentSetting object itself.
      */
@@ -68,14 +73,15 @@ public final class EnvironmentSetting {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (name() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property name in model EnvironmentSetting"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property name in model EnvironmentSetting"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(EnvironmentSetting.class);
 }

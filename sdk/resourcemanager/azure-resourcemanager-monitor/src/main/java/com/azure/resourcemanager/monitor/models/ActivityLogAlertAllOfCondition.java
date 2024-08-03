@@ -6,24 +6,29 @@ package com.azure.resourcemanager.monitor.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** An Activity Log alert condition that is met when all its member conditions are met. */
+/**
+ * An Activity Log Alert rule condition that is met when all its member conditions are met.
+ */
 @Fluent
 public final class ActivityLogAlertAllOfCondition {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ActivityLogAlertAllOfCondition.class);
-
     /*
-     * The list of activity log alert conditions.
+     * The list of Activity Log Alert rule conditions.
      */
     @JsonProperty(value = "allOf", required = true)
     private List<ActivityLogAlertLeafCondition> allOf;
 
     /**
-     * Get the allOf property: The list of activity log alert conditions.
-     *
+     * Creates an instance of ActivityLogAlertAllOfCondition class.
+     */
+    public ActivityLogAlertAllOfCondition() {
+    }
+
+    /**
+     * Get the allOf property: The list of Activity Log Alert rule conditions.
+     * 
      * @return the allOf value.
      */
     public List<ActivityLogAlertLeafCondition> allOf() {
@@ -31,8 +36,8 @@ public final class ActivityLogAlertAllOfCondition {
     }
 
     /**
-     * Set the allOf property: The list of activity log alert conditions.
-     *
+     * Set the allOf property: The list of Activity Log Alert rule conditions.
+     * 
      * @param allOf the allOf value to set.
      * @return the ActivityLogAlertAllOfCondition object itself.
      */
@@ -43,17 +48,17 @@ public final class ActivityLogAlertAllOfCondition {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (allOf() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property allOf in model ActivityLogAlertAllOfCondition"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property allOf in model ActivityLogAlertAllOfCondition"));
         } else {
             allOf().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ActivityLogAlertAllOfCondition.class);
 }

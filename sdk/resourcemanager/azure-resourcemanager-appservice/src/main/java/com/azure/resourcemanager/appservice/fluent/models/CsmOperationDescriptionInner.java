@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.CsmOperationDescriptionProperties;
 import com.azure.resourcemanager.appservice.models.CsmOperationDisplay;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Description of an operation available for Microsoft.Web resource provider. */
+/**
+ * Description of an operation available for Microsoft.Web resource provider.
+ */
 @Fluent
 public final class CsmOperationDescriptionInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CsmOperationDescriptionInner.class);
-
     /*
      * The name property.
      */
@@ -47,8 +45,14 @@ public final class CsmOperationDescriptionInner {
     private CsmOperationDescriptionProperties properties;
 
     /**
+     * Creates an instance of CsmOperationDescriptionInner class.
+     */
+    public CsmOperationDescriptionInner() {
+    }
+
+    /**
      * Get the name property: The name property.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -57,7 +61,7 @@ public final class CsmOperationDescriptionInner {
 
     /**
      * Set the name property: The name property.
-     *
+     * 
      * @param name the name value to set.
      * @return the CsmOperationDescriptionInner object itself.
      */
@@ -68,7 +72,7 @@ public final class CsmOperationDescriptionInner {
 
     /**
      * Get the isDataAction property: The isDataAction property.
-     *
+     * 
      * @return the isDataAction value.
      */
     public Boolean isDataAction() {
@@ -77,7 +81,7 @@ public final class CsmOperationDescriptionInner {
 
     /**
      * Set the isDataAction property: The isDataAction property.
-     *
+     * 
      * @param isDataAction the isDataAction value to set.
      * @return the CsmOperationDescriptionInner object itself.
      */
@@ -88,7 +92,7 @@ public final class CsmOperationDescriptionInner {
 
     /**
      * Get the display property: Meta data about operation used for display in portal.
-     *
+     * 
      * @return the display value.
      */
     public CsmOperationDisplay display() {
@@ -97,7 +101,7 @@ public final class CsmOperationDescriptionInner {
 
     /**
      * Set the display property: Meta data about operation used for display in portal.
-     *
+     * 
      * @param display the display value to set.
      * @return the CsmOperationDescriptionInner object itself.
      */
@@ -108,7 +112,7 @@ public final class CsmOperationDescriptionInner {
 
     /**
      * Get the origin property: The origin property.
-     *
+     * 
      * @return the origin value.
      */
     public String origin() {
@@ -117,7 +121,7 @@ public final class CsmOperationDescriptionInner {
 
     /**
      * Set the origin property: The origin property.
-     *
+     * 
      * @param origin the origin value to set.
      * @return the CsmOperationDescriptionInner object itself.
      */
@@ -128,7 +132,7 @@ public final class CsmOperationDescriptionInner {
 
     /**
      * Get the properties property: Properties available for a Microsoft.Web resource provider operation.
-     *
+     * 
      * @return the properties value.
      */
     public CsmOperationDescriptionProperties properties() {
@@ -137,7 +141,7 @@ public final class CsmOperationDescriptionInner {
 
     /**
      * Set the properties property: Properties available for a Microsoft.Web resource provider operation.
-     *
+     * 
      * @param properties the properties value to set.
      * @return the CsmOperationDescriptionInner object itself.
      */
@@ -148,7 +152,7 @@ public final class CsmOperationDescriptionInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

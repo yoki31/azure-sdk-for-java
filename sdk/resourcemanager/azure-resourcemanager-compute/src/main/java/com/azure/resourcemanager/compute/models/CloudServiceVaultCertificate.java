@@ -5,8 +5,6 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -15,19 +13,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @Fluent
 public final class CloudServiceVaultCertificate {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CloudServiceVaultCertificate.class);
-
     /*
-     * This is the URL of a certificate that has been uploaded to Key Vault as
-     * a secret.
+     * This is the URL of a certificate that has been uploaded to Key Vault as a secret.
      */
     @JsonProperty(value = "certificateUrl")
     private String certificateUrl;
 
     /**
+     * Creates an instance of CloudServiceVaultCertificate class.
+     */
+    public CloudServiceVaultCertificate() {
+    }
+
+    /**
      * Get the certificateUrl property: This is the URL of a certificate that has been uploaded to Key Vault as a
      * secret.
-     *
+     * 
      * @return the certificateUrl value.
      */
     public String certificateUrl() {
@@ -37,7 +38,7 @@ public final class CloudServiceVaultCertificate {
     /**
      * Set the certificateUrl property: This is the URL of a certificate that has been uploaded to Key Vault as a
      * secret.
-     *
+     * 
      * @param certificateUrl the certificateUrl value to set.
      * @return the CloudServiceVaultCertificate object itself.
      */
@@ -48,7 +49,7 @@ public final class CloudServiceVaultCertificate {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

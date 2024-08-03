@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.batch.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.batch.fluent.models.BatchAccountInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Values returned by the List operation. */
+/**
+ * Values returned by the List operation.
+ */
 @Fluent
 public final class BatchAccountListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(BatchAccountListResult.class);
-
     /*
      * The collection of Batch accounts returned by the listing operation.
      */
@@ -29,8 +27,14 @@ public final class BatchAccountListResult {
     private String nextLink;
 
     /**
+     * Creates an instance of BatchAccountListResult class.
+     */
+    public BatchAccountListResult() {
+    }
+
+    /**
      * Get the value property: The collection of Batch accounts returned by the listing operation.
-     *
+     * 
      * @return the value value.
      */
     public List<BatchAccountInner> value() {
@@ -39,7 +43,7 @@ public final class BatchAccountListResult {
 
     /**
      * Set the value property: The collection of Batch accounts returned by the listing operation.
-     *
+     * 
      * @param value the value value to set.
      * @return the BatchAccountListResult object itself.
      */
@@ -50,7 +54,7 @@ public final class BatchAccountListResult {
 
     /**
      * Get the nextLink property: The continuation token.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,7 +63,7 @@ public final class BatchAccountListResult {
 
     /**
      * Set the nextLink property: The continuation token.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the BatchAccountListResult object itself.
      */
@@ -70,7 +74,7 @@ public final class BatchAccountListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

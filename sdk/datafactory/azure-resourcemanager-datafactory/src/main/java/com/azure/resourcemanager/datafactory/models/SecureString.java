@@ -6,8 +6,8 @@ package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -15,11 +15,16 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
  * Azure Data Factory secure string definition. The string value will be masked with asterisks '*' during Get or List
  * API calls.
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = SecureString.class, visible = true)
 @JsonTypeName("SecureString")
 @Fluent
 public final class SecureString extends SecretBase {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SecureString.class);
+    /*
+     * Type of the secret.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "SecureString";
 
     /*
      * Value of secure string.
@@ -28,8 +33,24 @@ public final class SecureString extends SecretBase {
     private String value;
 
     /**
+     * Creates an instance of SecureString class.
+     */
+    public SecureString() {
+    }
+
+    /**
+     * Get the type property: Type of the secret.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the value property: Value of secure string.
-     *
+     * 
      * @return the value value.
      */
     public String value() {
@@ -38,7 +59,7 @@ public final class SecureString extends SecretBase {
 
     /**
      * Set the value property: Value of secure string.
-     *
+     * 
      * @param value the value value to set.
      * @return the SecureString object itself.
      */
@@ -49,16 +70,17 @@ public final class SecureString extends SecretBase {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property value in model SecureString"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property value in model SecureString"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(SecureString.class);
 }

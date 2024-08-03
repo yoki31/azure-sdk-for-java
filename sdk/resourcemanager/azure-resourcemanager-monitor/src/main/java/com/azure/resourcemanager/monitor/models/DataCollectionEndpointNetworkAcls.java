@@ -5,25 +5,31 @@
 package com.azure.resourcemanager.monitor.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
-/** Network access control rules for the endpoints. */
+/**
+ * Network access control rules for the endpoints.
+ */
 @Fluent
 public final class DataCollectionEndpointNetworkAcls extends NetworkRuleSet {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DataCollectionEndpointNetworkAcls.class);
+    /**
+     * Creates an instance of DataCollectionEndpointNetworkAcls class.
+     */
+    public DataCollectionEndpointNetworkAcls() {
+    }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public DataCollectionEndpointNetworkAcls withPublicNetworkAccess(
-        KnownPublicNetworkAccessOptions publicNetworkAccess) {
+    public DataCollectionEndpointNetworkAcls
+        withPublicNetworkAccess(KnownPublicNetworkAccessOptions publicNetworkAccess) {
         super.withPublicNetworkAccess(publicNetworkAccess);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

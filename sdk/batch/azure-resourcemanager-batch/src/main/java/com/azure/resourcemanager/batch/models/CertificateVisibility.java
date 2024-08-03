@@ -7,18 +7,28 @@ package com.azure.resourcemanager.batch.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** Defines values for CertificateVisibility. */
+/**
+ * Defines values for CertificateVisibility.
+ */
 public enum CertificateVisibility {
-    /** Enum value StartTask. */
+    /**
+     * Enum value StartTask.
+     */
     START_TASK("StartTask"),
 
-    /** Enum value Task. */
+    /**
+     * Enum value Task.
+     */
     TASK("Task"),
 
-    /** Enum value RemoteUser. */
+    /**
+     * Enum value RemoteUser.
+     */
     REMOTE_USER("RemoteUser");
 
-    /** The actual serialized value for a CertificateVisibility instance. */
+    /**
+     * The actual serialized value for a CertificateVisibility instance.
+     */
     private final String value;
 
     CertificateVisibility(String value) {
@@ -27,12 +37,15 @@ public enum CertificateVisibility {
 
     /**
      * Parses a serialized value to a CertificateVisibility instance.
-     *
+     * 
      * @param value the serialized value to parse.
      * @return the parsed CertificateVisibility object, or null if unable to parse.
      */
     @JsonCreator
     public static CertificateVisibility fromString(String value) {
+        if (value == null) {
+            return null;
+        }
         CertificateVisibility[] items = CertificateVisibility.values();
         for (CertificateVisibility item : items) {
             if (item.toString().equalsIgnoreCase(value)) {
@@ -42,6 +55,9 @@ public enum CertificateVisibility {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @JsonValue
     @Override
     public String toString() {

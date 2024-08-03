@@ -5,16 +5,11 @@
 package com.azure.resourcemanager.mediaservices.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** The ContentKeyPolicyFairPlayOfflineRentalConfiguration model. */
 @Fluent
 public final class ContentKeyPolicyFairPlayOfflineRentalConfiguration {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(ContentKeyPolicyFairPlayOfflineRentalConfiguration.class);
-
     /*
      * Playback duration
      */
@@ -26,6 +21,10 @@ public final class ContentKeyPolicyFairPlayOfflineRentalConfiguration {
      */
     @JsonProperty(value = "storageDurationSeconds", required = true)
     private long storageDurationSeconds;
+
+    /** Creates an instance of ContentKeyPolicyFairPlayOfflineRentalConfiguration class. */
+    public ContentKeyPolicyFairPlayOfflineRentalConfiguration() {
+    }
 
     /**
      * Get the playbackDurationSeconds property: Playback duration.

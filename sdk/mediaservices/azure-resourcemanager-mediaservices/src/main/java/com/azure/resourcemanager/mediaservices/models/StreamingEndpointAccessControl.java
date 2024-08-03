@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.mediaservices.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Streaming endpoint access control definition. */
 @Fluent
 public final class StreamingEndpointAccessControl {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(StreamingEndpointAccessControl.class);
-
     /*
      * The access control of Akamai
      */
@@ -25,6 +21,10 @@ public final class StreamingEndpointAccessControl {
      */
     @JsonProperty(value = "ip")
     private IpAccessControl ip;
+
+    /** Creates an instance of StreamingEndpointAccessControl class. */
+    public StreamingEndpointAccessControl() {
+    }
 
     /**
      * Get the akamai property: The access control of Akamai.

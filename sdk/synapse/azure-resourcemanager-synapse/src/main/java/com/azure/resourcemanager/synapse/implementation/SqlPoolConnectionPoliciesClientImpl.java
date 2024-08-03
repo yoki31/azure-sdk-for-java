@@ -21,7 +21,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.synapse.fluent.SqlPoolConnectionPoliciesClient;
 import com.azure.resourcemanager.synapse.fluent.models.SqlPoolConnectionPolicyInner;
 import com.azure.resourcemanager.synapse.models.ConnectionPolicyName;
@@ -29,8 +28,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in SqlPoolConnectionPoliciesClient. */
 public final class SqlPoolConnectionPoliciesClientImpl implements SqlPoolConnectionPoliciesClient {
-    private final ClientLogger logger = new ClientLogger(SqlPoolConnectionPoliciesClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final SqlPoolConnectionPoliciesService service;
 
@@ -56,7 +53,7 @@ public final class SqlPoolConnectionPoliciesClientImpl implements SqlPoolConnect
      */
     @Host("{$host}")
     @ServiceInterface(name = "SynapseManagementCli")
-    private interface SqlPoolConnectionPoliciesService {
+    public interface SqlPoolConnectionPoliciesService {
         @Headers({"Content-Type: application/json"})
         @Get(
             "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
@@ -76,7 +73,9 @@ public final class SqlPoolConnectionPoliciesClientImpl implements SqlPoolConnect
     }
 
     /**
-     * Get a Sql pool's connection policy, which is used with table auditing.
+     * Get a Sql pool's connection policy, which is used with table auditing
+     *
+     * <p>Get a Sql pool's connection policy, which is used with table auditing.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -85,7 +84,8 @@ public final class SqlPoolConnectionPoliciesClientImpl implements SqlPoolConnect
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Sql pool's connection policy, which is used with table auditing.
+     * @return a Sql pool's connection policy, which is used with table auditing along with {@link Response} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<SqlPoolConnectionPolicyInner>> getWithResponseAsync(
@@ -136,7 +136,9 @@ public final class SqlPoolConnectionPoliciesClientImpl implements SqlPoolConnect
     }
 
     /**
-     * Get a Sql pool's connection policy, which is used with table auditing.
+     * Get a Sql pool's connection policy, which is used with table auditing
+     *
+     * <p>Get a Sql pool's connection policy, which is used with table auditing.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -146,7 +148,8 @@ public final class SqlPoolConnectionPoliciesClientImpl implements SqlPoolConnect
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Sql pool's connection policy, which is used with table auditing.
+     * @return a Sql pool's connection policy, which is used with table auditing along with {@link Response} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<SqlPoolConnectionPolicyInner>> getWithResponseAsync(
@@ -198,7 +201,9 @@ public final class SqlPoolConnectionPoliciesClientImpl implements SqlPoolConnect
     }
 
     /**
-     * Get a Sql pool's connection policy, which is used with table auditing.
+     * Get a Sql pool's connection policy, which is used with table auditing
+     *
+     * <p>Get a Sql pool's connection policy, which is used with table auditing.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -207,24 +212,46 @@ public final class SqlPoolConnectionPoliciesClientImpl implements SqlPoolConnect
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Sql pool's connection policy, which is used with table auditing.
+     * @return a Sql pool's connection policy, which is used with table auditing on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<SqlPoolConnectionPolicyInner> getAsync(
         String resourceGroupName, String workspaceName, String sqlPoolName, ConnectionPolicyName connectionPolicyName) {
         return getWithResponseAsync(resourceGroupName, workspaceName, sqlPoolName, connectionPolicyName)
-            .flatMap(
-                (Response<SqlPoolConnectionPolicyInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
-     * Get a Sql pool's connection policy, which is used with table auditing.
+     * Get a Sql pool's connection policy, which is used with table auditing
+     *
+     * <p>Get a Sql pool's connection policy, which is used with table auditing.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param sqlPoolName SQL pool name.
+     * @param connectionPolicyName The name of the connection policy.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a Sql pool's connection policy, which is used with table auditing along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<SqlPoolConnectionPolicyInner> getWithResponse(
+        String resourceGroupName,
+        String workspaceName,
+        String sqlPoolName,
+        ConnectionPolicyName connectionPolicyName,
+        Context context) {
+        return getWithResponseAsync(resourceGroupName, workspaceName, sqlPoolName, connectionPolicyName, context)
+            .block();
+    }
+
+    /**
+     * Get a Sql pool's connection policy, which is used with table auditing
+     *
+     * <p>Get a Sql pool's connection policy, which is used with table auditing.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -238,30 +265,7 @@ public final class SqlPoolConnectionPoliciesClientImpl implements SqlPoolConnect
     @ServiceMethod(returns = ReturnType.SINGLE)
     public SqlPoolConnectionPolicyInner get(
         String resourceGroupName, String workspaceName, String sqlPoolName, ConnectionPolicyName connectionPolicyName) {
-        return getAsync(resourceGroupName, workspaceName, sqlPoolName, connectionPolicyName).block();
-    }
-
-    /**
-     * Get a Sql pool's connection policy, which is used with table auditing.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param sqlPoolName SQL pool name.
-     * @param connectionPolicyName The name of the connection policy.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Sql pool's connection policy, which is used with table auditing.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<SqlPoolConnectionPolicyInner> getWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        ConnectionPolicyName connectionPolicyName,
-        Context context) {
-        return getWithResponseAsync(resourceGroupName, workspaceName, sqlPoolName, connectionPolicyName, context)
-            .block();
+        return getWithResponse(resourceGroupName, workspaceName, sqlPoolName, connectionPolicyName, Context.NONE)
+            .getValue();
     }
 }

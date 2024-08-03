@@ -7,15 +7,23 @@ package com.azure.resourcemanager.appservice.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** Defines values for UsageState. */
+/**
+ * State indicating whether the app has exceeded its quota usage. Read-only.
+ */
 public enum UsageState {
-    /** Enum value Normal. */
+    /**
+     * Enum value Normal.
+     */
     NORMAL("Normal"),
 
-    /** Enum value Exceeded. */
+    /**
+     * Enum value Exceeded.
+     */
     EXCEEDED("Exceeded");
 
-    /** The actual serialized value for a UsageState instance. */
+    /**
+     * The actual serialized value for a UsageState instance.
+     */
     private final String value;
 
     UsageState(String value) {
@@ -24,12 +32,15 @@ public enum UsageState {
 
     /**
      * Parses a serialized value to a UsageState instance.
-     *
+     * 
      * @param value the serialized value to parse.
      * @return the parsed UsageState object, or null if unable to parse.
      */
     @JsonCreator
     public static UsageState fromString(String value) {
+        if (value == null) {
+            return null;
+        }
         UsageState[] items = UsageState.values();
         for (UsageState item : items) {
             if (item.toString().equalsIgnoreCase(value)) {
@@ -39,6 +50,9 @@ public enum UsageState {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @JsonValue
     @Override
     public String toString() {

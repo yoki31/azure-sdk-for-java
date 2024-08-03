@@ -6,20 +6,17 @@ package com.azure.resourcemanager.compute.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.SubResource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.compute.models.ApiEntityReference;
 import com.azure.resourcemanager.compute.models.IpVersion;
 import com.azure.resourcemanager.compute.models.VirtualMachineScaleSetUpdatePublicIpAddressConfiguration;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Describes a virtual machine scale set network profile's IP configuration properties. */
+/**
+ * Describes a virtual machine scale set network profile's IP configuration properties.
+ */
 @Fluent
 public final class VirtualMachineScaleSetUpdateIpConfigurationProperties {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(VirtualMachineScaleSetUpdateIpConfigurationProperties.class);
-
     /*
      * The subnet.
      */
@@ -27,8 +24,7 @@ public final class VirtualMachineScaleSetUpdateIpConfigurationProperties {
     private ApiEntityReference subnet;
 
     /*
-     * Specifies the primary IP Configuration in case the network interface has
-     * more than one IP Configuration.
+     * Specifies the primary IP Configuration in case the network interface has more than one IP Configuration.
      */
     @JsonProperty(value = "primary")
     private Boolean primary;
@@ -40,9 +36,8 @@ public final class VirtualMachineScaleSetUpdateIpConfigurationProperties {
     private VirtualMachineScaleSetUpdatePublicIpAddressConfiguration publicIpAddressConfiguration;
 
     /*
-     * Available from Api-Version 2017-03-30 onwards, it represents whether the
-     * specific ipconfiguration is IPv4 or IPv6. Default is taken as IPv4.
-     * Possible values are: 'IPv4' and 'IPv6'.
+     * Available from Api-Version 2017-03-30 onwards, it represents whether the specific ipconfiguration is IPv4 or
+     * IPv6. Default is taken as IPv4. Possible values are: 'IPv4' and 'IPv6'.
      */
     @JsonProperty(value = "privateIPAddressVersion")
     private IpVersion privateIpAddressVersion;
@@ -72,8 +67,14 @@ public final class VirtualMachineScaleSetUpdateIpConfigurationProperties {
     private List<SubResource> loadBalancerInboundNatPools;
 
     /**
+     * Creates an instance of VirtualMachineScaleSetUpdateIpConfigurationProperties class.
+     */
+    public VirtualMachineScaleSetUpdateIpConfigurationProperties() {
+    }
+
+    /**
      * Get the subnet property: The subnet.
-     *
+     * 
      * @return the subnet value.
      */
     public ApiEntityReference subnet() {
@@ -82,7 +83,7 @@ public final class VirtualMachineScaleSetUpdateIpConfigurationProperties {
 
     /**
      * Set the subnet property: The subnet.
-     *
+     * 
      * @param subnet the subnet value to set.
      * @return the VirtualMachineScaleSetUpdateIpConfigurationProperties object itself.
      */
@@ -94,7 +95,7 @@ public final class VirtualMachineScaleSetUpdateIpConfigurationProperties {
     /**
      * Get the primary property: Specifies the primary IP Configuration in case the network interface has more than one
      * IP Configuration.
-     *
+     * 
      * @return the primary value.
      */
     public Boolean primary() {
@@ -104,7 +105,7 @@ public final class VirtualMachineScaleSetUpdateIpConfigurationProperties {
     /**
      * Set the primary property: Specifies the primary IP Configuration in case the network interface has more than one
      * IP Configuration.
-     *
+     * 
      * @param primary the primary value to set.
      * @return the VirtualMachineScaleSetUpdateIpConfigurationProperties object itself.
      */
@@ -115,7 +116,7 @@ public final class VirtualMachineScaleSetUpdateIpConfigurationProperties {
 
     /**
      * Get the publicIpAddressConfiguration property: The publicIPAddressConfiguration.
-     *
+     * 
      * @return the publicIpAddressConfiguration value.
      */
     public VirtualMachineScaleSetUpdatePublicIpAddressConfiguration publicIpAddressConfiguration() {
@@ -124,7 +125,7 @@ public final class VirtualMachineScaleSetUpdateIpConfigurationProperties {
 
     /**
      * Set the publicIpAddressConfiguration property: The publicIPAddressConfiguration.
-     *
+     * 
      * @param publicIpAddressConfiguration the publicIpAddressConfiguration value to set.
      * @return the VirtualMachineScaleSetUpdateIpConfigurationProperties object itself.
      */
@@ -137,7 +138,7 @@ public final class VirtualMachineScaleSetUpdateIpConfigurationProperties {
     /**
      * Get the privateIpAddressVersion property: Available from Api-Version 2017-03-30 onwards, it represents whether
      * the specific ipconfiguration is IPv4 or IPv6. Default is taken as IPv4. Possible values are: 'IPv4' and 'IPv6'.
-     *
+     * 
      * @return the privateIpAddressVersion value.
      */
     public IpVersion privateIpAddressVersion() {
@@ -147,19 +148,19 @@ public final class VirtualMachineScaleSetUpdateIpConfigurationProperties {
     /**
      * Set the privateIpAddressVersion property: Available from Api-Version 2017-03-30 onwards, it represents whether
      * the specific ipconfiguration is IPv4 or IPv6. Default is taken as IPv4. Possible values are: 'IPv4' and 'IPv6'.
-     *
+     * 
      * @param privateIpAddressVersion the privateIpAddressVersion value to set.
      * @return the VirtualMachineScaleSetUpdateIpConfigurationProperties object itself.
      */
-    public VirtualMachineScaleSetUpdateIpConfigurationProperties withPrivateIpAddressVersion(
-        IpVersion privateIpAddressVersion) {
+    public VirtualMachineScaleSetUpdateIpConfigurationProperties
+        withPrivateIpAddressVersion(IpVersion privateIpAddressVersion) {
         this.privateIpAddressVersion = privateIpAddressVersion;
         return this;
     }
 
     /**
      * Get the applicationGatewayBackendAddressPools property: The application gateway backend address pools.
-     *
+     * 
      * @return the applicationGatewayBackendAddressPools value.
      */
     public List<SubResource> applicationGatewayBackendAddressPools() {
@@ -168,19 +169,19 @@ public final class VirtualMachineScaleSetUpdateIpConfigurationProperties {
 
     /**
      * Set the applicationGatewayBackendAddressPools property: The application gateway backend address pools.
-     *
+     * 
      * @param applicationGatewayBackendAddressPools the applicationGatewayBackendAddressPools value to set.
      * @return the VirtualMachineScaleSetUpdateIpConfigurationProperties object itself.
      */
-    public VirtualMachineScaleSetUpdateIpConfigurationProperties withApplicationGatewayBackendAddressPools(
-        List<SubResource> applicationGatewayBackendAddressPools) {
+    public VirtualMachineScaleSetUpdateIpConfigurationProperties
+        withApplicationGatewayBackendAddressPools(List<SubResource> applicationGatewayBackendAddressPools) {
         this.applicationGatewayBackendAddressPools = applicationGatewayBackendAddressPools;
         return this;
     }
 
     /**
      * Get the applicationSecurityGroups property: Specifies an array of references to application security group.
-     *
+     * 
      * @return the applicationSecurityGroups value.
      */
     public List<SubResource> applicationSecurityGroups() {
@@ -189,19 +190,19 @@ public final class VirtualMachineScaleSetUpdateIpConfigurationProperties {
 
     /**
      * Set the applicationSecurityGroups property: Specifies an array of references to application security group.
-     *
+     * 
      * @param applicationSecurityGroups the applicationSecurityGroups value to set.
      * @return the VirtualMachineScaleSetUpdateIpConfigurationProperties object itself.
      */
-    public VirtualMachineScaleSetUpdateIpConfigurationProperties withApplicationSecurityGroups(
-        List<SubResource> applicationSecurityGroups) {
+    public VirtualMachineScaleSetUpdateIpConfigurationProperties
+        withApplicationSecurityGroups(List<SubResource> applicationSecurityGroups) {
         this.applicationSecurityGroups = applicationSecurityGroups;
         return this;
     }
 
     /**
      * Get the loadBalancerBackendAddressPools property: The load balancer backend address pools.
-     *
+     * 
      * @return the loadBalancerBackendAddressPools value.
      */
     public List<SubResource> loadBalancerBackendAddressPools() {
@@ -210,19 +211,19 @@ public final class VirtualMachineScaleSetUpdateIpConfigurationProperties {
 
     /**
      * Set the loadBalancerBackendAddressPools property: The load balancer backend address pools.
-     *
+     * 
      * @param loadBalancerBackendAddressPools the loadBalancerBackendAddressPools value to set.
      * @return the VirtualMachineScaleSetUpdateIpConfigurationProperties object itself.
      */
-    public VirtualMachineScaleSetUpdateIpConfigurationProperties withLoadBalancerBackendAddressPools(
-        List<SubResource> loadBalancerBackendAddressPools) {
+    public VirtualMachineScaleSetUpdateIpConfigurationProperties
+        withLoadBalancerBackendAddressPools(List<SubResource> loadBalancerBackendAddressPools) {
         this.loadBalancerBackendAddressPools = loadBalancerBackendAddressPools;
         return this;
     }
 
     /**
      * Get the loadBalancerInboundNatPools property: The load balancer inbound nat pools.
-     *
+     * 
      * @return the loadBalancerInboundNatPools value.
      */
     public List<SubResource> loadBalancerInboundNatPools() {
@@ -231,19 +232,19 @@ public final class VirtualMachineScaleSetUpdateIpConfigurationProperties {
 
     /**
      * Set the loadBalancerInboundNatPools property: The load balancer inbound nat pools.
-     *
+     * 
      * @param loadBalancerInboundNatPools the loadBalancerInboundNatPools value to set.
      * @return the VirtualMachineScaleSetUpdateIpConfigurationProperties object itself.
      */
-    public VirtualMachineScaleSetUpdateIpConfigurationProperties withLoadBalancerInboundNatPools(
-        List<SubResource> loadBalancerInboundNatPools) {
+    public VirtualMachineScaleSetUpdateIpConfigurationProperties
+        withLoadBalancerInboundNatPools(List<SubResource> loadBalancerInboundNatPools) {
         this.loadBalancerInboundNatPools = loadBalancerInboundNatPools;
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

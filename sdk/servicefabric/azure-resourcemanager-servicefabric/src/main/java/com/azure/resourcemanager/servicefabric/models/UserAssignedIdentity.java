@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.servicefabric.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The UserAssignedIdentity model. */
+/**
+ * The UserAssignedIdentity model.
+ */
 @Immutable
-public class UserAssignedIdentity {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(UserAssignedIdentity.class);
-
+public final class UserAssignedIdentity {
     /*
      * The principal id of user assigned identity.
      */
@@ -27,8 +25,14 @@ public class UserAssignedIdentity {
     private String clientId;
 
     /**
+     * Creates an instance of UserAssignedIdentity class.
+     */
+    public UserAssignedIdentity() {
+    }
+
+    /**
      * Get the principalId property: The principal id of user assigned identity.
-     *
+     * 
      * @return the principalId value.
      */
     public String principalId() {
@@ -37,7 +41,7 @@ public class UserAssignedIdentity {
 
     /**
      * Get the clientId property: The client id of user assigned identity.
-     *
+     * 
      * @return the clientId value.
      */
     public String clientId() {
@@ -46,7 +50,7 @@ public class UserAssignedIdentity {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.cosmos.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Response of /command api. */
+/**
+ * Response of /command api.
+ */
 @Fluent
 public final class CommandOutputInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CommandOutputInner.class);
-
     /*
      * Output of the command.
      */
@@ -21,8 +19,14 @@ public final class CommandOutputInner {
     private String commandOutput;
 
     /**
+     * Creates an instance of CommandOutputInner class.
+     */
+    public CommandOutputInner() {
+    }
+
+    /**
      * Get the commandOutput property: Output of the command.
-     *
+     * 
      * @return the commandOutput value.
      */
     public String commandOutput() {
@@ -31,7 +35,7 @@ public final class CommandOutputInner {
 
     /**
      * Set the commandOutput property: Output of the command.
-     *
+     * 
      * @param commandOutput the commandOutput value to set.
      * @return the CommandOutputInner object itself.
      */
@@ -42,7 +46,7 @@ public final class CommandOutputInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

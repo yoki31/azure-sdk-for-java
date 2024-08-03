@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.kubernetesconfiguration.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Scope of the extension. It can be either Cluster or Namespace; but not both. */
 @Fluent
 public final class Scope {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Scope.class);
-
     /*
      * Specifies that the scope of the extension is Cluster
      */
@@ -25,6 +21,10 @@ public final class Scope {
      */
     @JsonProperty(value = "namespace")
     private ScopeNamespace namespace;
+
+    /** Creates an instance of Scope class. */
+    public Scope() {
+    }
 
     /**
      * Get the cluster property: Specifies that the scope of the extension is Cluster.

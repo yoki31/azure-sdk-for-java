@@ -27,7 +27,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.synapse.fluent.SqlPoolSecurityAlertPoliciesClient;
 import com.azure.resourcemanager.synapse.fluent.models.SqlPoolSecurityAlertPolicyInner;
 import com.azure.resourcemanager.synapse.models.ListSqlPoolSecurityAlertPolicies;
@@ -36,8 +35,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in SqlPoolSecurityAlertPoliciesClient. */
 public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecurityAlertPoliciesClient {
-    private final ClientLogger logger = new ClientLogger(SqlPoolSecurityAlertPoliciesClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final SqlPoolSecurityAlertPoliciesService service;
 
@@ -63,7 +60,7 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
      */
     @Host("{$host}")
     @ServiceInterface(name = "SynapseManagementCli")
-    private interface SqlPoolSecurityAlertPoliciesService {
+    public interface SqlPoolSecurityAlertPoliciesService {
         @Headers({"Content-Type: application/json"})
         @Get(
             "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
@@ -127,7 +124,9 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
     }
 
     /**
-     * Get a list of Sql pool's security alert policies.
+     * List Sql pool's security alert policies
+     *
+     * <p>Get a list of Sql pool's security alert policies.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -135,7 +134,8 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Sql pool's security alert policies.
+     * @return a list of Sql pool's security alert policies along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SqlPoolSecurityAlertPolicyInner>> listSinglePageAsync(
@@ -190,7 +190,9 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
     }
 
     /**
-     * Get a list of Sql pool's security alert policies.
+     * List Sql pool's security alert policies
+     *
+     * <p>Get a list of Sql pool's security alert policies.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -199,7 +201,8 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Sql pool's security alert policies.
+     * @return a list of Sql pool's security alert policies along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SqlPoolSecurityAlertPolicyInner>> listSinglePageAsync(
@@ -251,7 +254,9 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
     }
 
     /**
-     * Get a list of Sql pool's security alert policies.
+     * List Sql pool's security alert policies
+     *
+     * <p>Get a list of Sql pool's security alert policies.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -259,7 +264,7 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Sql pool's security alert policies.
+     * @return a list of Sql pool's security alert policies as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<SqlPoolSecurityAlertPolicyInner> listAsync(
@@ -270,7 +275,9 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
     }
 
     /**
-     * Get a list of Sql pool's security alert policies.
+     * List Sql pool's security alert policies
+     *
+     * <p>Get a list of Sql pool's security alert policies.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -279,7 +286,7 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Sql pool's security alert policies.
+     * @return a list of Sql pool's security alert policies as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<SqlPoolSecurityAlertPolicyInner> listAsync(
@@ -290,7 +297,9 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
     }
 
     /**
-     * Get a list of Sql pool's security alert policies.
+     * List Sql pool's security alert policies
+     *
+     * <p>Get a list of Sql pool's security alert policies.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -298,7 +307,7 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Sql pool's security alert policies.
+     * @return a list of Sql pool's security alert policies as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<SqlPoolSecurityAlertPolicyInner> list(
@@ -307,7 +316,9 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
     }
 
     /**
-     * Get a list of Sql pool's security alert policies.
+     * List Sql pool's security alert policies
+     *
+     * <p>Get a list of Sql pool's security alert policies.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -316,7 +327,7 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Sql pool's security alert policies.
+     * @return a list of Sql pool's security alert policies as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<SqlPoolSecurityAlertPolicyInner> list(
@@ -325,7 +336,9 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
     }
 
     /**
-     * Get a Sql pool's security alert policy.
+     * Get a Sql pool's security alert policy
+     *
+     * <p>Get a Sql pool's security alert policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -334,7 +347,7 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Sql pool's security alert policy.
+     * @return a Sql pool's security alert policy along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<SqlPoolSecurityAlertPolicyInner>> getWithResponseAsync(
@@ -389,7 +402,9 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
     }
 
     /**
-     * Get a Sql pool's security alert policy.
+     * Get a Sql pool's security alert policy
+     *
+     * <p>Get a Sql pool's security alert policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -399,7 +414,7 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Sql pool's security alert policy.
+     * @return a Sql pool's security alert policy along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<SqlPoolSecurityAlertPolicyInner>> getWithResponseAsync(
@@ -452,7 +467,9 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
     }
 
     /**
-     * Get a Sql pool's security alert policy.
+     * Get a Sql pool's security alert policy
+     *
+     * <p>Get a Sql pool's security alert policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -461,7 +478,7 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Sql pool's security alert policy.
+     * @return a Sql pool's security alert policy on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<SqlPoolSecurityAlertPolicyInner> getAsync(
@@ -470,18 +487,39 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
         String sqlPoolName,
         SecurityAlertPolicyName securityAlertPolicyName) {
         return getWithResponseAsync(resourceGroupName, workspaceName, sqlPoolName, securityAlertPolicyName)
-            .flatMap(
-                (Response<SqlPoolSecurityAlertPolicyInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
-     * Get a Sql pool's security alert policy.
+     * Get a Sql pool's security alert policy
+     *
+     * <p>Get a Sql pool's security alert policy.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param sqlPoolName SQL pool name.
+     * @param securityAlertPolicyName The name of the security alert policy.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a Sql pool's security alert policy along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<SqlPoolSecurityAlertPolicyInner> getWithResponse(
+        String resourceGroupName,
+        String workspaceName,
+        String sqlPoolName,
+        SecurityAlertPolicyName securityAlertPolicyName,
+        Context context) {
+        return getWithResponseAsync(resourceGroupName, workspaceName, sqlPoolName, securityAlertPolicyName, context)
+            .block();
+    }
+
+    /**
+     * Get a Sql pool's security alert policy
+     *
+     * <p>Get a Sql pool's security alert policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -498,35 +536,14 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
         String workspaceName,
         String sqlPoolName,
         SecurityAlertPolicyName securityAlertPolicyName) {
-        return getAsync(resourceGroupName, workspaceName, sqlPoolName, securityAlertPolicyName).block();
+        return getWithResponse(resourceGroupName, workspaceName, sqlPoolName, securityAlertPolicyName, Context.NONE)
+            .getValue();
     }
 
     /**
-     * Get a Sql pool's security alert policy.
+     * Create or update a Sql pool's security alert policy
      *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param sqlPoolName SQL pool name.
-     * @param securityAlertPolicyName The name of the security alert policy.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Sql pool's security alert policy.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<SqlPoolSecurityAlertPolicyInner> getWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        SecurityAlertPolicyName securityAlertPolicyName,
-        Context context) {
-        return getWithResponseAsync(resourceGroupName, workspaceName, sqlPoolName, securityAlertPolicyName, context)
-            .block();
-    }
-
-    /**
-     * Create or update a Sql pool's security alert policy.
+     * <p>Create or update a Sql pool's security alert policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -536,7 +553,7 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Sql pool security alert policy.
+     * @return a Sql pool security alert policy along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<SqlPoolSecurityAlertPolicyInner>> createOrUpdateWithResponseAsync(
@@ -598,7 +615,9 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
     }
 
     /**
-     * Create or update a Sql pool's security alert policy.
+     * Create or update a Sql pool's security alert policy
+     *
+     * <p>Create or update a Sql pool's security alert policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -609,7 +628,7 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Sql pool security alert policy.
+     * @return a Sql pool security alert policy along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<SqlPoolSecurityAlertPolicyInner>> createOrUpdateWithResponseAsync(
@@ -669,7 +688,9 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
     }
 
     /**
-     * Create or update a Sql pool's security alert policy.
+     * Create or update a Sql pool's security alert policy
+     *
+     * <p>Create or update a Sql pool's security alert policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -679,7 +700,7 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Sql pool security alert policy.
+     * @return a Sql pool security alert policy on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<SqlPoolSecurityAlertPolicyInner> createOrUpdateAsync(
@@ -690,18 +711,42 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
         SqlPoolSecurityAlertPolicyInner parameters) {
         return createOrUpdateWithResponseAsync(
                 resourceGroupName, workspaceName, sqlPoolName, securityAlertPolicyName, parameters)
-            .flatMap(
-                (Response<SqlPoolSecurityAlertPolicyInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
-     * Create or update a Sql pool's security alert policy.
+     * Create or update a Sql pool's security alert policy
+     *
+     * <p>Create or update a Sql pool's security alert policy.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param sqlPoolName SQL pool name.
+     * @param securityAlertPolicyName The name of the security alert policy.
+     * @param parameters The Sql pool security alert policy.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a Sql pool security alert policy along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<SqlPoolSecurityAlertPolicyInner> createOrUpdateWithResponse(
+        String resourceGroupName,
+        String workspaceName,
+        String sqlPoolName,
+        SecurityAlertPolicyName securityAlertPolicyName,
+        SqlPoolSecurityAlertPolicyInner parameters,
+        Context context) {
+        return createOrUpdateWithResponseAsync(
+                resourceGroupName, workspaceName, sqlPoolName, securityAlertPolicyName, parameters, context)
+            .block();
+    }
+
+    /**
+     * Create or update a Sql pool's security alert policy
+     *
+     * <p>Create or update a Sql pool's security alert policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -720,45 +765,21 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
         String sqlPoolName,
         SecurityAlertPolicyName securityAlertPolicyName,
         SqlPoolSecurityAlertPolicyInner parameters) {
-        return createOrUpdateAsync(resourceGroupName, workspaceName, sqlPoolName, securityAlertPolicyName, parameters)
-            .block();
-    }
-
-    /**
-     * Create or update a Sql pool's security alert policy.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param sqlPoolName SQL pool name.
-     * @param securityAlertPolicyName The name of the security alert policy.
-     * @param parameters The Sql pool security alert policy.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Sql pool security alert policy.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<SqlPoolSecurityAlertPolicyInner> createOrUpdateWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        SecurityAlertPolicyName securityAlertPolicyName,
-        SqlPoolSecurityAlertPolicyInner parameters,
-        Context context) {
-        return createOrUpdateWithResponseAsync(
-                resourceGroupName, workspaceName, sqlPoolName, securityAlertPolicyName, parameters, context)
-            .block();
+        return createOrUpdateWithResponse(
+                resourceGroupName, workspaceName, sqlPoolName, securityAlertPolicyName, parameters, Context.NONE)
+            .getValue();
     }
 
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of SQL pool security alert policies.
+     * @return a list of SQL pool security alert policies along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SqlPoolSecurityAlertPolicyInner>> listNextSinglePageAsync(String nextLink) {
@@ -789,12 +810,14 @@ public final class SqlPoolSecurityAlertPoliciesClientImpl implements SqlPoolSecu
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of SQL pool security alert policies.
+     * @return a list of SQL pool security alert policies along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SqlPoolSecurityAlertPolicyInner>> listNextSinglePageAsync(

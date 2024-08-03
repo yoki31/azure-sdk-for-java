@@ -6,50 +6,65 @@ package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
+import com.azure.resourcemanager.datafactory.models.CredentialReference;
 import com.azure.resourcemanager.datafactory.models.SecretBase;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Azure Databricks Delta Lake linked service properties. */
+/**
+ * Azure Databricks Delta Lake linked service properties.
+ */
 @Fluent
 public final class AzureDatabricksDetltaLakeLinkedServiceTypeProperties {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(AzureDatabricksDetltaLakeLinkedServiceTypeProperties.class);
-
     /*
-     * <REGION>.azuredatabricks.net, domain name of your Databricks deployment.
-     * Type: string (or Expression with resultType string).
+     * <REGION>.azuredatabricks.net, domain name of your Databricks deployment. Type: string (or Expression with
+     * resultType string).
      */
     @JsonProperty(value = "domain", required = true)
     private Object domain;
 
     /*
-     * Access token for databricks REST API. Refer to
-     * https://docs.azuredatabricks.net/api/latest/authentication.html. Type:
-     * string, SecureString or AzureKeyVaultSecretReference.
+     * Access token for databricks REST API. Refer to https://docs.azuredatabricks.net/api/latest/authentication.html.
+     * Type: string, SecureString or AzureKeyVaultSecretReference.
      */
     @JsonProperty(value = "accessToken")
     private SecretBase accessToken;
 
     /*
-     * The id of an existing interactive cluster that will be used for all runs
-     * of this job. Type: string (or Expression with resultType string).
+     * The id of an existing interactive cluster that will be used for all runs of this job. Type: string (or Expression
+     * with resultType string).
      */
     @JsonProperty(value = "clusterId")
     private Object clusterId;
 
     /*
-     * The encrypted credential used for authentication. Credentials are
-     * encrypted using the integration runtime credential manager. Type: string
-     * (or Expression with resultType string).
+     * The encrypted credential used for authentication. Credentials are encrypted using the integration runtime
+     * credential manager. Type: string.
      */
     @JsonProperty(value = "encryptedCredential")
-    private Object encryptedCredential;
+    private String encryptedCredential;
+
+    /*
+     * The credential reference containing authentication information.
+     */
+    @JsonProperty(value = "credential")
+    private CredentialReference credential;
+
+    /*
+     * Workspace resource id for databricks REST API. Type: string (or Expression with resultType string).
+     */
+    @JsonProperty(value = "workspaceResourceId")
+    private Object workspaceResourceId;
+
+    /**
+     * Creates an instance of AzureDatabricksDetltaLakeLinkedServiceTypeProperties class.
+     */
+    public AzureDatabricksDetltaLakeLinkedServiceTypeProperties() {
+    }
 
     /**
      * Get the domain property: &lt;REGION&gt;.azuredatabricks.net, domain name of your Databricks deployment. Type:
      * string (or Expression with resultType string).
-     *
+     * 
      * @return the domain value.
      */
     public Object domain() {
@@ -59,7 +74,7 @@ public final class AzureDatabricksDetltaLakeLinkedServiceTypeProperties {
     /**
      * Set the domain property: &lt;REGION&gt;.azuredatabricks.net, domain name of your Databricks deployment. Type:
      * string (or Expression with resultType string).
-     *
+     * 
      * @param domain the domain value to set.
      * @return the AzureDatabricksDetltaLakeLinkedServiceTypeProperties object itself.
      */
@@ -72,7 +87,7 @@ public final class AzureDatabricksDetltaLakeLinkedServiceTypeProperties {
      * Get the accessToken property: Access token for databricks REST API. Refer to
      * https://docs.azuredatabricks.net/api/latest/authentication.html. Type: string, SecureString or
      * AzureKeyVaultSecretReference.
-     *
+     * 
      * @return the accessToken value.
      */
     public SecretBase accessToken() {
@@ -83,7 +98,7 @@ public final class AzureDatabricksDetltaLakeLinkedServiceTypeProperties {
      * Set the accessToken property: Access token for databricks REST API. Refer to
      * https://docs.azuredatabricks.net/api/latest/authentication.html. Type: string, SecureString or
      * AzureKeyVaultSecretReference.
-     *
+     * 
      * @param accessToken the accessToken value to set.
      * @return the AzureDatabricksDetltaLakeLinkedServiceTypeProperties object itself.
      */
@@ -95,7 +110,7 @@ public final class AzureDatabricksDetltaLakeLinkedServiceTypeProperties {
     /**
      * Get the clusterId property: The id of an existing interactive cluster that will be used for all runs of this job.
      * Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the clusterId value.
      */
     public Object clusterId() {
@@ -105,7 +120,7 @@ public final class AzureDatabricksDetltaLakeLinkedServiceTypeProperties {
     /**
      * Set the clusterId property: The id of an existing interactive cluster that will be used for all runs of this job.
      * Type: string (or Expression with resultType string).
-     *
+     * 
      * @param clusterId the clusterId value to set.
      * @return the AzureDatabricksDetltaLakeLinkedServiceTypeProperties object itself.
      */
@@ -116,41 +131,87 @@ public final class AzureDatabricksDetltaLakeLinkedServiceTypeProperties {
 
     /**
      * Get the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @return the encryptedCredential value.
      */
-    public Object encryptedCredential() {
+    public String encryptedCredential() {
         return this.encryptedCredential;
     }
 
     /**
      * Set the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @param encryptedCredential the encryptedCredential value to set.
      * @return the AzureDatabricksDetltaLakeLinkedServiceTypeProperties object itself.
      */
-    public AzureDatabricksDetltaLakeLinkedServiceTypeProperties withEncryptedCredential(Object encryptedCredential) {
+    public AzureDatabricksDetltaLakeLinkedServiceTypeProperties withEncryptedCredential(String encryptedCredential) {
         this.encryptedCredential = encryptedCredential;
         return this;
     }
 
     /**
+     * Get the credential property: The credential reference containing authentication information.
+     * 
+     * @return the credential value.
+     */
+    public CredentialReference credential() {
+        return this.credential;
+    }
+
+    /**
+     * Set the credential property: The credential reference containing authentication information.
+     * 
+     * @param credential the credential value to set.
+     * @return the AzureDatabricksDetltaLakeLinkedServiceTypeProperties object itself.
+     */
+    public AzureDatabricksDetltaLakeLinkedServiceTypeProperties withCredential(CredentialReference credential) {
+        this.credential = credential;
+        return this;
+    }
+
+    /**
+     * Get the workspaceResourceId property: Workspace resource id for databricks REST API. Type: string (or Expression
+     * with resultType string).
+     * 
+     * @return the workspaceResourceId value.
+     */
+    public Object workspaceResourceId() {
+        return this.workspaceResourceId;
+    }
+
+    /**
+     * Set the workspaceResourceId property: Workspace resource id for databricks REST API. Type: string (or Expression
+     * with resultType string).
+     * 
+     * @param workspaceResourceId the workspaceResourceId value to set.
+     * @return the AzureDatabricksDetltaLakeLinkedServiceTypeProperties object itself.
+     */
+    public AzureDatabricksDetltaLakeLinkedServiceTypeProperties withWorkspaceResourceId(Object workspaceResourceId) {
+        this.workspaceResourceId = workspaceResourceId;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (domain() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property domain in model"
-                            + " AzureDatabricksDetltaLakeLinkedServiceTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property domain in model AzureDatabricksDetltaLakeLinkedServiceTypeProperties"));
         }
         if (accessToken() != null) {
             accessToken().validate();
         }
+        if (credential() != null) {
+            credential().validate();
+        }
     }
+
+    private static final ClientLogger LOGGER
+        = new ClientLogger(AzureDatabricksDetltaLakeLinkedServiceTypeProperties.class);
 }

@@ -22,7 +22,7 @@ operates in three different modes:
 * Isolated
 
 The core difference between the three modes of operation is the operations which
-are permitted on each, and whether or not the customer needs to create an
+are permitted on each, and if the customer needs to create an
 instance of the provider.
 
 Service Mode | Instance Creation  | Attestation | Policy Get | Policy Set | Signed Policies| Policy Management Certificate
@@ -61,9 +61,9 @@ Isolated mode instances are intended for customers who desire an additional leve
 of authorization beyond that which is allowed by ARM RBAC authorization. When a
 customer creates an isolated attestation instance, they also need to create an
 RSA asymmetric key pair and an X.509 certificate which contains that asymmetric
-key (the certificate can be self signed, or it can be issued by a certificate
+key (the certificate can be self-signed, or it can be issued by a certificate
 authority). Attestation policies MUST be signed with one of the private keys
-associated with the instance (either at instance creation or added with the [add_policy_management_certificate][add_policy_management_cert] API.
+associated with the instance (either at instance creation or added with the [add_policy_management_certificate][add_policy_management_cert] API).
 
 ## Sample Requirements
 
@@ -75,14 +75,14 @@ variables have been set by the user:
 * ATTESTATION_LOCATION_SHORT_NAME - the short name for the region in which the
   sample should be run - used to interact with the shared endpoint for that
   region.
-* isolatedSigningCertificate - The DER encoded form of the signing
+* ISOLATED_SIGNING_CERTIFICATE - The DER encoded form of the signing
   certificate used to create an isolated attestation instance, Base64 encoded.
-* isolatedSigningKey - The DER encoded of an RSA Private key,
+* ISOLATED_SIGNING_KEY - The DER encoded of an RSA Private key,
   Base64 encoded, which was used to create an isolated attestation service instance.
-* policySigningKey0 - The DER encoded of an RSA Private key,
+* POLICY_SIGNING_KEY0 - The DER encoded of an RSA Private key,
   Base64 encoded.
-* policySigningCertificate0 - The DER encoded form of a self-signed
-  certificate which contains the public key associated with policySigningKey0, Base64 encoded.
+* POLICY_SIGNING_CERTIFICATE0 - The DER encoded form of a self-signed
+  certificate which contains the public key associated with POLICY_SIGNING_KEY0, Base64 encoded.
 
 The tests also assume that the currently logged on user is authorized to call
 into the attestation service instance because they use [DefaultAzureCredential](https://docs.microsoft.com/java/api/overview/azure/identity-readme?view=azure-java-stable#defaultazurecredential) for authorization.
@@ -123,11 +123,11 @@ issuancerules {
 ```
 
 There are two sections to the document: `authorizationrules` and `issuancerules`.
-`authorizationrules` are rules which control whether or not an attestation token
+`authorizationrules` are rules which control whether an attestation token
 should be issued. `issuancerules` are rules which cause claims to be issued in an
 attestation token.
 
-In the example, the attestation service will issue an attestation token if an only if
+In the example, the attestation service will issue an attestation token if and only if
 the SGX enclave is configured as follows:
 
 * Not-Debuggable

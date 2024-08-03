@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Result for utterances query. */
+/**
+ * Result for utterances query.
+ */
 @Fluent
 public final class QueryUtterancesResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(QueryUtterancesResult.class);
-
     /*
      * A sample utterance.
      */
@@ -27,8 +25,14 @@ public final class QueryUtterancesResult {
     private Float score;
 
     /**
+     * Creates an instance of QueryUtterancesResult class.
+     */
+    public QueryUtterancesResult() {
+    }
+
+    /**
      * Get the sampleUtterance property: A sample utterance.
-     *
+     * 
      * @return the sampleUtterance value.
      */
     public SampleUtterance sampleUtterance() {
@@ -37,7 +41,7 @@ public final class QueryUtterancesResult {
 
     /**
      * Set the sampleUtterance property: A sample utterance.
-     *
+     * 
      * @param sampleUtterance the sampleUtterance value to set.
      * @return the QueryUtterancesResult object itself.
      */
@@ -48,7 +52,7 @@ public final class QueryUtterancesResult {
 
     /**
      * Get the score property: Score of a sample utterance.
-     *
+     * 
      * @return the score value.
      */
     public Float score() {
@@ -57,7 +61,7 @@ public final class QueryUtterancesResult {
 
     /**
      * Set the score property: Score of a sample utterance.
-     *
+     * 
      * @param score the score value to set.
      * @return the QueryUtterancesResult object itself.
      */
@@ -68,7 +72,7 @@ public final class QueryUtterancesResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

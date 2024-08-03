@@ -10,6 +10,8 @@ import com.azure.core.models.GeoPosition;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.search.documents.implementation.util.SpatialFormatter;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -28,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Tests {@link SpatialFormatter}.
  */
+@Execution(ExecutionMode.CONCURRENT)
 public class SpatialFormatterTests {
     private final ClientLogger logger = new ClientLogger(SpatialFormatterTests.class);
 
@@ -37,7 +40,7 @@ public class SpatialFormatterTests {
         assertEquals(expected, SpatialFormatter.encodePoint(longitude, latitude));
     }
 
-    private static Stream<Arguments> encodePointSupplier() {
+    static Stream<Arguments> encodePointSupplier() {
         final String pointFormat = "geography'POINT(%s %s)'";
 
         return Stream.of(
@@ -75,7 +78,7 @@ public class SpatialFormatterTests {
         assertEquals(expected, SpatialFormatter.encodePolygon(lineString, logger));
     }
 
-    private static Stream<Arguments> encodeGeoLineStringPolygonSupplier() {
+    static Stream<Arguments> encodeGeoLineStringPolygonSupplier() {
         return getGeoPositionsAndStringValues()
             .stream()
             .map(positionsExpected -> {
@@ -100,7 +103,7 @@ public class SpatialFormatterTests {
         assertEquals(expected, SpatialFormatter.encodePolygon(polygon, logger));
     }
 
-    private static Stream<Arguments> encodeGeoPolygonPolygonSupplier() {
+    static Stream<Arguments> encodeGeoPolygonPolygonSupplier() {
         return getGeoPositionsAndStringValues()
             .stream()
             .map(positionsExpected -> {
@@ -110,7 +113,7 @@ public class SpatialFormatterTests {
             });
     }
 
-    private static List<Tuple2<List<GeoPosition>, String>> getGeoPositionsAndStringValues() {
+    static List<Tuple2<List<GeoPosition>, String>> getGeoPositionsAndStringValues() {
         List<GeoPosition> noDecimalCoordinates = Arrays.asList(new GeoPosition(0, 0), new GeoPosition(0, 1),
             new GeoPosition(1, 1), new GeoPosition(0, 0));
         String noDecimalCoordinatesString = createGeographyPolygon("0", "0", "0", "1", "1", "1", "0", "0");

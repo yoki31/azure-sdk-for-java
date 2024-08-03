@@ -4,6 +4,7 @@
 
 package com.azure.resourcemanager.apimanagement.implementation;
 
+import com.azure.core.annotation.BodyParam;
 import com.azure.core.annotation.Delete;
 import com.azure.core.annotation.ExpectedResponses;
 import com.azure.core.annotation.Get;
@@ -27,7 +28,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.ContentTypesClient;
 import com.azure.resourcemanager.apimanagement.fluent.models.ContentTypeContractInner;
 import com.azure.resourcemanager.apimanagement.models.ContentTypeCollection;
@@ -37,8 +37,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in ContentTypesClient. */
 public final class ContentTypesClientImpl implements ContentTypesClient {
-    private final ClientLogger logger = new ClientLogger(ContentTypesClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final ContentTypesService service;
 
@@ -62,11 +60,10 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApiManagementClientC")
-    private interface ContentTypesService {
+    public interface ContentTypesService {
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/contentTypes")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/contentTypes")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<ContentTypeCollection>> listByService(
@@ -80,8 +77,7 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
 
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/contentTypes/{contentTypeId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/contentTypes/{contentTypeId}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<ContentTypesGetResponse> get(
@@ -96,8 +92,7 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
 
         @Headers({"Content-Type: application/json"})
         @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/contentTypes/{contentTypeId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/contentTypes/{contentTypeId}")
         @ExpectedResponses({200, 201})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<ContentTypesCreateOrUpdateResponse> createOrUpdate(
@@ -108,13 +103,13 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
             @HeaderParam("If-Match") String ifMatch,
             @QueryParam("api-version") String apiVersion,
             @PathParam("subscriptionId") String subscriptionId,
+            @BodyParam("application/json") ContentTypeContractInner parameters,
             @HeaderParam("Accept") String accept,
             Context context);
 
         @Headers({"Content-Type: application/json"})
         @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/contentTypes/{contentTypeId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/contentTypes/{contentTypeId}")
         @ExpectedResponses({200, 204})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Void>> delete(
@@ -143,12 +138,12 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
      * Lists the developer portal's content types. Content types describe content items' properties, validation rules,
      * and constraints.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged list of content types.
+     * @return paged list of content types along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ContentTypeContractInner>> listByServiceSinglePageAsync(
@@ -201,13 +196,13 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
      * Lists the developer portal's content types. Content types describe content items' properties, validation rules,
      * and constraints.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged list of content types.
+     * @return paged list of content types along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ContentTypeContractInner>> listByServiceSinglePageAsync(
@@ -257,12 +252,12 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
      * Lists the developer portal's content types. Content types describe content items' properties, validation rules,
      * and constraints.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged list of content types.
+     * @return paged list of content types as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<ContentTypeContractInner> listByServiceAsync(String resourceGroupName, String serviceName) {
@@ -275,13 +270,13 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
      * Lists the developer portal's content types. Content types describe content items' properties, validation rules,
      * and constraints.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged list of content types.
+     * @return paged list of content types as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<ContentTypeContractInner> listByServiceAsync(
@@ -295,12 +290,12 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
      * Lists the developer portal's content types. Content types describe content items' properties, validation rules,
      * and constraints.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged list of content types.
+     * @return paged list of content types as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<ContentTypeContractInner> listByService(String resourceGroupName, String serviceName) {
@@ -311,13 +306,13 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
      * Lists the developer portal's content types. Content types describe content items' properties, validation rules,
      * and constraints.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged list of content types.
+     * @return paged list of content types as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<ContentTypeContractInner> listByService(
@@ -329,13 +324,13 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
      * Gets the details of the developer portal's content type. Content types describe content items' properties,
      * validation rules, and constraints.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param contentTypeId Content type identifier.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the developer portal's content type.
+     * @return the details of the developer portal's content type on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ContentTypesGetResponse> getWithResponseAsync(
@@ -383,14 +378,14 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
      * Gets the details of the developer portal's content type. Content types describe content items' properties,
      * validation rules, and constraints.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param contentTypeId Content type identifier.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the developer portal's content type.
+     * @return the details of the developer portal's content type on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ContentTypesGetResponse> getWithResponseAsync(
@@ -435,50 +430,26 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
      * Gets the details of the developer portal's content type. Content types describe content items' properties,
      * validation rules, and constraints.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param contentTypeId Content type identifier.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the developer portal's content type.
+     * @return the details of the developer portal's content type on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ContentTypeContractInner> getAsync(
         String resourceGroupName, String serviceName, String contentTypeId) {
         return getWithResponseAsync(resourceGroupName, serviceName, contentTypeId)
-            .flatMap(
-                (ContentTypesGetResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Gets the details of the developer portal's content type. Content types describe content items' properties,
      * validation rules, and constraints.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param contentTypeId Content type identifier.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the developer portal's content type.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public ContentTypeContractInner get(String resourceGroupName, String serviceName, String contentTypeId) {
-        return getAsync(resourceGroupName, serviceName, contentTypeId).block();
-    }
-
-    /**
-     * Gets the details of the developer portal's content type. Content types describe content items' properties,
-     * validation rules, and constraints.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param contentTypeId Content type identifier.
      * @param context The context to associate with this operation.
@@ -494,22 +465,44 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
     }
 
     /**
+     * Gets the details of the developer portal's content type. Content types describe content items' properties,
+     * validation rules, and constraints.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param contentTypeId Content type identifier.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the details of the developer portal's content type.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public ContentTypeContractInner get(String resourceGroupName, String serviceName, String contentTypeId) {
+        return getWithResponse(resourceGroupName, serviceName, contentTypeId, Context.NONE).getValue();
+    }
+
+    /**
      * Creates or updates the developer portal's content type. Content types describe content items' properties,
      * validation rules, and constraints. Custom content types' identifiers need to start with the `c-` prefix. Built-in
      * content types can't be modified.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param contentTypeId Content type identifier.
+     * @param parameters Create or update parameters.
      * @param ifMatch ETag of the Entity. Not required when creating an entity, but required when updating an entity.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return content type contract details.
+     * @return content type contract details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ContentTypesCreateOrUpdateResponse> createOrUpdateWithResponseAsync(
-        String resourceGroupName, String serviceName, String contentTypeId, String ifMatch) {
+        String resourceGroupName,
+        String serviceName,
+        String contentTypeId,
+        ContentTypeContractInner parameters,
+        String ifMatch) {
         if (this.client.getEndpoint() == null) {
             return Mono
                 .error(
@@ -531,6 +524,11 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
                 .error(
                     new IllegalArgumentException(
                         "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+        }
+        if (parameters == null) {
+            return Mono.error(new IllegalArgumentException("Parameter parameters is required and cannot be null."));
+        } else {
+            parameters.validate();
         }
         final String accept = "application/json";
         return FluxUtil
@@ -545,6 +543,7 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
                             ifMatch,
                             this.client.getApiVersion(),
                             this.client.getSubscriptionId(),
+                            parameters,
                             accept,
                             context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
@@ -555,19 +554,25 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
      * validation rules, and constraints. Custom content types' identifiers need to start with the `c-` prefix. Built-in
      * content types can't be modified.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param contentTypeId Content type identifier.
+     * @param parameters Create or update parameters.
      * @param ifMatch ETag of the Entity. Not required when creating an entity, but required when updating an entity.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return content type contract details.
+     * @return content type contract details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ContentTypesCreateOrUpdateResponse> createOrUpdateWithResponseAsync(
-        String resourceGroupName, String serviceName, String contentTypeId, String ifMatch, Context context) {
+        String resourceGroupName,
+        String serviceName,
+        String contentTypeId,
+        ContentTypeContractInner parameters,
+        String ifMatch,
+        Context context) {
         if (this.client.getEndpoint() == null) {
             return Mono
                 .error(
@@ -590,6 +595,11 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
                     new IllegalArgumentException(
                         "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
+        if (parameters == null) {
+            return Mono.error(new IllegalArgumentException("Parameter parameters is required and cannot be null."));
+        } else {
+            parameters.validate();
+        }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
@@ -601,6 +611,7 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
                 ifMatch,
                 this.client.getApiVersion(),
                 this.client.getSubscriptionId(),
+                parameters,
                 accept,
                 context);
     }
@@ -610,55 +621,21 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
      * validation rules, and constraints. Custom content types' identifiers need to start with the `c-` prefix. Built-in
      * content types can't be modified.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param contentTypeId Content type identifier.
-     * @param ifMatch ETag of the Entity. Not required when creating an entity, but required when updating an entity.
+     * @param parameters Create or update parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return content type contract details.
+     * @return content type contract details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ContentTypeContractInner> createOrUpdateAsync(
-        String resourceGroupName, String serviceName, String contentTypeId, String ifMatch) {
-        return createOrUpdateWithResponseAsync(resourceGroupName, serviceName, contentTypeId, ifMatch)
-            .flatMap(
-                (ContentTypesCreateOrUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
-    }
-
-    /**
-     * Creates or updates the developer portal's content type. Content types describe content items' properties,
-     * validation rules, and constraints. Custom content types' identifiers need to start with the `c-` prefix. Built-in
-     * content types can't be modified.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param contentTypeId Content type identifier.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return content type contract details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<ContentTypeContractInner> createOrUpdateAsync(
-        String resourceGroupName, String serviceName, String contentTypeId) {
+        String resourceGroupName, String serviceName, String contentTypeId, ContentTypeContractInner parameters) {
         final String ifMatch = null;
-        return createOrUpdateWithResponseAsync(resourceGroupName, serviceName, contentTypeId, ifMatch)
-            .flatMap(
-                (ContentTypesCreateOrUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+        return createOrUpdateWithResponseAsync(resourceGroupName, serviceName, contentTypeId, parameters, ifMatch)
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -666,28 +643,10 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
      * validation rules, and constraints. Custom content types' identifiers need to start with the `c-` prefix. Built-in
      * content types can't be modified.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param contentTypeId Content type identifier.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return content type contract details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public ContentTypeContractInner createOrUpdate(String resourceGroupName, String serviceName, String contentTypeId) {
-        final String ifMatch = null;
-        return createOrUpdateAsync(resourceGroupName, serviceName, contentTypeId, ifMatch).block();
-    }
-
-    /**
-     * Creates or updates the developer portal's content type. Content types describe content items' properties,
-     * validation rules, and constraints. Custom content types' identifiers need to start with the `c-` prefix. Built-in
-     * content types can't be modified.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param contentTypeId Content type identifier.
+     * @param parameters Create or update parameters.
      * @param ifMatch ETag of the Entity. Not required when creating an entity, but required when updating an entity.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -697,8 +656,38 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public ContentTypesCreateOrUpdateResponse createOrUpdateWithResponse(
-        String resourceGroupName, String serviceName, String contentTypeId, String ifMatch, Context context) {
-        return createOrUpdateWithResponseAsync(resourceGroupName, serviceName, contentTypeId, ifMatch, context).block();
+        String resourceGroupName,
+        String serviceName,
+        String contentTypeId,
+        ContentTypeContractInner parameters,
+        String ifMatch,
+        Context context) {
+        return createOrUpdateWithResponseAsync(
+                resourceGroupName, serviceName, contentTypeId, parameters, ifMatch, context)
+            .block();
+    }
+
+    /**
+     * Creates or updates the developer portal's content type. Content types describe content items' properties,
+     * validation rules, and constraints. Custom content types' identifiers need to start with the `c-` prefix. Built-in
+     * content types can't be modified.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param contentTypeId Content type identifier.
+     * @param parameters Create or update parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return content type contract details.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public ContentTypeContractInner createOrUpdate(
+        String resourceGroupName, String serviceName, String contentTypeId, ContentTypeContractInner parameters) {
+        final String ifMatch = null;
+        return createOrUpdateWithResponse(
+                resourceGroupName, serviceName, contentTypeId, parameters, ifMatch, Context.NONE)
+            .getValue();
     }
 
     /**
@@ -706,7 +695,7 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
      * validation rules, and constraints. Built-in content types (with identifiers starting with the `c-` prefix) can't
      * be removed.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param contentTypeId Content type identifier.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -714,7 +703,7 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -767,7 +756,7 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
      * validation rules, and constraints. Built-in content types (with identifiers starting with the `c-` prefix) can't
      * be removed.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param contentTypeId Content type identifier.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -776,7 +765,7 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -826,7 +815,7 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
      * validation rules, and constraints. Built-in content types (with identifiers starting with the `c-` prefix) can't
      * be removed.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param contentTypeId Content type identifier.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -834,12 +823,12 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(String resourceGroupName, String serviceName, String contentTypeId, String ifMatch) {
         return deleteWithResponseAsync(resourceGroupName, serviceName, contentTypeId, ifMatch)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
@@ -847,7 +836,29 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
      * validation rules, and constraints. Built-in content types (with identifiers starting with the `c-` prefix) can't
      * be removed.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param contentTypeId Content type identifier.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> deleteWithResponse(
+        String resourceGroupName, String serviceName, String contentTypeId, String ifMatch, Context context) {
+        return deleteWithResponseAsync(resourceGroupName, serviceName, contentTypeId, ifMatch, context).block();
+    }
+
+    /**
+     * Removes the specified developer portal's content type. Content types describe content items' properties,
+     * validation rules, and constraints. Built-in content types (with identifiers starting with the `c-` prefix) can't
+     * be removed.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param contentTypeId Content type identifier.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -858,39 +869,18 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public void delete(String resourceGroupName, String serviceName, String contentTypeId, String ifMatch) {
-        deleteAsync(resourceGroupName, serviceName, contentTypeId, ifMatch).block();
-    }
-
-    /**
-     * Removes the specified developer portal's content type. Content types describe content items' properties,
-     * validation rules, and constraints. Built-in content types (with identifiers starting with the `c-` prefix) can't
-     * be removed.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param contentTypeId Content type identifier.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> deleteWithResponse(
-        String resourceGroupName, String serviceName, String contentTypeId, String ifMatch, Context context) {
-        return deleteWithResponseAsync(resourceGroupName, serviceName, contentTypeId, ifMatch, context).block();
+        deleteWithResponse(resourceGroupName, serviceName, contentTypeId, ifMatch, Context.NONE);
     }
 
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged list of content types.
+     * @return paged list of content types along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ContentTypeContractInner>> listByServiceNextSinglePageAsync(String nextLink) {
@@ -921,12 +911,13 @@ public final class ContentTypesClientImpl implements ContentTypesClient {
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged list of content types.
+     * @return paged list of content types along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ContentTypeContractInner>> listByServiceNextSinglePageAsync(

@@ -5,25 +5,28 @@
 package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Sybase table dataset properties. */
+/**
+ * Sybase table dataset properties.
+ */
 @Fluent
 public final class SybaseTableDatasetTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SybaseTableDatasetTypeProperties.class);
-
     /*
-     * The Sybase table name. Type: string (or Expression with resultType
-     * string).
+     * The Sybase table name. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "tableName")
     private Object tableName;
 
     /**
+     * Creates an instance of SybaseTableDatasetTypeProperties class.
+     */
+    public SybaseTableDatasetTypeProperties() {
+    }
+
+    /**
      * Get the tableName property: The Sybase table name. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the tableName value.
      */
     public Object tableName() {
@@ -32,7 +35,7 @@ public final class SybaseTableDatasetTypeProperties {
 
     /**
      * Set the tableName property: The Sybase table name. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param tableName the tableName value to set.
      * @return the SybaseTableDatasetTypeProperties object itself.
      */
@@ -43,7 +46,7 @@ public final class SybaseTableDatasetTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Client secret information for factory's bring your own app repository configuration. */
+/**
+ * Client secret information for factory's bring your own app repository configuration.
+ */
 @Fluent
 public final class GitHubClientSecret {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GitHubClientSecret.class);
-
     /*
      * Bring your own app client secret AKV URL.
      */
@@ -27,8 +25,14 @@ public final class GitHubClientSecret {
     private String byoaSecretName;
 
     /**
+     * Creates an instance of GitHubClientSecret class.
+     */
+    public GitHubClientSecret() {
+    }
+
+    /**
      * Get the byoaSecretAkvUrl property: Bring your own app client secret AKV URL.
-     *
+     * 
      * @return the byoaSecretAkvUrl value.
      */
     public String byoaSecretAkvUrl() {
@@ -37,7 +41,7 @@ public final class GitHubClientSecret {
 
     /**
      * Set the byoaSecretAkvUrl property: Bring your own app client secret AKV URL.
-     *
+     * 
      * @param byoaSecretAkvUrl the byoaSecretAkvUrl value to set.
      * @return the GitHubClientSecret object itself.
      */
@@ -48,7 +52,7 @@ public final class GitHubClientSecret {
 
     /**
      * Get the byoaSecretName property: Bring your own app client secret name in AKV.
-     *
+     * 
      * @return the byoaSecretName value.
      */
     public String byoaSecretName() {
@@ -57,7 +61,7 @@ public final class GitHubClientSecret {
 
     /**
      * Set the byoaSecretName property: Bring your own app client secret name in AKV.
-     *
+     * 
      * @param byoaSecretName the byoaSecretName value to set.
      * @return the GitHubClientSecret object itself.
      */
@@ -68,7 +72,7 @@ public final class GitHubClientSecret {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

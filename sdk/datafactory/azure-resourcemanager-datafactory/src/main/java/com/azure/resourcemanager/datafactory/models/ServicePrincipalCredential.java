@@ -7,43 +7,74 @@ package com.azure.resourcemanager.datafactory.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.fluent.models.ServicePrincipalCredentialTypeProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.List;
 
-/** Service principal credential. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * Service principal credential.
+ */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "type",
+    defaultImpl = ServicePrincipalCredential.class,
+    visible = true)
 @JsonTypeName("ServicePrincipal")
 @Fluent
 public final class ServicePrincipalCredential extends Credential {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ServicePrincipalCredential.class);
+    /*
+     * Type of credential.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "ServicePrincipal";
 
     /*
      * Service Principal credential properties.
      */
     @JsonProperty(value = "typeProperties", required = true)
-    private ServicePrincipalCredentialTypeProperties innerTypeProperties =
-        new ServicePrincipalCredentialTypeProperties();
+    private ServicePrincipalCredentialTypeProperties innerTypeProperties
+        = new ServicePrincipalCredentialTypeProperties();
+
+    /**
+     * Creates an instance of ServicePrincipalCredential class.
+     */
+    public ServicePrincipalCredential() {
+    }
+
+    /**
+     * Get the type property: Type of credential.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
 
     /**
      * Get the innerTypeProperties property: Service Principal credential properties.
-     *
+     * 
      * @return the innerTypeProperties value.
      */
     private ServicePrincipalCredentialTypeProperties innerTypeProperties() {
         return this.innerTypeProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ServicePrincipalCredential withDescription(String description) {
         super.withDescription(description);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ServicePrincipalCredential withAnnotations(List<Object> annotations) {
         super.withAnnotations(annotations);
@@ -52,7 +83,7 @@ public final class ServicePrincipalCredential extends Credential {
 
     /**
      * Get the servicePrincipalId property: The app ID of the service principal used to authenticate.
-     *
+     * 
      * @return the servicePrincipalId value.
      */
     public Object servicePrincipalId() {
@@ -61,7 +92,7 @@ public final class ServicePrincipalCredential extends Credential {
 
     /**
      * Set the servicePrincipalId property: The app ID of the service principal used to authenticate.
-     *
+     * 
      * @param servicePrincipalId the servicePrincipalId value to set.
      * @return the ServicePrincipalCredential object itself.
      */
@@ -75,7 +106,7 @@ public final class ServicePrincipalCredential extends Credential {
 
     /**
      * Get the servicePrincipalKey property: The key of the service principal used to authenticate.
-     *
+     * 
      * @return the servicePrincipalKey value.
      */
     public AzureKeyVaultSecretReference servicePrincipalKey() {
@@ -84,7 +115,7 @@ public final class ServicePrincipalCredential extends Credential {
 
     /**
      * Set the servicePrincipalKey property: The key of the service principal used to authenticate.
-     *
+     * 
      * @param servicePrincipalKey the servicePrincipalKey value to set.
      * @return the ServicePrincipalCredential object itself.
      */
@@ -98,7 +129,7 @@ public final class ServicePrincipalCredential extends Credential {
 
     /**
      * Get the tenant property: The ID of the tenant to which the service principal belongs.
-     *
+     * 
      * @return the tenant value.
      */
     public Object tenant() {
@@ -107,7 +138,7 @@ public final class ServicePrincipalCredential extends Credential {
 
     /**
      * Set the tenant property: The ID of the tenant to which the service principal belongs.
-     *
+     * 
      * @param tenant the tenant value to set.
      * @return the ServicePrincipalCredential object itself.
      */
@@ -121,19 +152,20 @@ public final class ServicePrincipalCredential extends Credential {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
         if (innerTypeProperties() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property innerTypeProperties in model ServicePrincipalCredential"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property innerTypeProperties in model ServicePrincipalCredential"));
         } else {
             innerTypeProperties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ServicePrincipalCredential.class);
 }

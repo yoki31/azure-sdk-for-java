@@ -5,8 +5,6 @@
 package com.azure.resourcemanager.applicationinsights.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
@@ -14,8 +12,6 @@ import java.util.Map;
 /** Work item configuration creation payload. */
 @Fluent
 public final class WorkItemCreateConfiguration {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(WorkItemCreateConfiguration.class);
-
     /*
      * Unique connector id
      */
@@ -40,6 +36,10 @@ public final class WorkItemCreateConfiguration {
     @JsonProperty(value = "WorkItemProperties")
     @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
     private Map<String, String> workItemProperties;
+
+    /** Creates an instance of WorkItemCreateConfiguration class. */
+    public WorkItemCreateConfiguration() {
+    }
 
     /**
      * Get the connectorId property: Unique connector id.

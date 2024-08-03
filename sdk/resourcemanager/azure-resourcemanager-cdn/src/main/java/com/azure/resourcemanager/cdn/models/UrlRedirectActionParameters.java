@@ -6,19 +6,18 @@ package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Defines the parameters for the url redirect action. */
+/**
+ * Defines the parameters for the url redirect action.
+ */
 @Fluent
 public final class UrlRedirectActionParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(UrlRedirectActionParameters.class);
-
     /*
-     * The @odata.type property.
+     * The typeName property.
      */
-    @JsonProperty(value = "@odata.type", required = true)
-    private String odataType;
+    @JsonProperty(value = "typeName", required = true)
+    private String typeName = "DeliveryRuleUrlRedirectActionParameters";
 
     /*
      * The redirect type the rule will use when redirecting traffic.
@@ -33,63 +32,61 @@ public final class UrlRedirectActionParameters {
     private DestinationProtocol destinationProtocol;
 
     /*
-     * The full path to redirect. Path cannot be empty and must start with /.
-     * Leave empty to use the incoming path as destination path.
+     * The full path to redirect. Path cannot be empty and must start with /. Leave empty to use the incoming path as
+     * destination path.
      */
     @JsonProperty(value = "customPath")
     private String customPath;
 
     /*
-     * Host to redirect. Leave empty to use the incoming host as the
-     * destination host.
+     * Host to redirect. Leave empty to use the incoming host as the destination host.
      */
     @JsonProperty(value = "customHostname")
     private String customHostname;
 
     /*
-     * The set of query strings to be placed in the redirect URL. Setting this
-     * value would replace any existing query string; leave empty to preserve
-     * the incoming query string. Query string must be in <key>=<value> format.
-     * ? and & will be added automatically so do not include them.
+     * The set of query strings to be placed in the redirect URL. Setting this value would replace any existing query
+     * string; leave empty to preserve the incoming query string. Query string must be in <key>=<value> format. ? and &
+     * will be added automatically so do not include them.
      */
     @JsonProperty(value = "customQueryString")
     private String customQueryString;
 
     /*
-     * Fragment to add to the redirect URL. Fragment is the part of the URL
-     * that comes after #. Do not include the #.
+     * Fragment to add to the redirect URL. Fragment is the part of the URL that comes after #. Do not include the #.
      */
     @JsonProperty(value = "customFragment")
     private String customFragment;
 
-    /** Creates an instance of UrlRedirectActionParameters class. */
-    public UrlRedirectActionParameters() {
-        odataType = "#Microsoft.Azure.Cdn.Models.DeliveryRuleUrlRedirectActionParameters";
-    }
-
     /**
-     * Get the odataType property: The @odata.type property.
-     *
-     * @return the odataType value.
+     * Creates an instance of UrlRedirectActionParameters class.
      */
-    public String odataType() {
-        return this.odataType;
+    public UrlRedirectActionParameters() {
     }
 
     /**
-     * Set the odataType property: The @odata.type property.
-     *
-     * @param odataType the odataType value to set.
+     * Get the typeName property: The typeName property.
+     * 
+     * @return the typeName value.
+     */
+    public String typeName() {
+        return this.typeName;
+    }
+
+    /**
+     * Set the typeName property: The typeName property.
+     * 
+     * @param typeName the typeName value to set.
      * @return the UrlRedirectActionParameters object itself.
      */
-    public UrlRedirectActionParameters withOdataType(String odataType) {
-        this.odataType = odataType;
+    public UrlRedirectActionParameters withTypeName(String typeName) {
+        this.typeName = typeName;
         return this;
     }
 
     /**
      * Get the redirectType property: The redirect type the rule will use when redirecting traffic.
-     *
+     * 
      * @return the redirectType value.
      */
     public RedirectType redirectType() {
@@ -98,7 +95,7 @@ public final class UrlRedirectActionParameters {
 
     /**
      * Set the redirectType property: The redirect type the rule will use when redirecting traffic.
-     *
+     * 
      * @param redirectType the redirectType value to set.
      * @return the UrlRedirectActionParameters object itself.
      */
@@ -109,7 +106,7 @@ public final class UrlRedirectActionParameters {
 
     /**
      * Get the destinationProtocol property: Protocol to use for the redirect. The default value is MatchRequest.
-     *
+     * 
      * @return the destinationProtocol value.
      */
     public DestinationProtocol destinationProtocol() {
@@ -118,7 +115,7 @@ public final class UrlRedirectActionParameters {
 
     /**
      * Set the destinationProtocol property: Protocol to use for the redirect. The default value is MatchRequest.
-     *
+     * 
      * @param destinationProtocol the destinationProtocol value to set.
      * @return the UrlRedirectActionParameters object itself.
      */
@@ -130,7 +127,7 @@ public final class UrlRedirectActionParameters {
     /**
      * Get the customPath property: The full path to redirect. Path cannot be empty and must start with /. Leave empty
      * to use the incoming path as destination path.
-     *
+     * 
      * @return the customPath value.
      */
     public String customPath() {
@@ -140,7 +137,7 @@ public final class UrlRedirectActionParameters {
     /**
      * Set the customPath property: The full path to redirect. Path cannot be empty and must start with /. Leave empty
      * to use the incoming path as destination path.
-     *
+     * 
      * @param customPath the customPath value to set.
      * @return the UrlRedirectActionParameters object itself.
      */
@@ -151,7 +148,7 @@ public final class UrlRedirectActionParameters {
 
     /**
      * Get the customHostname property: Host to redirect. Leave empty to use the incoming host as the destination host.
-     *
+     * 
      * @return the customHostname value.
      */
     public String customHostname() {
@@ -160,7 +157,7 @@ public final class UrlRedirectActionParameters {
 
     /**
      * Set the customHostname property: Host to redirect. Leave empty to use the incoming host as the destination host.
-     *
+     * 
      * @param customHostname the customHostname value to set.
      * @return the UrlRedirectActionParameters object itself.
      */
@@ -170,10 +167,10 @@ public final class UrlRedirectActionParameters {
     }
 
     /**
-     * Get the customQueryString property: The set of query strings to be placed in the redirect URL. Setting this value
-     * would replace any existing query string; leave empty to preserve the incoming query string. Query string must be
-     * in &lt;key&gt;=&lt;value&gt; format. ? and &amp; will be added automatically so do not include them.
-     *
+     * Get the customQueryString property: The set of query strings to be placed in the redirect URL. Setting this
+     * value would replace any existing query string; leave empty to preserve the incoming query string. Query string
+     * must be in &lt;key&gt;=&lt;value&gt; format. ? and &amp; will be added automatically so do not include them.
+     * 
      * @return the customQueryString value.
      */
     public String customQueryString() {
@@ -181,10 +178,10 @@ public final class UrlRedirectActionParameters {
     }
 
     /**
-     * Set the customQueryString property: The set of query strings to be placed in the redirect URL. Setting this value
-     * would replace any existing query string; leave empty to preserve the incoming query string. Query string must be
-     * in &lt;key&gt;=&lt;value&gt; format. ? and &amp; will be added automatically so do not include them.
-     *
+     * Set the customQueryString property: The set of query strings to be placed in the redirect URL. Setting this
+     * value would replace any existing query string; leave empty to preserve the incoming query string. Query string
+     * must be in &lt;key&gt;=&lt;value&gt; format. ? and &amp; will be added automatically so do not include them.
+     * 
      * @param customQueryString the customQueryString value to set.
      * @return the UrlRedirectActionParameters object itself.
      */
@@ -196,7 +193,7 @@ public final class UrlRedirectActionParameters {
     /**
      * Get the customFragment property: Fragment to add to the redirect URL. Fragment is the part of the URL that comes
      * after #. Do not include the #.
-     *
+     * 
      * @return the customFragment value.
      */
     public String customFragment() {
@@ -206,7 +203,7 @@ public final class UrlRedirectActionParameters {
     /**
      * Set the customFragment property: Fragment to add to the redirect URL. Fragment is the part of the URL that comes
      * after #. Do not include the #.
-     *
+     * 
      * @param customFragment the customFragment value to set.
      * @return the UrlRedirectActionParameters object itself.
      */
@@ -217,15 +214,15 @@ public final class UrlRedirectActionParameters {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (redirectType() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property redirectType in model UrlRedirectActionParameters"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property redirectType in model UrlRedirectActionParameters"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(UrlRedirectActionParameters.class);
 }

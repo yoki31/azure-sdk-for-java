@@ -7,21 +7,21 @@ package com.azure.resourcemanager.applicationinsights.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.applicationinsights.fluent.models.ApplicationInsightsComponentApiKeyInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Describes the list of API Keys of an Application Insights Component. */
 @Fluent
 public final class ApplicationInsightsComponentApiKeyListResult {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(ApplicationInsightsComponentApiKeyListResult.class);
-
     /*
      * List of API Key definitions.
      */
     @JsonProperty(value = "value", required = true)
     private List<ApplicationInsightsComponentApiKeyInner> value;
+
+    /** Creates an instance of ApplicationInsightsComponentApiKeyListResult class. */
+    public ApplicationInsightsComponentApiKeyListResult() {
+    }
 
     /**
      * Get the value property: List of API Key definitions.
@@ -50,7 +50,7 @@ public final class ApplicationInsightsComponentApiKeyListResult {
      */
     public void validate() {
         if (value() == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         "Missing required property value in model ApplicationInsightsComponentApiKeyListResult"));
@@ -58,4 +58,6 @@ public final class ApplicationInsightsComponentApiKeyListResult {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ApplicationInsightsComponentApiKeyListResult.class);
 }

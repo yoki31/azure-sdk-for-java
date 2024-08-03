@@ -34,8 +34,6 @@ import java.util.function.BiFunction;
 import static com.azure.core.util.FluxUtil.monoError;
 import static com.azure.core.util.FluxUtil.pagedFluxError;
 import static com.azure.core.util.FluxUtil.withContext;
-import static com.azure.core.util.tracing.Tracer.AZ_TRACING_NAMESPACE_KEY;
-import static com.azure.storage.common.Utility.STORAGE_TRACING_NAMESPACE_VALUE;
 
 /**
  * This class provides a client that contains all operations that apply to Azure Storage Blob batching.
@@ -48,7 +46,7 @@ import static com.azure.storage.common.Utility.STORAGE_TRACING_NAMESPACE_VALUE;
  */
 @ServiceClient(builder = BlobBatchClientBuilder.class, isAsync = true)
 public final class BlobBatchAsyncClient {
-    private final ClientLogger logger = new ClientLogger(BlobBatchAsyncClient.class);
+    private static final ClientLogger LOGGER = new ClientLogger(BlobBatchAsyncClient.class);
 
     private final AzureBlobStorageImpl client;
     private final boolean containerScoped;
@@ -62,6 +60,10 @@ public final class BlobBatchAsyncClient {
             .version(version.getVersion())
             .buildClient();
         this.containerScoped = containerScoped;
+    }
+
+    AzureBlobStorageImpl getClient() {
+        return client;
     }
 
     /**
@@ -106,7 +108,7 @@ public final class BlobBatchAsyncClient {
         try {
             return withContext(context -> submitBatchWithResponse(batch, true, context)).flatMap(FluxUtil::toMono);
         } catch (RuntimeException ex) {
-            return monoError(logger, ex);
+            return monoError(LOGGER, ex);
         }
     }
 
@@ -148,7 +150,7 @@ public final class BlobBatchAsyncClient {
             return withContext(context -> submitBatchWithResponse(batch, throwOnAnyFailure,
                 context));
         } catch (RuntimeException ex) {
-            return monoError(logger, ex);
+            return monoError(LOGGER, ex);
         }
     }
 
@@ -158,15 +160,13 @@ public final class BlobBatchAsyncClient {
             .flatMap(batchOperationInfo -> containerScoped
                 ? client.getContainers().submitBatchWithResponseAsync(null,
                 batchOperationInfo.getContentLength(), batchOperationInfo.getContentType(),
-                Flux.fromIterable(batchOperationInfo.getBody()), null, null,
-                finalContext.addData(AZ_TRACING_NAMESPACE_KEY, STORAGE_TRACING_NAMESPACE_VALUE))
+                Flux.fromIterable(batchOperationInfo.getBody()), null, null, finalContext)
                 .flatMap(response ->
-                    BlobBatchHelper.mapBatchResponse(batchOperationInfo, response, throwOnAnyFailure, logger))
+                    BlobBatchHelper.mapBatchResponse(batchOperationInfo, response, throwOnAnyFailure, LOGGER))
                 : client.getServices().submitBatchWithResponseAsync(batchOperationInfo.getContentLength(),
-                batchOperationInfo.getContentType(), Flux.fromIterable(batchOperationInfo.getBody()), null, null,
-                finalContext.addData(AZ_TRACING_NAMESPACE_KEY, STORAGE_TRACING_NAMESPACE_VALUE))
+                batchOperationInfo.getContentType(), Flux.fromIterable(batchOperationInfo.getBody()), null, null, finalContext)
                 .flatMap(response ->
-                    BlobBatchHelper.mapBatchResponse(batchOperationInfo, response, throwOnAnyFailure, logger)));
+                    BlobBatchHelper.mapBatchResponse(batchOperationInfo, response, throwOnAnyFailure, LOGGER)));
     }
 
     /**
@@ -200,7 +200,7 @@ public final class BlobBatchAsyncClient {
             return new PagedFlux<>(
                 () -> withContext(context -> submitDeleteBlobsBatch(blobUrls, deleteOptions, context)));
         } catch (RuntimeException ex) {
-            return pagedFluxError(logger, ex);
+            return pagedFluxError(LOGGER, ex);
         }
     }
 
@@ -245,7 +245,7 @@ public final class BlobBatchAsyncClient {
         try {
             return new PagedFlux<>(() -> withContext(context -> submitSetTierBatch(blobUrls, accessTier, context)));
         } catch (RuntimeException ex) {
-            return pagedFluxError(logger, ex);
+            return pagedFluxError(LOGGER, ex);
         }
     }
 

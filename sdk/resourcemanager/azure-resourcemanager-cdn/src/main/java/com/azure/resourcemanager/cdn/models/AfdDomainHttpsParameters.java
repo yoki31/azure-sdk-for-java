@@ -6,14 +6,13 @@ package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The JSON object that contains the properties to secure a domain. */
+/**
+ * The JSON object that contains the properties to secure a domain.
+ */
 @Fluent
 public final class AfdDomainHttpsParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AfdDomainHttpsParameters.class);
-
     /*
      * Defines the source of the SSL certificate.
      */
@@ -33,8 +32,14 @@ public final class AfdDomainHttpsParameters {
     private ResourceReference secret;
 
     /**
+     * Creates an instance of AfdDomainHttpsParameters class.
+     */
+    public AfdDomainHttpsParameters() {
+    }
+
+    /**
      * Get the certificateType property: Defines the source of the SSL certificate.
-     *
+     * 
      * @return the certificateType value.
      */
     public AfdCertificateType certificateType() {
@@ -43,7 +48,7 @@ public final class AfdDomainHttpsParameters {
 
     /**
      * Set the certificateType property: Defines the source of the SSL certificate.
-     *
+     * 
      * @param certificateType the certificateType value to set.
      * @return the AfdDomainHttpsParameters object itself.
      */
@@ -54,7 +59,7 @@ public final class AfdDomainHttpsParameters {
 
     /**
      * Get the minimumTlsVersion property: TLS protocol version that will be used for Https.
-     *
+     * 
      * @return the minimumTlsVersion value.
      */
     public AfdMinimumTlsVersion minimumTlsVersion() {
@@ -63,7 +68,7 @@ public final class AfdDomainHttpsParameters {
 
     /**
      * Set the minimumTlsVersion property: TLS protocol version that will be used for Https.
-     *
+     * 
      * @param minimumTlsVersion the minimumTlsVersion value to set.
      * @return the AfdDomainHttpsParameters object itself.
      */
@@ -74,7 +79,7 @@ public final class AfdDomainHttpsParameters {
 
     /**
      * Get the secret property: Resource reference to the secret. ie. subs/rg/profile/secret.
-     *
+     * 
      * @return the secret value.
      */
     public ResourceReference secret() {
@@ -83,7 +88,7 @@ public final class AfdDomainHttpsParameters {
 
     /**
      * Set the secret property: Resource reference to the secret. ie. subs/rg/profile/secret.
-     *
+     * 
      * @param secret the secret value to set.
      * @return the AfdDomainHttpsParameters object itself.
      */
@@ -94,18 +99,18 @@ public final class AfdDomainHttpsParameters {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (certificateType() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property certificateType in model AfdDomainHttpsParameters"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property certificateType in model AfdDomainHttpsParameters"));
         }
         if (secret() != null) {
             secret().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(AfdDomainHttpsParameters.class);
 }

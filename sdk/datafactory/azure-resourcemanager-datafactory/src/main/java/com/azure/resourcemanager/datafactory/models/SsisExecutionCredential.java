@@ -6,22 +6,21 @@ package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** SSIS package execution credential. */
+/**
+ * SSIS package execution credential.
+ */
 @Fluent
 public final class SsisExecutionCredential {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SsisExecutionCredential.class);
-
     /*
-     * Domain for windows authentication.
+     * Domain for windows authentication. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "domain", required = true)
     private Object domain;
 
     /*
-     * UseName for windows authentication.
+     * UseName for windows authentication. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "userName", required = true)
     private Object username;
@@ -33,8 +32,14 @@ public final class SsisExecutionCredential {
     private SecureString password;
 
     /**
-     * Get the domain property: Domain for windows authentication.
-     *
+     * Creates an instance of SsisExecutionCredential class.
+     */
+    public SsisExecutionCredential() {
+    }
+
+    /**
+     * Get the domain property: Domain for windows authentication. Type: string (or Expression with resultType string).
+     * 
      * @return the domain value.
      */
     public Object domain() {
@@ -42,8 +47,8 @@ public final class SsisExecutionCredential {
     }
 
     /**
-     * Set the domain property: Domain for windows authentication.
-     *
+     * Set the domain property: Domain for windows authentication. Type: string (or Expression with resultType string).
+     * 
      * @param domain the domain value to set.
      * @return the SsisExecutionCredential object itself.
      */
@@ -53,8 +58,9 @@ public final class SsisExecutionCredential {
     }
 
     /**
-     * Get the username property: UseName for windows authentication.
-     *
+     * Get the username property: UseName for windows authentication. Type: string (or Expression with resultType
+     * string).
+     * 
      * @return the username value.
      */
     public Object username() {
@@ -62,8 +68,9 @@ public final class SsisExecutionCredential {
     }
 
     /**
-     * Set the username property: UseName for windows authentication.
-     *
+     * Set the username property: UseName for windows authentication. Type: string (or Expression with resultType
+     * string).
+     * 
      * @param username the username value to set.
      * @return the SsisExecutionCredential object itself.
      */
@@ -74,7 +81,7 @@ public final class SsisExecutionCredential {
 
     /**
      * Get the password property: Password for windows authentication.
-     *
+     * 
      * @return the password value.
      */
     public SecureString password() {
@@ -83,7 +90,7 @@ public final class SsisExecutionCredential {
 
     /**
      * Set the password property: Password for windows authentication.
-     *
+     * 
      * @param password the password value to set.
      * @return the SsisExecutionCredential object itself.
      */
@@ -94,28 +101,27 @@ public final class SsisExecutionCredential {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (domain() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property domain in model SsisExecutionCredential"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property domain in model SsisExecutionCredential"));
         }
         if (username() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property username in model SsisExecutionCredential"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property username in model SsisExecutionCredential"));
         }
         if (password() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property password in model SsisExecutionCredential"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property password in model SsisExecutionCredential"));
         } else {
             password().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(SsisExecutionCredential.class);
 }

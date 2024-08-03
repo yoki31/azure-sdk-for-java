@@ -6,19 +6,18 @@ package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Defines the parameters for the origin group override action. */
+/**
+ * Defines the parameters for the origin group override action.
+ */
 @Fluent
 public final class OriginGroupOverrideActionParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OriginGroupOverrideActionParameters.class);
-
     /*
-     * The @odata.type property.
+     * The typeName property.
      */
-    @JsonProperty(value = "@odata.type", required = true)
-    private String odataType;
+    @JsonProperty(value = "typeName", required = true)
+    private String typeName = "DeliveryRuleOriginGroupOverrideActionParameters";
 
     /*
      * defines the OriginGroup that would override the DefaultOriginGroup.
@@ -26,34 +25,35 @@ public final class OriginGroupOverrideActionParameters {
     @JsonProperty(value = "originGroup", required = true)
     private ResourceReference originGroup;
 
-    /** Creates an instance of OriginGroupOverrideActionParameters class. */
-    public OriginGroupOverrideActionParameters() {
-        odataType = "#Microsoft.Azure.Cdn.Models.DeliveryRuleOriginGroupOverrideActionParameters";
-    }
-
     /**
-     * Get the odataType property: The @odata.type property.
-     *
-     * @return the odataType value.
+     * Creates an instance of OriginGroupOverrideActionParameters class.
      */
-    public String odataType() {
-        return this.odataType;
+    public OriginGroupOverrideActionParameters() {
     }
 
     /**
-     * Set the odataType property: The @odata.type property.
-     *
-     * @param odataType the odataType value to set.
+     * Get the typeName property: The typeName property.
+     * 
+     * @return the typeName value.
+     */
+    public String typeName() {
+        return this.typeName;
+    }
+
+    /**
+     * Set the typeName property: The typeName property.
+     * 
+     * @param typeName the typeName value to set.
      * @return the OriginGroupOverrideActionParameters object itself.
      */
-    public OriginGroupOverrideActionParameters withOdataType(String odataType) {
-        this.odataType = odataType;
+    public OriginGroupOverrideActionParameters withTypeName(String typeName) {
+        this.typeName = typeName;
         return this;
     }
 
     /**
      * Get the originGroup property: defines the OriginGroup that would override the DefaultOriginGroup.
-     *
+     * 
      * @return the originGroup value.
      */
     public ResourceReference originGroup() {
@@ -62,7 +62,7 @@ public final class OriginGroupOverrideActionParameters {
 
     /**
      * Set the originGroup property: defines the OriginGroup that would override the DefaultOriginGroup.
-     *
+     * 
      * @param originGroup the originGroup value to set.
      * @return the OriginGroupOverrideActionParameters object itself.
      */
@@ -73,17 +73,17 @@ public final class OriginGroupOverrideActionParameters {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (originGroup() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property originGroup in model OriginGroupOverrideActionParameters"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property originGroup in model OriginGroupOverrideActionParameters"));
         } else {
             originGroup().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(OriginGroupOverrideActionParameters.class);
 }

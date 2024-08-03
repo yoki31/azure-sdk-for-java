@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.ProxyOnlyResource;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** String list resource. */
+/**
+ * String list resource.
+ */
 @Fluent
 public final class StringListInner extends ProxyOnlyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(StringListInner.class);
-
     /*
      * List of string resources.
      */
@@ -23,8 +21,14 @@ public final class StringListInner extends ProxyOnlyResource {
     private List<String> properties;
 
     /**
+     * Creates an instance of StringListInner class.
+     */
+    public StringListInner() {
+    }
+
+    /**
      * Get the properties property: List of string resources.
-     *
+     * 
      * @return the properties value.
      */
     public List<String> properties() {
@@ -33,7 +37,7 @@ public final class StringListInner extends ProxyOnlyResource {
 
     /**
      * Set the properties property: List of string resources.
-     *
+     * 
      * @param properties the properties value to set.
      * @return the StringListInner object itself.
      */
@@ -42,7 +46,9 @@ public final class StringListInner extends ProxyOnlyResource {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public StringListInner withKind(String kind) {
         super.withKind(kind);
@@ -51,7 +57,7 @@ public final class StringListInner extends ProxyOnlyResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

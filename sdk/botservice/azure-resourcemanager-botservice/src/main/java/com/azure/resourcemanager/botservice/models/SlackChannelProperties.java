@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.botservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** The parameters to provide for the Slack channel. */
 @Fluent
 public final class SlackChannelProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SlackChannelProperties.class);
-
     /*
      * The Slack client id
      */
@@ -62,13 +58,13 @@ public final class SlackChannelProperties {
      * Whether to register the settings before OAuth validation is performed.
      * Recommended to True.
      */
-    @JsonProperty(value = "registerBeforeOAuthFlow", access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(value = "registerBeforeOAuthFlow")
     private Boolean registerBeforeOAuthFlow;
 
     /*
      * Whether this channel is validated for the bot
      */
-    @JsonProperty(value = "isValidated", access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(value = "IsValidated", access = JsonProperty.Access.WRITE_ONLY)
     private Boolean isValidated;
 
     /*
@@ -213,6 +209,18 @@ public final class SlackChannelProperties {
      */
     public Boolean registerBeforeOAuthFlow() {
         return this.registerBeforeOAuthFlow;
+    }
+
+    /**
+     * Set the registerBeforeOAuthFlow property: Whether to register the settings before OAuth validation is performed.
+     * Recommended to True.
+     *
+     * @param registerBeforeOAuthFlow the registerBeforeOAuthFlow value to set.
+     * @return the SlackChannelProperties object itself.
+     */
+    public SlackChannelProperties withRegisterBeforeOAuthFlow(Boolean registerBeforeOAuthFlow) {
+        this.registerBeforeOAuthFlow = registerBeforeOAuthFlow;
+        return this;
     }
 
     /**

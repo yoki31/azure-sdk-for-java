@@ -13,15 +13,14 @@ import com.azure.resourcemanager.datafactory.models.LogStorageSettings;
 import com.azure.resourcemanager.datafactory.models.RedirectIncompatibleRowSettings;
 import com.azure.resourcemanager.datafactory.models.SkipErrorFile;
 import com.azure.resourcemanager.datafactory.models.StagingSettings;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Copy activity properties. */
+/**
+ * Copy activity properties.
+ */
 @Fluent
 public final class CopyActivityTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CopyActivityTypeProperties.class);
-
     /*
      * Copy activity source.
      */
@@ -41,8 +40,8 @@ public final class CopyActivityTypeProperties {
     private Object translator;
 
     /*
-     * Specifies whether to copy data via an interim staging. Default value is
-     * false. Type: boolean (or Expression with resultType boolean).
+     * Specifies whether to copy data via an interim staging. Default value is false. Type: boolean (or Expression with
+     * resultType boolean).
      */
     @JsonProperty(value = "enableStaging")
     private Object enableStaging;
@@ -54,38 +53,33 @@ public final class CopyActivityTypeProperties {
     private StagingSettings stagingSettings;
 
     /*
-     * Maximum number of concurrent sessions opened on the source or sink to
-     * avoid overloading the data store. Type: integer (or Expression with
-     * resultType integer), minimum: 0.
+     * Maximum number of concurrent sessions opened on the source or sink to avoid overloading the data store. Type:
+     * integer (or Expression with resultType integer), minimum: 0.
      */
     @JsonProperty(value = "parallelCopies")
     private Object parallelCopies;
 
     /*
-     * Maximum number of data integration units that can be used to perform
-     * this data movement. Type: integer (or Expression with resultType
-     * integer), minimum: 0.
+     * Maximum number of data integration units that can be used to perform this data movement. Type: integer (or
+     * Expression with resultType integer), minimum: 0.
      */
     @JsonProperty(value = "dataIntegrationUnits")
     private Object dataIntegrationUnits;
 
     /*
-     * Whether to skip incompatible row. Default value is false. Type: boolean
-     * (or Expression with resultType boolean).
+     * Whether to skip incompatible row. Default value is false. Type: boolean (or Expression with resultType boolean).
      */
     @JsonProperty(value = "enableSkipIncompatibleRow")
     private Object enableSkipIncompatibleRow;
 
     /*
-     * Redirect incompatible row settings when EnableSkipIncompatibleRow is
-     * true.
+     * Redirect incompatible row settings when EnableSkipIncompatibleRow is true.
      */
     @JsonProperty(value = "redirectIncompatibleRowSettings")
     private RedirectIncompatibleRowSettings redirectIncompatibleRowSettings;
 
     /*
-     * (Deprecated. Please use LogSettings) Log storage settings customer need
-     * to provide when enabling session log.
+     * (Deprecated. Please use LogSettings) Log storage settings customer need to provide when enabling session log.
      */
     @JsonProperty(value = "logStorageSettings")
     private LogStorageSettings logStorageSettings;
@@ -109,8 +103,7 @@ public final class CopyActivityTypeProperties {
     private List<Object> preserve;
 
     /*
-     * Whether to enable Data Consistency validation. Type: boolean (or
-     * Expression with resultType boolean).
+     * Whether to enable Data Consistency validation. Type: boolean (or Expression with resultType boolean).
      */
     @JsonProperty(value = "validateDataConsistency")
     private Object validateDataConsistency;
@@ -122,8 +115,14 @@ public final class CopyActivityTypeProperties {
     private SkipErrorFile skipErrorFile;
 
     /**
+     * Creates an instance of CopyActivityTypeProperties class.
+     */
+    public CopyActivityTypeProperties() {
+    }
+
+    /**
      * Get the source property: Copy activity source.
-     *
+     * 
      * @return the source value.
      */
     public CopySource source() {
@@ -132,7 +131,7 @@ public final class CopyActivityTypeProperties {
 
     /**
      * Set the source property: Copy activity source.
-     *
+     * 
      * @param source the source value to set.
      * @return the CopyActivityTypeProperties object itself.
      */
@@ -143,7 +142,7 @@ public final class CopyActivityTypeProperties {
 
     /**
      * Get the sink property: Copy activity sink.
-     *
+     * 
      * @return the sink value.
      */
     public CopySink sink() {
@@ -152,7 +151,7 @@ public final class CopyActivityTypeProperties {
 
     /**
      * Set the sink property: Copy activity sink.
-     *
+     * 
      * @param sink the sink value to set.
      * @return the CopyActivityTypeProperties object itself.
      */
@@ -163,7 +162,7 @@ public final class CopyActivityTypeProperties {
 
     /**
      * Get the translator property: Copy activity translator. If not specified, tabular translator is used.
-     *
+     * 
      * @return the translator value.
      */
     public Object translator() {
@@ -172,7 +171,7 @@ public final class CopyActivityTypeProperties {
 
     /**
      * Set the translator property: Copy activity translator. If not specified, tabular translator is used.
-     *
+     * 
      * @param translator the translator value to set.
      * @return the CopyActivityTypeProperties object itself.
      */
@@ -184,7 +183,7 @@ public final class CopyActivityTypeProperties {
     /**
      * Get the enableStaging property: Specifies whether to copy data via an interim staging. Default value is false.
      * Type: boolean (or Expression with resultType boolean).
-     *
+     * 
      * @return the enableStaging value.
      */
     public Object enableStaging() {
@@ -194,7 +193,7 @@ public final class CopyActivityTypeProperties {
     /**
      * Set the enableStaging property: Specifies whether to copy data via an interim staging. Default value is false.
      * Type: boolean (or Expression with resultType boolean).
-     *
+     * 
      * @param enableStaging the enableStaging value to set.
      * @return the CopyActivityTypeProperties object itself.
      */
@@ -205,7 +204,7 @@ public final class CopyActivityTypeProperties {
 
     /**
      * Get the stagingSettings property: Specifies interim staging settings when EnableStaging is true.
-     *
+     * 
      * @return the stagingSettings value.
      */
     public StagingSettings stagingSettings() {
@@ -214,7 +213,7 @@ public final class CopyActivityTypeProperties {
 
     /**
      * Set the stagingSettings property: Specifies interim staging settings when EnableStaging is true.
-     *
+     * 
      * @param stagingSettings the stagingSettings value to set.
      * @return the CopyActivityTypeProperties object itself.
      */
@@ -226,7 +225,7 @@ public final class CopyActivityTypeProperties {
     /**
      * Get the parallelCopies property: Maximum number of concurrent sessions opened on the source or sink to avoid
      * overloading the data store. Type: integer (or Expression with resultType integer), minimum: 0.
-     *
+     * 
      * @return the parallelCopies value.
      */
     public Object parallelCopies() {
@@ -236,7 +235,7 @@ public final class CopyActivityTypeProperties {
     /**
      * Set the parallelCopies property: Maximum number of concurrent sessions opened on the source or sink to avoid
      * overloading the data store. Type: integer (or Expression with resultType integer), minimum: 0.
-     *
+     * 
      * @param parallelCopies the parallelCopies value to set.
      * @return the CopyActivityTypeProperties object itself.
      */
@@ -248,7 +247,7 @@ public final class CopyActivityTypeProperties {
     /**
      * Get the dataIntegrationUnits property: Maximum number of data integration units that can be used to perform this
      * data movement. Type: integer (or Expression with resultType integer), minimum: 0.
-     *
+     * 
      * @return the dataIntegrationUnits value.
      */
     public Object dataIntegrationUnits() {
@@ -258,7 +257,7 @@ public final class CopyActivityTypeProperties {
     /**
      * Set the dataIntegrationUnits property: Maximum number of data integration units that can be used to perform this
      * data movement. Type: integer (or Expression with resultType integer), minimum: 0.
-     *
+     * 
      * @param dataIntegrationUnits the dataIntegrationUnits value to set.
      * @return the CopyActivityTypeProperties object itself.
      */
@@ -270,7 +269,7 @@ public final class CopyActivityTypeProperties {
     /**
      * Get the enableSkipIncompatibleRow property: Whether to skip incompatible row. Default value is false. Type:
      * boolean (or Expression with resultType boolean).
-     *
+     * 
      * @return the enableSkipIncompatibleRow value.
      */
     public Object enableSkipIncompatibleRow() {
@@ -280,7 +279,7 @@ public final class CopyActivityTypeProperties {
     /**
      * Set the enableSkipIncompatibleRow property: Whether to skip incompatible row. Default value is false. Type:
      * boolean (or Expression with resultType boolean).
-     *
+     * 
      * @param enableSkipIncompatibleRow the enableSkipIncompatibleRow value to set.
      * @return the CopyActivityTypeProperties object itself.
      */
@@ -292,7 +291,7 @@ public final class CopyActivityTypeProperties {
     /**
      * Get the redirectIncompatibleRowSettings property: Redirect incompatible row settings when
      * EnableSkipIncompatibleRow is true.
-     *
+     * 
      * @return the redirectIncompatibleRowSettings value.
      */
     public RedirectIncompatibleRowSettings redirectIncompatibleRowSettings() {
@@ -302,12 +301,12 @@ public final class CopyActivityTypeProperties {
     /**
      * Set the redirectIncompatibleRowSettings property: Redirect incompatible row settings when
      * EnableSkipIncompatibleRow is true.
-     *
+     * 
      * @param redirectIncompatibleRowSettings the redirectIncompatibleRowSettings value to set.
      * @return the CopyActivityTypeProperties object itself.
      */
-    public CopyActivityTypeProperties withRedirectIncompatibleRowSettings(
-        RedirectIncompatibleRowSettings redirectIncompatibleRowSettings) {
+    public CopyActivityTypeProperties
+        withRedirectIncompatibleRowSettings(RedirectIncompatibleRowSettings redirectIncompatibleRowSettings) {
         this.redirectIncompatibleRowSettings = redirectIncompatibleRowSettings;
         return this;
     }
@@ -315,7 +314,7 @@ public final class CopyActivityTypeProperties {
     /**
      * Get the logStorageSettings property: (Deprecated. Please use LogSettings) Log storage settings customer need to
      * provide when enabling session log.
-     *
+     * 
      * @return the logStorageSettings value.
      */
     public LogStorageSettings logStorageSettings() {
@@ -325,7 +324,7 @@ public final class CopyActivityTypeProperties {
     /**
      * Set the logStorageSettings property: (Deprecated. Please use LogSettings) Log storage settings customer need to
      * provide when enabling session log.
-     *
+     * 
      * @param logStorageSettings the logStorageSettings value to set.
      * @return the CopyActivityTypeProperties object itself.
      */
@@ -336,7 +335,7 @@ public final class CopyActivityTypeProperties {
 
     /**
      * Get the logSettings property: Log settings customer needs provide when enabling log.
-     *
+     * 
      * @return the logSettings value.
      */
     public LogSettings logSettings() {
@@ -345,7 +344,7 @@ public final class CopyActivityTypeProperties {
 
     /**
      * Set the logSettings property: Log settings customer needs provide when enabling log.
-     *
+     * 
      * @param logSettings the logSettings value to set.
      * @return the CopyActivityTypeProperties object itself.
      */
@@ -356,7 +355,7 @@ public final class CopyActivityTypeProperties {
 
     /**
      * Get the preserveRules property: Preserve Rules.
-     *
+     * 
      * @return the preserveRules value.
      */
     public List<Object> preserveRules() {
@@ -365,7 +364,7 @@ public final class CopyActivityTypeProperties {
 
     /**
      * Set the preserveRules property: Preserve Rules.
-     *
+     * 
      * @param preserveRules the preserveRules value to set.
      * @return the CopyActivityTypeProperties object itself.
      */
@@ -376,7 +375,7 @@ public final class CopyActivityTypeProperties {
 
     /**
      * Get the preserve property: Preserve rules.
-     *
+     * 
      * @return the preserve value.
      */
     public List<Object> preserve() {
@@ -385,7 +384,7 @@ public final class CopyActivityTypeProperties {
 
     /**
      * Set the preserve property: Preserve rules.
-     *
+     * 
      * @param preserve the preserve value to set.
      * @return the CopyActivityTypeProperties object itself.
      */
@@ -397,7 +396,7 @@ public final class CopyActivityTypeProperties {
     /**
      * Get the validateDataConsistency property: Whether to enable Data Consistency validation. Type: boolean (or
      * Expression with resultType boolean).
-     *
+     * 
      * @return the validateDataConsistency value.
      */
     public Object validateDataConsistency() {
@@ -407,7 +406,7 @@ public final class CopyActivityTypeProperties {
     /**
      * Set the validateDataConsistency property: Whether to enable Data Consistency validation. Type: boolean (or
      * Expression with resultType boolean).
-     *
+     * 
      * @param validateDataConsistency the validateDataConsistency value to set.
      * @return the CopyActivityTypeProperties object itself.
      */
@@ -418,7 +417,7 @@ public final class CopyActivityTypeProperties {
 
     /**
      * Get the skipErrorFile property: Specify the fault tolerance for data consistency.
-     *
+     * 
      * @return the skipErrorFile value.
      */
     public SkipErrorFile skipErrorFile() {
@@ -427,7 +426,7 @@ public final class CopyActivityTypeProperties {
 
     /**
      * Set the skipErrorFile property: Specify the fault tolerance for data consistency.
-     *
+     * 
      * @param skipErrorFile the skipErrorFile value to set.
      * @return the CopyActivityTypeProperties object itself.
      */
@@ -438,21 +437,20 @@ public final class CopyActivityTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (source() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property source in model CopyActivityTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property source in model CopyActivityTypeProperties"));
         } else {
             source().validate();
         }
         if (sink() == null) {
-            throw logger
-                .logExceptionAsError(
+            throw LOGGER.atError()
+                .log(
                     new IllegalArgumentException("Missing required property sink in model CopyActivityTypeProperties"));
         } else {
             sink().validate();
@@ -473,4 +471,6 @@ public final class CopyActivityTypeProperties {
             skipErrorFile().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(CopyActivityTypeProperties.class);
 }

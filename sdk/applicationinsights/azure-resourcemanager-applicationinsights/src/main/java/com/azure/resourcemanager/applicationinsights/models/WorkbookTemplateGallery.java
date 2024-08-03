@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.applicationinsights.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Gallery information for a workbook template. */
 @Fluent
 public final class WorkbookTemplateGallery {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(WorkbookTemplateGallery.class);
-
     /*
      * Name of the workbook template in the gallery.
      */
@@ -43,6 +39,10 @@ public final class WorkbookTemplateGallery {
      */
     @JsonProperty(value = "resourceType")
     private String resourceType;
+
+    /** Creates an instance of WorkbookTemplateGallery class. */
+    public WorkbookTemplateGallery() {
+    }
 
     /**
      * Get the name property: Name of the workbook template in the gallery.

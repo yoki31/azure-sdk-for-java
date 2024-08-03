@@ -14,7 +14,27 @@ import com.azure.resourcemanager.synapse.fluent.models.SqlPoolBlobAuditingPolicy
 /** An instance of this class provides access to all the operations defined in SqlPoolBlobAuditingPoliciesClient. */
 public interface SqlPoolBlobAuditingPoliciesClient {
     /**
-     * Get a SQL pool's blob auditing policy.
+     * Get a SQL pool's blob auditing policy
+     *
+     * <p>Get a SQL pool's blob auditing policy.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param sqlPoolName SQL pool name.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a SQL pool's blob auditing policy along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<SqlPoolBlobAuditingPolicyInner> getWithResponse(
+        String resourceGroupName, String workspaceName, String sqlPoolName, Context context);
+
+    /**
+     * Get a SQL pool's blob auditing policy
+     *
+     * <p>Get a SQL pool's blob auditing policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -28,23 +48,32 @@ public interface SqlPoolBlobAuditingPoliciesClient {
     SqlPoolBlobAuditingPolicyInner get(String resourceGroupName, String workspaceName, String sqlPoolName);
 
     /**
-     * Get a SQL pool's blob auditing policy.
+     * Creates or updates a SQL pool's blob auditing policy
+     *
+     * <p>Creates or updates a SQL pool's blob auditing policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param sqlPoolName SQL pool name.
+     * @param parameters The database blob auditing policy.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a SQL pool's blob auditing policy.
+     * @return a Sql pool blob auditing policy along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<SqlPoolBlobAuditingPolicyInner> getWithResponse(
-        String resourceGroupName, String workspaceName, String sqlPoolName, Context context);
+    Response<SqlPoolBlobAuditingPolicyInner> createOrUpdateWithResponse(
+        String resourceGroupName,
+        String workspaceName,
+        String sqlPoolName,
+        SqlPoolBlobAuditingPolicyInner parameters,
+        Context context);
 
     /**
-     * Creates or updates a SQL pool's blob auditing policy.
+     * Creates or updates a SQL pool's blob auditing policy
+     *
+     * <p>Creates or updates a SQL pool's blob auditing policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -60,27 +89,6 @@ public interface SqlPoolBlobAuditingPoliciesClient {
         String resourceGroupName, String workspaceName, String sqlPoolName, SqlPoolBlobAuditingPolicyInner parameters);
 
     /**
-     * Creates or updates a SQL pool's blob auditing policy.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param sqlPoolName SQL pool name.
-     * @param parameters The database blob auditing policy.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Sql pool blob auditing policy.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<SqlPoolBlobAuditingPolicyInner> createOrUpdateWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        SqlPoolBlobAuditingPolicyInner parameters,
-        Context context);
-
-    /**
      * Lists auditing settings of a Sql pool.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -89,7 +97,7 @@ public interface SqlPoolBlobAuditingPoliciesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Sql pool auditing settings.
+     * @return a list of Sql pool auditing settings as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<SqlPoolBlobAuditingPolicyInner> listBySqlPool(
@@ -105,7 +113,7 @@ public interface SqlPoolBlobAuditingPoliciesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Sql pool auditing settings.
+     * @return a list of Sql pool auditing settings as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<SqlPoolBlobAuditingPolicyInner> listBySqlPool(

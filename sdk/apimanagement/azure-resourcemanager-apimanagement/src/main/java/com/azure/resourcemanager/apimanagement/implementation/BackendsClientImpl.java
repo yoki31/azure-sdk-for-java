@@ -31,7 +31,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.BackendsClient;
 import com.azure.resourcemanager.apimanagement.fluent.models.BackendContractInner;
 import com.azure.resourcemanager.apimanagement.models.BackendCollection;
@@ -45,8 +44,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in BackendsClient. */
 public final class BackendsClientImpl implements BackendsClient {
-    private final ClientLogger logger = new ClientLogger(BackendsClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final BackendsService service;
 
@@ -69,11 +66,10 @@ public final class BackendsClientImpl implements BackendsClient {
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApiManagementClientB")
-    private interface BackendsService {
+    public interface BackendsService {
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/backends")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/backends")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<BackendCollection>> listByService(
@@ -90,8 +86,7 @@ public final class BackendsClientImpl implements BackendsClient {
 
         @Headers({"Content-Type: application/json"})
         @Head(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/backends/{backendId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/backends/{backendId}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<BackendsGetEntityTagResponse> getEntityTag(
@@ -106,8 +101,7 @@ public final class BackendsClientImpl implements BackendsClient {
 
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/backends/{backendId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/backends/{backendId}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<BackendsGetResponse> get(
@@ -122,8 +116,7 @@ public final class BackendsClientImpl implements BackendsClient {
 
         @Headers({"Content-Type: application/json"})
         @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/backends/{backendId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/backends/{backendId}")
         @ExpectedResponses({200, 201})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<BackendsCreateOrUpdateResponse> createOrUpdate(
@@ -140,8 +133,7 @@ public final class BackendsClientImpl implements BackendsClient {
 
         @Headers({"Content-Type: application/json"})
         @Patch(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/backends/{backendId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/backends/{backendId}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<BackendsUpdateResponse> update(
@@ -158,8 +150,7 @@ public final class BackendsClientImpl implements BackendsClient {
 
         @Headers({"Content-Type: application/json"})
         @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/backends/{backendId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/backends/{backendId}")
         @ExpectedResponses({200, 204})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Void>> delete(
@@ -175,8 +166,7 @@ public final class BackendsClientImpl implements BackendsClient {
 
         @Headers({"Content-Type: application/json"})
         @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/backends/{backendId}/reconnect")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/backends/{backendId}/reconnect")
         @ExpectedResponses({202})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Void>> reconnect(
@@ -204,7 +194,7 @@ public final class BackendsClientImpl implements BackendsClient {
     /**
      * Lists a collection of backends in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -216,7 +206,8 @@ public final class BackendsClientImpl implements BackendsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Backend list representation.
+     * @return paged Backend list representation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<BackendContractInner>> listByServiceSinglePageAsync(
@@ -271,7 +262,7 @@ public final class BackendsClientImpl implements BackendsClient {
     /**
      * Lists a collection of backends in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -284,7 +275,8 @@ public final class BackendsClientImpl implements BackendsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Backend list representation.
+     * @return paged Backend list representation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<BackendContractInner>> listByServiceSinglePageAsync(
@@ -336,7 +328,7 @@ public final class BackendsClientImpl implements BackendsClient {
     /**
      * Lists a collection of backends in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -348,7 +340,7 @@ public final class BackendsClientImpl implements BackendsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Backend list representation.
+     * @return paged Backend list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<BackendContractInner> listByServiceAsync(
@@ -361,12 +353,12 @@ public final class BackendsClientImpl implements BackendsClient {
     /**
      * Lists a collection of backends in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Backend list representation.
+     * @return paged Backend list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<BackendContractInner> listByServiceAsync(String resourceGroupName, String serviceName) {
@@ -381,7 +373,7 @@ public final class BackendsClientImpl implements BackendsClient {
     /**
      * Lists a collection of backends in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -394,7 +386,7 @@ public final class BackendsClientImpl implements BackendsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Backend list representation.
+     * @return paged Backend list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<BackendContractInner> listByServiceAsync(
@@ -407,12 +399,12 @@ public final class BackendsClientImpl implements BackendsClient {
     /**
      * Lists a collection of backends in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Backend list representation.
+     * @return paged Backend list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<BackendContractInner> listByService(String resourceGroupName, String serviceName) {
@@ -425,7 +417,7 @@ public final class BackendsClientImpl implements BackendsClient {
     /**
      * Lists a collection of backends in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -438,7 +430,7 @@ public final class BackendsClientImpl implements BackendsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Backend list representation.
+     * @return paged Backend list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<BackendContractInner> listByService(
@@ -449,13 +441,14 @@ public final class BackendsClientImpl implements BackendsClient {
     /**
      * Gets the entity state (Etag) version of the backend specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the backend specified by its identifier.
+     * @return the entity state (Etag) version of the backend specified by its identifier on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<BackendsGetEntityTagResponse> getEntityTagWithResponseAsync(
@@ -502,14 +495,15 @@ public final class BackendsClientImpl implements BackendsClient {
     /**
      * Gets the entity state (Etag) version of the backend specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the backend specified by its identifier.
+     * @return the entity state (Etag) version of the backend specified by its identifier on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<BackendsGetEntityTagResponse> getEntityTagWithResponseAsync(
@@ -553,39 +547,25 @@ public final class BackendsClientImpl implements BackendsClient {
     /**
      * Gets the entity state (Etag) version of the backend specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the backend specified by its identifier.
+     * @return the entity state (Etag) version of the backend specified by its identifier on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> getEntityTagAsync(String resourceGroupName, String serviceName, String backendId) {
         return getEntityTagWithResponseAsync(resourceGroupName, serviceName, backendId)
-            .flatMap((BackendsGetEntityTagResponse res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Gets the entity state (Etag) version of the backend specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public void getEntityTag(String resourceGroupName, String serviceName, String backendId) {
-        getEntityTagAsync(resourceGroupName, serviceName, backendId).block();
-    }
-
-    /**
-     * Gets the entity state (Etag) version of the backend specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
      * @param context The context to associate with this operation.
@@ -601,15 +581,30 @@ public final class BackendsClientImpl implements BackendsClient {
     }
 
     /**
-     * Gets the details of the backend specified by its identifier.
+     * Gets the entity state (Etag) version of the backend specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the backend specified by its identifier.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public void getEntityTag(String resourceGroupName, String serviceName, String backendId) {
+        getEntityTagWithResponse(resourceGroupName, serviceName, backendId, Context.NONE);
+    }
+
+    /**
+     * Gets the details of the backend specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the details of the backend specified by its identifier on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<BackendsGetResponse> getWithResponseAsync(
@@ -656,14 +651,14 @@ public final class BackendsClientImpl implements BackendsClient {
     /**
      * Gets the details of the backend specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the backend specified by its identifier.
+     * @return the details of the backend specified by its identifier on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<BackendsGetResponse> getWithResponseAsync(
@@ -707,47 +702,24 @@ public final class BackendsClientImpl implements BackendsClient {
     /**
      * Gets the details of the backend specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the backend specified by its identifier.
+     * @return the details of the backend specified by its identifier on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<BackendContractInner> getAsync(String resourceGroupName, String serviceName, String backendId) {
         return getWithResponseAsync(resourceGroupName, serviceName, backendId)
-            .flatMap(
-                (BackendsGetResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Gets the details of the backend specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the backend specified by its identifier.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public BackendContractInner get(String resourceGroupName, String serviceName, String backendId) {
-        return getAsync(resourceGroupName, serviceName, backendId).block();
-    }
-
-    /**
-     * Gets the details of the backend specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
      * @param context The context to associate with this operation.
@@ -763,9 +735,25 @@ public final class BackendsClientImpl implements BackendsClient {
     }
 
     /**
+     * Gets the details of the backend specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the details of the backend specified by its identifier.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public BackendContractInner get(String resourceGroupName, String serviceName, String backendId) {
+        return getWithResponse(resourceGroupName, serviceName, backendId, Context.NONE).getValue();
+    }
+
+    /**
      * Creates or Updates a backend.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
      * @param parameters Create parameters.
@@ -773,7 +761,7 @@ public final class BackendsClientImpl implements BackendsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return backend details.
+     * @return backend details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<BackendsCreateOrUpdateResponse> createOrUpdateWithResponseAsync(
@@ -831,7 +819,7 @@ public final class BackendsClientImpl implements BackendsClient {
     /**
      * Creates or Updates a backend.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
      * @param parameters Create parameters.
@@ -840,7 +828,7 @@ public final class BackendsClientImpl implements BackendsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return backend details.
+     * @return backend details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<BackendsCreateOrUpdateResponse> createOrUpdateWithResponseAsync(
@@ -896,84 +884,27 @@ public final class BackendsClientImpl implements BackendsClient {
     /**
      * Creates or Updates a backend.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
-     * @param parameters Create parameters.
-     * @param ifMatch ETag of the Entity. Not required when creating an entity, but required when updating an entity.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return backend details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<BackendContractInner> createOrUpdateAsync(
-        String resourceGroupName,
-        String serviceName,
-        String backendId,
-        BackendContractInner parameters,
-        String ifMatch) {
-        return createOrUpdateWithResponseAsync(resourceGroupName, serviceName, backendId, parameters, ifMatch)
-            .flatMap(
-                (BackendsCreateOrUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
-    }
-
-    /**
-     * Creates or Updates a backend.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
      * @param parameters Create parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return backend details.
+     * @return backend details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<BackendContractInner> createOrUpdateAsync(
         String resourceGroupName, String serviceName, String backendId, BackendContractInner parameters) {
         final String ifMatch = null;
         return createOrUpdateWithResponseAsync(resourceGroupName, serviceName, backendId, parameters, ifMatch)
-            .flatMap(
-                (BackendsCreateOrUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Creates or Updates a backend.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
-     * @param parameters Create parameters.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return backend details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public BackendContractInner createOrUpdate(
-        String resourceGroupName, String serviceName, String backendId, BackendContractInner parameters) {
-        final String ifMatch = null;
-        return createOrUpdateAsync(resourceGroupName, serviceName, backendId, parameters, ifMatch).block();
-    }
-
-    /**
-     * Creates or Updates a backend.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
      * @param parameters Create parameters.
@@ -997,9 +928,29 @@ public final class BackendsClientImpl implements BackendsClient {
     }
 
     /**
+     * Creates or Updates a backend.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
+     * @param parameters Create parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return backend details.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public BackendContractInner createOrUpdate(
+        String resourceGroupName, String serviceName, String backendId, BackendContractInner parameters) {
+        final String ifMatch = null;
+        return createOrUpdateWithResponse(resourceGroupName, serviceName, backendId, parameters, ifMatch, Context.NONE)
+            .getValue();
+    }
+
+    /**
      * Updates an existing backend.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1008,7 +959,7 @@ public final class BackendsClientImpl implements BackendsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return backend details.
+     * @return backend details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<BackendsUpdateResponse> updateWithResponseAsync(
@@ -1069,7 +1020,7 @@ public final class BackendsClientImpl implements BackendsClient {
     /**
      * Updates an existing backend.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1079,7 +1030,7 @@ public final class BackendsClientImpl implements BackendsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return backend details.
+     * @return backend details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<BackendsUpdateResponse> updateWithResponseAsync(
@@ -1138,7 +1089,7 @@ public final class BackendsClientImpl implements BackendsClient {
     /**
      * Updates an existing backend.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1147,7 +1098,7 @@ public final class BackendsClientImpl implements BackendsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return backend details.
+     * @return backend details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<BackendContractInner> updateAsync(
@@ -1157,44 +1108,13 @@ public final class BackendsClientImpl implements BackendsClient {
         String ifMatch,
         BackendUpdateParameters parameters) {
         return updateWithResponseAsync(resourceGroupName, serviceName, backendId, ifMatch, parameters)
-            .flatMap(
-                (BackendsUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Updates an existing backend.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param parameters Update parameters.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return backend details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public BackendContractInner update(
-        String resourceGroupName,
-        String serviceName,
-        String backendId,
-        String ifMatch,
-        BackendUpdateParameters parameters) {
-        return updateAsync(resourceGroupName, serviceName, backendId, ifMatch, parameters).block();
-    }
-
-    /**
-     * Updates an existing backend.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1218,9 +1138,34 @@ public final class BackendsClientImpl implements BackendsClient {
     }
 
     /**
+     * Updates an existing backend.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param parameters Update parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return backend details.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public BackendContractInner update(
+        String resourceGroupName,
+        String serviceName,
+        String backendId,
+        String ifMatch,
+        BackendUpdateParameters parameters) {
+        return updateWithResponse(resourceGroupName, serviceName, backendId, ifMatch, parameters, Context.NONE)
+            .getValue();
+    }
+
+    /**
      * Deletes the specified backend.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1228,7 +1173,7 @@ public final class BackendsClientImpl implements BackendsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -1279,7 +1224,7 @@ public final class BackendsClientImpl implements BackendsClient {
     /**
      * Deletes the specified backend.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1288,7 +1233,7 @@ public final class BackendsClientImpl implements BackendsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -1336,7 +1281,7 @@ public final class BackendsClientImpl implements BackendsClient {
     /**
      * Deletes the specified backend.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1344,18 +1289,38 @@ public final class BackendsClientImpl implements BackendsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(String resourceGroupName, String serviceName, String backendId, String ifMatch) {
         return deleteWithResponseAsync(resourceGroupName, serviceName, backendId, ifMatch)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Deletes the specified backend.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> deleteWithResponse(
+        String resourceGroupName, String serviceName, String backendId, String ifMatch, Context context) {
+        return deleteWithResponseAsync(resourceGroupName, serviceName, backendId, ifMatch, context).block();
+    }
+
+    /**
+     * Deletes the specified backend.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1366,41 +1331,21 @@ public final class BackendsClientImpl implements BackendsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public void delete(String resourceGroupName, String serviceName, String backendId, String ifMatch) {
-        deleteAsync(resourceGroupName, serviceName, backendId, ifMatch).block();
+        deleteWithResponse(resourceGroupName, serviceName, backendId, ifMatch, Context.NONE);
     }
 
     /**
-     * Deletes the specified backend.
+     * Notifies the API Management gateway to create a new connection to the backend after the specified timeout. If no
+     * timeout was specified, timeout of 2 minutes is used.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> deleteWithResponse(
-        String resourceGroupName, String serviceName, String backendId, String ifMatch, Context context) {
-        return deleteWithResponseAsync(resourceGroupName, serviceName, backendId, ifMatch, context).block();
-    }
-
-    /**
-     * Notifies the APIM proxy to create a new connection to the backend after the specified timeout. If no timeout was
-     * specified, timeout of 2 minutes is used.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
      * @param parameters Reconnect request parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> reconnectWithResponseAsync(
@@ -1449,10 +1394,10 @@ public final class BackendsClientImpl implements BackendsClient {
     }
 
     /**
-     * Notifies the APIM proxy to create a new connection to the backend after the specified timeout. If no timeout was
-     * specified, timeout of 2 minutes is used.
+     * Notifies the API Management gateway to create a new connection to the backend after the specified timeout. If no
+     * timeout was specified, timeout of 2 minutes is used.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
      * @param parameters Reconnect request parameters.
@@ -1460,7 +1405,7 @@ public final class BackendsClientImpl implements BackendsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> reconnectWithResponseAsync(
@@ -1510,66 +1455,29 @@ public final class BackendsClientImpl implements BackendsClient {
     }
 
     /**
-     * Notifies the APIM proxy to create a new connection to the backend after the specified timeout. If no timeout was
-     * specified, timeout of 2 minutes is used.
+     * Notifies the API Management gateway to create a new connection to the backend after the specified timeout. If no
+     * timeout was specified, timeout of 2 minutes is used.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
-     * @param parameters Reconnect request parameters.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> reconnectAsync(
-        String resourceGroupName, String serviceName, String backendId, BackendReconnectContract parameters) {
-        return reconnectWithResponseAsync(resourceGroupName, serviceName, backendId, parameters)
-            .flatMap((Response<Void> res) -> Mono.empty());
-    }
-
-    /**
-     * Notifies the APIM proxy to create a new connection to the backend after the specified timeout. If no timeout was
-     * specified, timeout of 2 minutes is used.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> reconnectAsync(String resourceGroupName, String serviceName, String backendId) {
         final BackendReconnectContract parameters = null;
         return reconnectWithResponseAsync(resourceGroupName, serviceName, backendId, parameters)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
-     * Notifies the APIM proxy to create a new connection to the backend after the specified timeout. If no timeout was
-     * specified, timeout of 2 minutes is used.
+     * Notifies the API Management gateway to create a new connection to the backend after the specified timeout. If no
+     * timeout was specified, timeout of 2 minutes is used.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public void reconnect(String resourceGroupName, String serviceName, String backendId) {
-        final BackendReconnectContract parameters = null;
-        reconnectAsync(resourceGroupName, serviceName, backendId, parameters).block();
-    }
-
-    /**
-     * Notifies the APIM proxy to create a new connection to the backend after the specified timeout. If no timeout was
-     * specified, timeout of 2 minutes is used.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
      * @param parameters Reconnect request parameters.
@@ -1577,7 +1485,7 @@ public final class BackendsClientImpl implements BackendsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<Void> reconnectWithResponse(
@@ -1590,13 +1498,32 @@ public final class BackendsClientImpl implements BackendsClient {
     }
 
     /**
-     * Get the next page of items.
+     * Notifies the API Management gateway to create a new connection to the backend after the specified timeout. If no
+     * timeout was specified, timeout of 2 minutes is used.
      *
-     * @param nextLink The nextLink parameter.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param backendId Identifier of the Backend entity. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Backend list representation.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public void reconnect(String resourceGroupName, String serviceName, String backendId) {
+        final BackendReconnectContract parameters = null;
+        reconnectWithResponse(resourceGroupName, serviceName, backendId, parameters, Context.NONE);
+    }
+
+    /**
+     * Get the next page of items.
+     *
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return paged Backend list representation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<BackendContractInner>> listByServiceNextSinglePageAsync(String nextLink) {
@@ -1627,12 +1554,14 @@ public final class BackendsClientImpl implements BackendsClient {
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Backend list representation.
+     * @return paged Backend list representation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<BackendContractInner>> listByServiceNextSinglePageAsync(

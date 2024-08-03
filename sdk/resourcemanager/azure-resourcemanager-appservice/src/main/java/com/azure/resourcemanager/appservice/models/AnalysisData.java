@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.fluent.models.DetectorDefinition;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Class Representing Detector Evidence used for analysis. */
+/**
+ * Class Representing Detector Evidence used for analysis.
+ */
 @Fluent
 public final class AnalysisData {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AnalysisData.class);
-
     /*
      * Name of the Detector
      */
@@ -47,8 +45,14 @@ public final class AnalysisData {
     private ResponseMetadata detectorMetadata;
 
     /**
+     * Creates an instance of AnalysisData class.
+     */
+    public AnalysisData() {
+    }
+
+    /**
      * Get the source property: Name of the Detector.
-     *
+     * 
      * @return the source value.
      */
     public String source() {
@@ -57,7 +61,7 @@ public final class AnalysisData {
 
     /**
      * Set the source property: Name of the Detector.
-     *
+     * 
      * @param source the source value to set.
      * @return the AnalysisData object itself.
      */
@@ -68,7 +72,7 @@ public final class AnalysisData {
 
     /**
      * Get the detectorDefinition property: Detector Definition.
-     *
+     * 
      * @return the detectorDefinition value.
      */
     public DetectorDefinition detectorDefinition() {
@@ -77,7 +81,7 @@ public final class AnalysisData {
 
     /**
      * Set the detectorDefinition property: Detector Definition.
-     *
+     * 
      * @param detectorDefinition the detectorDefinition value to set.
      * @return the AnalysisData object itself.
      */
@@ -88,7 +92,7 @@ public final class AnalysisData {
 
     /**
      * Get the metrics property: Source Metrics.
-     *
+     * 
      * @return the metrics value.
      */
     public List<DiagnosticMetricSet> metrics() {
@@ -97,7 +101,7 @@ public final class AnalysisData {
 
     /**
      * Set the metrics property: Source Metrics.
-     *
+     * 
      * @param metrics the metrics value to set.
      * @return the AnalysisData object itself.
      */
@@ -108,7 +112,7 @@ public final class AnalysisData {
 
     /**
      * Get the data property: Additional Source Data.
-     *
+     * 
      * @return the data value.
      */
     public List<List<NameValuePair>> data() {
@@ -117,7 +121,7 @@ public final class AnalysisData {
 
     /**
      * Set the data property: Additional Source Data.
-     *
+     * 
      * @param data the data value to set.
      * @return the AnalysisData object itself.
      */
@@ -128,7 +132,7 @@ public final class AnalysisData {
 
     /**
      * Get the detectorMetadata property: Detector Meta Data.
-     *
+     * 
      * @return the detectorMetadata value.
      */
     public ResponseMetadata detectorMetadata() {
@@ -137,7 +141,7 @@ public final class AnalysisData {
 
     /**
      * Set the detectorMetadata property: Detector Meta Data.
-     *
+     * 
      * @param detectorMetadata the detectorMetadata value to set.
      * @return the AnalysisData object itself.
      */
@@ -148,7 +152,7 @@ public final class AnalysisData {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

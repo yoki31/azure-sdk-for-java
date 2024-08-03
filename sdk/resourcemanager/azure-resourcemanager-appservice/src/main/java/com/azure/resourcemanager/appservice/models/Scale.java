@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Container App scaling configurations. */
+/**
+ * Container App scaling configurations.
+ */
 @Fluent
 public final class Scale {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Scale.class);
-
     /*
      * Optional. Minimum number of container replicas.
      */
@@ -22,8 +20,7 @@ public final class Scale {
     private Integer minReplicas;
 
     /*
-     * Optional. Maximum number of container replicas. Defaults to 10 if not
-     * set.
+     * Optional. Maximum number of container replicas. Defaults to 10 if not set.
      */
     @JsonProperty(value = "maxReplicas")
     private Integer maxReplicas;
@@ -35,8 +32,14 @@ public final class Scale {
     private List<ScaleRule> rules;
 
     /**
+     * Creates an instance of Scale class.
+     */
+    public Scale() {
+    }
+
+    /**
      * Get the minReplicas property: Optional. Minimum number of container replicas.
-     *
+     * 
      * @return the minReplicas value.
      */
     public Integer minReplicas() {
@@ -45,7 +48,7 @@ public final class Scale {
 
     /**
      * Set the minReplicas property: Optional. Minimum number of container replicas.
-     *
+     * 
      * @param minReplicas the minReplicas value to set.
      * @return the Scale object itself.
      */
@@ -56,7 +59,7 @@ public final class Scale {
 
     /**
      * Get the maxReplicas property: Optional. Maximum number of container replicas. Defaults to 10 if not set.
-     *
+     * 
      * @return the maxReplicas value.
      */
     public Integer maxReplicas() {
@@ -65,7 +68,7 @@ public final class Scale {
 
     /**
      * Set the maxReplicas property: Optional. Maximum number of container replicas. Defaults to 10 if not set.
-     *
+     * 
      * @param maxReplicas the maxReplicas value to set.
      * @return the Scale object itself.
      */
@@ -76,7 +79,7 @@ public final class Scale {
 
     /**
      * Get the rules property: Scaling rules.
-     *
+     * 
      * @return the rules value.
      */
     public List<ScaleRule> rules() {
@@ -85,7 +88,7 @@ public final class Scale {
 
     /**
      * Set the rules property: Scaling rules.
-     *
+     * 
      * @param rules the rules value to set.
      * @return the Scale object itself.
      */
@@ -96,7 +99,7 @@ public final class Scale {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -6,14 +6,13 @@ package com.azure.resourcemanager.redis.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Specifies which Redis access keys to reset. */
+/**
+ * Specifies which Redis access keys to reset.
+ */
 @Fluent
 public final class RedisRegenerateKeyParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RedisRegenerateKeyParameters.class);
-
     /*
      * The Redis access key to regenerate.
      */
@@ -21,8 +20,14 @@ public final class RedisRegenerateKeyParameters {
     private RedisKeyType keyType;
 
     /**
+     * Creates an instance of RedisRegenerateKeyParameters class.
+     */
+    public RedisRegenerateKeyParameters() {
+    }
+
+    /**
      * Get the keyType property: The Redis access key to regenerate.
-     *
+     * 
      * @return the keyType value.
      */
     public RedisKeyType keyType() {
@@ -31,7 +36,7 @@ public final class RedisRegenerateKeyParameters {
 
     /**
      * Set the keyType property: The Redis access key to regenerate.
-     *
+     * 
      * @param keyType the keyType value to set.
      * @return the RedisRegenerateKeyParameters object itself.
      */
@@ -42,15 +47,16 @@ public final class RedisRegenerateKeyParameters {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (keyType() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property keyType in model RedisRegenerateKeyParameters"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property keyType in model RedisRegenerateKeyParameters"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(RedisRegenerateKeyParameters.class);
 }

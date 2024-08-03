@@ -5,9 +5,7 @@
 package com.azure.resourcemanager.kubernetesconfiguration.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.kubernetesconfiguration.fluent.models.ExtensionInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
@@ -17,8 +15,6 @@ import java.util.List;
  */
 @Immutable
 public final class ExtensionsList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ExtensionsList.class);
-
     /*
      * List of Extensions within a Kubernetes cluster.
      */
@@ -30,6 +26,10 @@ public final class ExtensionsList {
      */
     @JsonProperty(value = "nextLink", access = JsonProperty.Access.WRITE_ONLY)
     private String nextLink;
+
+    /** Creates an instance of ExtensionsList class. */
+    public ExtensionsList() {
+    }
 
     /**
      * Get the value property: List of Extensions within a Kubernetes cluster.

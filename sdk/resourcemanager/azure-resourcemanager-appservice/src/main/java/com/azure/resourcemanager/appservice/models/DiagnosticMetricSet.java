@@ -5,17 +5,16 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.OffsetDateTime;
 import java.util.List;
 
-/** Class representing Diagnostic Metric information. */
+/**
+ * Class representing Diagnostic Metric information.
+ */
 @Fluent
 public final class DiagnosticMetricSet {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DiagnosticMetricSet.class);
-
     /*
      * Name of the metric
      */
@@ -47,11 +46,16 @@ public final class DiagnosticMetricSet {
     private String timeGrain;
 
     /*
-     * Collection of metric values for the selected period based on the
-     * {Microsoft.Web.Hosting.Administration.DiagnosticMetricSet.TimeGrain}
+     * Collection of metric values for the selected period based on the {Microsoft.Web.Hosting.Administration.DiagnosticMetricSet.TimeGrain}
      */
     @JsonProperty(value = "values")
     private List<DiagnosticMetricSample> values;
+
+    /**
+     * Creates an instance of DiagnosticMetricSet class.
+     */
+    public DiagnosticMetricSet() {
+    }
 
     /**
      * Get the name property: Name of the metric.

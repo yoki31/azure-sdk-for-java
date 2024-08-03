@@ -23,10 +23,9 @@ import com.azure.resourcemanager.apimanagement.models.SubscriptionsGetEntityTagR
 import com.azure.resourcemanager.apimanagement.models.SubscriptionsGetResponse;
 import com.azure.resourcemanager.apimanagement.models.SubscriptionsListSecretsResponse;
 import com.azure.resourcemanager.apimanagement.models.SubscriptionsUpdateResponse;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class SubscriptionsImpl implements Subscriptions {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SubscriptionsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(SubscriptionsImpl.class);
 
     private final SubscriptionsClient innerClient;
 
@@ -50,22 +49,13 @@ public final class SubscriptionsImpl implements Subscriptions {
         return Utils.mapPage(inner, inner1 -> new SubscriptionContractImpl(inner1, this.manager()));
     }
 
-    public void getEntityTag(String resourceGroupName, String serviceName, String sid) {
-        this.serviceClient().getEntityTag(resourceGroupName, serviceName, sid);
-    }
-
     public SubscriptionsGetEntityTagResponse getEntityTagWithResponse(
         String resourceGroupName, String serviceName, String sid, Context context) {
         return this.serviceClient().getEntityTagWithResponse(resourceGroupName, serviceName, sid, context);
     }
 
-    public SubscriptionContract get(String resourceGroupName, String serviceName, String sid) {
-        SubscriptionContractInner inner = this.serviceClient().get(resourceGroupName, serviceName, sid);
-        if (inner != null) {
-            return new SubscriptionContractImpl(inner, this.manager());
-        } else {
-            return null;
-        }
+    public void getEntityTag(String resourceGroupName, String serviceName, String sid) {
+        this.serviceClient().getEntityTag(resourceGroupName, serviceName, sid);
     }
 
     public Response<SubscriptionContract> getWithResponse(
@@ -83,10 +73,8 @@ public final class SubscriptionsImpl implements Subscriptions {
         }
     }
 
-    public SubscriptionContract createOrUpdate(
-        String resourceGroupName, String serviceName, String sid, SubscriptionCreateParameters parameters) {
-        SubscriptionContractInner inner =
-            this.serviceClient().createOrUpdate(resourceGroupName, serviceName, sid, parameters);
+    public SubscriptionContract get(String resourceGroupName, String serviceName, String sid) {
+        SubscriptionContractInner inner = this.serviceClient().get(resourceGroupName, serviceName, sid);
         if (inner != null) {
             return new SubscriptionContractImpl(inner, this.manager());
         } else {
@@ -119,14 +107,10 @@ public final class SubscriptionsImpl implements Subscriptions {
         }
     }
 
-    public SubscriptionContract update(
-        String resourceGroupName,
-        String serviceName,
-        String sid,
-        String ifMatch,
-        SubscriptionUpdateParameters parameters) {
+    public SubscriptionContract createOrUpdate(
+        String resourceGroupName, String serviceName, String sid, SubscriptionCreateParameters parameters) {
         SubscriptionContractInner inner =
-            this.serviceClient().update(resourceGroupName, serviceName, sid, ifMatch, parameters);
+            this.serviceClient().createOrUpdate(resourceGroupName, serviceName, sid, parameters);
         if (inner != null) {
             return new SubscriptionContractImpl(inner, this.manager());
         } else {
@@ -158,8 +142,19 @@ public final class SubscriptionsImpl implements Subscriptions {
         }
     }
 
-    public void delete(String resourceGroupName, String serviceName, String sid, String ifMatch) {
-        this.serviceClient().delete(resourceGroupName, serviceName, sid, ifMatch);
+    public SubscriptionContract update(
+        String resourceGroupName,
+        String serviceName,
+        String sid,
+        String ifMatch,
+        SubscriptionUpdateParameters parameters) {
+        SubscriptionContractInner inner =
+            this.serviceClient().update(resourceGroupName, serviceName, sid, ifMatch, parameters);
+        if (inner != null) {
+            return new SubscriptionContractImpl(inner, this.manager());
+        } else {
+            return null;
+        }
     }
 
     public Response<Void> deleteWithResponse(
@@ -167,8 +162,8 @@ public final class SubscriptionsImpl implements Subscriptions {
         return this.serviceClient().deleteWithResponse(resourceGroupName, serviceName, sid, ifMatch, context);
     }
 
-    public void regeneratePrimaryKey(String resourceGroupName, String serviceName, String sid) {
-        this.serviceClient().regeneratePrimaryKey(resourceGroupName, serviceName, sid);
+    public void delete(String resourceGroupName, String serviceName, String sid, String ifMatch) {
+        this.serviceClient().delete(resourceGroupName, serviceName, sid, ifMatch);
     }
 
     public Response<Void> regeneratePrimaryKeyWithResponse(
@@ -176,8 +171,8 @@ public final class SubscriptionsImpl implements Subscriptions {
         return this.serviceClient().regeneratePrimaryKeyWithResponse(resourceGroupName, serviceName, sid, context);
     }
 
-    public void regenerateSecondaryKey(String resourceGroupName, String serviceName, String sid) {
-        this.serviceClient().regenerateSecondaryKey(resourceGroupName, serviceName, sid);
+    public void regeneratePrimaryKey(String resourceGroupName, String serviceName, String sid) {
+        this.serviceClient().regeneratePrimaryKey(resourceGroupName, serviceName, sid);
     }
 
     public Response<Void> regenerateSecondaryKeyWithResponse(
@@ -185,13 +180,8 @@ public final class SubscriptionsImpl implements Subscriptions {
         return this.serviceClient().regenerateSecondaryKeyWithResponse(resourceGroupName, serviceName, sid, context);
     }
 
-    public SubscriptionKeysContract listSecrets(String resourceGroupName, String serviceName, String sid) {
-        SubscriptionKeysContractInner inner = this.serviceClient().listSecrets(resourceGroupName, serviceName, sid);
-        if (inner != null) {
-            return new SubscriptionKeysContractImpl(inner, this.manager());
-        } else {
-            return null;
-        }
+    public void regenerateSecondaryKey(String resourceGroupName, String serviceName, String sid) {
+        this.serviceClient().regenerateSecondaryKey(resourceGroupName, serviceName, sid);
     }
 
     public Response<SubscriptionKeysContract> listSecretsWithResponse(
@@ -204,6 +194,15 @@ public final class SubscriptionsImpl implements Subscriptions {
                 inner.getStatusCode(),
                 inner.getHeaders(),
                 new SubscriptionKeysContractImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
+    }
+
+    public SubscriptionKeysContract listSecrets(String resourceGroupName, String serviceName, String sid) {
+        SubscriptionKeysContractInner inner = this.serviceClient().listSecrets(resourceGroupName, serviceName, sid);
+        if (inner != null) {
+            return new SubscriptionKeysContractImpl(inner, this.manager());
         } else {
             return null;
         }

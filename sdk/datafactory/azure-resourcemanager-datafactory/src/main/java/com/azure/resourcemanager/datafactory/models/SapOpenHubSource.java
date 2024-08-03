@@ -5,54 +5,73 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** A copy activity source for SAP Business Warehouse Open Hub Destination source. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * A copy activity source for SAP Business Warehouse Open Hub Destination source.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = SapOpenHubSource.class, visible = true)
 @JsonTypeName("SapOpenHubSource")
 @Fluent
 public final class SapOpenHubSource extends TabularSource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SapOpenHubSource.class);
+    /*
+     * Copy source type.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "SapOpenHubSource";
 
     /*
-     * Whether to exclude the records of the last request. The default value is
-     * true. Type: boolean (or Expression with resultType boolean).
+     * Whether to exclude the records of the last request. The default value is true. Type: boolean (or Expression with
+     * resultType boolean).
      */
     @JsonProperty(value = "excludeLastRequest")
     private Object excludeLastRequest;
 
     /*
-     * The ID of request for delta loading. Once it is set, only data with
-     * requestId larger than the value of this property will be retrieved. The
-     * default value is 0. Type: integer (or Expression with resultType integer
-     * ).
+     * The ID of request for delta loading. Once it is set, only data with requestId larger than the value of this
+     * property will be retrieved. The default value is 0. Type: integer (or Expression with resultType integer ).
      */
     @JsonProperty(value = "baseRequestId")
     private Object baseRequestId;
 
     /*
-     * Specifies the custom RFC function module that will be used to read data
-     * from SAP Table. Type: string (or Expression with resultType string).
+     * Specifies the custom RFC function module that will be used to read data from SAP Table. Type: string (or
+     * Expression with resultType string).
      */
     @JsonProperty(value = "customRfcReadTableFunctionModule")
     private Object customRfcReadTableFunctionModule;
 
     /*
-     * The single character that will be used as delimiter passed to SAP RFC as
-     * well as splitting the output data retrieved. Type: string (or Expression
-     * with resultType string).
+     * The single character that will be used as delimiter passed to SAP RFC as well as splitting the output data
+     * retrieved. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "sapDataColumnDelimiter")
     private Object sapDataColumnDelimiter;
 
     /**
+     * Creates an instance of SapOpenHubSource class.
+     */
+    public SapOpenHubSource() {
+    }
+
+    /**
+     * Get the type property: Copy source type.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the excludeLastRequest property: Whether to exclude the records of the last request. The default value is
      * true. Type: boolean (or Expression with resultType boolean).
-     *
+     * 
      * @return the excludeLastRequest value.
      */
     public Object excludeLastRequest() {
@@ -62,7 +81,7 @@ public final class SapOpenHubSource extends TabularSource {
     /**
      * Set the excludeLastRequest property: Whether to exclude the records of the last request. The default value is
      * true. Type: boolean (or Expression with resultType boolean).
-     *
+     * 
      * @param excludeLastRequest the excludeLastRequest value to set.
      * @return the SapOpenHubSource object itself.
      */
@@ -75,7 +94,7 @@ public final class SapOpenHubSource extends TabularSource {
      * Get the baseRequestId property: The ID of request for delta loading. Once it is set, only data with requestId
      * larger than the value of this property will be retrieved. The default value is 0. Type: integer (or Expression
      * with resultType integer ).
-     *
+     * 
      * @return the baseRequestId value.
      */
     public Object baseRequestId() {
@@ -86,7 +105,7 @@ public final class SapOpenHubSource extends TabularSource {
      * Set the baseRequestId property: The ID of request for delta loading. Once it is set, only data with requestId
      * larger than the value of this property will be retrieved. The default value is 0. Type: integer (or Expression
      * with resultType integer ).
-     *
+     * 
      * @param baseRequestId the baseRequestId value to set.
      * @return the SapOpenHubSource object itself.
      */
@@ -98,7 +117,7 @@ public final class SapOpenHubSource extends TabularSource {
     /**
      * Get the customRfcReadTableFunctionModule property: Specifies the custom RFC function module that will be used to
      * read data from SAP Table. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the customRfcReadTableFunctionModule value.
      */
     public Object customRfcReadTableFunctionModule() {
@@ -108,7 +127,7 @@ public final class SapOpenHubSource extends TabularSource {
     /**
      * Set the customRfcReadTableFunctionModule property: Specifies the custom RFC function module that will be used to
      * read data from SAP Table. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param customRfcReadTableFunctionModule the customRfcReadTableFunctionModule value to set.
      * @return the SapOpenHubSource object itself.
      */
@@ -120,7 +139,7 @@ public final class SapOpenHubSource extends TabularSource {
     /**
      * Get the sapDataColumnDelimiter property: The single character that will be used as delimiter passed to SAP RFC as
      * well as splitting the output data retrieved. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the sapDataColumnDelimiter value.
      */
     public Object sapDataColumnDelimiter() {
@@ -130,7 +149,7 @@ public final class SapOpenHubSource extends TabularSource {
     /**
      * Set the sapDataColumnDelimiter property: The single character that will be used as delimiter passed to SAP RFC as
      * well as splitting the output data retrieved. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param sapDataColumnDelimiter the sapDataColumnDelimiter value to set.
      * @return the SapOpenHubSource object itself.
      */
@@ -139,42 +158,54 @@ public final class SapOpenHubSource extends TabularSource {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SapOpenHubSource withQueryTimeout(Object queryTimeout) {
         super.withQueryTimeout(queryTimeout);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SapOpenHubSource withAdditionalColumns(Object additionalColumns) {
         super.withAdditionalColumns(additionalColumns);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SapOpenHubSource withSourceRetryCount(Object sourceRetryCount) {
         super.withSourceRetryCount(sourceRetryCount);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SapOpenHubSource withSourceRetryWait(Object sourceRetryWait) {
         super.withSourceRetryWait(sourceRetryWait);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SapOpenHubSource withMaxConcurrentConnections(Object maxConcurrentConnections) {
         super.withMaxConcurrentConnections(maxConcurrentConnections);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SapOpenHubSource withDisableMetricsCollection(Object disableMetricsCollection) {
         super.withDisableMetricsCollection(disableMetricsCollection);
@@ -183,7 +214,7 @@ public final class SapOpenHubSource extends TabularSource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

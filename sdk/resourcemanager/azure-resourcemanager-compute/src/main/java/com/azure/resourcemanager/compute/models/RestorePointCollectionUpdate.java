@@ -5,19 +5,17 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.compute.fluent.models.RestorePointCollectionProperties;
 import com.azure.resourcemanager.compute.fluent.models.RestorePointInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;
 
-/** Update Restore Point collection parameters. */
+/**
+ * Update Restore Point collection parameters.
+ */
 @Fluent
 public final class RestorePointCollectionUpdate extends UpdateResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RestorePointCollectionUpdate.class);
-
     /*
      * The restore point collection properties.
      */
@@ -25,15 +23,23 @@ public final class RestorePointCollectionUpdate extends UpdateResource {
     private RestorePointCollectionProperties innerProperties;
 
     /**
+     * Creates an instance of RestorePointCollectionUpdate class.
+     */
+    public RestorePointCollectionUpdate() {
+    }
+
+    /**
      * Get the innerProperties property: The restore point collection properties.
-     *
+     * 
      * @return the innerProperties value.
      */
     private RestorePointCollectionProperties innerProperties() {
         return this.innerProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RestorePointCollectionUpdate withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -43,7 +49,7 @@ public final class RestorePointCollectionUpdate extends UpdateResource {
     /**
      * Get the source property: The properties of the source resource that this restore point collection is created
      * from.
-     *
+     * 
      * @return the source value.
      */
     public RestorePointCollectionSourceProperties source() {
@@ -53,7 +59,7 @@ public final class RestorePointCollectionUpdate extends UpdateResource {
     /**
      * Set the source property: The properties of the source resource that this restore point collection is created
      * from.
-     *
+     * 
      * @param source the source value to set.
      * @return the RestorePointCollectionUpdate object itself.
      */
@@ -67,7 +73,7 @@ public final class RestorePointCollectionUpdate extends UpdateResource {
 
     /**
      * Get the provisioningState property: The provisioning state of the restore point collection.
-     *
+     * 
      * @return the provisioningState value.
      */
     public String provisioningState() {
@@ -76,7 +82,7 @@ public final class RestorePointCollectionUpdate extends UpdateResource {
 
     /**
      * Get the restorePointCollectionId property: The unique id of the restore point collection.
-     *
+     * 
      * @return the restorePointCollectionId value.
      */
     public String restorePointCollectionId() {
@@ -85,7 +91,7 @@ public final class RestorePointCollectionUpdate extends UpdateResource {
 
     /**
      * Get the restorePoints property: A list containing all restore points created under this restore point collection.
-     *
+     * 
      * @return the restorePoints value.
      */
     public List<RestorePointInner> restorePoints() {
@@ -94,7 +100,7 @@ public final class RestorePointCollectionUpdate extends UpdateResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

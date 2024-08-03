@@ -7,19 +7,26 @@ package com.azure.resourcemanager.datafactory.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.fluent.models.AzureMLLinkedServiceTypeProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.List;
 import java.util.Map;
 
-/** Azure ML Studio Web Service linked service. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * Azure ML Studio Web Service linked service.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = AzureMLLinkedService.class, visible = true)
 @JsonTypeName("AzureML")
 @Fluent
 public final class AzureMLLinkedService extends LinkedService {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureMLLinkedService.class);
+    /*
+     * Type of linked service.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "AzureML";
 
     /*
      * Azure ML Studio Web Service linked service properties.
@@ -28,36 +35,60 @@ public final class AzureMLLinkedService extends LinkedService {
     private AzureMLLinkedServiceTypeProperties innerTypeProperties = new AzureMLLinkedServiceTypeProperties();
 
     /**
+     * Creates an instance of AzureMLLinkedService class.
+     */
+    public AzureMLLinkedService() {
+    }
+
+    /**
+     * Get the type property: Type of linked service.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the innerTypeProperties property: Azure ML Studio Web Service linked service properties.
-     *
+     * 
      * @return the innerTypeProperties value.
      */
     private AzureMLLinkedServiceTypeProperties innerTypeProperties() {
         return this.innerTypeProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureMLLinkedService withConnectVia(IntegrationRuntimeReference connectVia) {
         super.withConnectVia(connectVia);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureMLLinkedService withDescription(String description) {
         super.withDescription(description);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureMLLinkedService withParameters(Map<String, ParameterSpecification> parameters) {
         super.withParameters(parameters);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureMLLinkedService withAnnotations(List<Object> annotations) {
         super.withAnnotations(annotations);
@@ -67,7 +98,7 @@ public final class AzureMLLinkedService extends LinkedService {
     /**
      * Get the mlEndpoint property: The Batch Execution REST URL for an Azure ML Studio Web Service endpoint. Type:
      * string (or Expression with resultType string).
-     *
+     * 
      * @return the mlEndpoint value.
      */
     public Object mlEndpoint() {
@@ -77,7 +108,7 @@ public final class AzureMLLinkedService extends LinkedService {
     /**
      * Set the mlEndpoint property: The Batch Execution REST URL for an Azure ML Studio Web Service endpoint. Type:
      * string (or Expression with resultType string).
-     *
+     * 
      * @param mlEndpoint the mlEndpoint value to set.
      * @return the AzureMLLinkedService object itself.
      */
@@ -91,7 +122,7 @@ public final class AzureMLLinkedService extends LinkedService {
 
     /**
      * Get the apiKey property: The API key for accessing the Azure ML model endpoint.
-     *
+     * 
      * @return the apiKey value.
      */
     public SecretBase apiKey() {
@@ -100,7 +131,7 @@ public final class AzureMLLinkedService extends LinkedService {
 
     /**
      * Set the apiKey property: The API key for accessing the Azure ML model endpoint.
-     *
+     * 
      * @param apiKey the apiKey value to set.
      * @return the AzureMLLinkedService object itself.
      */
@@ -115,7 +146,7 @@ public final class AzureMLLinkedService extends LinkedService {
     /**
      * Get the updateResourceEndpoint property: The Update Resource REST URL for an Azure ML Studio Web Service
      * endpoint. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the updateResourceEndpoint value.
      */
     public Object updateResourceEndpoint() {
@@ -125,7 +156,7 @@ public final class AzureMLLinkedService extends LinkedService {
     /**
      * Set the updateResourceEndpoint property: The Update Resource REST URL for an Azure ML Studio Web Service
      * endpoint. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param updateResourceEndpoint the updateResourceEndpoint value to set.
      * @return the AzureMLLinkedService object itself.
      */
@@ -140,7 +171,7 @@ public final class AzureMLLinkedService extends LinkedService {
     /**
      * Get the servicePrincipalId property: The ID of the service principal used to authenticate against the ARM-based
      * updateResourceEndpoint of an Azure ML Studio web service. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the servicePrincipalId value.
      */
     public Object servicePrincipalId() {
@@ -150,7 +181,7 @@ public final class AzureMLLinkedService extends LinkedService {
     /**
      * Set the servicePrincipalId property: The ID of the service principal used to authenticate against the ARM-based
      * updateResourceEndpoint of an Azure ML Studio web service. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param servicePrincipalId the servicePrincipalId value to set.
      * @return the AzureMLLinkedService object itself.
      */
@@ -165,7 +196,7 @@ public final class AzureMLLinkedService extends LinkedService {
     /**
      * Get the servicePrincipalKey property: The key of the service principal used to authenticate against the ARM-based
      * updateResourceEndpoint of an Azure ML Studio web service.
-     *
+     * 
      * @return the servicePrincipalKey value.
      */
     public SecretBase servicePrincipalKey() {
@@ -175,7 +206,7 @@ public final class AzureMLLinkedService extends LinkedService {
     /**
      * Set the servicePrincipalKey property: The key of the service principal used to authenticate against the ARM-based
      * updateResourceEndpoint of an Azure ML Studio web service.
-     *
+     * 
      * @param servicePrincipalKey the servicePrincipalKey value to set.
      * @return the AzureMLLinkedService object itself.
      */
@@ -190,7 +221,7 @@ public final class AzureMLLinkedService extends LinkedService {
     /**
      * Get the tenant property: The name or ID of the tenant to which the service principal belongs. Type: string (or
      * Expression with resultType string).
-     *
+     * 
      * @return the tenant value.
      */
     public Object tenant() {
@@ -200,7 +231,7 @@ public final class AzureMLLinkedService extends LinkedService {
     /**
      * Set the tenant property: The name or ID of the tenant to which the service principal belongs. Type: string (or
      * Expression with resultType string).
-     *
+     * 
      * @param tenant the tenant value to set.
      * @return the AzureMLLinkedService object itself.
      */
@@ -214,22 +245,22 @@ public final class AzureMLLinkedService extends LinkedService {
 
     /**
      * Get the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @return the encryptedCredential value.
      */
-    public Object encryptedCredential() {
+    public String encryptedCredential() {
         return this.innerTypeProperties() == null ? null : this.innerTypeProperties().encryptedCredential();
     }
 
     /**
      * Set the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @param encryptedCredential the encryptedCredential value to set.
      * @return the AzureMLLinkedService object itself.
      */
-    public AzureMLLinkedService withEncryptedCredential(Object encryptedCredential) {
+    public AzureMLLinkedService withEncryptedCredential(String encryptedCredential) {
         if (this.innerTypeProperties() == null) {
             this.innerTypeProperties = new AzureMLLinkedServiceTypeProperties();
         }
@@ -240,7 +271,7 @@ public final class AzureMLLinkedService extends LinkedService {
     /**
      * Get the authentication property: Type of authentication (Required to specify MSI) used to connect to AzureML.
      * Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the authentication value.
      */
     public Object authentication() {
@@ -250,7 +281,7 @@ public final class AzureMLLinkedService extends LinkedService {
     /**
      * Set the authentication property: Type of authentication (Required to specify MSI) used to connect to AzureML.
      * Type: string (or Expression with resultType string).
-     *
+     * 
      * @param authentication the authentication value to set.
      * @return the AzureMLLinkedService object itself.
      */
@@ -264,19 +295,20 @@ public final class AzureMLLinkedService extends LinkedService {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
         if (innerTypeProperties() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property innerTypeProperties in model AzureMLLinkedService"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property innerTypeProperties in model AzureMLLinkedService"));
         } else {
             innerTypeProperties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(AzureMLLinkedService.class);
 }

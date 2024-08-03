@@ -8,20 +8,38 @@ import com.azure.core.util.ExpandableStringEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collection;
 
-/** Defines values for ConsistencyModeTypes. */
+/**
+ * ConsistencyMode of the RestorePoint. Can be specified in the input while creating a restore point. For now, only
+ * CrashConsistent is accepted as a valid input. Please refer to https://aka.ms/RestorePoints for more details.
+ */
 public final class ConsistencyModeTypes extends ExpandableStringEnum<ConsistencyModeTypes> {
-    /** Static value CrashConsistent for ConsistencyModeTypes. */
+    /**
+     * Static value CrashConsistent for ConsistencyModeTypes.
+     */
     public static final ConsistencyModeTypes CRASH_CONSISTENT = fromString("CrashConsistent");
 
-    /** Static value FileSystemConsistent for ConsistencyModeTypes. */
+    /**
+     * Static value FileSystemConsistent for ConsistencyModeTypes.
+     */
     public static final ConsistencyModeTypes FILE_SYSTEM_CONSISTENT = fromString("FileSystemConsistent");
 
-    /** Static value ApplicationConsistent for ConsistencyModeTypes. */
+    /**
+     * Static value ApplicationConsistent for ConsistencyModeTypes.
+     */
     public static final ConsistencyModeTypes APPLICATION_CONSISTENT = fromString("ApplicationConsistent");
 
     /**
+     * Creates a new instance of ConsistencyModeTypes value.
+     * 
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public ConsistencyModeTypes() {
+    }
+
+    /**
      * Creates or finds a ConsistencyModeTypes from its string representation.
-     *
+     * 
      * @param name a name to look for.
      * @return the corresponding ConsistencyModeTypes.
      */
@@ -30,7 +48,11 @@ public final class ConsistencyModeTypes extends ExpandableStringEnum<Consistency
         return fromString(name, ConsistencyModeTypes.class);
     }
 
-    /** @return known ConsistencyModeTypes values. */
+    /**
+     * Gets known ConsistencyModeTypes values.
+     * 
+     * @return known ConsistencyModeTypes values.
+     */
     public static Collection<ConsistencyModeTypes> values() {
         return values(ConsistencyModeTypes.class);
     }

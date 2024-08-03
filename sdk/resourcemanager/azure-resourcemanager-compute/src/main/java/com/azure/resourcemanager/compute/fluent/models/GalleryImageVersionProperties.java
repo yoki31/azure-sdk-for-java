@@ -6,18 +6,19 @@ package com.azure.resourcemanager.compute.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.azure.resourcemanager.compute.models.GalleryImageVersionPropertiesProvisioningState;
 import com.azure.resourcemanager.compute.models.GalleryImageVersionPublishingProfile;
+import com.azure.resourcemanager.compute.models.GalleryImageVersionSafetyProfile;
 import com.azure.resourcemanager.compute.models.GalleryImageVersionStorageProfile;
+import com.azure.resourcemanager.compute.models.GalleryProvisioningState;
+import com.azure.resourcemanager.compute.models.ImageVersionSecurityProfile;
 import com.azure.resourcemanager.compute.models.ReplicationStatus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Describes the properties of a gallery image version. */
+/**
+ * Describes the properties of a gallery image version.
+ */
 @Fluent
 public final class GalleryImageVersionProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GalleryImageVersionProperties.class);
-
     /*
      * The publishing profile of a gallery image Version.
      */
@@ -25,11 +26,10 @@ public final class GalleryImageVersionProperties {
     private GalleryImageVersionPublishingProfile publishingProfile;
 
     /*
-     * The current state of the gallery image version. The provisioning state,
-     * which only appears in the response.
+     * The provisioning state, which only appears in the response.
      */
     @JsonProperty(value = "provisioningState", access = JsonProperty.Access.WRITE_ONLY)
-    private GalleryImageVersionPropertiesProvisioningState provisioningState;
+    private GalleryProvisioningState provisioningState;
 
     /*
      * This is the storage profile of a Gallery Image Version.
@@ -38,14 +38,32 @@ public final class GalleryImageVersionProperties {
     private GalleryImageVersionStorageProfile storageProfile;
 
     /*
+     * This is the safety profile of the Gallery Image Version.
+     */
+    @JsonProperty(value = "safetyProfile")
+    private GalleryImageVersionSafetyProfile safetyProfile;
+
+    /*
      * This is the replication status of the gallery image version.
      */
     @JsonProperty(value = "replicationStatus", access = JsonProperty.Access.WRITE_ONLY)
     private ReplicationStatus replicationStatus;
 
+    /*
+     * The security profile of a gallery image version
+     */
+    @JsonProperty(value = "securityProfile")
+    private ImageVersionSecurityProfile securityProfile;
+
+    /**
+     * Creates an instance of GalleryImageVersionProperties class.
+     */
+    public GalleryImageVersionProperties() {
+    }
+
     /**
      * Get the publishingProfile property: The publishing profile of a gallery image Version.
-     *
+     * 
      * @return the publishingProfile value.
      */
     public GalleryImageVersionPublishingProfile publishingProfile() {
@@ -54,7 +72,7 @@ public final class GalleryImageVersionProperties {
 
     /**
      * Set the publishingProfile property: The publishing profile of a gallery image Version.
-     *
+     * 
      * @param publishingProfile the publishingProfile value to set.
      * @return the GalleryImageVersionProperties object itself.
      */
@@ -64,18 +82,17 @@ public final class GalleryImageVersionProperties {
     }
 
     /**
-     * Get the provisioningState property: The current state of the gallery image version. The provisioning state, which
-     * only appears in the response.
-     *
+     * Get the provisioningState property: The provisioning state, which only appears in the response.
+     * 
      * @return the provisioningState value.
      */
-    public GalleryImageVersionPropertiesProvisioningState provisioningState() {
+    public GalleryProvisioningState provisioningState() {
         return this.provisioningState;
     }
 
     /**
      * Get the storageProfile property: This is the storage profile of a Gallery Image Version.
-     *
+     * 
      * @return the storageProfile value.
      */
     public GalleryImageVersionStorageProfile storageProfile() {
@@ -84,7 +101,7 @@ public final class GalleryImageVersionProperties {
 
     /**
      * Set the storageProfile property: This is the storage profile of a Gallery Image Version.
-     *
+     * 
      * @param storageProfile the storageProfile value to set.
      * @return the GalleryImageVersionProperties object itself.
      */
@@ -94,8 +111,28 @@ public final class GalleryImageVersionProperties {
     }
 
     /**
+     * Get the safetyProfile property: This is the safety profile of the Gallery Image Version.
+     * 
+     * @return the safetyProfile value.
+     */
+    public GalleryImageVersionSafetyProfile safetyProfile() {
+        return this.safetyProfile;
+    }
+
+    /**
+     * Set the safetyProfile property: This is the safety profile of the Gallery Image Version.
+     * 
+     * @param safetyProfile the safetyProfile value to set.
+     * @return the GalleryImageVersionProperties object itself.
+     */
+    public GalleryImageVersionProperties withSafetyProfile(GalleryImageVersionSafetyProfile safetyProfile) {
+        this.safetyProfile = safetyProfile;
+        return this;
+    }
+
+    /**
      * Get the replicationStatus property: This is the replication status of the gallery image version.
-     *
+     * 
      * @return the replicationStatus value.
      */
     public ReplicationStatus replicationStatus() {
@@ -103,8 +140,28 @@ public final class GalleryImageVersionProperties {
     }
 
     /**
+     * Get the securityProfile property: The security profile of a gallery image version.
+     * 
+     * @return the securityProfile value.
+     */
+    public ImageVersionSecurityProfile securityProfile() {
+        return this.securityProfile;
+    }
+
+    /**
+     * Set the securityProfile property: The security profile of a gallery image version.
+     * 
+     * @param securityProfile the securityProfile value to set.
+     * @return the GalleryImageVersionProperties object itself.
+     */
+    public GalleryImageVersionProperties withSecurityProfile(ImageVersionSecurityProfile securityProfile) {
+        this.securityProfile = securityProfile;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
@@ -112,15 +169,22 @@ public final class GalleryImageVersionProperties {
             publishingProfile().validate();
         }
         if (storageProfile() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property storageProfile in model GalleryImageVersionProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property storageProfile in model GalleryImageVersionProperties"));
         } else {
             storageProfile().validate();
+        }
+        if (safetyProfile() != null) {
+            safetyProfile().validate();
         }
         if (replicationStatus() != null) {
             replicationStatus().validate();
         }
+        if (securityProfile() != null) {
+            securityProfile().validate();
+        }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(GalleryImageVersionProperties.class);
 }

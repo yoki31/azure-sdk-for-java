@@ -7,20 +7,26 @@ package com.azure.resourcemanager.cosmos.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cosmos.fluent.models.GremlinDatabaseCreateUpdateProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Map;
 
-/** Parameters to create and update Cosmos DB Gremlin database. */
+/**
+ * Parameters to create and update Cosmos DB Gremlin database.
+ */
 @Fluent
 public final class GremlinDatabaseCreateUpdateParameters extends ArmResourceProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GremlinDatabaseCreateUpdateParameters.class);
-
     /*
      * Properties to create and update Azure Cosmos DB Gremlin database.
      */
     @JsonProperty(value = "properties", required = true)
     private GremlinDatabaseCreateUpdateProperties innerProperties = new GremlinDatabaseCreateUpdateProperties();
+
+    /**
+     * Creates an instance of GremlinDatabaseCreateUpdateParameters class.
+     */
+    public GremlinDatabaseCreateUpdateParameters() {
+    }
 
     /**
      * Get the innerProperties property: Properties to create and update Azure Cosmos DB Gremlin database.
@@ -31,14 +37,18 @@ public final class GremlinDatabaseCreateUpdateParameters extends ArmResourceProp
         return this.innerProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GremlinDatabaseCreateUpdateParameters withLocation(String location) {
         super.withLocation(location);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GremlinDatabaseCreateUpdateParameters withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -102,12 +112,13 @@ public final class GremlinDatabaseCreateUpdateParameters extends ArmResourceProp
     public void validate() {
         super.validate();
         if (innerProperties() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property innerProperties in model GremlinDatabaseCreateUpdateParameters"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property innerProperties in model GremlinDatabaseCreateUpdateParameters"));
         } else {
             innerProperties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(GremlinDatabaseCreateUpdateParameters.class);
 }

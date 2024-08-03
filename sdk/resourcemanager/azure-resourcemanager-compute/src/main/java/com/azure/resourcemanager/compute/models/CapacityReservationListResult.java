@@ -7,15 +7,14 @@ package com.azure.resourcemanager.compute.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.compute.fluent.models.CapacityReservationInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The list capacity reservation operation response. */
+/**
+ * The list capacity reservation operation response.
+ */
 @Fluent
 public final class CapacityReservationListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CapacityReservationListResult.class);
-
     /*
      * The list of capacity reservations
      */
@@ -23,15 +22,21 @@ public final class CapacityReservationListResult {
     private List<CapacityReservationInner> value;
 
     /*
-     * The URI to fetch the next page of capacity reservations. Call ListNext()
-     * with this URI to fetch the next page of capacity reservations.
+     * The URI to fetch the next page of capacity reservations. Call ListNext() with this URI to fetch the next page of
+     * capacity reservations.
      */
     @JsonProperty(value = "nextLink")
     private String nextLink;
 
     /**
+     * Creates an instance of CapacityReservationListResult class.
+     */
+    public CapacityReservationListResult() {
+    }
+
+    /**
      * Get the value property: The list of capacity reservations.
-     *
+     * 
      * @return the value value.
      */
     public List<CapacityReservationInner> value() {
@@ -40,7 +45,7 @@ public final class CapacityReservationListResult {
 
     /**
      * Set the value property: The list of capacity reservations.
-     *
+     * 
      * @param value the value value to set.
      * @return the CapacityReservationListResult object itself.
      */
@@ -52,7 +57,7 @@ public final class CapacityReservationListResult {
     /**
      * Get the nextLink property: The URI to fetch the next page of capacity reservations. Call ListNext() with this URI
      * to fetch the next page of capacity reservations.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -62,7 +67,7 @@ public final class CapacityReservationListResult {
     /**
      * Set the nextLink property: The URI to fetch the next page of capacity reservations. Call ListNext() with this URI
      * to fetch the next page of capacity reservations.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the CapacityReservationListResult object itself.
      */
@@ -73,17 +78,18 @@ public final class CapacityReservationListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property value in model CapacityReservationListResult"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property value in model CapacityReservationListResult"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(CapacityReservationListResult.class);
 }

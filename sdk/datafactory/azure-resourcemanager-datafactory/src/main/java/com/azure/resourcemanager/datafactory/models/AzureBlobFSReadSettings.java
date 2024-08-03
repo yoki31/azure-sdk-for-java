@@ -5,87 +5,106 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** Azure blobFS read settings. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * Azure blobFS read settings.
+ */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "type",
+    defaultImpl = AzureBlobFSReadSettings.class,
+    visible = true)
 @JsonTypeName("AzureBlobFSReadSettings")
 @Fluent
 public final class AzureBlobFSReadSettings extends StoreReadSettings {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureBlobFSReadSettings.class);
+    /*
+     * The read setting type.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "AzureBlobFSReadSettings";
 
     /*
-     * If true, files under the folder path will be read recursively. Default
-     * is true. Type: boolean (or Expression with resultType boolean).
+     * If true, files under the folder path will be read recursively. Default is true. Type: boolean (or Expression with
+     * resultType boolean).
      */
     @JsonProperty(value = "recursive")
     private Object recursive;
 
     /*
-     * Azure blobFS wildcardFolderPath. Type: string (or Expression with
-     * resultType string).
+     * Azure blobFS wildcardFolderPath. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "wildcardFolderPath")
     private Object wildcardFolderPath;
 
     /*
-     * Azure blobFS wildcardFileName. Type: string (or Expression with
-     * resultType string).
+     * Azure blobFS wildcardFileName. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "wildcardFileName")
     private Object wildcardFileName;
 
     /*
-     * Point to a text file that lists each file (relative path to the path
-     * configured in the dataset) that you want to copy. Type: string (or
-     * Expression with resultType string).
+     * Point to a text file that lists each file (relative path to the path configured in the dataset) that you want to
+     * copy. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "fileListPath")
     private Object fileListPath;
 
     /*
-     * Indicates whether to enable partition discovery.
+     * Indicates whether to enable partition discovery. Type: boolean (or Expression with resultType boolean).
      */
     @JsonProperty(value = "enablePartitionDiscovery")
-    private Boolean enablePartitionDiscovery;
+    private Object enablePartitionDiscovery;
 
     /*
-     * Specify the root path where partition discovery starts from. Type:
-     * string (or Expression with resultType string).
+     * Specify the root path where partition discovery starts from. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "partitionRootPath")
     private Object partitionRootPath;
 
     /*
-     * Indicates whether the source files need to be deleted after copy
-     * completion. Default is false. Type: boolean (or Expression with
-     * resultType boolean).
+     * Indicates whether the source files need to be deleted after copy completion. Default is false. Type: boolean (or
+     * Expression with resultType boolean).
      */
     @JsonProperty(value = "deleteFilesAfterCompletion")
     private Object deleteFilesAfterCompletion;
 
     /*
-     * The start of file's modified datetime. Type: string (or Expression with
-     * resultType string).
+     * The start of file's modified datetime. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "modifiedDatetimeStart")
     private Object modifiedDatetimeStart;
 
     /*
-     * The end of file's modified datetime. Type: string (or Expression with
-     * resultType string).
+     * The end of file's modified datetime. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "modifiedDatetimeEnd")
     private Object modifiedDatetimeEnd;
 
     /**
+     * Creates an instance of AzureBlobFSReadSettings class.
+     */
+    public AzureBlobFSReadSettings() {
+    }
+
+    /**
+     * Get the type property: The read setting type.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the recursive property: If true, files under the folder path will be read recursively. Default is true. Type:
      * boolean (or Expression with resultType boolean).
-     *
+     * 
      * @return the recursive value.
      */
     public Object recursive() {
@@ -95,7 +114,7 @@ public final class AzureBlobFSReadSettings extends StoreReadSettings {
     /**
      * Set the recursive property: If true, files under the folder path will be read recursively. Default is true. Type:
      * boolean (or Expression with resultType boolean).
-     *
+     * 
      * @param recursive the recursive value to set.
      * @return the AzureBlobFSReadSettings object itself.
      */
@@ -107,7 +126,7 @@ public final class AzureBlobFSReadSettings extends StoreReadSettings {
     /**
      * Get the wildcardFolderPath property: Azure blobFS wildcardFolderPath. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @return the wildcardFolderPath value.
      */
     public Object wildcardFolderPath() {
@@ -117,7 +136,7 @@ public final class AzureBlobFSReadSettings extends StoreReadSettings {
     /**
      * Set the wildcardFolderPath property: Azure blobFS wildcardFolderPath. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @param wildcardFolderPath the wildcardFolderPath value to set.
      * @return the AzureBlobFSReadSettings object itself.
      */
@@ -129,7 +148,7 @@ public final class AzureBlobFSReadSettings extends StoreReadSettings {
     /**
      * Get the wildcardFileName property: Azure blobFS wildcardFileName. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @return the wildcardFileName value.
      */
     public Object wildcardFileName() {
@@ -139,7 +158,7 @@ public final class AzureBlobFSReadSettings extends StoreReadSettings {
     /**
      * Set the wildcardFileName property: Azure blobFS wildcardFileName. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @param wildcardFileName the wildcardFileName value to set.
      * @return the AzureBlobFSReadSettings object itself.
      */
@@ -151,7 +170,7 @@ public final class AzureBlobFSReadSettings extends StoreReadSettings {
     /**
      * Get the fileListPath property: Point to a text file that lists each file (relative path to the path configured in
      * the dataset) that you want to copy. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the fileListPath value.
      */
     public Object fileListPath() {
@@ -161,7 +180,7 @@ public final class AzureBlobFSReadSettings extends StoreReadSettings {
     /**
      * Set the fileListPath property: Point to a text file that lists each file (relative path to the path configured in
      * the dataset) that you want to copy. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param fileListPath the fileListPath value to set.
      * @return the AzureBlobFSReadSettings object itself.
      */
@@ -171,21 +190,23 @@ public final class AzureBlobFSReadSettings extends StoreReadSettings {
     }
 
     /**
-     * Get the enablePartitionDiscovery property: Indicates whether to enable partition discovery.
-     *
+     * Get the enablePartitionDiscovery property: Indicates whether to enable partition discovery. Type: boolean (or
+     * Expression with resultType boolean).
+     * 
      * @return the enablePartitionDiscovery value.
      */
-    public Boolean enablePartitionDiscovery() {
+    public Object enablePartitionDiscovery() {
         return this.enablePartitionDiscovery;
     }
 
     /**
-     * Set the enablePartitionDiscovery property: Indicates whether to enable partition discovery.
-     *
+     * Set the enablePartitionDiscovery property: Indicates whether to enable partition discovery. Type: boolean (or
+     * Expression with resultType boolean).
+     * 
      * @param enablePartitionDiscovery the enablePartitionDiscovery value to set.
      * @return the AzureBlobFSReadSettings object itself.
      */
-    public AzureBlobFSReadSettings withEnablePartitionDiscovery(Boolean enablePartitionDiscovery) {
+    public AzureBlobFSReadSettings withEnablePartitionDiscovery(Object enablePartitionDiscovery) {
         this.enablePartitionDiscovery = enablePartitionDiscovery;
         return this;
     }
@@ -193,7 +214,7 @@ public final class AzureBlobFSReadSettings extends StoreReadSettings {
     /**
      * Get the partitionRootPath property: Specify the root path where partition discovery starts from. Type: string (or
      * Expression with resultType string).
-     *
+     * 
      * @return the partitionRootPath value.
      */
     public Object partitionRootPath() {
@@ -203,7 +224,7 @@ public final class AzureBlobFSReadSettings extends StoreReadSettings {
     /**
      * Set the partitionRootPath property: Specify the root path where partition discovery starts from. Type: string (or
      * Expression with resultType string).
-     *
+     * 
      * @param partitionRootPath the partitionRootPath value to set.
      * @return the AzureBlobFSReadSettings object itself.
      */
@@ -215,7 +236,7 @@ public final class AzureBlobFSReadSettings extends StoreReadSettings {
     /**
      * Get the deleteFilesAfterCompletion property: Indicates whether the source files need to be deleted after copy
      * completion. Default is false. Type: boolean (or Expression with resultType boolean).
-     *
+     * 
      * @return the deleteFilesAfterCompletion value.
      */
     public Object deleteFilesAfterCompletion() {
@@ -225,7 +246,7 @@ public final class AzureBlobFSReadSettings extends StoreReadSettings {
     /**
      * Set the deleteFilesAfterCompletion property: Indicates whether the source files need to be deleted after copy
      * completion. Default is false. Type: boolean (or Expression with resultType boolean).
-     *
+     * 
      * @param deleteFilesAfterCompletion the deleteFilesAfterCompletion value to set.
      * @return the AzureBlobFSReadSettings object itself.
      */
@@ -237,7 +258,7 @@ public final class AzureBlobFSReadSettings extends StoreReadSettings {
     /**
      * Get the modifiedDatetimeStart property: The start of file's modified datetime. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the modifiedDatetimeStart value.
      */
     public Object modifiedDatetimeStart() {
@@ -247,7 +268,7 @@ public final class AzureBlobFSReadSettings extends StoreReadSettings {
     /**
      * Set the modifiedDatetimeStart property: The start of file's modified datetime. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param modifiedDatetimeStart the modifiedDatetimeStart value to set.
      * @return the AzureBlobFSReadSettings object itself.
      */
@@ -259,7 +280,7 @@ public final class AzureBlobFSReadSettings extends StoreReadSettings {
     /**
      * Get the modifiedDatetimeEnd property: The end of file's modified datetime. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the modifiedDatetimeEnd value.
      */
     public Object modifiedDatetimeEnd() {
@@ -269,7 +290,7 @@ public final class AzureBlobFSReadSettings extends StoreReadSettings {
     /**
      * Set the modifiedDatetimeEnd property: The end of file's modified datetime. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param modifiedDatetimeEnd the modifiedDatetimeEnd value to set.
      * @return the AzureBlobFSReadSettings object itself.
      */
@@ -278,14 +299,18 @@ public final class AzureBlobFSReadSettings extends StoreReadSettings {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureBlobFSReadSettings withMaxConcurrentConnections(Object maxConcurrentConnections) {
         super.withMaxConcurrentConnections(maxConcurrentConnections);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureBlobFSReadSettings withDisableMetricsCollection(Object disableMetricsCollection) {
         super.withDisableMetricsCollection(disableMetricsCollection);
@@ -294,7 +319,7 @@ public final class AzureBlobFSReadSettings extends StoreReadSettings {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

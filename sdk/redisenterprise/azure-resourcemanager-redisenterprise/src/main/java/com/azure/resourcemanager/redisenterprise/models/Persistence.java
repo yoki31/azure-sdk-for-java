@@ -5,15 +5,15 @@
 package com.azure.resourcemanager.redisenterprise.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Persistence-related configuration for the RedisEnterprise database. */
+/**
+ * Persistence settings
+ * 
+ * Persistence-related configuration for the RedisEnterprise database.
+ */
 @Fluent
 public final class Persistence {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Persistence.class);
-
     /*
      * Sets whether AOF is enabled.
      */
@@ -39,8 +39,14 @@ public final class Persistence {
     private RdbFrequency rdbFrequency;
 
     /**
+     * Creates an instance of Persistence class.
+     */
+    public Persistence() {
+    }
+
+    /**
      * Get the aofEnabled property: Sets whether AOF is enabled.
-     *
+     * 
      * @return the aofEnabled value.
      */
     public Boolean aofEnabled() {
@@ -49,7 +55,7 @@ public final class Persistence {
 
     /**
      * Set the aofEnabled property: Sets whether AOF is enabled.
-     *
+     * 
      * @param aofEnabled the aofEnabled value to set.
      * @return the Persistence object itself.
      */
@@ -60,7 +66,7 @@ public final class Persistence {
 
     /**
      * Get the rdbEnabled property: Sets whether RDB is enabled.
-     *
+     * 
      * @return the rdbEnabled value.
      */
     public Boolean rdbEnabled() {
@@ -69,7 +75,7 @@ public final class Persistence {
 
     /**
      * Set the rdbEnabled property: Sets whether RDB is enabled.
-     *
+     * 
      * @param rdbEnabled the rdbEnabled value to set.
      * @return the Persistence object itself.
      */
@@ -80,7 +86,7 @@ public final class Persistence {
 
     /**
      * Get the aofFrequency property: Sets the frequency at which data is written to disk.
-     *
+     * 
      * @return the aofFrequency value.
      */
     public AofFrequency aofFrequency() {
@@ -89,7 +95,7 @@ public final class Persistence {
 
     /**
      * Set the aofFrequency property: Sets the frequency at which data is written to disk.
-     *
+     * 
      * @param aofFrequency the aofFrequency value to set.
      * @return the Persistence object itself.
      */
@@ -100,7 +106,7 @@ public final class Persistence {
 
     /**
      * Get the rdbFrequency property: Sets the frequency at which a snapshot of the database is created.
-     *
+     * 
      * @return the rdbFrequency value.
      */
     public RdbFrequency rdbFrequency() {
@@ -109,7 +115,7 @@ public final class Persistence {
 
     /**
      * Set the rdbFrequency property: Sets the frequency at which a snapshot of the database is created.
-     *
+     * 
      * @param rdbFrequency the rdbFrequency value to set.
      * @return the Persistence object itself.
      */
@@ -120,7 +126,7 @@ public final class Persistence {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

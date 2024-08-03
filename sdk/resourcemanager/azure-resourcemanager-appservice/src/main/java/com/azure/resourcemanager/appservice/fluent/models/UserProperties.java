@@ -6,14 +6,13 @@ package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** User resource specific properties. */
+/**
+ * User resource specific properties.
+ */
 @Fluent
 public final class UserProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(UserProperties.class);
-
     /*
      * Username used for publishing.
      */
@@ -45,8 +44,14 @@ public final class UserProperties {
     private String scmUri;
 
     /**
+     * Creates an instance of UserProperties class.
+     */
+    public UserProperties() {
+    }
+
+    /**
      * Get the publishingUsername property: Username used for publishing.
-     *
+     * 
      * @return the publishingUsername value.
      */
     public String publishingUsername() {
@@ -55,7 +60,7 @@ public final class UserProperties {
 
     /**
      * Set the publishingUsername property: Username used for publishing.
-     *
+     * 
      * @param publishingUsername the publishingUsername value to set.
      * @return the UserProperties object itself.
      */
@@ -66,7 +71,7 @@ public final class UserProperties {
 
     /**
      * Get the publishingPassword property: Password used for publishing.
-     *
+     * 
      * @return the publishingPassword value.
      */
     public String publishingPassword() {
@@ -75,7 +80,7 @@ public final class UserProperties {
 
     /**
      * Set the publishingPassword property: Password used for publishing.
-     *
+     * 
      * @param publishingPassword the publishingPassword value to set.
      * @return the UserProperties object itself.
      */
@@ -86,7 +91,7 @@ public final class UserProperties {
 
     /**
      * Get the publishingPasswordHash property: Password hash used for publishing.
-     *
+     * 
      * @return the publishingPasswordHash value.
      */
     public String publishingPasswordHash() {
@@ -95,7 +100,7 @@ public final class UserProperties {
 
     /**
      * Set the publishingPasswordHash property: Password hash used for publishing.
-     *
+     * 
      * @param publishingPasswordHash the publishingPasswordHash value to set.
      * @return the UserProperties object itself.
      */
@@ -106,7 +111,7 @@ public final class UserProperties {
 
     /**
      * Get the publishingPasswordHashSalt property: Password hash salt used for publishing.
-     *
+     * 
      * @return the publishingPasswordHashSalt value.
      */
     public String publishingPasswordHashSalt() {
@@ -115,7 +120,7 @@ public final class UserProperties {
 
     /**
      * Set the publishingPasswordHashSalt property: Password hash salt used for publishing.
-     *
+     * 
      * @param publishingPasswordHashSalt the publishingPasswordHashSalt value to set.
      * @return the UserProperties object itself.
      */
@@ -126,7 +131,7 @@ public final class UserProperties {
 
     /**
      * Get the scmUri property: Url of SCM site.
-     *
+     * 
      * @return the scmUri value.
      */
     public String scmUri() {
@@ -135,7 +140,7 @@ public final class UserProperties {
 
     /**
      * Set the scmUri property: Url of SCM site.
-     *
+     * 
      * @param scmUri the scmUri value to set.
      * @return the UserProperties object itself.
      */
@@ -146,15 +151,16 @@ public final class UserProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (publishingUsername() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property publishingUsername in model UserProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property publishingUsername in model UserProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(UserProperties.class);
 }

@@ -5,17 +5,17 @@
 package com.azure.resourcemanager.mediaservices.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.mediaservices.fluent.models.LiveEventInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The LiveEvent list result. */
+/**
+ * LiveEventListResult
+ *
+ * <p>The LiveEvent list result.
+ */
 @Fluent
 public final class LiveEventListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(LiveEventListResult.class);
-
     /*
      * The result of the List Live Event operation.
      */
@@ -29,11 +29,14 @@ public final class LiveEventListResult {
     private Integer odataCount;
 
     /*
-     * The link to the next set of results. Not empty if value contains
-     * incomplete list of live outputs.
+     * The link to the next set of results. Not empty if value contains incomplete list of live outputs.
      */
     @JsonProperty(value = "@odata.nextLink")
     private String odataNextLink;
+
+    /** Creates an instance of LiveEventListResult class. */
+    public LiveEventListResult() {
+    }
 
     /**
      * Get the value property: The result of the List Live Event operation.

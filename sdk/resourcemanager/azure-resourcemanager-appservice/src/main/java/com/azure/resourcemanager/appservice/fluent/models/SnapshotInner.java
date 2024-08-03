@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.ProxyOnlyResource;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** A snapshot of an app. */
+/**
+ * A snapshot of an app.
+ */
 @Fluent
 public final class SnapshotInner extends ProxyOnlyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SnapshotInner.class);
-
     /*
      * Snapshot resource specific properties
      */
@@ -22,15 +20,23 @@ public final class SnapshotInner extends ProxyOnlyResource {
     private SnapshotProperties innerProperties;
 
     /**
+     * Creates an instance of SnapshotInner class.
+     */
+    public SnapshotInner() {
+    }
+
+    /**
      * Get the innerProperties property: Snapshot resource specific properties.
-     *
+     * 
      * @return the innerProperties value.
      */
     private SnapshotProperties innerProperties() {
         return this.innerProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SnapshotInner withKind(String kind) {
         super.withKind(kind);
@@ -39,7 +45,7 @@ public final class SnapshotInner extends ProxyOnlyResource {
 
     /**
      * Get the time property: The time the snapshot was taken.
-     *
+     * 
      * @return the time value.
      */
     public String time() {
@@ -48,7 +54,7 @@ public final class SnapshotInner extends ProxyOnlyResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

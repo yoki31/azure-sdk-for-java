@@ -7,15 +7,14 @@ package com.azure.resourcemanager.compute.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.compute.fluent.models.VirtualMachineScaleSetExtensionInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The List VM scale set extension operation response. */
+/**
+ * The List VM scale set extension operation response.
+ */
 @Fluent
 public final class VirtualMachineScaleSetExtensionListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VirtualMachineScaleSetExtensionListResult.class);
-
     /*
      * The list of VM scale set extensions.
      */
@@ -23,15 +22,21 @@ public final class VirtualMachineScaleSetExtensionListResult {
     private List<VirtualMachineScaleSetExtensionInner> value;
 
     /*
-     * The uri to fetch the next page of VM scale set extensions. Call
-     * ListNext() with this to fetch the next page of VM scale set extensions.
+     * The uri to fetch the next page of VM scale set extensions. Call ListNext() with this to fetch the next page of VM
+     * scale set extensions.
      */
     @JsonProperty(value = "nextLink")
     private String nextLink;
 
     /**
+     * Creates an instance of VirtualMachineScaleSetExtensionListResult class.
+     */
+    public VirtualMachineScaleSetExtensionListResult() {
+    }
+
+    /**
      * Get the value property: The list of VM scale set extensions.
-     *
+     * 
      * @return the value value.
      */
     public List<VirtualMachineScaleSetExtensionInner> value() {
@@ -40,7 +45,7 @@ public final class VirtualMachineScaleSetExtensionListResult {
 
     /**
      * Set the value property: The list of VM scale set extensions.
-     *
+     * 
      * @param value the value value to set.
      * @return the VirtualMachineScaleSetExtensionListResult object itself.
      */
@@ -52,7 +57,7 @@ public final class VirtualMachineScaleSetExtensionListResult {
     /**
      * Get the nextLink property: The uri to fetch the next page of VM scale set extensions. Call ListNext() with this
      * to fetch the next page of VM scale set extensions.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -62,7 +67,7 @@ public final class VirtualMachineScaleSetExtensionListResult {
     /**
      * Set the nextLink property: The uri to fetch the next page of VM scale set extensions. Call ListNext() with this
      * to fetch the next page of VM scale set extensions.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the VirtualMachineScaleSetExtensionListResult object itself.
      */
@@ -73,17 +78,18 @@ public final class VirtualMachineScaleSetExtensionListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property value in model VirtualMachineScaleSetExtensionListResult"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property value in model VirtualMachineScaleSetExtensionListResult"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(VirtualMachineScaleSetExtensionListResult.class);
 }

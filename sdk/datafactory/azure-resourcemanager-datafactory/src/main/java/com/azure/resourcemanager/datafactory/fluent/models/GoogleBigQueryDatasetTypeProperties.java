@@ -5,40 +5,41 @@
 package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Google BigQuery Dataset Properties. */
+/**
+ * Google BigQuery Dataset Properties.
+ */
 @Fluent
 public final class GoogleBigQueryDatasetTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GoogleBigQueryDatasetTypeProperties.class);
-
     /*
-     * This property will be retired. Please consider using database + table
-     * properties instead.
+     * This property will be retired. Please consider using database + table properties instead.
      */
     @JsonProperty(value = "tableName")
     private Object tableName;
 
     /*
-     * The table name of the Google BigQuery. Type: string (or Expression with
-     * resultType string).
+     * The table name of the Google BigQuery. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "table")
     private Object table;
 
     /*
-     * The database name of the Google BigQuery. Type: string (or Expression
-     * with resultType string).
+     * The database name of the Google BigQuery. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "dataset")
     private Object dataset;
 
     /**
+     * Creates an instance of GoogleBigQueryDatasetTypeProperties class.
+     */
+    public GoogleBigQueryDatasetTypeProperties() {
+    }
+
+    /**
      * Get the tableName property: This property will be retired. Please consider using database + table properties
      * instead.
-     *
+     * 
      * @return the tableName value.
      */
     public Object tableName() {
@@ -48,7 +49,7 @@ public final class GoogleBigQueryDatasetTypeProperties {
     /**
      * Set the tableName property: This property will be retired. Please consider using database + table properties
      * instead.
-     *
+     * 
      * @param tableName the tableName value to set.
      * @return the GoogleBigQueryDatasetTypeProperties object itself.
      */
@@ -60,7 +61,7 @@ public final class GoogleBigQueryDatasetTypeProperties {
     /**
      * Get the table property: The table name of the Google BigQuery. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @return the table value.
      */
     public Object table() {
@@ -70,7 +71,7 @@ public final class GoogleBigQueryDatasetTypeProperties {
     /**
      * Set the table property: The table name of the Google BigQuery. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @param table the table value to set.
      * @return the GoogleBigQueryDatasetTypeProperties object itself.
      */
@@ -82,7 +83,7 @@ public final class GoogleBigQueryDatasetTypeProperties {
     /**
      * Get the dataset property: The database name of the Google BigQuery. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @return the dataset value.
      */
     public Object dataset() {
@@ -92,7 +93,7 @@ public final class GoogleBigQueryDatasetTypeProperties {
     /**
      * Set the dataset property: The database name of the Google BigQuery. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @param dataset the dataset value to set.
      * @return the GoogleBigQueryDatasetTypeProperties object itself.
      */
@@ -103,7 +104,7 @@ public final class GoogleBigQueryDatasetTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

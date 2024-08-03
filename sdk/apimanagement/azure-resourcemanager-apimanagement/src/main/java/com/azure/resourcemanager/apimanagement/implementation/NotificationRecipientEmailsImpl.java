@@ -15,10 +15,9 @@ import com.azure.resourcemanager.apimanagement.models.NotificationName;
 import com.azure.resourcemanager.apimanagement.models.NotificationRecipientEmails;
 import com.azure.resourcemanager.apimanagement.models.RecipientEmailCollection;
 import com.azure.resourcemanager.apimanagement.models.RecipientEmailContract;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class NotificationRecipientEmailsImpl implements NotificationRecipientEmails {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(NotificationRecipientEmailsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(NotificationRecipientEmailsImpl.class);
 
     private final NotificationRecipientEmailsClient innerClient;
 
@@ -29,17 +28,6 @@ public final class NotificationRecipientEmailsImpl implements NotificationRecipi
         com.azure.resourcemanager.apimanagement.ApiManagementManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
-    }
-
-    public RecipientEmailCollection listByNotification(
-        String resourceGroupName, String serviceName, NotificationName notificationName) {
-        RecipientEmailCollectionInner inner =
-            this.serviceClient().listByNotification(resourceGroupName, serviceName, notificationName);
-        if (inner != null) {
-            return new RecipientEmailCollectionImpl(inner, this.manager());
-        } else {
-            return null;
-        }
     }
 
     public Response<RecipientEmailCollection> listByNotificationWithResponse(
@@ -59,9 +47,15 @@ public final class NotificationRecipientEmailsImpl implements NotificationRecipi
         }
     }
 
-    public boolean checkEntityExists(
-        String resourceGroupName, String serviceName, NotificationName notificationName, String email) {
-        return this.serviceClient().checkEntityExists(resourceGroupName, serviceName, notificationName, email);
+    public RecipientEmailCollection listByNotification(
+        String resourceGroupName, String serviceName, NotificationName notificationName) {
+        RecipientEmailCollectionInner inner =
+            this.serviceClient().listByNotification(resourceGroupName, serviceName, notificationName);
+        if (inner != null) {
+            return new RecipientEmailCollectionImpl(inner, this.manager());
+        } else {
+            return null;
+        }
     }
 
     public Response<Boolean> checkEntityExistsWithResponse(
@@ -75,15 +69,9 @@ public final class NotificationRecipientEmailsImpl implements NotificationRecipi
             .checkEntityExistsWithResponse(resourceGroupName, serviceName, notificationName, email, context);
     }
 
-    public RecipientEmailContract createOrUpdate(
+    public boolean checkEntityExists(
         String resourceGroupName, String serviceName, NotificationName notificationName, String email) {
-        RecipientEmailContractInner inner =
-            this.serviceClient().createOrUpdate(resourceGroupName, serviceName, notificationName, email);
-        if (inner != null) {
-            return new RecipientEmailContractImpl(inner, this.manager());
-        } else {
-            return null;
-        }
+        return this.serviceClient().checkEntityExists(resourceGroupName, serviceName, notificationName, email);
     }
 
     public Response<RecipientEmailContract> createOrUpdateWithResponse(
@@ -107,8 +95,15 @@ public final class NotificationRecipientEmailsImpl implements NotificationRecipi
         }
     }
 
-    public void delete(String resourceGroupName, String serviceName, NotificationName notificationName, String email) {
-        this.serviceClient().delete(resourceGroupName, serviceName, notificationName, email);
+    public RecipientEmailContract createOrUpdate(
+        String resourceGroupName, String serviceName, NotificationName notificationName, String email) {
+        RecipientEmailContractInner inner =
+            this.serviceClient().createOrUpdate(resourceGroupName, serviceName, notificationName, email);
+        if (inner != null) {
+            return new RecipientEmailContractImpl(inner, this.manager());
+        } else {
+            return null;
+        }
     }
 
     public Response<Void> deleteWithResponse(
@@ -120,6 +115,10 @@ public final class NotificationRecipientEmailsImpl implements NotificationRecipi
         return this
             .serviceClient()
             .deleteWithResponse(resourceGroupName, serviceName, notificationName, email, context);
+    }
+
+    public void delete(String resourceGroupName, String serviceName, NotificationName notificationName, String email) {
+        this.serviceClient().delete(resourceGroupName, serviceName, notificationName, email);
     }
 
     private NotificationRecipientEmailsClient serviceClient() {

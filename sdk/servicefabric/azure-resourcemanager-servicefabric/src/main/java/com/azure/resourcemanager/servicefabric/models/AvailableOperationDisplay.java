@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.servicefabric.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Operation supported by the Service Fabric resource provider. */
+/**
+ * Operation supported by the Service Fabric resource provider.
+ */
 @Fluent
 public final class AvailableOperationDisplay {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AvailableOperationDisplay.class);
-
     /*
      * The name of the provider.
      */
@@ -39,8 +37,14 @@ public final class AvailableOperationDisplay {
     private String description;
 
     /**
+     * Creates an instance of AvailableOperationDisplay class.
+     */
+    public AvailableOperationDisplay() {
+    }
+
+    /**
      * Get the provider property: The name of the provider.
-     *
+     * 
      * @return the provider value.
      */
     public String provider() {
@@ -49,7 +53,7 @@ public final class AvailableOperationDisplay {
 
     /**
      * Set the provider property: The name of the provider.
-     *
+     * 
      * @param provider the provider value to set.
      * @return the AvailableOperationDisplay object itself.
      */
@@ -60,7 +64,7 @@ public final class AvailableOperationDisplay {
 
     /**
      * Get the resource property: The resource on which the operation is performed.
-     *
+     * 
      * @return the resource value.
      */
     public String resource() {
@@ -69,7 +73,7 @@ public final class AvailableOperationDisplay {
 
     /**
      * Set the resource property: The resource on which the operation is performed.
-     *
+     * 
      * @param resource the resource value to set.
      * @return the AvailableOperationDisplay object itself.
      */
@@ -80,7 +84,7 @@ public final class AvailableOperationDisplay {
 
     /**
      * Get the operation property: The operation that can be performed.
-     *
+     * 
      * @return the operation value.
      */
     public String operation() {
@@ -89,7 +93,7 @@ public final class AvailableOperationDisplay {
 
     /**
      * Set the operation property: The operation that can be performed.
-     *
+     * 
      * @param operation the operation value to set.
      * @return the AvailableOperationDisplay object itself.
      */
@@ -100,7 +104,7 @@ public final class AvailableOperationDisplay {
 
     /**
      * Get the description property: Operation description.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
@@ -109,7 +113,7 @@ public final class AvailableOperationDisplay {
 
     /**
      * Set the description property: Operation description.
-     *
+     * 
      * @param description the description value to set.
      * @return the AvailableOperationDisplay object itself.
      */
@@ -120,7 +124,7 @@ public final class AvailableOperationDisplay {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

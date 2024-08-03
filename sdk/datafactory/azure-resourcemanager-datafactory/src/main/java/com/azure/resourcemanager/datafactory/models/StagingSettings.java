@@ -10,14 +10,14 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-/** Staging settings. */
+/**
+ * Staging settings.
+ */
 @Fluent
 public final class StagingSettings {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(StagingSettings.class);
-
     /*
      * Staging linked service reference.
      */
@@ -25,16 +25,14 @@ public final class StagingSettings {
     private LinkedServiceReference linkedServiceName;
 
     /*
-     * The path to storage for storing the interim data. Type: string (or
-     * Expression with resultType string).
+     * The path to storage for storing the interim data. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "path")
     private Object path;
 
     /*
-     * Specifies whether to use compression when copying data via an interim
-     * staging. Default value is false. Type: boolean (or Expression with
-     * resultType boolean).
+     * Specifies whether to use compression when copying data via an interim staging. Default value is false. Type:
+     * boolean (or Expression with resultType boolean).
      */
     @JsonProperty(value = "enableCompression")
     private Object enableCompression;
@@ -42,11 +40,18 @@ public final class StagingSettings {
     /*
      * Staging settings.
      */
-    @JsonIgnore private Map<String, Object> additionalProperties;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties;
+
+    /**
+     * Creates an instance of StagingSettings class.
+     */
+    public StagingSettings() {
+    }
 
     /**
      * Get the linkedServiceName property: Staging linked service reference.
-     *
+     * 
      * @return the linkedServiceName value.
      */
     public LinkedServiceReference linkedServiceName() {
@@ -55,7 +60,7 @@ public final class StagingSettings {
 
     /**
      * Set the linkedServiceName property: Staging linked service reference.
-     *
+     * 
      * @param linkedServiceName the linkedServiceName value to set.
      * @return the StagingSettings object itself.
      */
@@ -67,7 +72,7 @@ public final class StagingSettings {
     /**
      * Get the path property: The path to storage for storing the interim data. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the path value.
      */
     public Object path() {
@@ -77,7 +82,7 @@ public final class StagingSettings {
     /**
      * Set the path property: The path to storage for storing the interim data. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param path the path value to set.
      * @return the StagingSettings object itself.
      */
@@ -89,7 +94,7 @@ public final class StagingSettings {
     /**
      * Get the enableCompression property: Specifies whether to use compression when copying data via an interim
      * staging. Default value is false. Type: boolean (or Expression with resultType boolean).
-     *
+     * 
      * @return the enableCompression value.
      */
     public Object enableCompression() {
@@ -99,7 +104,7 @@ public final class StagingSettings {
     /**
      * Set the enableCompression property: Specifies whether to use compression when copying data via an interim
      * staging. Default value is false. Type: boolean (or Expression with resultType boolean).
-     *
+     * 
      * @param enableCompression the enableCompression value to set.
      * @return the StagingSettings object itself.
      */
@@ -110,7 +115,7 @@ public final class StagingSettings {
 
     /**
      * Get the additionalProperties property: Staging settings.
-     *
+     * 
      * @return the additionalProperties value.
      */
     @JsonAnyGetter
@@ -120,7 +125,7 @@ public final class StagingSettings {
 
     /**
      * Set the additionalProperties property: Staging settings.
-     *
+     * 
      * @param additionalProperties the additionalProperties value to set.
      * @return the StagingSettings object itself.
      */
@@ -132,24 +137,25 @@ public final class StagingSettings {
     @JsonAnySetter
     void withAdditionalProperties(String key, Object value) {
         if (additionalProperties == null) {
-            additionalProperties = new HashMap<>();
+            additionalProperties = new LinkedHashMap<>();
         }
         additionalProperties.put(key, value);
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (linkedServiceName() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property linkedServiceName in model StagingSettings"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property linkedServiceName in model StagingSettings"));
         } else {
             linkedServiceName().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(StagingSettings.class);
 }

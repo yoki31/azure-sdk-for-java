@@ -6,14 +6,13 @@ package com.azure.resourcemanager.redis.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Parameters for Redis export operation. */
+/**
+ * Parameters for Redis export operation.
+ */
 @Fluent
 public final class ExportRdbParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ExportRdbParameters.class);
-
     /*
      * File format.
      */
@@ -32,9 +31,28 @@ public final class ExportRdbParameters {
     @JsonProperty(value = "container", required = true)
     private String container;
 
+    /*
+     * Preferred auth method to communicate to storage account used for data archive, specify SAS or ManagedIdentity,
+     * default value is SAS
+     */
+    @JsonProperty(value = "preferred-data-archive-auth-method")
+    private String preferredDataArchiveAuthMethod;
+
+    /*
+     * Subscription id of the storage container for data to be exported using ManagedIdentity.
+     */
+    @JsonProperty(value = "storage-subscription-id")
+    private String storageSubscriptionId;
+
+    /**
+     * Creates an instance of ExportRdbParameters class.
+     */
+    public ExportRdbParameters() {
+    }
+
     /**
      * Get the format property: File format.
-     *
+     * 
      * @return the format value.
      */
     public String format() {
@@ -43,7 +61,7 @@ public final class ExportRdbParameters {
 
     /**
      * Set the format property: File format.
-     *
+     * 
      * @param format the format value to set.
      * @return the ExportRdbParameters object itself.
      */
@@ -54,7 +72,7 @@ public final class ExportRdbParameters {
 
     /**
      * Get the prefix property: Prefix to use for exported files.
-     *
+     * 
      * @return the prefix value.
      */
     public String prefix() {
@@ -63,7 +81,7 @@ public final class ExportRdbParameters {
 
     /**
      * Set the prefix property: Prefix to use for exported files.
-     *
+     * 
      * @param prefix the prefix value to set.
      * @return the ExportRdbParameters object itself.
      */
@@ -74,7 +92,7 @@ public final class ExportRdbParameters {
 
     /**
      * Get the container property: Container name to export to.
-     *
+     * 
      * @return the container value.
      */
     public String container() {
@@ -83,7 +101,7 @@ public final class ExportRdbParameters {
 
     /**
      * Set the container property: Container name to export to.
-     *
+     * 
      * @param container the container value to set.
      * @return the ExportRdbParameters object itself.
      */
@@ -93,20 +111,64 @@ public final class ExportRdbParameters {
     }
 
     /**
+     * Get the preferredDataArchiveAuthMethod property: Preferred auth method to communicate to storage account used for
+     * data archive, specify SAS or ManagedIdentity, default value is SAS.
+     * 
+     * @return the preferredDataArchiveAuthMethod value.
+     */
+    public String preferredDataArchiveAuthMethod() {
+        return this.preferredDataArchiveAuthMethod;
+    }
+
+    /**
+     * Set the preferredDataArchiveAuthMethod property: Preferred auth method to communicate to storage account used for
+     * data archive, specify SAS or ManagedIdentity, default value is SAS.
+     * 
+     * @param preferredDataArchiveAuthMethod the preferredDataArchiveAuthMethod value to set.
+     * @return the ExportRdbParameters object itself.
+     */
+    public ExportRdbParameters withPreferredDataArchiveAuthMethod(String preferredDataArchiveAuthMethod) {
+        this.preferredDataArchiveAuthMethod = preferredDataArchiveAuthMethod;
+        return this;
+    }
+
+    /**
+     * Get the storageSubscriptionId property: Subscription id of the storage container for data to be exported using
+     * ManagedIdentity.
+     * 
+     * @return the storageSubscriptionId value.
+     */
+    public String storageSubscriptionId() {
+        return this.storageSubscriptionId;
+    }
+
+    /**
+     * Set the storageSubscriptionId property: Subscription id of the storage container for data to be exported using
+     * ManagedIdentity.
+     * 
+     * @param storageSubscriptionId the storageSubscriptionId value to set.
+     * @return the ExportRdbParameters object itself.
+     */
+    public ExportRdbParameters withStorageSubscriptionId(String storageSubscriptionId) {
+        this.storageSubscriptionId = storageSubscriptionId;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (prefix() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property prefix in model ExportRdbParameters"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property prefix in model ExportRdbParameters"));
         }
         if (container() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property container in model ExportRdbParameters"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property container in model ExportRdbParameters"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ExportRdbParameters.class);
 }

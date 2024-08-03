@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Describes a managed rule definition. */
+/**
+ * Describes a managed rule definition.
+ */
 @Immutable
 public final class ManagedRuleDefinition {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ManagedRuleDefinition.class);
-
     /*
      * Identifier for the managed rule.
      */
@@ -27,8 +25,14 @@ public final class ManagedRuleDefinition {
     private String description;
 
     /**
+     * Creates an instance of ManagedRuleDefinition class.
+     */
+    public ManagedRuleDefinition() {
+    }
+
+    /**
      * Get the ruleId property: Identifier for the managed rule.
-     *
+     * 
      * @return the ruleId value.
      */
     public String ruleId() {
@@ -37,7 +41,7 @@ public final class ManagedRuleDefinition {
 
     /**
      * Get the description property: Describes the functionality of the managed rule.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
@@ -46,7 +50,7 @@ public final class ManagedRuleDefinition {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

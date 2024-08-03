@@ -5,201 +5,195 @@
 package com.azure.resourcemanager.monitor.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.core.management.ProxyResource;
+import com.azure.core.management.SystemData;
 import com.azure.resourcemanager.monitor.models.LogSettings;
 import com.azure.resourcemanager.monitor.models.MetricSettings;
-import com.azure.resourcemanager.monitor.models.ProxyOnlyResource;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The diagnostic setting resource. */
-@JsonFlatten
+/**
+ * The diagnostic setting resource.
+ */
 @Fluent
-public class DiagnosticSettingsResourceInner extends ProxyOnlyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DiagnosticSettingsResourceInner.class);
+public final class DiagnosticSettingsResourceInner extends ProxyResource {
+    /*
+     * Properties of a Diagnostic Settings Resource.
+     */
+    @JsonProperty(value = "properties")
+    private DiagnosticSettings innerProperties;
 
     /*
-     * The resource ID of the storage account to which you would like to send
-     * Diagnostic Logs.
+     * The system metadata related to this resource.
      */
-    @JsonProperty(value = "properties.storageAccountId")
-    private String storageAccountId;
+    @JsonProperty(value = "systemData", access = JsonProperty.Access.WRITE_ONLY)
+    private SystemData systemData;
 
-    /*
-     * The service bus rule Id of the diagnostic setting. This is here to
-     * maintain backwards compatibility.
+    /**
+     * Creates an instance of DiagnosticSettingsResourceInner class.
      */
-    @JsonProperty(value = "properties.serviceBusRuleId")
-    private String serviceBusRuleId;
+    public DiagnosticSettingsResourceInner() {
+    }
 
-    /*
-     * The resource Id for the event hub authorization rule.
+    /**
+     * Get the innerProperties property: Properties of a Diagnostic Settings Resource.
+     * 
+     * @return the innerProperties value.
      */
-    @JsonProperty(value = "properties.eventHubAuthorizationRuleId")
-    private String eventHubAuthorizationRuleId;
+    private DiagnosticSettings innerProperties() {
+        return this.innerProperties;
+    }
 
-    /*
-     * The name of the event hub. If none is specified, the default event hub
-     * will be selected.
+    /**
+     * Get the systemData property: The system metadata related to this resource.
+     * 
+     * @return the systemData value.
      */
-    @JsonProperty(value = "properties.eventHubName")
-    private String eventHubName;
-
-    /*
-     * The list of metric settings.
-     */
-    @JsonProperty(value = "properties.metrics")
-    private List<MetricSettings> metrics;
-
-    /*
-     * The list of logs settings.
-     */
-    @JsonProperty(value = "properties.logs")
-    private List<LogSettings> logs;
-
-    /*
-     * The full ARM resource ID of the Log Analytics workspace to which you
-     * would like to send Diagnostic Logs. Example:
-     * /subscriptions/4b9e8510-67ab-4e9a-95a9-e2f1e570ea9c/resourceGroups/insights-integration/providers/Microsoft.OperationalInsights/workspaces/viruela2
-     */
-    @JsonProperty(value = "properties.workspaceId")
-    private String workspaceId;
-
-    /*
-     * A string indicating whether the export to Log Analytics should use the
-     * default destination type, i.e. AzureDiagnostics, or use a destination
-     * type constructed as follows: <normalized service identity>_<normalized
-     * category name>. Possible values are: Dedicated and null (null is
-     * default.)
-     */
-    @JsonProperty(value = "properties.logAnalyticsDestinationType")
-    private String logAnalyticsDestinationType;
+    public SystemData systemData() {
+        return this.systemData;
+    }
 
     /**
      * Get the storageAccountId property: The resource ID of the storage account to which you would like to send
      * Diagnostic Logs.
-     *
+     * 
      * @return the storageAccountId value.
      */
     public String storageAccountId() {
-        return this.storageAccountId;
+        return this.innerProperties() == null ? null : this.innerProperties().storageAccountId();
     }
 
     /**
      * Set the storageAccountId property: The resource ID of the storage account to which you would like to send
      * Diagnostic Logs.
-     *
+     * 
      * @param storageAccountId the storageAccountId value to set.
      * @return the DiagnosticSettingsResourceInner object itself.
      */
     public DiagnosticSettingsResourceInner withStorageAccountId(String storageAccountId) {
-        this.storageAccountId = storageAccountId;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new DiagnosticSettings();
+        }
+        this.innerProperties().withStorageAccountId(storageAccountId);
         return this;
     }
 
     /**
      * Get the serviceBusRuleId property: The service bus rule Id of the diagnostic setting. This is here to maintain
      * backwards compatibility.
-     *
+     * 
      * @return the serviceBusRuleId value.
      */
     public String serviceBusRuleId() {
-        return this.serviceBusRuleId;
+        return this.innerProperties() == null ? null : this.innerProperties().serviceBusRuleId();
     }
 
     /**
      * Set the serviceBusRuleId property: The service bus rule Id of the diagnostic setting. This is here to maintain
      * backwards compatibility.
-     *
+     * 
      * @param serviceBusRuleId the serviceBusRuleId value to set.
      * @return the DiagnosticSettingsResourceInner object itself.
      */
     public DiagnosticSettingsResourceInner withServiceBusRuleId(String serviceBusRuleId) {
-        this.serviceBusRuleId = serviceBusRuleId;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new DiagnosticSettings();
+        }
+        this.innerProperties().withServiceBusRuleId(serviceBusRuleId);
         return this;
     }
 
     /**
      * Get the eventHubAuthorizationRuleId property: The resource Id for the event hub authorization rule.
-     *
+     * 
      * @return the eventHubAuthorizationRuleId value.
      */
     public String eventHubAuthorizationRuleId() {
-        return this.eventHubAuthorizationRuleId;
+        return this.innerProperties() == null ? null : this.innerProperties().eventHubAuthorizationRuleId();
     }
 
     /**
      * Set the eventHubAuthorizationRuleId property: The resource Id for the event hub authorization rule.
-     *
+     * 
      * @param eventHubAuthorizationRuleId the eventHubAuthorizationRuleId value to set.
      * @return the DiagnosticSettingsResourceInner object itself.
      */
     public DiagnosticSettingsResourceInner withEventHubAuthorizationRuleId(String eventHubAuthorizationRuleId) {
-        this.eventHubAuthorizationRuleId = eventHubAuthorizationRuleId;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new DiagnosticSettings();
+        }
+        this.innerProperties().withEventHubAuthorizationRuleId(eventHubAuthorizationRuleId);
         return this;
     }
 
     /**
      * Get the eventHubName property: The name of the event hub. If none is specified, the default event hub will be
      * selected.
-     *
+     * 
      * @return the eventHubName value.
      */
     public String eventHubName() {
-        return this.eventHubName;
+        return this.innerProperties() == null ? null : this.innerProperties().eventHubName();
     }
 
     /**
      * Set the eventHubName property: The name of the event hub. If none is specified, the default event hub will be
      * selected.
-     *
+     * 
      * @param eventHubName the eventHubName value to set.
      * @return the DiagnosticSettingsResourceInner object itself.
      */
     public DiagnosticSettingsResourceInner withEventHubName(String eventHubName) {
-        this.eventHubName = eventHubName;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new DiagnosticSettings();
+        }
+        this.innerProperties().withEventHubName(eventHubName);
         return this;
     }
 
     /**
      * Get the metrics property: The list of metric settings.
-     *
+     * 
      * @return the metrics value.
      */
     public List<MetricSettings> metrics() {
-        return this.metrics;
+        return this.innerProperties() == null ? null : this.innerProperties().metrics();
     }
 
     /**
      * Set the metrics property: The list of metric settings.
-     *
+     * 
      * @param metrics the metrics value to set.
      * @return the DiagnosticSettingsResourceInner object itself.
      */
     public DiagnosticSettingsResourceInner withMetrics(List<MetricSettings> metrics) {
-        this.metrics = metrics;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new DiagnosticSettings();
+        }
+        this.innerProperties().withMetrics(metrics);
         return this;
     }
 
     /**
      * Get the logs property: The list of logs settings.
-     *
+     * 
      * @return the logs value.
      */
     public List<LogSettings> logs() {
-        return this.logs;
+        return this.innerProperties() == null ? null : this.innerProperties().logs();
     }
 
     /**
      * Set the logs property: The list of logs settings.
-     *
+     * 
      * @param logs the logs value to set.
      * @return the DiagnosticSettingsResourceInner object itself.
      */
     public DiagnosticSettingsResourceInner withLogs(List<LogSettings> logs) {
-        this.logs = logs;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new DiagnosticSettings();
+        }
+        this.innerProperties().withLogs(logs);
         return this;
     }
 
@@ -207,23 +201,51 @@ public class DiagnosticSettingsResourceInner extends ProxyOnlyResource {
      * Get the workspaceId property: The full ARM resource ID of the Log Analytics workspace to which you would like to
      * send Diagnostic Logs. Example:
      * /subscriptions/4b9e8510-67ab-4e9a-95a9-e2f1e570ea9c/resourceGroups/insights-integration/providers/Microsoft.OperationalInsights/workspaces/viruela2.
-     *
+     * 
      * @return the workspaceId value.
      */
     public String workspaceId() {
-        return this.workspaceId;
+        return this.innerProperties() == null ? null : this.innerProperties().workspaceId();
     }
 
     /**
      * Set the workspaceId property: The full ARM resource ID of the Log Analytics workspace to which you would like to
      * send Diagnostic Logs. Example:
      * /subscriptions/4b9e8510-67ab-4e9a-95a9-e2f1e570ea9c/resourceGroups/insights-integration/providers/Microsoft.OperationalInsights/workspaces/viruela2.
-     *
+     * 
      * @param workspaceId the workspaceId value to set.
      * @return the DiagnosticSettingsResourceInner object itself.
      */
     public DiagnosticSettingsResourceInner withWorkspaceId(String workspaceId) {
-        this.workspaceId = workspaceId;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new DiagnosticSettings();
+        }
+        this.innerProperties().withWorkspaceId(workspaceId);
+        return this;
+    }
+
+    /**
+     * Get the marketplacePartnerId property: The full ARM resource ID of the Marketplace resource to which you would
+     * like to send Diagnostic Logs.
+     * 
+     * @return the marketplacePartnerId value.
+     */
+    public String marketplacePartnerId() {
+        return this.innerProperties() == null ? null : this.innerProperties().marketplacePartnerId();
+    }
+
+    /**
+     * Set the marketplacePartnerId property: The full ARM resource ID of the Marketplace resource to which you would
+     * like to send Diagnostic Logs.
+     * 
+     * @param marketplacePartnerId the marketplacePartnerId value to set.
+     * @return the DiagnosticSettingsResourceInner object itself.
+     */
+    public DiagnosticSettingsResourceInner withMarketplacePartnerId(String marketplacePartnerId) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new DiagnosticSettings();
+        }
+        this.innerProperties().withMarketplacePartnerId(marketplacePartnerId);
         return this;
     }
 
@@ -232,11 +254,11 @@ public class DiagnosticSettingsResourceInner extends ProxyOnlyResource {
      * the default destination type, i.e. AzureDiagnostics, or use a destination type constructed as follows:
      * &lt;normalized service identity&gt;_&lt;normalized category name&gt;. Possible values are: Dedicated and null
      * (null is default.).
-     *
+     * 
      * @return the logAnalyticsDestinationType value.
      */
     public String logAnalyticsDestinationType() {
-        return this.logAnalyticsDestinationType;
+        return this.innerProperties() == null ? null : this.innerProperties().logAnalyticsDestinationType();
     }
 
     /**
@@ -244,28 +266,26 @@ public class DiagnosticSettingsResourceInner extends ProxyOnlyResource {
      * the default destination type, i.e. AzureDiagnostics, or use a destination type constructed as follows:
      * &lt;normalized service identity&gt;_&lt;normalized category name&gt;. Possible values are: Dedicated and null
      * (null is default.).
-     *
+     * 
      * @param logAnalyticsDestinationType the logAnalyticsDestinationType value to set.
      * @return the DiagnosticSettingsResourceInner object itself.
      */
     public DiagnosticSettingsResourceInner withLogAnalyticsDestinationType(String logAnalyticsDestinationType) {
-        this.logAnalyticsDestinationType = logAnalyticsDestinationType;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new DiagnosticSettings();
+        }
+        this.innerProperties().withLogAnalyticsDestinationType(logAnalyticsDestinationType);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
-    @Override
     public void validate() {
-        super.validate();
-        if (metrics() != null) {
-            metrics().forEach(e -> e.validate());
-        }
-        if (logs() != null) {
-            logs().forEach(e -> e.validate());
+        if (innerProperties() != null) {
+            innerProperties().validate();
         }
     }
 }

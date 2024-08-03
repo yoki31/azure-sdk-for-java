@@ -24,7 +24,40 @@ Details about the terms used here are described in [Key concepts](#key-concepts)
 - A [Java Development Kit (JDK)][jdk_link], version 8 or later.
 - [Azure Subscription][azure_subscription]
 
-### Include the Package
+### Include the package
+
+#### Include the BOM file
+
+Please include the azure-sdk-bom to your project to take dependency on the General Availability (GA) version of the library. In the following snippet, replace the {bom_version_to_target} placeholder with the version number.
+To learn more about the BOM, see the [AZURE SDK BOM README](https://github.com/Azure/azure-sdk-for-java/blob/main/sdk/boms/azure-sdk-bom/README.md).
+
+```xml
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-sdk-bom</artifactId>
+            <version>{bom_version_to_target}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+```
+and then include the direct dependency in the dependencies section without the version tag as shown below.
+
+```xml
+<dependencies>
+  <dependency>
+    <groupId>com.azure</groupId>
+    <artifactId>azure-messaging-webpubsub</artifactId>
+  </dependency>
+</dependencies>
+```
+
+#### Include direct dependency
+If you want to take dependency on a particular version of the library that is not present in the BOM,
+add the direct dependency to your project as follows.
 
 [//]: # ({x-version-update-start;com.azure:azure-messaging-webpubsub;current})
 
@@ -32,7 +65,7 @@ Details about the terms used here are described in [Key concepts](#key-concepts)
 <dependency>
     <groupId>com.azure</groupId>
     <artifactId>azure-messaging-webpubsub</artifactId>
-    <version>1.0.0</version>
+    <version>1.2.6</version>
 </dependency>
 ```
 
@@ -82,6 +115,7 @@ When the client is connected, it can send messages to the upstream application, 
 ## Examples
 
 * [Broadcast message to entire hub](#broadcast-message-to-entire-hub)
+* [Send message to entire hub with filters](#broadcast-message-to-entire-hub-with-filter)
 * [Broadcast message to a group](#broadcast-message-to-a-group)
 * [Send message to a connection](#send-message-to-a-connection)
 * [Send message to a user](#send-message-to-a-user)
@@ -90,6 +124,25 @@ When the client is connected, it can send messages to the upstream application, 
 
 ```java readme-sample-broadcastToAll
 webPubSubServiceClient.sendToAll("Hello world!", WebPubSubContentType.TEXT_PLAIN);
+```
+
+### Broadcast message to entire hub with filter
+
+```java readme-sample-broadcastToAll-filter
+// send a text message to the entire hub with a filter on userId
+BinaryData message = BinaryData.fromString("Hello World - Broadcast test!");
+webPubSubServiceClient.sendToAllWithResponse(
+    message,
+    WebPubSubContentType.TEXT_PLAIN,
+    message.getLength(),
+    new RequestOptions().addQueryParam("filter", "userId ne 'user1'"));
+
+// send a text message to the entire hub with another filter on group
+webPubSubServiceClient.sendToAllWithResponse(
+    message,
+    WebPubSubContentType.TEXT_PLAIN,
+    message.getLength(),
+    new RequestOptions().addQueryParam("filter", "'GroupA' in groups and not('GroupB' in groups)"));
 ```
 
 ### Broadcast message to a group

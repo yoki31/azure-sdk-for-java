@@ -6,18 +6,17 @@ package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** Defines the cache-key query string action for the delivery rule. */
+/**
+ * Defines the cache-key query string action for the delivery rule.
+ */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "name")
 @JsonTypeName("CacheKeyQueryString")
 @Fluent
 public final class DeliveryRuleCacheKeyQueryStringAction extends DeliveryRuleAction {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DeliveryRuleCacheKeyQueryStringAction.class);
-
     /*
      * Defines the parameters for the action.
      */
@@ -25,8 +24,14 @@ public final class DeliveryRuleCacheKeyQueryStringAction extends DeliveryRuleAct
     private CacheKeyQueryStringActionParameters parameters;
 
     /**
+     * Creates an instance of DeliveryRuleCacheKeyQueryStringAction class.
+     */
+    public DeliveryRuleCacheKeyQueryStringAction() {
+    }
+
+    /**
      * Get the parameters property: Defines the parameters for the action.
-     *
+     * 
      * @return the parameters value.
      */
     public CacheKeyQueryStringActionParameters parameters() {
@@ -35,7 +40,7 @@ public final class DeliveryRuleCacheKeyQueryStringAction extends DeliveryRuleAct
 
     /**
      * Set the parameters property: Defines the parameters for the action.
-     *
+     * 
      * @param parameters the parameters value to set.
      * @return the DeliveryRuleCacheKeyQueryStringAction object itself.
      */
@@ -46,19 +51,19 @@ public final class DeliveryRuleCacheKeyQueryStringAction extends DeliveryRuleAct
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
         if (parameters() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property parameters in model DeliveryRuleCacheKeyQueryStringAction"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property parameters in model DeliveryRuleCacheKeyQueryStringAction"));
         } else {
             parameters().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(DeliveryRuleCacheKeyQueryStringAction.class);
 }

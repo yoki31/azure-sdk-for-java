@@ -5,22 +5,22 @@
 package com.azure.resourcemanager.mediaservices.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.mediaservices.models.AssetStreamingLocator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** The Streaming Locators associated with this Asset. */
 @Immutable
 public final class ListStreamingLocatorsResponseInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ListStreamingLocatorsResponseInner.class);
-
     /*
      * The list of Streaming Locators.
      */
     @JsonProperty(value = "streamingLocators", access = JsonProperty.Access.WRITE_ONLY)
     private List<AssetStreamingLocator> streamingLocators;
+
+    /** Creates an instance of ListStreamingLocatorsResponseInner class. */
+    public ListStreamingLocatorsResponseInner() {
+    }
 
     /**
      * Get the streamingLocators property: The list of Streaming Locators.

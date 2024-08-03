@@ -5,25 +5,21 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The configuration settings of the GitHub provider. */
+/**
+ * The configuration settings of the GitHub provider.
+ */
 @Fluent
 public final class GitHub {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GitHub.class);
-
     /*
-     * <code>false</code> if the GitHub provider should not be enabled despite
-     * the set registration; otherwise, <code>true</code>.
+     * <code>false</code> if the GitHub provider should not be enabled despite the set registration; otherwise, <code>true</code>.
      */
     @JsonProperty(value = "enabled")
     private Boolean enabled;
 
     /*
-     * The configuration settings of the app registration for the GitHub
-     * provider.
+     * The configuration settings of the app registration for the GitHub provider.
      */
     @JsonProperty(value = "registration")
     private ClientRegistration registration;
@@ -35,9 +31,15 @@ public final class GitHub {
     private LoginScopes login;
 
     /**
+     * Creates an instance of GitHub class.
+     */
+    public GitHub() {
+    }
+
+    /**
      * Get the enabled property: &lt;code&gt;false&lt;/code&gt; if the GitHub provider should not be enabled despite the
      * set registration; otherwise, &lt;code&gt;true&lt;/code&gt;.
-     *
+     * 
      * @return the enabled value.
      */
     public Boolean enabled() {
@@ -47,7 +49,7 @@ public final class GitHub {
     /**
      * Set the enabled property: &lt;code&gt;false&lt;/code&gt; if the GitHub provider should not be enabled despite the
      * set registration; otherwise, &lt;code&gt;true&lt;/code&gt;.
-     *
+     * 
      * @param enabled the enabled value to set.
      * @return the GitHub object itself.
      */
@@ -58,7 +60,7 @@ public final class GitHub {
 
     /**
      * Get the registration property: The configuration settings of the app registration for the GitHub provider.
-     *
+     * 
      * @return the registration value.
      */
     public ClientRegistration registration() {
@@ -67,7 +69,7 @@ public final class GitHub {
 
     /**
      * Set the registration property: The configuration settings of the app registration for the GitHub provider.
-     *
+     * 
      * @param registration the registration value to set.
      * @return the GitHub object itself.
      */
@@ -78,7 +80,7 @@ public final class GitHub {
 
     /**
      * Get the login property: The configuration settings of the login flow.
-     *
+     * 
      * @return the login value.
      */
     public LoginScopes login() {
@@ -87,7 +89,7 @@ public final class GitHub {
 
     /**
      * Set the login property: The configuration settings of the login flow.
-     *
+     * 
      * @param login the login value to set.
      * @return the GitHub object itself.
      */
@@ -98,7 +100,7 @@ public final class GitHub {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

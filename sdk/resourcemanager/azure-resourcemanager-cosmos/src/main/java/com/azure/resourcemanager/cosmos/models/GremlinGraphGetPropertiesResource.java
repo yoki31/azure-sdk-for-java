@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The GremlinGraphGetPropertiesResource model. */
+/**
+ * The GremlinGraphGetPropertiesResource model.
+ */
 @Fluent
 public final class GremlinGraphGetPropertiesResource extends GremlinGraphResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GremlinGraphGetPropertiesResource.class);
-
     /*
      * A system generated property. A unique identifier.
      */
@@ -21,22 +19,26 @@ public final class GremlinGraphGetPropertiesResource extends GremlinGraphResourc
     private String rid;
 
     /*
-     * A system generated property that denotes the last updated timestamp of
-     * the resource.
+     * A system generated property that denotes the last updated timestamp of the resource.
      */
     @JsonProperty(value = "_ts", access = JsonProperty.Access.WRITE_ONLY)
     private Float ts;
 
     /*
-     * A system generated property representing the resource etag required for
-     * optimistic concurrency control.
+     * A system generated property representing the resource etag required for optimistic concurrency control.
      */
     @JsonProperty(value = "_etag", access = JsonProperty.Access.WRITE_ONLY)
     private String etag;
 
     /**
+     * Creates an instance of GremlinGraphGetPropertiesResource class.
+     */
+    public GremlinGraphGetPropertiesResource() {
+    }
+
+    /**
      * Get the rid property: A system generated property. A unique identifier.
-     *
+     * 
      * @return the rid value.
      */
     public String rid() {
@@ -45,7 +47,7 @@ public final class GremlinGraphGetPropertiesResource extends GremlinGraphResourc
 
     /**
      * Get the ts property: A system generated property that denotes the last updated timestamp of the resource.
-     *
+     * 
      * @return the ts value.
      */
     public Float ts() {
@@ -55,59 +57,98 @@ public final class GremlinGraphGetPropertiesResource extends GremlinGraphResourc
     /**
      * Get the etag property: A system generated property representing the resource etag required for optimistic
      * concurrency control.
-     *
+     * 
      * @return the etag value.
      */
     public String etag() {
         return this.etag;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GremlinGraphGetPropertiesResource withId(String id) {
         super.withId(id);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GremlinGraphGetPropertiesResource withIndexingPolicy(IndexingPolicy indexingPolicy) {
         super.withIndexingPolicy(indexingPolicy);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GremlinGraphGetPropertiesResource withPartitionKey(ContainerPartitionKey partitionKey) {
         super.withPartitionKey(partitionKey);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GremlinGraphGetPropertiesResource withDefaultTtl(Integer defaultTtl) {
         super.withDefaultTtl(defaultTtl);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GremlinGraphGetPropertiesResource withUniqueKeyPolicy(UniqueKeyPolicy uniqueKeyPolicy) {
         super.withUniqueKeyPolicy(uniqueKeyPolicy);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public GremlinGraphGetPropertiesResource withConflictResolutionPolicy(
-        ConflictResolutionPolicy conflictResolutionPolicy) {
+    public GremlinGraphGetPropertiesResource
+        withConflictResolutionPolicy(ConflictResolutionPolicy conflictResolutionPolicy) {
         super.withConflictResolutionPolicy(conflictResolutionPolicy);
         return this;
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GremlinGraphGetPropertiesResource withAnalyticalStorageTtl(Long analyticalStorageTtl) {
+        super.withAnalyticalStorageTtl(analyticalStorageTtl);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GremlinGraphGetPropertiesResource withRestoreParameters(ResourceRestoreParameters restoreParameters) {
+        super.withRestoreParameters(restoreParameters);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GremlinGraphGetPropertiesResource withCreateMode(CreateMode createMode) {
+        super.withCreateMode(createMode);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

@@ -6,9 +6,11 @@ package com.azure.resourcemanager.apimanagement.implementation;
 
 import com.azure.core.util.Context;
 import com.azure.resourcemanager.apimanagement.fluent.models.ApiContractInner;
+import com.azure.resourcemanager.apimanagement.models.ApiContactInformation;
 import com.azure.resourcemanager.apimanagement.models.ApiContract;
 import com.azure.resourcemanager.apimanagement.models.ApiCreateOrUpdateParameter;
 import com.azure.resourcemanager.apimanagement.models.ApiCreateOrUpdatePropertiesWsdlSelector;
+import com.azure.resourcemanager.apimanagement.models.ApiLicenseInformation;
 import com.azure.resourcemanager.apimanagement.models.ApiType;
 import com.azure.resourcemanager.apimanagement.models.ApiUpdateContract;
 import com.azure.resourcemanager.apimanagement.models.ApiVersionSetContractDetails;
@@ -17,6 +19,7 @@ import com.azure.resourcemanager.apimanagement.models.ContentFormat;
 import com.azure.resourcemanager.apimanagement.models.Protocol;
 import com.azure.resourcemanager.apimanagement.models.SoapApiType;
 import com.azure.resourcemanager.apimanagement.models.SubscriptionKeyParameterNamesContract;
+import com.azure.resourcemanager.apimanagement.models.TranslateRequiredQueryParametersConduct;
 import java.util.Collections;
 import java.util.List;
 
@@ -112,6 +115,22 @@ public final class ApiContractImpl implements ApiContract, ApiContract.Definitio
 
     public Boolean subscriptionRequired() {
         return this.innerModel().subscriptionRequired();
+    }
+
+    public String termsOfServiceUrl() {
+        return this.innerModel().termsOfServiceUrl();
+    }
+
+    public ApiContactInformation contact() {
+        return this.innerModel().contact();
+    }
+
+    public ApiLicenseInformation license() {
+        return this.innerModel().license();
+    }
+
+    public String resourceGroupName() {
+        return resourceGroupName;
     }
 
     public ApiContractInner innerModel() {
@@ -241,6 +260,12 @@ public final class ApiContractImpl implements ApiContract, ApiContract.Definitio
 
     public ApiContractImpl withSoapApiType(SoapApiType soapApiType) {
         this.createParameters.withSoapApiType(soapApiType);
+        return this;
+    }
+
+    public ApiContractImpl withTranslateRequiredQueryParametersConduct(
+        TranslateRequiredQueryParametersConduct translateRequiredQueryParametersConduct) {
+        this.createParameters.withTranslateRequiredQueryParametersConduct(translateRequiredQueryParametersConduct);
         return this;
     }
 
@@ -401,6 +426,36 @@ public final class ApiContractImpl implements ApiContract, ApiContract.Definitio
             return this;
         } else {
             this.updateParameters.withSubscriptionRequired(subscriptionRequired);
+            return this;
+        }
+    }
+
+    public ApiContractImpl withTermsOfServiceUrl(String termsOfServiceUrl) {
+        if (isInCreateMode()) {
+            this.createParameters.withTermsOfServiceUrl(termsOfServiceUrl);
+            return this;
+        } else {
+            this.updateParameters.withTermsOfServiceUrl(termsOfServiceUrl);
+            return this;
+        }
+    }
+
+    public ApiContractImpl withContact(ApiContactInformation contact) {
+        if (isInCreateMode()) {
+            this.createParameters.withContact(contact);
+            return this;
+        } else {
+            this.updateParameters.withContact(contact);
+            return this;
+        }
+    }
+
+    public ApiContractImpl withLicense(ApiLicenseInformation license) {
+        if (isInCreateMode()) {
+            this.createParameters.withLicense(license);
+            return this;
+        } else {
+            this.updateParameters.withLicense(license);
             return this;
         }
     }

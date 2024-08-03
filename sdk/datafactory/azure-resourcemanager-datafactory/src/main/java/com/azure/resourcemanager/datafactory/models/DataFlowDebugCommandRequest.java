@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Request body structure for data flow debug command. */
+/**
+ * Request body structure for data flow debug command.
+ */
 @Fluent
 public final class DataFlowDebugCommandRequest {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DataFlowDebugCommandRequest.class);
-
     /*
      * The ID of data flow debug session.
      */
@@ -33,8 +31,14 @@ public final class DataFlowDebugCommandRequest {
     private DataFlowDebugCommandPayload commandPayload;
 
     /**
+     * Creates an instance of DataFlowDebugCommandRequest class.
+     */
+    public DataFlowDebugCommandRequest() {
+    }
+
+    /**
      * Get the sessionId property: The ID of data flow debug session.
-     *
+     * 
      * @return the sessionId value.
      */
     public String sessionId() {
@@ -43,7 +47,7 @@ public final class DataFlowDebugCommandRequest {
 
     /**
      * Set the sessionId property: The ID of data flow debug session.
-     *
+     * 
      * @param sessionId the sessionId value to set.
      * @return the DataFlowDebugCommandRequest object itself.
      */
@@ -54,7 +58,7 @@ public final class DataFlowDebugCommandRequest {
 
     /**
      * Get the command property: The command type.
-     *
+     * 
      * @return the command value.
      */
     public DataFlowDebugCommandType command() {
@@ -63,7 +67,7 @@ public final class DataFlowDebugCommandRequest {
 
     /**
      * Set the command property: The command type.
-     *
+     * 
      * @param command the command value to set.
      * @return the DataFlowDebugCommandRequest object itself.
      */
@@ -74,7 +78,7 @@ public final class DataFlowDebugCommandRequest {
 
     /**
      * Get the commandPayload property: The command payload object.
-     *
+     * 
      * @return the commandPayload value.
      */
     public DataFlowDebugCommandPayload commandPayload() {
@@ -83,7 +87,7 @@ public final class DataFlowDebugCommandRequest {
 
     /**
      * Set the commandPayload property: The command payload object.
-     *
+     * 
      * @param commandPayload the commandPayload value to set.
      * @return the DataFlowDebugCommandRequest object itself.
      */
@@ -94,7 +98,7 @@ public final class DataFlowDebugCommandRequest {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

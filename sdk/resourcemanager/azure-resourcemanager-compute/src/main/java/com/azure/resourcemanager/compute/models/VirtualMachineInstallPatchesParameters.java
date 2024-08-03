@@ -6,31 +6,28 @@ package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Input for InstallPatches as directly received by the API. */
+/**
+ * Input for InstallPatches as directly received by the API.
+ */
 @Fluent
 public final class VirtualMachineInstallPatchesParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VirtualMachineInstallPatchesParameters.class);
-
     /*
-     * Specifies the maximum amount of time that the operation will run. It
-     * must be an ISO 8601-compliant duration string such as PT4H (4 hours)
+     * Specifies the maximum amount of time that the operation will run. It must be an ISO 8601-compliant duration
+     * string such as PT4H (4 hours)
      */
     @JsonProperty(value = "maximumDuration")
     private String maximumDuration;
 
     /*
-     * Defines when it is acceptable to reboot a VM during a software update
-     * operation.
+     * Defines when it is acceptable to reboot a VM during a software update operation.
      */
     @JsonProperty(value = "rebootSetting", required = true)
     private VMGuestPatchRebootSetting rebootSetting;
 
     /*
-     * Input for InstallPatches on a Windows VM, as directly received by the
-     * API
+     * Input for InstallPatches on a Windows VM, as directly received by the API
      */
     @JsonProperty(value = "windowsParameters")
     private WindowsParameters windowsParameters;
@@ -42,9 +39,15 @@ public final class VirtualMachineInstallPatchesParameters {
     private LinuxParameters linuxParameters;
 
     /**
+     * Creates an instance of VirtualMachineInstallPatchesParameters class.
+     */
+    public VirtualMachineInstallPatchesParameters() {
+    }
+
+    /**
      * Get the maximumDuration property: Specifies the maximum amount of time that the operation will run. It must be an
      * ISO 8601-compliant duration string such as PT4H (4 hours).
-     *
+     * 
      * @return the maximumDuration value.
      */
     public String maximumDuration() {
@@ -54,7 +57,7 @@ public final class VirtualMachineInstallPatchesParameters {
     /**
      * Set the maximumDuration property: Specifies the maximum amount of time that the operation will run. It must be an
      * ISO 8601-compliant duration string such as PT4H (4 hours).
-     *
+     * 
      * @param maximumDuration the maximumDuration value to set.
      * @return the VirtualMachineInstallPatchesParameters object itself.
      */
@@ -65,7 +68,7 @@ public final class VirtualMachineInstallPatchesParameters {
 
     /**
      * Get the rebootSetting property: Defines when it is acceptable to reboot a VM during a software update operation.
-     *
+     * 
      * @return the rebootSetting value.
      */
     public VMGuestPatchRebootSetting rebootSetting() {
@@ -74,7 +77,7 @@ public final class VirtualMachineInstallPatchesParameters {
 
     /**
      * Set the rebootSetting property: Defines when it is acceptable to reboot a VM during a software update operation.
-     *
+     * 
      * @param rebootSetting the rebootSetting value to set.
      * @return the VirtualMachineInstallPatchesParameters object itself.
      */
@@ -85,7 +88,7 @@ public final class VirtualMachineInstallPatchesParameters {
 
     /**
      * Get the windowsParameters property: Input for InstallPatches on a Windows VM, as directly received by the API.
-     *
+     * 
      * @return the windowsParameters value.
      */
     public WindowsParameters windowsParameters() {
@@ -94,7 +97,7 @@ public final class VirtualMachineInstallPatchesParameters {
 
     /**
      * Set the windowsParameters property: Input for InstallPatches on a Windows VM, as directly received by the API.
-     *
+     * 
      * @param windowsParameters the windowsParameters value to set.
      * @return the VirtualMachineInstallPatchesParameters object itself.
      */
@@ -105,7 +108,7 @@ public final class VirtualMachineInstallPatchesParameters {
 
     /**
      * Get the linuxParameters property: Input for InstallPatches on a Linux VM, as directly received by the API.
-     *
+     * 
      * @return the linuxParameters value.
      */
     public LinuxParameters linuxParameters() {
@@ -114,7 +117,7 @@ public final class VirtualMachineInstallPatchesParameters {
 
     /**
      * Set the linuxParameters property: Input for InstallPatches on a Linux VM, as directly received by the API.
-     *
+     * 
      * @param linuxParameters the linuxParameters value to set.
      * @return the VirtualMachineInstallPatchesParameters object itself.
      */
@@ -125,15 +128,14 @@ public final class VirtualMachineInstallPatchesParameters {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (rebootSetting() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property rebootSetting in model VirtualMachineInstallPatchesParameters"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property rebootSetting in model VirtualMachineInstallPatchesParameters"));
         }
         if (windowsParameters() != null) {
             windowsParameters().validate();
@@ -142,4 +144,6 @@ public final class VirtualMachineInstallPatchesParameters {
             linuxParameters().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(VirtualMachineInstallPatchesParameters.class);
 }

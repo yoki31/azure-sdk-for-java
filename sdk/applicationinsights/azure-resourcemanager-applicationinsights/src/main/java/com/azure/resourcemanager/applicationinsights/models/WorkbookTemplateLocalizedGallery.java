@@ -5,16 +5,12 @@
 package com.azure.resourcemanager.applicationinsights.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Localized template data and gallery information. */
 @Fluent
 public final class WorkbookTemplateLocalizedGallery {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(WorkbookTemplateLocalizedGallery.class);
-
     /*
      * Valid JSON object containing workbook template payload.
      */
@@ -26,6 +22,10 @@ public final class WorkbookTemplateLocalizedGallery {
      */
     @JsonProperty(value = "galleries")
     private List<WorkbookTemplateGallery> galleries;
+
+    /** Creates an instance of WorkbookTemplateLocalizedGallery class. */
+    public WorkbookTemplateLocalizedGallery() {
+    }
 
     /**
      * Get the templateData property: Valid JSON object containing workbook template payload.

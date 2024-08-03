@@ -7,14 +7,13 @@ package com.azure.resourcemanager.datafactory.fluent.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.models.DatasetLocation;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** ORC dataset properties. */
+/**
+ * ORC dataset properties.
+ */
 @Fluent
 public final class OrcDatasetTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OrcDatasetTypeProperties.class);
-
     /*
      * The location of the ORC data storage.
      */
@@ -22,15 +21,20 @@ public final class OrcDatasetTypeProperties {
     private DatasetLocation location;
 
     /*
-     * The data orcCompressionCodec. Type: string (or Expression with
-     * resultType string).
+     * The data orcCompressionCodec. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "orcCompressionCodec")
     private Object orcCompressionCodec;
 
     /**
+     * Creates an instance of OrcDatasetTypeProperties class.
+     */
+    public OrcDatasetTypeProperties() {
+    }
+
+    /**
      * Get the location property: The location of the ORC data storage.
-     *
+     * 
      * @return the location value.
      */
     public DatasetLocation location() {
@@ -39,7 +43,7 @@ public final class OrcDatasetTypeProperties {
 
     /**
      * Set the location property: The location of the ORC data storage.
-     *
+     * 
      * @param location the location value to set.
      * @return the OrcDatasetTypeProperties object itself.
      */
@@ -51,7 +55,7 @@ public final class OrcDatasetTypeProperties {
     /**
      * Get the orcCompressionCodec property: The data orcCompressionCodec. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @return the orcCompressionCodec value.
      */
     public Object orcCompressionCodec() {
@@ -61,7 +65,7 @@ public final class OrcDatasetTypeProperties {
     /**
      * Set the orcCompressionCodec property: The data orcCompressionCodec. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @param orcCompressionCodec the orcCompressionCodec value to set.
      * @return the OrcDatasetTypeProperties object itself.
      */
@@ -72,17 +76,18 @@ public final class OrcDatasetTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (location() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property location in model OrcDatasetTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property location in model OrcDatasetTypeProperties"));
         } else {
             location().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(OrcDatasetTypeProperties.class);
 }

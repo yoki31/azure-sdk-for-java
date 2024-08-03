@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Extensions summary for virtual machines of a virtual machine scale set. */
+/**
+ * Extensions summary for virtual machines of a virtual machine scale set.
+ */
 @Immutable
 public final class VirtualMachineScaleSetVMExtensionsSummary {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VirtualMachineScaleSetVMExtensionsSummary.class);
-
     /*
      * The extension name.
      */
@@ -28,8 +26,14 @@ public final class VirtualMachineScaleSetVMExtensionsSummary {
     private List<VirtualMachineStatusCodeCount> statusesSummary;
 
     /**
+     * Creates an instance of VirtualMachineScaleSetVMExtensionsSummary class.
+     */
+    public VirtualMachineScaleSetVMExtensionsSummary() {
+    }
+
+    /**
      * Get the name property: The extension name.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -38,7 +42,7 @@ public final class VirtualMachineScaleSetVMExtensionsSummary {
 
     /**
      * Get the statusesSummary property: The extensions information.
-     *
+     * 
      * @return the statusesSummary value.
      */
     public List<VirtualMachineStatusCodeCount> statusesSummary() {
@@ -47,7 +51,7 @@ public final class VirtualMachineScaleSetVMExtensionsSummary {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

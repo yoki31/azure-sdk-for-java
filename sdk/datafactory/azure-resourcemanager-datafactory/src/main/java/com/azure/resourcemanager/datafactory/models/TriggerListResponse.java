@@ -7,15 +7,14 @@ package com.azure.resourcemanager.datafactory.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.fluent.models.TriggerResourceInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** A list of trigger resources. */
+/**
+ * A list of trigger resources.
+ */
 @Fluent
 public final class TriggerListResponse {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TriggerListResponse.class);
-
     /*
      * List of triggers.
      */
@@ -29,8 +28,14 @@ public final class TriggerListResponse {
     private String nextLink;
 
     /**
+     * Creates an instance of TriggerListResponse class.
+     */
+    public TriggerListResponse() {
+    }
+
+    /**
      * Get the value property: List of triggers.
-     *
+     * 
      * @return the value value.
      */
     public List<TriggerResourceInner> value() {
@@ -39,7 +44,7 @@ public final class TriggerListResponse {
 
     /**
      * Set the value property: List of triggers.
-     *
+     * 
      * @param value the value value to set.
      * @return the TriggerListResponse object itself.
      */
@@ -50,7 +55,7 @@ public final class TriggerListResponse {
 
     /**
      * Get the nextLink property: The link to the next page of results, if any remaining results exist.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,7 +64,7 @@ public final class TriggerListResponse {
 
     /**
      * Set the nextLink property: The link to the next page of results, if any remaining results exist.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the TriggerListResponse object itself.
      */
@@ -70,16 +75,17 @@ public final class TriggerListResponse {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property value in model TriggerListResponse"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property value in model TriggerListResponse"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(TriggerListResponse.class);
 }

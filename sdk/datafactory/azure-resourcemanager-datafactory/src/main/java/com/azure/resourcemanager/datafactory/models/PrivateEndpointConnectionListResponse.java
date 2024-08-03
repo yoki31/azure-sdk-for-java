@@ -7,15 +7,14 @@ package com.azure.resourcemanager.datafactory.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.fluent.models.PrivateEndpointConnectionResourceInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** A list of linked service resources. */
+/**
+ * A list of linked service resources.
+ */
 @Fluent
 public final class PrivateEndpointConnectionListResponse {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PrivateEndpointConnectionListResponse.class);
-
     /*
      * List of Private Endpoint Connections.
      */
@@ -29,8 +28,14 @@ public final class PrivateEndpointConnectionListResponse {
     private String nextLink;
 
     /**
+     * Creates an instance of PrivateEndpointConnectionListResponse class.
+     */
+    public PrivateEndpointConnectionListResponse() {
+    }
+
+    /**
      * Get the value property: List of Private Endpoint Connections.
-     *
+     * 
      * @return the value value.
      */
     public List<PrivateEndpointConnectionResourceInner> value() {
@@ -39,7 +44,7 @@ public final class PrivateEndpointConnectionListResponse {
 
     /**
      * Set the value property: List of Private Endpoint Connections.
-     *
+     * 
      * @param value the value value to set.
      * @return the PrivateEndpointConnectionListResponse object itself.
      */
@@ -50,7 +55,7 @@ public final class PrivateEndpointConnectionListResponse {
 
     /**
      * Get the nextLink property: The link to the next page of results, if any remaining results exist.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,7 +64,7 @@ public final class PrivateEndpointConnectionListResponse {
 
     /**
      * Set the nextLink property: The link to the next page of results, if any remaining results exist.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the PrivateEndpointConnectionListResponse object itself.
      */
@@ -70,17 +75,18 @@ public final class PrivateEndpointConnectionListResponse {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property value in model PrivateEndpointConnectionListResponse"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property value in model PrivateEndpointConnectionListResponse"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(PrivateEndpointConnectionListResponse.class);
 }

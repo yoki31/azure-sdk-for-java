@@ -8,31 +8,58 @@ import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.fluent.models.SelfHostedIntegrationRuntimeNodeInner;
 import com.azure.resourcemanager.datafactory.fluent.models.SelfHostedIntegrationRuntimeStatusTypeProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 
-/** Self-hosted integration runtime status. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * Self-hosted integration runtime status.
+ */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "type",
+    defaultImpl = SelfHostedIntegrationRuntimeStatus.class,
+    visible = true)
 @JsonTypeName("SelfHosted")
 @Fluent
 public final class SelfHostedIntegrationRuntimeStatus extends IntegrationRuntimeStatus {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SelfHostedIntegrationRuntimeStatus.class);
+    /*
+     * Type of integration runtime.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private IntegrationRuntimeType type = IntegrationRuntimeType.SELF_HOSTED;
 
     /*
      * Self-hosted integration runtime status type properties.
      */
     @JsonProperty(value = "typeProperties", required = true)
-    private SelfHostedIntegrationRuntimeStatusTypeProperties innerTypeProperties =
-        new SelfHostedIntegrationRuntimeStatusTypeProperties();
+    private SelfHostedIntegrationRuntimeStatusTypeProperties innerTypeProperties
+        = new SelfHostedIntegrationRuntimeStatusTypeProperties();
+
+    /**
+     * Creates an instance of SelfHostedIntegrationRuntimeStatus class.
+     */
+    public SelfHostedIntegrationRuntimeStatus() {
+    }
+
+    /**
+     * Get the type property: Type of integration runtime.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public IntegrationRuntimeType type() {
+        return this.type;
+    }
 
     /**
      * Get the innerTypeProperties property: Self-hosted integration runtime status type properties.
-     *
+     * 
      * @return the innerTypeProperties value.
      */
     private SelfHostedIntegrationRuntimeStatusTypeProperties innerTypeProperties() {
@@ -41,7 +68,7 @@ public final class SelfHostedIntegrationRuntimeStatus extends IntegrationRuntime
 
     /**
      * Get the createTime property: The time at which the integration runtime was created, in ISO8601 format.
-     *
+     * 
      * @return the createTime value.
      */
     public OffsetDateTime createTime() {
@@ -50,7 +77,7 @@ public final class SelfHostedIntegrationRuntimeStatus extends IntegrationRuntime
 
     /**
      * Get the taskQueueId property: The task queue id of the integration runtime.
-     *
+     * 
      * @return the taskQueueId value.
      */
     public String taskQueueId() {
@@ -60,7 +87,7 @@ public final class SelfHostedIntegrationRuntimeStatus extends IntegrationRuntime
     /**
      * Get the internalChannelEncryption property: It is used to set the encryption mode for node-node communication
      * channel (when more than 2 self-hosted integration runtime nodes exist).
-     *
+     * 
      * @return the internalChannelEncryption value.
      */
     public IntegrationRuntimeInternalChannelEncryptionMode internalChannelEncryption() {
@@ -69,7 +96,7 @@ public final class SelfHostedIntegrationRuntimeStatus extends IntegrationRuntime
 
     /**
      * Get the version property: Version of the integration runtime.
-     *
+     * 
      * @return the version value.
      */
     public String version() {
@@ -78,7 +105,7 @@ public final class SelfHostedIntegrationRuntimeStatus extends IntegrationRuntime
 
     /**
      * Get the nodes property: The list of nodes for this integration runtime.
-     *
+     * 
      * @return the nodes value.
      */
     public List<SelfHostedIntegrationRuntimeNodeInner> nodes() {
@@ -87,7 +114,7 @@ public final class SelfHostedIntegrationRuntimeStatus extends IntegrationRuntime
 
     /**
      * Set the nodes property: The list of nodes for this integration runtime.
-     *
+     * 
      * @param nodes the nodes value to set.
      * @return the SelfHostedIntegrationRuntimeStatus object itself.
      */
@@ -102,7 +129,7 @@ public final class SelfHostedIntegrationRuntimeStatus extends IntegrationRuntime
     /**
      * Get the scheduledUpdateDate property: The date at which the integration runtime will be scheduled to update, in
      * ISO8601 format.
-     *
+     * 
      * @return the scheduledUpdateDate value.
      */
     public OffsetDateTime scheduledUpdateDate() {
@@ -112,7 +139,7 @@ public final class SelfHostedIntegrationRuntimeStatus extends IntegrationRuntime
     /**
      * Get the updateDelayOffset property: The time in the date scheduled by service to update the integration runtime,
      * e.g., PT03H is 3 hours.
-     *
+     * 
      * @return the updateDelayOffset value.
      */
     public String updateDelayOffset() {
@@ -121,7 +148,7 @@ public final class SelfHostedIntegrationRuntimeStatus extends IntegrationRuntime
 
     /**
      * Get the localTimeZoneOffset property: The local time zone offset in hours.
-     *
+     * 
      * @return the localTimeZoneOffset value.
      */
     public String localTimeZoneOffset() {
@@ -130,7 +157,7 @@ public final class SelfHostedIntegrationRuntimeStatus extends IntegrationRuntime
 
     /**
      * Get the capabilities property: Object with additional information about integration runtime capabilities.
-     *
+     * 
      * @return the capabilities value.
      */
     public Map<String, String> capabilities() {
@@ -139,7 +166,7 @@ public final class SelfHostedIntegrationRuntimeStatus extends IntegrationRuntime
 
     /**
      * Get the serviceUrls property: The URLs for the services used in integration runtime backend service.
-     *
+     * 
      * @return the serviceUrls value.
      */
     public List<String> serviceUrls() {
@@ -148,7 +175,7 @@ public final class SelfHostedIntegrationRuntimeStatus extends IntegrationRuntime
 
     /**
      * Get the autoUpdate property: Whether Self-hosted integration runtime auto update has been turned on.
-     *
+     * 
      * @return the autoUpdate value.
      */
     public IntegrationRuntimeAutoUpdate autoUpdate() {
@@ -157,7 +184,7 @@ public final class SelfHostedIntegrationRuntimeStatus extends IntegrationRuntime
 
     /**
      * Get the versionStatus property: Status of the integration runtime version.
-     *
+     * 
      * @return the versionStatus value.
      */
     public String versionStatus() {
@@ -167,7 +194,7 @@ public final class SelfHostedIntegrationRuntimeStatus extends IntegrationRuntime
     /**
      * Get the links property: The list of linked integration runtimes that are created to share with this integration
      * runtime.
-     *
+     * 
      * @return the links value.
      */
     public List<LinkedIntegrationRuntime> links() {
@@ -177,7 +204,7 @@ public final class SelfHostedIntegrationRuntimeStatus extends IntegrationRuntime
     /**
      * Set the links property: The list of linked integration runtimes that are created to share with this integration
      * runtime.
-     *
+     * 
      * @param links the links value to set.
      * @return the SelfHostedIntegrationRuntimeStatus object itself.
      */
@@ -191,7 +218,7 @@ public final class SelfHostedIntegrationRuntimeStatus extends IntegrationRuntime
 
     /**
      * Get the pushedVersion property: The version that the integration runtime is going to update to.
-     *
+     * 
      * @return the pushedVersion value.
      */
     public String pushedVersion() {
@@ -200,7 +227,7 @@ public final class SelfHostedIntegrationRuntimeStatus extends IntegrationRuntime
 
     /**
      * Get the latestVersion property: The latest version on download center.
-     *
+     * 
      * @return the latestVersion value.
      */
     public String latestVersion() {
@@ -209,7 +236,7 @@ public final class SelfHostedIntegrationRuntimeStatus extends IntegrationRuntime
 
     /**
      * Get the autoUpdateEta property: The estimated time when the self-hosted integration runtime will be updated.
-     *
+     * 
      * @return the autoUpdateEta value.
      */
     public OffsetDateTime autoUpdateEta() {
@@ -217,20 +244,33 @@ public final class SelfHostedIntegrationRuntimeStatus extends IntegrationRuntime
     }
 
     /**
+     * Get the selfContainedInteractiveAuthoringEnabled property: An alternative option to ensure interactive authoring
+     * function when your self-hosted integration runtime is unable to establish a connection with Azure Relay.
+     * 
+     * @return the selfContainedInteractiveAuthoringEnabled value.
+     */
+    public Boolean selfContainedInteractiveAuthoringEnabled() {
+        return this.innerTypeProperties() == null
+            ? null
+            : this.innerTypeProperties().selfContainedInteractiveAuthoringEnabled();
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
         if (innerTypeProperties() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property innerTypeProperties in model SelfHostedIntegrationRuntimeStatus"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property innerTypeProperties in model SelfHostedIntegrationRuntimeStatus"));
         } else {
             innerTypeProperties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(SelfHostedIntegrationRuntimeStatus.class);
 }

@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The IP address of self-hosted integration runtime node. */
+/**
+ * The IP address of self-hosted integration runtime node.
+ */
 @Immutable
 public final class IntegrationRuntimeNodeIpAddressInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(IntegrationRuntimeNodeIpAddressInner.class);
-
     /*
      * The IP address of self-hosted integration runtime node.
      */
@@ -21,8 +19,14 @@ public final class IntegrationRuntimeNodeIpAddressInner {
     private String ipAddress;
 
     /**
+     * Creates an instance of IntegrationRuntimeNodeIpAddressInner class.
+     */
+    public IntegrationRuntimeNodeIpAddressInner() {
+    }
+
+    /**
      * Get the ipAddress property: The IP address of self-hosted integration runtime node.
-     *
+     * 
      * @return the ipAddress value.
      */
     public String ipAddress() {
@@ -31,7 +35,7 @@ public final class IntegrationRuntimeNodeIpAddressInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

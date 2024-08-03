@@ -5,17 +5,14 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
-/** StaticSiteUserInvitationResponseResource resource specific properties. */
+/**
+ * StaticSiteUserInvitationResponseResource resource specific properties.
+ */
 @Immutable
 public final class StaticSiteUserInvitationResponseResourceProperties {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(StaticSiteUserInvitationResponseResourceProperties.class);
-
     /*
      * The expiration time of the invitation
      */
@@ -29,8 +26,14 @@ public final class StaticSiteUserInvitationResponseResourceProperties {
     private String invitationUrl;
 
     /**
+     * Creates an instance of StaticSiteUserInvitationResponseResourceProperties class.
+     */
+    public StaticSiteUserInvitationResponseResourceProperties() {
+    }
+
+    /**
      * Get the expiresOn property: The expiration time of the invitation.
-     *
+     * 
      * @return the expiresOn value.
      */
     public OffsetDateTime expiresOn() {
@@ -39,7 +42,7 @@ public final class StaticSiteUserInvitationResponseResourceProperties {
 
     /**
      * Get the invitationUrl property: The url for the invitation link.
-     *
+     * 
      * @return the invitationUrl value.
      */
     public String invitationUrl() {
@@ -48,7 +51,7 @@ public final class StaticSiteUserInvitationResponseResourceProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.compute.fluent.models.SharedGalleryIdentifier;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Base information about the shared gallery resource in pir. */
+/**
+ * Base information about the shared gallery resource in pir.
+ */
 @Fluent
 public class PirSharedGalleryResource extends PirResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PirSharedGalleryResource.class);
-
     /*
      * The identifier information of shared gallery.
      */
@@ -22,8 +20,14 @@ public class PirSharedGalleryResource extends PirResource {
     private SharedGalleryIdentifier innerIdentifier;
 
     /**
+     * Creates an instance of PirSharedGalleryResource class.
+     */
+    public PirSharedGalleryResource() {
+    }
+
+    /**
      * Get the innerIdentifier property: The identifier information of shared gallery.
-     *
+     * 
      * @return the innerIdentifier value.
      */
     private SharedGalleryIdentifier innerIdentifier() {
@@ -32,7 +36,7 @@ public class PirSharedGalleryResource extends PirResource {
 
     /**
      * Get the uniqueId property: The unique id of this shared gallery.
-     *
+     * 
      * @return the uniqueId value.
      */
     public String uniqueId() {
@@ -41,7 +45,7 @@ public class PirSharedGalleryResource extends PirResource {
 
     /**
      * Set the uniqueId property: The unique id of this shared gallery.
-     *
+     * 
      * @param uniqueId the uniqueId value to set.
      * @return the PirSharedGalleryResource object itself.
      */
@@ -55,7 +59,7 @@ public class PirSharedGalleryResource extends PirResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

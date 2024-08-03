@@ -6,15 +6,13 @@ package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Immutable;
 import com.azure.core.management.exception.ManagementError;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** App Service error response. */
+/**
+ * App Service error response.
+ */
 @Immutable
 public final class DefaultErrorResponseError extends ManagementError {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DefaultErrorResponseError.class);
-
     /*
      * More information to debug error.
      */
@@ -22,8 +20,14 @@ public final class DefaultErrorResponseError extends ManagementError {
     private String innererror;
 
     /**
+     * Creates an instance of DefaultErrorResponseError class.
+     */
+    public DefaultErrorResponseError() {
+    }
+
+    /**
      * Get the innererror property: More information to debug error.
-     *
+     * 
      * @return the innererror value.
      */
     public String getInnererror() {
@@ -32,7 +36,7 @@ public final class DefaultErrorResponseError extends ManagementError {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

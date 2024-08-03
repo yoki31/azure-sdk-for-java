@@ -13,13 +13,18 @@ import java.io.Closeable;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.azure.core.amqp.implementation.AmqpLoggingUtils.addSignalTypeAndResult;
+import static com.azure.core.amqp.implementation.AmqpLoggingUtils.createContextWithConnectionId;
+
 /**
  * Base class for all proton-j handlers.
  */
 public abstract class Handler extends BaseHandler implements Closeable {
+    // The flux streaming state of the amqp endpoint (connection, session, link) from this handler receives events.
+    private final Sinks.Many<EndpointState> endpointStates
+        = Sinks.many().replay().latestOrDefault(EndpointState.UNINITIALIZED);
+    // The flag indicating if the endpointStates Flux reached terminal state (error-ed or completed).
     private final AtomicBoolean isTerminal = new AtomicBoolean();
-    private final Sinks.Many<EndpointState> endpointStates = Sinks.many().replay()
-        .latestOrDefault(EndpointState.UNINITIALIZED);
     private final String connectionId;
     private final String hostname;
 
@@ -32,14 +37,13 @@ public abstract class Handler extends BaseHandler implements Closeable {
      * @param hostname Hostname of the connection. This could be the DNS hostname or the IP address of the
      *     connection. Usually of the form {@literal "<your-namespace>.service.windows.net"} but can change if the
      *     messages are brokered through an intermediary.
-     * @param logger Logger to use for messages.
      *
-     * @throws NullPointerException if {@code connectionId}, {@code hostname}, or {@code logger} is null.
+     * @throws NullPointerException if {@code connectionId} or {@code hostname} is null.
      */
-    Handler(final String connectionId, final String hostname, ClientLogger logger) {
+    Handler(final String connectionId, final String hostname) {
         this.connectionId = Objects.requireNonNull(connectionId, "'connectionId' cannot be null.");
         this.hostname = Objects.requireNonNull(hostname, "'hostname' cannot be null.");
-        this.logger = Objects.requireNonNull(logger, "'logger' cannot be null.");
+        this.logger = new ClientLogger(getClass(), createContextWithConnectionId(connectionId));
     }
 
     /**
@@ -85,10 +89,17 @@ public abstract class Handler extends BaseHandler implements Closeable {
         }
 
         endpointStates.emitNext(state, (signalType, emitResult) -> {
-            logger.verbose("connectionId[{}] signal[{}] result[{}] could not emit endpoint state.", connectionId,
-                signalType, emitResult);
+            if (emitResult == Sinks.EmitResult.FAIL_NON_SERIALIZED) {
+                addSignalTypeAndResult(logger.atVerbose(), signalType, emitResult)
+                    .log("Could not emit endpoint state. Non-serial access. Retrying.");
 
-            return false;
+                return true;
+            } else {
+                addSignalTypeAndResult(logger.atVerbose(), signalType, emitResult)
+                    .log("Could not emit endpoint state.");
+
+                return false;
+            }
         });
     }
 
@@ -97,16 +108,22 @@ public abstract class Handler extends BaseHandler implements Closeable {
      *
      * @param error The error to emit.
      */
-    void onError(Throwable error) {
+    public void onError(Throwable error) {
         if (isTerminal.getAndSet(true)) {
             return;
         }
 
         endpointStates.emitError(error, (signalType, emitResult) -> {
-            logger.warning("connectionId[{}] signal[{}] result[{}] Could not emit error.", connectionId,
-                signalType, emitResult, error);
+            if (emitResult == Sinks.EmitResult.FAIL_NON_SERIALIZED) {
+                addSignalTypeAndResult(logger.atVerbose(), signalType, emitResult)
+                    .log("Could not emit error. Non-serial access. Retrying.", error);
 
-            return false;
+                return true;
+            } else {
+                addSignalTypeAndResult(logger.atVerbose(), signalType, emitResult).log("Could not emit error.", error);
+
+                return false;
+            }
         });
     }
 
@@ -123,16 +140,30 @@ public abstract class Handler extends BaseHandler implements Closeable {
         // This is fine in the case that someone called onNext(EndpointState.CLOSED) and then called handler.close().
         // We want to ensure that the next endpoint subscriber does not believe the handler is alive still.
         endpointStates.emitNext(EndpointState.CLOSED, (signalType, emitResult) -> {
-            logger.info("connectionId[{}] signal[{}] result[{}] Could not emit closed endpoint state.", connectionId,
-                signalType, emitResult);
+            if (emitResult == Sinks.EmitResult.FAIL_NON_SERIALIZED) {
+                addSignalTypeAndResult(logger.atInfo(), signalType, emitResult)
+                    .log("Could not emit closed endpoint state. Non-serial access. Retrying.");
 
-            return false;
+                return true;
+            } else {
+                addSignalTypeAndResult(logger.atInfo(), signalType, emitResult)
+                    .log("Could not emit closed endpoint state.");
+
+                return false;
+            }
         });
 
         endpointStates.emitComplete((signalType, emitResult) -> {
-            logger.verbose("connectionId[{}] result[{}] Could not emit complete.", connectionId, emitResult);
+            if (emitResult == Sinks.EmitResult.FAIL_NON_SERIALIZED) {
+                addSignalTypeAndResult(logger.atInfo(), signalType, emitResult)
+                    .log("Could not emit complete. Non-serial access. Retrying.");
 
-            return false;
+                return true;
+            } else {
+                addSignalTypeAndResult(logger.atInfo(), signalType, emitResult).log("Could not emit complete.");
+
+                return false;
+            }
         });
     }
 }

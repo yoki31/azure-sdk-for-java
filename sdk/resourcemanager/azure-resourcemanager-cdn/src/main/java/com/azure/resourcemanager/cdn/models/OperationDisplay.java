@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The object that represents the operation. */
+/**
+ * The object that represents the operation.
+ */
 @Immutable
 public final class OperationDisplay {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationDisplay.class);
-
     /*
      * Service provider: Microsoft.Cdn
      */
@@ -32,9 +30,21 @@ public final class OperationDisplay {
     @JsonProperty(value = "operation", access = JsonProperty.Access.WRITE_ONLY)
     private String operation;
 
+    /*
+     * Description of operation.
+     */
+    @JsonProperty(value = "description", access = JsonProperty.Access.WRITE_ONLY)
+    private String description;
+
+    /**
+     * Creates an instance of OperationDisplay class.
+     */
+    public OperationDisplay() {
+    }
+
     /**
      * Get the provider property: Service provider: Microsoft.Cdn.
-     *
+     * 
      * @return the provider value.
      */
     public String provider() {
@@ -43,7 +53,7 @@ public final class OperationDisplay {
 
     /**
      * Get the resource property: Resource on which the operation is performed: Profile, endpoint, etc.
-     *
+     * 
      * @return the resource value.
      */
     public String resource() {
@@ -52,7 +62,7 @@ public final class OperationDisplay {
 
     /**
      * Get the operation property: Operation type: Read, write, delete, etc.
-     *
+     * 
      * @return the operation value.
      */
     public String operation() {
@@ -60,8 +70,17 @@ public final class OperationDisplay {
     }
 
     /**
+     * Get the description property: Description of operation.
+     * 
+     * @return the description value.
+     */
+    public String description() {
+        return this.description;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

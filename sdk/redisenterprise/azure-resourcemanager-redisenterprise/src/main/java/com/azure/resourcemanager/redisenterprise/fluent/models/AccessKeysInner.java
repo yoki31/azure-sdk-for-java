@@ -5,15 +5,15 @@
 package com.azure.resourcemanager.redisenterprise.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The secret access keys used for authenticating connections to redis. */
+/**
+ * Access keys
+ * 
+ * The secret access keys used for authenticating connections to redis.
+ */
 @Immutable
 public final class AccessKeysInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AccessKeysInner.class);
-
     /*
      * The current primary key that clients can use to authenticate
      */
@@ -27,8 +27,14 @@ public final class AccessKeysInner {
     private String secondaryKey;
 
     /**
+     * Creates an instance of AccessKeysInner class.
+     */
+    public AccessKeysInner() {
+    }
+
+    /**
      * Get the primaryKey property: The current primary key that clients can use to authenticate.
-     *
+     * 
      * @return the primaryKey value.
      */
     public String primaryKey() {
@@ -37,7 +43,7 @@ public final class AccessKeysInner {
 
     /**
      * Get the secondaryKey property: The current secondary key that clients can use to authenticate.
-     *
+     * 
      * @return the secondaryKey value.
      */
     public String secondaryKey() {
@@ -46,7 +52,7 @@ public final class AccessKeysInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

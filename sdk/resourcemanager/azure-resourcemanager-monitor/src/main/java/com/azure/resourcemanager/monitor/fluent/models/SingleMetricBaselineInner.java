@@ -5,20 +5,17 @@
 package com.azure.resourcemanager.monitor.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.monitor.models.TimeSeriesBaseline;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Duration;
 import java.util.List;
 
-/** The baseline results of a single metric. */
-@JsonFlatten
+/**
+ * The baseline results of a single metric.
+ */
 @Fluent
-public class SingleMetricBaselineInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SingleMetricBaselineInner.class);
-
+public final class SingleMetricBaselineInner {
     /*
      * The metric baseline Id.
      */
@@ -38,37 +35,20 @@ public class SingleMetricBaselineInner {
     private String name;
 
     /*
-     * The timespan for which the data was retrieved. Its value consists of two
-     * datetimes concatenated, separated by '/'.  This may be adjusted in the
-     * future and returned back from what was originally requested.
+     * The metric baseline properties of the metric.
      */
-    @JsonProperty(value = "properties.timespan", required = true)
-    private String timespan;
+    @JsonProperty(value = "properties", required = true)
+    private MetricBaselinesProperties innerProperties = new MetricBaselinesProperties();
 
-    /*
-     * The interval (window size) for which the metric data was returned in.
-     * This may be adjusted in the future and returned back from what was
-     * originally requested.  This is not present if a metadata request was
-     * made.
+    /**
+     * Creates an instance of SingleMetricBaselineInner class.
      */
-    @JsonProperty(value = "properties.interval", required = true)
-    private Duration interval;
-
-    /*
-     * The namespace of the metrics been queried.
-     */
-    @JsonProperty(value = "properties.namespace")
-    private String namespace;
-
-    /*
-     * The baseline for each time series that was queried.
-     */
-    @JsonProperty(value = "properties.baselines", required = true)
-    private List<TimeSeriesBaseline> baselines;
+    public SingleMetricBaselineInner() {
+    }
 
     /**
      * Get the id property: The metric baseline Id.
-     *
+     * 
      * @return the id value.
      */
     public String id() {
@@ -77,7 +57,7 @@ public class SingleMetricBaselineInner {
 
     /**
      * Set the id property: The metric baseline Id.
-     *
+     * 
      * @param id the id value to set.
      * @return the SingleMetricBaselineInner object itself.
      */
@@ -88,7 +68,7 @@ public class SingleMetricBaselineInner {
 
     /**
      * Get the type property: The resource type of the metric baseline resource.
-     *
+     * 
      * @return the type value.
      */
     public String type() {
@@ -97,7 +77,7 @@ public class SingleMetricBaselineInner {
 
     /**
      * Set the type property: The resource type of the metric baseline resource.
-     *
+     * 
      * @param type the type value to set.
      * @return the SingleMetricBaselineInner object itself.
      */
@@ -108,7 +88,7 @@ public class SingleMetricBaselineInner {
 
     /**
      * Get the name property: The name of the metric for which the baselines were retrieved.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -117,7 +97,7 @@ public class SingleMetricBaselineInner {
 
     /**
      * Set the name property: The name of the metric for which the baselines were retrieved.
-     *
+     * 
      * @param name the name value to set.
      * @return the SingleMetricBaselineInner object itself.
      */
@@ -127,26 +107,38 @@ public class SingleMetricBaselineInner {
     }
 
     /**
+     * Get the innerProperties property: The metric baseline properties of the metric.
+     * 
+     * @return the innerProperties value.
+     */
+    private MetricBaselinesProperties innerProperties() {
+        return this.innerProperties;
+    }
+
+    /**
      * Get the timespan property: The timespan for which the data was retrieved. Its value consists of two datetimes
      * concatenated, separated by '/'. This may be adjusted in the future and returned back from what was originally
      * requested.
-     *
+     * 
      * @return the timespan value.
      */
     public String timespan() {
-        return this.timespan;
+        return this.innerProperties() == null ? null : this.innerProperties().timespan();
     }
 
     /**
      * Set the timespan property: The timespan for which the data was retrieved. Its value consists of two datetimes
      * concatenated, separated by '/'. This may be adjusted in the future and returned back from what was originally
      * requested.
-     *
+     * 
      * @param timespan the timespan value to set.
      * @return the SingleMetricBaselineInner object itself.
      */
     public SingleMetricBaselineInner withTimespan(String timespan) {
-        this.timespan = timespan;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new MetricBaselinesProperties();
+        }
+        this.innerProperties().withTimespan(timespan);
         return this;
     }
 
@@ -154,106 +146,100 @@ public class SingleMetricBaselineInner {
      * Get the interval property: The interval (window size) for which the metric data was returned in. This may be
      * adjusted in the future and returned back from what was originally requested. This is not present if a metadata
      * request was made.
-     *
+     * 
      * @return the interval value.
      */
     public Duration interval() {
-        return this.interval;
+        return this.innerProperties() == null ? null : this.innerProperties().interval();
     }
 
     /**
      * Set the interval property: The interval (window size) for which the metric data was returned in. This may be
      * adjusted in the future and returned back from what was originally requested. This is not present if a metadata
      * request was made.
-     *
+     * 
      * @param interval the interval value to set.
      * @return the SingleMetricBaselineInner object itself.
      */
     public SingleMetricBaselineInner withInterval(Duration interval) {
-        this.interval = interval;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new MetricBaselinesProperties();
+        }
+        this.innerProperties().withInterval(interval);
         return this;
     }
 
     /**
      * Get the namespace property: The namespace of the metrics been queried.
-     *
+     * 
      * @return the namespace value.
      */
     public String namespace() {
-        return this.namespace;
+        return this.innerProperties() == null ? null : this.innerProperties().namespace();
     }
 
     /**
      * Set the namespace property: The namespace of the metrics been queried.
-     *
+     * 
      * @param namespace the namespace value to set.
      * @return the SingleMetricBaselineInner object itself.
      */
     public SingleMetricBaselineInner withNamespace(String namespace) {
-        this.namespace = namespace;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new MetricBaselinesProperties();
+        }
+        this.innerProperties().withNamespace(namespace);
         return this;
     }
 
     /**
      * Get the baselines property: The baseline for each time series that was queried.
-     *
+     * 
      * @return the baselines value.
      */
     public List<TimeSeriesBaseline> baselines() {
-        return this.baselines;
+        return this.innerProperties() == null ? null : this.innerProperties().baselines();
     }
 
     /**
      * Set the baselines property: The baseline for each time series that was queried.
-     *
+     * 
      * @param baselines the baselines value to set.
      * @return the SingleMetricBaselineInner object itself.
      */
     public SingleMetricBaselineInner withBaselines(List<TimeSeriesBaseline> baselines) {
-        this.baselines = baselines;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new MetricBaselinesProperties();
+        }
+        this.innerProperties().withBaselines(baselines);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (id() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property id in model SingleMetricBaselineInner"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property id in model SingleMetricBaselineInner"));
         }
         if (type() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property type in model SingleMetricBaselineInner"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property type in model SingleMetricBaselineInner"));
         }
         if (name() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property name in model SingleMetricBaselineInner"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property name in model SingleMetricBaselineInner"));
         }
-        if (timespan() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property timespan in model SingleMetricBaselineInner"));
-        }
-        if (interval() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property interval in model SingleMetricBaselineInner"));
-        }
-        if (baselines() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property baselines in model SingleMetricBaselineInner"));
+        if (innerProperties() == null) {
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property innerProperties in model SingleMetricBaselineInner"));
         } else {
-            baselines().forEach(e -> e.validate());
+            innerProperties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(SingleMetricBaselineInner.class);
 }

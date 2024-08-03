@@ -5,20 +5,18 @@
 package com.azure.resourcemanager.batch.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.batch.models.CertificateBaseProperties;
 import com.azure.resourcemanager.batch.models.CertificateFormat;
 import com.azure.resourcemanager.batch.models.CertificateProvisioningState;
 import com.azure.resourcemanager.batch.models.DeleteCertificateError;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
-/** Certificate properties. */
+/**
+ * Certificate properties.
+ */
 @Fluent
 public final class CertificateProperties extends CertificateBaseProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CertificateProperties.class);
-
     /*
      * The provisioningState property.
      */
@@ -50,15 +48,20 @@ public final class CertificateProperties extends CertificateBaseProperties {
     private String publicData;
 
     /*
-     * This is only returned when the certificate provisioningState is
-     * 'Failed'.
+     * This is only returned when the certificate provisioningState is 'Failed'.
      */
     @JsonProperty(value = "deleteCertificateError", access = JsonProperty.Access.WRITE_ONLY)
     private DeleteCertificateError deleteCertificateError;
 
     /**
+     * Creates an instance of CertificateProperties class.
+     */
+    public CertificateProperties() {
+    }
+
+    /**
      * Get the provisioningState property: The provisioningState property.
-     *
+     * 
      * @return the provisioningState value.
      */
     public CertificateProvisioningState provisioningState() {
@@ -67,7 +70,7 @@ public final class CertificateProperties extends CertificateBaseProperties {
 
     /**
      * Get the provisioningStateTransitionTime property: The time at which the certificate entered its current state.
-     *
+     * 
      * @return the provisioningStateTransitionTime value.
      */
     public OffsetDateTime provisioningStateTransitionTime() {
@@ -76,7 +79,7 @@ public final class CertificateProperties extends CertificateBaseProperties {
 
     /**
      * Get the previousProvisioningState property: The previous provisioned state of the resource.
-     *
+     * 
      * @return the previousProvisioningState value.
      */
     public CertificateProvisioningState previousProvisioningState() {
@@ -86,7 +89,7 @@ public final class CertificateProperties extends CertificateBaseProperties {
     /**
      * Get the previousProvisioningStateTransitionTime property: The time at which the certificate entered its previous
      * state.
-     *
+     * 
      * @return the previousProvisioningStateTransitionTime value.
      */
     public OffsetDateTime previousProvisioningStateTransitionTime() {
@@ -95,7 +98,7 @@ public final class CertificateProperties extends CertificateBaseProperties {
 
     /**
      * Get the publicData property: The public key of the certificate.
-     *
+     * 
      * @return the publicData value.
      */
     public String publicData() {
@@ -105,28 +108,34 @@ public final class CertificateProperties extends CertificateBaseProperties {
     /**
      * Get the deleteCertificateError property: This is only returned when the certificate provisioningState is
      * 'Failed'.
-     *
+     * 
      * @return the deleteCertificateError value.
      */
     public DeleteCertificateError deleteCertificateError() {
         return this.deleteCertificateError;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CertificateProperties withThumbprintAlgorithm(String thumbprintAlgorithm) {
         super.withThumbprintAlgorithm(thumbprintAlgorithm);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CertificateProperties withThumbprint(String thumbprint) {
         super.withThumbprint(thumbprint);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CertificateProperties withFormat(CertificateFormat format) {
         super.withFormat(format);
@@ -135,7 +144,7 @@ public final class CertificateProperties extends CertificateBaseProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

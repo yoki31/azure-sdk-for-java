@@ -28,7 +28,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.ProductGroupsClient;
 import com.azure.resourcemanager.apimanagement.fluent.models.GroupContractInner;
 import com.azure.resourcemanager.apimanagement.models.GroupCollection;
@@ -36,8 +35,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in ProductGroupsClient. */
 public final class ProductGroupsClientImpl implements ProductGroupsClient {
-    private final ClientLogger logger = new ClientLogger(ProductGroupsClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final ProductGroupsService service;
 
@@ -61,11 +58,10 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApiManagementClientP")
-    private interface ProductGroupsService {
+    public interface ProductGroupsService {
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/products/{productId}/groups")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/products/{productId}/groups")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<GroupCollection>> listByProduct(
@@ -83,8 +79,7 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
 
         @Headers({"Content-Type: application/json"})
         @Head(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/products/{productId}/groups/{groupId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/products/{productId}/groups/{groupId}")
         @ExpectedResponses({204})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Void>> checkEntityExists(
@@ -100,8 +95,7 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
 
         @Headers({"Content-Type: application/json"})
         @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/products/{productId}/groups/{groupId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/products/{productId}/groups/{groupId}")
         @ExpectedResponses({200, 201})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<GroupContractInner>> createOrUpdate(
@@ -117,8 +111,7 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
 
         @Headers({"Content-Type: application/json"})
         @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/products/{productId}/groups/{groupId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/products/{productId}/groups/{groupId}")
         @ExpectedResponses({200, 204})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Void>> delete(
@@ -146,7 +139,7 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
     /**
      * Lists the collection of developer groups associated with the specified product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -158,7 +151,8 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Group list representation.
+     * @return paged Group list representation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<GroupContractInner>> listByProductSinglePageAsync(
@@ -217,7 +211,7 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
     /**
      * Lists the collection of developer groups associated with the specified product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -230,7 +224,8 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Group list representation.
+     * @return paged Group list representation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<GroupContractInner>> listByProductSinglePageAsync(
@@ -292,7 +287,7 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
     /**
      * Lists the collection of developer groups associated with the specified product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -304,7 +299,7 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Group list representation.
+     * @return paged Group list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<GroupContractInner> listByProductAsync(
@@ -317,13 +312,13 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
     /**
      * Lists the collection of developer groups associated with the specified product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Group list representation.
+     * @return paged Group list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<GroupContractInner> listByProductAsync(
@@ -339,7 +334,7 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
     /**
      * Lists the collection of developer groups associated with the specified product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -352,7 +347,7 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Group list representation.
+     * @return paged Group list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<GroupContractInner> listByProductAsync(
@@ -371,13 +366,13 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
     /**
      * Lists the collection of developer groups associated with the specified product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Group list representation.
+     * @return paged Group list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<GroupContractInner> listByProduct(
@@ -391,7 +386,7 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
     /**
      * Lists the collection of developer groups associated with the specified product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -404,7 +399,7 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Group list representation.
+     * @return paged Group list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<GroupContractInner> listByProduct(
@@ -422,14 +417,14 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
     /**
      * Checks that Group entity specified by identifier is associated with the Product entity.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> checkEntityExistsWithResponseAsync(
@@ -480,7 +475,7 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
     /**
      * Checks that Group entity specified by identifier is associated with the Product entity.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
@@ -488,7 +483,7 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> checkEntityExistsWithResponseAsync(
@@ -536,26 +531,45 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
     /**
      * Checks that Group entity specified by identifier is associated with the Product entity.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> checkEntityExistsAsync(
         String resourceGroupName, String serviceName, String productId, String groupId) {
         return checkEntityExistsWithResponseAsync(resourceGroupName, serviceName, productId, groupId)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Checks that Group entity specified by identifier is associated with the Product entity.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param productId Product identifier. Must be unique in the current API Management service instance.
+     * @param groupId Group identifier. Must be unique in the current API Management service instance.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> checkEntityExistsWithResponse(
+        String resourceGroupName, String serviceName, String productId, String groupId, Context context) {
+        return checkEntityExistsWithResponseAsync(resourceGroupName, serviceName, productId, groupId, context).block();
+    }
+
+    /**
+     * Checks that Group entity specified by identifier is associated with the Product entity.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
@@ -565,39 +579,20 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public void checkEntityExists(String resourceGroupName, String serviceName, String productId, String groupId) {
-        checkEntityExistsAsync(resourceGroupName, serviceName, productId, groupId).block();
-    }
-
-    /**
-     * Checks that Group entity specified by identifier is associated with the Product entity.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param productId Product identifier. Must be unique in the current API Management service instance.
-     * @param groupId Group identifier. Must be unique in the current API Management service instance.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> checkEntityExistsWithResponse(
-        String resourceGroupName, String serviceName, String productId, String groupId, Context context) {
-        return checkEntityExistsWithResponseAsync(resourceGroupName, serviceName, productId, groupId, context).block();
+        checkEntityExistsWithResponse(resourceGroupName, serviceName, productId, groupId, Context.NONE);
     }
 
     /**
      * Adds the association between the specified developer group with the specified product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return contract details.
+     * @return contract details along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<GroupContractInner>> createOrUpdateWithResponseAsync(
@@ -648,7 +643,7 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
     /**
      * Adds the association between the specified developer group with the specified product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
@@ -656,7 +651,7 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return contract details.
+     * @return contract details along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<GroupContractInner>> createOrUpdateWithResponseAsync(
@@ -704,33 +699,45 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
     /**
      * Adds the association between the specified developer group with the specified product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return contract details.
+     * @return contract details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<GroupContractInner> createOrUpdateAsync(
         String resourceGroupName, String serviceName, String productId, String groupId) {
         return createOrUpdateWithResponseAsync(resourceGroupName, serviceName, productId, groupId)
-            .flatMap(
-                (Response<GroupContractInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Adds the association between the specified developer group with the specified product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param productId Product identifier. Must be unique in the current API Management service instance.
+     * @param groupId Group identifier. Must be unique in the current API Management service instance.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return contract details along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<GroupContractInner> createOrUpdateWithResponse(
+        String resourceGroupName, String serviceName, String productId, String groupId, Context context) {
+        return createOrUpdateWithResponseAsync(resourceGroupName, serviceName, productId, groupId, context).block();
+    }
+
+    /**
+     * Adds the association between the specified developer group with the specified product.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
@@ -742,39 +749,20 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public GroupContractInner createOrUpdate(
         String resourceGroupName, String serviceName, String productId, String groupId) {
-        return createOrUpdateAsync(resourceGroupName, serviceName, productId, groupId).block();
-    }
-
-    /**
-     * Adds the association between the specified developer group with the specified product.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param productId Product identifier. Must be unique in the current API Management service instance.
-     * @param groupId Group identifier. Must be unique in the current API Management service instance.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return contract details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<GroupContractInner> createOrUpdateWithResponse(
-        String resourceGroupName, String serviceName, String productId, String groupId, Context context) {
-        return createOrUpdateWithResponseAsync(resourceGroupName, serviceName, productId, groupId, context).block();
+        return createOrUpdateWithResponse(resourceGroupName, serviceName, productId, groupId, Context.NONE).getValue();
     }
 
     /**
      * Deletes the association between the specified group and product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -825,7 +813,7 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
     /**
      * Deletes the association between the specified group and product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
@@ -833,7 +821,7 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -881,25 +869,44 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
     /**
      * Deletes the association between the specified group and product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(String resourceGroupName, String serviceName, String productId, String groupId) {
         return deleteWithResponseAsync(resourceGroupName, serviceName, productId, groupId)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Deletes the association between the specified group and product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param productId Product identifier. Must be unique in the current API Management service instance.
+     * @param groupId Group identifier. Must be unique in the current API Management service instance.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> deleteWithResponse(
+        String resourceGroupName, String serviceName, String productId, String groupId, Context context) {
+        return deleteWithResponseAsync(resourceGroupName, serviceName, productId, groupId, context).block();
+    }
+
+    /**
+     * Deletes the association between the specified group and product.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param productId Product identifier. Must be unique in the current API Management service instance.
      * @param groupId Group identifier. Must be unique in the current API Management service instance.
@@ -909,36 +916,19 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public void delete(String resourceGroupName, String serviceName, String productId, String groupId) {
-        deleteAsync(resourceGroupName, serviceName, productId, groupId).block();
-    }
-
-    /**
-     * Deletes the association between the specified group and product.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param productId Product identifier. Must be unique in the current API Management service instance.
-     * @param groupId Group identifier. Must be unique in the current API Management service instance.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> deleteWithResponse(
-        String resourceGroupName, String serviceName, String productId, String groupId, Context context) {
-        return deleteWithResponseAsync(resourceGroupName, serviceName, productId, groupId, context).block();
+        deleteWithResponse(resourceGroupName, serviceName, productId, groupId, Context.NONE);
     }
 
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Group list representation.
+     * @return paged Group list representation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<GroupContractInner>> listByProductNextSinglePageAsync(String nextLink) {
@@ -969,12 +959,14 @@ public final class ProductGroupsClientImpl implements ProductGroupsClient {
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Group list representation.
+     * @return paged Group list representation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<GroupContractInner>> listByProductNextSinglePageAsync(String nextLink, Context context) {

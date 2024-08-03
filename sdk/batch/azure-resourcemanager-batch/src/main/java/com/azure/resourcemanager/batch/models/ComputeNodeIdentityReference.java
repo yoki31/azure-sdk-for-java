@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.batch.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The reference to a user assigned identity associated with the Batch pool which a compute node will use. */
+/**
+ * The reference to a user assigned identity associated with the Batch pool which a compute node will use.
+ */
 @Fluent
 public final class ComputeNodeIdentityReference {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ComputeNodeIdentityReference.class);
-
     /*
      * The ARM resource id of the user assigned identity.
      */
@@ -21,8 +19,14 @@ public final class ComputeNodeIdentityReference {
     private String resourceId;
 
     /**
+     * Creates an instance of ComputeNodeIdentityReference class.
+     */
+    public ComputeNodeIdentityReference() {
+    }
+
+    /**
      * Get the resourceId property: The ARM resource id of the user assigned identity.
-     *
+     * 
      * @return the resourceId value.
      */
     public String resourceId() {
@@ -31,7 +35,7 @@ public final class ComputeNodeIdentityReference {
 
     /**
      * Set the resourceId property: The ARM resource id of the user assigned identity.
-     *
+     * 
      * @param resourceId the resourceId value to set.
      * @return the ComputeNodeIdentityReference object itself.
      */
@@ -42,7 +46,7 @@ public final class ComputeNodeIdentityReference {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

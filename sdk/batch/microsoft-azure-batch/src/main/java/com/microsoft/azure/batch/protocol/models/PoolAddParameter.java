@@ -10,6 +10,7 @@ package com.microsoft.azure.batch.protocol.models;
 
 import org.joda.time.Period;
 import java.util.List;
+import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -93,7 +94,7 @@ public class PoolAddParameter {
     private Integer targetDedicatedNodes;
 
     /**
-     * The desired number of low-priority Compute Nodes in the Pool.
+     * The desired number of Spot/Low-priority Compute Nodes in the Pool.
      * This property must not be specified if enableAutoScale is set to true.
      * If enableAutoScale is set to false, then you must set either
      * targetDedicatedNodes, targetLowPriorityNodes, or both.
@@ -171,12 +172,20 @@ public class PoolAddParameter {
      * 'remoteUser', a 'certs' directory is created in the user's home
      * directory (e.g., /home/{user-name}/certs) and Certificates are placed in
      * that directory.
+     *
+     * Warning: This property is deprecated and will be removed after February,
+     * 2024. Please use the [Azure KeyVault
+     * Extension](https://learn.microsoft.com/azure/batch/batch-certificate-migration-guide)
+     * instead.
      */
     @JsonProperty(value = "certificateReferences")
     private List<CertificateReference> certificateReferences;
 
     /**
      * The list of Packages to be installed on each Compute Node in the Pool.
+     * When creating a pool, the package's application ID must be fully
+     * qualified
+     * (/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Batch/batchAccounts/{accountName}/applications/{applicationName}).
      * Changes to Package references affect all new Nodes joining the Pool, but
      * do not affect Compute Nodes that are already in the Pool until they are
      * rebooted or reimaged. There is a maximum of 10 Package references on any
@@ -234,6 +243,32 @@ public class PoolAddParameter {
      */
     @JsonProperty(value = "mountConfiguration")
     private List<MountConfiguration> mountConfiguration;
+
+    /**
+     * The desired node communication mode for the pool.
+     * If omitted, the default value is Default. Possible values include:
+     * 'default', 'classic', 'simplified'.
+     */
+    @JsonProperty(value = "targetNodeCommunicationMode")
+    private NodeCommunicationMode targetNodeCommunicationMode;
+
+    /**
+     * The upgrade policy for the Pool.
+     * Describes an upgrade policy - automatic, manual, or rolling.
+     */
+    @JsonProperty(value = "upgradePolicy")
+    private UpgradePolicy upgradePolicy;
+
+    /**
+     * The user-specified tags associated with the pool.
+     * The user-defined tags to be associated with the Azure Batch Pool. When
+     * specified, these tags are propagated to the backing Azure resources
+     * associated with the pool. This property can only be specified when the
+     * Batch account was created with the poolAllocationMode property set to
+     * 'UserSubscription'.
+     */
+    @JsonProperty(value = "resourceTags")
+    private Map<String, String> resourceTags;
 
     /**
      * Get the ID can contain any combination of alphanumeric characters including hyphens and underscores, and cannot contain more than 64 characters. The ID is case-preserving and case-insensitive (that is, you may not have two Pool IDs within an Account that differ only by case).
@@ -517,6 +552,7 @@ public class PoolAddParameter {
 
     /**
      * Get for Windows Nodes, the Batch service installs the Certificates to the specified Certificate store and location. For Linux Compute Nodes, the Certificates are stored in a directory inside the Task working directory and an environment variable AZ_BATCH_CERTIFICATES_DIR is supplied to the Task to query for this location. For Certificates with visibility of 'remoteUser', a 'certs' directory is created in the user's home directory (e.g., /home/{user-name}/certs) and Certificates are placed in that directory.
+     Warning: This property is deprecated and will be removed after February, 2024. Please use the [Azure KeyVault Extension](https://learn.microsoft.com/azure/batch/batch-certificate-migration-guide) instead.
      *
      * @return the certificateReferences value
      */
@@ -526,6 +562,7 @@ public class PoolAddParameter {
 
     /**
      * Set for Windows Nodes, the Batch service installs the Certificates to the specified Certificate store and location. For Linux Compute Nodes, the Certificates are stored in a directory inside the Task working directory and an environment variable AZ_BATCH_CERTIFICATES_DIR is supplied to the Task to query for this location. For Certificates with visibility of 'remoteUser', a 'certs' directory is created in the user's home directory (e.g., /home/{user-name}/certs) and Certificates are placed in that directory.
+     Warning: This property is deprecated and will be removed after February, 2024. Please use the [Azure KeyVault Extension](https://learn.microsoft.com/azure/batch/batch-certificate-migration-guide) instead.
      *
      * @param certificateReferences the certificateReferences value to set
      * @return the PoolAddParameter object itself.
@@ -536,7 +573,7 @@ public class PoolAddParameter {
     }
 
     /**
-     * Get changes to Package references affect all new Nodes joining the Pool, but do not affect Compute Nodes that are already in the Pool until they are rebooted or reimaged. There is a maximum of 10 Package references on any given Pool.
+     * Get when creating a pool, the package's application ID must be fully qualified (/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Batch/batchAccounts/{accountName}/applications/{applicationName}). Changes to Package references affect all new Nodes joining the Pool, but do not affect Compute Nodes that are already in the Pool until they are rebooted or reimaged. There is a maximum of 10 Package references on any given Pool.
      *
      * @return the applicationPackageReferences value
      */
@@ -545,7 +582,7 @@ public class PoolAddParameter {
     }
 
     /**
-     * Set changes to Package references affect all new Nodes joining the Pool, but do not affect Compute Nodes that are already in the Pool until they are rebooted or reimaged. There is a maximum of 10 Package references on any given Pool.
+     * Set when creating a pool, the package's application ID must be fully qualified (/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Batch/batchAccounts/{accountName}/applications/{applicationName}). Changes to Package references affect all new Nodes joining the Pool, but do not affect Compute Nodes that are already in the Pool until they are rebooted or reimaged. There is a maximum of 10 Package references on any given Pool.
      *
      * @param applicationPackageReferences the applicationPackageReferences value to set
      * @return the PoolAddParameter object itself.
@@ -672,6 +709,66 @@ public class PoolAddParameter {
      */
     public PoolAddParameter withMountConfiguration(List<MountConfiguration> mountConfiguration) {
         this.mountConfiguration = mountConfiguration;
+        return this;
+    }
+
+    /**
+     * Get if omitted, the default value is Default. Possible values include: 'default', 'classic', 'simplified'.
+     *
+     * @return the targetNodeCommunicationMode value
+     */
+    public NodeCommunicationMode targetNodeCommunicationMode() {
+        return this.targetNodeCommunicationMode;
+    }
+
+    /**
+     * Set if omitted, the default value is Default. Possible values include: 'default', 'classic', 'simplified'.
+     *
+     * @param targetNodeCommunicationMode the targetNodeCommunicationMode value to set
+     * @return the PoolAddParameter object itself.
+     */
+    public PoolAddParameter withTargetNodeCommunicationMode(NodeCommunicationMode targetNodeCommunicationMode) {
+        this.targetNodeCommunicationMode = targetNodeCommunicationMode;
+        return this;
+    }
+
+    /**
+     * Get describes an upgrade policy - automatic, manual, or rolling.
+     *
+     * @return the upgradePolicy value
+     */
+    public UpgradePolicy upgradePolicy() {
+        return this.upgradePolicy;
+    }
+
+    /**
+     * Set describes an upgrade policy - automatic, manual, or rolling.
+     *
+     * @param upgradePolicy the upgradePolicy value to set
+     * @return the PoolAddParameter object itself.
+     */
+    public PoolAddParameter withUpgradePolicy(UpgradePolicy upgradePolicy) {
+        this.upgradePolicy = upgradePolicy;
+        return this;
+    }
+
+    /**
+     * Get the user-defined tags to be associated with the Azure Batch Pool. When specified, these tags are propagated to the backing Azure resources associated with the pool. This property can only be specified when the Batch account was created with the poolAllocationMode property set to 'UserSubscription'.
+     *
+     * @return the resourceTags value
+     */
+    public Map<String, String> resourceTags() {
+        return this.resourceTags;
+    }
+
+    /**
+     * Set the user-defined tags to be associated with the Azure Batch Pool. When specified, these tags are propagated to the backing Azure resources associated with the pool. This property can only be specified when the Batch account was created with the poolAllocationMode property set to 'UserSubscription'.
+     *
+     * @param resourceTags the resourceTags value to set
+     * @return the PoolAddParameter object itself.
+     */
+    public PoolAddParameter withResourceTags(Map<String, String> resourceTags) {
+        this.resourceTags = resourceTags;
         return this;
     }
 

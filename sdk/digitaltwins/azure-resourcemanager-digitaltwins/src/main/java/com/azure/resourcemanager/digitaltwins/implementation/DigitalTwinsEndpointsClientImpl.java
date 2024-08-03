@@ -29,7 +29,6 @@ import com.azure.core.management.exception.ManagementException;
 import com.azure.core.management.polling.PollResult;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.core.util.polling.PollerFlux;
 import com.azure.core.util.polling.SyncPoller;
 import com.azure.resourcemanager.digitaltwins.fluent.DigitalTwinsEndpointsClient;
@@ -41,8 +40,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in DigitalTwinsEndpointsClient. */
 public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpointsClient {
-    private final ClientLogger logger = new ClientLogger(DigitalTwinsEndpointsClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final DigitalTwinsEndpointsService service;
 
@@ -67,11 +64,10 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
      */
     @Host("{$host}")
     @ServiceInterface(name = "AzureDigitalTwinsMan")
-    private interface DigitalTwinsEndpointsService {
+    public interface DigitalTwinsEndpointsService {
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DigitalTwins"
-                + "/digitalTwinsInstances/{resourceName}/endpoints")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DigitalTwins/digitalTwinsInstances/{resourceName}/endpoints")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<DigitalTwinsEndpointResourceListResult>> list(
@@ -85,8 +81,7 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
 
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DigitalTwins"
-                + "/digitalTwinsInstances/{resourceName}/endpoints/{endpointName}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DigitalTwins/digitalTwinsInstances/{resourceName}/endpoints/{endpointName}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<DigitalTwinsEndpointResourceInner>> get(
@@ -101,8 +96,7 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
 
         @Headers({"Content-Type: application/json"})
         @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DigitalTwins"
-                + "/digitalTwinsInstances/{resourceName}/endpoints/{endpointName}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DigitalTwins/digitalTwinsInstances/{resourceName}/endpoints/{endpointName}")
         @ExpectedResponses({200, 201})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Flux<ByteBuffer>>> createOrUpdate(
@@ -118,8 +112,7 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
 
         @Headers({"Content-Type: application/json"})
         @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DigitalTwins"
-                + "/digitalTwinsInstances/{resourceName}/endpoints/{endpointName}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DigitalTwins/digitalTwinsInstances/{resourceName}/endpoints/{endpointName}")
         @ExpectedResponses({200, 202, 204})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Flux<ByteBuffer>>> delete(
@@ -151,7 +144,7 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return digitalTwinsInstance Endpoints.
+     * @return digitalTwinsInstance Endpoints along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<DigitalTwinsEndpointResourceInner>> listSinglePageAsync(
@@ -197,7 +190,7 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
                         res.getValue().value(),
                         res.getValue().nextLink(),
                         null))
-            .subscriberContext(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext())));
+            .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
@@ -209,7 +202,7 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return digitalTwinsInstance Endpoints.
+     * @return digitalTwinsInstance Endpoints along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<DigitalTwinsEndpointResourceInner>> listSinglePageAsync(
@@ -263,7 +256,7 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return digitalTwinsInstance Endpoints.
+     * @return digitalTwinsInstance Endpoints as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<DigitalTwinsEndpointResourceInner> listAsync(String resourceGroupName, String resourceName) {
@@ -280,7 +273,7 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return digitalTwinsInstance Endpoints.
+     * @return digitalTwinsInstance Endpoints as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<DigitalTwinsEndpointResourceInner> listAsync(
@@ -298,7 +291,7 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return digitalTwinsInstance Endpoints.
+     * @return digitalTwinsInstance Endpoints as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<DigitalTwinsEndpointResourceInner> list(String resourceGroupName, String resourceName) {
@@ -314,7 +307,7 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return digitalTwinsInstance Endpoints.
+     * @return digitalTwinsInstance Endpoints as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<DigitalTwinsEndpointResourceInner> list(
@@ -331,7 +324,7 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return digitalTwinsInstances Endpoint.
+     * @return digitalTwinsInstances Endpoint along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<DigitalTwinsEndpointResourceInner>> getWithResponseAsync(
@@ -372,7 +365,7 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
                             endpointName,
                             accept,
                             context))
-            .subscriberContext(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext())));
+            .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
@@ -385,7 +378,7 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return digitalTwinsInstances Endpoint.
+     * @return digitalTwinsInstances Endpoint along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<DigitalTwinsEndpointResourceInner>> getWithResponseAsync(
@@ -435,20 +428,31 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return digitalTwinsInstances Endpoint.
+     * @return digitalTwinsInstances Endpoint on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<DigitalTwinsEndpointResourceInner> getAsync(
         String resourceGroupName, String resourceName, String endpointName) {
         return getWithResponseAsync(resourceGroupName, resourceName, endpointName)
-            .flatMap(
-                (Response<DigitalTwinsEndpointResourceInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
+    }
+
+    /**
+     * Get DigitalTwinsInstances Endpoint.
+     *
+     * @param resourceGroupName The name of the resource group that contains the DigitalTwinsInstance.
+     * @param resourceName The name of the DigitalTwinsInstance.
+     * @param endpointName Name of Endpoint Resource.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return digitalTwinsInstances Endpoint along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<DigitalTwinsEndpointResourceInner> getWithResponse(
+        String resourceGroupName, String resourceName, String endpointName, Context context) {
+        return getWithResponseAsync(resourceGroupName, resourceName, endpointName, context).block();
     }
 
     /**
@@ -464,25 +468,7 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public DigitalTwinsEndpointResourceInner get(String resourceGroupName, String resourceName, String endpointName) {
-        return getAsync(resourceGroupName, resourceName, endpointName).block();
-    }
-
-    /**
-     * Get DigitalTwinsInstances Endpoint.
-     *
-     * @param resourceGroupName The name of the resource group that contains the DigitalTwinsInstance.
-     * @param resourceName The name of the DigitalTwinsInstance.
-     * @param endpointName Name of Endpoint Resource.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return digitalTwinsInstances Endpoint.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<DigitalTwinsEndpointResourceInner> getWithResponse(
-        String resourceGroupName, String resourceName, String endpointName, Context context) {
-        return getWithResponseAsync(resourceGroupName, resourceName, endpointName, context).block();
+        return getWithResponse(resourceGroupName, resourceName, endpointName, Context.NONE).getValue();
     }
 
     /**
@@ -495,7 +481,8 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return digitalTwinsInstance endpoint resource.
+     * @return digitalTwinsInstance endpoint resource along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(
@@ -546,7 +533,7 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
                             endpointDescription,
                             accept,
                             context))
-            .subscriberContext(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext())));
+            .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
@@ -560,7 +547,8 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return digitalTwinsInstance endpoint resource.
+     * @return digitalTwinsInstance endpoint resource along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(
@@ -622,9 +610,9 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return digitalTwinsInstance endpoint resource.
+     * @return the {@link PollerFlux} for polling of digitalTwinsInstance endpoint resource.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<DigitalTwinsEndpointResourceInner>, DigitalTwinsEndpointResourceInner>
         beginCreateOrUpdateAsync(
             String resourceGroupName,
@@ -640,7 +628,7 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
                 this.client.getHttpPipeline(),
                 DigitalTwinsEndpointResourceInner.class,
                 DigitalTwinsEndpointResourceInner.class,
-                Context.NONE);
+                this.client.getContext());
     }
 
     /**
@@ -654,9 +642,9 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return digitalTwinsInstance endpoint resource.
+     * @return the {@link PollerFlux} for polling of digitalTwinsInstance endpoint resource.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<DigitalTwinsEndpointResourceInner>, DigitalTwinsEndpointResourceInner>
         beginCreateOrUpdateAsync(
             String resourceGroupName,
@@ -688,16 +676,17 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return digitalTwinsInstance endpoint resource.
+     * @return the {@link SyncPoller} for polling of digitalTwinsInstance endpoint resource.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<DigitalTwinsEndpointResourceInner>, DigitalTwinsEndpointResourceInner>
         beginCreateOrUpdate(
             String resourceGroupName,
             String resourceName,
             String endpointName,
             DigitalTwinsEndpointResourceInner endpointDescription) {
-        return beginCreateOrUpdateAsync(resourceGroupName, resourceName, endpointName, endpointDescription)
+        return this
+            .beginCreateOrUpdateAsync(resourceGroupName, resourceName, endpointName, endpointDescription)
             .getSyncPoller();
     }
 
@@ -712,9 +701,9 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return digitalTwinsInstance endpoint resource.
+     * @return the {@link SyncPoller} for polling of digitalTwinsInstance endpoint resource.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<DigitalTwinsEndpointResourceInner>, DigitalTwinsEndpointResourceInner>
         beginCreateOrUpdate(
             String resourceGroupName,
@@ -722,7 +711,8 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
             String endpointName,
             DigitalTwinsEndpointResourceInner endpointDescription,
             Context context) {
-        return beginCreateOrUpdateAsync(resourceGroupName, resourceName, endpointName, endpointDescription, context)
+        return this
+            .beginCreateOrUpdateAsync(resourceGroupName, resourceName, endpointName, endpointDescription, context)
             .getSyncPoller();
     }
 
@@ -736,7 +726,7 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return digitalTwinsInstance endpoint resource.
+     * @return digitalTwinsInstance endpoint resource on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<DigitalTwinsEndpointResourceInner> createOrUpdateAsync(
@@ -760,7 +750,7 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return digitalTwinsInstance endpoint resource.
+     * @return digitalTwinsInstance endpoint resource on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<DigitalTwinsEndpointResourceInner> createOrUpdateAsync(
@@ -827,7 +817,8 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return digitalTwinsInstance endpoint resource.
+     * @return digitalTwinsInstance endpoint resource along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(
@@ -868,7 +859,7 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
                             endpointName,
                             accept,
                             context))
-            .subscriberContext(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext())));
+            .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
@@ -881,7 +872,8 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return digitalTwinsInstance endpoint resource.
+     * @return digitalTwinsInstance endpoint resource along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(
@@ -931,9 +923,9 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return digitalTwinsInstance endpoint resource.
+     * @return the {@link PollerFlux} for polling of digitalTwinsInstance endpoint resource.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<DigitalTwinsEndpointResourceInner>, DigitalTwinsEndpointResourceInner>
         beginDeleteAsync(String resourceGroupName, String resourceName, String endpointName) {
         Mono<Response<Flux<ByteBuffer>>> mono = deleteWithResponseAsync(resourceGroupName, resourceName, endpointName);
@@ -944,7 +936,7 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
                 this.client.getHttpPipeline(),
                 DigitalTwinsEndpointResourceInner.class,
                 DigitalTwinsEndpointResourceInner.class,
-                Context.NONE);
+                this.client.getContext());
     }
 
     /**
@@ -957,9 +949,9 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return digitalTwinsInstance endpoint resource.
+     * @return the {@link PollerFlux} for polling of digitalTwinsInstance endpoint resource.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<DigitalTwinsEndpointResourceInner>, DigitalTwinsEndpointResourceInner>
         beginDeleteAsync(String resourceGroupName, String resourceName, String endpointName, Context context) {
         context = this.client.mergeContext(context);
@@ -984,12 +976,12 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return digitalTwinsInstance endpoint resource.
+     * @return the {@link SyncPoller} for polling of digitalTwinsInstance endpoint resource.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<DigitalTwinsEndpointResourceInner>, DigitalTwinsEndpointResourceInner> beginDelete(
         String resourceGroupName, String resourceName, String endpointName) {
-        return beginDeleteAsync(resourceGroupName, resourceName, endpointName).getSyncPoller();
+        return this.beginDeleteAsync(resourceGroupName, resourceName, endpointName).getSyncPoller();
     }
 
     /**
@@ -1002,12 +994,12 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return digitalTwinsInstance endpoint resource.
+     * @return the {@link SyncPoller} for polling of digitalTwinsInstance endpoint resource.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<DigitalTwinsEndpointResourceInner>, DigitalTwinsEndpointResourceInner> beginDelete(
         String resourceGroupName, String resourceName, String endpointName, Context context) {
-        return beginDeleteAsync(resourceGroupName, resourceName, endpointName, context).getSyncPoller();
+        return this.beginDeleteAsync(resourceGroupName, resourceName, endpointName, context).getSyncPoller();
     }
 
     /**
@@ -1019,7 +1011,7 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return digitalTwinsInstance endpoint resource.
+     * @return digitalTwinsInstance endpoint resource on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<DigitalTwinsEndpointResourceInner> deleteAsync(
@@ -1039,7 +1031,7 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return digitalTwinsInstance endpoint resource.
+     * @return digitalTwinsInstance endpoint resource on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<DigitalTwinsEndpointResourceInner> deleteAsync(
@@ -1087,11 +1079,13 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of DigitalTwinsInstance Endpoints with a next link.
+     * @return a list of DigitalTwinsInstance Endpoints with a next link along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<DigitalTwinsEndpointResourceInner>> listNextSinglePageAsync(String nextLink) {
@@ -1116,18 +1110,20 @@ public final class DigitalTwinsEndpointsClientImpl implements DigitalTwinsEndpoi
                         res.getValue().value(),
                         res.getValue().nextLink(),
                         null))
-            .subscriberContext(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext())));
+            .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of DigitalTwinsInstance Endpoints with a next link.
+     * @return a list of DigitalTwinsInstance Endpoints with a next link along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<DigitalTwinsEndpointResourceInner>> listNextSinglePageAsync(

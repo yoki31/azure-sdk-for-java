@@ -17,10 +17,9 @@ import com.azure.resourcemanager.mediaservices.models.ListContentKeysResponse;
 import com.azure.resourcemanager.mediaservices.models.ListPathsResponse;
 import com.azure.resourcemanager.mediaservices.models.StreamingLocator;
 import com.azure.resourcemanager.mediaservices.models.StreamingLocators;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class StreamingLocatorsImpl implements StreamingLocators {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(StreamingLocatorsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(StreamingLocatorsImpl.class);
 
     private final StreamingLocatorsClient innerClient;
 
@@ -45,15 +44,6 @@ public final class StreamingLocatorsImpl implements StreamingLocators {
         return Utils.mapPage(inner, inner1 -> new StreamingLocatorImpl(inner1, this.manager()));
     }
 
-    public StreamingLocator get(String resourceGroupName, String accountName, String streamingLocatorName) {
-        StreamingLocatorInner inner = this.serviceClient().get(resourceGroupName, accountName, streamingLocatorName);
-        if (inner != null) {
-            return new StreamingLocatorImpl(inner, this.manager());
-        } else {
-            return null;
-        }
-    }
-
     public Response<StreamingLocator> getWithResponse(
         String resourceGroupName, String accountName, String streamingLocatorName, Context context) {
         Response<StreamingLocatorInner> inner =
@@ -69,8 +59,13 @@ public final class StreamingLocatorsImpl implements StreamingLocators {
         }
     }
 
-    public void delete(String resourceGroupName, String accountName, String streamingLocatorName) {
-        this.serviceClient().delete(resourceGroupName, accountName, streamingLocatorName);
+    public StreamingLocator get(String resourceGroupName, String accountName, String streamingLocatorName) {
+        StreamingLocatorInner inner = this.serviceClient().get(resourceGroupName, accountName, streamingLocatorName);
+        if (inner != null) {
+            return new StreamingLocatorImpl(inner, this.manager());
+        } else {
+            return null;
+        }
     }
 
     public Response<Void> deleteWithResponse(
@@ -78,15 +73,8 @@ public final class StreamingLocatorsImpl implements StreamingLocators {
         return this.serviceClient().deleteWithResponse(resourceGroupName, accountName, streamingLocatorName, context);
     }
 
-    public ListContentKeysResponse listContentKeys(
-        String resourceGroupName, String accountName, String streamingLocatorName) {
-        ListContentKeysResponseInner inner =
-            this.serviceClient().listContentKeys(resourceGroupName, accountName, streamingLocatorName);
-        if (inner != null) {
-            return new ListContentKeysResponseImpl(inner, this.manager());
-        } else {
-            return null;
-        }
+    public void delete(String resourceGroupName, String accountName, String streamingLocatorName) {
+        this.serviceClient().delete(resourceGroupName, accountName, streamingLocatorName);
     }
 
     public Response<ListContentKeysResponse> listContentKeysWithResponse(
@@ -106,11 +94,12 @@ public final class StreamingLocatorsImpl implements StreamingLocators {
         }
     }
 
-    public ListPathsResponse listPaths(String resourceGroupName, String accountName, String streamingLocatorName) {
-        ListPathsResponseInner inner =
-            this.serviceClient().listPaths(resourceGroupName, accountName, streamingLocatorName);
+    public ListContentKeysResponse listContentKeys(
+        String resourceGroupName, String accountName, String streamingLocatorName) {
+        ListContentKeysResponseInner inner =
+            this.serviceClient().listContentKeys(resourceGroupName, accountName, streamingLocatorName);
         if (inner != null) {
-            return new ListPathsResponseImpl(inner, this.manager());
+            return new ListContentKeysResponseImpl(inner, this.manager());
         } else {
             return null;
         }
@@ -131,10 +120,20 @@ public final class StreamingLocatorsImpl implements StreamingLocators {
         }
     }
 
+    public ListPathsResponse listPaths(String resourceGroupName, String accountName, String streamingLocatorName) {
+        ListPathsResponseInner inner =
+            this.serviceClient().listPaths(resourceGroupName, accountName, streamingLocatorName);
+        if (inner != null) {
+            return new ListPathsResponseImpl(inner, this.manager());
+        } else {
+            return null;
+        }
+    }
+
     public StreamingLocator getById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -142,14 +141,14 @@ public final class StreamingLocatorsImpl implements StreamingLocators {
         }
         String accountName = Utils.getValueFromIdByName(id, "mediaServices");
         if (accountName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'mediaServices'.", id)));
         }
         String streamingLocatorName = Utils.getValueFromIdByName(id, "streamingLocators");
         if (streamingLocatorName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -162,7 +161,7 @@ public final class StreamingLocatorsImpl implements StreamingLocators {
     public Response<StreamingLocator> getByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -170,14 +169,14 @@ public final class StreamingLocatorsImpl implements StreamingLocators {
         }
         String accountName = Utils.getValueFromIdByName(id, "mediaServices");
         if (accountName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'mediaServices'.", id)));
         }
         String streamingLocatorName = Utils.getValueFromIdByName(id, "streamingLocators");
         if (streamingLocatorName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -190,7 +189,7 @@ public final class StreamingLocatorsImpl implements StreamingLocators {
     public void deleteById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -198,27 +197,27 @@ public final class StreamingLocatorsImpl implements StreamingLocators {
         }
         String accountName = Utils.getValueFromIdByName(id, "mediaServices");
         if (accountName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'mediaServices'.", id)));
         }
         String streamingLocatorName = Utils.getValueFromIdByName(id, "streamingLocators");
         if (streamingLocatorName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
                             .format(
                                 "The resource ID '%s' is not valid. Missing path segment 'streamingLocators'.", id)));
         }
-        this.deleteWithResponse(resourceGroupName, accountName, streamingLocatorName, Context.NONE).getValue();
+        this.deleteWithResponse(resourceGroupName, accountName, streamingLocatorName, Context.NONE);
     }
 
     public Response<Void> deleteByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -226,14 +225,14 @@ public final class StreamingLocatorsImpl implements StreamingLocators {
         }
         String accountName = Utils.getValueFromIdByName(id, "mediaServices");
         if (accountName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'mediaServices'.", id)));
         }
         String streamingLocatorName = Utils.getValueFromIdByName(id, "streamingLocators");
         if (streamingLocatorName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String

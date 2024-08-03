@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Container App container Azure Queue based scaling rule. */
+/**
+ * Container App container Azure Queue based scaling rule.
+ */
 @Fluent
 public final class QueueScaleRule {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(QueueScaleRule.class);
-
     /*
      * Queue name.
      */
@@ -34,8 +32,14 @@ public final class QueueScaleRule {
     private List<ScaleRuleAuth> auth;
 
     /**
+     * Creates an instance of QueueScaleRule class.
+     */
+    public QueueScaleRule() {
+    }
+
+    /**
      * Get the queueName property: Queue name.
-     *
+     * 
      * @return the queueName value.
      */
     public String queueName() {
@@ -44,7 +48,7 @@ public final class QueueScaleRule {
 
     /**
      * Set the queueName property: Queue name.
-     *
+     * 
      * @param queueName the queueName value to set.
      * @return the QueueScaleRule object itself.
      */
@@ -55,7 +59,7 @@ public final class QueueScaleRule {
 
     /**
      * Get the queueLength property: Queue length.
-     *
+     * 
      * @return the queueLength value.
      */
     public Integer queueLength() {
@@ -64,7 +68,7 @@ public final class QueueScaleRule {
 
     /**
      * Set the queueLength property: Queue length.
-     *
+     * 
      * @param queueLength the queueLength value to set.
      * @return the QueueScaleRule object itself.
      */
@@ -75,7 +79,7 @@ public final class QueueScaleRule {
 
     /**
      * Get the auth property: Authentication secrets for the queue scale rule.
-     *
+     * 
      * @return the auth value.
      */
     public List<ScaleRuleAuth> auth() {
@@ -84,7 +88,7 @@ public final class QueueScaleRule {
 
     /**
      * Set the auth property: Authentication secrets for the queue scale rule.
-     *
+     * 
      * @param auth the auth value to set.
      * @return the QueueScaleRule object itself.
      */
@@ -95,7 +99,7 @@ public final class QueueScaleRule {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

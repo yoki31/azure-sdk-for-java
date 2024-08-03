@@ -5,21 +5,21 @@
 package com.azure.resourcemanager.kubernetesconfiguration.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Specifies that the scope of the extension is Namespace. */
 @Fluent
 public final class ScopeNamespace {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ScopeNamespace.class);
-
     /*
-     * Namespace where the extension will be created for an Namespace scoped
-     * extension.  If this namespace does not exist, it will be created
+     * Namespace where the extension will be created for an Namespace scoped extension.  If this namespace does not
+     * exist, it will be created
      */
     @JsonProperty(value = "targetNamespace")
     private String targetNamespace;
+
+    /** Creates an instance of ScopeNamespace class. */
+    public ScopeNamespace() {
+    }
 
     /**
      * Get the targetNamespace property: Namespace where the extension will be created for an Namespace scoped

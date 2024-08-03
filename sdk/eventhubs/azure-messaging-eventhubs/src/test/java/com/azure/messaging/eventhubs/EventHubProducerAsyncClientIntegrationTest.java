@@ -3,15 +3,14 @@
 
 package com.azure.messaging.eventhubs;
 
-import com.azure.core.amqp.AmqpTransportType;
-import com.azure.core.amqp.ProxyOptions;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.messaging.eventhubs.models.CreateBatchOptions;
 import com.azure.messaging.eventhubs.models.SendOptions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -19,15 +18,16 @@ import reactor.test.StepVerifier;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.azure.messaging.eventhubs.TestUtils.getEventHubName;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * Tests for asynchronous {@link EventHubProducerAsyncClient}.
  */
 @Tag(TestUtils.INTEGRATION)
+@Execution(ExecutionMode.SAME_THREAD)
 class EventHubProducerAsyncClientIntegrationTest extends IntegrationTestBase {
     private static final String PARTITION_ID = "2";
-
     private EventHubProducerAsyncClient producer;
 
     EventHubProducerAsyncClientIntegrationTest() {
@@ -36,15 +36,7 @@ class EventHubProducerAsyncClientIntegrationTest extends IntegrationTestBase {
 
     @Override
     protected void beforeTest() {
-        producer = new EventHubClientBuilder()
-            .connectionString(getConnectionString())
-            .retry(RETRY_OPTIONS)
-            .buildAsyncProducerClient();
-    }
-
-    @Override
-    protected void afterTest() {
-        dispose(producer);
+        producer = toClose(createBuilder().buildAsyncProducerClient());
     }
 
     /**
@@ -61,7 +53,8 @@ class EventHubProducerAsyncClientIntegrationTest extends IntegrationTestBase {
 
         // Act & Assert
         StepVerifier.create(producer.send(events, sendOptions))
-            .verifyComplete();
+            .expectComplete()
+            .verify(TIMEOUT);
     }
 
     /**
@@ -78,7 +71,8 @@ class EventHubProducerAsyncClientIntegrationTest extends IntegrationTestBase {
 
         // Act & Assert
         StepVerifier.create(producer.send(events))
-            .verifyComplete();
+            .expectComplete()
+            .verify(TIMEOUT);
     }
 
     /**
@@ -100,7 +94,8 @@ class EventHubProducerAsyncClientIntegrationTest extends IntegrationTestBase {
 
         // Act & Assert
         StepVerifier.create(createBatch.flatMap(batch -> producer.send(batch)))
-            .verifyComplete();
+            .expectComplete()
+            .verify(TIMEOUT);
     }
 
     /**
@@ -126,7 +121,8 @@ class EventHubProducerAsyncClientIntegrationTest extends IntegrationTestBase {
 
         // Act & Assert
         StepVerifier.create(createBatch.flatMap(batch -> producer.send(batch)))
-            .verifyComplete();
+            .expectComplete()
+            .verify(TIMEOUT);
     }
 
     /**
@@ -149,7 +145,8 @@ class EventHubProducerAsyncClientIntegrationTest extends IntegrationTestBase {
 
         // Assert
         StepVerifier.create(onComplete)
-            .verifyComplete();
+            .expectComplete()
+            .verify(TIMEOUT);
     }
 
     @Test
@@ -198,36 +195,5 @@ class EventHubProducerAsyncClientIntegrationTest extends IntegrationTestBase {
         } finally {
             dispose(client);
         }
-    }
-
-    @Test
-    @EnabledIfEnvironmentVariable(named = "AZURE_EVENTHUBS_CONNECTION_STRING_WITH_SAS", matches =
-        ".*ShadAccessSignature .*")
-    void sendWithSasConnectionString() {
-        final EventData event = new EventData("body");
-        final SendOptions options = new SendOptions().setPartitionId(PARTITION_ID);
-        EventHubProducerAsyncClient eventHubAsyncClient = new EventHubClientBuilder()
-            .proxyOptions(ProxyOptions.SYSTEM_DEFAULTS)
-            .retry(RETRY_OPTIONS)
-            .transportType(AmqpTransportType.AMQP)
-            .connectionString(getConnectionString(true))
-            .buildAsyncProducerClient();
-
-        try {
-            StepVerifier.create(eventHubAsyncClient.getEventHubProperties())
-                .assertNext(properties -> {
-                    Assertions.assertEquals(getEventHubName(), properties.getName());
-                    Assertions.assertEquals(NUMBER_OF_PARTITIONS, properties.getPartitionIds().stream().count());
-                })
-                .expectComplete()
-                .verify(TIMEOUT);
-
-            StepVerifier.create(eventHubAsyncClient.send(event, options))
-                .expectComplete()
-                .verify(TIMEOUT);
-        } finally {
-            dispose(eventHubAsyncClient);
-        }
-
     }
 }

@@ -6,8 +6,8 @@ package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.OffsetDateTime;
 
 /**
@@ -16,26 +16,20 @@ import java.time.OffsetDateTime;
  */
 @Fluent
 public final class BackupSchedule {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(BackupSchedule.class);
-
     /*
-     * How often the backup should be executed (e.g. for weekly backup, this
-     * should be set to 7 and FrequencyUnit should be set to Day)
+     * How often the backup should be executed (e.g. for weekly backup, this should be set to 7 and FrequencyUnit should be set to Day)
      */
     @JsonProperty(value = "frequencyInterval", required = true)
     private int frequencyInterval;
 
     /*
-     * The unit of time for how often the backup should be executed (e.g. for
-     * weekly backup, this should be set to Day and FrequencyInterval should be
-     * set to 7)
+     * The unit of time for how often the backup should be executed (e.g. for weekly backup, this should be set to Day and FrequencyInterval should be set to 7)
      */
     @JsonProperty(value = "frequencyUnit", required = true)
     private FrequencyUnit frequencyUnit;
 
     /*
-     * True if the retention policy should always keep at least one backup in
-     * the storage account, regardless how old it is; false otherwise.
+     * True if the retention policy should always keep at least one backup in the storage account, regardless how old it is; false otherwise.
      */
     @JsonProperty(value = "keepAtLeastOneBackup", required = true)
     private boolean keepAtLeastOneBackup;
@@ -57,6 +51,12 @@ public final class BackupSchedule {
      */
     @JsonProperty(value = "lastExecutionTime", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime lastExecutionTime;
+
+    /**
+     * Creates an instance of BackupSchedule class.
+     */
+    public BackupSchedule() {
+    }
 
     /**
      * Get the frequencyInterval property: How often the backup should be executed (e.g. for weekly backup, this should
@@ -180,9 +180,10 @@ public final class BackupSchedule {
      */
     public void validate() {
         if (frequencyUnit() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property frequencyUnit in model BackupSchedule"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property frequencyUnit in model BackupSchedule"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(BackupSchedule.class);
 }

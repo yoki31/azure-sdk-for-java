@@ -4,7 +4,6 @@
 
 package com.azure.resourcemanager.applicationinsights.generated;
 
-import com.azure.core.util.Context;
 import com.azure.resourcemanager.applicationinsights.models.ApplicationInsightsComponent;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +11,7 @@ import java.util.Map;
 /** Samples for Components UpdateTags. */
 public final class ComponentsUpdateTagsSamples {
     /*
-     * x-ms-original-file: specification/applicationinsights/resource-manager/Microsoft.Insights/preview/2018-05-01-preview/examples/ComponentsUpdateTagsOnly.json
+     * x-ms-original-file: specification/applicationinsights/resource-manager/Microsoft.Insights/stable/2020-02-02/examples/ComponentsUpdateTagsOnly.json
      */
     /**
      * Sample code: ComponentUpdateTagsOnly.
@@ -24,7 +23,7 @@ public final class ComponentsUpdateTagsSamples {
         ApplicationInsightsComponent resource =
             manager
                 .components()
-                .getByResourceGroupWithResponse("my-resource-group", "my-component", Context.NONE)
+                .getByResourceGroupWithResponse("my-resource-group", "my-component", com.azure.core.util.Context.NONE)
                 .getValue();
         resource
             .update()
@@ -43,6 +42,7 @@ public final class ComponentsUpdateTagsSamples {
             .apply();
     }
 
+    // Use "Map.of" if available
     @SuppressWarnings("unchecked")
     private static <T> Map<String, T> mapOf(Object... inputs) {
         Map<String, T> map = new HashMap<>();

@@ -6,14 +6,13 @@ package com.azure.resourcemanager.servicefabric.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The UpgradableVersionsDescription model. */
+/**
+ * The UpgradableVersionsDescription model.
+ */
 @Fluent
 public final class UpgradableVersionsDescription {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(UpgradableVersionsDescription.class);
-
     /*
      * The target code version.
      */
@@ -21,8 +20,14 @@ public final class UpgradableVersionsDescription {
     private String targetVersion;
 
     /**
+     * Creates an instance of UpgradableVersionsDescription class.
+     */
+    public UpgradableVersionsDescription() {
+    }
+
+    /**
      * Get the targetVersion property: The target code version.
-     *
+     * 
      * @return the targetVersion value.
      */
     public String targetVersion() {
@@ -31,7 +36,7 @@ public final class UpgradableVersionsDescription {
 
     /**
      * Set the targetVersion property: The target code version.
-     *
+     * 
      * @param targetVersion the targetVersion value to set.
      * @return the UpgradableVersionsDescription object itself.
      */
@@ -42,15 +47,15 @@ public final class UpgradableVersionsDescription {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (targetVersion() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property targetVersion in model UpgradableVersionsDescription"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property targetVersion in model UpgradableVersionsDescription"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(UpgradableVersionsDescription.class);
 }

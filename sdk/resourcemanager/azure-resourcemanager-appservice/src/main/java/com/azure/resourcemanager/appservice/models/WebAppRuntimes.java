@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Web App stack runtimes. */
+/**
+ * Web App stack runtimes.
+ */
 @Immutable
 public final class WebAppRuntimes {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(WebAppRuntimes.class);
-
     /*
      * Linux-specific settings associated with the minor version.
      */
@@ -27,22 +25,26 @@ public final class WebAppRuntimes {
     private WebAppRuntimeSettings windowsRuntimeSettings;
 
     /*
-     * Linux-specific settings associated with the Java container minor
-     * version.
+     * Linux-specific settings associated with the Java container minor version.
      */
     @JsonProperty(value = "linuxContainerSettings", access = JsonProperty.Access.WRITE_ONLY)
     private LinuxJavaContainerSettings linuxContainerSettings;
 
     /*
-     * Windows-specific settings associated with the Java container minor
-     * version.
+     * Windows-specific settings associated with the Java container minor version.
      */
     @JsonProperty(value = "windowsContainerSettings", access = JsonProperty.Access.WRITE_ONLY)
     private WindowsJavaContainerSettings windowsContainerSettings;
 
     /**
+     * Creates an instance of WebAppRuntimes class.
+     */
+    public WebAppRuntimes() {
+    }
+
+    /**
      * Get the linuxRuntimeSettings property: Linux-specific settings associated with the minor version.
-     *
+     * 
      * @return the linuxRuntimeSettings value.
      */
     public WebAppRuntimeSettings linuxRuntimeSettings() {
@@ -51,7 +53,7 @@ public final class WebAppRuntimes {
 
     /**
      * Get the windowsRuntimeSettings property: Windows-specific settings associated with the minor version.
-     *
+     * 
      * @return the windowsRuntimeSettings value.
      */
     public WebAppRuntimeSettings windowsRuntimeSettings() {
@@ -61,7 +63,7 @@ public final class WebAppRuntimes {
     /**
      * Get the linuxContainerSettings property: Linux-specific settings associated with the Java container minor
      * version.
-     *
+     * 
      * @return the linuxContainerSettings value.
      */
     public LinuxJavaContainerSettings linuxContainerSettings() {
@@ -71,7 +73,7 @@ public final class WebAppRuntimes {
     /**
      * Get the windowsContainerSettings property: Windows-specific settings associated with the Java container minor
      * version.
-     *
+     * 
      * @return the windowsContainerSettings value.
      */
     public WindowsJavaContainerSettings windowsContainerSettings() {
@@ -80,7 +82,7 @@ public final class WebAppRuntimes {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

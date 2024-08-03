@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.cosmos.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The read-only access keys for the given database account. */
+/**
+ * The read-only access keys for the given database account.
+ */
 @Immutable
 public class DatabaseAccountListReadOnlyKeysResultInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DatabaseAccountListReadOnlyKeysResultInner.class);
-
     /*
      * Base 64 encoded value of the primary read-only key.
      */
@@ -27,8 +25,14 @@ public class DatabaseAccountListReadOnlyKeysResultInner {
     private String secondaryReadonlyMasterKey;
 
     /**
+     * Creates an instance of DatabaseAccountListReadOnlyKeysResultInner class.
+     */
+    public DatabaseAccountListReadOnlyKeysResultInner() {
+    }
+
+    /**
      * Get the primaryReadonlyMasterKey property: Base 64 encoded value of the primary read-only key.
-     *
+     * 
      * @return the primaryReadonlyMasterKey value.
      */
     public String primaryReadonlyMasterKey() {
@@ -37,7 +41,7 @@ public class DatabaseAccountListReadOnlyKeysResultInner {
 
     /**
      * Get the secondaryReadonlyMasterKey property: Base 64 encoded value of the secondary read-only key.
-     *
+     * 
      * @return the secondaryReadonlyMasterKey value.
      */
     public String secondaryReadonlyMasterKey() {
@@ -46,7 +50,7 @@ public class DatabaseAccountListReadOnlyKeysResultInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

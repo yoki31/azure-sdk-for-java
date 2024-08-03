@@ -7,15 +7,15 @@ package com.azure.resourcemanager.appservice.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.fluent.models.ProcessInfoInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
-/** Collection of Kudu process information elements. */
+/**
+ * Collection of Kudu process information elements.
+ */
 @Fluent
 public final class ProcessInfoCollection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ProcessInfoCollection.class);
-
     /*
      * Collection of resources.
      */
@@ -27,6 +27,12 @@ public final class ProcessInfoCollection {
      */
     @JsonProperty(value = "nextLink", access = JsonProperty.Access.WRITE_ONLY)
     private String nextLink;
+
+    /**
+     * Creates an instance of ProcessInfoCollection class.
+     */
+    public ProcessInfoCollection() {
+    }
 
     /**
      * Get the value property: Collection of resources.
@@ -64,11 +70,12 @@ public final class ProcessInfoCollection {
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property value in model ProcessInfoCollection"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property value in model ProcessInfoCollection"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ProcessInfoCollection.class);
 }

@@ -7,15 +7,15 @@ package com.azure.resourcemanager.appservice.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.fluent.models.ContinuousWebJobInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
-/** Collection of Kudu continuous web job information elements. */
+/**
+ * Collection of Kudu continuous web job information elements.
+ */
 @Fluent
 public final class ContinuousWebJobCollection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ContinuousWebJobCollection.class);
-
     /*
      * Collection of resources.
      */
@@ -27,6 +27,12 @@ public final class ContinuousWebJobCollection {
      */
     @JsonProperty(value = "nextLink", access = JsonProperty.Access.WRITE_ONLY)
     private String nextLink;
+
+    /**
+     * Creates an instance of ContinuousWebJobCollection class.
+     */
+    public ContinuousWebJobCollection() {
+    }
 
     /**
      * Get the value property: Collection of resources.
@@ -64,12 +70,13 @@ public final class ContinuousWebJobCollection {
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property value in model ContinuousWebJobCollection"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property value in model ContinuousWebJobCollection"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ContinuousWebJobCollection.class);
 }

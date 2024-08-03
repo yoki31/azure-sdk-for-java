@@ -17,10 +17,9 @@ import com.azure.resourcemanager.mediaservices.models.ListEdgePoliciesInput;
 import com.azure.resourcemanager.mediaservices.models.MediaService;
 import com.azure.resourcemanager.mediaservices.models.Mediaservices;
 import com.azure.resourcemanager.mediaservices.models.SyncStorageKeysInput;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class MediaservicesImpl implements Mediaservices {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MediaservicesImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(MediaservicesImpl.class);
 
     private final MediaservicesClient innerClient;
 
@@ -42,15 +41,6 @@ public final class MediaservicesImpl implements Mediaservices {
         return Utils.mapPage(inner, inner1 -> new MediaServiceImpl(inner1, this.manager()));
     }
 
-    public MediaService getByResourceGroup(String resourceGroupName, String accountName) {
-        MediaServiceInner inner = this.serviceClient().getByResourceGroup(resourceGroupName, accountName);
-        if (inner != null) {
-            return new MediaServiceImpl(inner, this.manager());
-        } else {
-            return null;
-        }
-    }
-
     public Response<MediaService> getByResourceGroupWithResponse(
         String resourceGroupName, String accountName, Context context) {
         Response<MediaServiceInner> inner =
@@ -66,16 +56,22 @@ public final class MediaservicesImpl implements Mediaservices {
         }
     }
 
-    public void deleteByResourceGroup(String resourceGroupName, String accountName) {
-        this.serviceClient().delete(resourceGroupName, accountName);
+    public MediaService getByResourceGroup(String resourceGroupName, String accountName) {
+        MediaServiceInner inner = this.serviceClient().getByResourceGroup(resourceGroupName, accountName);
+        if (inner != null) {
+            return new MediaServiceImpl(inner, this.manager());
+        } else {
+            return null;
+        }
     }
 
-    public Response<Void> deleteWithResponse(String resourceGroupName, String accountName, Context context) {
+    public Response<Void> deleteByResourceGroupWithResponse(
+        String resourceGroupName, String accountName, Context context) {
         return this.serviceClient().deleteWithResponse(resourceGroupName, accountName, context);
     }
 
-    public void syncStorageKeys(String resourceGroupName, String accountName, SyncStorageKeysInput parameters) {
-        this.serviceClient().syncStorageKeys(resourceGroupName, accountName, parameters);
+    public void deleteByResourceGroup(String resourceGroupName, String accountName) {
+        this.serviceClient().delete(resourceGroupName, accountName);
     }
 
     public Response<Void> syncStorageKeysWithResponse(
@@ -83,14 +79,8 @@ public final class MediaservicesImpl implements Mediaservices {
         return this.serviceClient().syncStorageKeysWithResponse(resourceGroupName, accountName, parameters, context);
     }
 
-    public EdgePolicies listEdgePolicies(
-        String resourceGroupName, String accountName, ListEdgePoliciesInput parameters) {
-        EdgePoliciesInner inner = this.serviceClient().listEdgePolicies(resourceGroupName, accountName, parameters);
-        if (inner != null) {
-            return new EdgePoliciesImpl(inner, this.manager());
-        } else {
-            return null;
-        }
+    public void syncStorageKeys(String resourceGroupName, String accountName, SyncStorageKeysInput parameters) {
+        this.serviceClient().syncStorageKeys(resourceGroupName, accountName, parameters);
     }
 
     public Response<EdgePolicies> listEdgePoliciesWithResponse(
@@ -103,6 +93,16 @@ public final class MediaservicesImpl implements Mediaservices {
                 inner.getStatusCode(),
                 inner.getHeaders(),
                 new EdgePoliciesImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
+    }
+
+    public EdgePolicies listEdgePolicies(
+        String resourceGroupName, String accountName, ListEdgePoliciesInput parameters) {
+        EdgePoliciesInner inner = this.serviceClient().listEdgePolicies(resourceGroupName, accountName, parameters);
+        if (inner != null) {
+            return new EdgePoliciesImpl(inner, this.manager());
         } else {
             return null;
         }
@@ -121,7 +121,7 @@ public final class MediaservicesImpl implements Mediaservices {
     public MediaService getById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -129,7 +129,7 @@ public final class MediaservicesImpl implements Mediaservices {
         }
         String accountName = Utils.getValueFromIdByName(id, "mediaservices");
         if (accountName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'mediaservices'.", id)));
@@ -140,7 +140,7 @@ public final class MediaservicesImpl implements Mediaservices {
     public Response<MediaService> getByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -148,7 +148,7 @@ public final class MediaservicesImpl implements Mediaservices {
         }
         String accountName = Utils.getValueFromIdByName(id, "mediaservices");
         if (accountName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'mediaservices'.", id)));
@@ -159,7 +159,7 @@ public final class MediaservicesImpl implements Mediaservices {
     public void deleteById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -167,18 +167,18 @@ public final class MediaservicesImpl implements Mediaservices {
         }
         String accountName = Utils.getValueFromIdByName(id, "mediaservices");
         if (accountName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'mediaservices'.", id)));
         }
-        this.deleteWithResponse(resourceGroupName, accountName, Context.NONE).getValue();
+        this.deleteByResourceGroupWithResponse(resourceGroupName, accountName, Context.NONE);
     }
 
     public Response<Void> deleteByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -186,12 +186,12 @@ public final class MediaservicesImpl implements Mediaservices {
         }
         String accountName = Utils.getValueFromIdByName(id, "mediaservices");
         if (accountName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'mediaservices'.", id)));
         }
-        return this.deleteWithResponse(resourceGroupName, accountName, context);
+        return this.deleteByResourceGroupWithResponse(resourceGroupName, accountName, context);
     }
 
     private MediaservicesClient serviceClient() {

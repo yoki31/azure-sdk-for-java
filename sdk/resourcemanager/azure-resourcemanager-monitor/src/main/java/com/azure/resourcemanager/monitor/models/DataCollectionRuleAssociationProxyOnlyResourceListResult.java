@@ -7,17 +7,14 @@ package com.azure.resourcemanager.monitor.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.monitor.fluent.models.DataCollectionRuleAssociationProxyOnlyResourceInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** A pageable list of resources. */
+/**
+ * A pageable list of resources.
+ */
 @Fluent
 public final class DataCollectionRuleAssociationProxyOnlyResourceListResult {
-    @JsonIgnore
-    private final ClientLogger logger =
-        new ClientLogger(DataCollectionRuleAssociationProxyOnlyResourceListResult.class);
-
     /*
      * A list of resources.
      */
@@ -31,8 +28,14 @@ public final class DataCollectionRuleAssociationProxyOnlyResourceListResult {
     private String nextLink;
 
     /**
+     * Creates an instance of DataCollectionRuleAssociationProxyOnlyResourceListResult class.
+     */
+    public DataCollectionRuleAssociationProxyOnlyResourceListResult() {
+    }
+
+    /**
      * Get the value property: A list of resources.
-     *
+     * 
      * @return the value value.
      */
     public List<DataCollectionRuleAssociationProxyOnlyResourceInner> value() {
@@ -41,19 +44,19 @@ public final class DataCollectionRuleAssociationProxyOnlyResourceListResult {
 
     /**
      * Set the value property: A list of resources.
-     *
+     * 
      * @param value the value value to set.
      * @return the DataCollectionRuleAssociationProxyOnlyResourceListResult object itself.
      */
-    public DataCollectionRuleAssociationProxyOnlyResourceListResult withValue(
-        List<DataCollectionRuleAssociationProxyOnlyResourceInner> value) {
+    public DataCollectionRuleAssociationProxyOnlyResourceListResult
+        withValue(List<DataCollectionRuleAssociationProxyOnlyResourceInner> value) {
         this.value = value;
         return this;
     }
 
     /**
      * Get the nextLink property: The URL to use for getting the next set of results.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -62,7 +65,7 @@ public final class DataCollectionRuleAssociationProxyOnlyResourceListResult {
 
     /**
      * Set the nextLink property: The URL to use for getting the next set of results.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the DataCollectionRuleAssociationProxyOnlyResourceListResult object itself.
      */
@@ -73,18 +76,18 @@ public final class DataCollectionRuleAssociationProxyOnlyResourceListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property value in model"
-                            + " DataCollectionRuleAssociationProxyOnlyResourceListResult"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property value in model DataCollectionRuleAssociationProxyOnlyResourceListResult"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER
+        = new ClientLogger(DataCollectionRuleAssociationProxyOnlyResourceListResult.class);
 }

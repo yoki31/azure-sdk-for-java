@@ -5,43 +5,41 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Describes an Operating System disk. */
+/**
+ * Describes an Operating System disk.
+ */
 @Fluent
 public final class RestorePointSourceVmosDisk {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RestorePointSourceVmosDisk.class);
-
     /*
      * Gets the Operating System type.
      */
-    @JsonProperty(value = "osType")
+    @JsonProperty(value = "osType", access = JsonProperty.Access.WRITE_ONLY)
     private OperatingSystemType osType;
 
     /*
      * Gets the disk encryption settings.
      */
-    @JsonProperty(value = "encryptionSettings")
+    @JsonProperty(value = "encryptionSettings", access = JsonProperty.Access.WRITE_ONLY)
     private DiskEncryptionSettings encryptionSettings;
 
     /*
      * Gets the disk name.
      */
-    @JsonProperty(value = "name")
+    @JsonProperty(value = "name", access = JsonProperty.Access.WRITE_ONLY)
     private String name;
 
     /*
      * Gets the caching type.
      */
-    @JsonProperty(value = "caching")
+    @JsonProperty(value = "caching", access = JsonProperty.Access.WRITE_ONLY)
     private CachingTypes caching;
 
     /*
      * Gets the disk size in GB.
      */
-    @JsonProperty(value = "diskSizeGB")
+    @JsonProperty(value = "diskSizeGB", access = JsonProperty.Access.WRITE_ONLY)
     private Integer diskSizeGB;
 
     /*
@@ -51,14 +49,26 @@ public final class RestorePointSourceVmosDisk {
     private ManagedDiskParameters managedDisk;
 
     /*
-     * Gets the disk restore point Id.
+     * Contains Disk Restore Point properties.
      */
     @JsonProperty(value = "diskRestorePoint")
-    private ApiEntityReference diskRestorePoint;
+    private DiskRestorePointAttributes diskRestorePoint;
+
+    /*
+     * Shows true if the disk is write-accelerator enabled.
+     */
+    @JsonProperty(value = "writeAcceleratorEnabled", access = JsonProperty.Access.WRITE_ONLY)
+    private Boolean writeAcceleratorEnabled;
+
+    /**
+     * Creates an instance of RestorePointSourceVmosDisk class.
+     */
+    public RestorePointSourceVmosDisk() {
+    }
 
     /**
      * Get the osType property: Gets the Operating System type.
-     *
+     * 
      * @return the osType value.
      */
     public OperatingSystemType osType() {
@@ -66,19 +76,8 @@ public final class RestorePointSourceVmosDisk {
     }
 
     /**
-     * Set the osType property: Gets the Operating System type.
-     *
-     * @param osType the osType value to set.
-     * @return the RestorePointSourceVmosDisk object itself.
-     */
-    public RestorePointSourceVmosDisk withOsType(OperatingSystemType osType) {
-        this.osType = osType;
-        return this;
-    }
-
-    /**
      * Get the encryptionSettings property: Gets the disk encryption settings.
-     *
+     * 
      * @return the encryptionSettings value.
      */
     public DiskEncryptionSettings encryptionSettings() {
@@ -86,19 +85,8 @@ public final class RestorePointSourceVmosDisk {
     }
 
     /**
-     * Set the encryptionSettings property: Gets the disk encryption settings.
-     *
-     * @param encryptionSettings the encryptionSettings value to set.
-     * @return the RestorePointSourceVmosDisk object itself.
-     */
-    public RestorePointSourceVmosDisk withEncryptionSettings(DiskEncryptionSettings encryptionSettings) {
-        this.encryptionSettings = encryptionSettings;
-        return this;
-    }
-
-    /**
      * Get the name property: Gets the disk name.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -106,19 +94,8 @@ public final class RestorePointSourceVmosDisk {
     }
 
     /**
-     * Set the name property: Gets the disk name.
-     *
-     * @param name the name value to set.
-     * @return the RestorePointSourceVmosDisk object itself.
-     */
-    public RestorePointSourceVmosDisk withName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    /**
      * Get the caching property: Gets the caching type.
-     *
+     * 
      * @return the caching value.
      */
     public CachingTypes caching() {
@@ -126,19 +103,8 @@ public final class RestorePointSourceVmosDisk {
     }
 
     /**
-     * Set the caching property: Gets the caching type.
-     *
-     * @param caching the caching value to set.
-     * @return the RestorePointSourceVmosDisk object itself.
-     */
-    public RestorePointSourceVmosDisk withCaching(CachingTypes caching) {
-        this.caching = caching;
-        return this;
-    }
-
-    /**
      * Get the diskSizeGB property: Gets the disk size in GB.
-     *
+     * 
      * @return the diskSizeGB value.
      */
     public Integer diskSizeGB() {
@@ -146,19 +112,8 @@ public final class RestorePointSourceVmosDisk {
     }
 
     /**
-     * Set the diskSizeGB property: Gets the disk size in GB.
-     *
-     * @param diskSizeGB the diskSizeGB value to set.
-     * @return the RestorePointSourceVmosDisk object itself.
-     */
-    public RestorePointSourceVmosDisk withDiskSizeGB(Integer diskSizeGB) {
-        this.diskSizeGB = diskSizeGB;
-        return this;
-    }
-
-    /**
      * Get the managedDisk property: Gets the managed disk details.
-     *
+     * 
      * @return the managedDisk value.
      */
     public ManagedDiskParameters managedDisk() {
@@ -167,7 +122,7 @@ public final class RestorePointSourceVmosDisk {
 
     /**
      * Set the managedDisk property: Gets the managed disk details.
-     *
+     * 
      * @param managedDisk the managedDisk value to set.
      * @return the RestorePointSourceVmosDisk object itself.
      */
@@ -177,28 +132,37 @@ public final class RestorePointSourceVmosDisk {
     }
 
     /**
-     * Get the diskRestorePoint property: Gets the disk restore point Id.
-     *
+     * Get the diskRestorePoint property: Contains Disk Restore Point properties.
+     * 
      * @return the diskRestorePoint value.
      */
-    public ApiEntityReference diskRestorePoint() {
+    public DiskRestorePointAttributes diskRestorePoint() {
         return this.diskRestorePoint;
     }
 
     /**
-     * Set the diskRestorePoint property: Gets the disk restore point Id.
-     *
+     * Set the diskRestorePoint property: Contains Disk Restore Point properties.
+     * 
      * @param diskRestorePoint the diskRestorePoint value to set.
      * @return the RestorePointSourceVmosDisk object itself.
      */
-    public RestorePointSourceVmosDisk withDiskRestorePoint(ApiEntityReference diskRestorePoint) {
+    public RestorePointSourceVmosDisk withDiskRestorePoint(DiskRestorePointAttributes diskRestorePoint) {
         this.diskRestorePoint = diskRestorePoint;
         return this;
     }
 
     /**
+     * Get the writeAcceleratorEnabled property: Shows true if the disk is write-accelerator enabled.
+     * 
+     * @return the writeAcceleratorEnabled value.
+     */
+    public Boolean writeAcceleratorEnabled() {
+        return this.writeAcceleratorEnabled;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

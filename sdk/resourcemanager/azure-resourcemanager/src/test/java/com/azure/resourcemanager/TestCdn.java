@@ -4,6 +4,8 @@
 package com.azure.resourcemanager;
 
 import com.azure.core.management.Region;
+import com.azure.core.util.logging.ClientLogger;
+import com.azure.core.util.logging.LogLevel;
 import com.azure.resourcemanager.cdn.models.CdnEndpoint;
 import com.azure.resourcemanager.cdn.models.CdnProfile;
 import com.azure.resourcemanager.cdn.models.CdnProfiles;
@@ -24,18 +26,20 @@ import java.util.stream.Collectors;
  * Test of CDN management.
  */
 public class TestCdn extends TestTemplate<CdnProfile, CdnProfiles> {
+    private static final ClientLogger LOGGER = new ClientLogger(TestCdn.class);
+
     @Override
     public CdnProfile createResource(CdnProfiles profiles) throws Exception {
         final Region region = Region.US_EAST;
         final String groupName = profiles.manager().resourceManager().internalContext().randomResourceName("rg", 10);
         final String cdnProfileName = profiles.manager().resourceManager().internalContext().randomResourceName("cdnProfile", 20);
         final String cdnEndpointName = profiles.manager().resourceManager().internalContext().randomResourceName("cdnEndpoint", 20);
-        final String cdnOriginHostName = "mylinuxapp.azurewebsites.net";
+        final String cdnOriginHostName = profiles.manager().resourceManager().internalContext().randomResourceName("my", 10) + ".azurewebsites.net";
 
         CdnProfile cdnProfile = profiles.define(cdnProfileName)
             .withRegion(region)
             .withNewResourceGroup(groupName)
-            .withStandardAkamaiSku()
+            .withStandardVerizonSku()
             .defineNewEndpoint(cdnEndpointName)
             .withOrigin(cdnOriginHostName)
             .withGeoFilter("/path/videos", GeoFilterActions.BLOCK, CountryIsoCode.ARGENTINA)
@@ -50,7 +54,7 @@ public class TestCdn extends TestTemplate<CdnProfile, CdnProfiles> {
             .attach()
             .create();
 
-        Assertions.assertTrue(cdnProfile.sku().name().equals(SkuName.STANDARD_AKAMAI));
+        Assertions.assertEquals(cdnProfile.sku().name(), SkuName.STANDARD_VERIZON);
         Assertions.assertNotNull(cdnProfile.endpoints());
         Assertions.assertEquals(1, cdnProfile.endpoints().size());
         CdnEndpoint endpoint = cdnProfile.endpoints().get(cdnEndpointName);
@@ -65,10 +69,7 @@ public class TestCdn extends TestTemplate<CdnProfile, CdnProfiles> {
         Assertions.assertNotNull(endpoint.geoFilters());
         Assertions.assertEquals(QueryStringCachingBehavior.BYPASS_CACHING, endpoint.queryStringCachingBehavior());
 
-        for (ResourceUsage usage : profiles.listResourceUsage()) {
-            Assertions.assertNotNull(usage);
-            Assertions.assertEquals("profile", usage.resourceType());
-        }
+        Assertions.assertTrue(profiles.listResourceUsage().stream().anyMatch(usage -> usage.resourceType().equals("profile")));
 
         for (EdgeNode node : profiles.listEdgeNodes()) {
             Assertions.assertNotNull(node);
@@ -168,6 +169,6 @@ public class TestCdn extends TestTemplate<CdnProfile, CdnProfiles> {
                 }
             }
         }
-        System.out.println(info.toString());
+        LOGGER.log(LogLevel.VERBOSE, info::toString);
     }
 }

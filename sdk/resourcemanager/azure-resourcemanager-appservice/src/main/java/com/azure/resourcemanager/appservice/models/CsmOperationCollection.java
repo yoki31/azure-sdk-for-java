@@ -7,15 +7,15 @@ package com.azure.resourcemanager.appservice.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.fluent.models.CsmOperationDescriptionInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
-/** Collection of Azure resource manager operation metadata. */
+/**
+ * Collection of Azure resource manager operation metadata.
+ */
 @Fluent
 public final class CsmOperationCollection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CsmOperationCollection.class);
-
     /*
      * Collection of resources.
      */
@@ -27,6 +27,12 @@ public final class CsmOperationCollection {
      */
     @JsonProperty(value = "nextLink", access = JsonProperty.Access.WRITE_ONLY)
     private String nextLink;
+
+    /**
+     * Creates an instance of CsmOperationCollection class.
+     */
+    public CsmOperationCollection() {
+    }
 
     /**
      * Get the value property: Collection of resources.
@@ -64,11 +70,12 @@ public final class CsmOperationCollection {
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property value in model CsmOperationCollection"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property value in model CsmOperationCollection"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(CsmOperationCollection.class);
 }

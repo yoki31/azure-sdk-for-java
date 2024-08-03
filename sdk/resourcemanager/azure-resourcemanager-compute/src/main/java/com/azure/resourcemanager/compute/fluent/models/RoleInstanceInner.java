@@ -5,18 +5,16 @@
 package com.azure.resourcemanager.compute.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.compute.models.InstanceSku;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** The RoleInstance model. */
+/**
+ * Describes the cloud service role instance.
+ */
 @Fluent
 public final class RoleInstanceInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RoleInstanceInner.class);
-
     /*
      * Resource Id
      */
@@ -49,20 +47,26 @@ public final class RoleInstanceInner {
     private Map<String, String> tags;
 
     /*
-     * The sku property.
+     * The role instance SKU.
      */
     @JsonProperty(value = "sku")
     private InstanceSku sku;
 
     /*
-     * The properties property.
+     * Role instance properties.
      */
     @JsonProperty(value = "properties")
     private RoleInstancePropertiesInner properties;
 
     /**
+     * Creates an instance of RoleInstanceInner class.
+     */
+    public RoleInstanceInner() {
+    }
+
+    /**
      * Get the id property: Resource Id.
-     *
+     * 
      * @return the id value.
      */
     public String id() {
@@ -71,7 +75,7 @@ public final class RoleInstanceInner {
 
     /**
      * Get the name property: Resource Name.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -80,7 +84,7 @@ public final class RoleInstanceInner {
 
     /**
      * Get the type property: Resource Type.
-     *
+     * 
      * @return the type value.
      */
     public String type() {
@@ -89,7 +93,7 @@ public final class RoleInstanceInner {
 
     /**
      * Get the location property: Resource Location.
-     *
+     * 
      * @return the location value.
      */
     public String location() {
@@ -98,7 +102,7 @@ public final class RoleInstanceInner {
 
     /**
      * Get the tags property: Resource tags.
-     *
+     * 
      * @return the tags value.
      */
     public Map<String, String> tags() {
@@ -106,8 +110,8 @@ public final class RoleInstanceInner {
     }
 
     /**
-     * Get the sku property: The sku property.
-     *
+     * Get the sku property: The role instance SKU.
+     * 
      * @return the sku value.
      */
     public InstanceSku sku() {
@@ -115,8 +119,8 @@ public final class RoleInstanceInner {
     }
 
     /**
-     * Set the sku property: The sku property.
-     *
+     * Set the sku property: The role instance SKU.
+     * 
      * @param sku the sku value to set.
      * @return the RoleInstanceInner object itself.
      */
@@ -126,8 +130,8 @@ public final class RoleInstanceInner {
     }
 
     /**
-     * Get the properties property: The properties property.
-     *
+     * Get the properties property: Role instance properties.
+     * 
      * @return the properties value.
      */
     public RoleInstancePropertiesInner properties() {
@@ -135,8 +139,8 @@ public final class RoleInstanceInner {
     }
 
     /**
-     * Set the properties property: The properties property.
-     *
+     * Set the properties property: Role instance properties.
+     * 
      * @param properties the properties value to set.
      * @return the RoleInstanceInner object itself.
      */
@@ -147,7 +151,7 @@ public final class RoleInstanceInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

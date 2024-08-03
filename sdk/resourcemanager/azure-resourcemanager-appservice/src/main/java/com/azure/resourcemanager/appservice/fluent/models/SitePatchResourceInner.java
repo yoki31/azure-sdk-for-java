@@ -5,7 +5,6 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.ClientCertMode;
 import com.azure.resourcemanager.appservice.models.CloningInfo;
 import com.azure.resourcemanager.appservice.models.HostingEnvironmentProfile;
@@ -14,19 +13,20 @@ import com.azure.resourcemanager.appservice.models.ManagedServiceIdentity;
 import com.azure.resourcemanager.appservice.models.ProxyOnlyResource;
 import com.azure.resourcemanager.appservice.models.RedundancyMode;
 import com.azure.resourcemanager.appservice.models.SiteAvailabilityState;
+import com.azure.resourcemanager.appservice.models.SiteDnsConfig;
 import com.azure.resourcemanager.appservice.models.SlotSwapStatus;
 import com.azure.resourcemanager.appservice.models.UsageState;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
-/** ARM resource for a site. */
+/**
+ * ARM resource for a site.
+ */
 @Fluent
 public final class SitePatchResourceInner extends ProxyOnlyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SitePatchResourceInner.class);
-
     /*
      * SitePatchResource resource specific properties
      */
@@ -38,6 +38,12 @@ public final class SitePatchResourceInner extends ProxyOnlyResource {
      */
     @JsonProperty(value = "identity")
     private ManagedServiceIdentity identity;
+
+    /**
+     * Creates an instance of SitePatchResourceInner class.
+     */
+    public SitePatchResourceInner() {
+    }
 
     /**
      * Get the innerProperties property: SitePatchResource resource specific properties.
@@ -68,7 +74,9 @@ public final class SitePatchResourceInner extends ProxyOnlyResource {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SitePatchResourceInner withKind(String kind) {
         super.withKind(kind);
@@ -138,7 +146,8 @@ public final class SitePatchResourceInner extends ProxyOnlyResource {
 
     /**
      * Get the enabledHostNames property: Enabled hostnames for the app.Hostnames need to be assigned (see HostNames)
-     * AND enabled. Otherwise, the app is not served on those hostnames.
+     * AND enabled. Otherwise,
+     * the app is not served on those hostnames.
      *
      * @return the enabledHostNames value.
      */
@@ -180,8 +189,7 @@ public final class SitePatchResourceInner extends ProxyOnlyResource {
 
     /**
      * Get the serverFarmId property: Resource ID of the associated App Service plan, formatted as:
-     * "/subscriptions/{subscriptionID}/resourceGroups/{groupName}/providers/Microsoft.Web/serverfarms"
-         + "/{appServicePlanName}".
+     * "/subscriptions/{subscriptionID}/resourceGroups/{groupName}/providers/Microsoft.Web/serverfarms/{appServicePlanName}".
      *
      * @return the serverFarmId value.
      */
@@ -191,8 +199,7 @@ public final class SitePatchResourceInner extends ProxyOnlyResource {
 
     /**
      * Set the serverFarmId property: Resource ID of the associated App Service plan, formatted as:
-     * "/subscriptions/{subscriptionID}/resourceGroups/{groupName}/providers/Microsoft.Web/serverfarms"
-         + "/{appServicePlanName}".
+     * "/subscriptions/{subscriptionID}/resourceGroups/{groupName}/providers/Microsoft.Web/serverfarms/{appServicePlanName}".
      *
      * @param serverFarmId the serverFarmId value to set.
      * @return the SitePatchResourceInner object itself.
@@ -281,6 +288,29 @@ public final class SitePatchResourceInner extends ProxyOnlyResource {
      */
     public OffsetDateTime lastModifiedTimeUtc() {
         return this.innerProperties() == null ? null : this.innerProperties().lastModifiedTimeUtc();
+    }
+
+    /**
+     * Get the dnsConfiguration property: Property to configure various DNS related settings for a site.
+     *
+     * @return the dnsConfiguration value.
+     */
+    public SiteDnsConfig dnsConfiguration() {
+        return this.innerProperties() == null ? null : this.innerProperties().dnsConfiguration();
+    }
+
+    /**
+     * Set the dnsConfiguration property: Property to configure various DNS related settings for a site.
+     *
+     * @param dnsConfiguration the dnsConfiguration value to set.
+     * @return the SitePatchResourceInner object itself.
+     */
+    public SitePatchResourceInner withDnsConfiguration(SiteDnsConfig dnsConfiguration) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new SitePatchResourcePropertiesInner();
+        }
+        this.innerProperties().withDnsConfiguration(dnsConfiguration);
+        return this;
     }
 
     /**
@@ -427,9 +457,10 @@ public final class SitePatchResourceInner extends ProxyOnlyResource {
     }
 
     /**
-     * Get the clientCertMode property: This composes with ClientCertEnabled setting. - ClientCertEnabled: false means
-     * ClientCert is ignored. - ClientCertEnabled: true and ClientCertMode: Required means ClientCert is required. -
-     * ClientCertEnabled: true and ClientCertMode: Optional means ClientCert is optional or accepted.
+     * Get the clientCertMode property: This composes with ClientCertEnabled setting.
+     * - ClientCertEnabled: false means ClientCert is ignored.
+     * - ClientCertEnabled: true and ClientCertMode: Required means ClientCert is required.
+     * - ClientCertEnabled: true and ClientCertMode: Optional means ClientCert is optional or accepted.
      *
      * @return the clientCertMode value.
      */
@@ -438,9 +469,10 @@ public final class SitePatchResourceInner extends ProxyOnlyResource {
     }
 
     /**
-     * Set the clientCertMode property: This composes with ClientCertEnabled setting. - ClientCertEnabled: false means
-     * ClientCert is ignored. - ClientCertEnabled: true and ClientCertMode: Required means ClientCert is required. -
-     * ClientCertEnabled: true and ClientCertMode: Optional means ClientCert is optional or accepted.
+     * Set the clientCertMode property: This composes with ClientCertEnabled setting.
+     * - ClientCertEnabled: false means ClientCert is ignored.
+     * - ClientCertEnabled: true and ClientCertMode: Required means ClientCert is required.
+     * - ClientCertEnabled: true and ClientCertMode: Optional means ClientCert is optional or accepted.
      *
      * @param clientCertMode the clientCertMode value to set.
      * @return the SitePatchResourceInner object itself.
@@ -478,8 +510,8 @@ public final class SitePatchResourceInner extends ProxyOnlyResource {
 
     /**
      * Get the hostNamesDisabled property: &lt;code&gt;true&lt;/code&gt; to disable the public hostnames of the app;
-     * otherwise, &lt;code&gt;false&lt;/code&gt;. If &lt;code&gt;true&lt;/code&gt;, the app is only accessible via API
-     * management process.
+     * otherwise, &lt;code&gt;false&lt;/code&gt;.
+     * If &lt;code&gt;true&lt;/code&gt;, the app is only accessible via API management process.
      *
      * @return the hostNamesDisabled value.
      */
@@ -489,8 +521,8 @@ public final class SitePatchResourceInner extends ProxyOnlyResource {
 
     /**
      * Set the hostNamesDisabled property: &lt;code&gt;true&lt;/code&gt; to disable the public hostnames of the app;
-     * otherwise, &lt;code&gt;false&lt;/code&gt;. If &lt;code&gt;true&lt;/code&gt;, the app is only accessible via API
-     * management process.
+     * otherwise, &lt;code&gt;false&lt;/code&gt;.
+     * If &lt;code&gt;true&lt;/code&gt;, the app is only accessible via API management process.
      *
      * @param hostNamesDisabled the hostNamesDisabled value to set.
      * @return the SitePatchResourceInner object itself.
@@ -604,7 +636,8 @@ public final class SitePatchResourceInner extends ProxyOnlyResource {
     }
 
     /**
-     * Get the maxNumberOfWorkers property: Maximum number of workers. This only applies to Functions container.
+     * Get the maxNumberOfWorkers property: Maximum number of workers.
+     * This only applies to Functions container.
      *
      * @return the maxNumberOfWorkers value.
      */
@@ -777,7 +810,8 @@ public final class SitePatchResourceInner extends ProxyOnlyResource {
 
     /**
      * Get the virtualNetworkSubnetId property: Azure Resource Manager ID of the Virtual network and subnet to be joined
-     * by Regional VNET Integration. This must be of the form
+     * by Regional VNET Integration.
+     * This must be of the form
      * /subscriptions/{subscriptionName}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/{vnetName}/subnets/{subnetName}.
      *
      * @return the virtualNetworkSubnetId value.
@@ -788,7 +822,8 @@ public final class SitePatchResourceInner extends ProxyOnlyResource {
 
     /**
      * Set the virtualNetworkSubnetId property: Azure Resource Manager ID of the Virtual network and subnet to be joined
-     * by Regional VNET Integration. This must be of the form
+     * by Regional VNET Integration.
+     * This must be of the form
      * /subscriptions/{subscriptionName}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/{vnetName}/subnets/{subnetName}.
      *
      * @param virtualNetworkSubnetId the virtualNetworkSubnetId value to set.

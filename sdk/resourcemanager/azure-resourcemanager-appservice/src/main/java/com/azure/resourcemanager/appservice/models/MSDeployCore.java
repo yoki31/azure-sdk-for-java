@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** MSDeploy ARM PUT core information. */
+/**
+ * MSDeploy ARM PUT core information.
+ */
 @Fluent
 public class MSDeployCore {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MSDeployCore.class);
-
     /*
      * Package URI
      */
@@ -35,8 +33,7 @@ public class MSDeployCore {
     private String dbType;
 
     /*
-     * URI of MSDeploy Parameters file. Must not be set if SetParameters is
-     * used.
+     * URI of MSDeploy Parameters file. Must not be set if SetParameters is used.
      */
     @JsonProperty(value = "setParametersXmlFileUri")
     private String setParametersXmlFileUri;
@@ -50,10 +47,8 @@ public class MSDeployCore {
 
     /*
      * Controls whether the MSDeploy operation skips the App_Data directory.
-     * If set to <code>true</code>, the existing App_Data directory on the
-     * destination
-     * will not be deleted, and any App_Data directory in the source will be
-     * ignored.
+     * If set to <code>true</code>, the existing App_Data directory on the destination
+     * will not be deleted, and any App_Data directory in the source will be ignored.
      * Setting is <code>false</code> by default.
      */
     @JsonProperty(value = "skipAppData")
@@ -67,8 +62,14 @@ public class MSDeployCore {
     private Boolean appOffline;
 
     /**
+     * Creates an instance of MSDeployCore class.
+     */
+    public MSDeployCore() {
+    }
+
+    /**
      * Get the packageUri property: Package URI.
-     *
+     * 
      * @return the packageUri value.
      */
     public String packageUri() {
@@ -77,7 +78,7 @@ public class MSDeployCore {
 
     /**
      * Set the packageUri property: Package URI.
-     *
+     * 
      * @param packageUri the packageUri value to set.
      * @return the MSDeployCore object itself.
      */
@@ -88,7 +89,7 @@ public class MSDeployCore {
 
     /**
      * Get the connectionString property: SQL Connection String.
-     *
+     * 
      * @return the connectionString value.
      */
     public String connectionString() {
@@ -97,7 +98,7 @@ public class MSDeployCore {
 
     /**
      * Set the connectionString property: SQL Connection String.
-     *
+     * 
      * @param connectionString the connectionString value to set.
      * @return the MSDeployCore object itself.
      */
@@ -108,7 +109,7 @@ public class MSDeployCore {
 
     /**
      * Get the dbType property: Database Type.
-     *
+     * 
      * @return the dbType value.
      */
     public String dbType() {
@@ -117,7 +118,7 @@ public class MSDeployCore {
 
     /**
      * Set the dbType property: Database Type.
-     *
+     * 
      * @param dbType the dbType value to set.
      * @return the MSDeployCore object itself.
      */
@@ -129,7 +130,7 @@ public class MSDeployCore {
     /**
      * Get the setParametersXmlFileUri property: URI of MSDeploy Parameters file. Must not be set if SetParameters is
      * used.
-     *
+     * 
      * @return the setParametersXmlFileUri value.
      */
     public String setParametersXmlFileUri() {
@@ -139,7 +140,7 @@ public class MSDeployCore {
     /**
      * Set the setParametersXmlFileUri property: URI of MSDeploy Parameters file. Must not be set if SetParameters is
      * used.
-     *
+     * 
      * @param setParametersXmlFileUri the setParametersXmlFileUri value to set.
      * @return the MSDeployCore object itself.
      */
@@ -150,7 +151,7 @@ public class MSDeployCore {
 
     /**
      * Get the setParameters property: MSDeploy Parameters. Must not be set if SetParametersXmlFileUri is used.
-     *
+     * 
      * @return the setParameters value.
      */
     public Map<String, String> setParameters() {
@@ -159,7 +160,7 @@ public class MSDeployCore {
 
     /**
      * Set the setParameters property: MSDeploy Parameters. Must not be set if SetParametersXmlFileUri is used.
-     *
+     * 
      * @param setParameters the setParameters value to set.
      * @return the MSDeployCore object itself.
      */
@@ -169,10 +170,11 @@ public class MSDeployCore {
     }
 
     /**
-     * Get the skipAppData property: Controls whether the MSDeploy operation skips the App_Data directory. If set to
-     * &lt;code&gt;true&lt;/code&gt;, the existing App_Data directory on the destination will not be deleted, and any
-     * App_Data directory in the source will be ignored. Setting is &lt;code&gt;false&lt;/code&gt; by default.
-     *
+     * Get the skipAppData property: Controls whether the MSDeploy operation skips the App_Data directory.
+     * If set to &lt;code&gt;true&lt;/code&gt;, the existing App_Data directory on the destination
+     * will not be deleted, and any App_Data directory in the source will be ignored.
+     * Setting is &lt;code&gt;false&lt;/code&gt; by default.
+     * 
      * @return the skipAppData value.
      */
     public Boolean skipAppData() {
@@ -180,10 +182,11 @@ public class MSDeployCore {
     }
 
     /**
-     * Set the skipAppData property: Controls whether the MSDeploy operation skips the App_Data directory. If set to
-     * &lt;code&gt;true&lt;/code&gt;, the existing App_Data directory on the destination will not be deleted, and any
-     * App_Data directory in the source will be ignored. Setting is &lt;code&gt;false&lt;/code&gt; by default.
-     *
+     * Set the skipAppData property: Controls whether the MSDeploy operation skips the App_Data directory.
+     * If set to &lt;code&gt;true&lt;/code&gt;, the existing App_Data directory on the destination
+     * will not be deleted, and any App_Data directory in the source will be ignored.
+     * Setting is &lt;code&gt;false&lt;/code&gt; by default.
+     * 
      * @param skipAppData the skipAppData value to set.
      * @return the MSDeployCore object itself.
      */
@@ -193,9 +196,9 @@ public class MSDeployCore {
     }
 
     /**
-     * Get the appOffline property: Sets the AppOffline rule while the MSDeploy operation executes. Setting is
-     * &lt;code&gt;false&lt;/code&gt; by default.
-     *
+     * Get the appOffline property: Sets the AppOffline rule while the MSDeploy operation executes.
+     * Setting is &lt;code&gt;false&lt;/code&gt; by default.
+     * 
      * @return the appOffline value.
      */
     public Boolean appOffline() {
@@ -203,9 +206,9 @@ public class MSDeployCore {
     }
 
     /**
-     * Set the appOffline property: Sets the AppOffline rule while the MSDeploy operation executes. Setting is
-     * &lt;code&gt;false&lt;/code&gt; by default.
-     *
+     * Set the appOffline property: Sets the AppOffline rule while the MSDeploy operation executes.
+     * Setting is &lt;code&gt;false&lt;/code&gt; by default.
+     * 
      * @param appOffline the appOffline value to set.
      * @return the MSDeployCore object itself.
      */
@@ -216,7 +219,7 @@ public class MSDeployCore {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

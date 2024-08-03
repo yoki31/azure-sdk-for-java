@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** DomainOwnershipIdentifier resource specific properties. */
+/**
+ * DomainOwnershipIdentifier resource specific properties.
+ */
 @Fluent
 public final class DomainOwnershipIdentifierProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DomainOwnershipIdentifierProperties.class);
-
     /*
      * Ownership Id.
      */
@@ -21,8 +19,14 @@ public final class DomainOwnershipIdentifierProperties {
     private String ownershipId;
 
     /**
+     * Creates an instance of DomainOwnershipIdentifierProperties class.
+     */
+    public DomainOwnershipIdentifierProperties() {
+    }
+
+    /**
      * Get the ownershipId property: Ownership Id.
-     *
+     * 
      * @return the ownershipId value.
      */
     public String ownershipId() {
@@ -31,7 +35,7 @@ public final class DomainOwnershipIdentifierProperties {
 
     /**
      * Set the ownershipId property: Ownership Id.
-     *
+     * 
      * @param ownershipId the ownershipId value to set.
      * @return the DomainOwnershipIdentifierProperties object itself.
      */
@@ -42,7 +46,7 @@ public final class DomainOwnershipIdentifierProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -18,7 +18,7 @@ public interface PrivateEndpointConnectionsPrivateLinkHubs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all PrivateEndpointConnections in the PrivateLinkHub.
+     * @return all PrivateEndpointConnections in the PrivateLinkHub as paginated response with {@link PagedIterable}.
      */
     PagedIterable<PrivateEndpointConnectionForPrivateLinkHub> list(String resourceGroupName, String privateLinkHubName);
 
@@ -31,10 +31,25 @@ public interface PrivateEndpointConnectionsPrivateLinkHubs {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all PrivateEndpointConnections in the PrivateLinkHub.
+     * @return all PrivateEndpointConnections in the PrivateLinkHub as paginated response with {@link PagedIterable}.
      */
     PagedIterable<PrivateEndpointConnectionForPrivateLinkHub> list(
         String resourceGroupName, String privateLinkHubName, Context context);
+
+    /**
+     * Get all PrivateEndpointConnection in the PrivateLinkHub by name.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param privateLinkHubName Name of the privateLinkHub.
+     * @param privateEndpointConnectionName Name of the privateEndpointConnection.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return all PrivateEndpointConnection in the PrivateLinkHub by name along with {@link Response}.
+     */
+    Response<PrivateEndpointConnectionForPrivateLinkHub> getWithResponse(
+        String resourceGroupName, String privateLinkHubName, String privateEndpointConnectionName, Context context);
 
     /**
      * Get all PrivateEndpointConnection in the PrivateLinkHub by name.
@@ -49,19 +64,4 @@ public interface PrivateEndpointConnectionsPrivateLinkHubs {
      */
     PrivateEndpointConnectionForPrivateLinkHub get(
         String resourceGroupName, String privateLinkHubName, String privateEndpointConnectionName);
-
-    /**
-     * Get all PrivateEndpointConnection in the PrivateLinkHub by name.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param privateLinkHubName Name of the privateLinkHub.
-     * @param privateEndpointConnectionName Name of the privateEndpointConnection.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all PrivateEndpointConnection in the PrivateLinkHub by name.
-     */
-    Response<PrivateEndpointConnectionForPrivateLinkHub> getWithResponse(
-        String resourceGroupName, String privateLinkHubName, String privateEndpointConnectionName, Context context);
 }

@@ -5,24 +5,34 @@
 package com.azure.resourcemanager.batch.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.azure.core.http.HttpHeaderName;
+import com.azure.core.http.HttpHeaders;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The PoolsStopResizeHeaders model. */
+/**
+ * The PoolsStopResizeHeaders model.
+ */
 @Fluent
 public final class PoolsStopResizeHeaders {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PoolsStopResizeHeaders.class);
-
     /*
      * The Etag property.
      */
     @JsonProperty(value = "Etag")
     private String etag;
 
+    // HttpHeaders containing the raw property values.
+    /**
+     * Creates an instance of PoolsStopResizeHeaders class.
+     * 
+     * @param rawHeaders The raw HttpHeaders that will be used to create the property values.
+     */
+    public PoolsStopResizeHeaders(HttpHeaders rawHeaders) {
+        this.etag = rawHeaders.getValue(HttpHeaderName.ETAG);
+    }
+
     /**
      * Get the etag property: The Etag property.
-     *
+     * 
      * @return the etag value.
      */
     public String etag() {
@@ -31,7 +41,7 @@ public final class PoolsStopResizeHeaders {
 
     /**
      * Set the etag property: The Etag property.
-     *
+     * 
      * @param etag the etag value to set.
      * @return the PoolsStopResizeHeaders object itself.
      */
@@ -42,7 +52,7 @@ public final class PoolsStopResizeHeaders {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

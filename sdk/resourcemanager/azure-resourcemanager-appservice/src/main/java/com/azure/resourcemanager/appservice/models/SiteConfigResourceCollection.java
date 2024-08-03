@@ -7,15 +7,15 @@ package com.azure.resourcemanager.appservice.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.fluent.models.SiteConfigResourceInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
-/** Collection of site configurations. */
+/**
+ * Collection of site configurations.
+ */
 @Fluent
 public final class SiteConfigResourceCollection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SiteConfigResourceCollection.class);
-
     /*
      * Collection of resources.
      */
@@ -27,6 +27,12 @@ public final class SiteConfigResourceCollection {
      */
     @JsonProperty(value = "nextLink", access = JsonProperty.Access.WRITE_ONLY)
     private String nextLink;
+
+    /**
+     * Creates an instance of SiteConfigResourceCollection class.
+     */
+    public SiteConfigResourceCollection() {
+    }
 
     /**
      * Get the value property: Collection of resources.
@@ -64,12 +70,13 @@ public final class SiteConfigResourceCollection {
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property value in model SiteConfigResourceCollection"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property value in model SiteConfigResourceCollection"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(SiteConfigResourceCollection.class);
 }

@@ -5,20 +5,22 @@
 package com.azure.resourcemanager.monitor.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.ProxyResource;
 import com.azure.core.management.SystemData;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.resourcemanager.monitor.models.DataCollectionRuleAssociationMetadata;
 import com.azure.resourcemanager.monitor.models.KnownDataCollectionRuleAssociationProvisioningState;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Definition of generic ARM proxy resource. */
-@JsonFlatten
+/**
+ * Definition of generic ARM proxy resource.
+ */
 @Fluent
-public class DataCollectionRuleAssociationProxyOnlyResourceInner extends ProxyResource {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(DataCollectionRuleAssociationProxyOnlyResourceInner.class);
+public final class DataCollectionRuleAssociationProxyOnlyResourceInner extends ProxyResource {
+    /*
+     * Resource properties.
+     */
+    @JsonProperty(value = "properties")
+    private DataCollectionRuleAssociationProxyOnlyResourceProperties innerProperties;
 
     /*
      * Resource entity tag (ETag).
@@ -32,34 +34,24 @@ public class DataCollectionRuleAssociationProxyOnlyResourceInner extends ProxyRe
     @JsonProperty(value = "systemData", access = JsonProperty.Access.WRITE_ONLY)
     private SystemData systemData;
 
-    /*
-     * Description of the association.
+    /**
+     * Creates an instance of DataCollectionRuleAssociationProxyOnlyResourceInner class.
      */
-    @JsonProperty(value = "properties.description")
-    private String description;
+    public DataCollectionRuleAssociationProxyOnlyResourceInner() {
+    }
 
-    /*
-     * The resource ID of the data collection rule that is to be associated.
+    /**
+     * Get the innerProperties property: Resource properties.
+     * 
+     * @return the innerProperties value.
      */
-    @JsonProperty(value = "properties.dataCollectionRuleId")
-    private String dataCollectionRuleId;
-
-    /*
-     * The resource ID of the data collection endpoint that is to be
-     * associated.
-     */
-    @JsonProperty(value = "properties.dataCollectionEndpointId")
-    private String dataCollectionEndpointId;
-
-    /*
-     * The resource provisioning state.
-     */
-    @JsonProperty(value = "properties.provisioningState", access = JsonProperty.Access.WRITE_ONLY)
-    private KnownDataCollectionRuleAssociationProvisioningState provisioningState;
+    private DataCollectionRuleAssociationProxyOnlyResourceProperties innerProperties() {
+        return this.innerProperties;
+    }
 
     /**
      * Get the etag property: Resource entity tag (ETag).
-     *
+     * 
      * @return the etag value.
      */
     public String etag() {
@@ -68,7 +60,7 @@ public class DataCollectionRuleAssociationProxyOnlyResourceInner extends ProxyRe
 
     /**
      * Get the systemData property: Metadata pertaining to creation and last modification of the resource.
-     *
+     * 
      * @return the systemData value.
      */
     public SystemData systemData() {
@@ -77,81 +69,102 @@ public class DataCollectionRuleAssociationProxyOnlyResourceInner extends ProxyRe
 
     /**
      * Get the description property: Description of the association.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
-        return this.description;
+        return this.innerProperties() == null ? null : this.innerProperties().description();
     }
 
     /**
      * Set the description property: Description of the association.
-     *
+     * 
      * @param description the description value to set.
      * @return the DataCollectionRuleAssociationProxyOnlyResourceInner object itself.
      */
     public DataCollectionRuleAssociationProxyOnlyResourceInner withDescription(String description) {
-        this.description = description;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new DataCollectionRuleAssociationProxyOnlyResourceProperties();
+        }
+        this.innerProperties().withDescription(description);
         return this;
     }
 
     /**
      * Get the dataCollectionRuleId property: The resource ID of the data collection rule that is to be associated.
-     *
+     * 
      * @return the dataCollectionRuleId value.
      */
     public String dataCollectionRuleId() {
-        return this.dataCollectionRuleId;
+        return this.innerProperties() == null ? null : this.innerProperties().dataCollectionRuleId();
     }
 
     /**
      * Set the dataCollectionRuleId property: The resource ID of the data collection rule that is to be associated.
-     *
+     * 
      * @param dataCollectionRuleId the dataCollectionRuleId value to set.
      * @return the DataCollectionRuleAssociationProxyOnlyResourceInner object itself.
      */
     public DataCollectionRuleAssociationProxyOnlyResourceInner withDataCollectionRuleId(String dataCollectionRuleId) {
-        this.dataCollectionRuleId = dataCollectionRuleId;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new DataCollectionRuleAssociationProxyOnlyResourceProperties();
+        }
+        this.innerProperties().withDataCollectionRuleId(dataCollectionRuleId);
         return this;
     }
 
     /**
      * Get the dataCollectionEndpointId property: The resource ID of the data collection endpoint that is to be
      * associated.
-     *
+     * 
      * @return the dataCollectionEndpointId value.
      */
     public String dataCollectionEndpointId() {
-        return this.dataCollectionEndpointId;
+        return this.innerProperties() == null ? null : this.innerProperties().dataCollectionEndpointId();
     }
 
     /**
      * Set the dataCollectionEndpointId property: The resource ID of the data collection endpoint that is to be
      * associated.
-     *
+     * 
      * @param dataCollectionEndpointId the dataCollectionEndpointId value to set.
      * @return the DataCollectionRuleAssociationProxyOnlyResourceInner object itself.
      */
-    public DataCollectionRuleAssociationProxyOnlyResourceInner withDataCollectionEndpointId(
-        String dataCollectionEndpointId) {
-        this.dataCollectionEndpointId = dataCollectionEndpointId;
+    public DataCollectionRuleAssociationProxyOnlyResourceInner
+        withDataCollectionEndpointId(String dataCollectionEndpointId) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new DataCollectionRuleAssociationProxyOnlyResourceProperties();
+        }
+        this.innerProperties().withDataCollectionEndpointId(dataCollectionEndpointId);
         return this;
     }
 
     /**
      * Get the provisioningState property: The resource provisioning state.
-     *
+     * 
      * @return the provisioningState value.
      */
     public KnownDataCollectionRuleAssociationProvisioningState provisioningState() {
-        return this.provisioningState;
+        return this.innerProperties() == null ? null : this.innerProperties().provisioningState();
+    }
+
+    /**
+     * Get the metadata property: Metadata about the resource.
+     * 
+     * @return the metadata value.
+     */
+    public DataCollectionRuleAssociationMetadata metadata() {
+        return this.innerProperties() == null ? null : this.innerProperties().metadata();
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
+        if (innerProperties() != null) {
+            innerProperties().validate();
+        }
     }
 }

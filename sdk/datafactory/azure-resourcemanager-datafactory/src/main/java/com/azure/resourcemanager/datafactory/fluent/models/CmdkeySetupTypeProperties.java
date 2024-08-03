@@ -7,22 +7,21 @@ package com.azure.resourcemanager.datafactory.fluent.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.models.SecretBase;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Cmdkey command custom setup type properties. */
+/**
+ * Cmdkey command custom setup type properties.
+ */
 @Fluent
 public final class CmdkeySetupTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CmdkeySetupTypeProperties.class);
-
     /*
-     * The server name of data source access.
+     * The server name of data source access. Type: string.
      */
     @JsonProperty(value = "targetName", required = true)
     private Object targetName;
 
     /*
-     * The user name of data source access.
+     * The user name of data source access. Type: string.
      */
     @JsonProperty(value = "userName", required = true)
     private Object username;
@@ -34,8 +33,14 @@ public final class CmdkeySetupTypeProperties {
     private SecretBase password;
 
     /**
-     * Get the targetName property: The server name of data source access.
-     *
+     * Creates an instance of CmdkeySetupTypeProperties class.
+     */
+    public CmdkeySetupTypeProperties() {
+    }
+
+    /**
+     * Get the targetName property: The server name of data source access. Type: string.
+     * 
      * @return the targetName value.
      */
     public Object targetName() {
@@ -43,8 +48,8 @@ public final class CmdkeySetupTypeProperties {
     }
 
     /**
-     * Set the targetName property: The server name of data source access.
-     *
+     * Set the targetName property: The server name of data source access. Type: string.
+     * 
      * @param targetName the targetName value to set.
      * @return the CmdkeySetupTypeProperties object itself.
      */
@@ -54,8 +59,8 @@ public final class CmdkeySetupTypeProperties {
     }
 
     /**
-     * Get the username property: The user name of data source access.
-     *
+     * Get the username property: The user name of data source access. Type: string.
+     * 
      * @return the username value.
      */
     public Object username() {
@@ -63,8 +68,8 @@ public final class CmdkeySetupTypeProperties {
     }
 
     /**
-     * Set the username property: The user name of data source access.
-     *
+     * Set the username property: The user name of data source access. Type: string.
+     * 
      * @param username the username value to set.
      * @return the CmdkeySetupTypeProperties object itself.
      */
@@ -75,7 +80,7 @@ public final class CmdkeySetupTypeProperties {
 
     /**
      * Get the password property: The password of data source access.
-     *
+     * 
      * @return the password value.
      */
     public SecretBase password() {
@@ -84,7 +89,7 @@ public final class CmdkeySetupTypeProperties {
 
     /**
      * Set the password property: The password of data source access.
-     *
+     * 
      * @param password the password value to set.
      * @return the CmdkeySetupTypeProperties object itself.
      */
@@ -95,29 +100,28 @@ public final class CmdkeySetupTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (targetName() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property targetName in model CmdkeySetupTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property targetName in model CmdkeySetupTypeProperties"));
         }
         if (username() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property username in model CmdkeySetupTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property username in model CmdkeySetupTypeProperties"));
         }
         if (password() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property password in model CmdkeySetupTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property password in model CmdkeySetupTypeProperties"));
         } else {
             password().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(CmdkeySetupTypeProperties.class);
 }

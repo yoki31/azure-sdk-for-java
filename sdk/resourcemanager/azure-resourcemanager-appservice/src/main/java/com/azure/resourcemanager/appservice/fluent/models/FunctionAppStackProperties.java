@@ -5,18 +5,16 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.FunctionAppMajorVersion;
 import com.azure.resourcemanager.appservice.models.StackPreferredOs;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** FunctionAppStack resource specific properties. */
+/**
+ * FunctionAppStack resource specific properties.
+ */
 @Immutable
 public final class FunctionAppStackProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(FunctionAppStackProperties.class);
-
     /*
      * Function App stack (display only).
      */
@@ -42,8 +40,14 @@ public final class FunctionAppStackProperties {
     private StackPreferredOs preferredOs;
 
     /**
+     * Creates an instance of FunctionAppStackProperties class.
+     */
+    public FunctionAppStackProperties() {
+    }
+
+    /**
      * Get the displayText property: Function App stack (display only).
-     *
+     * 
      * @return the displayText value.
      */
     public String displayText() {
@@ -52,7 +56,7 @@ public final class FunctionAppStackProperties {
 
     /**
      * Get the value property: Function App stack name.
-     *
+     * 
      * @return the value value.
      */
     public String value() {
@@ -61,7 +65,7 @@ public final class FunctionAppStackProperties {
 
     /**
      * Get the majorVersions property: List of major versions available.
-     *
+     * 
      * @return the majorVersions value.
      */
     public List<FunctionAppMajorVersion> majorVersions() {
@@ -70,7 +74,7 @@ public final class FunctionAppStackProperties {
 
     /**
      * Get the preferredOs property: Function App stack preferred OS.
-     *
+     * 
      * @return the preferredOs value.
      */
     public StackPreferredOs preferredOs() {
@@ -79,7 +83,7 @@ public final class FunctionAppStackProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

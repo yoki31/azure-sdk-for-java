@@ -7,15 +7,14 @@ package com.azure.resourcemanager.datafactory.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.fluent.models.IntegrationRuntimeResourceInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** A list of integration runtime resources. */
+/**
+ * A list of integration runtime resources.
+ */
 @Fluent
 public final class IntegrationRuntimeListResponse {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(IntegrationRuntimeListResponse.class);
-
     /*
      * List of integration runtimes.
      */
@@ -29,8 +28,14 @@ public final class IntegrationRuntimeListResponse {
     private String nextLink;
 
     /**
+     * Creates an instance of IntegrationRuntimeListResponse class.
+     */
+    public IntegrationRuntimeListResponse() {
+    }
+
+    /**
      * Get the value property: List of integration runtimes.
-     *
+     * 
      * @return the value value.
      */
     public List<IntegrationRuntimeResourceInner> value() {
@@ -39,7 +44,7 @@ public final class IntegrationRuntimeListResponse {
 
     /**
      * Set the value property: List of integration runtimes.
-     *
+     * 
      * @param value the value value to set.
      * @return the IntegrationRuntimeListResponse object itself.
      */
@@ -50,7 +55,7 @@ public final class IntegrationRuntimeListResponse {
 
     /**
      * Get the nextLink property: The link to the next page of results, if any remaining results exist.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,7 +64,7 @@ public final class IntegrationRuntimeListResponse {
 
     /**
      * Set the nextLink property: The link to the next page of results, if any remaining results exist.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the IntegrationRuntimeListResponse object itself.
      */
@@ -70,17 +75,18 @@ public final class IntegrationRuntimeListResponse {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property value in model IntegrationRuntimeListResponse"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property value in model IntegrationRuntimeListResponse"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(IntegrationRuntimeListResponse.class);
 }

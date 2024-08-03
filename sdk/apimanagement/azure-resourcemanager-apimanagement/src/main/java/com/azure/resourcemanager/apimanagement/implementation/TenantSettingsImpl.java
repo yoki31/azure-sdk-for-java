@@ -15,10 +15,9 @@ import com.azure.resourcemanager.apimanagement.models.SettingsTypeName;
 import com.azure.resourcemanager.apimanagement.models.TenantSettings;
 import com.azure.resourcemanager.apimanagement.models.TenantSettingsContract;
 import com.azure.resourcemanager.apimanagement.models.TenantSettingsGetResponse;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class TenantSettingsImpl implements TenantSettings {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TenantSettingsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(TenantSettingsImpl.class);
 
     private final TenantSettingsClient innerClient;
 
@@ -43,15 +42,6 @@ public final class TenantSettingsImpl implements TenantSettings {
         return Utils.mapPage(inner, inner1 -> new TenantSettingsContractImpl(inner1, this.manager()));
     }
 
-    public TenantSettingsContract get(String resourceGroupName, String serviceName, SettingsTypeName settingsType) {
-        TenantSettingsContractInner inner = this.serviceClient().get(resourceGroupName, serviceName, settingsType);
-        if (inner != null) {
-            return new TenantSettingsContractImpl(inner, this.manager());
-        } else {
-            return null;
-        }
-    }
-
     public Response<TenantSettingsContract> getWithResponse(
         String resourceGroupName, String serviceName, SettingsTypeName settingsType, Context context) {
         TenantSettingsGetResponse inner =
@@ -62,6 +52,15 @@ public final class TenantSettingsImpl implements TenantSettings {
                 inner.getStatusCode(),
                 inner.getHeaders(),
                 new TenantSettingsContractImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
+    }
+
+    public TenantSettingsContract get(String resourceGroupName, String serviceName, SettingsTypeName settingsType) {
+        TenantSettingsContractInner inner = this.serviceClient().get(resourceGroupName, serviceName, settingsType);
+        if (inner != null) {
+            return new TenantSettingsContractImpl(inner, this.manager());
         } else {
             return null;
         }

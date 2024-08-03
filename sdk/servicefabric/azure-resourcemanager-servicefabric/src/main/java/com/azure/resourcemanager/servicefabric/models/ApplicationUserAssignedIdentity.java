@@ -6,14 +6,13 @@ package com.azure.resourcemanager.servicefabric.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The ApplicationUserAssignedIdentity model. */
+/**
+ * The ApplicationUserAssignedIdentity model.
+ */
 @Fluent
-public class ApplicationUserAssignedIdentity {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApplicationUserAssignedIdentity.class);
-
+public final class ApplicationUserAssignedIdentity {
     /*
      * The friendly name of user assigned identity.
      */
@@ -27,8 +26,14 @@ public class ApplicationUserAssignedIdentity {
     private String principalId;
 
     /**
+     * Creates an instance of ApplicationUserAssignedIdentity class.
+     */
+    public ApplicationUserAssignedIdentity() {
+    }
+
+    /**
      * Get the name property: The friendly name of user assigned identity.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -37,7 +42,7 @@ public class ApplicationUserAssignedIdentity {
 
     /**
      * Set the name property: The friendly name of user assigned identity.
-     *
+     * 
      * @param name the name value to set.
      * @return the ApplicationUserAssignedIdentity object itself.
      */
@@ -48,7 +53,7 @@ public class ApplicationUserAssignedIdentity {
 
     /**
      * Get the principalId property: The principal id of user assigned identity.
-     *
+     * 
      * @return the principalId value.
      */
     public String principalId() {
@@ -57,7 +62,7 @@ public class ApplicationUserAssignedIdentity {
 
     /**
      * Set the principalId property: The principal id of user assigned identity.
-     *
+     * 
      * @param principalId the principalId value to set.
      * @return the ApplicationUserAssignedIdentity object itself.
      */
@@ -68,21 +73,19 @@ public class ApplicationUserAssignedIdentity {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (name() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property name in model ApplicationUserAssignedIdentity"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property name in model ApplicationUserAssignedIdentity"));
         }
         if (principalId() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property principalId in model ApplicationUserAssignedIdentity"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property principalId in model ApplicationUserAssignedIdentity"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ApplicationUserAssignedIdentity.class);
 }

@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The folder that this data flow is in. If not specified, Data flow will appear at the root level. */
+/**
+ * The folder that this data flow is in. If not specified, Data flow will appear at the root level.
+ */
 @Fluent
 public final class DataFlowFolder {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DataFlowFolder.class);
-
     /*
      * The name of the folder that this data flow is in.
      */
@@ -21,8 +19,14 @@ public final class DataFlowFolder {
     private String name;
 
     /**
+     * Creates an instance of DataFlowFolder class.
+     */
+    public DataFlowFolder() {
+    }
+
+    /**
      * Get the name property: The name of the folder that this data flow is in.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -31,7 +35,7 @@ public final class DataFlowFolder {
 
     /**
      * Set the name property: The name of the folder that this data flow is in.
-     *
+     * 
      * @param name the name value to set.
      * @return the DataFlowFolder object itself.
      */
@@ -42,7 +46,7 @@ public final class DataFlowFolder {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -20,10 +20,9 @@ import com.azure.resourcemanager.mediaservices.models.Assets;
 import com.azure.resourcemanager.mediaservices.models.ListContainerSasInput;
 import com.azure.resourcemanager.mediaservices.models.ListStreamingLocatorsResponse;
 import com.azure.resourcemanager.mediaservices.models.StorageEncryptedAssetDecryptionData;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class AssetsImpl implements Assets {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AssetsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(AssetsImpl.class);
 
     private final AssetsClient innerClient;
 
@@ -47,15 +46,6 @@ public final class AssetsImpl implements Assets {
         return Utils.mapPage(inner, inner1 -> new AssetImpl(inner1, this.manager()));
     }
 
-    public Asset get(String resourceGroupName, String accountName, String assetName) {
-        AssetInner inner = this.serviceClient().get(resourceGroupName, accountName, assetName);
-        if (inner != null) {
-            return new AssetImpl(inner, this.manager());
-        } else {
-            return null;
-        }
-    }
-
     public Response<Asset> getWithResponse(
         String resourceGroupName, String accountName, String assetName, Context context) {
         Response<AssetInner> inner =
@@ -71,8 +61,13 @@ public final class AssetsImpl implements Assets {
         }
     }
 
-    public void delete(String resourceGroupName, String accountName, String assetName) {
-        this.serviceClient().delete(resourceGroupName, accountName, assetName);
+    public Asset get(String resourceGroupName, String accountName, String assetName) {
+        AssetInner inner = this.serviceClient().get(resourceGroupName, accountName, assetName);
+        if (inner != null) {
+            return new AssetImpl(inner, this.manager());
+        } else {
+            return null;
+        }
     }
 
     public Response<Void> deleteWithResponse(
@@ -80,15 +75,8 @@ public final class AssetsImpl implements Assets {
         return this.serviceClient().deleteWithResponse(resourceGroupName, accountName, assetName, context);
     }
 
-    public AssetContainerSas listContainerSas(
-        String resourceGroupName, String accountName, String assetName, ListContainerSasInput parameters) {
-        AssetContainerSasInner inner =
-            this.serviceClient().listContainerSas(resourceGroupName, accountName, assetName, parameters);
-        if (inner != null) {
-            return new AssetContainerSasImpl(inner, this.manager());
-        } else {
-            return null;
-        }
+    public void delete(String resourceGroupName, String accountName, String assetName) {
+        this.serviceClient().delete(resourceGroupName, accountName, assetName);
     }
 
     public Response<AssetContainerSas> listContainerSasWithResponse(
@@ -112,12 +100,12 @@ public final class AssetsImpl implements Assets {
         }
     }
 
-    public StorageEncryptedAssetDecryptionData getEncryptionKey(
-        String resourceGroupName, String accountName, String assetName) {
-        StorageEncryptedAssetDecryptionDataInner inner =
-            this.serviceClient().getEncryptionKey(resourceGroupName, accountName, assetName);
+    public AssetContainerSas listContainerSas(
+        String resourceGroupName, String accountName, String assetName, ListContainerSasInput parameters) {
+        AssetContainerSasInner inner =
+            this.serviceClient().listContainerSas(resourceGroupName, accountName, assetName, parameters);
         if (inner != null) {
-            return new StorageEncryptedAssetDecryptionDataImpl(inner, this.manager());
+            return new AssetContainerSasImpl(inner, this.manager());
         } else {
             return null;
         }
@@ -138,12 +126,12 @@ public final class AssetsImpl implements Assets {
         }
     }
 
-    public ListStreamingLocatorsResponse listStreamingLocators(
+    public StorageEncryptedAssetDecryptionData getEncryptionKey(
         String resourceGroupName, String accountName, String assetName) {
-        ListStreamingLocatorsResponseInner inner =
-            this.serviceClient().listStreamingLocators(resourceGroupName, accountName, assetName);
+        StorageEncryptedAssetDecryptionDataInner inner =
+            this.serviceClient().getEncryptionKey(resourceGroupName, accountName, assetName);
         if (inner != null) {
-            return new ListStreamingLocatorsResponseImpl(inner, this.manager());
+            return new StorageEncryptedAssetDecryptionDataImpl(inner, this.manager());
         } else {
             return null;
         }
@@ -164,10 +152,21 @@ public final class AssetsImpl implements Assets {
         }
     }
 
+    public ListStreamingLocatorsResponse listStreamingLocators(
+        String resourceGroupName, String accountName, String assetName) {
+        ListStreamingLocatorsResponseInner inner =
+            this.serviceClient().listStreamingLocators(resourceGroupName, accountName, assetName);
+        if (inner != null) {
+            return new ListStreamingLocatorsResponseImpl(inner, this.manager());
+        } else {
+            return null;
+        }
+    }
+
     public Asset getById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -175,14 +174,14 @@ public final class AssetsImpl implements Assets {
         }
         String accountName = Utils.getValueFromIdByName(id, "mediaServices");
         if (accountName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'mediaServices'.", id)));
         }
         String assetName = Utils.getValueFromIdByName(id, "assets");
         if (assetName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'assets'.", id)));
@@ -193,7 +192,7 @@ public final class AssetsImpl implements Assets {
     public Response<Asset> getByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -201,14 +200,14 @@ public final class AssetsImpl implements Assets {
         }
         String accountName = Utils.getValueFromIdByName(id, "mediaServices");
         if (accountName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'mediaServices'.", id)));
         }
         String assetName = Utils.getValueFromIdByName(id, "assets");
         if (assetName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'assets'.", id)));
@@ -219,7 +218,7 @@ public final class AssetsImpl implements Assets {
     public void deleteById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -227,25 +226,25 @@ public final class AssetsImpl implements Assets {
         }
         String accountName = Utils.getValueFromIdByName(id, "mediaServices");
         if (accountName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'mediaServices'.", id)));
         }
         String assetName = Utils.getValueFromIdByName(id, "assets");
         if (assetName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'assets'.", id)));
         }
-        this.deleteWithResponse(resourceGroupName, accountName, assetName, Context.NONE).getValue();
+        this.deleteWithResponse(resourceGroupName, accountName, assetName, Context.NONE);
     }
 
     public Response<Void> deleteByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -253,14 +252,14 @@ public final class AssetsImpl implements Assets {
         }
         String accountName = Utils.getValueFromIdByName(id, "mediaServices");
         if (accountName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'mediaServices'.", id)));
         }
         String assetName = Utils.getValueFromIdByName(id, "assets");
         if (assetName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'assets'.", id)));

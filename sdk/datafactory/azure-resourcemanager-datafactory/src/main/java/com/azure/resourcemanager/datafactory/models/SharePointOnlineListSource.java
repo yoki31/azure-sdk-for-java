@@ -5,38 +5,63 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** A copy activity source for sharePoint online list source. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * A copy activity source for sharePoint online list source.
+ */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "type",
+    defaultImpl = SharePointOnlineListSource.class,
+    visible = true)
 @JsonTypeName("SharePointOnlineListSource")
 @Fluent
 public final class SharePointOnlineListSource extends CopySource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SharePointOnlineListSource.class);
+    /*
+     * Copy source type.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "SharePointOnlineListSource";
 
     /*
-     * The OData query to filter the data in SharePoint Online list. For
-     * example, "$top=1". Type: string (or Expression with resultType string).
+     * The OData query to filter the data in SharePoint Online list. For example, "$top=1". Type: string (or Expression
+     * with resultType string).
      */
     @JsonProperty(value = "query")
     private Object query;
 
     /*
-     * The wait time to get a response from SharePoint Online. Default value is
-     * 5 minutes (00:05:00). Type: string (or Expression with resultType
-     * string), pattern: ((\d+)\.)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
+     * The wait time to get a response from SharePoint Online. Default value is 5 minutes (00:05:00). Type: string (or
+     * Expression with resultType string), pattern: ((\d+)\.)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
      */
     @JsonProperty(value = "httpRequestTimeout")
     private Object httpRequestTimeout;
 
     /**
+     * Creates an instance of SharePointOnlineListSource class.
+     */
+    public SharePointOnlineListSource() {
+    }
+
+    /**
+     * Get the type property: Copy source type.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the query property: The OData query to filter the data in SharePoint Online list. For example, "$top=1".
      * Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the query value.
      */
     public Object query() {
@@ -46,7 +71,7 @@ public final class SharePointOnlineListSource extends CopySource {
     /**
      * Set the query property: The OData query to filter the data in SharePoint Online list. For example, "$top=1".
      * Type: string (or Expression with resultType string).
-     *
+     * 
      * @param query the query value to set.
      * @return the SharePointOnlineListSource object itself.
      */
@@ -59,7 +84,7 @@ public final class SharePointOnlineListSource extends CopySource {
      * Get the httpRequestTimeout property: The wait time to get a response from SharePoint Online. Default value is 5
      * minutes (00:05:00). Type: string (or Expression with resultType string), pattern:
      * ((\d+)\.)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
-     *
+     * 
      * @return the httpRequestTimeout value.
      */
     public Object httpRequestTimeout() {
@@ -70,7 +95,7 @@ public final class SharePointOnlineListSource extends CopySource {
      * Set the httpRequestTimeout property: The wait time to get a response from SharePoint Online. Default value is 5
      * minutes (00:05:00). Type: string (or Expression with resultType string), pattern:
      * ((\d+)\.)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
-     *
+     * 
      * @param httpRequestTimeout the httpRequestTimeout value to set.
      * @return the SharePointOnlineListSource object itself.
      */
@@ -79,28 +104,36 @@ public final class SharePointOnlineListSource extends CopySource {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SharePointOnlineListSource withSourceRetryCount(Object sourceRetryCount) {
         super.withSourceRetryCount(sourceRetryCount);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SharePointOnlineListSource withSourceRetryWait(Object sourceRetryWait) {
         super.withSourceRetryWait(sourceRetryWait);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SharePointOnlineListSource withMaxConcurrentConnections(Object maxConcurrentConnections) {
         super.withMaxConcurrentConnections(maxConcurrentConnections);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SharePointOnlineListSource withDisableMetricsCollection(Object disableMetricsCollection) {
         super.withDisableMetricsCollection(disableMetricsCollection);
@@ -109,7 +142,7 @@ public final class SharePointOnlineListSource extends CopySource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

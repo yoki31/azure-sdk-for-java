@@ -7,19 +7,30 @@ package com.azure.resourcemanager.datafactory.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.fluent.models.ServiceNowLinkedServiceTypeProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.List;
 import java.util.Map;
 
-/** ServiceNow server linked service. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * ServiceNow server linked service.
+ */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "type",
+    defaultImpl = ServiceNowLinkedService.class,
+    visible = true)
 @JsonTypeName("ServiceNow")
 @Fluent
 public final class ServiceNowLinkedService extends LinkedService {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ServiceNowLinkedService.class);
+    /*
+     * Type of linked service.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "ServiceNow";
 
     /*
      * ServiceNow server linked service properties.
@@ -28,36 +39,60 @@ public final class ServiceNowLinkedService extends LinkedService {
     private ServiceNowLinkedServiceTypeProperties innerTypeProperties = new ServiceNowLinkedServiceTypeProperties();
 
     /**
+     * Creates an instance of ServiceNowLinkedService class.
+     */
+    public ServiceNowLinkedService() {
+    }
+
+    /**
+     * Get the type property: Type of linked service.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the innerTypeProperties property: ServiceNow server linked service properties.
-     *
+     * 
      * @return the innerTypeProperties value.
      */
     private ServiceNowLinkedServiceTypeProperties innerTypeProperties() {
         return this.innerTypeProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ServiceNowLinkedService withConnectVia(IntegrationRuntimeReference connectVia) {
         super.withConnectVia(connectVia);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ServiceNowLinkedService withDescription(String description) {
         super.withDescription(description);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ServiceNowLinkedService withParameters(Map<String, ParameterSpecification> parameters) {
         super.withParameters(parameters);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ServiceNowLinkedService withAnnotations(List<Object> annotations) {
         super.withAnnotations(annotations);
@@ -66,7 +101,7 @@ public final class ServiceNowLinkedService extends LinkedService {
 
     /**
      * Get the endpoint property: The endpoint of the ServiceNow server. (i.e. &lt;instance&gt;.service-now.com).
-     *
+     * 
      * @return the endpoint value.
      */
     public Object endpoint() {
@@ -75,7 +110,7 @@ public final class ServiceNowLinkedService extends LinkedService {
 
     /**
      * Set the endpoint property: The endpoint of the ServiceNow server. (i.e. &lt;instance&gt;.service-now.com).
-     *
+     * 
      * @param endpoint the endpoint value to set.
      * @return the ServiceNowLinkedService object itself.
      */
@@ -89,7 +124,7 @@ public final class ServiceNowLinkedService extends LinkedService {
 
     /**
      * Get the authenticationType property: The authentication type to use.
-     *
+     * 
      * @return the authenticationType value.
      */
     public ServiceNowAuthenticationType authenticationType() {
@@ -98,7 +133,7 @@ public final class ServiceNowLinkedService extends LinkedService {
 
     /**
      * Set the authenticationType property: The authentication type to use.
-     *
+     * 
      * @param authenticationType the authenticationType value to set.
      * @return the ServiceNowLinkedService object itself.
      */
@@ -113,7 +148,7 @@ public final class ServiceNowLinkedService extends LinkedService {
     /**
      * Get the username property: The user name used to connect to the ServiceNow server for Basic and OAuth2
      * authentication.
-     *
+     * 
      * @return the username value.
      */
     public Object username() {
@@ -123,7 +158,7 @@ public final class ServiceNowLinkedService extends LinkedService {
     /**
      * Set the username property: The user name used to connect to the ServiceNow server for Basic and OAuth2
      * authentication.
-     *
+     * 
      * @param username the username value to set.
      * @return the ServiceNowLinkedService object itself.
      */
@@ -137,7 +172,7 @@ public final class ServiceNowLinkedService extends LinkedService {
 
     /**
      * Get the password property: The password corresponding to the user name for Basic and OAuth2 authentication.
-     *
+     * 
      * @return the password value.
      */
     public SecretBase password() {
@@ -146,7 +181,7 @@ public final class ServiceNowLinkedService extends LinkedService {
 
     /**
      * Set the password property: The password corresponding to the user name for Basic and OAuth2 authentication.
-     *
+     * 
      * @param password the password value to set.
      * @return the ServiceNowLinkedService object itself.
      */
@@ -160,7 +195,7 @@ public final class ServiceNowLinkedService extends LinkedService {
 
     /**
      * Get the clientId property: The client id for OAuth2 authentication.
-     *
+     * 
      * @return the clientId value.
      */
     public Object clientId() {
@@ -169,7 +204,7 @@ public final class ServiceNowLinkedService extends LinkedService {
 
     /**
      * Set the clientId property: The client id for OAuth2 authentication.
-     *
+     * 
      * @param clientId the clientId value to set.
      * @return the ServiceNowLinkedService object itself.
      */
@@ -183,7 +218,7 @@ public final class ServiceNowLinkedService extends LinkedService {
 
     /**
      * Get the clientSecret property: The client secret for OAuth2 authentication.
-     *
+     * 
      * @return the clientSecret value.
      */
     public SecretBase clientSecret() {
@@ -192,7 +227,7 @@ public final class ServiceNowLinkedService extends LinkedService {
 
     /**
      * Set the clientSecret property: The client secret for OAuth2 authentication.
-     *
+     * 
      * @param clientSecret the clientSecret value to set.
      * @return the ServiceNowLinkedService object itself.
      */
@@ -207,7 +242,7 @@ public final class ServiceNowLinkedService extends LinkedService {
     /**
      * Get the useEncryptedEndpoints property: Specifies whether the data source endpoints are encrypted using HTTPS.
      * The default value is true.
-     *
+     * 
      * @return the useEncryptedEndpoints value.
      */
     public Object useEncryptedEndpoints() {
@@ -217,7 +252,7 @@ public final class ServiceNowLinkedService extends LinkedService {
     /**
      * Set the useEncryptedEndpoints property: Specifies whether the data source endpoints are encrypted using HTTPS.
      * The default value is true.
-     *
+     * 
      * @param useEncryptedEndpoints the useEncryptedEndpoints value to set.
      * @return the ServiceNowLinkedService object itself.
      */
@@ -232,7 +267,7 @@ public final class ServiceNowLinkedService extends LinkedService {
     /**
      * Get the useHostVerification property: Specifies whether to require the host name in the server's certificate to
      * match the host name of the server when connecting over SSL. The default value is true.
-     *
+     * 
      * @return the useHostVerification value.
      */
     public Object useHostVerification() {
@@ -242,7 +277,7 @@ public final class ServiceNowLinkedService extends LinkedService {
     /**
      * Set the useHostVerification property: Specifies whether to require the host name in the server's certificate to
      * match the host name of the server when connecting over SSL. The default value is true.
-     *
+     * 
      * @param useHostVerification the useHostVerification value to set.
      * @return the ServiceNowLinkedService object itself.
      */
@@ -257,7 +292,7 @@ public final class ServiceNowLinkedService extends LinkedService {
     /**
      * Get the usePeerVerification property: Specifies whether to verify the identity of the server when connecting over
      * SSL. The default value is true.
-     *
+     * 
      * @return the usePeerVerification value.
      */
     public Object usePeerVerification() {
@@ -267,7 +302,7 @@ public final class ServiceNowLinkedService extends LinkedService {
     /**
      * Set the usePeerVerification property: Specifies whether to verify the identity of the server when connecting over
      * SSL. The default value is true.
-     *
+     * 
      * @param usePeerVerification the usePeerVerification value to set.
      * @return the ServiceNowLinkedService object itself.
      */
@@ -281,22 +316,22 @@ public final class ServiceNowLinkedService extends LinkedService {
 
     /**
      * Get the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @return the encryptedCredential value.
      */
-    public Object encryptedCredential() {
+    public String encryptedCredential() {
         return this.innerTypeProperties() == null ? null : this.innerTypeProperties().encryptedCredential();
     }
 
     /**
      * Set the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @param encryptedCredential the encryptedCredential value to set.
      * @return the ServiceNowLinkedService object itself.
      */
-    public ServiceNowLinkedService withEncryptedCredential(Object encryptedCredential) {
+    public ServiceNowLinkedService withEncryptedCredential(String encryptedCredential) {
         if (this.innerTypeProperties() == null) {
             this.innerTypeProperties = new ServiceNowLinkedServiceTypeProperties();
         }
@@ -306,19 +341,20 @@ public final class ServiceNowLinkedService extends LinkedService {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
         if (innerTypeProperties() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property innerTypeProperties in model ServiceNowLinkedService"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property innerTypeProperties in model ServiceNowLinkedService"));
         } else {
             innerTypeProperties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ServiceNowLinkedService.class);
 }

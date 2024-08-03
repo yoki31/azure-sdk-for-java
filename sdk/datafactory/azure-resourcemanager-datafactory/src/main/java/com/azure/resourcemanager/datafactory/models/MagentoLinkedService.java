@@ -7,19 +7,26 @@ package com.azure.resourcemanager.datafactory.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.fluent.models.MagentoLinkedServiceTypeProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.List;
 import java.util.Map;
 
-/** Magento server linked service. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * Magento server linked service.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = MagentoLinkedService.class, visible = true)
 @JsonTypeName("Magento")
 @Fluent
 public final class MagentoLinkedService extends LinkedService {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MagentoLinkedService.class);
+    /*
+     * Type of linked service.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "Magento";
 
     /*
      * Magento server linked service properties.
@@ -28,36 +35,60 @@ public final class MagentoLinkedService extends LinkedService {
     private MagentoLinkedServiceTypeProperties innerTypeProperties = new MagentoLinkedServiceTypeProperties();
 
     /**
+     * Creates an instance of MagentoLinkedService class.
+     */
+    public MagentoLinkedService() {
+    }
+
+    /**
+     * Get the type property: Type of linked service.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the innerTypeProperties property: Magento server linked service properties.
-     *
+     * 
      * @return the innerTypeProperties value.
      */
     private MagentoLinkedServiceTypeProperties innerTypeProperties() {
         return this.innerTypeProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public MagentoLinkedService withConnectVia(IntegrationRuntimeReference connectVia) {
         super.withConnectVia(connectVia);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public MagentoLinkedService withDescription(String description) {
         super.withDescription(description);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public MagentoLinkedService withParameters(Map<String, ParameterSpecification> parameters) {
         super.withParameters(parameters);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public MagentoLinkedService withAnnotations(List<Object> annotations) {
         super.withAnnotations(annotations);
@@ -66,7 +97,7 @@ public final class MagentoLinkedService extends LinkedService {
 
     /**
      * Get the host property: The URL of the Magento instance. (i.e. 192.168.222.110/magento3).
-     *
+     * 
      * @return the host value.
      */
     public Object host() {
@@ -75,7 +106,7 @@ public final class MagentoLinkedService extends LinkedService {
 
     /**
      * Set the host property: The URL of the Magento instance. (i.e. 192.168.222.110/magento3).
-     *
+     * 
      * @param host the host value to set.
      * @return the MagentoLinkedService object itself.
      */
@@ -89,7 +120,7 @@ public final class MagentoLinkedService extends LinkedService {
 
     /**
      * Get the accessToken property: The access token from Magento.
-     *
+     * 
      * @return the accessToken value.
      */
     public SecretBase accessToken() {
@@ -98,7 +129,7 @@ public final class MagentoLinkedService extends LinkedService {
 
     /**
      * Set the accessToken property: The access token from Magento.
-     *
+     * 
      * @param accessToken the accessToken value to set.
      * @return the MagentoLinkedService object itself.
      */
@@ -113,7 +144,7 @@ public final class MagentoLinkedService extends LinkedService {
     /**
      * Get the useEncryptedEndpoints property: Specifies whether the data source endpoints are encrypted using HTTPS.
      * The default value is true.
-     *
+     * 
      * @return the useEncryptedEndpoints value.
      */
     public Object useEncryptedEndpoints() {
@@ -123,7 +154,7 @@ public final class MagentoLinkedService extends LinkedService {
     /**
      * Set the useEncryptedEndpoints property: Specifies whether the data source endpoints are encrypted using HTTPS.
      * The default value is true.
-     *
+     * 
      * @param useEncryptedEndpoints the useEncryptedEndpoints value to set.
      * @return the MagentoLinkedService object itself.
      */
@@ -138,7 +169,7 @@ public final class MagentoLinkedService extends LinkedService {
     /**
      * Get the useHostVerification property: Specifies whether to require the host name in the server's certificate to
      * match the host name of the server when connecting over SSL. The default value is true.
-     *
+     * 
      * @return the useHostVerification value.
      */
     public Object useHostVerification() {
@@ -148,7 +179,7 @@ public final class MagentoLinkedService extends LinkedService {
     /**
      * Set the useHostVerification property: Specifies whether to require the host name in the server's certificate to
      * match the host name of the server when connecting over SSL. The default value is true.
-     *
+     * 
      * @param useHostVerification the useHostVerification value to set.
      * @return the MagentoLinkedService object itself.
      */
@@ -163,7 +194,7 @@ public final class MagentoLinkedService extends LinkedService {
     /**
      * Get the usePeerVerification property: Specifies whether to verify the identity of the server when connecting over
      * SSL. The default value is true.
-     *
+     * 
      * @return the usePeerVerification value.
      */
     public Object usePeerVerification() {
@@ -173,7 +204,7 @@ public final class MagentoLinkedService extends LinkedService {
     /**
      * Set the usePeerVerification property: Specifies whether to verify the identity of the server when connecting over
      * SSL. The default value is true.
-     *
+     * 
      * @param usePeerVerification the usePeerVerification value to set.
      * @return the MagentoLinkedService object itself.
      */
@@ -187,22 +218,22 @@ public final class MagentoLinkedService extends LinkedService {
 
     /**
      * Get the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @return the encryptedCredential value.
      */
-    public Object encryptedCredential() {
+    public String encryptedCredential() {
         return this.innerTypeProperties() == null ? null : this.innerTypeProperties().encryptedCredential();
     }
 
     /**
      * Set the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @param encryptedCredential the encryptedCredential value to set.
      * @return the MagentoLinkedService object itself.
      */
-    public MagentoLinkedService withEncryptedCredential(Object encryptedCredential) {
+    public MagentoLinkedService withEncryptedCredential(String encryptedCredential) {
         if (this.innerTypeProperties() == null) {
             this.innerTypeProperties = new MagentoLinkedServiceTypeProperties();
         }
@@ -212,19 +243,20 @@ public final class MagentoLinkedService extends LinkedService {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
         if (innerTypeProperties() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property innerTypeProperties in model MagentoLinkedService"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property innerTypeProperties in model MagentoLinkedService"));
         } else {
             innerTypeProperties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(MagentoLinkedService.class);
 }

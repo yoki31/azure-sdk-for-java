@@ -5,29 +5,25 @@
 package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.models.SecretBase;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Salesforce linked service properties. */
+/**
+ * Salesforce linked service properties.
+ */
 @Fluent
 public final class SalesforceLinkedServiceTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SalesforceLinkedServiceTypeProperties.class);
-
     /*
-     * The URL of Salesforce instance. Default is
-     * 'https://login.salesforce.com'. To copy data from sandbox, specify
-     * 'https://test.salesforce.com'. To copy data from custom domain, specify,
-     * for example, 'https://[domain].my.salesforce.com'. Type: string (or
-     * Expression with resultType string).
+     * The URL of Salesforce instance. Default is 'https://login.salesforce.com'. To copy data from sandbox, specify
+     * 'https://test.salesforce.com'. To copy data from custom domain, specify, for example,
+     * 'https://[domain].my.salesforce.com'. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "environmentUrl")
     private Object environmentUrl;
 
     /*
-     * The username for Basic authentication of the Salesforce instance. Type:
-     * string (or Expression with resultType string).
+     * The username for Basic authentication of the Salesforce instance. Type: string (or Expression with resultType
+     * string).
      */
     @JsonProperty(value = "username")
     private Object username;
@@ -45,25 +41,29 @@ public final class SalesforceLinkedServiceTypeProperties {
     private SecretBase securityToken;
 
     /*
-     * The Salesforce API version used in ADF. Type: string (or Expression with
-     * resultType string).
+     * The Salesforce API version used in ADF. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "apiVersion")
     private Object apiVersion;
 
     /*
-     * The encrypted credential used for authentication. Credentials are
-     * encrypted using the integration runtime credential manager. Type: string
-     * (or Expression with resultType string).
+     * The encrypted credential used for authentication. Credentials are encrypted using the integration runtime
+     * credential manager. Type: string.
      */
     @JsonProperty(value = "encryptedCredential")
-    private Object encryptedCredential;
+    private String encryptedCredential;
+
+    /**
+     * Creates an instance of SalesforceLinkedServiceTypeProperties class.
+     */
+    public SalesforceLinkedServiceTypeProperties() {
+    }
 
     /**
      * Get the environmentUrl property: The URL of Salesforce instance. Default is 'https://login.salesforce.com'. To
      * copy data from sandbox, specify 'https://test.salesforce.com'. To copy data from custom domain, specify, for
      * example, 'https://[domain].my.salesforce.com'. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the environmentUrl value.
      */
     public Object environmentUrl() {
@@ -74,7 +74,7 @@ public final class SalesforceLinkedServiceTypeProperties {
      * Set the environmentUrl property: The URL of Salesforce instance. Default is 'https://login.salesforce.com'. To
      * copy data from sandbox, specify 'https://test.salesforce.com'. To copy data from custom domain, specify, for
      * example, 'https://[domain].my.salesforce.com'. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param environmentUrl the environmentUrl value to set.
      * @return the SalesforceLinkedServiceTypeProperties object itself.
      */
@@ -86,7 +86,7 @@ public final class SalesforceLinkedServiceTypeProperties {
     /**
      * Get the username property: The username for Basic authentication of the Salesforce instance. Type: string (or
      * Expression with resultType string).
-     *
+     * 
      * @return the username value.
      */
     public Object username() {
@@ -96,7 +96,7 @@ public final class SalesforceLinkedServiceTypeProperties {
     /**
      * Set the username property: The username for Basic authentication of the Salesforce instance. Type: string (or
      * Expression with resultType string).
-     *
+     * 
      * @param username the username value to set.
      * @return the SalesforceLinkedServiceTypeProperties object itself.
      */
@@ -107,7 +107,7 @@ public final class SalesforceLinkedServiceTypeProperties {
 
     /**
      * Get the password property: The password for Basic authentication of the Salesforce instance.
-     *
+     * 
      * @return the password value.
      */
     public SecretBase password() {
@@ -116,7 +116,7 @@ public final class SalesforceLinkedServiceTypeProperties {
 
     /**
      * Set the password property: The password for Basic authentication of the Salesforce instance.
-     *
+     * 
      * @param password the password value to set.
      * @return the SalesforceLinkedServiceTypeProperties object itself.
      */
@@ -127,7 +127,7 @@ public final class SalesforceLinkedServiceTypeProperties {
 
     /**
      * Get the securityToken property: The security token is optional to remotely access Salesforce instance.
-     *
+     * 
      * @return the securityToken value.
      */
     public SecretBase securityToken() {
@@ -136,7 +136,7 @@ public final class SalesforceLinkedServiceTypeProperties {
 
     /**
      * Set the securityToken property: The security token is optional to remotely access Salesforce instance.
-     *
+     * 
      * @param securityToken the securityToken value to set.
      * @return the SalesforceLinkedServiceTypeProperties object itself.
      */
@@ -148,7 +148,7 @@ public final class SalesforceLinkedServiceTypeProperties {
     /**
      * Get the apiVersion property: The Salesforce API version used in ADF. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @return the apiVersion value.
      */
     public Object apiVersion() {
@@ -158,7 +158,7 @@ public final class SalesforceLinkedServiceTypeProperties {
     /**
      * Set the apiVersion property: The Salesforce API version used in ADF. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @param apiVersion the apiVersion value to set.
      * @return the SalesforceLinkedServiceTypeProperties object itself.
      */
@@ -169,29 +169,29 @@ public final class SalesforceLinkedServiceTypeProperties {
 
     /**
      * Get the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @return the encryptedCredential value.
      */
-    public Object encryptedCredential() {
+    public String encryptedCredential() {
         return this.encryptedCredential;
     }
 
     /**
      * Set the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @param encryptedCredential the encryptedCredential value to set.
      * @return the SalesforceLinkedServiceTypeProperties object itself.
      */
-    public SalesforceLinkedServiceTypeProperties withEncryptedCredential(Object encryptedCredential) {
+    public SalesforceLinkedServiceTypeProperties withEncryptedCredential(String encryptedCredential) {
         this.encryptedCredential = encryptedCredential;
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

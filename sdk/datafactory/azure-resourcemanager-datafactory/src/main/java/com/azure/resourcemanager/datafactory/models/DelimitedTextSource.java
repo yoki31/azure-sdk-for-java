@@ -5,18 +5,24 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** A copy activity DelimitedText source. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * A copy activity DelimitedText source.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = DelimitedTextSource.class, visible = true)
 @JsonTypeName("DelimitedTextSource")
 @Fluent
 public final class DelimitedTextSource extends CopySource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DelimitedTextSource.class);
+    /*
+     * Copy source type.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "DelimitedTextSource";
 
     /*
      * DelimitedText store settings.
@@ -31,16 +37,31 @@ public final class DelimitedTextSource extends CopySource {
     private DelimitedTextReadSettings formatSettings;
 
     /*
-     * Specifies the additional columns to be added to source data. Type: array
-     * of objects(AdditionalColumns) (or Expression with resultType array of
-     * objects).
+     * Specifies the additional columns to be added to source data. Type: array of objects(AdditionalColumns) (or
+     * Expression with resultType array of objects).
      */
     @JsonProperty(value = "additionalColumns")
     private Object additionalColumns;
 
     /**
+     * Creates an instance of DelimitedTextSource class.
+     */
+    public DelimitedTextSource() {
+    }
+
+    /**
+     * Get the type property: Copy source type.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the storeSettings property: DelimitedText store settings.
-     *
+     * 
      * @return the storeSettings value.
      */
     public StoreReadSettings storeSettings() {
@@ -49,7 +70,7 @@ public final class DelimitedTextSource extends CopySource {
 
     /**
      * Set the storeSettings property: DelimitedText store settings.
-     *
+     * 
      * @param storeSettings the storeSettings value to set.
      * @return the DelimitedTextSource object itself.
      */
@@ -60,7 +81,7 @@ public final class DelimitedTextSource extends CopySource {
 
     /**
      * Get the formatSettings property: DelimitedText format settings.
-     *
+     * 
      * @return the formatSettings value.
      */
     public DelimitedTextReadSettings formatSettings() {
@@ -69,7 +90,7 @@ public final class DelimitedTextSource extends CopySource {
 
     /**
      * Set the formatSettings property: DelimitedText format settings.
-     *
+     * 
      * @param formatSettings the formatSettings value to set.
      * @return the DelimitedTextSource object itself.
      */
@@ -81,7 +102,7 @@ public final class DelimitedTextSource extends CopySource {
     /**
      * Get the additionalColumns property: Specifies the additional columns to be added to source data. Type: array of
      * objects(AdditionalColumns) (or Expression with resultType array of objects).
-     *
+     * 
      * @return the additionalColumns value.
      */
     public Object additionalColumns() {
@@ -91,7 +112,7 @@ public final class DelimitedTextSource extends CopySource {
     /**
      * Set the additionalColumns property: Specifies the additional columns to be added to source data. Type: array of
      * objects(AdditionalColumns) (or Expression with resultType array of objects).
-     *
+     * 
      * @param additionalColumns the additionalColumns value to set.
      * @return the DelimitedTextSource object itself.
      */
@@ -100,28 +121,36 @@ public final class DelimitedTextSource extends CopySource {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DelimitedTextSource withSourceRetryCount(Object sourceRetryCount) {
         super.withSourceRetryCount(sourceRetryCount);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DelimitedTextSource withSourceRetryWait(Object sourceRetryWait) {
         super.withSourceRetryWait(sourceRetryWait);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DelimitedTextSource withMaxConcurrentConnections(Object maxConcurrentConnections) {
         super.withMaxConcurrentConnections(maxConcurrentConnections);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DelimitedTextSource withDisableMetricsCollection(Object disableMetricsCollection) {
         super.withDisableMetricsCollection(disableMetricsCollection);
@@ -130,7 +159,7 @@ public final class DelimitedTextSource extends CopySource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

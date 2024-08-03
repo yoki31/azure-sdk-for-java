@@ -5,16 +5,12 @@
 package com.azure.resourcemanager.mediaservices.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** The service metric specifications. */
 @Immutable
 public final class ServiceSpecification {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ServiceSpecification.class);
-
     /*
      * List of log specifications.
      */
@@ -26,6 +22,10 @@ public final class ServiceSpecification {
      */
     @JsonProperty(value = "metricSpecifications", access = JsonProperty.Access.WRITE_ONLY)
     private List<MetricSpecification> metricSpecifications;
+
+    /** Creates an instance of ServiceSpecification class. */
+    public ServiceSpecification() {
+    }
 
     /**
      * Get the logSpecifications property: List of log specifications.

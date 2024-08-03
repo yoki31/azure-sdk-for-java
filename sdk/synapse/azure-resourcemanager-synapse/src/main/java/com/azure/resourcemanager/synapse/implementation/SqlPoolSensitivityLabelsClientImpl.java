@@ -30,7 +30,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.synapse.fluent.SqlPoolSensitivityLabelsClient;
 import com.azure.resourcemanager.synapse.fluent.models.SensitivityLabelInner;
 import com.azure.resourcemanager.synapse.models.SensitivityLabelListResult;
@@ -40,8 +39,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in SqlPoolSensitivityLabelsClient. */
 public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitivityLabelsClient {
-    private final ClientLogger logger = new ClientLogger(SqlPoolSensitivityLabelsClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final SqlPoolSensitivityLabelsService service;
 
@@ -66,7 +63,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      */
     @Host("{$host}")
     @ServiceInterface(name = "SynapseManagementCli")
-    private interface SqlPoolSensitivityLabelsService {
+    public interface SqlPoolSensitivityLabelsService {
         @Headers({"Content-Type: application/json"})
         @Get(
             "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
@@ -244,7 +241,9 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
     }
 
     /**
-     * Gets SQL pool sensitivity labels.
+     * Gets SQL pool sensitivity labels
+     *
+     * <p>Gets SQL pool sensitivity labels.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -253,7 +252,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return sQL pool sensitivity labels.
+     * @return sQL pool sensitivity labels along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SensitivityLabelInner>> listCurrentSinglePageAsync(
@@ -309,7 +308,9 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
     }
 
     /**
-     * Gets SQL pool sensitivity labels.
+     * Gets SQL pool sensitivity labels
+     *
+     * <p>Gets SQL pool sensitivity labels.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -319,7 +320,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return sQL pool sensitivity labels.
+     * @return sQL pool sensitivity labels along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SensitivityLabelInner>> listCurrentSinglePageAsync(
@@ -372,7 +373,9 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
     }
 
     /**
-     * Gets SQL pool sensitivity labels.
+     * Gets SQL pool sensitivity labels
+     *
+     * <p>Gets SQL pool sensitivity labels.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -381,7 +384,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return sQL pool sensitivity labels.
+     * @return sQL pool sensitivity labels as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<SensitivityLabelInner> listCurrentAsync(
@@ -392,7 +395,9 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
     }
 
     /**
-     * Gets SQL pool sensitivity labels.
+     * Gets SQL pool sensitivity labels
+     *
+     * <p>Gets SQL pool sensitivity labels.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -400,7 +405,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return sQL pool sensitivity labels.
+     * @return sQL pool sensitivity labels as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<SensitivityLabelInner> listCurrentAsync(
@@ -412,7 +417,9 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
     }
 
     /**
-     * Gets SQL pool sensitivity labels.
+     * Gets SQL pool sensitivity labels
+     *
+     * <p>Gets SQL pool sensitivity labels.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -422,7 +429,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return sQL pool sensitivity labels.
+     * @return sQL pool sensitivity labels as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<SensitivityLabelInner> listCurrentAsync(
@@ -433,7 +440,9 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
     }
 
     /**
-     * Gets SQL pool sensitivity labels.
+     * Gets SQL pool sensitivity labels
+     *
+     * <p>Gets SQL pool sensitivity labels.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -441,7 +450,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return sQL pool sensitivity labels.
+     * @return sQL pool sensitivity labels as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<SensitivityLabelInner> listCurrent(
@@ -451,7 +460,9 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
     }
 
     /**
-     * Gets SQL pool sensitivity labels.
+     * Gets SQL pool sensitivity labels
+     *
+     * <p>Gets SQL pool sensitivity labels.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -461,7 +472,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return sQL pool sensitivity labels.
+     * @return sQL pool sensitivity labels as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<SensitivityLabelInner> listCurrent(
@@ -479,7 +490,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> updateWithResponseAsync(
@@ -539,7 +550,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> updateWithResponseAsync(
@@ -599,13 +610,36 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> updateAsync(
         String resourceGroupName, String workspaceName, String sqlPoolName, SensitivityLabelUpdateList parameters) {
         return updateWithResponseAsync(resourceGroupName, workspaceName, sqlPoolName, parameters)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
+    }
+
+    /**
+     * Update sensitivity labels of a given SQL Pool using an operations batch.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param sqlPoolName SQL pool name.
+     * @param parameters A list of sensitivity label update operations.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> updateWithResponse(
+        String resourceGroupName,
+        String workspaceName,
+        String sqlPoolName,
+        SensitivityLabelUpdateList parameters,
+        Context context) {
+        return updateWithResponseAsync(resourceGroupName, workspaceName, sqlPoolName, parameters, context).block();
     }
 
     /**
@@ -622,34 +656,13 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
     @ServiceMethod(returns = ReturnType.SINGLE)
     public void update(
         String resourceGroupName, String workspaceName, String sqlPoolName, SensitivityLabelUpdateList parameters) {
-        updateAsync(resourceGroupName, workspaceName, sqlPoolName, parameters).block();
+        updateWithResponse(resourceGroupName, workspaceName, sqlPoolName, parameters, Context.NONE);
     }
 
     /**
-     * Update sensitivity labels of a given SQL Pool using an operations batch.
+     * Gets sensitivity labels of a given SQL pool
      *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param sqlPoolName SQL pool name.
-     * @param parameters A list of sensitivity label update operations.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> updateWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        SensitivityLabelUpdateList parameters,
-        Context context) {
-        return updateWithResponseAsync(resourceGroupName, workspaceName, sqlPoolName, parameters, context).block();
-    }
-
-    /**
-     * Gets sensitivity labels of a given SQL pool.
+     * <p>Gets sensitivity labels of a given SQL pool.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -660,7 +673,8 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return sensitivity labels of a given SQL pool.
+     * @return sensitivity labels of a given SQL pool along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SensitivityLabelInner>> listRecommendedSinglePageAsync(
@@ -723,7 +737,9 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
     }
 
     /**
-     * Gets sensitivity labels of a given SQL pool.
+     * Gets sensitivity labels of a given SQL pool
+     *
+     * <p>Gets sensitivity labels of a given SQL pool.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -735,7 +751,8 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return sensitivity labels of a given SQL pool.
+     * @return sensitivity labels of a given SQL pool along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SensitivityLabelInner>> listRecommendedSinglePageAsync(
@@ -796,7 +813,9 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
     }
 
     /**
-     * Gets sensitivity labels of a given SQL pool.
+     * Gets sensitivity labels of a given SQL pool
+     *
+     * <p>Gets sensitivity labels of a given SQL pool.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -807,7 +826,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return sensitivity labels of a given SQL pool.
+     * @return sensitivity labels of a given SQL pool as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<SensitivityLabelInner> listRecommendedAsync(
@@ -825,7 +844,9 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
     }
 
     /**
-     * Gets sensitivity labels of a given SQL pool.
+     * Gets sensitivity labels of a given SQL pool
+     *
+     * <p>Gets sensitivity labels of a given SQL pool.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -833,7 +854,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return sensitivity labels of a given SQL pool.
+     * @return sensitivity labels of a given SQL pool as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<SensitivityLabelInner> listRecommendedAsync(
@@ -849,7 +870,9 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
     }
 
     /**
-     * Gets sensitivity labels of a given SQL pool.
+     * Gets sensitivity labels of a given SQL pool
+     *
+     * <p>Gets sensitivity labels of a given SQL pool.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -861,7 +884,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return sensitivity labels of a given SQL pool.
+     * @return sensitivity labels of a given SQL pool as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<SensitivityLabelInner> listRecommendedAsync(
@@ -886,7 +909,9 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
     }
 
     /**
-     * Gets sensitivity labels of a given SQL pool.
+     * Gets sensitivity labels of a given SQL pool
+     *
+     * <p>Gets sensitivity labels of a given SQL pool.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -894,7 +919,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return sensitivity labels of a given SQL pool.
+     * @return sensitivity labels of a given SQL pool as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<SensitivityLabelInner> listRecommended(
@@ -908,7 +933,9 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
     }
 
     /**
-     * Gets sensitivity labels of a given SQL pool.
+     * Gets sensitivity labels of a given SQL pool
+     *
+     * <p>Gets sensitivity labels of a given SQL pool.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -920,7 +947,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return sensitivity labels of a given SQL pool.
+     * @return sensitivity labels of a given SQL pool as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<SensitivityLabelInner> listRecommended(
@@ -955,7 +982,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a sensitivity label.
+     * @return a sensitivity label along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<SensitivityLabelInner>> createOrUpdateWithResponseAsync(
@@ -1040,7 +1067,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a sensitivity label.
+     * @return a sensitivity label along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<SensitivityLabelInner>> createOrUpdateWithResponseAsync(
@@ -1122,7 +1149,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a sensitivity label.
+     * @return a sensitivity label on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<SensitivityLabelInner> createOrUpdateAsync(
@@ -1135,14 +1162,38 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
         SensitivityLabelInner parameters) {
         return createOrUpdateWithResponseAsync(
                 resourceGroupName, workspaceName, sqlPoolName, schemaName, tableName, columnName, parameters)
-            .flatMap(
-                (Response<SensitivityLabelInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
+    }
+
+    /**
+     * Creates or updates the sensitivity label of a given column in a Sql pool.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param sqlPoolName SQL pool name.
+     * @param schemaName The name of the schema.
+     * @param tableName The name of the table.
+     * @param columnName The name of the column.
+     * @param parameters The column sensitivity label resource.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a sensitivity label along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<SensitivityLabelInner> createOrUpdateWithResponse(
+        String resourceGroupName,
+        String workspaceName,
+        String sqlPoolName,
+        String schemaName,
+        String tableName,
+        String columnName,
+        SensitivityLabelInner parameters,
+        Context context) {
+        return createOrUpdateWithResponseAsync(
+                resourceGroupName, workspaceName, sqlPoolName, schemaName, tableName, columnName, parameters, context)
+            .block();
     }
 
     /**
@@ -1169,40 +1220,16 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
         String tableName,
         String columnName,
         SensitivityLabelInner parameters) {
-        return createOrUpdateAsync(
-                resourceGroupName, workspaceName, sqlPoolName, schemaName, tableName, columnName, parameters)
-            .block();
-    }
-
-    /**
-     * Creates or updates the sensitivity label of a given column in a Sql pool.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param sqlPoolName SQL pool name.
-     * @param schemaName The name of the schema.
-     * @param tableName The name of the table.
-     * @param columnName The name of the column.
-     * @param parameters The column sensitivity label resource.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a sensitivity label.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<SensitivityLabelInner> createOrUpdateWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        String schemaName,
-        String tableName,
-        String columnName,
-        SensitivityLabelInner parameters,
-        Context context) {
-        return createOrUpdateWithResponseAsync(
-                resourceGroupName, workspaceName, sqlPoolName, schemaName, tableName, columnName, parameters, context)
-            .block();
+        return createOrUpdateWithResponse(
+                resourceGroupName,
+                workspaceName,
+                sqlPoolName,
+                schemaName,
+                tableName,
+                columnName,
+                parameters,
+                Context.NONE)
+            .getValue();
     }
 
     /**
@@ -1217,7 +1244,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -1292,7 +1319,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -1364,7 +1391,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(
@@ -1375,7 +1402,36 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
         String tableName,
         String columnName) {
         return deleteWithResponseAsync(resourceGroupName, workspaceName, sqlPoolName, schemaName, tableName, columnName)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
+    }
+
+    /**
+     * Deletes the sensitivity label of a given column in a Sql pool.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param sqlPoolName SQL pool name.
+     * @param schemaName The name of the schema.
+     * @param tableName The name of the table.
+     * @param columnName The name of the column.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> deleteWithResponse(
+        String resourceGroupName,
+        String workspaceName,
+        String sqlPoolName,
+        String schemaName,
+        String tableName,
+        String columnName,
+        Context context) {
+        return deleteWithResponseAsync(
+                resourceGroupName, workspaceName, sqlPoolName, schemaName, tableName, columnName, context)
+            .block();
     }
 
     /**
@@ -1399,36 +1455,8 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
         String schemaName,
         String tableName,
         String columnName) {
-        deleteAsync(resourceGroupName, workspaceName, sqlPoolName, schemaName, tableName, columnName).block();
-    }
-
-    /**
-     * Deletes the sensitivity label of a given column in a Sql pool.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param sqlPoolName SQL pool name.
-     * @param schemaName The name of the schema.
-     * @param tableName The name of the table.
-     * @param columnName The name of the column.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> deleteWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        String schemaName,
-        String tableName,
-        String columnName,
-        Context context) {
-        return deleteWithResponseAsync(
-                resourceGroupName, workspaceName, sqlPoolName, schemaName, tableName, columnName, context)
-            .block();
+        deleteWithResponse(
+            resourceGroupName, workspaceName, sqlPoolName, schemaName, tableName, columnName, Context.NONE);
     }
 
     /**
@@ -1444,7 +1472,8 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the sensitivity label of a given column.
+     * @return the sensitivity label of a given column along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<SensitivityLabelInner>> getWithResponseAsync(
@@ -1527,7 +1556,8 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the sensitivity label of a given column.
+     * @return the sensitivity label of a given column along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<SensitivityLabelInner>> getWithResponseAsync(
@@ -1607,7 +1637,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the sensitivity label of a given column.
+     * @return the sensitivity label of a given column on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<SensitivityLabelInner> getAsync(
@@ -1626,14 +1656,45 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
                 tableName,
                 columnName,
                 sensitivityLabelSource)
-            .flatMap(
-                (Response<SensitivityLabelInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
+    }
+
+    /**
+     * Gets the sensitivity label of a given column.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param sqlPoolName SQL pool name.
+     * @param schemaName The name of the schema.
+     * @param tableName The name of the table.
+     * @param columnName The name of the column.
+     * @param sensitivityLabelSource The source of the sensitivity label.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the sensitivity label of a given column along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<SensitivityLabelInner> getWithResponse(
+        String resourceGroupName,
+        String workspaceName,
+        String sqlPoolName,
+        String schemaName,
+        String tableName,
+        String columnName,
+        SensitivityLabelSource sensitivityLabelSource,
+        Context context) {
+        return getWithResponseAsync(
+                resourceGroupName,
+                workspaceName,
+                sqlPoolName,
+                schemaName,
+                tableName,
+                columnName,
+                sensitivityLabelSource,
+                context)
+            .block();
     }
 
     /**
@@ -1660,44 +1721,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
         String tableName,
         String columnName,
         SensitivityLabelSource sensitivityLabelSource) {
-        return getAsync(
-                resourceGroupName,
-                workspaceName,
-                sqlPoolName,
-                schemaName,
-                tableName,
-                columnName,
-                sensitivityLabelSource)
-            .block();
-    }
-
-    /**
-     * Gets the sensitivity label of a given column.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param sqlPoolName SQL pool name.
-     * @param schemaName The name of the schema.
-     * @param tableName The name of the table.
-     * @param columnName The name of the column.
-     * @param sensitivityLabelSource The source of the sensitivity label.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the sensitivity label of a given column.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<SensitivityLabelInner> getWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        String schemaName,
-        String tableName,
-        String columnName,
-        SensitivityLabelSource sensitivityLabelSource,
-        Context context) {
-        return getWithResponseAsync(
+        return getWithResponse(
                 resourceGroupName,
                 workspaceName,
                 sqlPoolName,
@@ -1705,8 +1729,8 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
                 tableName,
                 columnName,
                 sensitivityLabelSource,
-                context)
-            .block();
+                Context.NONE)
+            .getValue();
     }
 
     /**
@@ -1721,7 +1745,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> enableRecommendationWithResponseAsync(
@@ -1796,7 +1820,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> enableRecommendationWithResponseAsync(
@@ -1868,7 +1892,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> enableRecommendationAsync(
@@ -1880,7 +1904,36 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
         String columnName) {
         return enableRecommendationWithResponseAsync(
                 resourceGroupName, workspaceName, sqlPoolName, schemaName, tableName, columnName)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
+    }
+
+    /**
+     * Enables sensitivity recommendations on a given column (recommendations are enabled by default on all columns).
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param sqlPoolName SQL pool name.
+     * @param schemaName The name of the schema.
+     * @param tableName The name of the table.
+     * @param columnName The name of the column.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> enableRecommendationWithResponse(
+        String resourceGroupName,
+        String workspaceName,
+        String sqlPoolName,
+        String schemaName,
+        String tableName,
+        String columnName,
+        Context context) {
+        return enableRecommendationWithResponseAsync(
+                resourceGroupName, workspaceName, sqlPoolName, schemaName, tableName, columnName, context)
+            .block();
     }
 
     /**
@@ -1904,37 +1957,8 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
         String schemaName,
         String tableName,
         String columnName) {
-        enableRecommendationAsync(resourceGroupName, workspaceName, sqlPoolName, schemaName, tableName, columnName)
-            .block();
-    }
-
-    /**
-     * Enables sensitivity recommendations on a given column (recommendations are enabled by default on all columns).
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param sqlPoolName SQL pool name.
-     * @param schemaName The name of the schema.
-     * @param tableName The name of the table.
-     * @param columnName The name of the column.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> enableRecommendationWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        String schemaName,
-        String tableName,
-        String columnName,
-        Context context) {
-        return enableRecommendationWithResponseAsync(
-                resourceGroupName, workspaceName, sqlPoolName, schemaName, tableName, columnName, context)
-            .block();
+        enableRecommendationWithResponse(
+            resourceGroupName, workspaceName, sqlPoolName, schemaName, tableName, columnName, Context.NONE);
     }
 
     /**
@@ -1949,7 +1973,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> disableRecommendationWithResponseAsync(
@@ -2024,7 +2048,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> disableRecommendationWithResponseAsync(
@@ -2096,7 +2120,7 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> disableRecommendationAsync(
@@ -2108,7 +2132,36 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
         String columnName) {
         return disableRecommendationWithResponseAsync(
                 resourceGroupName, workspaceName, sqlPoolName, schemaName, tableName, columnName)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
+    }
+
+    /**
+     * Disables sensitivity recommendations on a given column.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param sqlPoolName SQL pool name.
+     * @param schemaName The name of the schema.
+     * @param tableName The name of the table.
+     * @param columnName The name of the column.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> disableRecommendationWithResponse(
+        String resourceGroupName,
+        String workspaceName,
+        String sqlPoolName,
+        String schemaName,
+        String tableName,
+        String columnName,
+        Context context) {
+        return disableRecommendationWithResponseAsync(
+                resourceGroupName, workspaceName, sqlPoolName, schemaName, tableName, columnName, context)
+            .block();
     }
 
     /**
@@ -2132,47 +2185,19 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
         String schemaName,
         String tableName,
         String columnName) {
-        disableRecommendationAsync(resourceGroupName, workspaceName, sqlPoolName, schemaName, tableName, columnName)
-            .block();
-    }
-
-    /**
-     * Disables sensitivity recommendations on a given column.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param sqlPoolName SQL pool name.
-     * @param schemaName The name of the schema.
-     * @param tableName The name of the table.
-     * @param columnName The name of the column.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> disableRecommendationWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        String schemaName,
-        String tableName,
-        String columnName,
-        Context context) {
-        return disableRecommendationWithResponseAsync(
-                resourceGroupName, workspaceName, sqlPoolName, schemaName, tableName, columnName, context)
-            .block();
+        disableRecommendationWithResponse(
+            resourceGroupName, workspaceName, sqlPoolName, schemaName, tableName, columnName, Context.NONE);
     }
 
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of sensitivity labels.
+     * @return a list of sensitivity labels along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SensitivityLabelInner>> listCurrentNextSinglePageAsync(String nextLink) {
@@ -2203,12 +2228,13 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of sensitivity labels.
+     * @return a list of sensitivity labels along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SensitivityLabelInner>> listCurrentNextSinglePageAsync(
@@ -2240,11 +2266,12 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of sensitivity labels.
+     * @return a list of sensitivity labels along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SensitivityLabelInner>> listRecommendedNextSinglePageAsync(String nextLink) {
@@ -2275,12 +2302,13 @@ public final class SqlPoolSensitivityLabelsClientImpl implements SqlPoolSensitiv
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of sensitivity labels.
+     * @return a list of sensitivity labels along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SensitivityLabelInner>> listRecommendedNextSinglePageAsync(

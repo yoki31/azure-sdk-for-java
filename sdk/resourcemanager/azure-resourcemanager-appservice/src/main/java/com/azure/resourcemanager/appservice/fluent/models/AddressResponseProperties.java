@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.VirtualIpMapping;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** AddressResponse resource specific properties. */
+/**
+ * AddressResponse resource specific properties.
+ */
 @Fluent
 public final class AddressResponseProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AddressResponseProperties.class);
-
     /*
      * Main public virtual IP.
      */
@@ -23,8 +21,7 @@ public final class AddressResponseProperties {
     private String serviceIpAddress;
 
     /*
-     * Virtual Network internal IP address of the App Service Environment if it
-     * is in internal load-balancing mode.
+     * Virtual Network internal IP address of the App Service Environment if it is in internal load-balancing mode.
      */
     @JsonProperty(value = "internalIpAddress")
     private String internalIpAddress;
@@ -42,8 +39,14 @@ public final class AddressResponseProperties {
     private List<VirtualIpMapping> vipMappings;
 
     /**
+     * Creates an instance of AddressResponseProperties class.
+     */
+    public AddressResponseProperties() {
+    }
+
+    /**
      * Get the serviceIpAddress property: Main public virtual IP.
-     *
+     * 
      * @return the serviceIpAddress value.
      */
     public String serviceIpAddress() {
@@ -52,7 +55,7 @@ public final class AddressResponseProperties {
 
     /**
      * Set the serviceIpAddress property: Main public virtual IP.
-     *
+     * 
      * @param serviceIpAddress the serviceIpAddress value to set.
      * @return the AddressResponseProperties object itself.
      */
@@ -64,7 +67,7 @@ public final class AddressResponseProperties {
     /**
      * Get the internalIpAddress property: Virtual Network internal IP address of the App Service Environment if it is
      * in internal load-balancing mode.
-     *
+     * 
      * @return the internalIpAddress value.
      */
     public String internalIpAddress() {
@@ -74,7 +77,7 @@ public final class AddressResponseProperties {
     /**
      * Set the internalIpAddress property: Virtual Network internal IP address of the App Service Environment if it is
      * in internal load-balancing mode.
-     *
+     * 
      * @param internalIpAddress the internalIpAddress value to set.
      * @return the AddressResponseProperties object itself.
      */
@@ -85,7 +88,7 @@ public final class AddressResponseProperties {
 
     /**
      * Get the outboundIpAddresses property: IP addresses appearing on outbound connections.
-     *
+     * 
      * @return the outboundIpAddresses value.
      */
     public List<String> outboundIpAddresses() {
@@ -94,7 +97,7 @@ public final class AddressResponseProperties {
 
     /**
      * Set the outboundIpAddresses property: IP addresses appearing on outbound connections.
-     *
+     * 
      * @param outboundIpAddresses the outboundIpAddresses value to set.
      * @return the AddressResponseProperties object itself.
      */
@@ -105,7 +108,7 @@ public final class AddressResponseProperties {
 
     /**
      * Get the vipMappings property: Additional virtual IPs.
-     *
+     * 
      * @return the vipMappings value.
      */
     public List<VirtualIpMapping> vipMappings() {
@@ -114,7 +117,7 @@ public final class AddressResponseProperties {
 
     /**
      * Set the vipMappings property: Additional virtual IPs.
-     *
+     * 
      * @param vipMappings the vipMappings value to set.
      * @return the AddressResponseProperties object itself.
      */
@@ -125,7 +128,7 @@ public final class AddressResponseProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

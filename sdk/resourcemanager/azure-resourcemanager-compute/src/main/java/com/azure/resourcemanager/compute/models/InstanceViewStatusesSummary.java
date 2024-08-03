@@ -5,25 +5,29 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Instance view statuses. */
+/**
+ * Instance view statuses.
+ */
 @Immutable
 public final class InstanceViewStatusesSummary {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(InstanceViewStatusesSummary.class);
-
     /*
-     * The statusesSummary property.
+     * The summary.
      */
     @JsonProperty(value = "statusesSummary", access = JsonProperty.Access.WRITE_ONLY)
     private List<StatusCodeCount> statusesSummary;
 
     /**
-     * Get the statusesSummary property: The statusesSummary property.
-     *
+     * Creates an instance of InstanceViewStatusesSummary class.
+     */
+    public InstanceViewStatusesSummary() {
+    }
+
+    /**
+     * Get the statusesSummary property: The summary.
+     * 
      * @return the statusesSummary value.
      */
     public List<StatusCodeCount> statusesSummary() {
@@ -32,7 +36,7 @@ public final class InstanceViewStatusesSummary {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

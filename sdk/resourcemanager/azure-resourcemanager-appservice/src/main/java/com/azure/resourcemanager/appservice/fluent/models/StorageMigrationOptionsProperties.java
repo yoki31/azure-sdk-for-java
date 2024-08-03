@@ -6,14 +6,13 @@ package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** StorageMigrationOptions resource specific properties. */
+/**
+ * StorageMigrationOptions resource specific properties.
+ */
 @Fluent
 public final class StorageMigrationOptionsProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(StorageMigrationOptionsProperties.class);
-
     /*
      * AzureFiles connection string.
      */
@@ -27,22 +26,26 @@ public final class StorageMigrationOptionsProperties {
     private String azurefilesShare;
 
     /*
-     * <code>true</code>if the app should be switched over; otherwise,
-     * <code>false</code>.
+     * <code>true</code>if the app should be switched over; otherwise, <code>false</code>.
      */
     @JsonProperty(value = "switchSiteAfterMigration")
     private Boolean switchSiteAfterMigration;
 
     /*
-     * <code>true</code> if the app should be read only during copy operation;
-     * otherwise, <code>false</code>.
+     * <code>true</code> if the app should be read only during copy operation; otherwise, <code>false</code>.
      */
     @JsonProperty(value = "blockWriteAccessToSite")
     private Boolean blockWriteAccessToSite;
 
     /**
+     * Creates an instance of StorageMigrationOptionsProperties class.
+     */
+    public StorageMigrationOptionsProperties() {
+    }
+
+    /**
      * Get the azurefilesConnectionString property: AzureFiles connection string.
-     *
+     * 
      * @return the azurefilesConnectionString value.
      */
     public String azurefilesConnectionString() {
@@ -51,7 +54,7 @@ public final class StorageMigrationOptionsProperties {
 
     /**
      * Set the azurefilesConnectionString property: AzureFiles connection string.
-     *
+     * 
      * @param azurefilesConnectionString the azurefilesConnectionString value to set.
      * @return the StorageMigrationOptionsProperties object itself.
      */
@@ -62,7 +65,7 @@ public final class StorageMigrationOptionsProperties {
 
     /**
      * Get the azurefilesShare property: AzureFiles share.
-     *
+     * 
      * @return the azurefilesShare value.
      */
     public String azurefilesShare() {
@@ -71,7 +74,7 @@ public final class StorageMigrationOptionsProperties {
 
     /**
      * Set the azurefilesShare property: AzureFiles share.
-     *
+     * 
      * @param azurefilesShare the azurefilesShare value to set.
      * @return the StorageMigrationOptionsProperties object itself.
      */
@@ -83,7 +86,7 @@ public final class StorageMigrationOptionsProperties {
     /**
      * Get the switchSiteAfterMigration property: &lt;code&gt;true&lt;/code&gt;if the app should be switched over;
      * otherwise, &lt;code&gt;false&lt;/code&gt;.
-     *
+     * 
      * @return the switchSiteAfterMigration value.
      */
     public Boolean switchSiteAfterMigration() {
@@ -93,7 +96,7 @@ public final class StorageMigrationOptionsProperties {
     /**
      * Set the switchSiteAfterMigration property: &lt;code&gt;true&lt;/code&gt;if the app should be switched over;
      * otherwise, &lt;code&gt;false&lt;/code&gt;.
-     *
+     * 
      * @param switchSiteAfterMigration the switchSiteAfterMigration value to set.
      * @return the StorageMigrationOptionsProperties object itself.
      */
@@ -105,7 +108,7 @@ public final class StorageMigrationOptionsProperties {
     /**
      * Get the blockWriteAccessToSite property: &lt;code&gt;true&lt;/code&gt; if the app should be read only during copy
      * operation; otherwise, &lt;code&gt;false&lt;/code&gt;.
-     *
+     * 
      * @return the blockWriteAccessToSite value.
      */
     public Boolean blockWriteAccessToSite() {
@@ -115,7 +118,7 @@ public final class StorageMigrationOptionsProperties {
     /**
      * Set the blockWriteAccessToSite property: &lt;code&gt;true&lt;/code&gt; if the app should be read only during copy
      * operation; otherwise, &lt;code&gt;false&lt;/code&gt;.
-     *
+     * 
      * @param blockWriteAccessToSite the blockWriteAccessToSite value to set.
      * @return the StorageMigrationOptionsProperties object itself.
      */
@@ -126,22 +129,21 @@ public final class StorageMigrationOptionsProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (azurefilesConnectionString() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property azurefilesConnectionString in model"
-                            + " StorageMigrationOptionsProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property azurefilesConnectionString in model StorageMigrationOptionsProperties"));
         }
         if (azurefilesShare() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property azurefilesShare in model StorageMigrationOptionsProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property azurefilesShare in model StorageMigrationOptionsProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(StorageMigrationOptionsProperties.class);
 }

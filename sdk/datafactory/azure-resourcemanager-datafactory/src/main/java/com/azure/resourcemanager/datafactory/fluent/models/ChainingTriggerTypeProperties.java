@@ -7,15 +7,14 @@ package com.azure.resourcemanager.datafactory.fluent.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.models.PipelineReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Chaining Trigger properties. */
+/**
+ * Chaining Trigger properties.
+ */
 @Fluent
 public final class ChainingTriggerTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ChainingTriggerTypeProperties.class);
-
     /*
      * Upstream Pipelines.
      */
@@ -29,8 +28,14 @@ public final class ChainingTriggerTypeProperties {
     private String runDimension;
 
     /**
+     * Creates an instance of ChainingTriggerTypeProperties class.
+     */
+    public ChainingTriggerTypeProperties() {
+    }
+
+    /**
      * Get the dependsOn property: Upstream Pipelines.
-     *
+     * 
      * @return the dependsOn value.
      */
     public List<PipelineReference> dependsOn() {
@@ -39,7 +44,7 @@ public final class ChainingTriggerTypeProperties {
 
     /**
      * Set the dependsOn property: Upstream Pipelines.
-     *
+     * 
      * @param dependsOn the dependsOn value to set.
      * @return the ChainingTriggerTypeProperties object itself.
      */
@@ -50,7 +55,7 @@ public final class ChainingTriggerTypeProperties {
 
     /**
      * Get the runDimension property: Run Dimension property that needs to be emitted by upstream pipelines.
-     *
+     * 
      * @return the runDimension value.
      */
     public String runDimension() {
@@ -59,7 +64,7 @@ public final class ChainingTriggerTypeProperties {
 
     /**
      * Set the runDimension property: Run Dimension property that needs to be emitted by upstream pipelines.
-     *
+     * 
      * @param runDimension the runDimension value to set.
      * @return the ChainingTriggerTypeProperties object itself.
      */
@@ -70,23 +75,23 @@ public final class ChainingTriggerTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (dependsOn() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property dependsOn in model ChainingTriggerTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property dependsOn in model ChainingTriggerTypeProperties"));
         } else {
             dependsOn().forEach(e -> e.validate());
         }
         if (runDimension() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property runDimension in model ChainingTriggerTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property runDimension in model ChainingTriggerTypeProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ChainingTriggerTypeProperties.class);
 }

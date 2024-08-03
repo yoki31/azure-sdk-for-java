@@ -7,15 +7,23 @@ package com.azure.resourcemanager.compute.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** Defines values for InstanceViewTypes. */
+/**
+ * Defines values for InstanceViewTypes.
+ */
 public enum InstanceViewTypes {
-    /** Enum value instanceView. */
+    /**
+     * Enum value instanceView.
+     */
     INSTANCE_VIEW("instanceView"),
 
-    /** Enum value userData. */
+    /**
+     * Enum value userData.
+     */
     USER_DATA("userData");
 
-    /** The actual serialized value for a InstanceViewTypes instance. */
+    /**
+     * The actual serialized value for a InstanceViewTypes instance.
+     */
     private final String value;
 
     InstanceViewTypes(String value) {
@@ -24,12 +32,15 @@ public enum InstanceViewTypes {
 
     /**
      * Parses a serialized value to a InstanceViewTypes instance.
-     *
+     * 
      * @param value the serialized value to parse.
      * @return the parsed InstanceViewTypes object, or null if unable to parse.
      */
     @JsonCreator
     public static InstanceViewTypes fromString(String value) {
+        if (value == null) {
+            return null;
+        }
         InstanceViewTypes[] items = InstanceViewTypes.values();
         for (InstanceViewTypes item : items) {
             if (item.toString().equalsIgnoreCase(value)) {
@@ -39,6 +50,9 @@ public enum InstanceViewTypes {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @JsonValue
     @Override
     public String toString() {

@@ -5,37 +5,61 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** The location of Amazon S3 Compatible dataset. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * The location of Amazon S3 Compatible dataset.
+ */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "type",
+    defaultImpl = AmazonS3CompatibleLocation.class,
+    visible = true)
 @JsonTypeName("AmazonS3CompatibleLocation")
 @Fluent
 public final class AmazonS3CompatibleLocation extends DatasetLocation {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AmazonS3CompatibleLocation.class);
+    /*
+     * Type of dataset storage location.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "AmazonS3CompatibleLocation";
 
     /*
-     * Specify the bucketName of Amazon S3 Compatible. Type: string (or
-     * Expression with resultType string)
+     * Specify the bucketName of Amazon S3 Compatible. Type: string (or Expression with resultType string)
      */
     @JsonProperty(value = "bucketName")
     private Object bucketName;
 
     /*
-     * Specify the version of Amazon S3 Compatible. Type: string (or Expression
-     * with resultType string).
+     * Specify the version of Amazon S3 Compatible. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "version")
     private Object version;
 
     /**
+     * Creates an instance of AmazonS3CompatibleLocation class.
+     */
+    public AmazonS3CompatibleLocation() {
+    }
+
+    /**
+     * Get the type property: Type of dataset storage location.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the bucketName property: Specify the bucketName of Amazon S3 Compatible. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the bucketName value.
      */
     public Object bucketName() {
@@ -45,7 +69,7 @@ public final class AmazonS3CompatibleLocation extends DatasetLocation {
     /**
      * Set the bucketName property: Specify the bucketName of Amazon S3 Compatible. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param bucketName the bucketName value to set.
      * @return the AmazonS3CompatibleLocation object itself.
      */
@@ -57,7 +81,7 @@ public final class AmazonS3CompatibleLocation extends DatasetLocation {
     /**
      * Get the version property: Specify the version of Amazon S3 Compatible. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the version value.
      */
     public Object version() {
@@ -67,7 +91,7 @@ public final class AmazonS3CompatibleLocation extends DatasetLocation {
     /**
      * Set the version property: Specify the version of Amazon S3 Compatible. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param version the version value to set.
      * @return the AmazonS3CompatibleLocation object itself.
      */
@@ -76,14 +100,18 @@ public final class AmazonS3CompatibleLocation extends DatasetLocation {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AmazonS3CompatibleLocation withFolderPath(Object folderPath) {
         super.withFolderPath(folderPath);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AmazonS3CompatibleLocation withFileName(Object fileName) {
         super.withFileName(fileName);
@@ -92,7 +120,7 @@ public final class AmazonS3CompatibleLocation extends DatasetLocation {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

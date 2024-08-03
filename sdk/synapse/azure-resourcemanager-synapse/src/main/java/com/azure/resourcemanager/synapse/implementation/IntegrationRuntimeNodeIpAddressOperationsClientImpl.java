@@ -21,7 +21,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.synapse.fluent.IntegrationRuntimeNodeIpAddressOperationsClient;
 import com.azure.resourcemanager.synapse.fluent.models.IntegrationRuntimeNodeIpAddressInner;
 import reactor.core.publisher.Mono;
@@ -32,8 +31,6 @@ import reactor.core.publisher.Mono;
  */
 public final class IntegrationRuntimeNodeIpAddressOperationsClientImpl
     implements IntegrationRuntimeNodeIpAddressOperationsClient {
-    private final ClientLogger logger = new ClientLogger(IntegrationRuntimeNodeIpAddressOperationsClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final IntegrationRuntimeNodeIpAddressOperationsService service;
 
@@ -61,7 +58,7 @@ public final class IntegrationRuntimeNodeIpAddressOperationsClientImpl
      */
     @Host("{$host}")
     @ServiceInterface(name = "SynapseManagementCli")
-    private interface IntegrationRuntimeNodeIpAddressOperationsService {
+    public interface IntegrationRuntimeNodeIpAddressOperationsService {
         @Headers({"Content-Type: application/json"})
         @Post(
             "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
@@ -81,7 +78,9 @@ public final class IntegrationRuntimeNodeIpAddressOperationsClientImpl
     }
 
     /**
-     * Get the IP address of an integration runtime node.
+     * Get integration runtime node IP address
+     *
+     * <p>Get the IP address of an integration runtime node.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -90,7 +89,8 @@ public final class IntegrationRuntimeNodeIpAddressOperationsClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the IP address of an integration runtime node.
+     * @return the IP address of an integration runtime node along with {@link Response} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<IntegrationRuntimeNodeIpAddressInner>> getWithResponseAsync(
@@ -142,7 +142,9 @@ public final class IntegrationRuntimeNodeIpAddressOperationsClientImpl
     }
 
     /**
-     * Get the IP address of an integration runtime node.
+     * Get integration runtime node IP address
+     *
+     * <p>Get the IP address of an integration runtime node.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -152,7 +154,8 @@ public final class IntegrationRuntimeNodeIpAddressOperationsClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the IP address of an integration runtime node.
+     * @return the IP address of an integration runtime node along with {@link Response} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<IntegrationRuntimeNodeIpAddressInner>> getWithResponseAsync(
@@ -205,7 +208,9 @@ public final class IntegrationRuntimeNodeIpAddressOperationsClientImpl
     }
 
     /**
-     * Get the IP address of an integration runtime node.
+     * Get integration runtime node IP address
+     *
+     * <p>Get the IP address of an integration runtime node.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -214,24 +219,45 @@ public final class IntegrationRuntimeNodeIpAddressOperationsClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the IP address of an integration runtime node.
+     * @return the IP address of an integration runtime node on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<IntegrationRuntimeNodeIpAddressInner> getAsync(
         String resourceGroupName, String workspaceName, String integrationRuntimeName, String nodeName) {
         return getWithResponseAsync(resourceGroupName, workspaceName, integrationRuntimeName, nodeName)
-            .flatMap(
-                (Response<IntegrationRuntimeNodeIpAddressInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
-     * Get the IP address of an integration runtime node.
+     * Get integration runtime node IP address
+     *
+     * <p>Get the IP address of an integration runtime node.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param integrationRuntimeName Integration runtime name.
+     * @param nodeName Integration runtime node name.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the IP address of an integration runtime node along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<IntegrationRuntimeNodeIpAddressInner> getWithResponse(
+        String resourceGroupName,
+        String workspaceName,
+        String integrationRuntimeName,
+        String nodeName,
+        Context context) {
+        return getWithResponseAsync(resourceGroupName, workspaceName, integrationRuntimeName, nodeName, context)
+            .block();
+    }
+
+    /**
+     * Get integration runtime node IP address
+     *
+     * <p>Get the IP address of an integration runtime node.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -245,30 +271,7 @@ public final class IntegrationRuntimeNodeIpAddressOperationsClientImpl
     @ServiceMethod(returns = ReturnType.SINGLE)
     public IntegrationRuntimeNodeIpAddressInner get(
         String resourceGroupName, String workspaceName, String integrationRuntimeName, String nodeName) {
-        return getAsync(resourceGroupName, workspaceName, integrationRuntimeName, nodeName).block();
-    }
-
-    /**
-     * Get the IP address of an integration runtime node.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param integrationRuntimeName Integration runtime name.
-     * @param nodeName Integration runtime node name.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the IP address of an integration runtime node.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<IntegrationRuntimeNodeIpAddressInner> getWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String integrationRuntimeName,
-        String nodeName,
-        Context context) {
-        return getWithResponseAsync(resourceGroupName, workspaceName, integrationRuntimeName, nodeName, context)
-            .block();
+        return getWithResponse(resourceGroupName, workspaceName, integrationRuntimeName, nodeName, Context.NONE)
+            .getValue();
     }
 }

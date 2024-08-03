@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Azure API management (APIM) configuration linked to the app. */
+/**
+ * Azure API management (APIM) configuration linked to the app.
+ */
 @Fluent
 public final class ApiManagementConfig {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiManagementConfig.class);
-
     /*
      * APIM-Api Identifier.
      */
@@ -21,8 +19,14 @@ public final class ApiManagementConfig {
     private String id;
 
     /**
+     * Creates an instance of ApiManagementConfig class.
+     */
+    public ApiManagementConfig() {
+    }
+
+    /**
      * Get the id property: APIM-Api Identifier.
-     *
+     * 
      * @return the id value.
      */
     public String id() {
@@ -31,7 +35,7 @@ public final class ApiManagementConfig {
 
     /**
      * Set the id property: APIM-Api Identifier.
-     *
+     * 
      * @param id the id value to set.
      * @return the ApiManagementConfig object itself.
      */
@@ -42,7 +46,7 @@ public final class ApiManagementConfig {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

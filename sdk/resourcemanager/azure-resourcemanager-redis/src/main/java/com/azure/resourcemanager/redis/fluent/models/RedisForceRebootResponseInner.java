@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.redis.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Response to force reboot for Redis cache. */
+/**
+ * Response to force reboot for Redis cache.
+ */
 @Immutable
 public final class RedisForceRebootResponseInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RedisForceRebootResponseInner.class);
-
     /*
      * Status message
      */
@@ -21,8 +19,14 @@ public final class RedisForceRebootResponseInner {
     private String message;
 
     /**
+     * Creates an instance of RedisForceRebootResponseInner class.
+     */
+    public RedisForceRebootResponseInner() {
+    }
+
+    /**
      * Get the message property: Status message.
-     *
+     * 
      * @return the message value.
      */
     public String message() {
@@ -31,7 +35,7 @@ public final class RedisForceRebootResponseInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

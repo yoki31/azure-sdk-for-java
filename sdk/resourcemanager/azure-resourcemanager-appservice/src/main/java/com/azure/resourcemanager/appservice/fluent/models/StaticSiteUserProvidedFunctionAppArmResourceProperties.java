@@ -5,17 +5,14 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
-/** StaticSiteUserProvidedFunctionAppARMResource resource specific properties. */
+/**
+ * StaticSiteUserProvidedFunctionAppARMResource resource specific properties.
+ */
 @Fluent
 public final class StaticSiteUserProvidedFunctionAppArmResourceProperties {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(StaticSiteUserProvidedFunctionAppArmResourceProperties.class);
-
     /*
      * The resource id of the function app registered with the static site
      */
@@ -29,15 +26,20 @@ public final class StaticSiteUserProvidedFunctionAppArmResourceProperties {
     private String functionAppRegion;
 
     /*
-     * The date and time on which the function app was registered with the
-     * static site.
+     * The date and time on which the function app was registered with the static site.
      */
     @JsonProperty(value = "createdOn", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdOn;
 
     /**
+     * Creates an instance of StaticSiteUserProvidedFunctionAppArmResourceProperties class.
+     */
+    public StaticSiteUserProvidedFunctionAppArmResourceProperties() {
+    }
+
+    /**
      * Get the functionAppResourceId property: The resource id of the function app registered with the static site.
-     *
+     * 
      * @return the functionAppResourceId value.
      */
     public String functionAppResourceId() {
@@ -46,19 +48,19 @@ public final class StaticSiteUserProvidedFunctionAppArmResourceProperties {
 
     /**
      * Set the functionAppResourceId property: The resource id of the function app registered with the static site.
-     *
+     * 
      * @param functionAppResourceId the functionAppResourceId value to set.
      * @return the StaticSiteUserProvidedFunctionAppArmResourceProperties object itself.
      */
-    public StaticSiteUserProvidedFunctionAppArmResourceProperties withFunctionAppResourceId(
-        String functionAppResourceId) {
+    public StaticSiteUserProvidedFunctionAppArmResourceProperties
+        withFunctionAppResourceId(String functionAppResourceId) {
         this.functionAppResourceId = functionAppResourceId;
         return this;
     }
 
     /**
      * Get the functionAppRegion property: The region of the function app registered with the static site.
-     *
+     * 
      * @return the functionAppRegion value.
      */
     public String functionAppRegion() {
@@ -67,7 +69,7 @@ public final class StaticSiteUserProvidedFunctionAppArmResourceProperties {
 
     /**
      * Set the functionAppRegion property: The region of the function app registered with the static site.
-     *
+     * 
      * @param functionAppRegion the functionAppRegion value to set.
      * @return the StaticSiteUserProvidedFunctionAppArmResourceProperties object itself.
      */
@@ -78,7 +80,7 @@ public final class StaticSiteUserProvidedFunctionAppArmResourceProperties {
 
     /**
      * Get the createdOn property: The date and time on which the function app was registered with the static site.
-     *
+     * 
      * @return the createdOn value.
      */
     public OffsetDateTime createdOn() {
@@ -87,7 +89,7 @@ public final class StaticSiteUserProvidedFunctionAppArmResourceProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

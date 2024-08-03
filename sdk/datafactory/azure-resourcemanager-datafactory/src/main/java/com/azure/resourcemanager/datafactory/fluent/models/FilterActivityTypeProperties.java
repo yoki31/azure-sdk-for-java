@@ -7,14 +7,13 @@ package com.azure.resourcemanager.datafactory.fluent.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.models.Expression;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Filter activity properties. */
+/**
+ * Filter activity properties.
+ */
 @Fluent
 public final class FilterActivityTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(FilterActivityTypeProperties.class);
-
     /*
      * Input array on which filter should be applied.
      */
@@ -28,8 +27,14 @@ public final class FilterActivityTypeProperties {
     private Expression condition;
 
     /**
+     * Creates an instance of FilterActivityTypeProperties class.
+     */
+    public FilterActivityTypeProperties() {
+    }
+
+    /**
      * Get the items property: Input array on which filter should be applied.
-     *
+     * 
      * @return the items value.
      */
     public Expression items() {
@@ -38,7 +43,7 @@ public final class FilterActivityTypeProperties {
 
     /**
      * Set the items property: Input array on which filter should be applied.
-     *
+     * 
      * @param items the items value to set.
      * @return the FilterActivityTypeProperties object itself.
      */
@@ -49,7 +54,7 @@ public final class FilterActivityTypeProperties {
 
     /**
      * Get the condition property: Condition to be used for filtering the input.
-     *
+     * 
      * @return the condition value.
      */
     public Expression condition() {
@@ -58,7 +63,7 @@ public final class FilterActivityTypeProperties {
 
     /**
      * Set the condition property: Condition to be used for filtering the input.
-     *
+     * 
      * @param condition the condition value to set.
      * @return the FilterActivityTypeProperties object itself.
      */
@@ -69,25 +74,25 @@ public final class FilterActivityTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (items() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property items in model FilterActivityTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property items in model FilterActivityTypeProperties"));
         } else {
             items().validate();
         }
         if (condition() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property condition in model FilterActivityTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property condition in model FilterActivityTypeProperties"));
         } else {
             condition().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(FilterActivityTypeProperties.class);
 }

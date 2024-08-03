@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.redisenterprise.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.redisenterprise.fluent.models.PrivateLinkResourceInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** A list of private link resources. */
+/**
+ * A list of private link resources.
+ */
 @Fluent
 public final class PrivateLinkResourceListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PrivateLinkResourceListResult.class);
-
     /*
      * Array of private link resources
      */
@@ -23,8 +21,14 @@ public final class PrivateLinkResourceListResult {
     private List<PrivateLinkResourceInner> value;
 
     /**
+     * Creates an instance of PrivateLinkResourceListResult class.
+     */
+    public PrivateLinkResourceListResult() {
+    }
+
+    /**
      * Get the value property: Array of private link resources.
-     *
+     * 
      * @return the value value.
      */
     public List<PrivateLinkResourceInner> value() {
@@ -33,7 +37,7 @@ public final class PrivateLinkResourceListResult {
 
     /**
      * Set the value property: Array of private link resources.
-     *
+     * 
      * @param value the value value to set.
      * @return the PrivateLinkResourceListResult object itself.
      */
@@ -44,7 +48,7 @@ public final class PrivateLinkResourceListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

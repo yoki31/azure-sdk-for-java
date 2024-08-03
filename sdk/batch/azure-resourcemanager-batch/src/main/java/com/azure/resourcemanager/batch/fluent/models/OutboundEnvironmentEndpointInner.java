@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.batch.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.batch.models.EndpointDependency;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** A collection of related endpoints from the same service for which the Batch service requires outbound access. */
+/**
+ * A collection of related endpoints from the same service for which the Batch service requires outbound access.
+ */
 @Immutable
 public final class OutboundEnvironmentEndpointInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OutboundEnvironmentEndpointInner.class);
-
     /*
      * The type of service that the Batch service connects to.
      */
@@ -23,15 +21,20 @@ public final class OutboundEnvironmentEndpointInner {
     private String category;
 
     /*
-     * The endpoints for this service to which the Batch service makes outbound
-     * calls.
+     * The endpoints for this service to which the Batch service makes outbound calls.
      */
     @JsonProperty(value = "endpoints", access = JsonProperty.Access.WRITE_ONLY)
     private List<EndpointDependency> endpoints;
 
     /**
+     * Creates an instance of OutboundEnvironmentEndpointInner class.
+     */
+    public OutboundEnvironmentEndpointInner() {
+    }
+
+    /**
      * Get the category property: The type of service that the Batch service connects to.
-     *
+     * 
      * @return the category value.
      */
     public String category() {
@@ -40,7 +43,7 @@ public final class OutboundEnvironmentEndpointInner {
 
     /**
      * Get the endpoints property: The endpoints for this service to which the Batch service makes outbound calls.
-     *
+     * 
      * @return the endpoints value.
      */
     public List<EndpointDependency> endpoints() {
@@ -49,7 +52,7 @@ public final class OutboundEnvironmentEndpointInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

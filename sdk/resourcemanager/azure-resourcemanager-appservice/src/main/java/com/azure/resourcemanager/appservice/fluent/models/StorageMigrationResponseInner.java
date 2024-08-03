@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.ProxyOnlyResource;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Response for a migration of app content request. */
+/**
+ * Response for a migration of app content request.
+ */
 @Fluent
 public final class StorageMigrationResponseInner extends ProxyOnlyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(StorageMigrationResponseInner.class);
-
     /*
      * StorageMigrationResponse resource specific properties
      */
@@ -22,15 +20,23 @@ public final class StorageMigrationResponseInner extends ProxyOnlyResource {
     private StorageMigrationResponseProperties innerProperties;
 
     /**
+     * Creates an instance of StorageMigrationResponseInner class.
+     */
+    public StorageMigrationResponseInner() {
+    }
+
+    /**
      * Get the innerProperties property: StorageMigrationResponse resource specific properties.
-     *
+     * 
      * @return the innerProperties value.
      */
     private StorageMigrationResponseProperties innerProperties() {
         return this.innerProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public StorageMigrationResponseInner withKind(String kind) {
         super.withKind(kind);
@@ -40,7 +46,7 @@ public final class StorageMigrationResponseInner extends ProxyOnlyResource {
     /**
      * Get the operationId property: When server starts the migration process, it will return an operation ID
      * identifying that particular migration operation.
-     *
+     * 
      * @return the operationId value.
      */
     public String operationId() {
@@ -49,7 +55,7 @@ public final class StorageMigrationResponseInner extends ProxyOnlyResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

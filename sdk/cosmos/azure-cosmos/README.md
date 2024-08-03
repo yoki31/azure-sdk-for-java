@@ -1,4 +1,4 @@
-# Azure CosmosDB Client Library for Java
+# Azure Cosmos DB Client Library for Java
 
 Azure Cosmos DB is Microsoft’s globally distributed, multi-model database service for operational and analytics workloads. It offers multi-mastering feature by automatically scaling throughput, compute, and storage.
 This project provides SDK library in Java for interacting with [SQL API][sql_api_query] of [Azure Cosmos DB Database Service][cosmos_introduction].
@@ -40,16 +40,13 @@ and then include the direct dependency in the dependencies section without the v
 #### Include direct dependency
 If you want to take dependency on a particular version of the library that is not present in the BOM,
 add the direct dependency to your project as follows.
-
-[//]: # ({x-version-update-start;com.azure:azure-cosmos;current})
 ```xml
 <dependency>
   <groupId>com.azure</groupId>
   <artifactId>azure-cosmos</artifactId>
-  <version>4.24.0</version>
+  <version>LATEST</version>
 </dependency>
 ```
-[//]: # ({x-version-update-end})
 
 Refer to maven central for previous [releases][cosmos_maven]
 
@@ -58,7 +55,7 @@ Refer to [javadocs][api_documentation] for more details on the package
 ### Prerequisites
 
 - [Java Development Kit (JDK) with version 8 or above][jdk]
-- An active Azure account. If you don't have one, you can sign up for a [free account][azure_subscription]. Alternatively, you can use the [Azure Cosmos DB Emulator](https://azure.microsoft.com/documentation/articles/documentdb-nosql-local-emulator) for development and testing. As emulator https certificate is self signed, you need to import its certificate to java trusted cert store as [explained here](https://docs.microsoft.com/azure/cosmos-db/local-emulator-export-ssl-certificates)
+- An active Azure account. If you don't have one, you can sign up for a [free account][azure_subscription]. Alternatively, you can use the [Azure Cosmos DB Emulator](https://docs.microsoft.com/azure/cosmos-db/local-emulator) for development and testing. As emulator https certificate is self signed, you need to import its certificate to java trusted cert store as [explained here](https://docs.microsoft.com/azure/cosmos-db/local-emulator-export-ssl-certificates)
 - (Optional) SLF4J is a logging facade.
 - (Optional) [SLF4J binding](https://www.slf4j.org/manual.html) is used to associate a specific logging framework with SLF4J.
 - (Optional) [Maven][maven]
@@ -69,7 +66,7 @@ The SDK provides Reactor Core based async APIs. You can read more about Reactor 
 
 ### Authenticate the client
 
-In order to interact with the Azure CosmosDB service you'll need to create an instance of the Cosmos Client class. To make this possible you will need an url and key of the Azure CosmosDB service.
+In order to interact with the Azure Cosmos DB service you'll need to create an instance of the Cosmos Client class. To make this possible you will need an url and key of the Azure Cosmos DB service.
 
 The SDK provides two clients.
 1. `CosmosAsyncClient` for operations using asynchronous APIs.
@@ -124,7 +121,7 @@ You may learn more about partitioning [here](https://docs.microsoft.com/azure/co
 
 ## Examples
 
-The following section provides several code snippets covering some of the most common CosmosDB SQL API tasks, including:
+The following section provides several code snippets covering some of the most common Cosmos DB SQL API tasks, including:
 * [Create Cosmos Client](#create-cosmos-client "Create Cosmos Client")
 * [Create Database](#create-database "Create Database")
 * [Create Container](#create-container "Create Container")
@@ -270,8 +267,8 @@ log4j.appender.A1.layout.ConversionPattern=%d %5X{pid} [%t] %-5p %c - %m%n
 ## Next Steps
 
 - Samples are explained in detail [here][samples_readme]
-- Go through [quickstart][quickstart] - Building a java app to manage CosmosDB SQL API data
-- [Read more about Azure CosmosDB Service][cosmos_docs]
+- Go through [quickstart][quickstart] - Building a java app to manage Cosmos DB SQL API data
+- [Read more about Azure Cosmos DB Service][cosmos_docs]
 
 ## Contributing
 
@@ -294,7 +291,7 @@ or contact [opencode@microsoft.com][coc_contact] with any additional questions o
 [jdk]: https://docs.microsoft.com/java/azure/jdk/
 [slf4j]: http://www.slf4j.org/
 [maven]: https://maven.apache.org/
-[cosmos_maven]: https://search.maven.org/artifact/com.azure/azure-cosmos
+[cosmos_maven]: https://central.sonatype.com/artifact/com.azure/azure-cosmos
 [cosmos_maven_svg]: https://img.shields.io/maven-central/v/com.azure/azure-cosmos.svg
 [cla]: https://cla.microsoft.com
 [coc]: https://opensource.microsoft.com/codeofconduct/

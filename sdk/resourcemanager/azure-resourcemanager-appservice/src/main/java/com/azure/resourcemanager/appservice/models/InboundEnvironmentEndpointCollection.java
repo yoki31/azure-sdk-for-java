@@ -7,15 +7,15 @@ package com.azure.resourcemanager.appservice.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.fluent.models.InboundEnvironmentEndpointInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
-/** Collection of Inbound Environment Endpoints. */
+/**
+ * Collection of Inbound Environment Endpoints.
+ */
 @Fluent
 public final class InboundEnvironmentEndpointCollection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(InboundEnvironmentEndpointCollection.class);
-
     /*
      * Collection of resources.
      */
@@ -27,6 +27,12 @@ public final class InboundEnvironmentEndpointCollection {
      */
     @JsonProperty(value = "nextLink", access = JsonProperty.Access.WRITE_ONLY)
     private String nextLink;
+
+    /**
+     * Creates an instance of InboundEnvironmentEndpointCollection class.
+     */
+    public InboundEnvironmentEndpointCollection() {
+    }
 
     /**
      * Get the value property: Collection of resources.
@@ -64,12 +70,13 @@ public final class InboundEnvironmentEndpointCollection {
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property value in model InboundEnvironmentEndpointCollection"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property value in model InboundEnvironmentEndpointCollection"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(InboundEnvironmentEndpointCollection.class);
 }

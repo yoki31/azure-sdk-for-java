@@ -5,25 +5,31 @@
 package com.azure.resourcemanager.monitor.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** Definition of ARM tracked top level resource properties for update operation. */
+/**
+ * Definition of ARM tracked top level resource properties for update operation.
+ */
 @Fluent
 public final class ResourceForUpdate {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ResourceForUpdate.class);
-
     /*
      * Resource tags.
      */
     @JsonProperty(value = "tags")
+    @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
     private Map<String, String> tags;
 
     /**
+     * Creates an instance of ResourceForUpdate class.
+     */
+    public ResourceForUpdate() {
+    }
+
+    /**
      * Get the tags property: Resource tags.
-     *
+     * 
      * @return the tags value.
      */
     public Map<String, String> tags() {
@@ -32,7 +38,7 @@ public final class ResourceForUpdate {
 
     /**
      * Set the tags property: Resource tags.
-     *
+     * 
      * @param tags the tags value to set.
      * @return the ResourceForUpdate object itself.
      */
@@ -43,7 +49,7 @@ public final class ResourceForUpdate {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

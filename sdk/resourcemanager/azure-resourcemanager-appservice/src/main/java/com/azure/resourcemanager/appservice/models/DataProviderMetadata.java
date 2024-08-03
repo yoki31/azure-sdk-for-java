@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Additional configuration for a data providers. */
+/**
+ * Additional configuration for a data providers.
+ */
 @Fluent
 public final class DataProviderMetadata {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DataProviderMetadata.class);
-
     /*
      * The providerName property.
      */
@@ -28,8 +26,14 @@ public final class DataProviderMetadata {
     private List<KeyValuePairStringObject> propertyBag;
 
     /**
+     * Creates an instance of DataProviderMetadata class.
+     */
+    public DataProviderMetadata() {
+    }
+
+    /**
      * Get the providerName property: The providerName property.
-     *
+     * 
      * @return the providerName value.
      */
     public String providerName() {
@@ -38,7 +42,7 @@ public final class DataProviderMetadata {
 
     /**
      * Set the providerName property: The providerName property.
-     *
+     * 
      * @param providerName the providerName value to set.
      * @return the DataProviderMetadata object itself.
      */
@@ -49,7 +53,7 @@ public final class DataProviderMetadata {
 
     /**
      * Get the propertyBag property: Settings for the data provider.
-     *
+     * 
      * @return the propertyBag value.
      */
     public List<KeyValuePairStringObject> propertyBag() {
@@ -58,7 +62,7 @@ public final class DataProviderMetadata {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

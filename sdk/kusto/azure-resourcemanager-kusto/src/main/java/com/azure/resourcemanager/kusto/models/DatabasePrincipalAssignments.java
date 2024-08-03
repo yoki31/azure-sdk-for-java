@@ -13,7 +13,27 @@ public interface DatabasePrincipalAssignments {
     /**
      * Checks that the database principal assignment is valid and is not already in use.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param clusterName The name of the Kusto cluster.
+     * @param databaseName The name of the database in the Kusto cluster.
+     * @param principalAssignmentName The name of the resource.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the result returned from a check name availability request along with {@link Response}.
+     */
+    Response<CheckNameResult> checkNameAvailabilityWithResponse(
+        String resourceGroupName,
+        String clusterName,
+        String databaseName,
+        DatabasePrincipalAssignmentCheckNameRequest principalAssignmentName,
+        Context context);
+
+    /**
+     * Checks that the database principal assignment is valid and is not already in use.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param principalAssignmentName The name of the resource.
@@ -29,29 +49,29 @@ public interface DatabasePrincipalAssignments {
         DatabasePrincipalAssignmentCheckNameRequest principalAssignmentName);
 
     /**
-     * Checks that the database principal assignment is valid and is not already in use.
+     * Gets a Kusto cluster database principalAssignment.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
-     * @param principalAssignmentName The name of the resource.
+     * @param principalAssignmentName The name of the Kusto principalAssignment.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
+     * @return a Kusto cluster database principalAssignment along with {@link Response}.
      */
-    Response<CheckNameResult> checkNameAvailabilityWithResponse(
+    Response<DatabasePrincipalAssignment> getWithResponse(
         String resourceGroupName,
         String clusterName,
         String databaseName,
-        DatabasePrincipalAssignmentCheckNameRequest principalAssignmentName,
+        String principalAssignmentName,
         Context context);
 
     /**
      * Gets a Kusto cluster database principalAssignment.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param principalAssignmentName The name of the Kusto principalAssignment.
@@ -64,29 +84,9 @@ public interface DatabasePrincipalAssignments {
         String resourceGroupName, String clusterName, String databaseName, String principalAssignmentName);
 
     /**
-     * Gets a Kusto cluster database principalAssignment.
-     *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
-     * @param clusterName The name of the Kusto cluster.
-     * @param databaseName The name of the database in the Kusto cluster.
-     * @param principalAssignmentName The name of the Kusto principalAssignment.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Kusto cluster database principalAssignment.
-     */
-    Response<DatabasePrincipalAssignment> getWithResponse(
-        String resourceGroupName,
-        String clusterName,
-        String databaseName,
-        String principalAssignmentName,
-        Context context);
-
-    /**
      * Deletes a Kusto principalAssignment.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param principalAssignmentName The name of the Kusto principalAssignment.
@@ -99,7 +99,7 @@ public interface DatabasePrincipalAssignments {
     /**
      * Deletes a Kusto principalAssignment.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param principalAssignmentName The name of the Kusto principalAssignment.
@@ -118,27 +118,29 @@ public interface DatabasePrincipalAssignments {
     /**
      * Lists all Kusto cluster database principalAssignments.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database principal assignments operation response.
+     * @return the list Kusto database principal assignments operation response as paginated response with {@link
+     *     PagedIterable}.
      */
     PagedIterable<DatabasePrincipalAssignment> list(String resourceGroupName, String clusterName, String databaseName);
 
     /**
      * Lists all Kusto cluster database principalAssignments.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param databaseName The name of the database in the Kusto cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database principal assignments operation response.
+     * @return the list Kusto database principal assignments operation response as paginated response with {@link
+     *     PagedIterable}.
      */
     PagedIterable<DatabasePrincipalAssignment> list(
         String resourceGroupName, String clusterName, String databaseName, Context context);
@@ -150,7 +152,7 @@ public interface DatabasePrincipalAssignments {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Kusto cluster database principalAssignment.
+     * @return a Kusto cluster database principalAssignment along with {@link Response}.
      */
     DatabasePrincipalAssignment getById(String id);
 
@@ -162,7 +164,7 @@ public interface DatabasePrincipalAssignments {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Kusto cluster database principalAssignment.
+     * @return a Kusto cluster database principalAssignment along with {@link Response}.
      */
     Response<DatabasePrincipalAssignment> getByIdWithResponse(String id, Context context);
 

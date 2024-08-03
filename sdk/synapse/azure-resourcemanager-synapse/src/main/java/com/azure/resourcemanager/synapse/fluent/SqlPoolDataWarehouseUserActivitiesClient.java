@@ -16,7 +16,33 @@ import com.azure.resourcemanager.synapse.models.DataWarehouseUserActivityName;
  */
 public interface SqlPoolDataWarehouseUserActivitiesClient {
     /**
-     * Gets the user activities of a SQL pool which includes running and suspended queries.
+     * Get SQL pool user activities
+     *
+     * <p>Gets the user activities of a SQL pool which includes running and suspended queries.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param sqlPoolName SQL pool name.
+     * @param dataWarehouseUserActivityName The activity name of the Sql pool.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the user activities of a SQL pool which includes running and suspended queries along with {@link
+     *     Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<DataWarehouseUserActivitiesInner> getWithResponse(
+        String resourceGroupName,
+        String workspaceName,
+        String sqlPoolName,
+        DataWarehouseUserActivityName dataWarehouseUserActivityName,
+        Context context);
+
+    /**
+     * Get SQL pool user activities
+     *
+     * <p>Gets the user activities of a SQL pool which includes running and suspended queries.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -33,25 +59,4 @@ public interface SqlPoolDataWarehouseUserActivitiesClient {
         String workspaceName,
         String sqlPoolName,
         DataWarehouseUserActivityName dataWarehouseUserActivityName);
-
-    /**
-     * Gets the user activities of a SQL pool which includes running and suspended queries.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param sqlPoolName SQL pool name.
-     * @param dataWarehouseUserActivityName The activity name of the Sql pool.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the user activities of a SQL pool which includes running and suspended queries.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<DataWarehouseUserActivitiesInner> getWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        DataWarehouseUserActivityName dataWarehouseUserActivityName,
-        Context context);
 }

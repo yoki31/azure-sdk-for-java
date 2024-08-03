@@ -6,16 +6,14 @@ package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.Resource;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** The core properties of ARM resources. */
+/**
+ * The core properties of ARM resources.
+ */
 @Fluent
 public class ManagedCassandraArmResourceProperties extends Resource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ManagedCassandraArmResourceProperties.class);
-
     /*
      * Identity for the resource.
      */
@@ -23,8 +21,14 @@ public class ManagedCassandraArmResourceProperties extends Resource {
     private ManagedCassandraManagedServiceIdentity identity;
 
     /**
+     * Creates an instance of ManagedCassandraArmResourceProperties class.
+     */
+    public ManagedCassandraArmResourceProperties() {
+    }
+
+    /**
      * Get the identity property: Identity for the resource.
-     *
+     * 
      * @return the identity value.
      */
     public ManagedCassandraManagedServiceIdentity identity() {
@@ -33,7 +37,7 @@ public class ManagedCassandraArmResourceProperties extends Resource {
 
     /**
      * Set the identity property: Identity for the resource.
-     *
+     * 
      * @param identity the identity value to set.
      * @return the ManagedCassandraArmResourceProperties object itself.
      */
@@ -42,14 +46,18 @@ public class ManagedCassandraArmResourceProperties extends Resource {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ManagedCassandraArmResourceProperties withLocation(String location) {
         super.withLocation(location);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ManagedCassandraArmResourceProperties withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -58,7 +66,7 @@ public class ManagedCassandraArmResourceProperties extends Resource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

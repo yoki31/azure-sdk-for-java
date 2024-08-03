@@ -13,19 +13,19 @@ public interface Users {
     /**
      * Lists a collection of registered users in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Users list representation.
+     * @return paged Users list representation as paginated response with {@link PagedIterable}.
      */
     PagedIterable<UserContract> listByService(String resourceGroupName, String serviceName);
 
     /**
      * Lists a collection of registered users in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -42,7 +42,7 @@ public interface Users {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Users list representation.
+     * @return paged Users list representation as paginated response with {@link PagedIterable}.
      */
     PagedIterable<UserContract> listByService(
         String resourceGroupName,
@@ -56,19 +56,7 @@ public interface Users {
     /**
      * Gets the entity state (Etag) version of the user specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param userId User identifier. Must be unique in the current API Management service instance.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    void getEntityTag(String resourceGroupName, String serviceName, String userId);
-
-    /**
-     * Gets the entity state (Etag) version of the user specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param context The context to associate with this operation.
@@ -81,22 +69,21 @@ public interface Users {
         String resourceGroupName, String serviceName, String userId, Context context);
 
     /**
-     * Gets the details of the user specified by its identifier.
+     * Gets the entity state (Etag) version of the user specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the user specified by its identifier.
      */
-    UserContract get(String resourceGroupName, String serviceName, String userId);
+    void getEntityTag(String resourceGroupName, String serviceName, String userId);
 
     /**
      * Gets the details of the user specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param context The context to associate with this operation.
@@ -109,23 +96,22 @@ public interface Users {
         String resourceGroupName, String serviceName, String userId, Context context);
 
     /**
-     * Deletes specific user.
+     * Gets the details of the user specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the details of the user specified by its identifier.
      */
-    void delete(String resourceGroupName, String serviceName, String userId, String ifMatch);
+    UserContract get(String resourceGroupName, String serviceName, String userId);
 
     /**
      * Deletes specific user.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -138,7 +124,7 @@ public interface Users {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     Response<Void> deleteWithResponse(
         String resourceGroupName,
@@ -151,10 +137,40 @@ public interface Users {
         Context context);
 
     /**
+     * Deletes specific user.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param userId User identifier. Must be unique in the current API Management service instance.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     */
+    void delete(String resourceGroupName, String serviceName, String userId, String ifMatch);
+
+    /**
      * Retrieves a redirection URL containing an authentication token for signing a given user into the developer
      * portal.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param userId User identifier. Must be unique in the current API Management service instance.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return generate SSO Url operations response details along with {@link Response}.
+     */
+    Response<GenerateSsoUrlResult> generateSsoUrlWithResponse(
+        String resourceGroupName, String serviceName, String userId, Context context);
+
+    /**
+     * Retrieves a redirection URL containing an authentication token for signing a given user into the developer
+     * portal.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -165,25 +181,25 @@ public interface Users {
     GenerateSsoUrlResult generateSsoUrl(String resourceGroupName, String serviceName, String userId);
 
     /**
-     * Retrieves a redirection URL containing an authentication token for signing a given user into the developer
-     * portal.
+     * Gets the Shared Access Authorization Token for the User.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
+     * @param parameters Create Authorization Token parameters.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return generate SSO Url operations response details.
+     * @return the Shared Access Authorization Token for the User along with {@link Response}.
      */
-    Response<GenerateSsoUrlResult> generateSsoUrlWithResponse(
-        String resourceGroupName, String serviceName, String userId, Context context);
+    Response<UserTokenResult> getSharedAccessTokenWithResponse(
+        String resourceGroupName, String serviceName, String userId, UserTokenParameters parameters, Context context);
 
     /**
      * Gets the Shared Access Authorization Token for the User.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param parameters Create Authorization Token parameters.
@@ -194,22 +210,6 @@ public interface Users {
      */
     UserTokenResult getSharedAccessToken(
         String resourceGroupName, String serviceName, String userId, UserTokenParameters parameters);
-
-    /**
-     * Gets the Shared Access Authorization Token for the User.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param userId User identifier. Must be unique in the current API Management service instance.
-     * @param parameters Create Authorization Token parameters.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the Shared Access Authorization Token for the User.
-     */
-    Response<UserTokenResult> getSharedAccessTokenWithResponse(
-        String resourceGroupName, String serviceName, String userId, UserTokenParameters parameters, Context context);
 
     /**
      * Gets the details of the user specified by its identifier.
@@ -258,7 +258,7 @@ public interface Users {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     Response<Void> deleteByIdWithResponse(
         String id, String ifMatch, Boolean deleteSubscriptions, Boolean notify, AppType appType, Context context);

@@ -1,7 +1,8 @@
 trigger: none
 
-stages:
-  - template: /sdk/communication/communication-tests-template.yml
-    parameters:
-      PackageName: azure-communication-chat
-      SafeName: azurecommunicationchat
+extends:
+  template: /sdk/communication/communication-tests-template.yml
+  parameters:
+    PackageName: azure-communication-chat
+    SafeName: azurecommunicationchat
+    UseFederatedAuth: true

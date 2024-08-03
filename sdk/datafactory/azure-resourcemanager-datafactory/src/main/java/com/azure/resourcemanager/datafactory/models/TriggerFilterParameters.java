@@ -5,33 +5,35 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Query parameters for triggers. */
+/**
+ * Query parameters for triggers.
+ */
 @Fluent
 public final class TriggerFilterParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TriggerFilterParameters.class);
-
     /*
-     * The continuation token for getting the next page of results. Null for
-     * first page.
+     * The continuation token for getting the next page of results. Null for first page.
      */
     @JsonProperty(value = "continuationToken")
     private String continuationToken;
 
     /*
-     * The name of the parent TumblingWindowTrigger to get the child rerun
-     * triggers
+     * The name of the parent TumblingWindowTrigger to get the child rerun triggers
      */
     @JsonProperty(value = "parentTriggerName")
     private String parentTriggerName;
 
     /**
+     * Creates an instance of TriggerFilterParameters class.
+     */
+    public TriggerFilterParameters() {
+    }
+
+    /**
      * Get the continuationToken property: The continuation token for getting the next page of results. Null for first
      * page.
-     *
+     * 
      * @return the continuationToken value.
      */
     public String continuationToken() {
@@ -41,7 +43,7 @@ public final class TriggerFilterParameters {
     /**
      * Set the continuationToken property: The continuation token for getting the next page of results. Null for first
      * page.
-     *
+     * 
      * @param continuationToken the continuationToken value to set.
      * @return the TriggerFilterParameters object itself.
      */
@@ -52,7 +54,7 @@ public final class TriggerFilterParameters {
 
     /**
      * Get the parentTriggerName property: The name of the parent TumblingWindowTrigger to get the child rerun triggers.
-     *
+     * 
      * @return the parentTriggerName value.
      */
     public String parentTriggerName() {
@@ -61,7 +63,7 @@ public final class TriggerFilterParameters {
 
     /**
      * Set the parentTriggerName property: The name of the parent TumblingWindowTrigger to get the child rerun triggers.
-     *
+     * 
      * @param parentTriggerName the parentTriggerName value to set.
      * @return the TriggerFilterParameters object itself.
      */
@@ -72,7 +74,7 @@ public final class TriggerFilterParameters {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

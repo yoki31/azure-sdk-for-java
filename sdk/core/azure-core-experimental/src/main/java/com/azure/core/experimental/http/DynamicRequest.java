@@ -4,6 +4,7 @@
 package com.azure.core.experimental.http;
 
 import com.azure.core.http.HttpHeader;
+import com.azure.core.http.HttpHeaderName;
 import com.azure.core.http.HttpHeaders;
 import com.azure.core.http.HttpMethod;
 import com.azure.core.http.HttpPipeline;
@@ -37,10 +38,13 @@ import java.util.stream.Collectors;
  *
  * <p>
  * To demonstrate how this class can be used to construct a request, let's use a Pet Store service as an example. The
- * list of APIs available on this service are <a href="https://petstore.swagger.io/#/pet">documented in the swagger definition.</a>
+ * list of APIs available on this service are <a href="https://petstore.swagger.io/#/pet">documented in the swagger
+ * definition.</a>
  * </p>
  *
- * <p><strong>Creating an instance of DynamicRequest using the constructor</strong></p>
+ * <p>
+ * <strong>Creating an instance of DynamicRequest using the constructor</strong>
+ * </p>
  * <!-- src_embed com.azure.core.experimental.http.dynamicrequest.instantiation -->
  * <pre>
  * ObjectSerializer serializer = JsonSerializerProviders.createInstance&#40;true&#41;;
@@ -49,11 +53,15 @@ import java.util.stream.Collectors;
  * </pre>
  * <!-- end com.azure.core.experimental.http.dynamicrequest.instantiation -->
  *
- * <p>An Azure service client may provide methods that are specific to the service which returns an instance
+ * <p>
+ * An Azure service client may provide methods that are specific to the service which returns an instance
  * {@link DynamicRequest} that comes preconfigured with some request components like the endpoint, required path
- * params, headers etc. </p>
+ * params, headers etc.
+ * </p>
  *
- * <p><strong>Configuring the request with a path param and making a HTTP GET request</strong></p>
+ * <p>
+ * <strong>Configuring the request with a path param and making a HTTP GET request</strong>
+ * </p>
  * Continuing with the pet store example, getting information about a pet requires making a
  * <a href="https://petstore.swagger.io/#/pet/getPetById">HTTP GET call
  * to the pet service</a> and setting the pet id in path param as shown in the sample below.
@@ -67,7 +75,9 @@ import java.util.stream.Collectors;
  * </pre>
  * <!-- end com.azure.core.experimental.http.dynamicrequest.getrequest -->
  *
- * <p><strong>Configuring the request with JSON body and making a HTTP POST request</strong></p>
+ * <p>
+ * <strong>Configuring the request with JSON body and making a HTTP POST request</strong>
+ * </p>
  * To <a href="https://petstore.swagger.io/#/pet/addPet">add a new pet to the pet store</a>, a HTTP POST call should
  * be made to the service with the details of the pet that is to be added. The details of the pet are included as the
  * request body in JSON format.
@@ -79,18 +89,18 @@ import java.util.stream.Collectors;
  *   "category": {
  *     "id": 0,
  *     "name": "string"
- *   },
- *   "name": "doggie",
- *   "photoUrls": [
- *     "string"
- *   ],
- *   "tags": [
- *     {
- *       "id": 0,
- *       "name": "string"
- *     }
- *   ],
- *   "status": "available"
+ * },
+ * "name": "doggie",
+ * "photoUrls": [
+ * "string"
+ * ],
+ * "tags": [
+ * {
+ * "id": 0,
+ * "name": "string"
+ * }
+ * ],
+ * "status": "available"
  * }
  * }</pre>
  *
@@ -134,7 +144,7 @@ import java.util.stream.Collectors;
  * <pre>
  * DynamicResponse response = dynamicRequest
  *     .setUrl&#40;&quot;https:&#47;&#47;petstore.example.com&#47;pet&quot;&#41; &#47;&#47; may already be set if request is created from a client
- *     .addHeader&#40;&quot;Content-Type&quot;, &quot;application&#47;json&quot;&#41;
+ *     .addHeader&#40;HttpHeaderName.CONTENT_TYPE, &quot;application&#47;json&quot;&#41;
  *     .setBody&#40;requestBodyStr&#41;
  *     .send&#40;&#41;; &#47;&#47; makes the service call
  * </pre>
@@ -214,8 +224,22 @@ public final class DynamicRequest {
      * @param value the header value
      *
      * @return the modified DynamicRequest object
+     * @deprecated Use {@link #addHeader(HttpHeaderName, String)} as it provides better performance.
      */
+    @Deprecated
     public DynamicRequest addHeader(String header, String value) {
+        headers.set(header, value);
+        return this;
+    }
+
+    /**
+     * Adds a header to the HTTP request.
+     * @param header the header key
+     * @param value the header value
+     *
+     * @return the modified DynamicRequest object
+     */
+    public DynamicRequest addHeader(HttpHeaderName header, String value) {
         headers.set(header, value);
         return this;
     }
@@ -227,6 +251,7 @@ public final class DynamicRequest {
      * @return the modified DynamicRequest object
      * @throws NullPointerException if the httpHeader is null
      */
+    @SuppressWarnings("deprecation")
     public DynamicRequest addHeader(HttpHeader httpHeader) {
         if (httpHeader == null) {
             throw logger.logExceptionAsError(new NullPointerException("httpHeader cannot be null"));
@@ -316,7 +341,8 @@ public final class DynamicRequest {
         }
         if (!queries.isEmpty()) {
             url = url + (url.contains("?") ? "&" : "?");
-            url = url + queries.keySet().stream().map(key -> key + "=" + queries.get(key)).collect(Collectors.joining("&"));
+            url = url
+                + queries.keySet().stream().map(key -> key + "=" + queries.get(key)).collect(Collectors.joining("&"));
         }
         HttpRequest request = new HttpRequest(httpMethod, url);
         if (headers != null) {

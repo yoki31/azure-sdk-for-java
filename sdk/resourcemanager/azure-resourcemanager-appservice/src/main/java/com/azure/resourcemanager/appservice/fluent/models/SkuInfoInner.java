@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.SkuCapacity;
 import com.azure.resourcemanager.appservice.models.SkuDescription;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** SKU discovery information. */
+/**
+ * SKU discovery information.
+ */
 @Fluent
 public final class SkuInfoInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SkuInfoInner.class);
-
     /*
      * Resource type that this SKU applies to.
      */
@@ -35,8 +33,14 @@ public final class SkuInfoInner {
     private SkuCapacity capacity;
 
     /**
+     * Creates an instance of SkuInfoInner class.
+     */
+    public SkuInfoInner() {
+    }
+
+    /**
      * Get the resourceType property: Resource type that this SKU applies to.
-     *
+     * 
      * @return the resourceType value.
      */
     public String resourceType() {
@@ -45,7 +49,7 @@ public final class SkuInfoInner {
 
     /**
      * Set the resourceType property: Resource type that this SKU applies to.
-     *
+     * 
      * @param resourceType the resourceType value to set.
      * @return the SkuInfoInner object itself.
      */
@@ -56,7 +60,7 @@ public final class SkuInfoInner {
 
     /**
      * Get the sku property: Name and tier of the SKU.
-     *
+     * 
      * @return the sku value.
      */
     public SkuDescription sku() {
@@ -65,7 +69,7 @@ public final class SkuInfoInner {
 
     /**
      * Set the sku property: Name and tier of the SKU.
-     *
+     * 
      * @param sku the sku value to set.
      * @return the SkuInfoInner object itself.
      */
@@ -76,7 +80,7 @@ public final class SkuInfoInner {
 
     /**
      * Get the capacity property: Min, max, and default scale values of the SKU.
-     *
+     * 
      * @return the capacity value.
      */
     public SkuCapacity capacity() {
@@ -85,7 +89,7 @@ public final class SkuInfoInner {
 
     /**
      * Set the capacity property: Min, max, and default scale values of the SKU.
-     *
+     * 
      * @param capacity the capacity value to set.
      * @return the SkuInfoInner object itself.
      */
@@ -96,7 +100,7 @@ public final class SkuInfoInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

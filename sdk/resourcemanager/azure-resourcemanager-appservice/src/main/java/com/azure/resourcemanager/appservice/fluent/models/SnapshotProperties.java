@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Snapshot resource specific properties. */
+/**
+ * Snapshot resource specific properties.
+ */
 @Immutable
 public final class SnapshotProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SnapshotProperties.class);
-
     /*
      * The time the snapshot was taken.
      */
@@ -21,8 +19,14 @@ public final class SnapshotProperties {
     private String time;
 
     /**
+     * Creates an instance of SnapshotProperties class.
+     */
+    public SnapshotProperties() {
+    }
+
+    /**
      * Get the time property: The time the snapshot was taken.
-     *
+     * 
      * @return the time value.
      */
     public String time() {
@@ -31,7 +35,7 @@ public final class SnapshotProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

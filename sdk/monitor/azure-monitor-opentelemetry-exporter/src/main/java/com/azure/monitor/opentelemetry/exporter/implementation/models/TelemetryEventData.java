@@ -5,7 +5,11 @@
 package com.azure.monitor.opentelemetry.exporter.implementation.models;
 
 import com.azure.core.annotation.Fluent;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -15,23 +19,25 @@ import java.util.Map;
 @Fluent
 public final class TelemetryEventData extends MonitorDomain {
     /*
-     * Event name. Keep it low cardinality to allow proper grouping and useful
-     * metrics.
+     * Event name. Keep it low cardinality to allow proper grouping and useful metrics.
      */
-    @JsonProperty(value = "name", required = true)
     private String name;
 
     /*
      * Collection of custom properties.
      */
-    @JsonProperty(value = "properties")
     private Map<String, String> properties;
 
     /*
      * Collection of custom measurements.
      */
-    @JsonProperty(value = "measurements")
     private Map<String, Double> measurements;
+
+    /**
+     * Creates an instance of TelemetryEventData class.
+     */
+    public TelemetryEventData() {
+    }
 
     /**
      * Get the name property: Event name. Keep it low cardinality to allow proper grouping and useful metrics.
@@ -91,5 +97,71 @@ public final class TelemetryEventData extends MonitorDomain {
     public TelemetryEventData setMeasurements(Map<String, Double> measurements) {
         this.measurements = measurements;
         return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public TelemetryEventData setVersion(int version) {
+        super.setVersion(version);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeIntField("ver", getVersion());
+        jsonWriter.writeStringField("name", this.name);
+        jsonWriter.writeMapField("properties", this.properties, JsonWriter::writeString);
+        jsonWriter.writeMapField("measurements", this.measurements, JsonWriter::writeDouble);
+        if (getAdditionalProperties() != null) {
+            for (Map.Entry<String, Object> additionalProperty : getAdditionalProperties().entrySet()) {
+                jsonWriter.writeUntypedField(additionalProperty.getKey(), additionalProperty.getValue());
+            }
+        }
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of TelemetryEventData from the JsonReader.
+     *
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of TelemetryEventData if the JsonReader was pointing to an instance of it, or null if it was
+     * pointing to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the TelemetryEventData.
+     */
+    public static TelemetryEventData fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            TelemetryEventData deserializedTelemetryEventData = new TelemetryEventData();
+            Map<String, Object> additionalProperties = null;
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("ver".equals(fieldName)) {
+                    deserializedTelemetryEventData.setVersion(reader.getInt());
+                } else if ("name".equals(fieldName)) {
+                    deserializedTelemetryEventData.name = reader.getString();
+                } else if ("properties".equals(fieldName)) {
+                    deserializedTelemetryEventData.properties = reader.readMap(JsonReader::getString);
+                } else if ("measurements".equals(fieldName)) {
+                    deserializedTelemetryEventData.measurements = reader.readMap(JsonReader::getDouble);
+                } else {
+                    if (additionalProperties == null) {
+                        additionalProperties = new LinkedHashMap<>();
+                    }
+
+                    additionalProperties.put(fieldName, reader.readUntyped());
+                }
+            }
+            deserializedTelemetryEventData.setAdditionalProperties(additionalProperties);
+
+            return deserializedTelemetryEventData;
+        });
     }
 }

@@ -7,20 +7,26 @@ package com.azure.resourcemanager.cosmos.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cosmos.fluent.models.SqlStoredProcedureCreateUpdateProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Map;
 
-/** Parameters to create and update Cosmos DB storedProcedure. */
+/**
+ * Parameters to create and update Cosmos DB storedProcedure.
+ */
 @Fluent
 public final class SqlStoredProcedureCreateUpdateParameters extends ArmResourceProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SqlStoredProcedureCreateUpdateParameters.class);
-
     /*
      * Properties to create and update Azure Cosmos DB storedProcedure.
      */
     @JsonProperty(value = "properties", required = true)
     private SqlStoredProcedureCreateUpdateProperties innerProperties = new SqlStoredProcedureCreateUpdateProperties();
+
+    /**
+     * Creates an instance of SqlStoredProcedureCreateUpdateParameters class.
+     */
+    public SqlStoredProcedureCreateUpdateParameters() {
+    }
 
     /**
      * Get the innerProperties property: Properties to create and update Azure Cosmos DB storedProcedure.
@@ -31,14 +37,18 @@ public final class SqlStoredProcedureCreateUpdateParameters extends ArmResourceP
         return this.innerProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SqlStoredProcedureCreateUpdateParameters withLocation(String location) {
         super.withLocation(location);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SqlStoredProcedureCreateUpdateParameters withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -102,12 +112,13 @@ public final class SqlStoredProcedureCreateUpdateParameters extends ArmResourceP
     public void validate() {
         super.validate();
         if (innerProperties() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property innerProperties in model SqlStoredProcedureCreateUpdateParameters"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property innerProperties in model SqlStoredProcedureCreateUpdateParameters"));
         } else {
             innerProperties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(SqlStoredProcedureCreateUpdateParameters.class);
 }

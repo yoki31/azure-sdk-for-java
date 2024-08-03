@@ -13,10 +13,9 @@ import com.azure.resourcemanager.mediaservices.fluent.models.EntityNameAvailabil
 import com.azure.resourcemanager.mediaservices.models.CheckNameAvailabilityInput;
 import com.azure.resourcemanager.mediaservices.models.EntityNameAvailabilityCheckOutput;
 import com.azure.resourcemanager.mediaservices.models.Locations;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class LocationsImpl implements Locations {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(LocationsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(LocationsImpl.class);
 
     private final LocationsClient innerClient;
 
@@ -26,17 +25,6 @@ public final class LocationsImpl implements Locations {
         LocationsClient innerClient, com.azure.resourcemanager.mediaservices.MediaServicesManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
-    }
-
-    public EntityNameAvailabilityCheckOutput checkNameAvailability(
-        String locationName, CheckNameAvailabilityInput parameters) {
-        EntityNameAvailabilityCheckOutputInner inner =
-            this.serviceClient().checkNameAvailability(locationName, parameters);
-        if (inner != null) {
-            return new EntityNameAvailabilityCheckOutputImpl(inner, this.manager());
-        } else {
-            return null;
-        }
     }
 
     public Response<EntityNameAvailabilityCheckOutput> checkNameAvailabilityWithResponse(
@@ -49,6 +37,17 @@ public final class LocationsImpl implements Locations {
                 inner.getStatusCode(),
                 inner.getHeaders(),
                 new EntityNameAvailabilityCheckOutputImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
+    }
+
+    public EntityNameAvailabilityCheckOutput checkNameAvailability(
+        String locationName, CheckNameAvailabilityInput parameters) {
+        EntityNameAvailabilityCheckOutputInner inner =
+            this.serviceClient().checkNameAvailability(locationName, parameters);
+        if (inner != null) {
+            return new EntityNameAvailabilityCheckOutputImpl(inner, this.manager());
         } else {
             return null;
         }

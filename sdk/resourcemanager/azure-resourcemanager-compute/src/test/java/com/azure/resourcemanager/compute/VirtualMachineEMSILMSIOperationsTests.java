@@ -4,25 +4,29 @@
 package com.azure.resourcemanager.compute;
 
 import com.azure.core.http.rest.PagedIterable;
+import com.azure.core.management.Region;
+import com.azure.core.test.annotation.DoNotRecord;
+import com.azure.resourcemanager.authorization.models.BuiltInRole;
+import com.azure.resourcemanager.authorization.models.RoleAssignment;
 import com.azure.resourcemanager.compute.models.KnownLinuxVirtualMachineImage;
 import com.azure.resourcemanager.compute.models.ResourceIdentityType;
 import com.azure.resourcemanager.compute.models.VirtualMachine;
-import com.azure.resourcemanager.authorization.models.BuiltInRole;
-import com.azure.resourcemanager.authorization.models.RoleAssignment;
+import com.azure.resourcemanager.compute.models.VirtualMachineSizeTypes;
 import com.azure.resourcemanager.msi.models.Identity;
 import com.azure.resourcemanager.network.models.Network;
-import com.azure.resourcemanager.resources.models.ResourceGroup;
-import com.azure.core.management.Region;
 import com.azure.resourcemanager.resources.fluentcore.model.Creatable;
-import java.util.Iterator;
-import java.util.Set;
+import com.azure.resourcemanager.resources.models.ResourceGroup;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Mono;
 
+import java.util.Iterator;
+import java.util.Set;
+
 public class VirtualMachineEMSILMSIOperationsTests extends ComputeManagementTest {
+    // LiveOnly because test needs to be refactored for storing/evaluating PrincipalId
     private String rgName = "";
-    private Region region = Region.fromName("West Central US");
+    private Region region = Region.US_WEST2;
     private final String vmName = "javavm";
 
     @Override
@@ -31,9 +35,10 @@ public class VirtualMachineEMSILMSIOperationsTests extends ComputeManagementTest
     }
 
     @Test
+    @DoNotRecord(skipInPlayback = true)
     public void canCreateUpdateVirtualMachineWithEMSI() {
+        // LiveOnly because "test timing out after latest test proxy update"
         // this.resourceManager.resourceGroups().beginDeleteByName("41522c6e938c4f6");
-
         rgName = generateRandomResourceName("java-emsi-c-rg", 15);
         String identityName1 = generateRandomResourceName("msi-id", 15);
         String identityName2 = generateRandomResourceName("msi-id", 15);
@@ -88,6 +93,7 @@ public class VirtualMachineEMSILMSIOperationsTests extends ComputeManagementTest
                 .withSsh(sshPublicKey())
                 .withExistingUserAssignedManagedServiceIdentity(createdIdentity)
                 .withNewUserAssignedManagedServiceIdentity(creatableIdentity)
+                .withSize(VirtualMachineSizeTypes.STANDARD_A0)
                 .create();
 
         Assertions.assertNotNull(virtualMachine);
@@ -250,7 +256,9 @@ public class VirtualMachineEMSILMSIOperationsTests extends ComputeManagementTest
     }
 
     @Test
+    @DoNotRecord(skipInPlayback = true)
     public void canCreateVirtualMachineWithLMSIAndEMSI() {
+        // LiveOnly because "test timing out after latest test proxy update"
         rgName = generateRandomResourceName("java-emsi-c-rg", 15);
         String identityName1 = generateRandomResourceName("msi-id", 15);
         String networkName = generateRandomResourceName("nw", 10);
@@ -298,6 +306,7 @@ public class VirtualMachineEMSILMSIOperationsTests extends ComputeManagementTest
                 .withSystemAssignedManagedServiceIdentity()
                 .withSystemAssignedIdentityBasedAccessTo(network.id(), BuiltInRole.CONTRIBUTOR)
                 .withNewUserAssignedManagedServiceIdentity(creatableIdentity)
+                .withSize(VirtualMachineSizeTypes.STANDARD_A0)
                 .create();
 
         Assertions.assertNotNull(virtualMachine);
@@ -398,6 +407,7 @@ public class VirtualMachineEMSILMSIOperationsTests extends ComputeManagementTest
                 .withPopularLinuxImage(KnownLinuxVirtualMachineImage.UBUNTU_SERVER_16_04_LTS)
                 .withRootUsername("Foo12")
                 .withSsh(sshPublicKey())
+                .withSize(VirtualMachineSizeTypes.STANDARD_A0)
                 .create();
 
         // Prepare a definition for yet-to-be-created "User Assigned (External) MSI" with contributor access to the

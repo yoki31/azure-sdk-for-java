@@ -5,16 +5,12 @@
 package com.azure.resourcemanager.apimanagement.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** API OAuth2 Authentication settings details. */
 @Fluent
 public final class OpenIdAuthenticationSettingsContract {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OpenIdAuthenticationSettingsContract.class);
-
     /*
      * OAuth authorization server identifier.
      */
@@ -26,6 +22,10 @@ public final class OpenIdAuthenticationSettingsContract {
      */
     @JsonProperty(value = "bearerTokenSendingMethods")
     private List<BearerTokenSendingMethods> bearerTokenSendingMethods;
+
+    /** Creates an instance of OpenIdAuthenticationSettingsContract class. */
+    public OpenIdAuthenticationSettingsContract() {
+    }
 
     /**
      * Get the openidProviderId property: OAuth authorization server identifier.

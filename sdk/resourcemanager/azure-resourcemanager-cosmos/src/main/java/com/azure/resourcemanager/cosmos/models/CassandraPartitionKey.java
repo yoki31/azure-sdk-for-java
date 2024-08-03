@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Cosmos DB Cassandra table partition key. */
+/**
+ * Cosmos DB Cassandra table partition key.
+ */
 @Fluent
 public final class CassandraPartitionKey {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CassandraPartitionKey.class);
-
     /*
      * Name of the Cosmos DB Cassandra table partition key
      */
@@ -21,8 +19,14 @@ public final class CassandraPartitionKey {
     private String name;
 
     /**
+     * Creates an instance of CassandraPartitionKey class.
+     */
+    public CassandraPartitionKey() {
+    }
+
+    /**
      * Get the name property: Name of the Cosmos DB Cassandra table partition key.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -31,7 +35,7 @@ public final class CassandraPartitionKey {
 
     /**
      * Set the name property: Name of the Cosmos DB Cassandra table partition key.
-     *
+     * 
      * @param name the name value to set.
      * @return the CassandraPartitionKey object itself.
      */
@@ -42,7 +46,7 @@ public final class CassandraPartitionKey {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -30,27 +30,33 @@ import com.azure.core.management.exception.ManagementException;
 import com.azure.core.management.polling.PollResult;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.core.util.polling.PollerFlux;
 import com.azure.core.util.polling.SyncPoller;
 import com.azure.resourcemanager.cosmos.fluent.TableResourcesClient;
+import com.azure.resourcemanager.cosmos.fluent.models.BackupInformationInner;
 import com.azure.resourcemanager.cosmos.fluent.models.TableGetResultsInner;
 import com.azure.resourcemanager.cosmos.fluent.models.ThroughputSettingsGetResultsInner;
+import com.azure.resourcemanager.cosmos.models.ContinuousBackupRestoreLocation;
 import com.azure.resourcemanager.cosmos.models.TableCreateUpdateParameters;
 import com.azure.resourcemanager.cosmos.models.TableListResult;
 import com.azure.resourcemanager.cosmos.models.ThroughputSettingsUpdateParameters;
-import java.nio.ByteBuffer;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-/** An instance of this class provides access to all the operations defined in TableResourcesClient. */
-public final class TableResourcesClientImpl implements TableResourcesClient {
-    private final ClientLogger logger = new ClientLogger(TableResourcesClientImpl.class);
+import java.nio.ByteBuffer;
 
-    /** The proxy service used to perform REST calls. */
+/**
+ * An instance of this class provides access to all the operations defined in TableResourcesClient.
+ */
+public final class TableResourcesClientImpl implements TableResourcesClient {
+    /**
+     * The proxy service used to perform REST calls.
+     */
     private final TableResourcesService service;
 
-    /** The service client containing this operation class. */
+    /**
+     * The service client containing this operation class.
+     */
     private final CosmosDBManagementClientImpl client;
 
     /**
@@ -59,8 +65,8 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @param client the instance of the service client containing this operation class.
      */
     TableResourcesClientImpl(CosmosDBManagementClientImpl client) {
-        this.service =
-            RestProxy.create(TableResourcesService.class, client.getHttpPipeline(), client.getSerializerAdapter());
+        this.service
+            = RestProxy.create(TableResourcesService.class, client.getHttpPipeline(), client.getSerializerAdapter());
         this.client = client;
     }
 
@@ -70,135 +76,97 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      */
     @Host("{$host}")
     @ServiceInterface(name = "CosmosDBManagementCl")
-    private interface TableResourcesService {
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DocumentDB"
-                + "/databaseAccounts/{accountName}/tables")
-        @ExpectedResponses({200})
+    public interface TableResourcesService {
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DocumentDB/databaseAccounts/{accountName}/tables")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<TableListResult>> listTables(
-            @HostParam("$host") String endpoint,
+        Mono<Response<TableListResult>> listTables(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("accountName") String accountName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("accountName") String accountName,
+            @QueryParam("api-version") String apiVersion, @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DocumentDB"
-                + "/databaseAccounts/{accountName}/tables/{tableName}")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DocumentDB/databaseAccounts/{accountName}/tables/{tableName}")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<TableGetResultsInner>> getTable(
-            @HostParam("$host") String endpoint,
+        Mono<Response<TableGetResultsInner>> getTable(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("accountName") String accountName,
-            @PathParam("tableName") String tableName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("accountName") String accountName,
+            @PathParam("tableName") String tableName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DocumentDB"
-                + "/databaseAccounts/{accountName}/tables/{tableName}")
-        @ExpectedResponses({200, 202})
+        @Headers({ "Content-Type: application/json" })
+        @Put("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DocumentDB/databaseAccounts/{accountName}/tables/{tableName}")
+        @ExpectedResponses({ 200, 202 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> createUpdateTable(
-            @HostParam("$host") String endpoint,
+        Mono<Response<Flux<ByteBuffer>>> createUpdateTable(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("accountName") String accountName,
-            @PathParam("tableName") String tableName,
-            @QueryParam("api-version") String apiVersion,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("accountName") String accountName,
+            @PathParam("tableName") String tableName, @QueryParam("api-version") String apiVersion,
             @BodyParam("application/json") TableCreateUpdateParameters createUpdateTableParameters,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Accept: application/json;q=0.9", "Content-Type: application/json"})
-        @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DocumentDB"
-                + "/databaseAccounts/{accountName}/tables/{tableName}")
-        @ExpectedResponses({202, 204})
+        @Headers({ "Accept: application/json;q=0.9", "Content-Type: application/json" })
+        @Delete("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DocumentDB/databaseAccounts/{accountName}/tables/{tableName}")
+        @ExpectedResponses({ 202, 204 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> deleteTable(
-            @HostParam("$host") String endpoint,
+        Mono<Response<Flux<ByteBuffer>>> deleteTable(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("accountName") String accountName,
-            @PathParam("tableName") String tableName,
-            @QueryParam("api-version") String apiVersion,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("accountName") String accountName,
+            @PathParam("tableName") String tableName, @QueryParam("api-version") String apiVersion, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DocumentDB"
-                + "/databaseAccounts/{accountName}/tables/{tableName}/throughputSettings/default")
-        @ExpectedResponses({200})
+        @Headers({ "Content-Type: application/json" })
+        @Get("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DocumentDB/databaseAccounts/{accountName}/tables/{tableName}/throughputSettings/default")
+        @ExpectedResponses({ 200 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<ThroughputSettingsGetResultsInner>> getTableThroughput(
-            @HostParam("$host") String endpoint,
+        Mono<Response<ThroughputSettingsGetResultsInner>> getTableThroughput(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("accountName") String accountName,
-            @PathParam("tableName") String tableName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("accountName") String accountName,
+            @PathParam("tableName") String tableName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DocumentDB"
-                + "/databaseAccounts/{accountName}/tables/{tableName}/throughputSettings/default")
-        @ExpectedResponses({200, 202})
+        @Headers({ "Content-Type: application/json" })
+        @Put("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DocumentDB/databaseAccounts/{accountName}/tables/{tableName}/throughputSettings/default")
+        @ExpectedResponses({ 200, 202 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> updateTableThroughput(
-            @HostParam("$host") String endpoint,
+        Mono<Response<Flux<ByteBuffer>>> updateTableThroughput(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("accountName") String accountName,
-            @PathParam("tableName") String tableName,
-            @QueryParam("api-version") String apiVersion,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("accountName") String accountName,
+            @PathParam("tableName") String tableName, @QueryParam("api-version") String apiVersion,
             @BodyParam("application/json") ThroughputSettingsUpdateParameters updateThroughputParameters,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DocumentDB"
-                + "/databaseAccounts/{accountName}/tables/{tableName}/throughputSettings/default/migrateToAutoscale")
-        @ExpectedResponses({200, 202})
+        @Headers({ "Content-Type: application/json" })
+        @Post("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DocumentDB/databaseAccounts/{accountName}/tables/{tableName}/throughputSettings/default/migrateToAutoscale")
+        @ExpectedResponses({ 200, 202 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> migrateTableToAutoscale(
-            @HostParam("$host") String endpoint,
+        Mono<Response<Flux<ByteBuffer>>> migrateTableToAutoscale(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("accountName") String accountName,
-            @PathParam("tableName") String tableName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("accountName") String accountName,
+            @PathParam("tableName") String tableName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
 
-        @Headers({"Content-Type: application/json"})
-        @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DocumentDB"
-                + "/databaseAccounts/{accountName}/tables/{tableName}/throughputSettings/default"
-                + "/migrateToManualThroughput")
-        @ExpectedResponses({200, 202})
+        @Headers({ "Content-Type: application/json" })
+        @Post("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DocumentDB/databaseAccounts/{accountName}/tables/{tableName}/throughputSettings/default/migrateToManualThroughput")
+        @ExpectedResponses({ 200, 202 })
         @UnexpectedResponseExceptionType(ManagementException.class)
-        Mono<Response<Flux<ByteBuffer>>> migrateTableToManualThroughput(
-            @HostParam("$host") String endpoint,
+        Mono<Response<Flux<ByteBuffer>>> migrateTableToManualThroughput(@HostParam("$host") String endpoint,
             @PathParam("subscriptionId") String subscriptionId,
-            @PathParam("resourceGroupName") String resourceGroupName,
-            @PathParam("accountName") String accountName,
-            @PathParam("tableName") String tableName,
-            @QueryParam("api-version") String apiVersion,
-            @HeaderParam("Accept") String accept,
-            Context context);
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("accountName") String accountName,
+            @PathParam("tableName") String tableName, @QueryParam("api-version") String apiVersion,
+            @HeaderParam("Accept") String accept, Context context);
+
+        @Headers({ "Content-Type: application/json" })
+        @Post("/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DocumentDB/databaseAccounts/{accountName}/tables/{tableName}/retrieveContinuousBackupInformation")
+        @ExpectedResponses({ 200, 202 })
+        @UnexpectedResponseExceptionType(ManagementException.class)
+        Mono<Response<Flux<ByteBuffer>>> retrieveContinuousBackupInformation(@HostParam("$host") String endpoint,
+            @PathParam("subscriptionId") String subscriptionId,
+            @PathParam("resourceGroupName") String resourceGroupName, @PathParam("accountName") String accountName,
+            @PathParam("tableName") String tableName, @QueryParam("api-version") String apiVersion,
+            @BodyParam("application/json") ContinuousBackupRestoreLocation location,
+            @HeaderParam("Accept") String accept, Context context);
     }
 
     /**
@@ -209,22 +177,19 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the List operation response, that contains the Table and their properties.
+     * @return the List operation response, that contains the Table and their properties along with
+     * {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<TableGetResultsInner>> listTablesSinglePageAsync(
-        String resourceGroupName, String accountName) {
+    private Mono<PagedResponse<TableGetResultsInner>> listTablesSinglePageAsync(String resourceGroupName,
+        String accountName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -235,21 +200,10 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .listTables(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            accountName,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
-            .<PagedResponse<TableGetResultsInner>>map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(), res.getStatusCode(), res.getHeaders(), res.getValue().value(), null, null))
+            .withContext(context -> service.listTables(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, accountName, this.client.getApiVersion(), accept, context))
+            .<PagedResponse<TableGetResultsInner>>map(res -> new PagedResponseBase<>(res.getRequest(),
+                res.getStatusCode(), res.getHeaders(), res.getValue().value(), null, null))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -262,22 +216,19 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the List operation response, that contains the Table and their properties.
+     * @return the List operation response, that contains the Table and their properties along with
+     * {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PagedResponse<TableGetResultsInner>> listTablesSinglePageAsync(
-        String resourceGroupName, String accountName, Context context) {
+    private Mono<PagedResponse<TableGetResultsInner>> listTablesSinglePageAsync(String resourceGroupName,
+        String accountName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -289,18 +240,10 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
-            .listTables(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                accountName,
-                this.client.getApiVersion(),
-                accept,
-                context)
-            .map(
-                res ->
-                    new PagedResponseBase<>(
-                        res.getRequest(), res.getStatusCode(), res.getHeaders(), res.getValue().value(), null, null));
+            .listTables(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName, accountName,
+                this.client.getApiVersion(), accept, context)
+            .map(res -> new PagedResponseBase<>(res.getRequest(), res.getStatusCode(), res.getHeaders(),
+                res.getValue().value(), null, null));
     }
 
     /**
@@ -311,7 +254,8 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the List operation response, that contains the Table and their properties.
+     * @return the List operation response, that contains the Table and their properties as paginated response with
+     * {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<TableGetResultsInner> listTablesAsync(String resourceGroupName, String accountName) {
@@ -327,11 +271,12 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the List operation response, that contains the Table and their properties.
+     * @return the List operation response, that contains the Table and their properties as paginated response with
+     * {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    private PagedFlux<TableGetResultsInner> listTablesAsync(
-        String resourceGroupName, String accountName, Context context) {
+    private PagedFlux<TableGetResultsInner> listTablesAsync(String resourceGroupName, String accountName,
+        Context context) {
         return new PagedFlux<>(() -> listTablesSinglePageAsync(resourceGroupName, accountName, context));
     }
 
@@ -343,7 +288,8 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the List operation response, that contains the Table and their properties.
+     * @return the List operation response, that contains the Table and their properties as paginated response with
+     * {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<TableGetResultsInner> listTables(String resourceGroupName, String accountName) {
@@ -359,11 +305,12 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the List operation response, that contains the Table and their properties.
+     * @return the List operation response, that contains the Table and their properties as paginated response with
+     * {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
-    public PagedIterable<TableGetResultsInner> listTables(
-        String resourceGroupName, String accountName, Context context) {
+    public PagedIterable<TableGetResultsInner> listTables(String resourceGroupName, String accountName,
+        Context context) {
         return new PagedIterable<>(listTablesAsync(resourceGroupName, accountName, context));
     }
 
@@ -376,22 +323,19 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the Tables under an existing Azure Cosmos DB database account with the provided name.
+     * @return the Tables under an existing Azure Cosmos DB database account with the provided name along with
+     * {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<TableGetResultsInner>> getTableWithResponseAsync(
-        String resourceGroupName, String accountName, String tableName) {
+    public Mono<Response<TableGetResultsInner>> getTableWithResponseAsync(String resourceGroupName, String accountName,
+        String tableName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -405,18 +349,8 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .getTable(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            accountName,
-                            tableName,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
+            .withContext(context -> service.getTable(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, accountName, tableName, this.client.getApiVersion(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -430,22 +364,19 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the Tables under an existing Azure Cosmos DB database account with the provided name.
+     * @return the Tables under an existing Azure Cosmos DB database account with the provided name along with
+     * {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<TableGetResultsInner>> getTableWithResponseAsync(
-        String resourceGroupName, String accountName, String tableName, Context context) {
+    private Mono<Response<TableGetResultsInner>> getTableWithResponseAsync(String resourceGroupName, String accountName,
+        String tableName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -459,16 +390,8 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .getTable(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                accountName,
-                tableName,
-                this.client.getApiVersion(),
-                accept,
-                context);
+        return service.getTable(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+            accountName, tableName, this.client.getApiVersion(), accept, context);
     }
 
     /**
@@ -480,19 +403,32 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the Tables under an existing Azure Cosmos DB database account with the provided name.
+     * @return the Tables under an existing Azure Cosmos DB database account with the provided name on successful
+     * completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<TableGetResultsInner> getTableAsync(String resourceGroupName, String accountName, String tableName) {
         return getTableWithResponseAsync(resourceGroupName, accountName, tableName)
-            .flatMap(
-                (Response<TableGetResultsInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
+    }
+
+    /**
+     * Gets the Tables under an existing Azure Cosmos DB database account with the provided name.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param accountName Cosmos DB database account name.
+     * @param tableName Cosmos DB table name.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the Tables under an existing Azure Cosmos DB database account with the provided name along with
+     * {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<TableGetResultsInner> getTableWithResponse(String resourceGroupName, String accountName,
+        String tableName, Context context) {
+        return getTableWithResponseAsync(resourceGroupName, accountName, tableName, context).block();
     }
 
     /**
@@ -508,25 +444,7 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public TableGetResultsInner getTable(String resourceGroupName, String accountName, String tableName) {
-        return getTableAsync(resourceGroupName, accountName, tableName).block();
-    }
-
-    /**
-     * Gets the Tables under an existing Azure Cosmos DB database account with the provided name.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param accountName Cosmos DB database account name.
-     * @param tableName Cosmos DB table name.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the Tables under an existing Azure Cosmos DB database account with the provided name.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<TableGetResultsInner> getTableWithResponse(
-        String resourceGroupName, String accountName, String tableName, Context context) {
-        return getTableWithResponseAsync(resourceGroupName, accountName, tableName, context).block();
+        return getTableWithResponse(resourceGroupName, accountName, tableName, Context.NONE).getValue();
     }
 
     /**
@@ -539,25 +457,18 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB Table.
+     * @return an Azure Cosmos DB Table along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<Flux<ByteBuffer>>> createUpdateTableWithResponseAsync(
-        String resourceGroupName,
-        String accountName,
-        String tableName,
-        TableCreateUpdateParameters createUpdateTableParameters) {
+    public Mono<Response<Flux<ByteBuffer>>> createUpdateTableWithResponseAsync(String resourceGroupName,
+        String accountName, String tableName, TableCreateUpdateParameters createUpdateTableParameters) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -570,28 +481,16 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
             return Mono.error(new IllegalArgumentException("Parameter tableName is required and cannot be null."));
         }
         if (createUpdateTableParameters == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter createUpdateTableParameters is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter createUpdateTableParameters is required and cannot be null."));
         } else {
             createUpdateTableParameters.validate();
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .createUpdateTable(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            accountName,
-                            tableName,
-                            this.client.getApiVersion(),
-                            createUpdateTableParameters,
-                            accept,
-                            context))
+            .withContext(context -> service.createUpdateTable(this.client.getEndpoint(),
+                this.client.getSubscriptionId(), resourceGroupName, accountName, tableName, this.client.getApiVersion(),
+                createUpdateTableParameters, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -606,26 +505,19 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB Table.
+     * @return an Azure Cosmos DB Table along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> createUpdateTableWithResponseAsync(
-        String resourceGroupName,
-        String accountName,
-        String tableName,
-        TableCreateUpdateParameters createUpdateTableParameters,
+    private Mono<Response<Flux<ByteBuffer>>> createUpdateTableWithResponseAsync(String resourceGroupName,
+        String accountName, String tableName, TableCreateUpdateParameters createUpdateTableParameters,
         Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -638,26 +530,15 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
             return Mono.error(new IllegalArgumentException("Parameter tableName is required and cannot be null."));
         }
         if (createUpdateTableParameters == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter createUpdateTableParameters is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter createUpdateTableParameters is required and cannot be null."));
         } else {
             createUpdateTableParameters.validate();
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .createUpdateTable(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                accountName,
-                tableName,
-                this.client.getApiVersion(),
-                createUpdateTableParameters,
-                accept,
-                context);
+        return service.createUpdateTable(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+            accountName, tableName, this.client.getApiVersion(), createUpdateTableParameters, accept, context);
     }
 
     /**
@@ -670,24 +551,16 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB Table.
+     * @return the {@link PollerFlux} for polling of an Azure Cosmos DB Table.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public PollerFlux<PollResult<TableGetResultsInner>, TableGetResultsInner> beginCreateUpdateTableAsync(
-        String resourceGroupName,
-        String accountName,
-        String tableName,
+        String resourceGroupName, String accountName, String tableName,
         TableCreateUpdateParameters createUpdateTableParameters) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            createUpdateTableWithResponseAsync(resourceGroupName, accountName, tableName, createUpdateTableParameters);
-        return this
-            .client
-            .<TableGetResultsInner, TableGetResultsInner>getLroResult(
-                mono,
-                this.client.getHttpPipeline(),
-                TableGetResultsInner.class,
-                TableGetResultsInner.class,
-                this.client.getContext());
+        Mono<Response<Flux<ByteBuffer>>> mono = createUpdateTableWithResponseAsync(resourceGroupName, accountName,
+            tableName, createUpdateTableParameters);
+        return this.client.<TableGetResultsInner, TableGetResultsInner>getLroResult(mono, this.client.getHttpPipeline(),
+            TableGetResultsInner.class, TableGetResultsInner.class, this.client.getContext());
     }
 
     /**
@@ -701,69 +574,59 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB Table.
+     * @return the {@link PollerFlux} for polling of an Azure Cosmos DB Table.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<TableGetResultsInner>, TableGetResultsInner> beginCreateUpdateTableAsync(
-        String resourceGroupName,
-        String accountName,
-        String tableName,
-        TableCreateUpdateParameters createUpdateTableParameters,
-        Context context) {
+        String resourceGroupName, String accountName, String tableName,
+        TableCreateUpdateParameters createUpdateTableParameters, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            createUpdateTableWithResponseAsync(
-                resourceGroupName, accountName, tableName, createUpdateTableParameters, context);
+        Mono<Response<Flux<ByteBuffer>>> mono = createUpdateTableWithResponseAsync(resourceGroupName, accountName,
+            tableName, createUpdateTableParameters, context);
+        return this.client.<TableGetResultsInner, TableGetResultsInner>getLroResult(mono, this.client.getHttpPipeline(),
+            TableGetResultsInner.class, TableGetResultsInner.class, context);
+    }
+
+    /**
+     * Create or update an Azure Cosmos DB Table.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param accountName Cosmos DB database account name.
+     * @param tableName Cosmos DB table name.
+     * @param createUpdateTableParameters The parameters to provide for the current Table.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of an Azure Cosmos DB Table.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<TableGetResultsInner>, TableGetResultsInner> beginCreateUpdateTable(
+        String resourceGroupName, String accountName, String tableName,
+        TableCreateUpdateParameters createUpdateTableParameters) {
+        return this.beginCreateUpdateTableAsync(resourceGroupName, accountName, tableName, createUpdateTableParameters)
+            .getSyncPoller();
+    }
+
+    /**
+     * Create or update an Azure Cosmos DB Table.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param accountName Cosmos DB database account name.
+     * @param tableName Cosmos DB table name.
+     * @param createUpdateTableParameters The parameters to provide for the current Table.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of an Azure Cosmos DB Table.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<TableGetResultsInner>, TableGetResultsInner> beginCreateUpdateTable(
+        String resourceGroupName, String accountName, String tableName,
+        TableCreateUpdateParameters createUpdateTableParameters, Context context) {
         return this
-            .client
-            .<TableGetResultsInner, TableGetResultsInner>getLroResult(
-                mono, this.client.getHttpPipeline(), TableGetResultsInner.class, TableGetResultsInner.class, context);
-    }
-
-    /**
-     * Create or update an Azure Cosmos DB Table.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param accountName Cosmos DB database account name.
-     * @param tableName Cosmos DB table name.
-     * @param createUpdateTableParameters The parameters to provide for the current Table.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB Table.
-     */
-    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<TableGetResultsInner>, TableGetResultsInner> beginCreateUpdateTable(
-        String resourceGroupName,
-        String accountName,
-        String tableName,
-        TableCreateUpdateParameters createUpdateTableParameters) {
-        return beginCreateUpdateTableAsync(resourceGroupName, accountName, tableName, createUpdateTableParameters)
-            .getSyncPoller();
-    }
-
-    /**
-     * Create or update an Azure Cosmos DB Table.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param accountName Cosmos DB database account name.
-     * @param tableName Cosmos DB table name.
-     * @param createUpdateTableParameters The parameters to provide for the current Table.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB Table.
-     */
-    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<TableGetResultsInner>, TableGetResultsInner> beginCreateUpdateTable(
-        String resourceGroupName,
-        String accountName,
-        String tableName,
-        TableCreateUpdateParameters createUpdateTableParameters,
-        Context context) {
-        return beginCreateUpdateTableAsync(
-                resourceGroupName, accountName, tableName, createUpdateTableParameters, context)
+            .beginCreateUpdateTableAsync(resourceGroupName, accountName, tableName, createUpdateTableParameters,
+                context)
             .getSyncPoller();
     }
 
@@ -777,14 +640,11 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB Table.
+     * @return an Azure Cosmos DB Table on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<TableGetResultsInner> createUpdateTableAsync(
-        String resourceGroupName,
-        String accountName,
-        String tableName,
-        TableCreateUpdateParameters createUpdateTableParameters) {
+    public Mono<TableGetResultsInner> createUpdateTableAsync(String resourceGroupName, String accountName,
+        String tableName, TableCreateUpdateParameters createUpdateTableParameters) {
         return beginCreateUpdateTableAsync(resourceGroupName, accountName, tableName, createUpdateTableParameters)
             .last()
             .flatMap(this.client::getLroFinalResultOrError);
@@ -801,19 +661,13 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB Table.
+     * @return an Azure Cosmos DB Table on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<TableGetResultsInner> createUpdateTableAsync(
-        String resourceGroupName,
-        String accountName,
-        String tableName,
-        TableCreateUpdateParameters createUpdateTableParameters,
-        Context context) {
-        return beginCreateUpdateTableAsync(
-                resourceGroupName, accountName, tableName, createUpdateTableParameters, context)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
+    private Mono<TableGetResultsInner> createUpdateTableAsync(String resourceGroupName, String accountName,
+        String tableName, TableCreateUpdateParameters createUpdateTableParameters, Context context) {
+        return beginCreateUpdateTableAsync(resourceGroupName, accountName, tableName, createUpdateTableParameters,
+            context).last().flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
@@ -829,10 +683,7 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @return an Azure Cosmos DB Table.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public TableGetResultsInner createUpdateTable(
-        String resourceGroupName,
-        String accountName,
-        String tableName,
+    public TableGetResultsInner createUpdateTable(String resourceGroupName, String accountName, String tableName,
         TableCreateUpdateParameters createUpdateTableParameters) {
         return createUpdateTableAsync(resourceGroupName, accountName, tableName, createUpdateTableParameters).block();
     }
@@ -851,12 +702,8 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @return an Azure Cosmos DB Table.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public TableGetResultsInner createUpdateTable(
-        String resourceGroupName,
-        String accountName,
-        String tableName,
-        TableCreateUpdateParameters createUpdateTableParameters,
-        Context context) {
+    public TableGetResultsInner createUpdateTable(String resourceGroupName, String accountName, String tableName,
+        TableCreateUpdateParameters createUpdateTableParameters, Context context) {
         return createUpdateTableAsync(resourceGroupName, accountName, tableName, createUpdateTableParameters, context)
             .block();
     }
@@ -870,22 +717,18 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<Flux<ByteBuffer>>> deleteTableWithResponseAsync(
-        String resourceGroupName, String accountName, String tableName) {
+    public Mono<Response<Flux<ByteBuffer>>> deleteTableWithResponseAsync(String resourceGroupName, String accountName,
+        String tableName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -898,17 +741,8 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
             return Mono.error(new IllegalArgumentException("Parameter tableName is required and cannot be null."));
         }
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .deleteTable(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            accountName,
-                            tableName,
-                            this.client.getApiVersion(),
-                            context))
+            .withContext(context -> service.deleteTable(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                resourceGroupName, accountName, tableName, this.client.getApiVersion(), context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -922,22 +756,18 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> deleteTableWithResponseAsync(
-        String resourceGroupName, String accountName, String tableName, Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> deleteTableWithResponseAsync(String resourceGroupName, String accountName,
+        String tableName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -950,15 +780,8 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
             return Mono.error(new IllegalArgumentException("Parameter tableName is required and cannot be null."));
         }
         context = this.client.mergeContext(context);
-        return service
-            .deleteTable(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                accountName,
-                tableName,
-                this.client.getApiVersion(),
-                context);
+        return service.deleteTable(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+            accountName, tableName, this.client.getApiVersion(), context);
     }
 
     /**
@@ -970,16 +793,14 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public PollerFlux<PollResult<Void>, Void> beginDeleteTableAsync(
-        String resourceGroupName, String accountName, String tableName) {
+    public PollerFlux<PollResult<Void>, Void> beginDeleteTableAsync(String resourceGroupName, String accountName,
+        String tableName) {
         Mono<Response<Flux<ByteBuffer>>> mono = deleteTableWithResponseAsync(resourceGroupName, accountName, tableName);
-        return this
-            .client
-            .<Void, Void>getLroResult(
-                mono, this.client.getHttpPipeline(), Void.class, Void.class, this.client.getContext());
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            this.client.getContext());
     }
 
     /**
@@ -992,17 +813,16 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    private PollerFlux<PollResult<Void>, Void> beginDeleteTableAsync(
-        String resourceGroupName, String accountName, String tableName, Context context) {
+    private PollerFlux<PollResult<Void>, Void> beginDeleteTableAsync(String resourceGroupName, String accountName,
+        String tableName, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            deleteTableWithResponseAsync(resourceGroupName, accountName, tableName, context);
-        return this
-            .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, context);
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = deleteTableWithResponseAsync(resourceGroupName, accountName, tableName, context);
+        return this.client.<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class,
+            context);
     }
 
     /**
@@ -1014,12 +834,12 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<Void>, Void> beginDeleteTable(
-        String resourceGroupName, String accountName, String tableName) {
-        return beginDeleteTableAsync(resourceGroupName, accountName, tableName).getSyncPoller();
+    public SyncPoller<PollResult<Void>, Void> beginDeleteTable(String resourceGroupName, String accountName,
+        String tableName) {
+        return this.beginDeleteTableAsync(resourceGroupName, accountName, tableName).getSyncPoller();
     }
 
     /**
@@ -1032,12 +852,12 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    public SyncPoller<PollResult<Void>, Void> beginDeleteTable(
-        String resourceGroupName, String accountName, String tableName, Context context) {
-        return beginDeleteTableAsync(resourceGroupName, accountName, tableName, context).getSyncPoller();
+    public SyncPoller<PollResult<Void>, Void> beginDeleteTable(String resourceGroupName, String accountName,
+        String tableName, Context context) {
+        return this.beginDeleteTableAsync(resourceGroupName, accountName, tableName, context).getSyncPoller();
     }
 
     /**
@@ -1049,12 +869,11 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Void> deleteTableAsync(String resourceGroupName, String accountName, String tableName) {
-        return beginDeleteTableAsync(resourceGroupName, accountName, tableName)
-            .last()
+        return beginDeleteTableAsync(resourceGroupName, accountName, tableName).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -1068,13 +887,12 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> deleteTableAsync(
-        String resourceGroupName, String accountName, String tableName, Context context) {
-        return beginDeleteTableAsync(resourceGroupName, accountName, tableName, context)
-            .last()
+    private Mono<Void> deleteTableAsync(String resourceGroupName, String accountName, String tableName,
+        Context context) {
+        return beginDeleteTableAsync(resourceGroupName, accountName, tableName, context).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -1118,23 +936,19 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the RUs per second of the Table under an existing Azure Cosmos DB database account with the provided
-     *     name.
+     * @return the RUs per second of the Table under an existing Azure Cosmos DB database account with the provided name
+     * along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<ThroughputSettingsGetResultsInner>> getTableThroughputWithResponseAsync(
-        String resourceGroupName, String accountName, String tableName) {
+    public Mono<Response<ThroughputSettingsGetResultsInner>>
+        getTableThroughputWithResponseAsync(String resourceGroupName, String accountName, String tableName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1149,17 +963,8 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
         final String accept = "application/json";
         return FluxUtil
             .withContext(
-                context ->
-                    service
-                        .getTableThroughput(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            accountName,
-                            tableName,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
+                context -> service.getTableThroughput(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                    resourceGroupName, accountName, tableName, this.client.getApiVersion(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -1173,23 +978,19 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the RUs per second of the Table under an existing Azure Cosmos DB database account with the provided
-     *     name.
+     * @return the RUs per second of the Table under an existing Azure Cosmos DB database account with the provided name
+     * along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<ThroughputSettingsGetResultsInner>> getTableThroughputWithResponseAsync(
         String resourceGroupName, String accountName, String tableName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1203,16 +1004,8 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .getTableThroughput(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                accountName,
-                tableName,
-                this.client.getApiVersion(),
-                accept,
-                context);
+        return service.getTableThroughput(this.client.getEndpoint(), this.client.getSubscriptionId(), resourceGroupName,
+            accountName, tableName, this.client.getApiVersion(), accept, context);
     }
 
     /**
@@ -1224,39 +1017,14 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the RUs per second of the Table under an existing Azure Cosmos DB database account with the provided
-     *     name.
+     * @return the RUs per second of the Table under an existing Azure Cosmos DB database account with the provided name
+     * on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<ThroughputSettingsGetResultsInner> getTableThroughputAsync(
-        String resourceGroupName, String accountName, String tableName) {
+    public Mono<ThroughputSettingsGetResultsInner> getTableThroughputAsync(String resourceGroupName, String accountName,
+        String tableName) {
         return getTableThroughputWithResponseAsync(resourceGroupName, accountName, tableName)
-            .flatMap(
-                (Response<ThroughputSettingsGetResultsInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
-    }
-
-    /**
-     * Gets the RUs per second of the Table under an existing Azure Cosmos DB database account with the provided name.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param accountName Cosmos DB database account name.
-     * @param tableName Cosmos DB table name.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the RUs per second of the Table under an existing Azure Cosmos DB database account with the provided
-     *     name.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public ThroughputSettingsGetResultsInner getTableThroughput(
-        String resourceGroupName, String accountName, String tableName) {
-        return getTableThroughputAsync(resourceGroupName, accountName, tableName).block();
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
@@ -1269,13 +1037,31 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the RUs per second of the Table under an existing Azure Cosmos DB database account with the provided
-     *     name.
+     * @return the RUs per second of the Table under an existing Azure Cosmos DB database account with the provided name
+     * along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<ThroughputSettingsGetResultsInner> getTableThroughputWithResponse(
-        String resourceGroupName, String accountName, String tableName, Context context) {
+    public Response<ThroughputSettingsGetResultsInner> getTableThroughputWithResponse(String resourceGroupName,
+        String accountName, String tableName, Context context) {
         return getTableThroughputWithResponseAsync(resourceGroupName, accountName, tableName, context).block();
+    }
+
+    /**
+     * Gets the RUs per second of the Table under an existing Azure Cosmos DB database account with the provided name.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param accountName Cosmos DB database account name.
+     * @param tableName Cosmos DB table name.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the RUs per second of the Table under an existing Azure Cosmos DB database account with the provided
+     * name.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public ThroughputSettingsGetResultsInner getTableThroughput(String resourceGroupName, String accountName,
+        String tableName) {
+        return getTableThroughputWithResponse(resourceGroupName, accountName, tableName, Context.NONE).getValue();
     }
 
     /**
@@ -1288,25 +1074,19 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB resource throughput.
+     * @return an Azure Cosmos DB resource throughput along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<Flux<ByteBuffer>>> updateTableThroughputWithResponseAsync(
-        String resourceGroupName,
-        String accountName,
-        String tableName,
-        ThroughputSettingsUpdateParameters updateThroughputParameters) {
+    public Mono<Response<Flux<ByteBuffer>>> updateTableThroughputWithResponseAsync(String resourceGroupName,
+        String accountName, String tableName, ThroughputSettingsUpdateParameters updateThroughputParameters) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1319,28 +1099,16 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
             return Mono.error(new IllegalArgumentException("Parameter tableName is required and cannot be null."));
         }
         if (updateThroughputParameters == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter updateThroughputParameters is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter updateThroughputParameters is required and cannot be null."));
         } else {
             updateThroughputParameters.validate();
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .updateTableThroughput(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            accountName,
-                            tableName,
-                            this.client.getApiVersion(),
-                            updateThroughputParameters,
-                            accept,
-                            context))
+            .withContext(context -> service.updateTableThroughput(this.client.getEndpoint(),
+                this.client.getSubscriptionId(), resourceGroupName, accountName, tableName, this.client.getApiVersion(),
+                updateThroughputParameters, accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -1355,26 +1123,20 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB resource throughput.
+     * @return an Azure Cosmos DB resource throughput along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> updateTableThroughputWithResponseAsync(
-        String resourceGroupName,
-        String accountName,
-        String tableName,
-        ThroughputSettingsUpdateParameters updateThroughputParameters,
+    private Mono<Response<Flux<ByteBuffer>>> updateTableThroughputWithResponseAsync(String resourceGroupName,
+        String accountName, String tableName, ThroughputSettingsUpdateParameters updateThroughputParameters,
         Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1387,26 +1149,16 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
             return Mono.error(new IllegalArgumentException("Parameter tableName is required and cannot be null."));
         }
         if (updateThroughputParameters == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter updateThroughputParameters is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter updateThroughputParameters is required and cannot be null."));
         } else {
             updateThroughputParameters.validate();
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .updateTableThroughput(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                accountName,
-                tableName,
-                this.client.getApiVersion(),
-                updateThroughputParameters,
-                accept,
-                context);
+        return service.updateTableThroughput(this.client.getEndpoint(), this.client.getSubscriptionId(),
+            resourceGroupName, accountName, tableName, this.client.getApiVersion(), updateThroughputParameters, accept,
+            context);
     }
 
     /**
@@ -1419,26 +1171,17 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB resource throughput.
+     * @return the {@link PollerFlux} for polling of an Azure Cosmos DB resource throughput.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public PollerFlux<PollResult<ThroughputSettingsGetResultsInner>, ThroughputSettingsGetResultsInner>
-        beginUpdateTableThroughputAsync(
-            String resourceGroupName,
-            String accountName,
-            String tableName,
+        beginUpdateTableThroughputAsync(String resourceGroupName, String accountName, String tableName,
             ThroughputSettingsUpdateParameters updateThroughputParameters) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            updateTableThroughputWithResponseAsync(
-                resourceGroupName, accountName, tableName, updateThroughputParameters);
-        return this
-            .client
-            .<ThroughputSettingsGetResultsInner, ThroughputSettingsGetResultsInner>getLroResult(
-                mono,
-                this.client.getHttpPipeline(),
-                ThroughputSettingsGetResultsInner.class,
-                ThroughputSettingsGetResultsInner.class,
-                this.client.getContext());
+        Mono<Response<Flux<ByteBuffer>>> mono = updateTableThroughputWithResponseAsync(resourceGroupName, accountName,
+            tableName, updateThroughputParameters);
+        return this.client.<ThroughputSettingsGetResultsInner, ThroughputSettingsGetResultsInner>getLroResult(mono,
+            this.client.getHttpPipeline(), ThroughputSettingsGetResultsInner.class,
+            ThroughputSettingsGetResultsInner.class, this.client.getContext());
     }
 
     /**
@@ -1452,28 +1195,18 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB resource throughput.
+     * @return the {@link PollerFlux} for polling of an Azure Cosmos DB resource throughput.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<ThroughputSettingsGetResultsInner>, ThroughputSettingsGetResultsInner>
-        beginUpdateTableThroughputAsync(
-            String resourceGroupName,
-            String accountName,
-            String tableName,
-            ThroughputSettingsUpdateParameters updateThroughputParameters,
-            Context context) {
+        beginUpdateTableThroughputAsync(String resourceGroupName, String accountName, String tableName,
+            ThroughputSettingsUpdateParameters updateThroughputParameters, Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            updateTableThroughputWithResponseAsync(
-                resourceGroupName, accountName, tableName, updateThroughputParameters, context);
-        return this
-            .client
-            .<ThroughputSettingsGetResultsInner, ThroughputSettingsGetResultsInner>getLroResult(
-                mono,
-                this.client.getHttpPipeline(),
-                ThroughputSettingsGetResultsInner.class,
-                ThroughputSettingsGetResultsInner.class,
-                context);
+        Mono<Response<Flux<ByteBuffer>>> mono = updateTableThroughputWithResponseAsync(resourceGroupName, accountName,
+            tableName, updateThroughputParameters, context);
+        return this.client.<ThroughputSettingsGetResultsInner, ThroughputSettingsGetResultsInner>getLroResult(mono,
+            this.client.getHttpPipeline(), ThroughputSettingsGetResultsInner.class,
+            ThroughputSettingsGetResultsInner.class, context);
     }
 
     /**
@@ -1486,16 +1219,14 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB resource throughput.
+     * @return the {@link SyncPoller} for polling of an Azure Cosmos DB resource throughput.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<ThroughputSettingsGetResultsInner>, ThroughputSettingsGetResultsInner>
-        beginUpdateTableThroughput(
-            String resourceGroupName,
-            String accountName,
-            String tableName,
+        beginUpdateTableThroughput(String resourceGroupName, String accountName, String tableName,
             ThroughputSettingsUpdateParameters updateThroughputParameters) {
-        return beginUpdateTableThroughputAsync(resourceGroupName, accountName, tableName, updateThroughputParameters)
+        return this
+            .beginUpdateTableThroughputAsync(resourceGroupName, accountName, tableName, updateThroughputParameters)
             .getSyncPoller();
     }
 
@@ -1510,18 +1241,15 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB resource throughput.
+     * @return the {@link SyncPoller} for polling of an Azure Cosmos DB resource throughput.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<ThroughputSettingsGetResultsInner>, ThroughputSettingsGetResultsInner>
-        beginUpdateTableThroughput(
-            String resourceGroupName,
-            String accountName,
-            String tableName,
-            ThroughputSettingsUpdateParameters updateThroughputParameters,
-            Context context) {
-        return beginUpdateTableThroughputAsync(
-                resourceGroupName, accountName, tableName, updateThroughputParameters, context)
+        beginUpdateTableThroughput(String resourceGroupName, String accountName, String tableName,
+            ThroughputSettingsUpdateParameters updateThroughputParameters, Context context) {
+        return this
+            .beginUpdateTableThroughputAsync(resourceGroupName, accountName, tableName, updateThroughputParameters,
+                context)
             .getSyncPoller();
     }
 
@@ -1535,14 +1263,11 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB resource throughput.
+     * @return an Azure Cosmos DB resource throughput on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<ThroughputSettingsGetResultsInner> updateTableThroughputAsync(
-        String resourceGroupName,
-        String accountName,
-        String tableName,
-        ThroughputSettingsUpdateParameters updateThroughputParameters) {
+    public Mono<ThroughputSettingsGetResultsInner> updateTableThroughputAsync(String resourceGroupName,
+        String accountName, String tableName, ThroughputSettingsUpdateParameters updateThroughputParameters) {
         return beginUpdateTableThroughputAsync(resourceGroupName, accountName, tableName, updateThroughputParameters)
             .last()
             .flatMap(this.client::getLroFinalResultOrError);
@@ -1559,19 +1284,14 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB resource throughput.
+     * @return an Azure Cosmos DB resource throughput on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<ThroughputSettingsGetResultsInner> updateTableThroughputAsync(
-        String resourceGroupName,
-        String accountName,
-        String tableName,
-        ThroughputSettingsUpdateParameters updateThroughputParameters,
+    private Mono<ThroughputSettingsGetResultsInner> updateTableThroughputAsync(String resourceGroupName,
+        String accountName, String tableName, ThroughputSettingsUpdateParameters updateThroughputParameters,
         Context context) {
-        return beginUpdateTableThroughputAsync(
-                resourceGroupName, accountName, tableName, updateThroughputParameters, context)
-            .last()
-            .flatMap(this.client::getLroFinalResultOrError);
+        return beginUpdateTableThroughputAsync(resourceGroupName, accountName, tableName, updateThroughputParameters,
+            context).last().flatMap(this.client::getLroFinalResultOrError);
     }
 
     /**
@@ -1587,11 +1307,8 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @return an Azure Cosmos DB resource throughput.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public ThroughputSettingsGetResultsInner updateTableThroughput(
-        String resourceGroupName,
-        String accountName,
-        String tableName,
-        ThroughputSettingsUpdateParameters updateThroughputParameters) {
+    public ThroughputSettingsGetResultsInner updateTableThroughput(String resourceGroupName, String accountName,
+        String tableName, ThroughputSettingsUpdateParameters updateThroughputParameters) {
         return updateTableThroughputAsync(resourceGroupName, accountName, tableName, updateThroughputParameters)
             .block();
     }
@@ -1610,15 +1327,10 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @return an Azure Cosmos DB resource throughput.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public ThroughputSettingsGetResultsInner updateTableThroughput(
-        String resourceGroupName,
-        String accountName,
-        String tableName,
-        ThroughputSettingsUpdateParameters updateThroughputParameters,
-        Context context) {
-        return updateTableThroughputAsync(
-                resourceGroupName, accountName, tableName, updateThroughputParameters, context)
-            .block();
+    public ThroughputSettingsGetResultsInner updateTableThroughput(String resourceGroupName, String accountName,
+        String tableName, ThroughputSettingsUpdateParameters updateThroughputParameters, Context context) {
+        return updateTableThroughputAsync(resourceGroupName, accountName, tableName, updateThroughputParameters,
+            context).block();
     }
 
     /**
@@ -1630,22 +1342,19 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB resource throughput.
+     * @return an Azure Cosmos DB resource throughput along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<Flux<ByteBuffer>>> migrateTableToAutoscaleWithResponseAsync(
-        String resourceGroupName, String accountName, String tableName) {
+    public Mono<Response<Flux<ByteBuffer>>> migrateTableToAutoscaleWithResponseAsync(String resourceGroupName,
+        String accountName, String tableName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1660,17 +1369,8 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
         final String accept = "application/json";
         return FluxUtil
             .withContext(
-                context ->
-                    service
-                        .migrateTableToAutoscale(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            accountName,
-                            tableName,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
+                context -> service.migrateTableToAutoscale(this.client.getEndpoint(), this.client.getSubscriptionId(),
+                    resourceGroupName, accountName, tableName, this.client.getApiVersion(), accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -1684,22 +1384,19 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB resource throughput.
+     * @return an Azure Cosmos DB resource throughput along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> migrateTableToAutoscaleWithResponseAsync(
-        String resourceGroupName, String accountName, String tableName, Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> migrateTableToAutoscaleWithResponseAsync(String resourceGroupName,
+        String accountName, String tableName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1713,16 +1410,8 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .migrateTableToAutoscale(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                accountName,
-                tableName,
-                this.client.getApiVersion(),
-                accept,
-                context);
+        return service.migrateTableToAutoscale(this.client.getEndpoint(), this.client.getSubscriptionId(),
+            resourceGroupName, accountName, tableName, this.client.getApiVersion(), accept, context);
     }
 
     /**
@@ -1734,21 +1423,16 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB resource throughput.
+     * @return the {@link PollerFlux} for polling of an Azure Cosmos DB resource throughput.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public PollerFlux<PollResult<ThroughputSettingsGetResultsInner>, ThroughputSettingsGetResultsInner>
         beginMigrateTableToAutoscaleAsync(String resourceGroupName, String accountName, String tableName) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            migrateTableToAutoscaleWithResponseAsync(resourceGroupName, accountName, tableName);
-        return this
-            .client
-            .<ThroughputSettingsGetResultsInner, ThroughputSettingsGetResultsInner>getLroResult(
-                mono,
-                this.client.getHttpPipeline(),
-                ThroughputSettingsGetResultsInner.class,
-                ThroughputSettingsGetResultsInner.class,
-                this.client.getContext());
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = migrateTableToAutoscaleWithResponseAsync(resourceGroupName, accountName, tableName);
+        return this.client.<ThroughputSettingsGetResultsInner, ThroughputSettingsGetResultsInner>getLroResult(mono,
+            this.client.getHttpPipeline(), ThroughputSettingsGetResultsInner.class,
+            ThroughputSettingsGetResultsInner.class, this.client.getContext());
     }
 
     /**
@@ -1761,23 +1445,18 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB resource throughput.
+     * @return the {@link PollerFlux} for polling of an Azure Cosmos DB resource throughput.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<ThroughputSettingsGetResultsInner>, ThroughputSettingsGetResultsInner>
-        beginMigrateTableToAutoscaleAsync(
-            String resourceGroupName, String accountName, String tableName, Context context) {
+        beginMigrateTableToAutoscaleAsync(String resourceGroupName, String accountName, String tableName,
+            Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            migrateTableToAutoscaleWithResponseAsync(resourceGroupName, accountName, tableName, context);
-        return this
-            .client
-            .<ThroughputSettingsGetResultsInner, ThroughputSettingsGetResultsInner>getLroResult(
-                mono,
-                this.client.getHttpPipeline(),
-                ThroughputSettingsGetResultsInner.class,
-                ThroughputSettingsGetResultsInner.class,
-                context);
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = migrateTableToAutoscaleWithResponseAsync(resourceGroupName, accountName, tableName, context);
+        return this.client.<ThroughputSettingsGetResultsInner, ThroughputSettingsGetResultsInner>getLroResult(mono,
+            this.client.getHttpPipeline(), ThroughputSettingsGetResultsInner.class,
+            ThroughputSettingsGetResultsInner.class, context);
     }
 
     /**
@@ -1789,12 +1468,12 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB resource throughput.
+     * @return the {@link SyncPoller} for polling of an Azure Cosmos DB resource throughput.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<ThroughputSettingsGetResultsInner>, ThroughputSettingsGetResultsInner>
         beginMigrateTableToAutoscale(String resourceGroupName, String accountName, String tableName) {
-        return beginMigrateTableToAutoscaleAsync(resourceGroupName, accountName, tableName).getSyncPoller();
+        return this.beginMigrateTableToAutoscaleAsync(resourceGroupName, accountName, tableName).getSyncPoller();
     }
 
     /**
@@ -1807,12 +1486,13 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB resource throughput.
+     * @return the {@link SyncPoller} for polling of an Azure Cosmos DB resource throughput.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<ThroughputSettingsGetResultsInner>, ThroughputSettingsGetResultsInner>
         beginMigrateTableToAutoscale(String resourceGroupName, String accountName, String tableName, Context context) {
-        return beginMigrateTableToAutoscaleAsync(resourceGroupName, accountName, tableName, context).getSyncPoller();
+        return this.beginMigrateTableToAutoscaleAsync(resourceGroupName, accountName, tableName, context)
+            .getSyncPoller();
     }
 
     /**
@@ -1824,13 +1504,12 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB resource throughput.
+     * @return an Azure Cosmos DB resource throughput on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<ThroughputSettingsGetResultsInner> migrateTableToAutoscaleAsync(
-        String resourceGroupName, String accountName, String tableName) {
-        return beginMigrateTableToAutoscaleAsync(resourceGroupName, accountName, tableName)
-            .last()
+    public Mono<ThroughputSettingsGetResultsInner> migrateTableToAutoscaleAsync(String resourceGroupName,
+        String accountName, String tableName) {
+        return beginMigrateTableToAutoscaleAsync(resourceGroupName, accountName, tableName).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -1844,13 +1523,12 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB resource throughput.
+     * @return an Azure Cosmos DB resource throughput on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<ThroughputSettingsGetResultsInner> migrateTableToAutoscaleAsync(
-        String resourceGroupName, String accountName, String tableName, Context context) {
-        return beginMigrateTableToAutoscaleAsync(resourceGroupName, accountName, tableName, context)
-            .last()
+    private Mono<ThroughputSettingsGetResultsInner> migrateTableToAutoscaleAsync(String resourceGroupName,
+        String accountName, String tableName, Context context) {
+        return beginMigrateTableToAutoscaleAsync(resourceGroupName, accountName, tableName, context).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -1866,8 +1544,8 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @return an Azure Cosmos DB resource throughput.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public ThroughputSettingsGetResultsInner migrateTableToAutoscale(
-        String resourceGroupName, String accountName, String tableName) {
+    public ThroughputSettingsGetResultsInner migrateTableToAutoscale(String resourceGroupName, String accountName,
+        String tableName) {
         return migrateTableToAutoscaleAsync(resourceGroupName, accountName, tableName).block();
     }
 
@@ -1884,8 +1562,8 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @return an Azure Cosmos DB resource throughput.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public ThroughputSettingsGetResultsInner migrateTableToAutoscale(
-        String resourceGroupName, String accountName, String tableName, Context context) {
+    public ThroughputSettingsGetResultsInner migrateTableToAutoscale(String resourceGroupName, String accountName,
+        String tableName, Context context) {
         return migrateTableToAutoscaleAsync(resourceGroupName, accountName, tableName, context).block();
     }
 
@@ -1898,22 +1576,19 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB resource throughput.
+     * @return an Azure Cosmos DB resource throughput along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<Response<Flux<ByteBuffer>>> migrateTableToManualThroughputWithResponseAsync(
-        String resourceGroupName, String accountName, String tableName) {
+    public Mono<Response<Flux<ByteBuffer>>> migrateTableToManualThroughputWithResponseAsync(String resourceGroupName,
+        String accountName, String tableName) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1927,18 +1602,9 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
         }
         final String accept = "application/json";
         return FluxUtil
-            .withContext(
-                context ->
-                    service
-                        .migrateTableToManualThroughput(
-                            this.client.getEndpoint(),
-                            this.client.getSubscriptionId(),
-                            resourceGroupName,
-                            accountName,
-                            tableName,
-                            this.client.getApiVersion(),
-                            accept,
-                            context))
+            .withContext(context -> service.migrateTableToManualThroughput(this.client.getEndpoint(),
+                this.client.getSubscriptionId(), resourceGroupName, accountName, tableName, this.client.getApiVersion(),
+                accept, context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
@@ -1952,22 +1618,19 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB resource throughput.
+     * @return an Azure Cosmos DB resource throughput along with {@link Response} on successful completion of
+     * {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Response<Flux<ByteBuffer>>> migrateTableToManualThroughputWithResponseAsync(
-        String resourceGroupName, String accountName, String tableName, Context context) {
+    private Mono<Response<Flux<ByteBuffer>>> migrateTableToManualThroughputWithResponseAsync(String resourceGroupName,
+        String accountName, String tableName, Context context) {
         if (this.client.getEndpoint() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
         }
         if (this.client.getSubscriptionId() == null) {
-            return Mono
-                .error(
-                    new IllegalArgumentException(
-                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
         }
         if (resourceGroupName == null) {
             return Mono
@@ -1981,16 +1644,8 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
         }
         final String accept = "application/json";
         context = this.client.mergeContext(context);
-        return service
-            .migrateTableToManualThroughput(
-                this.client.getEndpoint(),
-                this.client.getSubscriptionId(),
-                resourceGroupName,
-                accountName,
-                tableName,
-                this.client.getApiVersion(),
-                accept,
-                context);
+        return service.migrateTableToManualThroughput(this.client.getEndpoint(), this.client.getSubscriptionId(),
+            resourceGroupName, accountName, tableName, this.client.getApiVersion(), accept, context);
     }
 
     /**
@@ -2002,21 +1657,16 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB resource throughput.
+     * @return the {@link PollerFlux} for polling of an Azure Cosmos DB resource throughput.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public PollerFlux<PollResult<ThroughputSettingsGetResultsInner>, ThroughputSettingsGetResultsInner>
         beginMigrateTableToManualThroughputAsync(String resourceGroupName, String accountName, String tableName) {
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            migrateTableToManualThroughputWithResponseAsync(resourceGroupName, accountName, tableName);
-        return this
-            .client
-            .<ThroughputSettingsGetResultsInner, ThroughputSettingsGetResultsInner>getLroResult(
-                mono,
-                this.client.getHttpPipeline(),
-                ThroughputSettingsGetResultsInner.class,
-                ThroughputSettingsGetResultsInner.class,
-                this.client.getContext());
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = migrateTableToManualThroughputWithResponseAsync(resourceGroupName, accountName, tableName);
+        return this.client.<ThroughputSettingsGetResultsInner, ThroughputSettingsGetResultsInner>getLroResult(mono,
+            this.client.getHttpPipeline(), ThroughputSettingsGetResultsInner.class,
+            ThroughputSettingsGetResultsInner.class, this.client.getContext());
     }
 
     /**
@@ -2029,23 +1679,18 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB resource throughput.
+     * @return the {@link PollerFlux} for polling of an Azure Cosmos DB resource throughput.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<ThroughputSettingsGetResultsInner>, ThroughputSettingsGetResultsInner>
-        beginMigrateTableToManualThroughputAsync(
-            String resourceGroupName, String accountName, String tableName, Context context) {
+        beginMigrateTableToManualThroughputAsync(String resourceGroupName, String accountName, String tableName,
+            Context context) {
         context = this.client.mergeContext(context);
-        Mono<Response<Flux<ByteBuffer>>> mono =
-            migrateTableToManualThroughputWithResponseAsync(resourceGroupName, accountName, tableName, context);
-        return this
-            .client
-            .<ThroughputSettingsGetResultsInner, ThroughputSettingsGetResultsInner>getLroResult(
-                mono,
-                this.client.getHttpPipeline(),
-                ThroughputSettingsGetResultsInner.class,
-                ThroughputSettingsGetResultsInner.class,
-                context);
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = migrateTableToManualThroughputWithResponseAsync(resourceGroupName, accountName, tableName, context);
+        return this.client.<ThroughputSettingsGetResultsInner, ThroughputSettingsGetResultsInner>getLroResult(mono,
+            this.client.getHttpPipeline(), ThroughputSettingsGetResultsInner.class,
+            ThroughputSettingsGetResultsInner.class, context);
     }
 
     /**
@@ -2057,12 +1702,12 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB resource throughput.
+     * @return the {@link SyncPoller} for polling of an Azure Cosmos DB resource throughput.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<ThroughputSettingsGetResultsInner>, ThroughputSettingsGetResultsInner>
         beginMigrateTableToManualThroughput(String resourceGroupName, String accountName, String tableName) {
-        return beginMigrateTableToManualThroughputAsync(resourceGroupName, accountName, tableName).getSyncPoller();
+        return this.beginMigrateTableToManualThroughputAsync(resourceGroupName, accountName, tableName).getSyncPoller();
     }
 
     /**
@@ -2075,13 +1720,13 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB resource throughput.
+     * @return the {@link SyncPoller} for polling of an Azure Cosmos DB resource throughput.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<ThroughputSettingsGetResultsInner>, ThroughputSettingsGetResultsInner>
-        beginMigrateTableToManualThroughput(
-            String resourceGroupName, String accountName, String tableName, Context context) {
-        return beginMigrateTableToManualThroughputAsync(resourceGroupName, accountName, tableName, context)
+        beginMigrateTableToManualThroughput(String resourceGroupName, String accountName, String tableName,
+            Context context) {
+        return this.beginMigrateTableToManualThroughputAsync(resourceGroupName, accountName, tableName, context)
             .getSyncPoller();
     }
 
@@ -2094,13 +1739,12 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB resource throughput.
+     * @return an Azure Cosmos DB resource throughput on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Mono<ThroughputSettingsGetResultsInner> migrateTableToManualThroughputAsync(
-        String resourceGroupName, String accountName, String tableName) {
-        return beginMigrateTableToManualThroughputAsync(resourceGroupName, accountName, tableName)
-            .last()
+    public Mono<ThroughputSettingsGetResultsInner> migrateTableToManualThroughputAsync(String resourceGroupName,
+        String accountName, String tableName) {
+        return beginMigrateTableToManualThroughputAsync(resourceGroupName, accountName, tableName).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -2114,13 +1758,12 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Azure Cosmos DB resource throughput.
+     * @return an Azure Cosmos DB resource throughput on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<ThroughputSettingsGetResultsInner> migrateTableToManualThroughputAsync(
-        String resourceGroupName, String accountName, String tableName, Context context) {
-        return beginMigrateTableToManualThroughputAsync(resourceGroupName, accountName, tableName, context)
-            .last()
+    private Mono<ThroughputSettingsGetResultsInner> migrateTableToManualThroughputAsync(String resourceGroupName,
+        String accountName, String tableName, Context context) {
+        return beginMigrateTableToManualThroughputAsync(resourceGroupName, accountName, tableName, context).last()
             .flatMap(this.client::getLroFinalResultOrError);
     }
 
@@ -2136,8 +1779,8 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @return an Azure Cosmos DB resource throughput.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public ThroughputSettingsGetResultsInner migrateTableToManualThroughput(
-        String resourceGroupName, String accountName, String tableName) {
+    public ThroughputSettingsGetResultsInner migrateTableToManualThroughput(String resourceGroupName,
+        String accountName, String tableName) {
         return migrateTableToManualThroughputAsync(resourceGroupName, accountName, tableName).block();
     }
 
@@ -2154,8 +1797,266 @@ public final class TableResourcesClientImpl implements TableResourcesClient {
      * @return an Azure Cosmos DB resource throughput.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public ThroughputSettingsGetResultsInner migrateTableToManualThroughput(
-        String resourceGroupName, String accountName, String tableName, Context context) {
+    public ThroughputSettingsGetResultsInner migrateTableToManualThroughput(String resourceGroupName,
+        String accountName, String tableName, Context context) {
         return migrateTableToManualThroughputAsync(resourceGroupName, accountName, tableName, context).block();
+    }
+
+    /**
+     * Retrieves continuous backup information for a table.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param accountName Cosmos DB database account name.
+     * @param tableName Cosmos DB table name.
+     * @param location The name of the continuous backup restore location.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return backup information of a resource along with {@link Response} on successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Mono<Response<Flux<ByteBuffer>>> retrieveContinuousBackupInformationWithResponseAsync(
+        String resourceGroupName, String accountName, String tableName, ContinuousBackupRestoreLocation location) {
+        if (this.client.getEndpoint() == null) {
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
+        }
+        if (this.client.getSubscriptionId() == null) {
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+        }
+        if (resourceGroupName == null) {
+            return Mono
+                .error(new IllegalArgumentException("Parameter resourceGroupName is required and cannot be null."));
+        }
+        if (accountName == null) {
+            return Mono.error(new IllegalArgumentException("Parameter accountName is required and cannot be null."));
+        }
+        if (tableName == null) {
+            return Mono.error(new IllegalArgumentException("Parameter tableName is required and cannot be null."));
+        }
+        if (location == null) {
+            return Mono.error(new IllegalArgumentException("Parameter location is required and cannot be null."));
+        } else {
+            location.validate();
+        }
+        final String accept = "application/json";
+        return FluxUtil
+            .withContext(context -> service.retrieveContinuousBackupInformation(this.client.getEndpoint(),
+                this.client.getSubscriptionId(), resourceGroupName, accountName, tableName, this.client.getApiVersion(),
+                location, accept, context))
+            .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
+    }
+
+    /**
+     * Retrieves continuous backup information for a table.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param accountName Cosmos DB database account name.
+     * @param tableName Cosmos DB table name.
+     * @param location The name of the continuous backup restore location.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return backup information of a resource along with {@link Response} on successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    private Mono<Response<Flux<ByteBuffer>>> retrieveContinuousBackupInformationWithResponseAsync(
+        String resourceGroupName, String accountName, String tableName, ContinuousBackupRestoreLocation location,
+        Context context) {
+        if (this.client.getEndpoint() == null) {
+            return Mono.error(
+                new IllegalArgumentException("Parameter this.client.getEndpoint() is required and cannot be null."));
+        }
+        if (this.client.getSubscriptionId() == null) {
+            return Mono.error(new IllegalArgumentException(
+                "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+        }
+        if (resourceGroupName == null) {
+            return Mono
+                .error(new IllegalArgumentException("Parameter resourceGroupName is required and cannot be null."));
+        }
+        if (accountName == null) {
+            return Mono.error(new IllegalArgumentException("Parameter accountName is required and cannot be null."));
+        }
+        if (tableName == null) {
+            return Mono.error(new IllegalArgumentException("Parameter tableName is required and cannot be null."));
+        }
+        if (location == null) {
+            return Mono.error(new IllegalArgumentException("Parameter location is required and cannot be null."));
+        } else {
+            location.validate();
+        }
+        final String accept = "application/json";
+        context = this.client.mergeContext(context);
+        return service.retrieveContinuousBackupInformation(this.client.getEndpoint(), this.client.getSubscriptionId(),
+            resourceGroupName, accountName, tableName, this.client.getApiVersion(), location, accept, context);
+    }
+
+    /**
+     * Retrieves continuous backup information for a table.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param accountName Cosmos DB database account name.
+     * @param tableName Cosmos DB table name.
+     * @param location The name of the continuous backup restore location.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link PollerFlux} for polling of backup information of a resource.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public PollerFlux<PollResult<BackupInformationInner>, BackupInformationInner>
+        beginRetrieveContinuousBackupInformationAsync(String resourceGroupName, String accountName, String tableName,
+            ContinuousBackupRestoreLocation location) {
+        Mono<Response<Flux<ByteBuffer>>> mono
+            = retrieveContinuousBackupInformationWithResponseAsync(resourceGroupName, accountName, tableName, location);
+        return this.client.<BackupInformationInner, BackupInformationInner>getLroResult(mono,
+            this.client.getHttpPipeline(), BackupInformationInner.class, BackupInformationInner.class,
+            this.client.getContext());
+    }
+
+    /**
+     * Retrieves continuous backup information for a table.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param accountName Cosmos DB database account name.
+     * @param tableName Cosmos DB table name.
+     * @param location The name of the continuous backup restore location.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link PollerFlux} for polling of backup information of a resource.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<BackupInformationInner>, BackupInformationInner>
+        beginRetrieveContinuousBackupInformationAsync(String resourceGroupName, String accountName, String tableName,
+            ContinuousBackupRestoreLocation location, Context context) {
+        context = this.client.mergeContext(context);
+        Mono<Response<Flux<ByteBuffer>>> mono = retrieveContinuousBackupInformationWithResponseAsync(resourceGroupName,
+            accountName, tableName, location, context);
+        return this.client.<BackupInformationInner, BackupInformationInner>getLroResult(mono,
+            this.client.getHttpPipeline(), BackupInformationInner.class, BackupInformationInner.class, context);
+    }
+
+    /**
+     * Retrieves continuous backup information for a table.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param accountName Cosmos DB database account name.
+     * @param tableName Cosmos DB table name.
+     * @param location The name of the continuous backup restore location.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of backup information of a resource.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<BackupInformationInner>, BackupInformationInner>
+        beginRetrieveContinuousBackupInformation(String resourceGroupName, String accountName, String tableName,
+            ContinuousBackupRestoreLocation location) {
+        return this.beginRetrieveContinuousBackupInformationAsync(resourceGroupName, accountName, tableName, location)
+            .getSyncPoller();
+    }
+
+    /**
+     * Retrieves continuous backup information for a table.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param accountName Cosmos DB database account name.
+     * @param tableName Cosmos DB table name.
+     * @param location The name of the continuous backup restore location.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of backup information of a resource.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<BackupInformationInner>, BackupInformationInner>
+        beginRetrieveContinuousBackupInformation(String resourceGroupName, String accountName, String tableName,
+            ContinuousBackupRestoreLocation location, Context context) {
+        return this
+            .beginRetrieveContinuousBackupInformationAsync(resourceGroupName, accountName, tableName, location, context)
+            .getSyncPoller();
+    }
+
+    /**
+     * Retrieves continuous backup information for a table.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param accountName Cosmos DB database account name.
+     * @param tableName Cosmos DB table name.
+     * @param location The name of the continuous backup restore location.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return backup information of a resource on successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Mono<BackupInformationInner> retrieveContinuousBackupInformationAsync(String resourceGroupName,
+        String accountName, String tableName, ContinuousBackupRestoreLocation location) {
+        return beginRetrieveContinuousBackupInformationAsync(resourceGroupName, accountName, tableName, location).last()
+            .flatMap(this.client::getLroFinalResultOrError);
+    }
+
+    /**
+     * Retrieves continuous backup information for a table.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param accountName Cosmos DB database account name.
+     * @param tableName Cosmos DB table name.
+     * @param location The name of the continuous backup restore location.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return backup information of a resource on successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    private Mono<BackupInformationInner> retrieveContinuousBackupInformationAsync(String resourceGroupName,
+        String accountName, String tableName, ContinuousBackupRestoreLocation location, Context context) {
+        return beginRetrieveContinuousBackupInformationAsync(resourceGroupName, accountName, tableName, location,
+            context).last().flatMap(this.client::getLroFinalResultOrError);
+    }
+
+    /**
+     * Retrieves continuous backup information for a table.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param accountName Cosmos DB database account name.
+     * @param tableName Cosmos DB table name.
+     * @param location The name of the continuous backup restore location.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return backup information of a resource.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public BackupInformationInner retrieveContinuousBackupInformation(String resourceGroupName, String accountName,
+        String tableName, ContinuousBackupRestoreLocation location) {
+        return retrieveContinuousBackupInformationAsync(resourceGroupName, accountName, tableName, location).block();
+    }
+
+    /**
+     * Retrieves continuous backup information for a table.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param accountName Cosmos DB database account name.
+     * @param tableName Cosmos DB table name.
+     * @param location The name of the continuous backup restore location.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return backup information of a resource.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public BackupInformationInner retrieveContinuousBackupInformation(String resourceGroupName, String accountName,
+        String tableName, ContinuousBackupRestoreLocation location, Context context) {
+        return retrieveContinuousBackupInformationAsync(resourceGroupName, accountName, tableName, location, context)
+            .block();
     }
 }

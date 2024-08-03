@@ -7,15 +7,15 @@ package com.azure.resourcemanager.appservice.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.fluent.models.StaticSiteFunctionOverviewArmResourceInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
-/** Collection of static site functions. */
+/**
+ * Collection of static site functions.
+ */
 @Fluent
 public final class StaticSiteFunctionOverviewCollection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(StaticSiteFunctionOverviewCollection.class);
-
     /*
      * Collection of resources.
      */
@@ -27,6 +27,12 @@ public final class StaticSiteFunctionOverviewCollection {
      */
     @JsonProperty(value = "nextLink", access = JsonProperty.Access.WRITE_ONLY)
     private String nextLink;
+
+    /**
+     * Creates an instance of StaticSiteFunctionOverviewCollection class.
+     */
+    public StaticSiteFunctionOverviewCollection() {
+    }
 
     /**
      * Get the value property: Collection of resources.
@@ -64,12 +70,13 @@ public final class StaticSiteFunctionOverviewCollection {
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property value in model StaticSiteFunctionOverviewCollection"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property value in model StaticSiteFunctionOverviewCollection"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(StaticSiteFunctionOverviewCollection.class);
 }

@@ -15,10 +15,9 @@ import com.azure.resourcemanager.apimanagement.models.GatewayHostnameConfigurati
 import com.azure.resourcemanager.apimanagement.models.GatewayHostnameConfigurations;
 import com.azure.resourcemanager.apimanagement.models.GatewayHostnameConfigurationsGetEntityTagResponse;
 import com.azure.resourcemanager.apimanagement.models.GatewayHostnameConfigurationsGetResponse;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class GatewayHostnameConfigurationsImpl implements GatewayHostnameConfigurations {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GatewayHostnameConfigurationsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(GatewayHostnameConfigurationsImpl.class);
 
     private final GatewayHostnameConfigurationsClient innerClient;
 
@@ -51,24 +50,13 @@ public final class GatewayHostnameConfigurationsImpl implements GatewayHostnameC
         return Utils.mapPage(inner, inner1 -> new GatewayHostnameConfigurationContractImpl(inner1, this.manager()));
     }
 
-    public void getEntityTag(String resourceGroupName, String serviceName, String gatewayId, String hcId) {
-        this.serviceClient().getEntityTag(resourceGroupName, serviceName, gatewayId, hcId);
-    }
-
     public GatewayHostnameConfigurationsGetEntityTagResponse getEntityTagWithResponse(
         String resourceGroupName, String serviceName, String gatewayId, String hcId, Context context) {
         return this.serviceClient().getEntityTagWithResponse(resourceGroupName, serviceName, gatewayId, hcId, context);
     }
 
-    public GatewayHostnameConfigurationContract get(
-        String resourceGroupName, String serviceName, String gatewayId, String hcId) {
-        GatewayHostnameConfigurationContractInner inner =
-            this.serviceClient().get(resourceGroupName, serviceName, gatewayId, hcId);
-        if (inner != null) {
-            return new GatewayHostnameConfigurationContractImpl(inner, this.manager());
-        } else {
-            return null;
-        }
+    public void getEntityTag(String resourceGroupName, String serviceName, String gatewayId, String hcId) {
+        this.serviceClient().getEntityTag(resourceGroupName, serviceName, gatewayId, hcId);
     }
 
     public Response<GatewayHostnameConfigurationContract> getWithResponse(
@@ -86,8 +74,15 @@ public final class GatewayHostnameConfigurationsImpl implements GatewayHostnameC
         }
     }
 
-    public void delete(String resourceGroupName, String serviceName, String gatewayId, String hcId, String ifMatch) {
-        this.serviceClient().delete(resourceGroupName, serviceName, gatewayId, hcId, ifMatch);
+    public GatewayHostnameConfigurationContract get(
+        String resourceGroupName, String serviceName, String gatewayId, String hcId) {
+        GatewayHostnameConfigurationContractInner inner =
+            this.serviceClient().get(resourceGroupName, serviceName, gatewayId, hcId);
+        if (inner != null) {
+            return new GatewayHostnameConfigurationContractImpl(inner, this.manager());
+        } else {
+            return null;
+        }
     }
 
     public Response<Void> deleteWithResponse(
@@ -97,10 +92,14 @@ public final class GatewayHostnameConfigurationsImpl implements GatewayHostnameC
             .deleteWithResponse(resourceGroupName, serviceName, gatewayId, hcId, ifMatch, context);
     }
 
+    public void delete(String resourceGroupName, String serviceName, String gatewayId, String hcId, String ifMatch) {
+        this.serviceClient().delete(resourceGroupName, serviceName, gatewayId, hcId, ifMatch);
+    }
+
     public GatewayHostnameConfigurationContract getById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -108,21 +107,21 @@ public final class GatewayHostnameConfigurationsImpl implements GatewayHostnameC
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String gatewayId = Utils.getValueFromIdByName(id, "gateways");
         if (gatewayId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'gateways'.", id)));
         }
         String hcId = Utils.getValueFromIdByName(id, "hostnameConfigurations");
         if (hcId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -136,7 +135,7 @@ public final class GatewayHostnameConfigurationsImpl implements GatewayHostnameC
     public Response<GatewayHostnameConfigurationContract> getByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -144,21 +143,21 @@ public final class GatewayHostnameConfigurationsImpl implements GatewayHostnameC
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String gatewayId = Utils.getValueFromIdByName(id, "gateways");
         if (gatewayId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'gateways'.", id)));
         }
         String hcId = Utils.getValueFromIdByName(id, "hostnameConfigurations");
         if (hcId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -172,7 +171,7 @@ public final class GatewayHostnameConfigurationsImpl implements GatewayHostnameC
     public void deleteById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -180,21 +179,21 @@ public final class GatewayHostnameConfigurationsImpl implements GatewayHostnameC
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String gatewayId = Utils.getValueFromIdByName(id, "gateways");
         if (gatewayId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'gateways'.", id)));
         }
         String hcId = Utils.getValueFromIdByName(id, "hostnameConfigurations");
         if (hcId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -203,13 +202,13 @@ public final class GatewayHostnameConfigurationsImpl implements GatewayHostnameC
                                 id)));
         }
         String localIfMatch = null;
-        this.deleteWithResponse(resourceGroupName, serviceName, gatewayId, hcId, localIfMatch, Context.NONE).getValue();
+        this.deleteWithResponse(resourceGroupName, serviceName, gatewayId, hcId, localIfMatch, Context.NONE);
     }
 
     public Response<Void> deleteByIdWithResponse(String id, String ifMatch, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -217,21 +216,21 @@ public final class GatewayHostnameConfigurationsImpl implements GatewayHostnameC
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String gatewayId = Utils.getValueFromIdByName(id, "gateways");
         if (gatewayId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'gateways'.", id)));
         }
         String hcId = Utils.getValueFromIdByName(id, "hostnameConfigurations");
         if (hcId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String

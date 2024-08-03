@@ -5,40 +5,51 @@
 package com.azure.resourcemanager.monitor.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 
 /**
- * The specification of data sources. This property is optional and can be omitted if the rule is meant to be used via
- * direct calls to the provisioned endpoint.
+ * The specification of data sources.
+ * This property is optional and can be omitted if the rule is meant to be used via direct calls to the provisioned
+ * endpoint.
  */
 @Fluent
 public final class DataCollectionRuleDataSources extends DataSourcesSpec {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DataCollectionRuleDataSources.class);
+    /**
+     * Creates an instance of DataCollectionRuleDataSources class.
+     */
+    public DataCollectionRuleDataSources() {
+    }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DataCollectionRuleDataSources withPerformanceCounters(List<PerfCounterDataSource> performanceCounters) {
         super.withPerformanceCounters(performanceCounters);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DataCollectionRuleDataSources withWindowsEventLogs(List<WindowsEventLogDataSource> windowsEventLogs) {
         super.withWindowsEventLogs(windowsEventLogs);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DataCollectionRuleDataSources withSyslog(List<SyslogDataSource> syslog) {
         super.withSyslog(syslog);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DataCollectionRuleDataSources withExtensions(List<ExtensionDataSource> extensions) {
         super.withExtensions(extensions);
@@ -46,8 +57,26 @@ public final class DataCollectionRuleDataSources extends DataSourcesSpec {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DataCollectionRuleDataSources withLogFiles(List<LogFilesDataSource> logFiles) {
+        super.withLogFiles(logFiles);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public DataCollectionRuleDataSources withIisLogs(List<IisLogsDataSource> iisLogs) {
+        super.withIisLogs(iisLogs);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

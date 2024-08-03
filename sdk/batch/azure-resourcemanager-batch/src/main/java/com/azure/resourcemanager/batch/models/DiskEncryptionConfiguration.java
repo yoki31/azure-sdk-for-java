@@ -5,31 +5,36 @@
 package com.azure.resourcemanager.batch.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /**
  * The disk encryption configuration applied on compute nodes in the pool. Disk encryption configuration is not
- * supported on Linux pool created with Virtual Machine Image or Shared Image Gallery Image.
+ * supported on Linux pool created with Virtual Machine Image or Azure Compute Gallery Image.
  */
 @Fluent
 public final class DiskEncryptionConfiguration {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DiskEncryptionConfiguration.class);
-
     /*
      * The list of disk targets Batch Service will encrypt on the compute node
-     * On Linux pool, only "TemporaryDisk" is supported; on Windows pool,
-     * "OsDisk" and "TemporaryDisk" must be specified.
+     * 
+     * On Linux pool, only "TemporaryDisk" is supported; on Windows pool, "OsDisk" and "TemporaryDisk" must be
+     * specified.
      */
     @JsonProperty(value = "targets")
     private List<DiskEncryptionTarget> targets;
 
     /**
-     * Get the targets property: The list of disk targets Batch Service will encrypt on the compute node On Linux pool,
-     * only "TemporaryDisk" is supported; on Windows pool, "OsDisk" and "TemporaryDisk" must be specified.
-     *
+     * Creates an instance of DiskEncryptionConfiguration class.
+     */
+    public DiskEncryptionConfiguration() {
+    }
+
+    /**
+     * Get the targets property: The list of disk targets Batch Service will encrypt on the compute node
+     * 
+     * On Linux pool, only "TemporaryDisk" is supported; on Windows pool, "OsDisk" and "TemporaryDisk" must be
+     * specified.
+     * 
      * @return the targets value.
      */
     public List<DiskEncryptionTarget> targets() {
@@ -37,9 +42,11 @@ public final class DiskEncryptionConfiguration {
     }
 
     /**
-     * Set the targets property: The list of disk targets Batch Service will encrypt on the compute node On Linux pool,
-     * only "TemporaryDisk" is supported; on Windows pool, "OsDisk" and "TemporaryDisk" must be specified.
-     *
+     * Set the targets property: The list of disk targets Batch Service will encrypt on the compute node
+     * 
+     * On Linux pool, only "TemporaryDisk" is supported; on Windows pool, "OsDisk" and "TemporaryDisk" must be
+     * specified.
+     * 
      * @param targets the targets value to set.
      * @return the DiskEncryptionConfiguration object itself.
      */
@@ -50,7 +57,7 @@ public final class DiskEncryptionConfiguration {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

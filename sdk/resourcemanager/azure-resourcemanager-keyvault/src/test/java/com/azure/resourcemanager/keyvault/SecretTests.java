@@ -4,10 +4,10 @@
 package com.azure.resourcemanager.keyvault;
 
 import com.azure.core.exception.ResourceModifiedException;
+import com.azure.core.management.Region;
 import com.azure.core.test.annotation.DoNotRecord;
 import com.azure.resourcemanager.keyvault.models.Secret;
 import com.azure.resourcemanager.keyvault.models.Vault;
-import com.azure.core.management.Region;
 import com.azure.resourcemanager.resources.fluentcore.utils.ResourceManagerUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,12 +19,8 @@ import java.util.stream.Collectors;
 public class SecretTests extends KeyVaultManagementTest {
 
     @Test
-    @DoNotRecord
+    @DoNotRecord(skipInPlayback = true)
     public void canCRUDSecret() throws Exception {
-        if (skipInPlayback()) {
-            return;
-        }
-
         String vaultName = generateRandomResourceName("vault", 20);
         String secretName = generateRandomResourceName("secret", 20);
 
@@ -35,7 +31,7 @@ public class SecretTests extends KeyVaultManagementTest {
                 .withRegion(Region.US_WEST)
                 .withNewResourceGroup(rgName)
                 .defineAccessPolicy()
-                .forServicePrincipal(clientIdFromFile())
+                .forUser(azureCliSignedInUser().userPrincipalName())
                 .allowSecretAllPermissions()
                 .attach()
                 .create();
@@ -69,12 +65,8 @@ public class SecretTests extends KeyVaultManagementTest {
     }
 
     @Test
-    @DoNotRecord
+    @DoNotRecord(skipInPlayback = true)
     public void canDisableSecret() throws Exception {
-        if (skipInPlayback()) {
-            return;
-        }
-
         String vaultName = generateRandomResourceName("vault", 20);
         String secretName = generateRandomResourceName("secret", 20);
 
@@ -85,7 +77,7 @@ public class SecretTests extends KeyVaultManagementTest {
                 .withRegion(Region.US_WEST)
                 .withNewResourceGroup(rgName)
                 .defineAccessPolicy()
-                .forServicePrincipal(clientIdFromFile())
+                .forUser(azureCliSignedInUser().userPrincipalName())
                 .allowSecretAllPermissions()
                 .attach()
                 .create();

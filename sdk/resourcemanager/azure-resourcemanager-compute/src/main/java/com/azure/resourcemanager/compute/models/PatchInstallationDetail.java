@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Information about a specific patch that was encountered during an installation action. */
+/**
+ * Information about a specific patch that was encountered during an installation action.
+ */
 @Immutable
 public final class PatchInstallationDetail {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PatchInstallationDetail.class);
-
     /*
      * A unique identifier for the patch.
      */
@@ -28,8 +26,7 @@ public final class PatchInstallationDetail {
     private String name;
 
     /*
-     * The version string of the package. It may conform to Semantic
-     * Versioning. Only applies to Linux.
+     * The version string of the package. It may conform to Semantic Versioning. Only applies to Linux.
      */
     @JsonProperty(value = "version", access = JsonProperty.Access.WRITE_ONLY)
     private String version;
@@ -53,8 +50,14 @@ public final class PatchInstallationDetail {
     private PatchInstallationState installationState;
 
     /**
+     * Creates an instance of PatchInstallationDetail class.
+     */
+    public PatchInstallationDetail() {
+    }
+
+    /**
      * Get the patchId property: A unique identifier for the patch.
-     *
+     * 
      * @return the patchId value.
      */
     public String patchId() {
@@ -63,7 +66,7 @@ public final class PatchInstallationDetail {
 
     /**
      * Get the name property: The friendly name of the patch.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -73,7 +76,7 @@ public final class PatchInstallationDetail {
     /**
      * Get the version property: The version string of the package. It may conform to Semantic Versioning. Only applies
      * to Linux.
-     *
+     * 
      * @return the version value.
      */
     public String version() {
@@ -82,7 +85,7 @@ public final class PatchInstallationDetail {
 
     /**
      * Get the kbId property: The KBID of the patch. Only applies to Windows patches.
-     *
+     * 
      * @return the kbId value.
      */
     public String kbId() {
@@ -91,7 +94,7 @@ public final class PatchInstallationDetail {
 
     /**
      * Get the classifications property: The classification(s) of the patch as provided by the patch publisher.
-     *
+     * 
      * @return the classifications value.
      */
     public List<String> classifications() {
@@ -100,7 +103,7 @@ public final class PatchInstallationDetail {
 
     /**
      * Get the installationState property: The state of the patch after the installation operation completed.
-     *
+     * 
      * @return the installationState value.
      */
     public PatchInstallationState installationState() {
@@ -109,7 +112,7 @@ public final class PatchInstallationDetail {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

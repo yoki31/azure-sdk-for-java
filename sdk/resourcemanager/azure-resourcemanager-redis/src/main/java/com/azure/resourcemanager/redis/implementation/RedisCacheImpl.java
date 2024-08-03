@@ -5,6 +5,7 @@ package com.azure.resourcemanager.redis.implementation;
 
 import com.azure.core.http.rest.PagedFlux;
 import com.azure.core.http.rest.PagedIterable;
+import com.azure.core.util.CoreUtils;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.redis.RedisManager;
 import com.azure.resourcemanager.redis.fluent.models.PrivateEndpointConnectionInner;
@@ -16,10 +17,12 @@ import com.azure.resourcemanager.redis.models.DayOfWeek;
 import com.azure.resourcemanager.redis.models.ExportRdbParameters;
 import com.azure.resourcemanager.redis.models.ImportRdbParameters;
 import com.azure.resourcemanager.redis.models.ProvisioningState;
+import com.azure.resourcemanager.redis.models.PublicNetworkAccess;
 import com.azure.resourcemanager.redis.models.RebootType;
 import com.azure.resourcemanager.redis.models.RedisAccessKeys;
 import com.azure.resourcemanager.redis.models.RedisCache;
 import com.azure.resourcemanager.redis.models.RedisCachePremium;
+import com.azure.resourcemanager.redis.models.RedisConfiguration;
 import com.azure.resourcemanager.redis.models.RedisCreateParameters;
 import com.azure.resourcemanager.redis.models.RedisFirewallRule;
 import com.azure.resourcemanager.redis.models.RedisKeyType;
@@ -153,7 +156,8 @@ class RedisCacheImpl extends GroupableResourceImpl<RedisCache, RedisResourceInne
 
     @Override
     public Map<String, String> redisConfiguration() {
-        return Collections.unmodifiableMap(this.innerModel().redisConfiguration());
+        return Collections.unmodifiableMap(
+            ConfigurationUtils.toMap(this.innerModel().redisConfiguration()));
     }
 
     @Override
@@ -191,6 +195,11 @@ class RedisCacheImpl extends GroupableResourceImpl<RedisCache, RedisResourceInne
             this.manager().serviceClient().getRedis().regenerateKey(this.resourceGroupName(), this.name(), new RedisRegenerateKeyParameters().withKeyType(keyType));
         cachedAccessKeys = new RedisAccessKeysImpl(response);
         return cachedAccessKeys;
+    }
+
+    @Override
+    public PublicNetworkAccess publicNetworkAccess() {
+        return this.innerModel().publicNetworkAccess();
     }
 
     @Override
@@ -251,9 +260,9 @@ class RedisCacheImpl extends GroupableResourceImpl<RedisCache, RedisResourceInne
     @Override
     public RedisCacheImpl withRedisConfiguration(Map<String, String> redisConfiguration) {
         if (isInCreateMode()) {
-            createParameters.withRedisConfiguration(redisConfiguration);
+            createParameters.withRedisConfiguration(ConfigurationUtils.toConfiguration(redisConfiguration));
         } else {
-            updateParameters.withRedisConfiguration(redisConfiguration);
+            updateParameters.withRedisConfiguration(ConfigurationUtils.toConfiguration(redisConfiguration));
         }
         return this;
     }
@@ -262,14 +271,24 @@ class RedisCacheImpl extends GroupableResourceImpl<RedisCache, RedisResourceInne
     public RedisCacheImpl withRedisConfiguration(String key, String value) {
         if (isInCreateMode()) {
             if (createParameters.redisConfiguration() == null) {
-                createParameters.withRedisConfiguration(new TreeMap<>());
+                createParameters.withRedisConfiguration(new RedisConfiguration());
             }
-            createParameters.redisConfiguration().put(key, value);
+            ConfigurationUtils.putConfiguration(createParameters.redisConfiguration(), key, value);
         } else {
             if (updateParameters.redisConfiguration() == null) {
-                updateParameters.withRedisConfiguration(new TreeMap<>());
+                updateParameters.withRedisConfiguration(new RedisConfiguration());
             }
-            updateParameters.redisConfiguration().put(key, value);
+            ConfigurationUtils.putConfiguration(updateParameters.redisConfiguration(), key, value);
+        }
+        return this;
+    }
+
+    @Override
+    public RedisCacheImpl withRedisConfiguration(RedisConfiguration redisConfiguration) {
+        if (isInCreateMode()) {
+            createParameters.withRedisConfiguration(redisConfiguration);
+        } else {
+            updateParameters.withRedisConfiguration(redisConfiguration);
         }
         return this;
     }
@@ -313,16 +332,14 @@ class RedisCacheImpl extends GroupableResourceImpl<RedisCache, RedisResourceInne
     @Override
     public RedisCacheImpl withoutRedisConfiguration() {
         if (updateParameters.redisConfiguration() != null) {
-            updateParameters.redisConfiguration().clear();
+            updateParameters.withRedisConfiguration(new RedisConfiguration());
         }
         return this;
     }
 
     @Override
     public RedisCacheImpl withoutRedisConfiguration(String key) {
-        if (updateParameters.redisConfiguration() != null) {
-            updateParameters.redisConfiguration().remove(key);
-        }
+        ConfigurationUtils.removeConfiguration(updateParameters.redisConfiguration(), (key));
         return this;
     }
 
@@ -576,6 +593,9 @@ class RedisCacheImpl extends GroupableResourceImpl<RedisCache, RedisResourceInne
     public Mono<RedisCache> createResourceAsync() {
         createParameters.withLocation(this.regionName());
         createParameters.withTags(this.innerModel().tags());
+        if (CoreUtils.isNullOrEmpty(this.createParameters.redisVersion())) {
+            withRedisVersion(RedisVersion.V6);
+        }
         this.patchScheduleAdded = false;
         return this
             .manager()
@@ -714,6 +734,26 @@ class RedisCacheImpl extends GroupableResourceImpl<RedisCache, RedisResourceInne
                         .withStatus(
                             com.azure.resourcemanager.redis.models.PrivateEndpointServiceConnectionStatus.REJECTED)))
             .then();
+    }
+
+    @Override
+    public RedisCacheImpl enablePublicNetworkAccess() {
+        if (isInCreateMode()) {
+            createParameters.withPublicNetworkAccess(PublicNetworkAccess.ENABLED);
+        } else {
+            updateParameters.withPublicNetworkAccess(PublicNetworkAccess.ENABLED);
+        }
+        return this;
+    }
+
+    @Override
+    public RedisCacheImpl disablePublicNetworkAccess() {
+        if (isInCreateMode()) {
+            createParameters.withPublicNetworkAccess(PublicNetworkAccess.DISABLED);
+        } else {
+            updateParameters.withPublicNetworkAccess(PublicNetworkAccess.DISABLED);
+        }
+        return this;
     }
 
     private static final class PrivateLinkResourceImpl implements PrivateLinkResource {

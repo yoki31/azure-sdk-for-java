@@ -25,7 +25,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.UserSubscriptionsClient;
 import com.azure.resourcemanager.apimanagement.fluent.models.SubscriptionContractInner;
 import com.azure.resourcemanager.apimanagement.models.SubscriptionCollection;
@@ -34,8 +33,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in UserSubscriptionsClient. */
 public final class UserSubscriptionsClientImpl implements UserSubscriptionsClient {
-    private final ClientLogger logger = new ClientLogger(UserSubscriptionsClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final UserSubscriptionsService service;
 
@@ -59,11 +56,10 @@ public final class UserSubscriptionsClientImpl implements UserSubscriptionsClien
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApiManagementClientU")
-    private interface UserSubscriptionsService {
+    public interface UserSubscriptionsService {
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/users/{userId}/subscriptions")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/users/{userId}/subscriptions")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<SubscriptionCollection>> list(
@@ -81,8 +77,7 @@ public final class UserSubscriptionsClientImpl implements UserSubscriptionsClien
 
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/users/{userId}/subscriptions/{sid}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/users/{userId}/subscriptions/{sid}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<UserSubscriptionsGetResponse> get(
@@ -110,7 +105,7 @@ public final class UserSubscriptionsClientImpl implements UserSubscriptionsClien
     /**
      * Lists the collection of subscriptions of the specified user.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -127,7 +122,8 @@ public final class UserSubscriptionsClientImpl implements UserSubscriptionsClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Subscriptions list representation.
+     * @return paged Subscriptions list representation along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SubscriptionContractInner>> listSinglePageAsync(
@@ -186,7 +182,7 @@ public final class UserSubscriptionsClientImpl implements UserSubscriptionsClien
     /**
      * Lists the collection of subscriptions of the specified user.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -204,7 +200,8 @@ public final class UserSubscriptionsClientImpl implements UserSubscriptionsClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Subscriptions list representation.
+     * @return paged Subscriptions list representation along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SubscriptionContractInner>> listSinglePageAsync(
@@ -266,7 +263,7 @@ public final class UserSubscriptionsClientImpl implements UserSubscriptionsClien
     /**
      * Lists the collection of subscriptions of the specified user.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -283,7 +280,7 @@ public final class UserSubscriptionsClientImpl implements UserSubscriptionsClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Subscriptions list representation.
+     * @return paged Subscriptions list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<SubscriptionContractInner> listAsync(
@@ -296,13 +293,13 @@ public final class UserSubscriptionsClientImpl implements UserSubscriptionsClien
     /**
      * Lists the collection of subscriptions of the specified user.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Subscriptions list representation.
+     * @return paged Subscriptions list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<SubscriptionContractInner> listAsync(
@@ -318,7 +315,7 @@ public final class UserSubscriptionsClientImpl implements UserSubscriptionsClien
     /**
      * Lists the collection of subscriptions of the specified user.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -336,7 +333,7 @@ public final class UserSubscriptionsClientImpl implements UserSubscriptionsClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Subscriptions list representation.
+     * @return paged Subscriptions list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<SubscriptionContractInner> listAsync(
@@ -355,13 +352,13 @@ public final class UserSubscriptionsClientImpl implements UserSubscriptionsClien
     /**
      * Lists the collection of subscriptions of the specified user.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Subscriptions list representation.
+     * @return paged Subscriptions list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<SubscriptionContractInner> list(String resourceGroupName, String serviceName, String userId) {
@@ -374,7 +371,7 @@ public final class UserSubscriptionsClientImpl implements UserSubscriptionsClien
     /**
      * Lists the collection of subscriptions of the specified user.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -392,7 +389,7 @@ public final class UserSubscriptionsClientImpl implements UserSubscriptionsClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Subscriptions list representation.
+     * @return paged Subscriptions list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<SubscriptionContractInner> list(
@@ -409,7 +406,7 @@ public final class UserSubscriptionsClientImpl implements UserSubscriptionsClien
     /**
      * Gets the specified Subscription entity associated with a particular user.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
@@ -417,7 +414,8 @@ public final class UserSubscriptionsClientImpl implements UserSubscriptionsClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the specified Subscription entity associated with a particular user.
+     * @return the specified Subscription entity associated with a particular user on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<UserSubscriptionsGetResponse> getWithResponseAsync(
@@ -468,7 +466,7 @@ public final class UserSubscriptionsClientImpl implements UserSubscriptionsClien
     /**
      * Gets the specified Subscription entity associated with a particular user.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
@@ -477,7 +475,8 @@ public final class UserSubscriptionsClientImpl implements UserSubscriptionsClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the specified Subscription entity associated with a particular user.
+     * @return the specified Subscription entity associated with a particular user on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<UserSubscriptionsGetResponse> getWithResponseAsync(
@@ -525,7 +524,7 @@ public final class UserSubscriptionsClientImpl implements UserSubscriptionsClien
     /**
      * Gets the specified Subscription entity associated with a particular user.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
@@ -533,44 +532,20 @@ public final class UserSubscriptionsClientImpl implements UserSubscriptionsClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the specified Subscription entity associated with a particular user.
+     * @return the specified Subscription entity associated with a particular user on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<SubscriptionContractInner> getAsync(
         String resourceGroupName, String serviceName, String userId, String sid) {
         return getWithResponseAsync(resourceGroupName, serviceName, userId, sid)
-            .flatMap(
-                (UserSubscriptionsGetResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Gets the specified Subscription entity associated with a particular user.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param userId User identifier. Must be unique in the current API Management service instance.
-     * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
-     *     API Management.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the specified Subscription entity associated with a particular user.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SubscriptionContractInner get(String resourceGroupName, String serviceName, String userId, String sid) {
-        return getAsync(resourceGroupName, serviceName, userId, sid).block();
-    }
-
-    /**
-     * Gets the specified Subscription entity associated with a particular user.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
@@ -588,13 +563,33 @@ public final class UserSubscriptionsClientImpl implements UserSubscriptionsClien
     }
 
     /**
-     * Get the next page of items.
+     * Gets the specified Subscription entity associated with a particular user.
      *
-     * @param nextLink The nextLink parameter.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param userId User identifier. Must be unique in the current API Management service instance.
+     * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
+     *     API Management.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Subscriptions list representation.
+     * @return the specified Subscription entity associated with a particular user.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public SubscriptionContractInner get(String resourceGroupName, String serviceName, String userId, String sid) {
+        return getWithResponse(resourceGroupName, serviceName, userId, sid, Context.NONE).getValue();
+    }
+
+    /**
+     * Get the next page of items.
+     *
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return paged Subscriptions list representation along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SubscriptionContractInner>> listNextSinglePageAsync(String nextLink) {
@@ -625,12 +620,14 @@ public final class UserSubscriptionsClientImpl implements UserSubscriptionsClien
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Subscriptions list representation.
+     * @return paged Subscriptions list representation along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SubscriptionContractInner>> listNextSinglePageAsync(String nextLink, Context context) {

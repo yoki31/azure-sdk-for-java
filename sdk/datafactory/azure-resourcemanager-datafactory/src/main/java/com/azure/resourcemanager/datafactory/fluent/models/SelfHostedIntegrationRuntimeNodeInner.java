@@ -5,7 +5,6 @@
 package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.models.IntegrationRuntimeUpdateResult;
 import com.azure.resourcemanager.datafactory.models.SelfHostedIntegrationRuntimeNodeStatus;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
@@ -14,14 +13,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-/** Properties of Self-hosted integration runtime node. */
+/**
+ * Properties of Self-hosted integration runtime node.
+ */
 @Fluent
 public final class SelfHostedIntegrationRuntimeNodeInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SelfHostedIntegrationRuntimeNodeInner.class);
-
     /*
      * Name of the integration runtime node.
      */
@@ -66,15 +65,13 @@ public final class SelfHostedIntegrationRuntimeNodeInner {
     private String version;
 
     /*
-     * The time at which the integration runtime node was registered in ISO8601
-     * format.
+     * The time at which the integration runtime node was registered in ISO8601 format.
      */
     @JsonProperty(value = "registerTime", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime registerTime;
 
     /*
-     * The most recent time at which the integration runtime was connected in
-     * ISO8601 format.
+     * The most recent time at which the integration runtime was connected in ISO8601 format.
      */
     @JsonProperty(value = "lastConnectTime", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime lastConnectTime;
@@ -116,8 +113,7 @@ public final class SelfHostedIntegrationRuntimeNodeInner {
     private OffsetDateTime lastEndUpdateTime;
 
     /*
-     * Indicates whether this node is the active dispatcher for integration
-     * runtime requests.
+     * Indicates whether this node is the active dispatcher for integration runtime requests.
      */
     @JsonProperty(value = "isActiveDispatcher", access = JsonProperty.Access.WRITE_ONLY)
     private Boolean isActiveDispatcher;
@@ -137,11 +133,18 @@ public final class SelfHostedIntegrationRuntimeNodeInner {
     /*
      * Properties of Self-hosted integration runtime node.
      */
-    @JsonIgnore private Map<String, Object> additionalProperties;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties;
+
+    /**
+     * Creates an instance of SelfHostedIntegrationRuntimeNodeInner class.
+     */
+    public SelfHostedIntegrationRuntimeNodeInner() {
+    }
 
     /**
      * Get the nodeName property: Name of the integration runtime node.
-     *
+     * 
      * @return the nodeName value.
      */
     public String nodeName() {
@@ -150,7 +153,7 @@ public final class SelfHostedIntegrationRuntimeNodeInner {
 
     /**
      * Get the machineName property: Machine name of the integration runtime node.
-     *
+     * 
      * @return the machineName value.
      */
     public String machineName() {
@@ -159,7 +162,7 @@ public final class SelfHostedIntegrationRuntimeNodeInner {
 
     /**
      * Get the hostServiceUri property: URI for the host machine of the integration runtime.
-     *
+     * 
      * @return the hostServiceUri value.
      */
     public String hostServiceUri() {
@@ -168,7 +171,7 @@ public final class SelfHostedIntegrationRuntimeNodeInner {
 
     /**
      * Get the status property: Status of the integration runtime node.
-     *
+     * 
      * @return the status value.
      */
     public SelfHostedIntegrationRuntimeNodeStatus status() {
@@ -177,7 +180,7 @@ public final class SelfHostedIntegrationRuntimeNodeInner {
 
     /**
      * Get the capabilities property: The integration runtime capabilities dictionary.
-     *
+     * 
      * @return the capabilities value.
      */
     public Map<String, String> capabilities() {
@@ -186,7 +189,7 @@ public final class SelfHostedIntegrationRuntimeNodeInner {
 
     /**
      * Get the versionStatus property: Status of the integration runtime node version.
-     *
+     * 
      * @return the versionStatus value.
      */
     public String versionStatus() {
@@ -195,7 +198,7 @@ public final class SelfHostedIntegrationRuntimeNodeInner {
 
     /**
      * Get the version property: Version of the integration runtime node.
-     *
+     * 
      * @return the version value.
      */
     public String version() {
@@ -204,7 +207,7 @@ public final class SelfHostedIntegrationRuntimeNodeInner {
 
     /**
      * Get the registerTime property: The time at which the integration runtime node was registered in ISO8601 format.
-     *
+     * 
      * @return the registerTime value.
      */
     public OffsetDateTime registerTime() {
@@ -214,7 +217,7 @@ public final class SelfHostedIntegrationRuntimeNodeInner {
     /**
      * Get the lastConnectTime property: The most recent time at which the integration runtime was connected in ISO8601
      * format.
-     *
+     * 
      * @return the lastConnectTime value.
      */
     public OffsetDateTime lastConnectTime() {
@@ -223,7 +226,7 @@ public final class SelfHostedIntegrationRuntimeNodeInner {
 
     /**
      * Get the expiryTime property: The time at which the integration runtime will expire in ISO8601 format.
-     *
+     * 
      * @return the expiryTime value.
      */
     public OffsetDateTime expiryTime() {
@@ -232,7 +235,7 @@ public final class SelfHostedIntegrationRuntimeNodeInner {
 
     /**
      * Get the lastStartTime property: The time the node last started up.
-     *
+     * 
      * @return the lastStartTime value.
      */
     public OffsetDateTime lastStartTime() {
@@ -241,7 +244,7 @@ public final class SelfHostedIntegrationRuntimeNodeInner {
 
     /**
      * Get the lastStopTime property: The integration runtime node last stop time.
-     *
+     * 
      * @return the lastStopTime value.
      */
     public OffsetDateTime lastStopTime() {
@@ -250,7 +253,7 @@ public final class SelfHostedIntegrationRuntimeNodeInner {
 
     /**
      * Get the lastUpdateResult property: The result of the last integration runtime node update.
-     *
+     * 
      * @return the lastUpdateResult value.
      */
     public IntegrationRuntimeUpdateResult lastUpdateResult() {
@@ -259,7 +262,7 @@ public final class SelfHostedIntegrationRuntimeNodeInner {
 
     /**
      * Get the lastStartUpdateTime property: The last time for the integration runtime node update start.
-     *
+     * 
      * @return the lastStartUpdateTime value.
      */
     public OffsetDateTime lastStartUpdateTime() {
@@ -268,7 +271,7 @@ public final class SelfHostedIntegrationRuntimeNodeInner {
 
     /**
      * Get the lastEndUpdateTime property: The last time for the integration runtime node update end.
-     *
+     * 
      * @return the lastEndUpdateTime value.
      */
     public OffsetDateTime lastEndUpdateTime() {
@@ -278,7 +281,7 @@ public final class SelfHostedIntegrationRuntimeNodeInner {
     /**
      * Get the isActiveDispatcher property: Indicates whether this node is the active dispatcher for integration runtime
      * requests.
-     *
+     * 
      * @return the isActiveDispatcher value.
      */
     public Boolean isActiveDispatcher() {
@@ -287,7 +290,7 @@ public final class SelfHostedIntegrationRuntimeNodeInner {
 
     /**
      * Get the concurrentJobsLimit property: Maximum concurrent jobs on the integration runtime node.
-     *
+     * 
      * @return the concurrentJobsLimit value.
      */
     public Integer concurrentJobsLimit() {
@@ -296,7 +299,7 @@ public final class SelfHostedIntegrationRuntimeNodeInner {
 
     /**
      * Get the maxConcurrentJobs property: The maximum concurrent jobs in this integration runtime.
-     *
+     * 
      * @return the maxConcurrentJobs value.
      */
     public Integer maxConcurrentJobs() {
@@ -305,7 +308,7 @@ public final class SelfHostedIntegrationRuntimeNodeInner {
 
     /**
      * Get the additionalProperties property: Properties of Self-hosted integration runtime node.
-     *
+     * 
      * @return the additionalProperties value.
      */
     @JsonAnyGetter
@@ -315,7 +318,7 @@ public final class SelfHostedIntegrationRuntimeNodeInner {
 
     /**
      * Set the additionalProperties property: Properties of Self-hosted integration runtime node.
-     *
+     * 
      * @param additionalProperties the additionalProperties value to set.
      * @return the SelfHostedIntegrationRuntimeNodeInner object itself.
      */
@@ -327,14 +330,14 @@ public final class SelfHostedIntegrationRuntimeNodeInner {
     @JsonAnySetter
     void withAdditionalProperties(String key, Object value) {
         if (additionalProperties == null) {
-            additionalProperties = new HashMap<>();
+            additionalProperties = new LinkedHashMap<>();
         }
         additionalProperties.put(key, value);
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

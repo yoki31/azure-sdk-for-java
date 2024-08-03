@@ -4,8 +4,13 @@
 package com.azure.communication.callingserver;
 
 import com.azure.communication.callingserver.models.CallingServerErrorException;
+import com.azure.communication.callingserver.models.DownloadToFileOptions;
 import com.azure.communication.callingserver.models.ParallelDownloadOptions;
 import com.azure.core.http.HttpClient;
+import com.azure.core.util.Context;
+import com.azure.core.util.logging.ClientLogger;
+import com.azure.core.util.logging.LogLevel;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -28,7 +33,8 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
 
-public class DownloadContentAsyncLiveTests extends CallingServerTestBase {
+public class DownloadContentAsyncLiveTests extends CallAutomationLiveTestBase {
+    private static final ClientLogger LOGGER = new ClientLogger(DownloadContentAsyncLiveTests.class);
 
     @ParameterizedTest
     @MethodSource("com.azure.core.test.TestBase#getHttpClients")
@@ -36,9 +42,10 @@ public class DownloadContentAsyncLiveTests extends CallingServerTestBase {
         named = "SKIP_LIVE_TEST",
         matches = "(?i)(true)",
         disabledReason = "Requires human intervention")
+    @Disabled("Disabling test as calling sever is in the process of decommissioning")
     public void downloadMetadataWithConnectionStringAsyncClient(HttpClient httpClient) {
-        CallingServerClientBuilder builder = getCallingServerClientUsingConnectionString(httpClient);
-        CallingServerAsyncClient conversationAsyncClient = setupAsyncClient(builder, "downloadMetadataWithConnectionStringAsyncClient");
+        CallAutomationClientBuilder builder = getCallingServerClientUsingConnectionString(httpClient);
+        CallAutomationAsyncClient conversationAsyncClient = setupAsyncClient(builder, "downloadMetadataWithConnectionStringAsyncClient");
         downloadMetadata(conversationAsyncClient);
     }
 
@@ -48,18 +55,19 @@ public class DownloadContentAsyncLiveTests extends CallingServerTestBase {
         named = "SKIP_LIVE_TEST",
         matches = "(?i)(true)",
         disabledReason = "Requires human intervention")
+    @Disabled("Disabling test as calling sever is in the process of decommissioning")
     public void downloadMetadataWithTokenCredentialAsyncClient(HttpClient httpClient) {
-        CallingServerClientBuilder builder = getCallingServerClientUsingTokenCredential(httpClient);
-        CallingServerAsyncClient conversationAsyncClient = setupAsyncClient(builder, "downloadMetadataWithTokenCredentialAsyncClient");
+        CallAutomationClientBuilder builder = getCallingServerClientUsingTokenCredential(httpClient);
+        CallAutomationAsyncClient conversationAsyncClient = setupAsyncClient(builder, "downloadMetadataWithTokenCredentialAsyncClient");
         downloadMetadata(conversationAsyncClient);
     }
 
-    private void downloadMetadata(CallingServerAsyncClient conversationAsyncClient) {
+    private void downloadMetadata(CallAutomationAsyncClient conversationAsyncClient) {
 
         try {
-            validateMetadata(conversationAsyncClient.downloadStream(METADATA_URL));
+            validateMetadata(conversationAsyncClient.getCallRecordingAsync().downloadStream(METADATA_URL));
         } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+            LOGGER.log(LogLevel.VERBOSE, () -> "Error", e);
             throw e;
         }
     }
@@ -70,14 +78,15 @@ public class DownloadContentAsyncLiveTests extends CallingServerTestBase {
         named = "SKIP_LIVE_TEST",
         matches = "(?i)(true)",
         disabledReason = "Requires human intervention")
+    @Disabled("Disabling test as calling sever is in the process of decommissioning")
     public void downloadMetadataRetryingAsync(HttpClient httpClient) {
-        CallingServerClientBuilder builder = getCallingServerClientUsingConnectionString(httpClient);
-        CallingServerAsyncClient conversationAsyncClient = setupAsyncClient(builder, "downloadMetadataRetryingAsync");
+        CallAutomationClientBuilder builder = getCallingServerClientUsingConnectionString(httpClient);
+        CallAutomationAsyncClient conversationAsyncClient = setupAsyncClient(builder, "downloadMetadataRetryingAsync");
 
         try {
-            validateMetadata(conversationAsyncClient.downloadStream(METADATA_URL));
+            validateMetadata(conversationAsyncClient.getCallRecordingAsync().downloadStream(METADATA_URL));
         } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+            LOGGER.log(LogLevel.VERBOSE, () -> "Error", e);
             throw e;
         }
     }
@@ -88,23 +97,22 @@ public class DownloadContentAsyncLiveTests extends CallingServerTestBase {
         named = "SKIP_LIVE_TEST",
         matches = "(?i)(true)",
         disabledReason = "Requires human intervention")
+    @Disabled("Disabling test as calling sever is in the process of decommissioning")
     public void downloadVideoAsync(HttpClient httpClient) {
-        CallingServerClientBuilder builder = getCallingServerClientUsingConnectionString(httpClient);
-        CallingServerAsyncClient conversationAsyncClient = setupAsyncClient(builder, "downloadVideoAsync");
+        CallAutomationClientBuilder builder = getCallingServerClientUsingConnectionString(httpClient);
+        CallAutomationAsyncClient conversationAsyncClient = setupAsyncClient(builder, "downloadVideoAsync");
 
         try {
-            StepVerifier.create(conversationAsyncClient.downloadStreamWithResponse(VIDEO_URL, null))
-                .consumeNextWith(response -> {
-                    StepVerifier.create(response.getValue())
-                        .consumeNextWith(byteBuffer -> {
+            StepVerifier.create(conversationAsyncClient.getCallRecordingAsync()
+                    .downloadStreamWithResponse(VIDEO_URL, null))
+                    .consumeNextWith(response -> StepVerifier.create(response.getValue())
+                        .consumeNextWith(byteBuffer ->
                             assertThat(Integer.parseInt(response.getHeaders().getValue("Content-Length")),
-                                is(equalTo(byteBuffer.array().length)));
-                        })
-                        .verifyComplete();
-                })
-                .verifyComplete();
+                            is(equalTo(byteBuffer.array().length))))
+                        .verifyComplete())
+                    .verifyComplete();
         } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+            LOGGER.log(LogLevel.VERBOSE, () -> "Error", e);
             throw e;
         }
     }
@@ -115,9 +123,10 @@ public class DownloadContentAsyncLiveTests extends CallingServerTestBase {
         named = "SKIP_LIVE_TEST",
         matches = "(?i)(true)",
         disabledReason = "Requires human intervention")
+    @Disabled("Disabling test as calling sever is in the process of decommissioning")
     public void downloadToFileAsync(HttpClient httpClient) {
-        CallingServerClientBuilder builder = getCallingServerClientUsingConnectionString(httpClient);
-        CallingServerAsyncClient conversationAsyncClient = setupAsyncClient(builder, "downloadToFileAsync");
+        CallAutomationClientBuilder builder = getCallingServerClientUsingConnectionString(httpClient);
+        CallAutomationAsyncClient conversationAsyncClient = setupAsyncClient(builder, "downloadToFileAsync");
         AsynchronousFileChannel channel = Mockito.mock(AsynchronousFileChannel.class);
 
         doAnswer(invocation -> {
@@ -135,12 +144,15 @@ public class DownloadContentAsyncLiveTests extends CallingServerTestBase {
             any(),
             any());
 
+        ParallelDownloadOptions parallelOptions = new ParallelDownloadOptions().setBlockSize(479L);
+        DownloadToFileOptions options = new DownloadToFileOptions().setParallelDownloadOptions(parallelOptions);
         conversationAsyncClient
+            .getCallRecordingAsync()
             .downloadToWithResponse(METADATA_URL,
                 Paths.get("dummyPath"),
                 channel,
-                new ParallelDownloadOptions().setBlockSize(479L),
-                null).block();
+                options,
+                Context.NONE).block();
 
         Mockito.verify(channel, times(2)).write(any(ByteBuffer.class), anyLong(),
             any(), any());
@@ -152,9 +164,10 @@ public class DownloadContentAsyncLiveTests extends CallingServerTestBase {
         named = "SKIP_LIVE_TEST",
         matches = "(?i)(true)",
         disabledReason = "Requires human intervention")
+    @Disabled("Disabling test as calling sever is in the process of decommissioning")
     public void downloadToFileRetryingAsync(HttpClient httpClient) {
-        CallingServerClientBuilder builder = getCallingServerClientUsingConnectionString(httpClient);
-        CallingServerAsyncClient conversationAsyncClient = setupAsyncClient(builder, "downloadToFileRetryingAsync");
+        CallAutomationClientBuilder builder = getCallingServerClientUsingConnectionString(httpClient);
+        CallAutomationAsyncClient conversationAsyncClient = setupAsyncClient(builder, "downloadToFileRetryingAsync");
         AsynchronousFileChannel channel = Mockito.mock(AsynchronousFileChannel.class);
 
         doAnswer(invocation -> {
@@ -171,11 +184,12 @@ public class DownloadContentAsyncLiveTests extends CallingServerTestBase {
 
 
         conversationAsyncClient
+            .getCallRecordingAsync()
             .downloadToWithResponse(METADATA_URL,
                 Paths.get("dummyPath"),
                 channel,
-                null,
-                null).block();
+                new DownloadToFileOptions(),
+                Context.NONE).block();
 
         Mockito.verify(channel).write(any(ByteBuffer.class), anyLong(),
             any(), any());
@@ -187,10 +201,13 @@ public class DownloadContentAsyncLiveTests extends CallingServerTestBase {
         named = "SKIP_LIVE_TEST",
         matches = "(?i)(true)",
         disabledReason = "Requires human intervention")
+    @Disabled("Disabling test as calling sever is in the process of decommissioning")
     public void downloadContent404Async(HttpClient httpClient) {
-        CallingServerClientBuilder builder = getCallingServerClientUsingConnectionString(httpClient);
-        CallingServerAsyncClient conversationAsyncClient = setupAsyncClient(builder, "downloadContent404Async");
-        StepVerifier.create(conversationAsyncClient.downloadStreamWithResponse(CONTENT_URL_404, null))
+        CallAutomationClientBuilder builder = getCallingServerClientUsingConnectionString(httpClient);
+        CallAutomationAsyncClient conversationAsyncClient = setupAsyncClient(builder, "downloadContent404Async");
+        StepVerifier.create(conversationAsyncClient
+                .getCallRecordingAsync()
+                .downloadStreamWithResponse(CONTENT_URL_404, null))
             .consumeNextWith(response -> {
                 assertThat(response.getStatusCode(), is(equalTo(404)));
                 StepVerifier.create(response.getValue()).verifyError(CallingServerErrorException.class);
@@ -198,29 +215,11 @@ public class DownloadContentAsyncLiveTests extends CallingServerTestBase {
             .verifyComplete();
     }
 
-    @ParameterizedTest
-    @MethodSource("com.azure.core.test.TestBase#getHttpClients")
-    @DisabledIfEnvironmentVariable(
-        named = "SKIP_LIVE_TEST",
-        matches = "(?i)(true)",
-        disabledReason = "Requires human intervention")
-    public void downloadMetadataWithRedirectAsync(HttpClient httpClient) {
-        CallingServerClientBuilder builder = getCallingServerClientUsingConnectionString(httpClient);
-        CallingServerAsyncClient conversationAsyncClient = setupAsyncClient(builder, "downloadMetadataAsync");
-
-        try {
-            validateMetadata(conversationAsyncClient.downloadStream(METADATA_URL));
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-            throw e;
-        }
-    }
-
-    private CallingServerAsyncClient setupAsyncClient(CallingServerClientBuilder builder, String testName) {
+    private CallAutomationAsyncClient setupAsyncClient(CallAutomationClientBuilder builder, String testName) {
         return addLoggingPolicy(builder, testName).buildAsyncClient();
     }
 
-    protected CallingServerClientBuilder addLoggingPolicy(CallingServerClientBuilder builder, String testName) {
+    protected CallAutomationClientBuilder addLoggingPolicy(CallAutomationClientBuilder builder, String testName) {
         return builder.addPolicy((context, next) -> logHeaders(testName, next));
     }
 

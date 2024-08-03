@@ -5,8 +5,6 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
@@ -16,8 +14,6 @@ import java.util.List;
  */
 @Fluent
 public class CapacityReservationInstanceView {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CapacityReservationInstanceView.class);
-
     /*
      * Unutilized capacity of the capacity reservation.
      */
@@ -31,8 +27,14 @@ public class CapacityReservationInstanceView {
     private List<InstanceViewStatus> statuses;
 
     /**
+     * Creates an instance of CapacityReservationInstanceView class.
+     */
+    public CapacityReservationInstanceView() {
+    }
+
+    /**
      * Get the utilizationInfo property: Unutilized capacity of the capacity reservation.
-     *
+     * 
      * @return the utilizationInfo value.
      */
     public CapacityReservationUtilization utilizationInfo() {
@@ -41,7 +43,7 @@ public class CapacityReservationInstanceView {
 
     /**
      * Set the utilizationInfo property: Unutilized capacity of the capacity reservation.
-     *
+     * 
      * @param utilizationInfo the utilizationInfo value to set.
      * @return the CapacityReservationInstanceView object itself.
      */
@@ -52,7 +54,7 @@ public class CapacityReservationInstanceView {
 
     /**
      * Get the statuses property: The resource status information.
-     *
+     * 
      * @return the statuses value.
      */
     public List<InstanceViewStatus> statuses() {
@@ -61,7 +63,7 @@ public class CapacityReservationInstanceView {
 
     /**
      * Set the statuses property: The resource status information.
-     *
+     * 
      * @param statuses the statuses value to set.
      * @return the CapacityReservationInstanceView object itself.
      */
@@ -72,7 +74,7 @@ public class CapacityReservationInstanceView {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

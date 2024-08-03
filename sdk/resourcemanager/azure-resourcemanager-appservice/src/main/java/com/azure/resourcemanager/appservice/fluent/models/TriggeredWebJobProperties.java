@@ -5,19 +5,17 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.TriggeredJobRun;
 import com.azure.resourcemanager.appservice.models.WebJobType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** TriggeredWebJob resource specific properties. */
+/**
+ * TriggeredWebJob resource specific properties.
+ */
 @Fluent
 public final class TriggeredWebJobProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TriggeredWebJobProperties.class);
-
     /*
      * Latest job run information.
      */
@@ -73,6 +71,18 @@ public final class TriggeredWebJobProperties {
     private Boolean usingSdk;
 
     /*
+     * Property to allow or block all public traffic. Allowed Values: 'Enabled', 'Disabled' or an empty string.
+     */
+    @JsonProperty(value = "publicNetworkAccess")
+    private String publicNetworkAccess;
+
+    /*
+     * Checks if Customer provided storage account is required
+     */
+    @JsonProperty(value = "storageAccountRequired")
+    private Boolean storageAccountRequired;
+
+    /*
      * Job settings.
      */
     @JsonProperty(value = "settings")
@@ -80,8 +90,14 @@ public final class TriggeredWebJobProperties {
     private Map<String, Object> settings;
 
     /**
+     * Creates an instance of TriggeredWebJobProperties class.
+     */
+    public TriggeredWebJobProperties() {
+    }
+
+    /**
      * Get the latestRun property: Latest job run information.
-     *
+     * 
      * @return the latestRun value.
      */
     public TriggeredJobRun latestRun() {
@@ -90,7 +106,7 @@ public final class TriggeredWebJobProperties {
 
     /**
      * Set the latestRun property: Latest job run information.
-     *
+     * 
      * @param latestRun the latestRun value to set.
      * @return the TriggeredWebJobProperties object itself.
      */
@@ -101,7 +117,7 @@ public final class TriggeredWebJobProperties {
 
     /**
      * Get the historyUrl property: History URL.
-     *
+     * 
      * @return the historyUrl value.
      */
     public String historyUrl() {
@@ -110,7 +126,7 @@ public final class TriggeredWebJobProperties {
 
     /**
      * Set the historyUrl property: History URL.
-     *
+     * 
      * @param historyUrl the historyUrl value to set.
      * @return the TriggeredWebJobProperties object itself.
      */
@@ -121,7 +137,7 @@ public final class TriggeredWebJobProperties {
 
     /**
      * Get the schedulerLogsUrl property: Scheduler Logs URL.
-     *
+     * 
      * @return the schedulerLogsUrl value.
      */
     public String schedulerLogsUrl() {
@@ -130,7 +146,7 @@ public final class TriggeredWebJobProperties {
 
     /**
      * Set the schedulerLogsUrl property: Scheduler Logs URL.
-     *
+     * 
      * @param schedulerLogsUrl the schedulerLogsUrl value to set.
      * @return the TriggeredWebJobProperties object itself.
      */
@@ -141,7 +157,7 @@ public final class TriggeredWebJobProperties {
 
     /**
      * Get the runCommand property: Run command.
-     *
+     * 
      * @return the runCommand value.
      */
     public String runCommand() {
@@ -150,7 +166,7 @@ public final class TriggeredWebJobProperties {
 
     /**
      * Set the runCommand property: Run command.
-     *
+     * 
      * @param runCommand the runCommand value to set.
      * @return the TriggeredWebJobProperties object itself.
      */
@@ -161,7 +177,7 @@ public final class TriggeredWebJobProperties {
 
     /**
      * Get the url property: Job URL.
-     *
+     * 
      * @return the url value.
      */
     public String url() {
@@ -170,7 +186,7 @@ public final class TriggeredWebJobProperties {
 
     /**
      * Set the url property: Job URL.
-     *
+     * 
      * @param url the url value to set.
      * @return the TriggeredWebJobProperties object itself.
      */
@@ -181,7 +197,7 @@ public final class TriggeredWebJobProperties {
 
     /**
      * Get the extraInfoUrl property: Extra Info URL.
-     *
+     * 
      * @return the extraInfoUrl value.
      */
     public String extraInfoUrl() {
@@ -190,7 +206,7 @@ public final class TriggeredWebJobProperties {
 
     /**
      * Set the extraInfoUrl property: Extra Info URL.
-     *
+     * 
      * @param extraInfoUrl the extraInfoUrl value to set.
      * @return the TriggeredWebJobProperties object itself.
      */
@@ -201,7 +217,7 @@ public final class TriggeredWebJobProperties {
 
     /**
      * Get the webJobType property: Job type.
-     *
+     * 
      * @return the webJobType value.
      */
     public WebJobType webJobType() {
@@ -210,7 +226,7 @@ public final class TriggeredWebJobProperties {
 
     /**
      * Set the webJobType property: Job type.
-     *
+     * 
      * @param webJobType the webJobType value to set.
      * @return the TriggeredWebJobProperties object itself.
      */
@@ -221,7 +237,7 @@ public final class TriggeredWebJobProperties {
 
     /**
      * Get the error property: Error information.
-     *
+     * 
      * @return the error value.
      */
     public String error() {
@@ -230,7 +246,7 @@ public final class TriggeredWebJobProperties {
 
     /**
      * Set the error property: Error information.
-     *
+     * 
      * @param error the error value to set.
      * @return the TriggeredWebJobProperties object itself.
      */
@@ -241,7 +257,7 @@ public final class TriggeredWebJobProperties {
 
     /**
      * Get the usingSdk property: Using SDK?.
-     *
+     * 
      * @return the usingSdk value.
      */
     public Boolean usingSdk() {
@@ -250,7 +266,7 @@ public final class TriggeredWebJobProperties {
 
     /**
      * Set the usingSdk property: Using SDK?.
-     *
+     * 
      * @param usingSdk the usingSdk value to set.
      * @return the TriggeredWebJobProperties object itself.
      */
@@ -260,8 +276,50 @@ public final class TriggeredWebJobProperties {
     }
 
     /**
+     * Get the publicNetworkAccess property: Property to allow or block all public traffic. Allowed Values: 'Enabled',
+     * 'Disabled' or an empty string.
+     * 
+     * @return the publicNetworkAccess value.
+     */
+    public String publicNetworkAccess() {
+        return this.publicNetworkAccess;
+    }
+
+    /**
+     * Set the publicNetworkAccess property: Property to allow or block all public traffic. Allowed Values: 'Enabled',
+     * 'Disabled' or an empty string.
+     * 
+     * @param publicNetworkAccess the publicNetworkAccess value to set.
+     * @return the TriggeredWebJobProperties object itself.
+     */
+    public TriggeredWebJobProperties withPublicNetworkAccess(String publicNetworkAccess) {
+        this.publicNetworkAccess = publicNetworkAccess;
+        return this;
+    }
+
+    /**
+     * Get the storageAccountRequired property: Checks if Customer provided storage account is required.
+     * 
+     * @return the storageAccountRequired value.
+     */
+    public Boolean storageAccountRequired() {
+        return this.storageAccountRequired;
+    }
+
+    /**
+     * Set the storageAccountRequired property: Checks if Customer provided storage account is required.
+     * 
+     * @param storageAccountRequired the storageAccountRequired value to set.
+     * @return the TriggeredWebJobProperties object itself.
+     */
+    public TriggeredWebJobProperties withStorageAccountRequired(Boolean storageAccountRequired) {
+        this.storageAccountRequired = storageAccountRequired;
+        return this;
+    }
+
+    /**
      * Get the settings property: Job settings.
-     *
+     * 
      * @return the settings value.
      */
     public Map<String, Object> settings() {
@@ -270,7 +328,7 @@ public final class TriggeredWebJobProperties {
 
     /**
      * Set the settings property: Job settings.
-     *
+     * 
      * @param settings the settings value to set.
      * @return the TriggeredWebJobProperties object itself.
      */
@@ -281,7 +339,7 @@ public final class TriggeredWebJobProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

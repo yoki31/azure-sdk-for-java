@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The CassandraClusterPublicStatusDataCentersItem model. */
+/**
+ * The CassandraClusterPublicStatusDataCentersItem model.
+ */
 @Fluent
 public final class CassandraClusterPublicStatusDataCentersItem {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CassandraClusterPublicStatusDataCentersItem.class);
-
     /*
      * The name of this Datacenter.
      */
@@ -31,12 +29,17 @@ public final class CassandraClusterPublicStatusDataCentersItem {
      * The nodes property.
      */
     @JsonProperty(value = "nodes")
-    private List<ComponentsM9L909SchemasCassandraclusterpublicstatusPropertiesDatacentersItemsPropertiesNodesItems>
-        nodes;
+    private List<CassandraClusterPublicStatusDataCentersItemNode> nodes;
+
+    /**
+     * Creates an instance of CassandraClusterPublicStatusDataCentersItem class.
+     */
+    public CassandraClusterPublicStatusDataCentersItem() {
+    }
 
     /**
      * Get the name property: The name of this Datacenter.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -45,7 +48,7 @@ public final class CassandraClusterPublicStatusDataCentersItem {
 
     /**
      * Set the name property: The name of this Datacenter.
-     *
+     * 
      * @param name the name value to set.
      * @return the CassandraClusterPublicStatusDataCentersItem object itself.
      */
@@ -56,7 +59,7 @@ public final class CassandraClusterPublicStatusDataCentersItem {
 
     /**
      * Get the seedNodes property: A list of all seed nodes in the cluster, managed and unmanaged.
-     *
+     * 
      * @return the seedNodes value.
      */
     public List<String> seedNodes() {
@@ -65,7 +68,7 @@ public final class CassandraClusterPublicStatusDataCentersItem {
 
     /**
      * Set the seedNodes property: A list of all seed nodes in the cluster, managed and unmanaged.
-     *
+     * 
      * @param seedNodes the seedNodes value to set.
      * @return the CassandraClusterPublicStatusDataCentersItem object itself.
      */
@@ -76,29 +79,28 @@ public final class CassandraClusterPublicStatusDataCentersItem {
 
     /**
      * Get the nodes property: The nodes property.
-     *
+     * 
      * @return the nodes value.
      */
-    public List<ComponentsM9L909SchemasCassandraclusterpublicstatusPropertiesDatacentersItemsPropertiesNodesItems>
-        nodes() {
+    public List<CassandraClusterPublicStatusDataCentersItemNode> nodes() {
         return this.nodes;
     }
 
     /**
      * Set the nodes property: The nodes property.
-     *
+     * 
      * @param nodes the nodes value to set.
      * @return the CassandraClusterPublicStatusDataCentersItem object itself.
      */
-    public CassandraClusterPublicStatusDataCentersItem withNodes(
-        List<ComponentsM9L909SchemasCassandraclusterpublicstatusPropertiesDatacentersItemsPropertiesNodesItems> nodes) {
+    public CassandraClusterPublicStatusDataCentersItem
+        withNodes(List<CassandraClusterPublicStatusDataCentersItemNode> nodes) {
         this.nodes = nodes;
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

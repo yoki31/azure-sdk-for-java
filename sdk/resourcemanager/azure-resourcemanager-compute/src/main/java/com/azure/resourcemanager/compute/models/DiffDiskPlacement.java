@@ -8,17 +8,42 @@ import com.azure.core.util.ExpandableStringEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collection;
 
-/** Defines values for DiffDiskPlacement. */
+/**
+ * Specifies the ephemeral disk placement for operating system disk. This property can be used by user in the request to
+ * choose the location i.e, cache disk, resource disk or nvme disk space for Ephemeral OS disk provisioning. For more
+ * information on Ephemeral OS disk size requirements, please refer Ephemeral OS disk size requirements for Windows VM
+ * at https://docs.microsoft.com/azure/virtual-machines/windows/ephemeral-os-disks#size-requirements and Linux VM at
+ * https://docs.microsoft.com/azure/virtual-machines/linux/ephemeral-os-disks#size-requirements. Minimum api-version for
+ * NvmeDisk: 2024-03-01.
+ */
 public final class DiffDiskPlacement extends ExpandableStringEnum<DiffDiskPlacement> {
-    /** Static value CacheDisk for DiffDiskPlacement. */
+    /**
+     * Static value CacheDisk for DiffDiskPlacement.
+     */
     public static final DiffDiskPlacement CACHE_DISK = fromString("CacheDisk");
 
-    /** Static value ResourceDisk for DiffDiskPlacement. */
+    /**
+     * Static value ResourceDisk for DiffDiskPlacement.
+     */
     public static final DiffDiskPlacement RESOURCE_DISK = fromString("ResourceDisk");
 
     /**
+     * Static value NvmeDisk for DiffDiskPlacement.
+     */
+    public static final DiffDiskPlacement NVME_DISK = fromString("NvmeDisk");
+
+    /**
+     * Creates a new instance of DiffDiskPlacement value.
+     * 
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public DiffDiskPlacement() {
+    }
+
+    /**
      * Creates or finds a DiffDiskPlacement from its string representation.
-     *
+     * 
      * @param name a name to look for.
      * @return the corresponding DiffDiskPlacement.
      */
@@ -27,7 +52,11 @@ public final class DiffDiskPlacement extends ExpandableStringEnum<DiffDiskPlacem
         return fromString(name, DiffDiskPlacement.class);
     }
 
-    /** @return known DiffDiskPlacement values. */
+    /**
+     * Gets known DiffDiskPlacement values.
+     * 
+     * @return known DiffDiskPlacement values.
+     */
     public static Collection<DiffDiskPlacement> values() {
         return values(DiffDiskPlacement.class);
     }

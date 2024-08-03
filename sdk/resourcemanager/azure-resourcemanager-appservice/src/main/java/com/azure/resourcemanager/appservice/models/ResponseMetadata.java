@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The ResponseMetadata model. */
+/**
+ * The ResponseMetadata model.
+ */
 @Fluent
 public final class ResponseMetadata {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ResponseMetadata.class);
-
     /*
      * Source of the Data
      */
@@ -21,8 +19,14 @@ public final class ResponseMetadata {
     private DataSource dataSource;
 
     /**
+     * Creates an instance of ResponseMetadata class.
+     */
+    public ResponseMetadata() {
+    }
+
+    /**
      * Get the dataSource property: Source of the Data.
-     *
+     * 
      * @return the dataSource value.
      */
     public DataSource dataSource() {
@@ -31,7 +35,7 @@ public final class ResponseMetadata {
 
     /**
      * Set the dataSource property: Source of the Data.
-     *
+     * 
      * @param dataSource the dataSource value to set.
      * @return the ResponseMetadata object itself.
      */
@@ -42,7 +46,7 @@ public final class ResponseMetadata {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

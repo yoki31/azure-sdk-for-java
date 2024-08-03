@@ -6,16 +6,15 @@ package com.azure.resourcemanager.batch.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Properties used to create a user on an Azure Batch node. */
+/**
+ * Properties used to create a user on an Azure Batch node.
+ */
 @Fluent
 public final class UserAccount {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(UserAccount.class);
-
     /*
-     * The name of the user account.
+     * The name of the user account. Names can contain any Unicode characters up to a maximum length of 20.
      */
     @JsonProperty(value = "name", required = true)
     private String name;
@@ -23,38 +22,46 @@ public final class UserAccount {
     /*
      * The password for the user account.
      */
-    @JsonProperty(value = "password", required = true)
+    @JsonProperty(value = "password")
     private String password;
 
     /*
-     * The elevation level of the user. nonAdmin - The auto user is a standard
-     * user without elevated access. admin - The auto user is a user with
-     * elevated access and operates with full Administrator permissions. The
-     * default value is nonAdmin.
+     * The elevation level of the user.
+     * 
+     * nonAdmin - The auto user is a standard user without elevated access. admin - The auto user is a user with
+     * elevated access and operates with full Administrator permissions. The default value is nonAdmin.
      */
     @JsonProperty(value = "elevationLevel")
     private ElevationLevel elevationLevel;
 
     /*
-     * Properties used to create a user account on a Linux node. This property
-     * is ignored if specified on a Windows pool. If not specified, the user is
-     * created with the default options.
+     * Properties used to create a user account on a Linux node.
+     * 
+     * This property is ignored if specified on a Windows pool. If not specified, the user is created with the default
+     * options.
      */
     @JsonProperty(value = "linuxUserConfiguration")
     private LinuxUserConfiguration linuxUserConfiguration;
 
     /*
-     * Properties used to create a user account on a Windows node. This
-     * property can only be specified if the user is on a Windows pool. If not
-     * specified and on a Windows pool, the user is created with the default
-     * options.
+     * Properties used to create a user account on a Windows node.
+     * 
+     * This property can only be specified if the user is on a Windows pool. If not specified and on a Windows pool,
+     * the user is created with the default options.
      */
     @JsonProperty(value = "windowsUserConfiguration")
     private WindowsUserConfiguration windowsUserConfiguration;
 
     /**
-     * Get the name property: The name of the user account.
-     *
+     * Creates an instance of UserAccount class.
+     */
+    public UserAccount() {
+    }
+
+    /**
+     * Get the name property: The name of the user account. Names can contain any Unicode characters up to a maximum
+     * length of 20.
+     * 
      * @return the name value.
      */
     public String name() {
@@ -62,8 +69,9 @@ public final class UserAccount {
     }
 
     /**
-     * Set the name property: The name of the user account.
-     *
+     * Set the name property: The name of the user account. Names can contain any Unicode characters up to a maximum
+     * length of 20.
+     * 
      * @param name the name value to set.
      * @return the UserAccount object itself.
      */
@@ -74,7 +82,7 @@ public final class UserAccount {
 
     /**
      * Get the password property: The password for the user account.
-     *
+     * 
      * @return the password value.
      */
     public String password() {
@@ -83,7 +91,7 @@ public final class UserAccount {
 
     /**
      * Set the password property: The password for the user account.
-     *
+     * 
      * @param password the password value to set.
      * @return the UserAccount object itself.
      */
@@ -93,10 +101,11 @@ public final class UserAccount {
     }
 
     /**
-     * Get the elevationLevel property: The elevation level of the user. nonAdmin - The auto user is a standard user
-     * without elevated access. admin - The auto user is a user with elevated access and operates with full
-     * Administrator permissions. The default value is nonAdmin.
-     *
+     * Get the elevationLevel property: The elevation level of the user.
+     * 
+     * nonAdmin - The auto user is a standard user without elevated access. admin - The auto user is a user with
+     * elevated access and operates with full Administrator permissions. The default value is nonAdmin.
+     * 
      * @return the elevationLevel value.
      */
     public ElevationLevel elevationLevel() {
@@ -104,10 +113,11 @@ public final class UserAccount {
     }
 
     /**
-     * Set the elevationLevel property: The elevation level of the user. nonAdmin - The auto user is a standard user
-     * without elevated access. admin - The auto user is a user with elevated access and operates with full
-     * Administrator permissions. The default value is nonAdmin.
-     *
+     * Set the elevationLevel property: The elevation level of the user.
+     * 
+     * nonAdmin - The auto user is a standard user without elevated access. admin - The auto user is a user with
+     * elevated access and operates with full Administrator permissions. The default value is nonAdmin.
+     * 
      * @param elevationLevel the elevationLevel value to set.
      * @return the UserAccount object itself.
      */
@@ -117,9 +127,11 @@ public final class UserAccount {
     }
 
     /**
-     * Get the linuxUserConfiguration property: Properties used to create a user account on a Linux node. This property
-     * is ignored if specified on a Windows pool. If not specified, the user is created with the default options.
-     *
+     * Get the linuxUserConfiguration property: Properties used to create a user account on a Linux node.
+     * 
+     * This property is ignored if specified on a Windows pool. If not specified, the user is created with the default
+     * options.
+     * 
      * @return the linuxUserConfiguration value.
      */
     public LinuxUserConfiguration linuxUserConfiguration() {
@@ -127,9 +139,11 @@ public final class UserAccount {
     }
 
     /**
-     * Set the linuxUserConfiguration property: Properties used to create a user account on a Linux node. This property
-     * is ignored if specified on a Windows pool. If not specified, the user is created with the default options.
-     *
+     * Set the linuxUserConfiguration property: Properties used to create a user account on a Linux node.
+     * 
+     * This property is ignored if specified on a Windows pool. If not specified, the user is created with the default
+     * options.
+     * 
      * @param linuxUserConfiguration the linuxUserConfiguration value to set.
      * @return the UserAccount object itself.
      */
@@ -139,10 +153,11 @@ public final class UserAccount {
     }
 
     /**
-     * Get the windowsUserConfiguration property: Properties used to create a user account on a Windows node. This
-     * property can only be specified if the user is on a Windows pool. If not specified and on a Windows pool, the user
-     * is created with the default options.
-     *
+     * Get the windowsUserConfiguration property: Properties used to create a user account on a Windows node.
+     * 
+     * This property can only be specified if the user is on a Windows pool. If not specified and on a Windows pool,
+     * the user is created with the default options.
+     * 
      * @return the windowsUserConfiguration value.
      */
     public WindowsUserConfiguration windowsUserConfiguration() {
@@ -150,10 +165,11 @@ public final class UserAccount {
     }
 
     /**
-     * Set the windowsUserConfiguration property: Properties used to create a user account on a Windows node. This
-     * property can only be specified if the user is on a Windows pool. If not specified and on a Windows pool, the user
-     * is created with the default options.
-     *
+     * Set the windowsUserConfiguration property: Properties used to create a user account on a Windows node.
+     * 
+     * This property can only be specified if the user is on a Windows pool. If not specified and on a Windows pool,
+     * the user is created with the default options.
+     * 
      * @param windowsUserConfiguration the windowsUserConfiguration value to set.
      * @return the UserAccount object itself.
      */
@@ -164,19 +180,17 @@ public final class UserAccount {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (name() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property name in model UserAccount"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property name in model UserAccount"));
         }
         if (password() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property password in model UserAccount"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property password in model UserAccount"));
         }
         if (linuxUserConfiguration() != null) {
             linuxUserConfiguration().validate();
@@ -185,4 +199,6 @@ public final class UserAccount {
             windowsUserConfiguration().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(UserAccount.class);
 }

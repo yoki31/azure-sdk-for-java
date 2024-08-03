@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.batch.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** A SKU capability, such as the number of cores. */
+/**
+ * A SKU capability, such as the number of cores.
+ */
 @Immutable
 public final class SkuCapability {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SkuCapability.class);
-
     /*
      * The name of the feature.
      */
@@ -27,8 +25,14 @@ public final class SkuCapability {
     private String value;
 
     /**
+     * Creates an instance of SkuCapability class.
+     */
+    public SkuCapability() {
+    }
+
+    /**
      * Get the name property: The name of the feature.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -37,7 +41,7 @@ public final class SkuCapability {
 
     /**
      * Get the value property: The value of the feature.
-     *
+     * 
      * @return the value value.
      */
     public String value() {
@@ -46,7 +50,7 @@ public final class SkuCapability {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -6,38 +6,41 @@ package com.azure.resourcemanager.batch.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The properties related to the auto-storage account. */
+/**
+ * The properties related to the auto-storage account.
+ */
 @Fluent
 public class AutoStorageBaseProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AutoStorageBaseProperties.class);
-
     /*
-     * The resource ID of the storage account to be used for auto-storage
-     * account.
+     * The resource ID of the storage account to be used for auto-storage account.
      */
     @JsonProperty(value = "storageAccountId", required = true)
     private String storageAccountId;
 
     /*
-     * The authentication mode which the Batch service will use to manage the
-     * auto-storage account.
+     * The authentication mode which the Batch service will use to manage the auto-storage account.
      */
     @JsonProperty(value = "authenticationMode")
     private AutoStorageAuthenticationMode authenticationMode;
 
     /*
-     * The identity referenced here must be assigned to pools which have
-     * compute nodes that need access to auto-storage.
+     * The identity referenced here must be assigned to pools which have compute nodes that need access to
+     * auto-storage.
      */
     @JsonProperty(value = "nodeIdentityReference")
     private ComputeNodeIdentityReference nodeIdentityReference;
 
     /**
+     * Creates an instance of AutoStorageBaseProperties class.
+     */
+    public AutoStorageBaseProperties() {
+    }
+
+    /**
      * Get the storageAccountId property: The resource ID of the storage account to be used for auto-storage account.
-     *
+     * 
      * @return the storageAccountId value.
      */
     public String storageAccountId() {
@@ -46,7 +49,7 @@ public class AutoStorageBaseProperties {
 
     /**
      * Set the storageAccountId property: The resource ID of the storage account to be used for auto-storage account.
-     *
+     * 
      * @param storageAccountId the storageAccountId value to set.
      * @return the AutoStorageBaseProperties object itself.
      */
@@ -58,7 +61,7 @@ public class AutoStorageBaseProperties {
     /**
      * Get the authenticationMode property: The authentication mode which the Batch service will use to manage the
      * auto-storage account.
-     *
+     * 
      * @return the authenticationMode value.
      */
     public AutoStorageAuthenticationMode authenticationMode() {
@@ -68,7 +71,7 @@ public class AutoStorageBaseProperties {
     /**
      * Set the authenticationMode property: The authentication mode which the Batch service will use to manage the
      * auto-storage account.
-     *
+     * 
      * @param authenticationMode the authenticationMode value to set.
      * @return the AutoStorageBaseProperties object itself.
      */
@@ -78,9 +81,9 @@ public class AutoStorageBaseProperties {
     }
 
     /**
-     * Get the nodeIdentityReference property: The identity referenced here must be assigned to pools which have compute
-     * nodes that need access to auto-storage.
-     *
+     * Get the nodeIdentityReference property: The identity referenced here must be assigned to pools which have
+     * compute nodes that need access to auto-storage.
+     * 
      * @return the nodeIdentityReference value.
      */
     public ComputeNodeIdentityReference nodeIdentityReference() {
@@ -88,9 +91,9 @@ public class AutoStorageBaseProperties {
     }
 
     /**
-     * Set the nodeIdentityReference property: The identity referenced here must be assigned to pools which have compute
-     * nodes that need access to auto-storage.
-     *
+     * Set the nodeIdentityReference property: The identity referenced here must be assigned to pools which have
+     * compute nodes that need access to auto-storage.
+     * 
      * @param nodeIdentityReference the nodeIdentityReference value to set.
      * @return the AutoStorageBaseProperties object itself.
      */
@@ -101,18 +104,18 @@ public class AutoStorageBaseProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (storageAccountId() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property storageAccountId in model AutoStorageBaseProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property storageAccountId in model AutoStorageBaseProperties"));
         }
         if (nodeIdentityReference() != null) {
             nodeIdentityReference().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(AutoStorageBaseProperties.class);
 }

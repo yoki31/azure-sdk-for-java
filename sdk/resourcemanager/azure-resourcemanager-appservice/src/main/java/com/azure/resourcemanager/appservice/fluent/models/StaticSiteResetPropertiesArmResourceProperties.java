@@ -5,16 +5,13 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** StaticSiteResetPropertiesARMResource resource specific properties. */
+/**
+ * StaticSiteResetPropertiesARMResource resource specific properties.
+ */
 @Fluent
 public final class StaticSiteResetPropertiesArmResourceProperties {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(StaticSiteResetPropertiesArmResourceProperties.class);
-
     /*
      * The token which proves admin privileges to the repository.
      */
@@ -22,15 +19,20 @@ public final class StaticSiteResetPropertiesArmResourceProperties {
     private String repositoryToken;
 
     /*
-     * Determines whether the repository should be updated with the new
-     * properties.
+     * Determines whether the repository should be updated with the new properties.
      */
     @JsonProperty(value = "shouldUpdateRepository")
     private Boolean shouldUpdateRepository;
 
     /**
+     * Creates an instance of StaticSiteResetPropertiesArmResourceProperties class.
+     */
+    public StaticSiteResetPropertiesArmResourceProperties() {
+    }
+
+    /**
      * Get the repositoryToken property: The token which proves admin privileges to the repository.
-     *
+     * 
      * @return the repositoryToken value.
      */
     public String repositoryToken() {
@@ -39,7 +41,7 @@ public final class StaticSiteResetPropertiesArmResourceProperties {
 
     /**
      * Set the repositoryToken property: The token which proves admin privileges to the repository.
-     *
+     * 
      * @param repositoryToken the repositoryToken value to set.
      * @return the StaticSiteResetPropertiesArmResourceProperties object itself.
      */
@@ -51,7 +53,7 @@ public final class StaticSiteResetPropertiesArmResourceProperties {
     /**
      * Get the shouldUpdateRepository property: Determines whether the repository should be updated with the new
      * properties.
-     *
+     * 
      * @return the shouldUpdateRepository value.
      */
     public Boolean shouldUpdateRepository() {
@@ -61,7 +63,7 @@ public final class StaticSiteResetPropertiesArmResourceProperties {
     /**
      * Set the shouldUpdateRepository property: Determines whether the repository should be updated with the new
      * properties.
-     *
+     * 
      * @param shouldUpdateRepository the shouldUpdateRepository value to set.
      * @return the StaticSiteResetPropertiesArmResourceProperties object itself.
      */
@@ -72,7 +74,7 @@ public final class StaticSiteResetPropertiesArmResourceProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

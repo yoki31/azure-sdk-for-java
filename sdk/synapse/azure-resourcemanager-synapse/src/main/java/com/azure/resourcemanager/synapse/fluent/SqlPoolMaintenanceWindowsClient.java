@@ -19,6 +19,27 @@ public interface SqlPoolMaintenanceWindowsClient {
      * @param workspaceName The name of the workspace.
      * @param sqlPoolName SQL pool name.
      * @param maintenanceWindowName Maintenance window name.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a SQL pool's Maintenance Windows along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<MaintenanceWindowsInner> getWithResponse(
+        String resourceGroupName,
+        String workspaceName,
+        String sqlPoolName,
+        String maintenanceWindowName,
+        Context context);
+
+    /**
+     * Get a SQL pool's Maintenance Windows.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param sqlPoolName SQL pool name.
+     * @param maintenanceWindowName Maintenance window name.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
@@ -29,24 +50,26 @@ public interface SqlPoolMaintenanceWindowsClient {
         String resourceGroupName, String workspaceName, String sqlPoolName, String maintenanceWindowName);
 
     /**
-     * Get a SQL pool's Maintenance Windows.
+     * Creates or updates a Sql pool's maintenance windows settings.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param sqlPoolName SQL pool name.
      * @param maintenanceWindowName Maintenance window name.
+     * @param parameters The required parameters for creating or updating Maintenance Windows settings.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a SQL pool's Maintenance Windows.
+     * @return the {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<MaintenanceWindowsInner> getWithResponse(
+    Response<Void> createOrUpdateWithResponse(
         String resourceGroupName,
         String workspaceName,
         String sqlPoolName,
         String maintenanceWindowName,
+        MaintenanceWindowsInner parameters,
         Context context);
 
     /**
@@ -68,27 +91,4 @@ public interface SqlPoolMaintenanceWindowsClient {
         String sqlPoolName,
         String maintenanceWindowName,
         MaintenanceWindowsInner parameters);
-
-    /**
-     * Creates or updates a Sql pool's maintenance windows settings.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param sqlPoolName SQL pool name.
-     * @param maintenanceWindowName Maintenance window name.
-     * @param parameters The required parameters for creating or updating Maintenance Windows settings.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<Void> createOrUpdateWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        String maintenanceWindowName,
-        MaintenanceWindowsInner parameters,
-        Context context);
 }

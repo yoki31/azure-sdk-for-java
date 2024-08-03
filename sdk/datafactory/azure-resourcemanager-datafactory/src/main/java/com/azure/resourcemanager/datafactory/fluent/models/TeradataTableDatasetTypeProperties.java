@@ -5,32 +5,34 @@
 package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Teradata dataset properties. */
+/**
+ * Teradata dataset properties.
+ */
 @Fluent
 public final class TeradataTableDatasetTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TeradataTableDatasetTypeProperties.class);
-
     /*
-     * The database name of Teradata. Type: string (or Expression with
-     * resultType string).
+     * The database name of Teradata. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "database")
     private Object database;
 
     /*
-     * The table name of Teradata. Type: string (or Expression with resultType
-     * string).
+     * The table name of Teradata. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "table")
     private Object table;
 
     /**
+     * Creates an instance of TeradataTableDatasetTypeProperties class.
+     */
+    public TeradataTableDatasetTypeProperties() {
+    }
+
+    /**
      * Get the database property: The database name of Teradata. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the database value.
      */
     public Object database() {
@@ -39,7 +41,7 @@ public final class TeradataTableDatasetTypeProperties {
 
     /**
      * Set the database property: The database name of Teradata. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param database the database value to set.
      * @return the TeradataTableDatasetTypeProperties object itself.
      */
@@ -50,7 +52,7 @@ public final class TeradataTableDatasetTypeProperties {
 
     /**
      * Get the table property: The table name of Teradata. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the table value.
      */
     public Object table() {
@@ -59,7 +61,7 @@ public final class TeradataTableDatasetTypeProperties {
 
     /**
      * Set the table property: The table name of Teradata. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param table the table value to set.
      * @return the TeradataTableDatasetTypeProperties object itself.
      */
@@ -70,7 +72,7 @@ public final class TeradataTableDatasetTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

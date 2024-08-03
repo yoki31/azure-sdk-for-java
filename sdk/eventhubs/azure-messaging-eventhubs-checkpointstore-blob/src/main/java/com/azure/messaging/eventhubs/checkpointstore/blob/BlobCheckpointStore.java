@@ -4,30 +4,34 @@
 package com.azure.messaging.eventhubs.checkpointstore.blob;
 
 import com.azure.core.http.rest.Response;
+import com.azure.core.util.ClientOptions;
 import com.azure.core.util.CoreUtils;
 import com.azure.core.util.logging.ClientLogger;
+import com.azure.core.util.metrics.MeterProvider;
 import com.azure.messaging.eventhubs.CheckpointStore;
 import com.azure.messaging.eventhubs.EventProcessorClient;
 import com.azure.messaging.eventhubs.models.Checkpoint;
 import com.azure.messaging.eventhubs.models.PartitionOwnership;
 import com.azure.storage.blob.BlobAsyncClient;
 import com.azure.storage.blob.BlobContainerAsyncClient;
-import com.azure.storage.blob.models.BlobRequestConditions;
 import com.azure.storage.blob.models.BlobItem;
-import com.azure.storage.blob.models.BlobListDetails;
 import com.azure.storage.blob.models.BlobItemProperties;
+import com.azure.storage.blob.models.BlobListDetails;
+import com.azure.storage.blob.models.BlobRequestConditions;
 import com.azure.storage.blob.models.ListBlobsOptions;
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Function;
 import reactor.core.Exceptions;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.nio.ByteBuffer;
+import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -41,14 +45,21 @@ import static java.nio.charset.StandardCharsets.UTF_8;
  */
 public class BlobCheckpointStore implements CheckpointStore {
 
-    private static final String SEQUENCE_NUMBER = "sequencenumber";
-    private static final String OFFSET = "offset";
-    private static final String OWNER_ID = "ownerid";
+    static final String SEQUENCE_NUMBER = "sequencenumber";
+    static final String OFFSET = "offset";
+    static final String OWNER_ID = "ownerid";
     private static final String ETAG = "eTag";
 
-    private static final String BLOB_PATH_SEPARATOR = "/";
-    private static final String CHECKPOINT_PATH = "/checkpoint/";
-    private static final String OWNERSHIP_PATH = "/ownership/";
+    static final String BLOB_PATH_SEPARATOR = "/";
+    static final String CHECKPOINT_PATH = "/checkpoint/";
+    static final String OWNERSHIP_PATH = "/ownership/";
+
+    // logging keys, consistent across all AMQP libraries and human-readable
+    private static final String PARTITION_ID_LOG_KEY = "partitionId";
+    private static final String OWNER_ID_LOG_KEY = "ownerId";
+    private static final String SEQUENCE_NUMBER_LOG_KEY = "sequenceNumber";
+    private static final String BLOB_NAME_LOG_KEY = "blobName";
+    private static final String OFFSET_LOG_KEY = "offset";
 
     /**
      * An empty string.
@@ -56,9 +67,10 @@ public class BlobCheckpointStore implements CheckpointStore {
     public static final String EMPTY_STRING = "";
 
     private static final ByteBuffer UPLOAD_DATA = ByteBuffer.wrap(EMPTY_STRING.getBytes(UTF_8));
+    private static final ClientLogger LOGGER = new ClientLogger(BlobCheckpointStore.class);
 
     private final BlobContainerAsyncClient blobContainerAsyncClient;
-    private final ClientLogger logger = new ClientLogger(BlobCheckpointStore.class);
+    private final MetricsHelper metricsHelper;
     private final Map<String, BlobAsyncClient> blobClients = new ConcurrentHashMap<>();
 
     /**
@@ -68,7 +80,20 @@ public class BlobCheckpointStore implements CheckpointStore {
      * blobs in the storage container.
      */
     public BlobCheckpointStore(BlobContainerAsyncClient blobContainerAsyncClient) {
+        this(blobContainerAsyncClient, null);
+    }
+
+
+    /**
+     * Creates an instance of BlobCheckpointStore.
+     *
+     * @param blobContainerAsyncClient The {@link BlobContainerAsyncClient} this instance will use to read and update
+     * @param options The {@link ClientOptions} to configure this instance.
+     * blobs in the storage container.
+     */
+    public BlobCheckpointStore(BlobContainerAsyncClient blobContainerAsyncClient, ClientOptions options) {
         this.blobContainerAsyncClient = blobContainerAsyncClient;
+        this.metricsHelper = new MetricsHelper(options == null ? null : options.getMetricsOptions(), MeterProvider.getDefaultProvider());
     }
 
     /**
@@ -103,20 +128,27 @@ public class BlobCheckpointStore implements CheckpointStore {
 
     private Mono<Checkpoint> convertToCheckpoint(BlobItem blobItem) {
         String[] names = blobItem.getName().split(BLOB_PATH_SEPARATOR);
-        logger.verbose(Messages.FOUND_BLOB_FOR_PARTITION, blobItem.getName());
+        LOGGER.atVerbose()
+            .addKeyValue(BLOB_NAME_LOG_KEY, blobItem.getName())
+            .log(Messages.FOUND_BLOB_FOR_PARTITION);
         if (names.length == 5) {
             // Blob names should be of the pattern
             // fullyqualifiednamespace/eventhub/consumergroup/checkpoints/<partitionId>
             // While we can further check if the partition id is numeric, it may not necessarily be the case in future.
 
             if (CoreUtils.isNullOrEmpty(blobItem.getMetadata())) {
-                logger.warning(Messages.NO_METADATA_AVAILABLE_FOR_BLOB, blobItem.getName());
+                LOGGER.atWarning()
+                    .addKeyValue(BLOB_NAME_LOG_KEY, blobItem.getName())
+                    .log(Messages.NO_METADATA_AVAILABLE_FOR_BLOB);
                 return Mono.empty();
             }
 
             Map<String, String> metadata = blobItem.getMetadata();
-            logger.verbose(Messages.CHECKPOINT_INFO, blobItem.getName(), metadata.get(SEQUENCE_NUMBER),
-                metadata.get(OFFSET));
+            LOGGER.atVerbose()
+                .addKeyValue(BLOB_NAME_LOG_KEY, blobItem.getName())
+                .addKeyValue(SEQUENCE_NUMBER_LOG_KEY, metadata.get(SEQUENCE_NUMBER))
+                .addKeyValue(OFFSET_LOG_KEY, metadata.get(OFFSET))
+                .log(Messages.CHECKPOINT_INFO);
 
             Long sequenceNumber = null;
             Long offset = null;
@@ -176,7 +208,9 @@ public class BlobCheckpointStore implements CheckpointStore {
                         .uploadWithResponse(Flux.just(UPLOAD_DATA), 0, null, metadata, null, null,
                             blobRequestConditions)
                         .flatMapMany(response -> updateOwnershipETag(response, partitionOwnership), error -> {
-                            logger.verbose(Messages.CLAIM_ERROR, partitionId, error.getMessage());
+                            LOGGER.atVerbose()
+                                .addKeyValue(PARTITION_ID_LOG_KEY, partitionId)
+                                .log(Messages.CLAIM_ERROR, error);
                             return Mono.empty();
                         }, Mono::empty);
                 } else {
@@ -184,12 +218,16 @@ public class BlobCheckpointStore implements CheckpointStore {
                     blobRequestConditions.setIfMatch(partitionOwnership.getETag());
                     return blobAsyncClient.setMetadataWithResponse(metadata, blobRequestConditions)
                         .flatMapMany(response -> updateOwnershipETag(response, partitionOwnership), error -> {
-                            logger.verbose(Messages.CLAIM_ERROR, partitionId, error);
+                            LOGGER.atVerbose()
+                                .addKeyValue(PARTITION_ID_LOG_KEY, partitionId)
+                                .log(Messages.CLAIM_ERROR, error);
                             return Mono.empty();
                         }, Mono::empty);
                 }
             } catch (Exception ex) {
-                logger.warning(Messages.CLAIM_ERROR, partitionOwnership.getPartitionId(), ex);
+                LOGGER.atWarning()
+                    .addKeyValue(PARTITION_ID_LOG_KEY, partitionOwnership.getPartitionId())
+                    .log(Messages.CLAIM_ERROR, ex);
                 return Mono.empty();
             }
         });
@@ -208,7 +246,7 @@ public class BlobCheckpointStore implements CheckpointStore {
     @Override
     public Mono<Void> updateCheckpoint(Checkpoint checkpoint) {
         if (checkpoint == null || (checkpoint.getSequenceNumber() == null && checkpoint.getOffset() == null)) {
-            throw logger.logExceptionAsWarning(Exceptions
+            throw LOGGER.logExceptionAsWarning(Exceptions
                 .propagate(new IllegalStateException(
                     "Both sequence number and offset cannot be null when updating a checkpoint")));
         }
@@ -229,7 +267,7 @@ public class BlobCheckpointStore implements CheckpointStore {
         metadata.put(OFFSET, offset);
         BlobAsyncClient blobAsyncClient = blobClients.get(blobName);
 
-        return blobAsyncClient.exists().flatMap(exists -> {
+        Mono<Void> response = blobAsyncClient.exists().flatMap(exists -> {
             if (exists) {
                 return blobAsyncClient.setMetadata(metadata);
             } else {
@@ -237,6 +275,22 @@ public class BlobCheckpointStore implements CheckpointStore {
                     metadata, null, null, null).then();
             }
         });
+        return reportMetrics(response, checkpoint, blobName);
+    }
+
+    private Mono<Void> reportMetrics(Mono<Void> checkpointMono, Checkpoint checkpoint, String blobName) {
+        AtomicReference<Instant> startTime = metricsHelper.isCheckpointDurationEnabled() ? new AtomicReference<>() : null;
+        return checkpointMono
+            .doOnEach(signal ->  {
+                if (signal.isOnComplete() || signal.isOnError()) {
+                    metricsHelper.reportCheckpoint(checkpoint, blobName, !signal.hasError(), startTime != null ? startTime.get() : null);
+                }
+            })
+            .doOnSubscribe(ignored -> {
+                if (startTime != null) {
+                    startTime.set(Instant.now());
+                }
+            });
     }
 
     private String getBlobPrefix(String fullyQualifiedNamespace, String eventHubName, String consumerGroupName,
@@ -252,19 +306,21 @@ public class BlobCheckpointStore implements CheckpointStore {
     }
 
     private Mono<PartitionOwnership> convertToPartitionOwnership(BlobItem blobItem) {
-        logger.verbose(Messages.FOUND_BLOB_FOR_PARTITION, blobItem.getName());
+        LOGGER.atVerbose()
+            .addKeyValue(BLOB_NAME_LOG_KEY, blobItem.getName())
+            .log(Messages.FOUND_BLOB_FOR_PARTITION);
+
         String[] names = blobItem.getName().split(BLOB_PATH_SEPARATOR);
         if (names.length == 5) {
             // Blob names should be of the pattern
             // fullyqualifiednamespace/eventhub/consumergroup/ownership/<partitionId>
             // While we can further check if the partition id is numeric, it may not necessarily be the case in future.
             if (CoreUtils.isNullOrEmpty(blobItem.getMetadata())) {
-                logger.warning(Messages.NO_METADATA_AVAILABLE_FOR_BLOB, blobItem.getName());
+                LOGGER.atWarning()
+                    .addKeyValue(BLOB_NAME_LOG_KEY, blobItem.getName())
+                    .log(Messages.NO_METADATA_AVAILABLE_FOR_BLOB);
                 return Mono.empty();
             }
-            logger
-                .verbose(Messages.BLOB_OWNER_INFO, blobItem.getName(),
-                    blobItem.getMetadata().getOrDefault(OWNER_ID, EMPTY_STRING));
 
             BlobItemProperties blobProperties = blobItem.getProperties();
 
@@ -272,6 +328,11 @@ public class BlobCheckpointStore implements CheckpointStore {
             if (ownerId == null) {
                 ownerId = EMPTY_STRING;
             }
+
+            LOGGER.atVerbose()
+                .addKeyValue(BLOB_NAME_LOG_KEY, blobItem.getName())
+                .addKeyValue(OWNER_ID_LOG_KEY, ownerId)
+                .log(Messages.BLOB_OWNER_INFO);
 
             PartitionOwnership partitionOwnership = new PartitionOwnership()
                 .setFullyQualifiedNamespace(names[0])

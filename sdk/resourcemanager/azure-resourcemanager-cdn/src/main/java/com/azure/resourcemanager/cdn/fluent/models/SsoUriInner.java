@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.cdn.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The URI required to login to the supplemental portal from the Azure portal. */
+/**
+ * The URI required to login to the supplemental portal from the Azure portal.
+ */
 @Immutable
 public final class SsoUriInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SsoUriInner.class);
-
     /*
      * The URI used to login to the supplemental portal.
      */
@@ -21,8 +19,14 @@ public final class SsoUriInner {
     private String ssoUriValue;
 
     /**
+     * Creates an instance of SsoUriInner class.
+     */
+    public SsoUriInner() {
+    }
+
+    /**
      * Get the ssoUriValue property: The URI used to login to the supplemental portal.
-     *
+     * 
      * @return the ssoUriValue value.
      */
     public String ssoUriValue() {
@@ -31,7 +35,7 @@ public final class SsoUriInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

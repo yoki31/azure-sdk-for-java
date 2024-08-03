@@ -5,9 +5,6 @@
 package com.azure.resourcemanager.mediaservices.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
@@ -17,15 +14,15 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
     include = JsonTypeInfo.As.PROPERTY,
-    property = "@odata\\.type",
+    property = "@odata.type",
     defaultImpl = Audio.class)
 @JsonTypeName("#Microsoft.Media.Audio")
-@JsonSubTypes({@JsonSubTypes.Type(name = "#Microsoft.Media.AacAudio", value = AacAudio.class)})
-@JsonFlatten
+@JsonSubTypes({
+    @JsonSubTypes.Type(name = "#Microsoft.Media.AacAudio", value = AacAudio.class),
+    @JsonSubTypes.Type(name = "#Microsoft.Media.DDAudio", value = DDAudio.class)
+})
 @Fluent
 public class Audio extends Codec {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Audio.class);
-
     /*
      * The number of channels in the audio.
      */
@@ -43,6 +40,10 @@ public class Audio extends Codec {
      */
     @JsonProperty(value = "bitrate")
     private Integer bitrate;
+
+    /** Creates an instance of Audio class. */
+    public Audio() {
+    }
 
     /**
      * Get the channels property: The number of channels in the audio.

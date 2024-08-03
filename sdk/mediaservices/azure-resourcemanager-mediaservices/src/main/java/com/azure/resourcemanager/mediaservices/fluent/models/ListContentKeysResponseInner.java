@@ -5,22 +5,22 @@
 package com.azure.resourcemanager.mediaservices.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.mediaservices.models.StreamingLocatorContentKey;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Class of response for listContentKeys action. */
 @Fluent
 public final class ListContentKeysResponseInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ListContentKeysResponseInner.class);
-
     /*
      * ContentKeys used by current Streaming Locator
      */
     @JsonProperty(value = "contentKeys")
     private List<StreamingLocatorContentKey> contentKeys;
+
+    /** Creates an instance of ListContentKeysResponseInner class. */
+    public ListContentKeysResponseInner() {
+    }
 
     /**
      * Get the contentKeys property: ContentKeys used by current Streaming Locator.

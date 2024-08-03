@@ -25,7 +25,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.PoliciesClient;
 import com.azure.resourcemanager.apimanagement.fluent.models.PolicyCollectionInner;
 import com.azure.resourcemanager.apimanagement.fluent.models.PolicyContractInner;
@@ -38,8 +37,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in PoliciesClient. */
 public final class PoliciesClientImpl implements PoliciesClient {
-    private final ClientLogger logger = new ClientLogger(PoliciesClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final PoliciesService service;
 
@@ -62,11 +59,10 @@ public final class PoliciesClientImpl implements PoliciesClient {
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApiManagementClientP")
-    private interface PoliciesService {
+    public interface PoliciesService {
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/policies")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/policies")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<PolicyCollectionInner>> listByService(
@@ -80,8 +76,7 @@ public final class PoliciesClientImpl implements PoliciesClient {
 
         @Headers({"Content-Type: application/json"})
         @Head(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/policies/{policyId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/policies/{policyId}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<PoliciesGetEntityTagResponse> getEntityTag(
@@ -96,8 +91,7 @@ public final class PoliciesClientImpl implements PoliciesClient {
 
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/policies/{policyId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/policies/{policyId}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<PoliciesGetResponse> get(
@@ -113,8 +107,7 @@ public final class PoliciesClientImpl implements PoliciesClient {
 
         @Headers({"Content-Type: application/json"})
         @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/policies/{policyId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/policies/{policyId}")
         @ExpectedResponses({200, 201})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<PoliciesCreateOrUpdateResponse> createOrUpdate(
@@ -131,8 +124,7 @@ public final class PoliciesClientImpl implements PoliciesClient {
 
         @Headers({"Content-Type: application/json"})
         @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/policies/{policyId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/policies/{policyId}")
         @ExpectedResponses({200, 204})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Void>> delete(
@@ -150,12 +142,13 @@ public final class PoliciesClientImpl implements PoliciesClient {
     /**
      * Lists all the Global Policy definitions of the Api Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of the list policy operation.
+     * @return the response of the list policy operation along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<PolicyCollectionInner>> listByServiceWithResponseAsync(
@@ -198,13 +191,14 @@ public final class PoliciesClientImpl implements PoliciesClient {
     /**
      * Lists all the Global Policy definitions of the Api Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of the list policy operation.
+     * @return the response of the list policy operation along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<PolicyCollectionInner>> listByServiceWithResponseAsync(
@@ -244,51 +238,29 @@ public final class PoliciesClientImpl implements PoliciesClient {
     /**
      * Lists all the Global Policy definitions of the Api Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of the list policy operation.
+     * @return the response of the list policy operation on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PolicyCollectionInner> listByServiceAsync(String resourceGroupName, String serviceName) {
         return listByServiceWithResponseAsync(resourceGroupName, serviceName)
-            .flatMap(
-                (Response<PolicyCollectionInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Lists all the Global Policy definitions of the Api Management service.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of the list policy operation.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public PolicyCollectionInner listByService(String resourceGroupName, String serviceName) {
-        return listByServiceAsync(resourceGroupName, serviceName).block();
-    }
-
-    /**
-     * Lists all the Global Policy definitions of the Api Management service.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of the list policy operation.
+     * @return the response of the list policy operation along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<PolicyCollectionInner> listByServiceWithResponse(
@@ -297,15 +269,31 @@ public final class PoliciesClientImpl implements PoliciesClient {
     }
 
     /**
+     * Lists all the Global Policy definitions of the Api Management service.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the response of the list policy operation.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public PolicyCollectionInner listByService(String resourceGroupName, String serviceName) {
+        return listByServiceWithResponse(resourceGroupName, serviceName, Context.NONE).getValue();
+    }
+
+    /**
      * Gets the entity state (Etag) version of the Global policy definition in the Api Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param policyId The identifier of the Policy.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the Global policy definition in the Api Management service.
+     * @return the entity state (Etag) version of the Global policy definition in the Api Management service on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PoliciesGetEntityTagResponse> getEntityTagWithResponseAsync(
@@ -352,14 +340,15 @@ public final class PoliciesClientImpl implements PoliciesClient {
     /**
      * Gets the entity state (Etag) version of the Global policy definition in the Api Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param policyId The identifier of the Policy.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the Global policy definition in the Api Management service.
+     * @return the entity state (Etag) version of the Global policy definition in the Api Management service on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PoliciesGetEntityTagResponse> getEntityTagWithResponseAsync(
@@ -403,39 +392,24 @@ public final class PoliciesClientImpl implements PoliciesClient {
     /**
      * Gets the entity state (Etag) version of the Global policy definition in the Api Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param policyId The identifier of the Policy.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the Global policy definition in the Api Management service.
+     * @return the entity state (Etag) version of the Global policy definition in the Api Management service on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> getEntityTagAsync(String resourceGroupName, String serviceName, PolicyIdName policyId) {
-        return getEntityTagWithResponseAsync(resourceGroupName, serviceName, policyId)
-            .flatMap((PoliciesGetEntityTagResponse res) -> Mono.empty());
+        return getEntityTagWithResponseAsync(resourceGroupName, serviceName, policyId).flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Gets the entity state (Etag) version of the Global policy definition in the Api Management service.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param policyId The identifier of the Policy.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public void getEntityTag(String resourceGroupName, String serviceName, PolicyIdName policyId) {
-        getEntityTagAsync(resourceGroupName, serviceName, policyId).block();
-    }
-
-    /**
-     * Gets the entity state (Etag) version of the Global policy definition in the Api Management service.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param policyId The identifier of the Policy.
      * @param context The context to associate with this operation.
@@ -451,16 +425,31 @@ public final class PoliciesClientImpl implements PoliciesClient {
     }
 
     /**
+     * Gets the entity state (Etag) version of the Global policy definition in the Api Management service.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param policyId The identifier of the Policy.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public void getEntityTag(String resourceGroupName, String serviceName, PolicyIdName policyId) {
+        getEntityTagWithResponse(resourceGroupName, serviceName, policyId, Context.NONE);
+    }
+
+    /**
      * Get the Global policy definition of the Api Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param policyId The identifier of the Policy.
      * @param format Policy Export Format.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the Global policy definition of the Api Management service.
+     * @return the Global policy definition of the Api Management service on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PoliciesGetResponse> getWithResponseAsync(
@@ -508,7 +497,7 @@ public final class PoliciesClientImpl implements PoliciesClient {
     /**
      * Get the Global policy definition of the Api Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param policyId The identifier of the Policy.
      * @param format Policy Export Format.
@@ -516,7 +505,7 @@ public final class PoliciesClientImpl implements PoliciesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the Global policy definition of the Api Management service.
+     * @return the Global policy definition of the Api Management service on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PoliciesGetResponse> getWithResponseAsync(
@@ -565,75 +554,25 @@ public final class PoliciesClientImpl implements PoliciesClient {
     /**
      * Get the Global policy definition of the Api Management service.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param policyId The identifier of the Policy.
-     * @param format Policy Export Format.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the Global policy definition of the Api Management service.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PolicyContractInner> getAsync(
-        String resourceGroupName, String serviceName, PolicyIdName policyId, PolicyExportFormat format) {
-        return getWithResponseAsync(resourceGroupName, serviceName, policyId, format)
-            .flatMap(
-                (PoliciesGetResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
-    }
-
-    /**
-     * Get the Global policy definition of the Api Management service.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param policyId The identifier of the Policy.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the Global policy definition of the Api Management service.
+     * @return the Global policy definition of the Api Management service on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PolicyContractInner> getAsync(String resourceGroupName, String serviceName, PolicyIdName policyId) {
         final PolicyExportFormat format = null;
         return getWithResponseAsync(resourceGroupName, serviceName, policyId, format)
-            .flatMap(
-                (PoliciesGetResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Get the Global policy definition of the Api Management service.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param policyId The identifier of the Policy.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the Global policy definition of the Api Management service.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public PolicyContractInner get(String resourceGroupName, String serviceName, PolicyIdName policyId) {
-        final PolicyExportFormat format = null;
-        return getAsync(resourceGroupName, serviceName, policyId, format).block();
-    }
-
-    /**
-     * Get the Global policy definition of the Api Management service.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param policyId The identifier of the Policy.
      * @param format Policy Export Format.
@@ -654,9 +593,26 @@ public final class PoliciesClientImpl implements PoliciesClient {
     }
 
     /**
+     * Get the Global policy definition of the Api Management service.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param policyId The identifier of the Policy.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the Global policy definition of the Api Management service.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public PolicyContractInner get(String resourceGroupName, String serviceName, PolicyIdName policyId) {
+        final PolicyExportFormat format = null;
+        return getWithResponse(resourceGroupName, serviceName, policyId, format, Context.NONE).getValue();
+    }
+
+    /**
      * Creates or updates the global policy configuration of the Api Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param policyId The identifier of the Policy.
      * @param parameters The policy contents to apply.
@@ -664,7 +620,7 @@ public final class PoliciesClientImpl implements PoliciesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return policy Contract details.
+     * @return policy Contract details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PoliciesCreateOrUpdateResponse> createOrUpdateWithResponseAsync(
@@ -722,7 +678,7 @@ public final class PoliciesClientImpl implements PoliciesClient {
     /**
      * Creates or updates the global policy configuration of the Api Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param policyId The identifier of the Policy.
      * @param parameters The policy contents to apply.
@@ -731,7 +687,7 @@ public final class PoliciesClientImpl implements PoliciesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return policy Contract details.
+     * @return policy Contract details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PoliciesCreateOrUpdateResponse> createOrUpdateWithResponseAsync(
@@ -787,84 +743,27 @@ public final class PoliciesClientImpl implements PoliciesClient {
     /**
      * Creates or updates the global policy configuration of the Api Management service.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param policyId The identifier of the Policy.
-     * @param parameters The policy contents to apply.
-     * @param ifMatch ETag of the Entity. Not required when creating an entity, but required when updating an entity.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return policy Contract details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<PolicyContractInner> createOrUpdateAsync(
-        String resourceGroupName,
-        String serviceName,
-        PolicyIdName policyId,
-        PolicyContractInner parameters,
-        String ifMatch) {
-        return createOrUpdateWithResponseAsync(resourceGroupName, serviceName, policyId, parameters, ifMatch)
-            .flatMap(
-                (PoliciesCreateOrUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
-    }
-
-    /**
-     * Creates or updates the global policy configuration of the Api Management service.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param policyId The identifier of the Policy.
      * @param parameters The policy contents to apply.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return policy Contract details.
+     * @return policy Contract details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PolicyContractInner> createOrUpdateAsync(
         String resourceGroupName, String serviceName, PolicyIdName policyId, PolicyContractInner parameters) {
         final String ifMatch = null;
         return createOrUpdateWithResponseAsync(resourceGroupName, serviceName, policyId, parameters, ifMatch)
-            .flatMap(
-                (PoliciesCreateOrUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Creates or updates the global policy configuration of the Api Management service.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param policyId The identifier of the Policy.
-     * @param parameters The policy contents to apply.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return policy Contract details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public PolicyContractInner createOrUpdate(
-        String resourceGroupName, String serviceName, PolicyIdName policyId, PolicyContractInner parameters) {
-        final String ifMatch = null;
-        return createOrUpdateAsync(resourceGroupName, serviceName, policyId, parameters, ifMatch).block();
-    }
-
-    /**
-     * Creates or updates the global policy configuration of the Api Management service.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param policyId The identifier of the Policy.
      * @param parameters The policy contents to apply.
@@ -888,9 +787,29 @@ public final class PoliciesClientImpl implements PoliciesClient {
     }
 
     /**
+     * Creates or updates the global policy configuration of the Api Management service.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param policyId The identifier of the Policy.
+     * @param parameters The policy contents to apply.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return policy Contract details.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public PolicyContractInner createOrUpdate(
+        String resourceGroupName, String serviceName, PolicyIdName policyId, PolicyContractInner parameters) {
+        final String ifMatch = null;
+        return createOrUpdateWithResponse(resourceGroupName, serviceName, policyId, parameters, ifMatch, Context.NONE)
+            .getValue();
+    }
+
+    /**
      * Deletes the global policy configuration of the Api Management Service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param policyId The identifier of the Policy.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -898,7 +817,7 @@ public final class PoliciesClientImpl implements PoliciesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -949,7 +868,7 @@ public final class PoliciesClientImpl implements PoliciesClient {
     /**
      * Deletes the global policy configuration of the Api Management Service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param policyId The identifier of the Policy.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -958,7 +877,7 @@ public final class PoliciesClientImpl implements PoliciesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -1006,7 +925,7 @@ public final class PoliciesClientImpl implements PoliciesClient {
     /**
      * Deletes the global policy configuration of the Api Management Service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param policyId The identifier of the Policy.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1014,19 +933,39 @@ public final class PoliciesClientImpl implements PoliciesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(
         String resourceGroupName, String serviceName, PolicyIdName policyId, String ifMatch) {
         return deleteWithResponseAsync(resourceGroupName, serviceName, policyId, ifMatch)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Deletes the global policy configuration of the Api Management Service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param policyId The identifier of the Policy.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> deleteWithResponse(
+        String resourceGroupName, String serviceName, PolicyIdName policyId, String ifMatch, Context context) {
+        return deleteWithResponseAsync(resourceGroupName, serviceName, policyId, ifMatch, context).block();
+    }
+
+    /**
+     * Deletes the global policy configuration of the Api Management Service.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param policyId The identifier of the Policy.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1037,26 +976,6 @@ public final class PoliciesClientImpl implements PoliciesClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public void delete(String resourceGroupName, String serviceName, PolicyIdName policyId, String ifMatch) {
-        deleteAsync(resourceGroupName, serviceName, policyId, ifMatch).block();
-    }
-
-    /**
-     * Deletes the global policy configuration of the Api Management Service.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param policyId The identifier of the Policy.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> deleteWithResponse(
-        String resourceGroupName, String serviceName, PolicyIdName policyId, String ifMatch, Context context) {
-        return deleteWithResponseAsync(resourceGroupName, serviceName, policyId, ifMatch, context).block();
+        deleteWithResponse(resourceGroupName, serviceName, policyId, ifMatch, Context.NONE);
     }
 }

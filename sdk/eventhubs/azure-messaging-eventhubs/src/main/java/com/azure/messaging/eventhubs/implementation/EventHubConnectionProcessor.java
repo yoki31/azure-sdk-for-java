@@ -6,9 +6,13 @@ package com.azure.messaging.eventhubs.implementation;
 import com.azure.core.amqp.AmqpRetryOptions;
 import com.azure.core.amqp.implementation.AmqpChannelProcessor;
 import com.azure.core.amqp.implementation.RetryUtil;
-import com.azure.core.util.logging.ClientLogger;
+import reactor.core.publisher.Mono;
 
+import java.util.Collections;
 import java.util.Objects;
+
+import static com.azure.core.amqp.implementation.RetryUtil.withRetry;
+import static com.azure.messaging.eventhubs.implementation.ClientConstants.ENTITY_PATH_KEY;
 
 /**
  * Subscribes to an upstream Mono that creates {@link EventHubAmqpConnection} then publishes the created connection
@@ -19,10 +23,9 @@ public class EventHubConnectionProcessor extends AmqpChannelProcessor<EventHubAm
     private final String eventHubName;
     private final AmqpRetryOptions retryOptions;
 
-    public EventHubConnectionProcessor(String fullyQualifiedNamespace, String eventHubName,
-        AmqpRetryOptions retryOptions) {
-        super(fullyQualifiedNamespace, eventHubName, channel -> channel.getEndpointStates(),
-            RetryUtil.getRetryPolicy(retryOptions), new ClientLogger(EventHubConnectionProcessor.class));
+    public EventHubConnectionProcessor(String fullyQualifiedNamespace, String eventHubName, AmqpRetryOptions retryOptions) {
+        super(fullyQualifiedNamespace, channel -> channel.getEndpointStates(),
+            RetryUtil.getRetryPolicy(retryOptions), Collections.singletonMap(ENTITY_PATH_KEY, eventHubName));
 
         this.fullyQualifiedNamespace = Objects.requireNonNull(fullyQualifiedNamespace,
             "'fullyQualifiedNamespace' cannot be null.");
@@ -55,5 +58,12 @@ public class EventHubConnectionProcessor extends AmqpChannelProcessor<EventHubAm
      */
     public AmqpRetryOptions getRetryOptions() {
         return retryOptions;
+    }
+
+    public Mono<EventHubManagementNode> getManagementNodeWithRetries() {
+        // TODO (limolkova) - https://github.com/Azure/azure-sdk-for-java/issues/38733
+        // once underlying AMQP stack does retries close-to-the-wire, this should be removed
+        return withRetry(this.flatMap(connection -> connection.getManagementNode()),
+            retryOptions, "Time out creating management node.");
     }
 }

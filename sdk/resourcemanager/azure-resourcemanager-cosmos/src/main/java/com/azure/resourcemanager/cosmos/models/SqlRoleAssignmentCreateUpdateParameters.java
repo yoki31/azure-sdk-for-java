@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cosmos.fluent.models.SqlRoleAssignmentResource;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Parameters to create and update an Azure Cosmos DB SQL Role Assignment. */
+/**
+ * Parameters to create and update an Azure Cosmos DB SQL Role Assignment.
+ */
 @Fluent
 public final class SqlRoleAssignmentCreateUpdateParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SqlRoleAssignmentCreateUpdateParameters.class);
-
     /*
      * Properties to create and update an Azure Cosmos DB SQL Role Assignment.
      */
@@ -22,8 +20,14 @@ public final class SqlRoleAssignmentCreateUpdateParameters {
     private SqlRoleAssignmentResource innerProperties;
 
     /**
+     * Creates an instance of SqlRoleAssignmentCreateUpdateParameters class.
+     */
+    public SqlRoleAssignmentCreateUpdateParameters() {
+    }
+
+    /**
      * Get the innerProperties property: Properties to create and update an Azure Cosmos DB SQL Role Assignment.
-     *
+     * 
      * @return the innerProperties value.
      */
     private SqlRoleAssignmentResource innerProperties() {
@@ -32,7 +36,7 @@ public final class SqlRoleAssignmentCreateUpdateParameters {
 
     /**
      * Get the roleDefinitionId property: The unique identifier for the associated Role Definition.
-     *
+     * 
      * @return the roleDefinitionId value.
      */
     public String roleDefinitionId() {
@@ -41,7 +45,7 @@ public final class SqlRoleAssignmentCreateUpdateParameters {
 
     /**
      * Set the roleDefinitionId property: The unique identifier for the associated Role Definition.
-     *
+     * 
      * @param roleDefinitionId the roleDefinitionId value to set.
      * @return the SqlRoleAssignmentCreateUpdateParameters object itself.
      */
@@ -56,7 +60,7 @@ public final class SqlRoleAssignmentCreateUpdateParameters {
     /**
      * Get the scope property: The data plane resource path for which access is being granted through this Role
      * Assignment.
-     *
+     * 
      * @return the scope value.
      */
     public String scope() {
@@ -66,7 +70,7 @@ public final class SqlRoleAssignmentCreateUpdateParameters {
     /**
      * Set the scope property: The data plane resource path for which access is being granted through this Role
      * Assignment.
-     *
+     * 
      * @param scope the scope value to set.
      * @return the SqlRoleAssignmentCreateUpdateParameters object itself.
      */
@@ -82,7 +86,7 @@ public final class SqlRoleAssignmentCreateUpdateParameters {
      * Get the principalId property: The unique identifier for the associated AAD principal in the AAD graph to which
      * access is being granted through this Role Assignment. Tenant ID for the principal is inferred using the tenant
      * associated with the subscription.
-     *
+     * 
      * @return the principalId value.
      */
     public String principalId() {
@@ -93,7 +97,7 @@ public final class SqlRoleAssignmentCreateUpdateParameters {
      * Set the principalId property: The unique identifier for the associated AAD principal in the AAD graph to which
      * access is being granted through this Role Assignment. Tenant ID for the principal is inferred using the tenant
      * associated with the subscription.
-     *
+     * 
      * @param principalId the principalId value to set.
      * @return the SqlRoleAssignmentCreateUpdateParameters object itself.
      */
@@ -107,7 +111,7 @@ public final class SqlRoleAssignmentCreateUpdateParameters {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

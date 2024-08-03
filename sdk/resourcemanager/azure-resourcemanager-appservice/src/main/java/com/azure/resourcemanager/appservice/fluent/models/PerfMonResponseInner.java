@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.PerfMonSet;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Performance monitor API response. */
+/**
+ * Performance monitor API response.
+ */
 @Fluent
 public final class PerfMonResponseInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PerfMonResponseInner.class);
-
     /*
      * The response code.
      */
@@ -34,8 +32,14 @@ public final class PerfMonResponseInner {
     private PerfMonSet data;
 
     /**
+     * Creates an instance of PerfMonResponseInner class.
+     */
+    public PerfMonResponseInner() {
+    }
+
+    /**
      * Get the code property: The response code.
-     *
+     * 
      * @return the code value.
      */
     public String code() {
@@ -44,7 +48,7 @@ public final class PerfMonResponseInner {
 
     /**
      * Set the code property: The response code.
-     *
+     * 
      * @param code the code value to set.
      * @return the PerfMonResponseInner object itself.
      */
@@ -55,7 +59,7 @@ public final class PerfMonResponseInner {
 
     /**
      * Get the message property: The message.
-     *
+     * 
      * @return the message value.
      */
     public String message() {
@@ -64,7 +68,7 @@ public final class PerfMonResponseInner {
 
     /**
      * Set the message property: The message.
-     *
+     * 
      * @param message the message value to set.
      * @return the PerfMonResponseInner object itself.
      */
@@ -75,7 +79,7 @@ public final class PerfMonResponseInner {
 
     /**
      * Get the data property: The performance monitor counters.
-     *
+     * 
      * @return the data value.
      */
     public PerfMonSet data() {
@@ -84,7 +88,7 @@ public final class PerfMonResponseInner {
 
     /**
      * Set the data property: The performance monitor counters.
-     *
+     * 
      * @param data the data value to set.
      * @return the PerfMonResponseInner object itself.
      */
@@ -95,7 +99,7 @@ public final class PerfMonResponseInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -6,16 +6,15 @@ package com.azure.resourcemanager.monitor.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-/** The baseline values for a single time series. */
+/**
+ * The baseline values for a single time series.
+ */
 @Fluent
 public final class TimeSeriesBaseline {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TimeSeriesBaseline.class);
-
     /*
      * The aggregation type of the metric.
      */
@@ -47,8 +46,14 @@ public final class TimeSeriesBaseline {
     private List<BaselineMetadata> metadataValues;
 
     /**
+     * Creates an instance of TimeSeriesBaseline class.
+     */
+    public TimeSeriesBaseline() {
+    }
+
+    /**
      * Get the aggregation property: The aggregation type of the metric.
-     *
+     * 
      * @return the aggregation value.
      */
     public String aggregation() {
@@ -57,7 +62,7 @@ public final class TimeSeriesBaseline {
 
     /**
      * Set the aggregation property: The aggregation type of the metric.
-     *
+     * 
      * @param aggregation the aggregation value to set.
      * @return the TimeSeriesBaseline object itself.
      */
@@ -68,7 +73,7 @@ public final class TimeSeriesBaseline {
 
     /**
      * Get the dimensions property: The dimensions of this time series.
-     *
+     * 
      * @return the dimensions value.
      */
     public List<MetricSingleDimension> dimensions() {
@@ -77,7 +82,7 @@ public final class TimeSeriesBaseline {
 
     /**
      * Set the dimensions property: The dimensions of this time series.
-     *
+     * 
      * @param dimensions the dimensions value to set.
      * @return the TimeSeriesBaseline object itself.
      */
@@ -88,7 +93,7 @@ public final class TimeSeriesBaseline {
 
     /**
      * Get the timestamps property: The list of timestamps of the baselines.
-     *
+     * 
      * @return the timestamps value.
      */
     public List<OffsetDateTime> timestamps() {
@@ -97,7 +102,7 @@ public final class TimeSeriesBaseline {
 
     /**
      * Set the timestamps property: The list of timestamps of the baselines.
-     *
+     * 
      * @param timestamps the timestamps value to set.
      * @return the TimeSeriesBaseline object itself.
      */
@@ -108,7 +113,7 @@ public final class TimeSeriesBaseline {
 
     /**
      * Get the data property: The baseline values for each sensitivity.
-     *
+     * 
      * @return the data value.
      */
     public List<SingleBaseline> data() {
@@ -117,7 +122,7 @@ public final class TimeSeriesBaseline {
 
     /**
      * Set the data property: The baseline values for each sensitivity.
-     *
+     * 
      * @param data the data value to set.
      * @return the TimeSeriesBaseline object itself.
      */
@@ -128,7 +133,7 @@ public final class TimeSeriesBaseline {
 
     /**
      * Get the metadataValues property: The baseline metadata values.
-     *
+     * 
      * @return the metadataValues value.
      */
     public List<BaselineMetadata> metadataValues() {
@@ -137,7 +142,7 @@ public final class TimeSeriesBaseline {
 
     /**
      * Set the metadataValues property: The baseline metadata values.
-     *
+     * 
      * @param metadataValues the metadataValues value to set.
      * @return the TimeSeriesBaseline object itself.
      */
@@ -148,27 +153,24 @@ public final class TimeSeriesBaseline {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (aggregation() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property aggregation in model TimeSeriesBaseline"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property aggregation in model TimeSeriesBaseline"));
         }
         if (dimensions() != null) {
             dimensions().forEach(e -> e.validate());
         }
         if (timestamps() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property timestamps in model TimeSeriesBaseline"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property timestamps in model TimeSeriesBaseline"));
         }
         if (data() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property data in model TimeSeriesBaseline"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property data in model TimeSeriesBaseline"));
         } else {
             data().forEach(e -> e.validate());
         }
@@ -176,4 +178,6 @@ public final class TimeSeriesBaseline {
             metadataValues().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(TimeSeriesBaseline.class);
 }

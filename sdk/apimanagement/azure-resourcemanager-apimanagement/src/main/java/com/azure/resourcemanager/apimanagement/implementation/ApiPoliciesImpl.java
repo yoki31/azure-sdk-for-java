@@ -19,10 +19,9 @@ import com.azure.resourcemanager.apimanagement.models.PolicyCollection;
 import com.azure.resourcemanager.apimanagement.models.PolicyContract;
 import com.azure.resourcemanager.apimanagement.models.PolicyExportFormat;
 import com.azure.resourcemanager.apimanagement.models.PolicyIdName;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class ApiPoliciesImpl implements ApiPolicies {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiPoliciesImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(ApiPoliciesImpl.class);
 
     private final ApiPoliciesClient innerClient;
 
@@ -32,15 +31,6 @@ public final class ApiPoliciesImpl implements ApiPolicies {
         ApiPoliciesClient innerClient, com.azure.resourcemanager.apimanagement.ApiManagementManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
-    }
-
-    public PolicyCollection listByApi(String resourceGroupName, String serviceName, String apiId) {
-        PolicyCollectionInner inner = this.serviceClient().listByApi(resourceGroupName, serviceName, apiId);
-        if (inner != null) {
-            return new PolicyCollectionImpl(inner, this.manager());
-        } else {
-            return null;
-        }
     }
 
     public Response<PolicyCollection> listByApiWithResponse(
@@ -58,8 +48,13 @@ public final class ApiPoliciesImpl implements ApiPolicies {
         }
     }
 
-    public void getEntityTag(String resourceGroupName, String serviceName, String apiId, PolicyIdName policyId) {
-        this.serviceClient().getEntityTag(resourceGroupName, serviceName, apiId, policyId);
+    public PolicyCollection listByApi(String resourceGroupName, String serviceName, String apiId) {
+        PolicyCollectionInner inner = this.serviceClient().listByApi(resourceGroupName, serviceName, apiId);
+        if (inner != null) {
+            return new PolicyCollectionImpl(inner, this.manager());
+        } else {
+            return null;
+        }
     }
 
     public ApiPoliciesGetEntityTagResponse getEntityTagWithResponse(
@@ -67,13 +62,8 @@ public final class ApiPoliciesImpl implements ApiPolicies {
         return this.serviceClient().getEntityTagWithResponse(resourceGroupName, serviceName, apiId, policyId, context);
     }
 
-    public PolicyContract get(String resourceGroupName, String serviceName, String apiId, PolicyIdName policyId) {
-        PolicyContractInner inner = this.serviceClient().get(resourceGroupName, serviceName, apiId, policyId);
-        if (inner != null) {
-            return new PolicyContractImpl(inner, this.manager());
-        } else {
-            return null;
-        }
+    public void getEntityTag(String resourceGroupName, String serviceName, String apiId, PolicyIdName policyId) {
+        this.serviceClient().getEntityTag(resourceGroupName, serviceName, apiId, policyId);
     }
 
     public Response<PolicyContract> getWithResponse(
@@ -96,14 +86,8 @@ public final class ApiPoliciesImpl implements ApiPolicies {
         }
     }
 
-    public PolicyContract createOrUpdate(
-        String resourceGroupName,
-        String serviceName,
-        String apiId,
-        PolicyIdName policyId,
-        PolicyContractInner parameters) {
-        PolicyContractInner inner =
-            this.serviceClient().createOrUpdate(resourceGroupName, serviceName, apiId, policyId, parameters);
+    public PolicyContract get(String resourceGroupName, String serviceName, String apiId, PolicyIdName policyId) {
+        PolicyContractInner inner = this.serviceClient().get(resourceGroupName, serviceName, apiId, policyId);
         if (inner != null) {
             return new PolicyContractImpl(inner, this.manager());
         } else {
@@ -135,9 +119,19 @@ public final class ApiPoliciesImpl implements ApiPolicies {
         }
     }
 
-    public void delete(
-        String resourceGroupName, String serviceName, String apiId, PolicyIdName policyId, String ifMatch) {
-        this.serviceClient().delete(resourceGroupName, serviceName, apiId, policyId, ifMatch);
+    public PolicyContract createOrUpdate(
+        String resourceGroupName,
+        String serviceName,
+        String apiId,
+        PolicyIdName policyId,
+        PolicyContractInner parameters) {
+        PolicyContractInner inner =
+            this.serviceClient().createOrUpdate(resourceGroupName, serviceName, apiId, policyId, parameters);
+        if (inner != null) {
+            return new PolicyContractImpl(inner, this.manager());
+        } else {
+            return null;
+        }
     }
 
     public Response<Void> deleteWithResponse(
@@ -150,6 +144,11 @@ public final class ApiPoliciesImpl implements ApiPolicies {
         return this
             .serviceClient()
             .deleteWithResponse(resourceGroupName, serviceName, apiId, policyId, ifMatch, context);
+    }
+
+    public void delete(
+        String resourceGroupName, String serviceName, String apiId, PolicyIdName policyId, String ifMatch) {
+        this.serviceClient().delete(resourceGroupName, serviceName, apiId, policyId, ifMatch);
     }
 
     private ApiPoliciesClient serviceClient() {

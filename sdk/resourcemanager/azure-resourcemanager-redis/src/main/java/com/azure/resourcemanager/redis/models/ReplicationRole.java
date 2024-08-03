@@ -7,15 +7,23 @@ package com.azure.resourcemanager.redis.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** Defines values for ReplicationRole. */
+/**
+ * Role of the linked server.
+ */
 public enum ReplicationRole {
-    /** Enum value Primary. */
+    /**
+     * Enum value Primary.
+     */
     PRIMARY("Primary"),
 
-    /** Enum value Secondary. */
+    /**
+     * Enum value Secondary.
+     */
     SECONDARY("Secondary");
 
-    /** The actual serialized value for a ReplicationRole instance. */
+    /**
+     * The actual serialized value for a ReplicationRole instance.
+     */
     private final String value;
 
     ReplicationRole(String value) {
@@ -24,12 +32,15 @@ public enum ReplicationRole {
 
     /**
      * Parses a serialized value to a ReplicationRole instance.
-     *
+     * 
      * @param value the serialized value to parse.
      * @return the parsed ReplicationRole object, or null if unable to parse.
      */
     @JsonCreator
     public static ReplicationRole fromString(String value) {
+        if (value == null) {
+            return null;
+        }
         ReplicationRole[] items = ReplicationRole.values();
         for (ReplicationRole item : items) {
             if (item.toString().equalsIgnoreCase(value)) {
@@ -39,6 +50,9 @@ public enum ReplicationRole {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @JsonValue
     @Override
     public String toString() {

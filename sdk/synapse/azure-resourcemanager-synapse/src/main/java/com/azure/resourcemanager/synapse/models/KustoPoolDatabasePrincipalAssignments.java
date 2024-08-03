@@ -18,6 +18,28 @@ public interface KustoPoolDatabasePrincipalAssignments {
      * @param databaseName The name of the database in the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param principalAssignmentName The name of the resource.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the result returned from a check name availability request along with {@link Response}.
+     */
+    Response<CheckNameResult> checkNameAvailabilityWithResponse(
+        String workspaceName,
+        String kustoPoolName,
+        String databaseName,
+        String resourceGroupName,
+        DatabasePrincipalAssignmentCheckNameRequest principalAssignmentName,
+        Context context);
+
+    /**
+     * Checks that the database principal assignment is valid and is not already in use.
+     *
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param databaseName The name of the database in the Kusto pool.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param principalAssignmentName The name of the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
@@ -31,28 +53,6 @@ public interface KustoPoolDatabasePrincipalAssignments {
         DatabasePrincipalAssignmentCheckNameRequest principalAssignmentName);
 
     /**
-     * Checks that the database principal assignment is valid and is not already in use.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param databaseName The name of the database in the Kusto pool.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param principalAssignmentName The name of the resource.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
-     */
-    Response<CheckNameResult> checkNameAvailabilityWithResponse(
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String resourceGroupName,
-        DatabasePrincipalAssignmentCheckNameRequest principalAssignmentName,
-        Context context);
-
-    /**
      * Lists all Kusto pool database principalAssignments.
      *
      * @param workspaceName The name of the workspace.
@@ -62,7 +62,8 @@ public interface KustoPoolDatabasePrincipalAssignments {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database principal assignments operation response.
+     * @return the list Kusto database principal assignments operation response as paginated response with {@link
+     *     PagedIterable}.
      */
     PagedIterable<DatabasePrincipalAssignment> list(
         String workspaceName, String kustoPoolName, String databaseName, String resourceGroupName);
@@ -78,10 +79,33 @@ public interface KustoPoolDatabasePrincipalAssignments {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database principal assignments operation response.
+     * @return the list Kusto database principal assignments operation response as paginated response with {@link
+     *     PagedIterable}.
      */
     PagedIterable<DatabasePrincipalAssignment> list(
         String workspaceName, String kustoPoolName, String databaseName, String resourceGroupName, Context context);
+
+    /**
+     * Gets a Kusto pool database principalAssignment.
+     *
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param databaseName The name of the database in the Kusto pool.
+     * @param principalAssignmentName The name of the Kusto principalAssignment.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a Kusto pool database principalAssignment along with {@link Response}.
+     */
+    Response<DatabasePrincipalAssignment> getWithResponse(
+        String workspaceName,
+        String kustoPoolName,
+        String databaseName,
+        String principalAssignmentName,
+        String resourceGroupName,
+        Context context);
 
     /**
      * Gets a Kusto pool database principalAssignment.
@@ -104,28 +128,6 @@ public interface KustoPoolDatabasePrincipalAssignments {
         String resourceGroupName);
 
     /**
-     * Gets a Kusto pool database principalAssignment.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param databaseName The name of the database in the Kusto pool.
-     * @param principalAssignmentName The name of the Kusto principalAssignment.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Kusto pool database principalAssignment.
-     */
-    Response<DatabasePrincipalAssignment> getWithResponse(
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String principalAssignmentName,
-        String resourceGroupName,
-        Context context);
-
-    /**
      * Deletes a Kusto pool principalAssignment.
      *
      * @param workspaceName The name of the workspace.
@@ -172,7 +174,7 @@ public interface KustoPoolDatabasePrincipalAssignments {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Kusto pool database principalAssignment.
+     * @return a Kusto pool database principalAssignment along with {@link Response}.
      */
     DatabasePrincipalAssignment getById(String id);
 
@@ -184,7 +186,7 @@ public interface KustoPoolDatabasePrincipalAssignments {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Kusto pool database principalAssignment.
+     * @return a Kusto pool database principalAssignment along with {@link Response}.
      */
     Response<DatabasePrincipalAssignment> getByIdWithResponse(String id, Context context);
 

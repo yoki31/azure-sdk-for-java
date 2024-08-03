@@ -11,7 +11,24 @@ import java.util.List;
 /** Resource collection API of Operations. */
 public interface Operations {
     /**
-     * Check whether a workspace name is available.
+     * Check name availability
+     *
+     * <p>Check whether a workspace name is available.
+     *
+     * @param request The check request.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return check name availability response along with {@link Response}.
+     */
+    Response<CheckNameAvailabilityResponse> checkNameAvailabilityWithResponse(
+        CheckNameAvailabilityRequest request, Context context);
+
+    /**
+     * Check name availability
+     *
+     * <p>Check whether a workspace name is available.
      *
      * @param request The check request.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -22,20 +39,22 @@ public interface Operations {
     CheckNameAvailabilityResponse checkNameAvailability(CheckNameAvailabilityRequest request);
 
     /**
-     * Check whether a workspace name is available.
+     * All operations
      *
-     * @param request The check request.
+     * <p>Get all available operations.
+     *
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return check name availability response.
+     * @return all available operations along with {@link Response}.
      */
-    Response<CheckNameAvailabilityResponse> checkNameAvailabilityWithResponse(
-        CheckNameAvailabilityRequest request, Context context);
+    Response<List<AvailableRpOperation>> listWithResponse(Context context);
 
     /**
-     * Get all available operations.
+     * All operations
+     *
+     * <p>Get all available operations.
      *
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
@@ -44,18 +63,26 @@ public interface Operations {
     List<AvailableRpOperation> list();
 
     /**
-     * Get all available operations.
+     * Get operation result
      *
+     * <p>Get the result of an operation.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param operationId Operation ID.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all available operations.
+     * @return the result of an operation along with {@link Response}.
      */
-    Response<List<AvailableRpOperation>> listWithResponse(Context context);
+    Response<Void> getLocationHeaderResultWithResponse(
+        String resourceGroupName, String workspaceName, String operationId, Context context);
 
     /**
-     * Get the result of an operation.
+     * Get operation result
+     *
+     * <p>Get the result of an operation.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -67,7 +94,9 @@ public interface Operations {
     void getLocationHeaderResult(String resourceGroupName, String workspaceName, String operationId);
 
     /**
-     * Get the result of an operation.
+     * Get operation status
+     *
+     * <p>Get the status of an operation.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -76,13 +105,15 @@ public interface Operations {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result of an operation.
+     * @return the status of an operation along with {@link Response}.
      */
-    Response<Void> getLocationHeaderResultWithResponse(
+    Response<OperationResource> getAzureAsyncHeaderResultWithResponse(
         String resourceGroupName, String workspaceName, String operationId, Context context);
 
     /**
-     * Get the status of an operation.
+     * Get operation status
+     *
+     * <p>Get the status of an operation.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -93,19 +124,4 @@ public interface Operations {
      * @return the status of an operation.
      */
     OperationResource getAzureAsyncHeaderResult(String resourceGroupName, String workspaceName, String operationId);
-
-    /**
-     * Get the status of an operation.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param operationId Operation ID.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the status of an operation.
-     */
-    Response<OperationResource> getAzureAsyncHeaderResultWithResponse(
-        String resourceGroupName, String workspaceName, String operationId, Context context);
 }

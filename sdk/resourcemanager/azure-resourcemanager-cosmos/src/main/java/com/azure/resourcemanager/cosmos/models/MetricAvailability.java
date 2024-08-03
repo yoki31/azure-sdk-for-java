@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The availability of the metric. */
+/**
+ * The availability of the metric.
+ */
 @Immutable
 public final class MetricAvailability {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MetricAvailability.class);
-
     /*
      * The time grain to be used to summarize the metric values.
      */
@@ -27,8 +25,14 @@ public final class MetricAvailability {
     private String retention;
 
     /**
+     * Creates an instance of MetricAvailability class.
+     */
+    public MetricAvailability() {
+    }
+
+    /**
      * Get the timeGrain property: The time grain to be used to summarize the metric values.
-     *
+     * 
      * @return the timeGrain value.
      */
     public String timeGrain() {
@@ -37,7 +41,7 @@ public final class MetricAvailability {
 
     /**
      * Get the retention property: The retention for the metric values.
-     *
+     * 
      * @return the retention value.
      */
     public String retention() {
@@ -46,7 +50,7 @@ public final class MetricAvailability {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

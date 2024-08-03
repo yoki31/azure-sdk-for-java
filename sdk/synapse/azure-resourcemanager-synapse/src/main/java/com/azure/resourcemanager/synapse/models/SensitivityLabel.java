@@ -103,6 +103,13 @@ public interface SensitivityLabel {
     SensitivityLabelRank rank();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.synapse.fluent.models.SensitivityLabelInner object.
      *
      * @return the inner object.
@@ -300,21 +307,32 @@ public interface SensitivityLabel {
     /**
      * Enables sensitivity recommendations on a given column (recommendations are enabled by default on all columns).
      *
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    Response<Void> enableRecommendationWithResponse(Context context);
+
+    /**
+     * Enables sensitivity recommendations on a given column (recommendations are enabled by default on all columns).
+     *
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     void enableRecommendation();
 
     /**
-     * Enables sensitivity recommendations on a given column (recommendations are enabled by default on all columns).
+     * Disables sensitivity recommendations on a given column.
      *
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
-    Response<Void> enableRecommendationWithResponse(Context context);
+    Response<Void> disableRecommendationWithResponse(Context context);
 
     /**
      * Disables sensitivity recommendations on a given column.
@@ -323,15 +341,4 @@ public interface SensitivityLabel {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     void disableRecommendation();
-
-    /**
-     * Disables sensitivity recommendations on a given column.
-     *
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    Response<Void> disableRecommendationWithResponse(Context context);
 }

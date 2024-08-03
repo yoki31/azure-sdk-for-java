@@ -4,49 +4,63 @@
 package com.azure.resourcemanager.resources;
 
 import com.azure.core.http.rest.PagedIterable;
+import com.azure.core.management.serializer.SerializerFactory;
 import com.azure.core.test.annotation.DoNotRecord;
+import com.azure.core.util.serializer.SerializerAdapter;
+import com.azure.core.util.serializer.SerializerEncoding;
+import com.azure.core.management.Region;
 import com.azure.resourcemanager.resources.models.EnforcementMode;
+import com.azure.resourcemanager.resources.models.GenericResource;
 import com.azure.resourcemanager.resources.models.ParameterDefinitionsValue;
 import com.azure.resourcemanager.resources.models.ParameterType;
-import com.azure.resourcemanager.test.utils.TestUtilities;
-import com.azure.resourcemanager.resources.models.GenericResource;
 import com.azure.resourcemanager.resources.models.PolicyAssignment;
 import com.azure.resourcemanager.resources.models.PolicyDefinition;
 import com.azure.resourcemanager.resources.models.PolicyType;
 import com.azure.resourcemanager.resources.models.ResourceGroup;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.azure.core.management.Region;
+import com.azure.resourcemanager.test.utils.TestUtilities;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PolicyTests extends ResourceManagementTest {
     private String policyRule = "{\"if\":{\"not\":{\"field\":\"location\",\"in\":[\"southcentralus\",\"westeurope\"]}},\"then\":{\"effect\":\"deny\"}}";
     private String policyRule2 = "{\"if\":{\"not\":{\"field\":\"name\",\"like\":\"[concat(parameters('prefix'),'*',parameters('suffix'))]\"}},\"then\":{\"effect\":\"deny\"}}";
+    private final SerializerAdapter serializerAdapter = SerializerFactory.createDefaultManagementSerializerAdapter();
 
     @Override
     protected void cleanUpResources() {
 
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     @DoNotRecord(skipInPlayback = true)
     public void canCRUDPolicyDefinition() throws Exception {
+        // LiveOnly because "test timing out after latest test proxy update"
         String policyName = generateRandomResourceName("policy", 15);
         String displayName = generateRandomResourceName("mypolicy", 15);
         try {
+            Map<String, String> metadata = new HashMap<>();
+            metadata.put("category", "Compute");
+
             // Create
             PolicyDefinition definition = resourceClient.policyDefinitions().define(policyName)
                     .withPolicyRuleJson(policyRule)
                     .withPolicyType(PolicyType.CUSTOM)
                     .withDisplayName(displayName)
                     .withDescription("This is my policy")
+                    .withMode("All")
+                    .withMetadata(metadata)
                     .create();
             Assertions.assertEquals(policyName, definition.name());
             Assertions.assertEquals(PolicyType.CUSTOM, definition.policyType());
             Assertions.assertEquals(displayName, definition.displayName());
             Assertions.assertEquals("This is my policy", definition.description());
+            Assertions.assertEquals("All", definition.mode());
+            Assertions.assertEquals("Compute", ((Map<String, String>) definition.metadata()).get("category"));
             // List
             PagedIterable<PolicyDefinition> definitions = resourceClient.policyDefinitions().list();
             boolean found = false;
@@ -60,6 +74,15 @@ public class PolicyTests extends ResourceManagementTest {
             definition = resourceClient.policyDefinitions().getByName(policyName);
             Assertions.assertNotNull(definition);
             Assertions.assertEquals(displayName, definition.displayName());
+            // Update
+            metadata.put("tag", "Test");
+            definition.update()
+                .withDescription("This is my updated policy")
+                .withMode("Indexed")
+                .withMetadata(metadata)
+                .apply();
+            Assertions.assertEquals("Indexed", definition.mode());
+            Assertions.assertEquals("Test", ((Map<String, String>) definition.metadata()).get("tag"));
         } finally {
             // Delete
             resourceClient.policyDefinitions().deleteByName(policyName);
@@ -111,7 +134,7 @@ public class PolicyTests extends ResourceManagementTest {
                     .withoutPlan()
                     .withApiVersion("2020-12-01")
                     .withParentResourcePath("")
-                    .withProperties(new ObjectMapper().readTree("{\"SiteMode\":\"Limited\",\"ComputeMode\":\"Shared\"}"))
+                    .withProperties(serializerAdapter.deserialize("{\"SiteMode\":\"Limited\",\"ComputeMode\":\"Shared\"}", Object.class, SerializerEncoding.JSON))
                     .create();
 
             PolicyAssignment assignment2 = resourceClient.policyAssignments().define(assignmentName2)

@@ -7,19 +7,26 @@ package com.azure.resourcemanager.datafactory.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.fluent.models.MongoDbLinkedServiceTypeProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.List;
 import java.util.Map;
 
-/** Linked service for MongoDb data source. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * Linked service for MongoDb data source.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = MongoDbLinkedService.class, visible = true)
 @JsonTypeName("MongoDb")
 @Fluent
 public final class MongoDbLinkedService extends LinkedService {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MongoDbLinkedService.class);
+    /*
+     * Type of linked service.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "MongoDb";
 
     /*
      * MongoDB linked service properties.
@@ -28,36 +35,60 @@ public final class MongoDbLinkedService extends LinkedService {
     private MongoDbLinkedServiceTypeProperties innerTypeProperties = new MongoDbLinkedServiceTypeProperties();
 
     /**
+     * Creates an instance of MongoDbLinkedService class.
+     */
+    public MongoDbLinkedService() {
+    }
+
+    /**
+     * Get the type property: Type of linked service.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the innerTypeProperties property: MongoDB linked service properties.
-     *
+     * 
      * @return the innerTypeProperties value.
      */
     private MongoDbLinkedServiceTypeProperties innerTypeProperties() {
         return this.innerTypeProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public MongoDbLinkedService withConnectVia(IntegrationRuntimeReference connectVia) {
         super.withConnectVia(connectVia);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public MongoDbLinkedService withDescription(String description) {
         super.withDescription(description);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public MongoDbLinkedService withParameters(Map<String, ParameterSpecification> parameters) {
         super.withParameters(parameters);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public MongoDbLinkedService withAnnotations(List<Object> annotations) {
         super.withAnnotations(annotations);
@@ -67,7 +98,7 @@ public final class MongoDbLinkedService extends LinkedService {
     /**
      * Get the server property: The IP address or server name of the MongoDB server. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the server value.
      */
     public Object server() {
@@ -77,7 +108,7 @@ public final class MongoDbLinkedService extends LinkedService {
     /**
      * Set the server property: The IP address or server name of the MongoDB server. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param server the server value to set.
      * @return the MongoDbLinkedService object itself.
      */
@@ -91,7 +122,7 @@ public final class MongoDbLinkedService extends LinkedService {
 
     /**
      * Get the authenticationType property: The authentication type to be used to connect to the MongoDB database.
-     *
+     * 
      * @return the authenticationType value.
      */
     public MongoDbAuthenticationType authenticationType() {
@@ -100,7 +131,7 @@ public final class MongoDbLinkedService extends LinkedService {
 
     /**
      * Set the authenticationType property: The authentication type to be used to connect to the MongoDB database.
-     *
+     * 
      * @param authenticationType the authenticationType value to set.
      * @return the MongoDbLinkedService object itself.
      */
@@ -115,7 +146,7 @@ public final class MongoDbLinkedService extends LinkedService {
     /**
      * Get the databaseName property: The name of the MongoDB database that you want to access. Type: string (or
      * Expression with resultType string).
-     *
+     * 
      * @return the databaseName value.
      */
     public Object databaseName() {
@@ -125,7 +156,7 @@ public final class MongoDbLinkedService extends LinkedService {
     /**
      * Set the databaseName property: The name of the MongoDB database that you want to access. Type: string (or
      * Expression with resultType string).
-     *
+     * 
      * @param databaseName the databaseName value to set.
      * @return the MongoDbLinkedService object itself.
      */
@@ -139,7 +170,7 @@ public final class MongoDbLinkedService extends LinkedService {
 
     /**
      * Get the username property: Username for authentication. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the username value.
      */
     public Object username() {
@@ -148,7 +179,7 @@ public final class MongoDbLinkedService extends LinkedService {
 
     /**
      * Set the username property: Username for authentication. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param username the username value to set.
      * @return the MongoDbLinkedService object itself.
      */
@@ -162,7 +193,7 @@ public final class MongoDbLinkedService extends LinkedService {
 
     /**
      * Get the password property: Password for authentication.
-     *
+     * 
      * @return the password value.
      */
     public SecretBase password() {
@@ -171,7 +202,7 @@ public final class MongoDbLinkedService extends LinkedService {
 
     /**
      * Set the password property: Password for authentication.
-     *
+     * 
      * @param password the password value to set.
      * @return the MongoDbLinkedService object itself.
      */
@@ -186,7 +217,7 @@ public final class MongoDbLinkedService extends LinkedService {
     /**
      * Get the authSource property: Database to verify the username and password. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the authSource value.
      */
     public Object authSource() {
@@ -196,7 +227,7 @@ public final class MongoDbLinkedService extends LinkedService {
     /**
      * Set the authSource property: Database to verify the username and password. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param authSource the authSource value to set.
      * @return the MongoDbLinkedService object itself.
      */
@@ -211,7 +242,7 @@ public final class MongoDbLinkedService extends LinkedService {
     /**
      * Get the port property: The TCP port number that the MongoDB server uses to listen for client connections. The
      * default value is 27017. Type: integer (or Expression with resultType integer), minimum: 0.
-     *
+     * 
      * @return the port value.
      */
     public Object port() {
@@ -221,7 +252,7 @@ public final class MongoDbLinkedService extends LinkedService {
     /**
      * Set the port property: The TCP port number that the MongoDB server uses to listen for client connections. The
      * default value is 27017. Type: integer (or Expression with resultType integer), minimum: 0.
-     *
+     * 
      * @param port the port value to set.
      * @return the MongoDbLinkedService object itself.
      */
@@ -236,7 +267,7 @@ public final class MongoDbLinkedService extends LinkedService {
     /**
      * Get the enableSsl property: Specifies whether the connections to the server are encrypted using SSL. The default
      * value is false. Type: boolean (or Expression with resultType boolean).
-     *
+     * 
      * @return the enableSsl value.
      */
     public Object enableSsl() {
@@ -246,7 +277,7 @@ public final class MongoDbLinkedService extends LinkedService {
     /**
      * Set the enableSsl property: Specifies whether the connections to the server are encrypted using SSL. The default
      * value is false. Type: boolean (or Expression with resultType boolean).
-     *
+     * 
      * @param enableSsl the enableSsl value to set.
      * @return the MongoDbLinkedService object itself.
      */
@@ -261,7 +292,7 @@ public final class MongoDbLinkedService extends LinkedService {
     /**
      * Get the allowSelfSignedServerCert property: Specifies whether to allow self-signed certificates from the server.
      * The default value is false. Type: boolean (or Expression with resultType boolean).
-     *
+     * 
      * @return the allowSelfSignedServerCert value.
      */
     public Object allowSelfSignedServerCert() {
@@ -271,7 +302,7 @@ public final class MongoDbLinkedService extends LinkedService {
     /**
      * Set the allowSelfSignedServerCert property: Specifies whether to allow self-signed certificates from the server.
      * The default value is false. Type: boolean (or Expression with resultType boolean).
-     *
+     * 
      * @param allowSelfSignedServerCert the allowSelfSignedServerCert value to set.
      * @return the MongoDbLinkedService object itself.
      */
@@ -285,22 +316,22 @@ public final class MongoDbLinkedService extends LinkedService {
 
     /**
      * Get the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @return the encryptedCredential value.
      */
-    public Object encryptedCredential() {
+    public String encryptedCredential() {
         return this.innerTypeProperties() == null ? null : this.innerTypeProperties().encryptedCredential();
     }
 
     /**
      * Set the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @param encryptedCredential the encryptedCredential value to set.
      * @return the MongoDbLinkedService object itself.
      */
-    public MongoDbLinkedService withEncryptedCredential(Object encryptedCredential) {
+    public MongoDbLinkedService withEncryptedCredential(String encryptedCredential) {
         if (this.innerTypeProperties() == null) {
             this.innerTypeProperties = new MongoDbLinkedServiceTypeProperties();
         }
@@ -310,19 +341,20 @@ public final class MongoDbLinkedService extends LinkedService {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
         if (innerTypeProperties() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property innerTypeProperties in model MongoDbLinkedService"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property innerTypeProperties in model MongoDbLinkedService"));
         } else {
             innerTypeProperties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(MongoDbLinkedService.class);
 }

@@ -6,14 +6,13 @@ package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Site seal. */
+/**
+ * Site seal.
+ */
 @Fluent
 public final class SiteSealInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SiteSealInner.class);
-
     /*
      * HTML snippet
      */
@@ -21,8 +20,14 @@ public final class SiteSealInner {
     private String html;
 
     /**
+     * Creates an instance of SiteSealInner class.
+     */
+    public SiteSealInner() {
+    }
+
+    /**
      * Get the html property: HTML snippet.
-     *
+     * 
      * @return the html value.
      */
     public String html() {
@@ -31,7 +36,7 @@ public final class SiteSealInner {
 
     /**
      * Set the html property: HTML snippet.
-     *
+     * 
      * @param html the html value to set.
      * @return the SiteSealInner object itself.
      */
@@ -42,14 +47,15 @@ public final class SiteSealInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (html() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property html in model SiteSealInner"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property html in model SiteSealInner"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(SiteSealInner.class);
 }

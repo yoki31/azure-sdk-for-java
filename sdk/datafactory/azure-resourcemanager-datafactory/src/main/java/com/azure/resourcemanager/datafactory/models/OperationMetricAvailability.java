@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Defines how often data for a metric becomes available. */
+/**
+ * Defines how often data for a metric becomes available.
+ */
 @Fluent
 public final class OperationMetricAvailability {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationMetricAvailability.class);
-
     /*
      * The granularity for the metric.
      */
@@ -27,8 +25,14 @@ public final class OperationMetricAvailability {
     private String blobDuration;
 
     /**
+     * Creates an instance of OperationMetricAvailability class.
+     */
+    public OperationMetricAvailability() {
+    }
+
+    /**
      * Get the timeGrain property: The granularity for the metric.
-     *
+     * 
      * @return the timeGrain value.
      */
     public String timeGrain() {
@@ -37,7 +41,7 @@ public final class OperationMetricAvailability {
 
     /**
      * Set the timeGrain property: The granularity for the metric.
-     *
+     * 
      * @param timeGrain the timeGrain value to set.
      * @return the OperationMetricAvailability object itself.
      */
@@ -48,7 +52,7 @@ public final class OperationMetricAvailability {
 
     /**
      * Get the blobDuration property: Blob created in the customer storage account, per hour.
-     *
+     * 
      * @return the blobDuration value.
      */
     public String blobDuration() {
@@ -57,7 +61,7 @@ public final class OperationMetricAvailability {
 
     /**
      * Set the blobDuration property: Blob created in the customer storage account, per hour.
-     *
+     * 
      * @param blobDuration the blobDuration value to set.
      * @return the OperationMetricAvailability object itself.
      */
@@ -68,7 +72,7 @@ public final class OperationMetricAvailability {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

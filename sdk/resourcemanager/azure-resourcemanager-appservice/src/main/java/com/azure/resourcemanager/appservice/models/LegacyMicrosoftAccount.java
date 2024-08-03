@@ -5,25 +5,21 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The configuration settings of the legacy Microsoft Account provider. */
+/**
+ * The configuration settings of the legacy Microsoft Account provider.
+ */
 @Fluent
 public final class LegacyMicrosoftAccount {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(LegacyMicrosoftAccount.class);
-
     /*
-     * <code>false</code> if the legacy Microsoft Account provider should not
-     * be enabled despite the set registration; otherwise, <code>true</code>.
+     * <code>false</code> if the legacy Microsoft Account provider should not be enabled despite the set registration; otherwise, <code>true</code>.
      */
     @JsonProperty(value = "enabled")
     private Boolean enabled;
 
     /*
-     * The configuration settings of the app registration for the legacy
-     * Microsoft Account provider.
+     * The configuration settings of the app registration for the legacy Microsoft Account provider.
      */
     @JsonProperty(value = "registration")
     private ClientRegistration registration;
@@ -35,16 +31,21 @@ public final class LegacyMicrosoftAccount {
     private LoginScopes login;
 
     /*
-     * The configuration settings of the legacy Microsoft Account provider
-     * token validation flow.
+     * The configuration settings of the legacy Microsoft Account provider token validation flow.
      */
     @JsonProperty(value = "validation")
     private AllowedAudiencesValidation validation;
 
     /**
+     * Creates an instance of LegacyMicrosoftAccount class.
+     */
+    public LegacyMicrosoftAccount() {
+    }
+
+    /**
      * Get the enabled property: &lt;code&gt;false&lt;/code&gt; if the legacy Microsoft Account provider should not be
      * enabled despite the set registration; otherwise, &lt;code&gt;true&lt;/code&gt;.
-     *
+     * 
      * @return the enabled value.
      */
     public Boolean enabled() {
@@ -54,7 +55,7 @@ public final class LegacyMicrosoftAccount {
     /**
      * Set the enabled property: &lt;code&gt;false&lt;/code&gt; if the legacy Microsoft Account provider should not be
      * enabled despite the set registration; otherwise, &lt;code&gt;true&lt;/code&gt;.
-     *
+     * 
      * @param enabled the enabled value to set.
      * @return the LegacyMicrosoftAccount object itself.
      */
@@ -66,7 +67,7 @@ public final class LegacyMicrosoftAccount {
     /**
      * Get the registration property: The configuration settings of the app registration for the legacy Microsoft
      * Account provider.
-     *
+     * 
      * @return the registration value.
      */
     public ClientRegistration registration() {
@@ -76,7 +77,7 @@ public final class LegacyMicrosoftAccount {
     /**
      * Set the registration property: The configuration settings of the app registration for the legacy Microsoft
      * Account provider.
-     *
+     * 
      * @param registration the registration value to set.
      * @return the LegacyMicrosoftAccount object itself.
      */
@@ -87,7 +88,7 @@ public final class LegacyMicrosoftAccount {
 
     /**
      * Get the login property: The configuration settings of the login flow.
-     *
+     * 
      * @return the login value.
      */
     public LoginScopes login() {
@@ -96,7 +97,7 @@ public final class LegacyMicrosoftAccount {
 
     /**
      * Set the login property: The configuration settings of the login flow.
-     *
+     * 
      * @param login the login value to set.
      * @return the LegacyMicrosoftAccount object itself.
      */
@@ -108,7 +109,7 @@ public final class LegacyMicrosoftAccount {
     /**
      * Get the validation property: The configuration settings of the legacy Microsoft Account provider token validation
      * flow.
-     *
+     * 
      * @return the validation value.
      */
     public AllowedAudiencesValidation validation() {
@@ -118,7 +119,7 @@ public final class LegacyMicrosoftAccount {
     /**
      * Set the validation property: The configuration settings of the legacy Microsoft Account provider token validation
      * flow.
-     *
+     * 
      * @param validation the validation value to set.
      * @return the LegacyMicrosoftAccount object itself.
      */
@@ -129,7 +130,7 @@ public final class LegacyMicrosoftAccount {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

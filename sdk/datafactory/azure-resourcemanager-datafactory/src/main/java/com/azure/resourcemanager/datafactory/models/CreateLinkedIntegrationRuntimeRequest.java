@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The linked integration runtime information. */
+/**
+ * The linked integration runtime information.
+ */
 @Fluent
 public final class CreateLinkedIntegrationRuntimeRequest {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CreateLinkedIntegrationRuntimeRequest.class);
-
     /*
      * The name of the linked integration runtime.
      */
@@ -21,29 +19,32 @@ public final class CreateLinkedIntegrationRuntimeRequest {
     private String name;
 
     /*
-     * The ID of the subscription that the linked integration runtime belongs
-     * to.
+     * The ID of the subscription that the linked integration runtime belongs to.
      */
     @JsonProperty(value = "subscriptionId")
     private String subscriptionId;
 
     /*
-     * The name of the data factory that the linked integration runtime belongs
-     * to.
+     * The name of the data factory that the linked integration runtime belongs to.
      */
     @JsonProperty(value = "dataFactoryName")
     private String dataFactoryName;
 
     /*
-     * The location of the data factory that the linked integration runtime
-     * belongs to.
+     * The location of the data factory that the linked integration runtime belongs to.
      */
     @JsonProperty(value = "dataFactoryLocation")
     private String dataFactoryLocation;
 
     /**
+     * Creates an instance of CreateLinkedIntegrationRuntimeRequest class.
+     */
+    public CreateLinkedIntegrationRuntimeRequest() {
+    }
+
+    /**
      * Get the name property: The name of the linked integration runtime.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -52,7 +53,7 @@ public final class CreateLinkedIntegrationRuntimeRequest {
 
     /**
      * Set the name property: The name of the linked integration runtime.
-     *
+     * 
      * @param name the name value to set.
      * @return the CreateLinkedIntegrationRuntimeRequest object itself.
      */
@@ -63,7 +64,7 @@ public final class CreateLinkedIntegrationRuntimeRequest {
 
     /**
      * Get the subscriptionId property: The ID of the subscription that the linked integration runtime belongs to.
-     *
+     * 
      * @return the subscriptionId value.
      */
     public String subscriptionId() {
@@ -72,7 +73,7 @@ public final class CreateLinkedIntegrationRuntimeRequest {
 
     /**
      * Set the subscriptionId property: The ID of the subscription that the linked integration runtime belongs to.
-     *
+     * 
      * @param subscriptionId the subscriptionId value to set.
      * @return the CreateLinkedIntegrationRuntimeRequest object itself.
      */
@@ -83,7 +84,7 @@ public final class CreateLinkedIntegrationRuntimeRequest {
 
     /**
      * Get the dataFactoryName property: The name of the data factory that the linked integration runtime belongs to.
-     *
+     * 
      * @return the dataFactoryName value.
      */
     public String dataFactoryName() {
@@ -92,7 +93,7 @@ public final class CreateLinkedIntegrationRuntimeRequest {
 
     /**
      * Set the dataFactoryName property: The name of the data factory that the linked integration runtime belongs to.
-     *
+     * 
      * @param dataFactoryName the dataFactoryName value to set.
      * @return the CreateLinkedIntegrationRuntimeRequest object itself.
      */
@@ -104,7 +105,7 @@ public final class CreateLinkedIntegrationRuntimeRequest {
     /**
      * Get the dataFactoryLocation property: The location of the data factory that the linked integration runtime
      * belongs to.
-     *
+     * 
      * @return the dataFactoryLocation value.
      */
     public String dataFactoryLocation() {
@@ -114,7 +115,7 @@ public final class CreateLinkedIntegrationRuntimeRequest {
     /**
      * Set the dataFactoryLocation property: The location of the data factory that the linked integration runtime
      * belongs to.
-     *
+     * 
      * @param dataFactoryLocation the dataFactoryLocation value to set.
      * @return the CreateLinkedIntegrationRuntimeRequest object itself.
      */
@@ -125,7 +126,7 @@ public final class CreateLinkedIntegrationRuntimeRequest {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

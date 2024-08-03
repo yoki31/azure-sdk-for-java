@@ -6,19 +6,18 @@ package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Defines the parameters for the cache expiration action. */
+/**
+ * Defines the parameters for the cache expiration action.
+ */
 @Fluent
 public final class CacheExpirationActionParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CacheExpirationActionParameters.class);
-
     /*
-     * The @odata.type property.
+     * The typeName property.
      */
-    @JsonProperty(value = "@odata.type", required = true)
-    private String odataType;
+    @JsonProperty(value = "typeName", required = true)
+    private String typeName = "DeliveryRuleCacheExpirationActionParameters";
 
     /*
      * Caching behavior for the requests
@@ -33,40 +32,40 @@ public final class CacheExpirationActionParameters {
     private CacheType cacheType;
 
     /*
-     * The duration for which the content needs to be cached. Allowed format is
-     * [d.]hh:mm:ss
+     * The duration for which the content needs to be cached. Allowed format is [d.]hh:mm:ss
      */
     @JsonProperty(value = "cacheDuration")
     private String cacheDuration;
 
-    /** Creates an instance of CacheExpirationActionParameters class. */
-    public CacheExpirationActionParameters() {
-        odataType = "#Microsoft.Azure.Cdn.Models.DeliveryRuleCacheExpirationActionParameters";
-    }
-
     /**
-     * Get the odataType property: The @odata.type property.
-     *
-     * @return the odataType value.
+     * Creates an instance of CacheExpirationActionParameters class.
      */
-    public String odataType() {
-        return this.odataType;
+    public CacheExpirationActionParameters() {
     }
 
     /**
-     * Set the odataType property: The @odata.type property.
-     *
-     * @param odataType the odataType value to set.
+     * Get the typeName property: The typeName property.
+     * 
+     * @return the typeName value.
+     */
+    public String typeName() {
+        return this.typeName;
+    }
+
+    /**
+     * Set the typeName property: The typeName property.
+     * 
+     * @param typeName the typeName value to set.
      * @return the CacheExpirationActionParameters object itself.
      */
-    public CacheExpirationActionParameters withOdataType(String odataType) {
-        this.odataType = odataType;
+    public CacheExpirationActionParameters withTypeName(String typeName) {
+        this.typeName = typeName;
         return this;
     }
 
     /**
      * Get the cacheBehavior property: Caching behavior for the requests.
-     *
+     * 
      * @return the cacheBehavior value.
      */
     public CacheBehavior cacheBehavior() {
@@ -75,7 +74,7 @@ public final class CacheExpirationActionParameters {
 
     /**
      * Set the cacheBehavior property: Caching behavior for the requests.
-     *
+     * 
      * @param cacheBehavior the cacheBehavior value to set.
      * @return the CacheExpirationActionParameters object itself.
      */
@@ -86,7 +85,7 @@ public final class CacheExpirationActionParameters {
 
     /**
      * Get the cacheType property: The level at which the content needs to be cached.
-     *
+     * 
      * @return the cacheType value.
      */
     public CacheType cacheType() {
@@ -95,7 +94,7 @@ public final class CacheExpirationActionParameters {
 
     /**
      * Set the cacheType property: The level at which the content needs to be cached.
-     *
+     * 
      * @param cacheType the cacheType value to set.
      * @return the CacheExpirationActionParameters object itself.
      */
@@ -107,7 +106,7 @@ public final class CacheExpirationActionParameters {
     /**
      * Get the cacheDuration property: The duration for which the content needs to be cached. Allowed format is
      * [d.]hh:mm:ss.
-     *
+     * 
      * @return the cacheDuration value.
      */
     public String cacheDuration() {
@@ -117,7 +116,7 @@ public final class CacheExpirationActionParameters {
     /**
      * Set the cacheDuration property: The duration for which the content needs to be cached. Allowed format is
      * [d.]hh:mm:ss.
-     *
+     * 
      * @param cacheDuration the cacheDuration value to set.
      * @return the CacheExpirationActionParameters object itself.
      */
@@ -128,21 +127,19 @@ public final class CacheExpirationActionParameters {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (cacheBehavior() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property cacheBehavior in model CacheExpirationActionParameters"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property cacheBehavior in model CacheExpirationActionParameters"));
         }
         if (cacheType() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property cacheType in model CacheExpirationActionParameters"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property cacheType in model CacheExpirationActionParameters"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(CacheExpirationActionParameters.class);
 }

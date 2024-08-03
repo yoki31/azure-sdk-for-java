@@ -7,7 +7,6 @@ package com.azure.resourcemanager.monitor.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.monitor.fluent.models.LocalizableStringInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
@@ -17,8 +16,6 @@ import java.util.List;
  */
 @Fluent
 public final class EventCategoryCollection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(EventCategoryCollection.class);
-
     /*
      * the list that includes the Azure event categories.
      */
@@ -26,8 +23,14 @@ public final class EventCategoryCollection {
     private List<LocalizableStringInner> value;
 
     /**
+     * Creates an instance of EventCategoryCollection class.
+     */
+    public EventCategoryCollection() {
+    }
+
+    /**
      * Get the value property: the list that includes the Azure event categories.
-     *
+     * 
      * @return the value value.
      */
     public List<LocalizableStringInner> value() {
@@ -36,7 +39,7 @@ public final class EventCategoryCollection {
 
     /**
      * Set the value property: the list that includes the Azure event categories.
-     *
+     * 
      * @param value the value value to set.
      * @return the EventCategoryCollection object itself.
      */
@@ -47,16 +50,17 @@ public final class EventCategoryCollection {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property value in model EventCategoryCollection"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property value in model EventCategoryCollection"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(EventCategoryCollection.class);
 }

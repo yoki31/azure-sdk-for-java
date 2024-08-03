@@ -9,8 +9,14 @@ import com.azure.core.http.policy.HttpLogOptions;
 import com.azure.core.http.policy.HttpPipelinePolicy;
 import com.azure.core.http.policy.RetryPolicy;
 import com.azure.core.http.rest.PagedIterable;
+import com.azure.core.management.Region;
 import com.azure.core.management.exception.ManagementException;
+import com.azure.core.management.profile.AzureProfile;
 import com.azure.core.test.annotation.DoNotRecord;
+import com.azure.core.test.models.TestProxySanitizer;
+import com.azure.core.test.models.TestProxySanitizerType;
+import com.azure.core.util.logging.ClientLogger;
+import com.azure.core.util.logging.LogLevel;
 import com.azure.resourcemanager.authorization.models.BuiltInRole;
 import com.azure.resourcemanager.compute.models.CachingTypes;
 import com.azure.resourcemanager.compute.models.Disk;
@@ -47,28 +53,33 @@ import com.azure.resourcemanager.network.models.SecurityGroupView;
 import com.azure.resourcemanager.network.models.Subnet;
 import com.azure.resourcemanager.network.models.Topology;
 import com.azure.resourcemanager.network.models.VerificationIPFlow;
-import com.azure.resourcemanager.resources.fluentcore.arm.implementation.AzureConfigurableImpl;
-import com.azure.resourcemanager.resources.fluentcore.model.CreatedResources;
-import com.azure.resourcemanager.resources.models.LockLevel;
-import com.azure.resourcemanager.resources.models.ManagementLock;
-import com.azure.resourcemanager.resources.models.ResourceGroup;
-import com.azure.resourcemanager.storage.models.StorageAccountSkuType;
-import com.azure.resourcemanager.test.utils.TestUtilities;
 import com.azure.resourcemanager.resources.fluentcore.arm.CountryIsoCode;
-import com.azure.core.management.Region;
 import com.azure.resourcemanager.resources.fluentcore.model.Creatable;
-import com.azure.core.management.profile.AzureProfile;
+import com.azure.resourcemanager.resources.fluentcore.model.CreatedResources;
 import com.azure.resourcemanager.resources.fluentcore.utils.HttpPipelineProvider;
 import com.azure.resourcemanager.resources.fluentcore.utils.ResourceManagerUtils;
 import com.azure.resourcemanager.resources.models.Deployment;
 import com.azure.resourcemanager.resources.models.DeploymentMode;
 import com.azure.resourcemanager.resources.models.GenericResource;
 import com.azure.resourcemanager.resources.models.Location;
+import com.azure.resourcemanager.resources.models.LockLevel;
+import com.azure.resourcemanager.resources.models.ManagementLock;
 import com.azure.resourcemanager.resources.models.RegionCategory;
 import com.azure.resourcemanager.resources.models.RegionType;
+import com.azure.resourcemanager.resources.models.ResourceGroup;
 import com.azure.resourcemanager.resources.models.Subscription;
 import com.azure.resourcemanager.storage.models.StorageAccount;
-import java.io.IOException;
+import com.azure.resourcemanager.storage.models.StorageAccountSkuType;
+import com.azure.resourcemanager.test.ResourceManagerTestProxyTestBase;
+import com.azure.resourcemanager.test.utils.TestDelayProvider;
+import com.azure.resourcemanager.test.utils.TestIdentifierProvider;
+import com.azure.resourcemanager.test.utils.TestUtilities;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Schedulers;
+
 import java.text.MessageFormat;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -83,17 +94,18 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import com.azure.resourcemanager.test.ResourceManagerTestBase;
-import com.azure.resourcemanager.test.utils.TestDelayProvider;
-import com.azure.resourcemanager.test.utils.TestIdentifierProvider;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-import reactor.core.publisher.Flux;
-import reactor.core.scheduler.Schedulers;
+public class AzureResourceManagerTests extends ResourceManagerTestProxyTestBase {
+    private static final ClientLogger LOGGER = new ClientLogger(AzureResourceManagerTests.class);
 
-public class AzureResourceManagerTests extends ResourceManagerTestBase {
     private AzureResourceManager azureResourceManager;
+
+    public AzureResourceManagerTests() {
+        addSanitizers(
+            // Search key
+            new TestProxySanitizer("$.key", null, REDACTED_VALUE, TestProxySanitizerType.BODY_KEY),
+            new TestProxySanitizer("$.value[*].key", null, REDACTED_VALUE, TestProxySanitizerType.BODY_KEY)
+        );
+    }
 
     @Override
     protected HttpPipeline buildHttpPipeline(
@@ -118,9 +130,7 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
         ResourceManagerUtils.InternalRuntimeContext.setDelayProvider(new TestDelayProvider(!isPlaybackMode()));
         ResourceManagerUtils.InternalRuntimeContext internalContext = new ResourceManagerUtils.InternalRuntimeContext();
         internalContext.setIdentifierFunction(name -> new TestIdentifierProvider(testResourceNamer));
-        AzureResourceManager.Configurable configurable = AzureResourceManager.configure();
-        ((AzureConfigurableImpl) configurable).withHttpPipeline(httpPipeline);
-        azureResourceManager = configurable.authenticate(null, profile).withDefaultSubscription();
+        azureResourceManager = AzureResourceManager.authenticate(httpPipeline, profile).withDefaultSubscription();
         setInternalContext(internalContext, azureResourceManager);
     }
 
@@ -131,7 +141,6 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Stress-tests the resilience of ExpandableEnum to multi-threaded access
      *
-     * @throws Exception
      */
     @Test
     public void testExpandableEnum() throws Exception {
@@ -216,17 +225,17 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
 
         // Verify country ISO codes
         Collection<CountryIsoCode> countryIsoCodes = CountryIsoCode.values();
-        System.out.println("\n## Country ISO codes: " + countryIsoCodes.size());
+        LOGGER.log(LogLevel.VERBOSE, () -> "\n## Country ISO codes: " + countryIsoCodes.size());
         for (CountryIsoCode value : countryIsoCodes) {
-            System.out.println(value.toString());
+            LOGGER.log(LogLevel.VERBOSE, value::toString);
         }
         Assertions.assertEquals(257, countryIsoCodes.size());
 
         // Verify power states
         Collection<PowerState> powerStates = PowerState.values();
-        System.out.println("\n## Power states: " + powerStates.size());
+        LOGGER.log(LogLevel.VERBOSE, () -> "\n## Power states: " + powerStates.size());
         for (PowerState value : powerStates) {
-            System.out.println(value.toString());
+            LOGGER.log(LogLevel.VERBOSE, value::toString);
         }
         Assertions.assertEquals(27, powerStates.size());
     }
@@ -238,14 +247,13 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests ARM template deployments.
      *
-     * @throws IOException
-     * @throws ManagementException
      */
+    @DoNotRecord(skipInPlayback = true) // response contains token in hostpoolToken
     @Test
-    public void testDeployments() throws Exception {
+    public void testDeployments() {
         String testId = azureResourceManager.deployments().manager().resourceManager().internalContext().randomResourceName("", 8);
         PagedIterable<Deployment> deployments = azureResourceManager.deployments().list();
-        System.out.println("Deployments: " + TestUtilities.getSize(deployments));
+        LOGGER.log(LogLevel.VERBOSE, () -> "Deployments: " + TestUtilities.getSize(deployments));
         Deployment deployment =
             azureResourceManager
                 .deployments()
@@ -255,7 +263,7 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
                 .withParametersLink(PARAMETERS_URI, CONTENT_VERSION)
                 .withMode(DeploymentMode.COMPLETE)
                 .create();
-        System.out.println("Created deployment: " + deployment.correlationId());
+        LOGGER.log(LogLevel.VERBOSE, () -> "Created deployment: " + deployment.correlationId());
 
         azureResourceManager.resourceGroups().beginDeleteByName("rg" + testId);
     }
@@ -263,10 +271,9 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests basic generic resources retrieval.
      *
-     * @throws Exception
      */
     @Test
-    public void testGenericResources() throws Exception {
+    public void testGenericResources() {
         // Create some resources
         NetworkSecurityGroup nsg =
             azureResourceManager
@@ -304,12 +311,11 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
      * Tests management locks.
      * NOTE: This requires the service principal to have an Owner role on the subscription
      *
-     * @throws Exception
      */
     @Test
-    public void testManagementLocks() throws Exception {
+    public void testManagementLocks() {
         // Prepare a VM
-        final String password = ResourceManagerTestBase.password();
+        final String password = ResourceManagerTestProxyTestBase.password();
         final String rgName = generateRandomResourceName("rg", 15);
         final String vmName = generateRandomResourceName("vm", 15);
         final String storageName = generateRandomResourceName("st", 15);
@@ -479,14 +485,14 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
             Assertions.assertNotNull(locksGroup);
 
             int locksAllCount = TestUtilities.getSize(locksSubscription);
-            System.out.println("All locks: " + locksAllCount);
+            LOGGER.log(LogLevel.VERBOSE, () -> "All locks: " + locksAllCount);
             Assertions.assertTrue(6 <= locksAllCount);
 
             int locksGroupCount = TestUtilities.getSize(locksGroup);
-            System.out.println("Group locks: " + locksGroupCount);
+            LOGGER.log(LogLevel.VERBOSE, () -> "Group locks: " + locksGroupCount);
             Assertions.assertEquals(6, locksGroupCount);
         } catch (Exception ex) {
-            ex.printStackTrace(System.out);
+            LOGGER.log(LogLevel.VERBOSE, () -> "Error occurred", ex);
         } finally {
             if (resourceGroup != null) {
                 if (lockGroup != null) {
@@ -516,21 +522,19 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests VM images.
      *
-     * @throws IOException
-     * @throws ManagementException
      */
     @DoNotRecord(skipInPlayback = true)
     @Test
-    public void testVMImages() throws ManagementException, IOException {
+    public void testVMImages() throws ManagementException {
         PagedIterable<VirtualMachinePublisher> publishers =
             azureResourceManager.virtualMachineImages().publishers().listByRegion(Region.US_WEST);
         Assertions.assertTrue(TestUtilities.getSize(publishers) > 0);
         for (VirtualMachinePublisher p : publishers.stream().limit(5).toArray(VirtualMachinePublisher[]::new)) {
-            System.out.println(String.format("Publisher name: %s, region: %s", p.name(), p.region()));
+            LOGGER.log(LogLevel.VERBOSE, () -> "Publisher name: " + p.name() + ", region: " + p.region());
             for (VirtualMachineOffer o : p.offers().list().stream().limit(5).toArray(VirtualMachineOffer[]::new)) {
-                System.out.println(String.format("\tOffer name: %s", o.name()));
+                LOGGER.log(LogLevel.VERBOSE, () -> "\tOffer name: " + o.name());
                 for (VirtualMachineSku s : o.skus().list().stream().limit(5).toArray(VirtualMachineSku[]::new)) {
-                    System.out.println(String.format("\t\tSku name: %s", s.name()));
+                    LOGGER.log(LogLevel.VERBOSE, () -> "\t\tSku name: " + s.name());
                 }
             }
         }
@@ -544,7 +548,6 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests the network security group implementation.
      *
-     * @throws Exception
      */
     @Test
     public void testNetworkSecurityGroups() throws Exception {
@@ -554,8 +557,8 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests the inbound NAT rule support in load balancers.
      *
-     * @throws Exception
      */
+    @DoNotRecord(skipInPlayback = true) // TODO(weidxu)
     @Test
     public void testLoadBalancersNatRules() throws Exception {
         new TestLoadBalancer().new InternetWithNatRule(azureResourceManager.virtualMachines().manager())
@@ -565,8 +568,8 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests the inbound NAT pool support in load balancers.
      *
-     * @throws Exception
      */
+    @DoNotRecord(skipInPlayback = true) // TODO(weidxu)
     @Test
     public void testLoadBalancersNatPools() throws Exception {
         new TestLoadBalancer().new InternetWithNatPool(azureResourceManager.virtualMachines().manager())
@@ -576,7 +579,6 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests the minimum Internet-facing load balancer with a load balancing rule only
      *
-     * @throws Exception
      */
     @Test
     public void testLoadBalancersInternetMinimum() throws Exception {
@@ -587,7 +589,6 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests the minimum Internet-facing load balancer with a NAT rule only
      *
-     * @throws Exception
      */
     @Test
     public void testLoadBalancersNatOnly() throws Exception {
@@ -598,7 +599,6 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests the minimum internal load balancer.
      *
-     * @throws Exception
      */
     @Test
     public void testLoadBalancersInternalMinimum() throws Exception {
@@ -609,7 +609,6 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests the internal load balancer with availability zone.
      *
-     * @throws Exception
      */
     @Test
     @Disabled("Though valid scenario, NRP is failing")
@@ -619,7 +618,7 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     }
 
     @Test
-    public void testManagedDiskVMUpdate() throws Exception {
+    public void testManagedDiskVMUpdate() {
         ResourceManagerUtils.InternalRuntimeContext context = azureResourceManager.disks().manager().resourceManager().internalContext();
         final String rgName = context.randomResourceName("rg", 13);
         final String linuxVM2Name = context.randomResourceName("vm" + "-", 10);
@@ -651,7 +650,6 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests the public IP address implementation.
      *
-     * @throws Exception
      */
     @Test
     public void testPublicIPAddresses() throws Exception {
@@ -661,7 +659,6 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests the public IP address implementation.
      *
-     * @throws Exception
      */
     @Test
     public void testPublicIPPrefixes() throws Exception {
@@ -671,7 +668,6 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests the availability set implementation.
      *
-     * @throws Exception
      */
     @Test
     public void testAvailabilitySets() throws Exception {
@@ -681,7 +677,6 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests the virtual network implementation.
      *
-     * @throws Exception
      */
     @Test
     public void testNetworks() throws Exception {
@@ -691,7 +686,6 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests virtual network peering
      *
-     * @throws Exception
      */
     @Test
     public void testNetworkWithAccessFromServiceToSubnet() throws Exception {
@@ -701,7 +695,6 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests virtual network peering
      *
-     * @throws Exception
      */
     @Test
     public void testNetworkPeerings() throws Exception {
@@ -711,7 +704,6 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests virtual network with DDoS protection plan
      *
-     * @throws Exception
      */
     @Test
     public void testDdosAndVmProtection() throws Exception {
@@ -721,7 +713,6 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests updateTags for virtual network.
      *
-     * @throws Exception
      */
     @Test
     public void testNetworkUpdateTags() throws Exception {
@@ -731,7 +722,6 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests route tables.
      *
-     * @throws Exception
      */
     @Test
     public void testRouteTables() throws Exception {
@@ -742,16 +732,16 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     @Test
     public void testRegions() {
         // Show built-in regions
-        System.out.println("Built-in regions list:");
+        LOGGER.log(LogLevel.VERBOSE, () -> "Built-in regions list:");
         int regionsCount = Region.values().size();
 
         for (Region region : Region.values()) {
-            System.out.println("Name: " + region.name() + ", Label: " + region.label());
+            LOGGER.log(LogLevel.VERBOSE, () -> "Name: " + region.name() + ", Label: " + region.label());
         }
 
         // Look up built-in region
         Region region = Region.fromName("westus");
-        Assertions.assertTrue(region == Region.US_WEST);
+        Assertions.assertSame(region, Region.US_WEST);
 
         // Add a region
         Region region2 = Region.fromName("madeUpRegion");
@@ -765,7 +755,6 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests the network interface implementation.
      *
-     * @throws Exception
      */
     @Test
     public void testNetworkInterfaces() throws Exception {
@@ -775,7 +764,6 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests the network watcher implementation.
      *
-     * @throws Exception
      */
     @Test
     public void testNetworkWatchers() throws Exception {
@@ -849,7 +837,7 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
                 .withRetentionPolicyDays(5)
                 .withRetentionPolicyEnabled()
                 .apply();
-            Assertions.assertEquals(true, flowLogSettings.enabled());
+            Assertions.assertTrue(flowLogSettings.enabled());
             Assertions.assertEquals(5, flowLogSettings.retentionDays());
             Assertions.assertEquals(storageAccount.id(), flowLogSettings.storageId());
 
@@ -935,8 +923,8 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests the local network gateway implementation.
      *
-     * @throws Exception
      */
+    @DoNotRecord(skipInPlayback = true) // TODO(weidxu)
     @Test
     public void testLocalNetworkGateways() throws Exception {
         new TestLocalNetworkGateway().runTest(azureResourceManager.localNetworkGateways(), azureResourceManager.resourceGroups());
@@ -945,7 +933,6 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests the express route circuit implementation.
      *
-     * @throws Exception
      */
     @Test
     @Disabled("Failed to provision ExpressRoute circuit as the service provider does not have sufficient capacity at this location.")
@@ -956,7 +943,6 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests the express route circuit peerings implementation.
      *
-     * @throws Exception
      */
     @Test
     @Disabled("Failed to provision ExpressRoute circuit as the service provider does not have sufficient capacity at this location.")
@@ -968,7 +954,6 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests virtual machines.
      *
-     * @throws Exception
      */
     @Test
     @Disabled("osDiskSize is returned as 127 instead of 128 - known service bug")
@@ -981,7 +966,6 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests the virtual machine data disk implementation.
      *
-     * @throws Exception
      */
     @Test
     public void testVirtualMachineDataDisk() throws Exception {
@@ -991,7 +975,6 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests the virtual machine network interface implementation.
      *
-     * @throws Exception
      */
     @Test
     public void testVirtualMachineNics() throws Exception {
@@ -1001,7 +984,6 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests virtual machine support for SSH.
      *
-     * @throws Exception
      */
     @Test
     public void testVirtualMachineSSh() throws Exception {
@@ -1011,7 +993,6 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests virtual machine sizes.
      *
-     * @throws Exception
      */
     @Test
     public void testVirtualMachineSizes() throws Exception {
@@ -1038,23 +1019,23 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests subscription listing.
      *
-     * @throws Exception
      */
     @Test
-    public void listSubscriptions() throws Exception {
+    public void listSubscriptions() {
         Assertions.assertTrue(0 < TestUtilities.getSize(azureResourceManager.subscriptions().list()));
         Subscription subscription = azureResourceManager.getCurrentSubscription();
         Assertions.assertNotNull(subscription);
-        Assertions.assertTrue(azureResourceManager.subscriptionId().equalsIgnoreCase(subscription.subscriptionId()));
+        if (!isPlaybackMode()) {
+            Assertions.assertTrue(azureResourceManager.subscriptionId().equalsIgnoreCase(subscription.subscriptionId()));
+        }
     }
 
     /**
      * Tests location listing.
      *
-     * @throws Exception
      */
     @Test
-    public void listLocations() throws Exception {
+    public void listLocations() {
         Subscription subscription = azureResourceManager.getCurrentSubscription();
         Assertions.assertNotNull(subscription);
         for (Location location : subscription.listLocations()) {
@@ -1072,27 +1053,25 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     /**
      * Tests resource group listing.
      *
-     * @throws Exception
      */
     @Test
-    public void listResourceGroups() throws Exception {
+    public void listResourceGroups() {
         int groupCount = TestUtilities.getSize(azureResourceManager.resourceGroups().list());
-        System.out.println(String.format("Group count: %s", groupCount));
+        LOGGER.log(LogLevel.VERBOSE, () -> "Group count: " + groupCount);
         Assertions.assertTrue(0 < groupCount);
     }
 
     /**
      * Tests storage account listing.
      *
-     * @throws Exception
      */
     @Test
-    public void listStorageAccounts() throws Exception {
+    public void listStorageAccounts() {
         Assertions.assertTrue(0 < TestUtilities.getSize(azureResourceManager.storageAccounts().list()));
     }
 
     @Test
-    public void createStorageAccount() throws Exception {
+    public void createStorageAccount() {
         String storageAccountName = generateRandomResourceName("testsa", 12);
         StorageAccount storageAccount =
             azureResourceManager
@@ -1115,7 +1094,7 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
 
     @Test
     public void testTrafficManager() throws Exception {
-        new TestTrafficManager(azureResourceManager.publicIpAddresses())
+        new TestTrafficManager(azureResourceManager.publicIpAddresses(), isPlaybackMode())
                 .runTest(azureResourceManager.trafficManagerProfiles(), azureResourceManager.resourceGroups());
     }
 
@@ -1158,11 +1137,11 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
     @Test
     public void testContainerInstanceWithPublicIpAddressWithSystemAssignedMsi() throws Exception {
         new TestContainerInstanceWithPublicIpAddressWithSystemAssignedMSI()
-            .runTest(azureResourceManager.containerGroups(), azureResourceManager.resourceGroups(), azureResourceManager.subscriptionId());
+            .runTest(azureResourceManager.containerGroups(), azureResourceManager.resourceGroups());
     }
 
     @Test
-    public void testContainerInstanceWithPublicIpAddressWithUserAssignedMsi() throws Exception {
+    public void testContainerInstanceWithPublicIpAddressWithUserAssignedMsi() {
         final String cgName = generateRandomResourceName("aci", 10);
         final String rgName = generateRandomResourceName("rgaci", 10);
         String identityName1 = generateRandomResourceName("msi-id", 15);
@@ -1185,7 +1164,7 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
                 .withExistingResourceGroup(rgName)
                 .withAccessToCurrentResourceGroup(BuiltInRole.CONTRIBUTOR);
 
-        List<String> dnsServers = new ArrayList<String>();
+        List<String> dnsServers = new ArrayList<>();
         dnsServers.add("dnsServer1");
         ContainerGroup containerGroup =
             azureResourceManager
@@ -1270,14 +1249,14 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
 
         List<ContainerGroup> containerGroupList =
             azureResourceManager.containerGroups().listByResourceGroup(rgName).stream().collect(Collectors.toList());
-        Assertions.assertTrue(containerGroupList.size() > 0);
+        Assertions.assertFalse(containerGroupList.isEmpty());
 
         containerGroup.refresh();
 
         Set<Operation> containerGroupOperations =
             azureResourceManager.containerGroups().listOperations().stream().collect(Collectors.toSet());
         // Number of supported operation can change hence don't assert with a predefined number.
-        Assertions.assertTrue(containerGroupOperations.size() > 0);
+        Assertions.assertFalse(containerGroupOperations.isEmpty());
     }
 
     @Test
@@ -1285,6 +1264,7 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
         new TestContainerRegistry().runTest(azureResourceManager.containerRegistries(), azureResourceManager.resourceGroups());
     }
 
+    @Disabled("Often encounters service does not have enough resource in target region. cosmos module should have similar tests.")
     @Test
     public void testCosmosDB() throws Exception {
         new TestCosmosDB().runTest(azureResourceManager.cosmosDBAccounts(), azureResourceManager.resourceGroups());
@@ -1308,6 +1288,8 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
                 .runTest(azureResourceManager.searchServices(), azureResourceManager.resourceGroups());
     }
 
+    // secret in URL on API deleteQueryKey
+    @DoNotRecord(skipInPlayback = true)
     @Test
     public void testSearchServiceAnySku() throws Exception {
         new TestSearchService.SearchServiceAnySku()
@@ -1370,7 +1352,7 @@ public class AzureResourceManagerTests extends ResourceManagerTestBase {
             }
         }
 
-        Assertions.assertTrue(sb.length() == 0, sb.toString());
+        Assertions.assertEquals(0, sb.length(), sb.toString());
     }
 
     private static Region findByLabelOrName(String labelOrName) {

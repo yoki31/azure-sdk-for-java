@@ -4,7 +4,6 @@
 
 package com.azure.resourcemanager.applicationinsights.generated;
 
-import com.azure.core.util.Context;
 import com.azure.resourcemanager.applicationinsights.models.ComponentPurgeBody;
 import com.azure.resourcemanager.applicationinsights.models.ComponentPurgeBodyFilters;
 import java.util.Arrays;
@@ -12,7 +11,7 @@ import java.util.Arrays;
 /** Samples for Components Purge. */
 public final class ComponentsPurgeSamples {
     /*
-     * x-ms-original-file: specification/applicationinsights/resource-manager/Microsoft.Insights/preview/2018-05-01-preview/examples/ComponentsPurge.json
+     * x-ms-original-file: specification/applicationinsights/resource-manager/Microsoft.Insights/stable/2020-02-02/examples/ComponentsPurge.json
      */
     /**
      * Sample code: ComponentPurge.
@@ -35,6 +34,6 @@ public final class ComponentsPurgeSamples {
                                     .withColumn("TimeGenerated")
                                     .withOperator(">")
                                     .withValue("2017-09-01T00:00:00"))),
-                Context.NONE);
+                com.azure.core.util.Context.NONE);
     }
 }

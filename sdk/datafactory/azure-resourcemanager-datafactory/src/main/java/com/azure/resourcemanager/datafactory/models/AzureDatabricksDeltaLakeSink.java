@@ -5,22 +5,31 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** A copy activity Azure Databricks Delta Lake sink. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * A copy activity Azure Databricks Delta Lake sink.
+ */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "type",
+    defaultImpl = AzureDatabricksDeltaLakeSink.class,
+    visible = true)
 @JsonTypeName("AzureDatabricksDeltaLakeSink")
 @Fluent
 public final class AzureDatabricksDeltaLakeSink extends CopySink {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureDatabricksDeltaLakeSink.class);
+    /*
+     * Copy sink type.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "AzureDatabricksDeltaLakeSink";
 
     /*
-     * SQL pre-copy script. Type: string (or Expression with resultType
-     * string).
+     * SQL pre-copy script. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "preCopyScript")
     private Object preCopyScript;
@@ -32,8 +41,24 @@ public final class AzureDatabricksDeltaLakeSink extends CopySink {
     private AzureDatabricksDeltaLakeImportCommand importSettings;
 
     /**
+     * Creates an instance of AzureDatabricksDeltaLakeSink class.
+     */
+    public AzureDatabricksDeltaLakeSink() {
+    }
+
+    /**
+     * Get the type property: Copy sink type.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the preCopyScript property: SQL pre-copy script. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the preCopyScript value.
      */
     public Object preCopyScript() {
@@ -42,7 +67,7 @@ public final class AzureDatabricksDeltaLakeSink extends CopySink {
 
     /**
      * Set the preCopyScript property: SQL pre-copy script. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param preCopyScript the preCopyScript value to set.
      * @return the AzureDatabricksDeltaLakeSink object itself.
      */
@@ -53,7 +78,7 @@ public final class AzureDatabricksDeltaLakeSink extends CopySink {
 
     /**
      * Get the importSettings property: Azure Databricks Delta Lake import settings.
-     *
+     * 
      * @return the importSettings value.
      */
     public AzureDatabricksDeltaLakeImportCommand importSettings() {
@@ -62,7 +87,7 @@ public final class AzureDatabricksDeltaLakeSink extends CopySink {
 
     /**
      * Set the importSettings property: Azure Databricks Delta Lake import settings.
-     *
+     * 
      * @param importSettings the importSettings value to set.
      * @return the AzureDatabricksDeltaLakeSink object itself.
      */
@@ -71,42 +96,54 @@ public final class AzureDatabricksDeltaLakeSink extends CopySink {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureDatabricksDeltaLakeSink withWriteBatchSize(Object writeBatchSize) {
         super.withWriteBatchSize(writeBatchSize);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureDatabricksDeltaLakeSink withWriteBatchTimeout(Object writeBatchTimeout) {
         super.withWriteBatchTimeout(writeBatchTimeout);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureDatabricksDeltaLakeSink withSinkRetryCount(Object sinkRetryCount) {
         super.withSinkRetryCount(sinkRetryCount);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureDatabricksDeltaLakeSink withSinkRetryWait(Object sinkRetryWait) {
         super.withSinkRetryWait(sinkRetryWait);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureDatabricksDeltaLakeSink withMaxConcurrentConnections(Object maxConcurrentConnections) {
         super.withMaxConcurrentConnections(maxConcurrentConnections);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureDatabricksDeltaLakeSink withDisableMetricsCollection(Object disableMetricsCollection) {
         super.withDisableMetricsCollection(disableMetricsCollection);
@@ -115,7 +152,7 @@ public final class AzureDatabricksDeltaLakeSink extends CopySink {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

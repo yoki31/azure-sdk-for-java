@@ -19,7 +19,32 @@ import com.azure.resourcemanager.synapse.models.UpdateIntegrationRuntimeRequest;
 /** An instance of this class provides access to all the operations defined in IntegrationRuntimesClient. */
 public interface IntegrationRuntimesClient {
     /**
-     * Update an integration runtime.
+     * Update integration runtime
+     *
+     * <p>Update an integration runtime.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param integrationRuntimeName Integration runtime name.
+     * @param updateIntegrationRuntimeRequest The parameters for updating an integration runtime.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return integration runtime resource type along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<IntegrationRuntimeResourceInner> updateWithResponse(
+        String resourceGroupName,
+        String workspaceName,
+        String integrationRuntimeName,
+        UpdateIntegrationRuntimeRequest updateIntegrationRuntimeRequest,
+        Context context);
+
+    /**
+     * Update integration runtime
+     *
+     * <p>Update an integration runtime.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -38,28 +63,33 @@ public interface IntegrationRuntimesClient {
         UpdateIntegrationRuntimeRequest updateIntegrationRuntimeRequest);
 
     /**
-     * Update an integration runtime.
+     * Get integration runtime
+     *
+     * <p>Get an integration runtime.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param integrationRuntimeName Integration runtime name.
-     * @param updateIntegrationRuntimeRequest The parameters for updating an integration runtime.
+     * @param ifNoneMatch ETag of the integration runtime entity. Should only be specified for get. If the ETag matches
+     *     the existing entity tag, or if * was provided, then no content will be returned.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return integration runtime resource type.
+     * @return an integration runtime along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<IntegrationRuntimeResourceInner> updateWithResponse(
+    Response<IntegrationRuntimeResourceInner> getWithResponse(
         String resourceGroupName,
         String workspaceName,
         String integrationRuntimeName,
-        UpdateIntegrationRuntimeRequest updateIntegrationRuntimeRequest,
+        String ifNoneMatch,
         Context context);
 
     /**
-     * Get an integration runtime.
+     * Get integration runtime
+     *
+     * <p>Get an integration runtime.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -73,51 +103,30 @@ public interface IntegrationRuntimesClient {
     IntegrationRuntimeResourceInner get(String resourceGroupName, String workspaceName, String integrationRuntimeName);
 
     /**
-     * Get an integration runtime.
+     * Create integration runtime
      *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param integrationRuntimeName Integration runtime name.
-     * @param ifNoneMatch ETag of the integration runtime entity. Should only be specified for get. If the ETag matches
-     *     the existing entity tag, or if * was provided, then no content will be returned.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an integration runtime.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<IntegrationRuntimeResourceInner> getWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String integrationRuntimeName,
-        String ifNoneMatch,
-        Context context);
-
-    /**
-     * Create an integration runtime.
+     * <p>Create an integration runtime.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param integrationRuntimeName Integration runtime name.
      * @param integrationRuntime Integration runtime resource definition.
-     * @param ifMatch ETag of the integration runtime entity. Should only be specified for update, for which it should
-     *     match existing entity or can be * for unconditional update.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return integration runtime resource type.
+     * @return the {@link SyncPoller} for polling of integration runtime resource type.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<IntegrationRuntimeResourceInner>, IntegrationRuntimeResourceInner> beginCreate(
         String resourceGroupName,
         String workspaceName,
         String integrationRuntimeName,
-        IntegrationRuntimeResourceInner integrationRuntime,
-        String ifMatch);
+        IntegrationRuntimeResourceInner integrationRuntime);
 
     /**
-     * Create an integration runtime.
+     * Create integration runtime
+     *
+     * <p>Create an integration runtime.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -129,7 +138,7 @@ public interface IntegrationRuntimesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return integration runtime resource type.
+     * @return the {@link SyncPoller} for polling of integration runtime resource type.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<IntegrationRuntimeResourceInner>, IntegrationRuntimeResourceInner> beginCreate(
@@ -141,29 +150,9 @@ public interface IntegrationRuntimesClient {
         Context context);
 
     /**
-     * Create an integration runtime.
+     * Create integration runtime
      *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param integrationRuntimeName Integration runtime name.
-     * @param integrationRuntime Integration runtime resource definition.
-     * @param ifMatch ETag of the integration runtime entity. Should only be specified for update, for which it should
-     *     match existing entity or can be * for unconditional update.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return integration runtime resource type.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    IntegrationRuntimeResourceInner create(
-        String resourceGroupName,
-        String workspaceName,
-        String integrationRuntimeName,
-        IntegrationRuntimeResourceInner integrationRuntime,
-        String ifMatch);
-
-    /**
-     * Create an integration runtime.
+     * <p>Create an integration runtime.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -182,7 +171,9 @@ public interface IntegrationRuntimesClient {
         IntegrationRuntimeResourceInner integrationRuntime);
 
     /**
-     * Create an integration runtime.
+     * Create integration runtime
+     *
+     * <p>Create an integration runtime.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -206,7 +197,9 @@ public interface IntegrationRuntimesClient {
         Context context);
 
     /**
-     * Delete an integration runtime.
+     * Delete integration runtime
+     *
+     * <p>Delete an integration runtime.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -214,14 +207,16 @@ public interface IntegrationRuntimesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginDelete(
         String resourceGroupName, String workspaceName, String integrationRuntimeName);
 
     /**
-     * Delete an integration runtime.
+     * Delete integration runtime
+     *
+     * <p>Delete an integration runtime.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -230,14 +225,16 @@ public interface IntegrationRuntimesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginDelete(
         String resourceGroupName, String workspaceName, String integrationRuntimeName, Context context);
 
     /**
-     * Delete an integration runtime.
+     * Delete integration runtime
+     *
+     * <p>Delete an integration runtime.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -250,7 +247,9 @@ public interface IntegrationRuntimesClient {
     void delete(String resourceGroupName, String workspaceName, String integrationRuntimeName);
 
     /**
-     * Delete an integration runtime.
+     * Delete integration runtime
+     *
+     * <p>Delete an integration runtime.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -264,7 +263,27 @@ public interface IntegrationRuntimesClient {
     void delete(String resourceGroupName, String workspaceName, String integrationRuntimeName, Context context);
 
     /**
-     * Upgrade an integration runtime.
+     * Upgrade integration runtime
+     *
+     * <p>Upgrade an integration runtime.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param integrationRuntimeName Integration runtime name.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<Void> upgradeWithResponse(
+        String resourceGroupName, String workspaceName, String integrationRuntimeName, Context context);
+
+    /**
+     * Upgrade integration runtime
+     *
+     * <p>Upgrade an integration runtime.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -277,36 +296,24 @@ public interface IntegrationRuntimesClient {
     void upgrade(String resourceGroupName, String workspaceName, String integrationRuntimeName);
 
     /**
-     * Upgrade an integration runtime.
+     * List integration runtimes
      *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param integrationRuntimeName Integration runtime name.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<Void> upgradeWithResponse(
-        String resourceGroupName, String workspaceName, String integrationRuntimeName, Context context);
-
-    /**
-     * List all integration runtimes.
+     * <p>List all integration runtimes.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of integration runtime resources.
+     * @return a list of integration runtime resources as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<IntegrationRuntimeResourceInner> listByWorkspace(String resourceGroupName, String workspaceName);
 
     /**
-     * List all integration runtimes.
+     * List integration runtimes
+     *
+     * <p>List all integration runtimes.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -314,14 +321,16 @@ public interface IntegrationRuntimesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of integration runtime resources.
+     * @return a list of integration runtime resources as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<IntegrationRuntimeResourceInner> listByWorkspace(
         String resourceGroupName, String workspaceName, Context context);
 
     /**
-     * Start an integration runtime.
+     * Start integration runtime
+     *
+     * <p>Start an integration runtime.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -329,14 +338,16 @@ public interface IntegrationRuntimesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return integration runtime status response.
+     * @return the {@link SyncPoller} for polling of integration runtime status response.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<IntegrationRuntimeStatusResponseInner>, IntegrationRuntimeStatusResponseInner> beginStart(
         String resourceGroupName, String workspaceName, String integrationRuntimeName);
 
     /**
-     * Start an integration runtime.
+     * Start integration runtime
+     *
+     * <p>Start an integration runtime.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -345,14 +356,16 @@ public interface IntegrationRuntimesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return integration runtime status response.
+     * @return the {@link SyncPoller} for polling of integration runtime status response.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<IntegrationRuntimeStatusResponseInner>, IntegrationRuntimeStatusResponseInner> beginStart(
         String resourceGroupName, String workspaceName, String integrationRuntimeName, Context context);
 
     /**
-     * Start an integration runtime.
+     * Start integration runtime
+     *
+     * <p>Start an integration runtime.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -367,7 +380,9 @@ public interface IntegrationRuntimesClient {
         String resourceGroupName, String workspaceName, String integrationRuntimeName);
 
     /**
-     * Start an integration runtime.
+     * Start integration runtime
+     *
+     * <p>Start an integration runtime.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -383,7 +398,9 @@ public interface IntegrationRuntimesClient {
         String resourceGroupName, String workspaceName, String integrationRuntimeName, Context context);
 
     /**
-     * Stop an integration runtime.
+     * Stop integration runtime
+     *
+     * <p>Stop an integration runtime.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -391,14 +408,16 @@ public interface IntegrationRuntimesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginStop(
         String resourceGroupName, String workspaceName, String integrationRuntimeName);
 
     /**
-     * Stop an integration runtime.
+     * Stop integration runtime
+     *
+     * <p>Stop an integration runtime.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -407,14 +426,16 @@ public interface IntegrationRuntimesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginStop(
         String resourceGroupName, String workspaceName, String integrationRuntimeName, Context context);
 
     /**
-     * Stop an integration runtime.
+     * Stop integration runtime
+     *
+     * <p>Stop an integration runtime.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -427,7 +448,9 @@ public interface IntegrationRuntimesClient {
     void stop(String resourceGroupName, String workspaceName, String integrationRuntimeName);
 
     /**
-     * Stop an integration runtime.
+     * Stop integration runtime
+     *
+     * <p>Stop an integration runtime.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -441,7 +464,29 @@ public interface IntegrationRuntimesClient {
     void stop(String resourceGroupName, String workspaceName, String integrationRuntimeName, Context context);
 
     /**
-     * Gets the list of outbound network dependencies for a given Azure-SSIS integration runtime.
+     * Gets list of outbound network dependencies for a given Azure-SSIS integration runtime.
+     *
+     * <p>Gets the list of outbound network dependencies for a given Azure-SSIS integration runtime.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param integrationRuntimeName Integration runtime name.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the list of outbound network dependencies for a given Azure-SSIS integration runtime along with {@link
+     *     Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<IntegrationRuntimeOutboundNetworkDependenciesEndpointsResponseInner>
+        listOutboundNetworkDependenciesEndpointsWithResponse(
+            String resourceGroupName, String workspaceName, String integrationRuntimeName, Context context);
+
+    /**
+     * Gets list of outbound network dependencies for a given Azure-SSIS integration runtime.
+     *
+     * <p>Gets the list of outbound network dependencies for a given Azure-SSIS integration runtime.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -456,23 +501,6 @@ public interface IntegrationRuntimesClient {
         String resourceGroupName, String workspaceName, String integrationRuntimeName);
 
     /**
-     * Gets the list of outbound network dependencies for a given Azure-SSIS integration runtime.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param integrationRuntimeName Integration runtime name.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of outbound network dependencies for a given Azure-SSIS integration runtime.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<IntegrationRuntimeOutboundNetworkDependenciesEndpointsResponseInner>
-        listOutboundNetworkDependenciesEndpointsWithResponse(
-            String resourceGroupName, String workspaceName, String integrationRuntimeName, Context context);
-
-    /**
      * Enable interactive query in integration runtime.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -481,7 +509,7 @@ public interface IntegrationRuntimesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginEnableInteractiveQuery(
@@ -497,7 +525,7 @@ public interface IntegrationRuntimesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginEnableInteractiveQuery(
@@ -540,7 +568,7 @@ public interface IntegrationRuntimesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginDisableInteractiveQuery(
@@ -556,7 +584,7 @@ public interface IntegrationRuntimesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginDisableInteractiveQuery(

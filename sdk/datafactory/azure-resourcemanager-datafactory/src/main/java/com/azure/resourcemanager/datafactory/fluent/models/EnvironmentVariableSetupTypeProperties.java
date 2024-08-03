@@ -6,14 +6,13 @@ package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Environment variable custom setup type properties. */
+/**
+ * Environment variable custom setup type properties.
+ */
 @Fluent
 public final class EnvironmentVariableSetupTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(EnvironmentVariableSetupTypeProperties.class);
-
     /*
      * The name of the environment variable.
      */
@@ -27,8 +26,14 @@ public final class EnvironmentVariableSetupTypeProperties {
     private String variableValue;
 
     /**
+     * Creates an instance of EnvironmentVariableSetupTypeProperties class.
+     */
+    public EnvironmentVariableSetupTypeProperties() {
+    }
+
+    /**
      * Get the variableName property: The name of the environment variable.
-     *
+     * 
      * @return the variableName value.
      */
     public String variableName() {
@@ -37,7 +42,7 @@ public final class EnvironmentVariableSetupTypeProperties {
 
     /**
      * Set the variableName property: The name of the environment variable.
-     *
+     * 
      * @param variableName the variableName value to set.
      * @return the EnvironmentVariableSetupTypeProperties object itself.
      */
@@ -48,7 +53,7 @@ public final class EnvironmentVariableSetupTypeProperties {
 
     /**
      * Get the variableValue property: The value of the environment variable.
-     *
+     * 
      * @return the variableValue value.
      */
     public String variableValue() {
@@ -57,7 +62,7 @@ public final class EnvironmentVariableSetupTypeProperties {
 
     /**
      * Set the variableValue property: The value of the environment variable.
-     *
+     * 
      * @param variableValue the variableValue value to set.
      * @return the EnvironmentVariableSetupTypeProperties object itself.
      */
@@ -68,21 +73,21 @@ public final class EnvironmentVariableSetupTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (variableName() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property variableName in model EnvironmentVariableSetupTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property variableName in model EnvironmentVariableSetupTypeProperties"));
         }
         if (variableValue() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property variableValue in model EnvironmentVariableSetupTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property variableValue in model EnvironmentVariableSetupTypeProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(EnvironmentVariableSetupTypeProperties.class);
 }

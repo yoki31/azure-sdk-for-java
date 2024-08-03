@@ -30,7 +30,6 @@ import com.azure.core.management.exception.ManagementException;
 import com.azure.core.management.polling.PollResult;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.core.util.polling.PollerFlux;
 import com.azure.core.util.polling.SyncPoller;
 import com.azure.resourcemanager.synapse.fluent.PrivateLinkHubsClient;
@@ -43,8 +42,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in PrivateLinkHubsClient. */
 public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
-    private final ClientLogger logger = new ClientLogger(PrivateLinkHubsClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final PrivateLinkHubsService service;
 
@@ -68,7 +65,7 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      */
     @Host("{$host}")
     @ServiceInterface(name = "SynapseManagementCli")
-    private interface PrivateLinkHubsService {
+    public interface PrivateLinkHubsService {
         @Headers({"Content-Type: application/json"})
         @Get(
             "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse"
@@ -184,7 +181,7 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of privateLinkHubs.
+     * @return list of privateLinkHubs along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<PrivateLinkHubInner>> listByResourceGroupSinglePageAsync(String resourceGroupName) {
@@ -237,7 +234,7 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of privateLinkHubs.
+     * @return list of privateLinkHubs along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<PrivateLinkHubInner>> listByResourceGroupSinglePageAsync(
@@ -287,7 +284,7 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of privateLinkHubs.
+     * @return list of privateLinkHubs as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<PrivateLinkHubInner> listByResourceGroupAsync(String resourceGroupName) {
@@ -304,7 +301,7 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of privateLinkHubs.
+     * @return list of privateLinkHubs as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<PrivateLinkHubInner> listByResourceGroupAsync(String resourceGroupName, Context context) {
@@ -320,7 +317,7 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of privateLinkHubs.
+     * @return list of privateLinkHubs as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<PrivateLinkHubInner> listByResourceGroup(String resourceGroupName) {
@@ -335,7 +332,7 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of privateLinkHubs.
+     * @return list of privateLinkHubs as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<PrivateLinkHubInner> listByResourceGroup(String resourceGroupName, Context context) {
@@ -350,7 +347,7 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a privateLinkHub.
+     * @return a privateLinkHub along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<PrivateLinkHubInner>> getByResourceGroupWithResponseAsync(
@@ -401,7 +398,7 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a privateLinkHub.
+     * @return a privateLinkHub along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<PrivateLinkHubInner>> getByResourceGroupWithResponseAsync(
@@ -448,19 +445,29 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a privateLinkHub.
+     * @return a privateLinkHub on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PrivateLinkHubInner> getByResourceGroupAsync(String resourceGroupName, String privateLinkHubName) {
         return getByResourceGroupWithResponseAsync(resourceGroupName, privateLinkHubName)
-            .flatMap(
-                (Response<PrivateLinkHubInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
+    }
+
+    /**
+     * Gets a privateLinkHub.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param privateLinkHubName Name of the privateLinkHub.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a privateLinkHub along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<PrivateLinkHubInner> getByResourceGroupWithResponse(
+        String resourceGroupName, String privateLinkHubName, Context context) {
+        return getByResourceGroupWithResponseAsync(resourceGroupName, privateLinkHubName, context).block();
     }
 
     /**
@@ -475,24 +482,7 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public PrivateLinkHubInner getByResourceGroup(String resourceGroupName, String privateLinkHubName) {
-        return getByResourceGroupAsync(resourceGroupName, privateLinkHubName).block();
-    }
-
-    /**
-     * Gets a privateLinkHub.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param privateLinkHubName Name of the privateLinkHub.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a privateLinkHub.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<PrivateLinkHubInner> getByResourceGroupWithResponse(
-        String resourceGroupName, String privateLinkHubName, Context context) {
-        return getByResourceGroupWithResponseAsync(resourceGroupName, privateLinkHubName, context).block();
+        return getByResourceGroupWithResponse(resourceGroupName, privateLinkHubName, Context.NONE).getValue();
     }
 
     /**
@@ -504,7 +494,7 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a privateLinkHub.
+     * @return a privateLinkHub along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<PrivateLinkHubInner>> updateWithResponseAsync(
@@ -564,7 +554,7 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a privateLinkHub.
+     * @return a privateLinkHub along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<PrivateLinkHubInner>> updateWithResponseAsync(
@@ -623,20 +613,34 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a privateLinkHub.
+     * @return a privateLinkHub on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PrivateLinkHubInner> updateAsync(
         String resourceGroupName, String privateLinkHubName, PrivateLinkHubPatchInfo privateLinkHubPatchInfo) {
         return updateWithResponseAsync(resourceGroupName, privateLinkHubName, privateLinkHubPatchInfo)
-            .flatMap(
-                (Response<PrivateLinkHubInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
+    }
+
+    /**
+     * Updates a privateLinkHub.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param privateLinkHubName Name of the privateLinkHub.
+     * @param privateLinkHubPatchInfo PrivateLinkHub patch request properties.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a privateLinkHub along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<PrivateLinkHubInner> updateWithResponse(
+        String resourceGroupName,
+        String privateLinkHubName,
+        PrivateLinkHubPatchInfo privateLinkHubPatchInfo,
+        Context context) {
+        return updateWithResponseAsync(resourceGroupName, privateLinkHubName, privateLinkHubPatchInfo, context).block();
     }
 
     /**
@@ -653,28 +657,8 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public PrivateLinkHubInner update(
         String resourceGroupName, String privateLinkHubName, PrivateLinkHubPatchInfo privateLinkHubPatchInfo) {
-        return updateAsync(resourceGroupName, privateLinkHubName, privateLinkHubPatchInfo).block();
-    }
-
-    /**
-     * Updates a privateLinkHub.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param privateLinkHubName Name of the privateLinkHub.
-     * @param privateLinkHubPatchInfo PrivateLinkHub patch request properties.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a privateLinkHub.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<PrivateLinkHubInner> updateWithResponse(
-        String resourceGroupName,
-        String privateLinkHubName,
-        PrivateLinkHubPatchInfo privateLinkHubPatchInfo,
-        Context context) {
-        return updateWithResponseAsync(resourceGroupName, privateLinkHubName, privateLinkHubPatchInfo, context).block();
+        return updateWithResponse(resourceGroupName, privateLinkHubName, privateLinkHubPatchInfo, Context.NONE)
+            .getValue();
     }
 
     /**
@@ -686,7 +670,7 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a privateLinkHub.
+     * @return a privateLinkHub along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<PrivateLinkHubInner>> createOrUpdateWithResponseAsync(
@@ -745,7 +729,7 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a privateLinkHub.
+     * @return a privateLinkHub along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<PrivateLinkHubInner>> createOrUpdateWithResponseAsync(
@@ -800,20 +784,32 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a privateLinkHub.
+     * @return a privateLinkHub on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PrivateLinkHubInner> createOrUpdateAsync(
         String resourceGroupName, String privateLinkHubName, PrivateLinkHubInner privateLinkHubInfo) {
         return createOrUpdateWithResponseAsync(resourceGroupName, privateLinkHubName, privateLinkHubInfo)
-            .flatMap(
-                (Response<PrivateLinkHubInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
+    }
+
+    /**
+     * Creates or updates a privateLinkHub.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param privateLinkHubName Name of the privateLinkHub.
+     * @param privateLinkHubInfo PrivateLinkHub create or update request properties.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a privateLinkHub along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<PrivateLinkHubInner> createOrUpdateWithResponse(
+        String resourceGroupName, String privateLinkHubName, PrivateLinkHubInner privateLinkHubInfo, Context context) {
+        return createOrUpdateWithResponseAsync(resourceGroupName, privateLinkHubName, privateLinkHubInfo, context)
+            .block();
     }
 
     /**
@@ -830,26 +826,8 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public PrivateLinkHubInner createOrUpdate(
         String resourceGroupName, String privateLinkHubName, PrivateLinkHubInner privateLinkHubInfo) {
-        return createOrUpdateAsync(resourceGroupName, privateLinkHubName, privateLinkHubInfo).block();
-    }
-
-    /**
-     * Creates or updates a privateLinkHub.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param privateLinkHubName Name of the privateLinkHub.
-     * @param privateLinkHubInfo PrivateLinkHub create or update request properties.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a privateLinkHub.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<PrivateLinkHubInner> createOrUpdateWithResponse(
-        String resourceGroupName, String privateLinkHubName, PrivateLinkHubInner privateLinkHubInfo, Context context) {
-        return createOrUpdateWithResponseAsync(resourceGroupName, privateLinkHubName, privateLinkHubInfo, context)
-            .block();
+        return createOrUpdateWithResponse(resourceGroupName, privateLinkHubName, privateLinkHubInfo, Context.NONE)
+            .getValue();
     }
 
     /**
@@ -860,7 +838,7 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(
@@ -911,7 +889,7 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(
@@ -958,14 +936,15 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(String resourceGroupName, String privateLinkHubName) {
         Mono<Response<Flux<ByteBuffer>>> mono = deleteWithResponseAsync(resourceGroupName, privateLinkHubName);
         return this
             .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, Context.NONE);
+            .<Void, Void>getLroResult(
+                mono, this.client.getHttpPipeline(), Void.class, Void.class, this.client.getContext());
     }
 
     /**
@@ -977,7 +956,7 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(
@@ -997,11 +976,11 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<Void>, Void> beginDelete(String resourceGroupName, String privateLinkHubName) {
-        return beginDeleteAsync(resourceGroupName, privateLinkHubName).getSyncPoller();
+        return this.beginDeleteAsync(resourceGroupName, privateLinkHubName).getSyncPoller();
     }
 
     /**
@@ -1013,12 +992,12 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<Void>, Void> beginDelete(
         String resourceGroupName, String privateLinkHubName, Context context) {
-        return beginDeleteAsync(resourceGroupName, privateLinkHubName, context).getSyncPoller();
+        return this.beginDeleteAsync(resourceGroupName, privateLinkHubName, context).getSyncPoller();
     }
 
     /**
@@ -1029,7 +1008,7 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(String resourceGroupName, String privateLinkHubName) {
@@ -1047,7 +1026,7 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(String resourceGroupName, String privateLinkHubName, Context context) {
@@ -1090,7 +1069,7 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      *
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of privateLinkHubs.
+     * @return list of privateLinkHubs along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<PrivateLinkHubInner>> listSinglePageAsync() {
@@ -1132,7 +1111,7 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of privateLinkHubs.
+     * @return list of privateLinkHubs along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<PrivateLinkHubInner>> listSinglePageAsync(Context context) {
@@ -1169,7 +1148,7 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      *
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of privateLinkHubs.
+     * @return list of privateLinkHubs as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<PrivateLinkHubInner> listAsync() {
@@ -1183,7 +1162,7 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of privateLinkHubs.
+     * @return list of privateLinkHubs as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<PrivateLinkHubInner> listAsync(Context context) {
@@ -1196,7 +1175,7 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      *
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of privateLinkHubs.
+     * @return list of privateLinkHubs as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<PrivateLinkHubInner> list() {
@@ -1210,7 +1189,7 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of privateLinkHubs.
+     * @return list of privateLinkHubs as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<PrivateLinkHubInner> list(Context context) {
@@ -1220,11 +1199,12 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of privateLinkHubs.
+     * @return list of privateLinkHubs along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<PrivateLinkHubInner>> listByResourceGroupNextSinglePageAsync(String nextLink) {
@@ -1256,12 +1236,13 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of privateLinkHubs.
+     * @return list of privateLinkHubs along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<PrivateLinkHubInner>> listByResourceGroupNextSinglePageAsync(
@@ -1293,11 +1274,12 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of privateLinkHubs.
+     * @return list of privateLinkHubs along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<PrivateLinkHubInner>> listNextSinglePageAsync(String nextLink) {
@@ -1328,12 +1310,13 @@ public final class PrivateLinkHubsClientImpl implements PrivateLinkHubsClient {
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of privateLinkHubs.
+     * @return list of privateLinkHubs along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<PrivateLinkHubInner>> listNextSinglePageAsync(String nextLink, Context context) {

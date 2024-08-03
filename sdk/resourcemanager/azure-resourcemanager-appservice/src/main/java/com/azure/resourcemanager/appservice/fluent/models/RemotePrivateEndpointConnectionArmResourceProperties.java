@@ -5,19 +5,16 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.ArmIdWrapper;
 import com.azure.resourcemanager.appservice.models.PrivateLinkConnectionState;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** RemotePrivateEndpointConnectionARMResource resource specific properties. */
+/**
+ * RemotePrivateEndpointConnectionARMResource resource specific properties.
+ */
 @Fluent
 public final class RemotePrivateEndpointConnectionArmResourceProperties {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(RemotePrivateEndpointConnectionArmResourceProperties.class);
-
     /*
      * The provisioningState property.
      */
@@ -43,8 +40,14 @@ public final class RemotePrivateEndpointConnectionArmResourceProperties {
     private List<String> ipAddresses;
 
     /**
+     * Creates an instance of RemotePrivateEndpointConnectionArmResourceProperties class.
+     */
+    public RemotePrivateEndpointConnectionArmResourceProperties() {
+    }
+
+    /**
      * Get the provisioningState property: The provisioningState property.
-     *
+     * 
      * @return the provisioningState value.
      */
     public String provisioningState() {
@@ -53,7 +56,7 @@ public final class RemotePrivateEndpointConnectionArmResourceProperties {
 
     /**
      * Get the privateEndpoint property: PrivateEndpoint of a remote private endpoint connection.
-     *
+     * 
      * @return the privateEndpoint value.
      */
     public ArmIdWrapper privateEndpoint() {
@@ -62,7 +65,7 @@ public final class RemotePrivateEndpointConnectionArmResourceProperties {
 
     /**
      * Set the privateEndpoint property: PrivateEndpoint of a remote private endpoint connection.
-     *
+     * 
      * @param privateEndpoint the privateEndpoint value to set.
      * @return the RemotePrivateEndpointConnectionArmResourceProperties object itself.
      */
@@ -73,7 +76,7 @@ public final class RemotePrivateEndpointConnectionArmResourceProperties {
 
     /**
      * Get the privateLinkServiceConnectionState property: The state of a private link connection.
-     *
+     * 
      * @return the privateLinkServiceConnectionState value.
      */
     public PrivateLinkConnectionState privateLinkServiceConnectionState() {
@@ -82,19 +85,19 @@ public final class RemotePrivateEndpointConnectionArmResourceProperties {
 
     /**
      * Set the privateLinkServiceConnectionState property: The state of a private link connection.
-     *
+     * 
      * @param privateLinkServiceConnectionState the privateLinkServiceConnectionState value to set.
      * @return the RemotePrivateEndpointConnectionArmResourceProperties object itself.
      */
-    public RemotePrivateEndpointConnectionArmResourceProperties withPrivateLinkServiceConnectionState(
-        PrivateLinkConnectionState privateLinkServiceConnectionState) {
+    public RemotePrivateEndpointConnectionArmResourceProperties
+        withPrivateLinkServiceConnectionState(PrivateLinkConnectionState privateLinkServiceConnectionState) {
         this.privateLinkServiceConnectionState = privateLinkServiceConnectionState;
         return this;
     }
 
     /**
      * Get the ipAddresses property: Private IPAddresses mapped to the remote private endpoint.
-     *
+     * 
      * @return the ipAddresses value.
      */
     public List<String> ipAddresses() {
@@ -103,7 +106,7 @@ public final class RemotePrivateEndpointConnectionArmResourceProperties {
 
     /**
      * Set the ipAddresses property: Private IPAddresses mapped to the remote private endpoint.
-     *
+     * 
      * @param ipAddresses the ipAddresses value to set.
      * @return the RemotePrivateEndpointConnectionArmResourceProperties object itself.
      */
@@ -114,7 +117,7 @@ public final class RemotePrivateEndpointConnectionArmResourceProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

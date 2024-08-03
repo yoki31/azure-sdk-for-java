@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** CIDR Ip address. */
+/**
+ * CIDR Ip address.
+ */
 @Fluent
 public final class CidrIpAddress {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CidrIpAddress.class);
-
     /*
      * Ip address itself.
      */
@@ -27,8 +25,14 @@ public final class CidrIpAddress {
     private Integer prefixLength;
 
     /**
+     * Creates an instance of CidrIpAddress class.
+     */
+    public CidrIpAddress() {
+    }
+
+    /**
      * Get the baseIpAddress property: Ip address itself.
-     *
+     * 
      * @return the baseIpAddress value.
      */
     public String baseIpAddress() {
@@ -37,7 +41,7 @@ public final class CidrIpAddress {
 
     /**
      * Set the baseIpAddress property: Ip address itself.
-     *
+     * 
      * @param baseIpAddress the baseIpAddress value to set.
      * @return the CidrIpAddress object itself.
      */
@@ -48,7 +52,7 @@ public final class CidrIpAddress {
 
     /**
      * Get the prefixLength property: The length of the prefix of the ip address.
-     *
+     * 
      * @return the prefixLength value.
      */
     public Integer prefixLength() {
@@ -57,7 +61,7 @@ public final class CidrIpAddress {
 
     /**
      * Set the prefixLength property: The length of the prefix of the ip address.
-     *
+     * 
      * @param prefixLength the prefixLength value to set.
      * @return the CidrIpAddress object itself.
      */
@@ -68,7 +72,7 @@ public final class CidrIpAddress {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

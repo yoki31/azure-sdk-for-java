@@ -5,30 +5,30 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The object that represents all properties related to capacity enforcement on an account. */
+/**
+ * The object that represents all properties related to capacity enforcement on an account.
+ */
 @Fluent
 public final class Capacity {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Capacity.class);
-
     /*
-     * The total throughput limit imposed on the account. A
-     * totalThroughputLimit of 2000 imposes a strict limit of max throughput
-     * that can be provisioned on that account to be 2000. A
-     * totalThroughputLimit of -1 indicates no limits on provisioning of
-     * throughput.
+     * The total throughput limit imposed on the account. A totalThroughputLimit of 2000 imposes a strict limit of max throughput that can be provisioned on that account to be 2000. A totalThroughputLimit of -1 indicates no limits on provisioning of throughput.
      */
     @JsonProperty(value = "totalThroughputLimit")
     private Integer totalThroughputLimit;
 
     /**
+     * Creates an instance of Capacity class.
+     */
+    public Capacity() {
+    }
+
+    /**
      * Get the totalThroughputLimit property: The total throughput limit imposed on the account. A totalThroughputLimit
      * of 2000 imposes a strict limit of max throughput that can be provisioned on that account to be 2000. A
      * totalThroughputLimit of -1 indicates no limits on provisioning of throughput.
-     *
+     * 
      * @return the totalThroughputLimit value.
      */
     public Integer totalThroughputLimit() {
@@ -39,7 +39,7 @@ public final class Capacity {
      * Set the totalThroughputLimit property: The total throughput limit imposed on the account. A totalThroughputLimit
      * of 2000 imposes a strict limit of max throughput that can be provisioned on that account to be 2000. A
      * totalThroughputLimit of -1 indicates no limits on provisioning of throughput.
-     *
+     * 
      * @param totalThroughputLimit the totalThroughputLimit value to set.
      * @return the Capacity object itself.
      */
@@ -50,7 +50,7 @@ public final class Capacity {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

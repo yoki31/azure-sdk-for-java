@@ -7,18 +7,28 @@ package com.azure.resourcemanager.appservice.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** Defines values for MSDeployLogEntryType. */
+/**
+ * Log entry type.
+ */
 public enum MSDeployLogEntryType {
-    /** Enum value Message. */
+    /**
+     * Enum value Message.
+     */
     MESSAGE("Message"),
 
-    /** Enum value Warning. */
+    /**
+     * Enum value Warning.
+     */
     WARNING("Warning"),
 
-    /** Enum value Error. */
+    /**
+     * Enum value Error.
+     */
     ERROR("Error");
 
-    /** The actual serialized value for a MSDeployLogEntryType instance. */
+    /**
+     * The actual serialized value for a MSDeployLogEntryType instance.
+     */
     private final String value;
 
     MSDeployLogEntryType(String value) {
@@ -27,12 +37,15 @@ public enum MSDeployLogEntryType {
 
     /**
      * Parses a serialized value to a MSDeployLogEntryType instance.
-     *
+     * 
      * @param value the serialized value to parse.
      * @return the parsed MSDeployLogEntryType object, or null if unable to parse.
      */
     @JsonCreator
     public static MSDeployLogEntryType fromString(String value) {
+        if (value == null) {
+            return null;
+        }
         MSDeployLogEntryType[] items = MSDeployLogEntryType.values();
         for (MSDeployLogEntryType item : items) {
             if (item.toString().equalsIgnoreCase(value)) {
@@ -42,6 +55,9 @@ public enum MSDeployLogEntryType {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @JsonValue
     @Override
     public String toString() {

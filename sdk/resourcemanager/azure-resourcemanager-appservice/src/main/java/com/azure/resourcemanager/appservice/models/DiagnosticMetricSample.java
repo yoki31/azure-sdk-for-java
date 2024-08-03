@@ -5,16 +5,15 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.OffsetDateTime;
 
-/** Class representing Diagnostic Metric. */
+/**
+ * Class representing Diagnostic Metric.
+ */
 @Fluent
 public final class DiagnosticMetricSample {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DiagnosticMetricSample.class);
-
     /*
      * Time at which metric is measured
      */
@@ -23,18 +22,15 @@ public final class DiagnosticMetricSample {
 
     /*
      * Role Instance. Null if this counter is not per instance
-     * This is returned and should be whichever instance name we desire to be
-     * returned
+     * This is returned and should be whichever instance name we desire to be returned
      * i.e. CPU and Memory return RDWORKERNAME (LargeDed..._IN_0)
-     * where RDWORKERNAME is Machine name below and RoleInstance name in
-     * parenthesis
+     * where RDWORKERNAME is Machine name below and RoleInstance name in parenthesis
      */
     @JsonProperty(value = "roleInstance")
     private String roleInstance;
 
     /*
-     * Total value of the metric. If multiple measurements are made this will
-     * have sum of all.
+     * Total value of the metric. If multiple measurements are made this will have sum of all.
      */
     @JsonProperty(value = "total")
     private Double total;
@@ -58,6 +54,12 @@ public final class DiagnosticMetricSample {
     private Boolean isAggregated;
 
     /**
+     * Creates an instance of DiagnosticMetricSample class.
+     */
+    public DiagnosticMetricSample() {
+    }
+
+    /**
      * Get the timestamp property: Time at which metric is measured.
      *
      * @return the timestamp value.
@@ -78,9 +80,10 @@ public final class DiagnosticMetricSample {
     }
 
     /**
-     * Get the roleInstance property: Role Instance. Null if this counter is not per instance This is returned and
-     * should be whichever instance name we desire to be returned i.e. CPU and Memory return RDWORKERNAME
-     * (LargeDed..._IN_0) where RDWORKERNAME is Machine name below and RoleInstance name in parenthesis.
+     * Get the roleInstance property: Role Instance. Null if this counter is not per instance
+     * This is returned and should be whichever instance name we desire to be returned
+     * i.e. CPU and Memory return RDWORKERNAME (LargeDed..._IN_0)
+     * where RDWORKERNAME is Machine name below and RoleInstance name in parenthesis.
      *
      * @return the roleInstance value.
      */
@@ -89,9 +92,10 @@ public final class DiagnosticMetricSample {
     }
 
     /**
-     * Set the roleInstance property: Role Instance. Null if this counter is not per instance This is returned and
-     * should be whichever instance name we desire to be returned i.e. CPU and Memory return RDWORKERNAME
-     * (LargeDed..._IN_0) where RDWORKERNAME is Machine name below and RoleInstance name in parenthesis.
+     * Set the roleInstance property: Role Instance. Null if this counter is not per instance
+     * This is returned and should be whichever instance name we desire to be returned
+     * i.e. CPU and Memory return RDWORKERNAME (LargeDed..._IN_0)
+     * where RDWORKERNAME is Machine name below and RoleInstance name in parenthesis.
      *
      * @param roleInstance the roleInstance value to set.
      * @return the DiagnosticMetricSample object itself.

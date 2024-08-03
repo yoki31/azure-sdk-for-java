@@ -6,15 +6,14 @@ package com.azure.resourcemanager.monitor.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Specifies the criteria for converting log to metric. */
+/**
+ * Dimension splitting and filtering definition.
+ */
 @Fluent
 public final class Dimension {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Dimension.class);
-
     /*
      * Name of the dimension
      */
@@ -25,7 +24,7 @@ public final class Dimension {
      * Operator for dimension values
      */
     @JsonProperty(value = "operator", required = true)
-    private Operator operator;
+    private DimensionOperator operator;
 
     /*
      * List of dimension values
@@ -34,8 +33,14 @@ public final class Dimension {
     private List<String> values;
 
     /**
+     * Creates an instance of Dimension class.
+     */
+    public Dimension() {
+    }
+
+    /**
      * Get the name property: Name of the dimension.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -44,7 +49,7 @@ public final class Dimension {
 
     /**
      * Set the name property: Name of the dimension.
-     *
+     * 
      * @param name the name value to set.
      * @return the Dimension object itself.
      */
@@ -55,27 +60,27 @@ public final class Dimension {
 
     /**
      * Get the operator property: Operator for dimension values.
-     *
+     * 
      * @return the operator value.
      */
-    public Operator operator() {
+    public DimensionOperator operator() {
         return this.operator;
     }
 
     /**
      * Set the operator property: Operator for dimension values.
-     *
+     * 
      * @param operator the operator value to set.
      * @return the Dimension object itself.
      */
-    public Dimension withOperator(Operator operator) {
+    public Dimension withOperator(DimensionOperator operator) {
         this.operator = operator;
         return this;
     }
 
     /**
      * Get the values property: List of dimension values.
-     *
+     * 
      * @return the values value.
      */
     public List<String> values() {
@@ -84,7 +89,7 @@ public final class Dimension {
 
     /**
      * Set the values property: List of dimension values.
-     *
+     * 
      * @param values the values value to set.
      * @return the Dimension object itself.
      */
@@ -95,23 +100,23 @@ public final class Dimension {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (name() == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(new IllegalArgumentException("Missing required property name in model Dimension"));
         }
         if (operator() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property operator in model Dimension"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property operator in model Dimension"));
         }
         if (values() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property values in model Dimension"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property values in model Dimension"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(Dimension.class);
 }

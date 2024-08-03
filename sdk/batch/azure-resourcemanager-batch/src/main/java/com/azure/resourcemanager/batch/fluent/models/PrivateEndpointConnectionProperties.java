@@ -5,18 +5,17 @@
 package com.azure.resourcemanager.batch.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.batch.models.PrivateEndpoint;
 import com.azure.resourcemanager.batch.models.PrivateEndpointConnectionProvisioningState;
 import com.azure.resourcemanager.batch.models.PrivateLinkServiceConnectionState;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 
-/** Private endpoint connection properties. */
+/**
+ * Private endpoint connection properties.
+ */
 @Fluent
 public final class PrivateEndpointConnectionProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PrivateEndpointConnectionProperties.class);
-
     /*
      * The provisioning state of the private endpoint connection.
      */
@@ -26,19 +25,32 @@ public final class PrivateEndpointConnectionProperties {
     /*
      * The private endpoint of the private endpoint connection.
      */
-    @JsonProperty(value = "privateEndpoint")
+    @JsonProperty(value = "privateEndpoint", access = JsonProperty.Access.WRITE_ONLY)
     private PrivateEndpoint privateEndpoint;
 
     /*
-     * The private link service connection state of the private endpoint
-     * connection
+     * The group id of the private endpoint connection.
+     * 
+     * The value has one and only one group id.
+     */
+    @JsonProperty(value = "groupIds", access = JsonProperty.Access.WRITE_ONLY)
+    private List<String> groupIds;
+
+    /*
+     * The private link service connection state of the private endpoint connection
      */
     @JsonProperty(value = "privateLinkServiceConnectionState")
     private PrivateLinkServiceConnectionState privateLinkServiceConnectionState;
 
     /**
+     * Creates an instance of PrivateEndpointConnectionProperties class.
+     */
+    public PrivateEndpointConnectionProperties() {
+    }
+
+    /**
      * Get the provisioningState property: The provisioning state of the private endpoint connection.
-     *
+     * 
      * @return the provisioningState value.
      */
     public PrivateEndpointConnectionProvisioningState provisioningState() {
@@ -47,7 +59,7 @@ public final class PrivateEndpointConnectionProperties {
 
     /**
      * Get the privateEndpoint property: The private endpoint of the private endpoint connection.
-     *
+     * 
      * @return the privateEndpoint value.
      */
     public PrivateEndpoint privateEndpoint() {
@@ -55,20 +67,20 @@ public final class PrivateEndpointConnectionProperties {
     }
 
     /**
-     * Set the privateEndpoint property: The private endpoint of the private endpoint connection.
-     *
-     * @param privateEndpoint the privateEndpoint value to set.
-     * @return the PrivateEndpointConnectionProperties object itself.
+     * Get the groupIds property: The group id of the private endpoint connection.
+     * 
+     * The value has one and only one group id.
+     * 
+     * @return the groupIds value.
      */
-    public PrivateEndpointConnectionProperties withPrivateEndpoint(PrivateEndpoint privateEndpoint) {
-        this.privateEndpoint = privateEndpoint;
-        return this;
+    public List<String> groupIds() {
+        return this.groupIds;
     }
 
     /**
      * Get the privateLinkServiceConnectionState property: The private link service connection state of the private
      * endpoint connection.
-     *
+     * 
      * @return the privateLinkServiceConnectionState value.
      */
     public PrivateLinkServiceConnectionState privateLinkServiceConnectionState() {
@@ -78,19 +90,19 @@ public final class PrivateEndpointConnectionProperties {
     /**
      * Set the privateLinkServiceConnectionState property: The private link service connection state of the private
      * endpoint connection.
-     *
+     * 
      * @param privateLinkServiceConnectionState the privateLinkServiceConnectionState value to set.
      * @return the PrivateEndpointConnectionProperties object itself.
      */
-    public PrivateEndpointConnectionProperties withPrivateLinkServiceConnectionState(
-        PrivateLinkServiceConnectionState privateLinkServiceConnectionState) {
+    public PrivateEndpointConnectionProperties
+        withPrivateLinkServiceConnectionState(PrivateLinkServiceConnectionState privateLinkServiceConnectionState) {
         this.privateLinkServiceConnectionState = privateLinkServiceConnectionState;
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

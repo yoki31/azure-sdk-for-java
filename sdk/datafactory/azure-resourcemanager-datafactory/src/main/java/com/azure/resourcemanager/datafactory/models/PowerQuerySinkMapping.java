@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Map Power Query mashup query to sink dataset(s). */
+/**
+ * Map Power Query mashup query to sink dataset(s).
+ */
 @Fluent
 public final class PowerQuerySinkMapping {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PowerQuerySinkMapping.class);
-
     /*
      * Name of the query in Power Query mashup document.
      */
@@ -28,8 +26,14 @@ public final class PowerQuerySinkMapping {
     private List<PowerQuerySink> dataflowSinks;
 
     /**
+     * Creates an instance of PowerQuerySinkMapping class.
+     */
+    public PowerQuerySinkMapping() {
+    }
+
+    /**
      * Get the queryName property: Name of the query in Power Query mashup document.
-     *
+     * 
      * @return the queryName value.
      */
     public String queryName() {
@@ -38,7 +42,7 @@ public final class PowerQuerySinkMapping {
 
     /**
      * Set the queryName property: Name of the query in Power Query mashup document.
-     *
+     * 
      * @param queryName the queryName value to set.
      * @return the PowerQuerySinkMapping object itself.
      */
@@ -49,7 +53,7 @@ public final class PowerQuerySinkMapping {
 
     /**
      * Get the dataflowSinks property: List of sinks mapped to Power Query mashup query.
-     *
+     * 
      * @return the dataflowSinks value.
      */
     public List<PowerQuerySink> dataflowSinks() {
@@ -58,7 +62,7 @@ public final class PowerQuerySinkMapping {
 
     /**
      * Set the dataflowSinks property: List of sinks mapped to Power Query mashup query.
-     *
+     * 
      * @param dataflowSinks the dataflowSinks value to set.
      * @return the PowerQuerySinkMapping object itself.
      */
@@ -69,7 +73,7 @@ public final class PowerQuerySinkMapping {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

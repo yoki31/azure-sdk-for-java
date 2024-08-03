@@ -7,15 +7,14 @@ package com.azure.resourcemanager.datafactory.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.fluent.models.PipelineResourceInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** A list of pipeline resources. */
+/**
+ * A list of pipeline resources.
+ */
 @Fluent
 public final class PipelineListResponse {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PipelineListResponse.class);
-
     /*
      * List of pipelines.
      */
@@ -29,8 +28,14 @@ public final class PipelineListResponse {
     private String nextLink;
 
     /**
+     * Creates an instance of PipelineListResponse class.
+     */
+    public PipelineListResponse() {
+    }
+
+    /**
      * Get the value property: List of pipelines.
-     *
+     * 
      * @return the value value.
      */
     public List<PipelineResourceInner> value() {
@@ -39,7 +44,7 @@ public final class PipelineListResponse {
 
     /**
      * Set the value property: List of pipelines.
-     *
+     * 
      * @param value the value value to set.
      * @return the PipelineListResponse object itself.
      */
@@ -50,7 +55,7 @@ public final class PipelineListResponse {
 
     /**
      * Get the nextLink property: The link to the next page of results, if any remaining results exist.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,7 +64,7 @@ public final class PipelineListResponse {
 
     /**
      * Set the nextLink property: The link to the next page of results, if any remaining results exist.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the PipelineListResponse object itself.
      */
@@ -70,16 +75,17 @@ public final class PipelineListResponse {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property value in model PipelineListResponse"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property value in model PipelineListResponse"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(PipelineListResponse.class);
 }

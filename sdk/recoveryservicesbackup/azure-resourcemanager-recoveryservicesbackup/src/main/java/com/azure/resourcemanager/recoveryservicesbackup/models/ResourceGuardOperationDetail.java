@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The ResourceGuardOperationDetail model. */
+/**
+ * The ResourceGuardOperationDetail model.
+ */
 @Fluent
 public final class ResourceGuardOperationDetail {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ResourceGuardOperationDetail.class);
-
     /*
      * The vaultCriticalOperation property.
      */
@@ -27,8 +25,14 @@ public final class ResourceGuardOperationDetail {
     private String defaultResourceRequest;
 
     /**
+     * Creates an instance of ResourceGuardOperationDetail class.
+     */
+    public ResourceGuardOperationDetail() {
+    }
+
+    /**
      * Get the vaultCriticalOperation property: The vaultCriticalOperation property.
-     *
+     * 
      * @return the vaultCriticalOperation value.
      */
     public String vaultCriticalOperation() {
@@ -37,7 +41,7 @@ public final class ResourceGuardOperationDetail {
 
     /**
      * Set the vaultCriticalOperation property: The vaultCriticalOperation property.
-     *
+     * 
      * @param vaultCriticalOperation the vaultCriticalOperation value to set.
      * @return the ResourceGuardOperationDetail object itself.
      */
@@ -48,7 +52,7 @@ public final class ResourceGuardOperationDetail {
 
     /**
      * Get the defaultResourceRequest property: The defaultResourceRequest property.
-     *
+     * 
      * @return the defaultResourceRequest value.
      */
     public String defaultResourceRequest() {
@@ -57,7 +61,7 @@ public final class ResourceGuardOperationDetail {
 
     /**
      * Set the defaultResourceRequest property: The defaultResourceRequest property.
-     *
+     * 
      * @param defaultResourceRequest the defaultResourceRequest value to set.
      * @return the ResourceGuardOperationDetail object itself.
      */
@@ -68,7 +72,7 @@ public final class ResourceGuardOperationDetail {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

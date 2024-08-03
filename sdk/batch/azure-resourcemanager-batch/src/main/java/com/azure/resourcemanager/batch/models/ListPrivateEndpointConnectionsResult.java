@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.batch.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.batch.fluent.models.PrivateEndpointConnectionInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Values returned by the List operation. */
+/**
+ * Values returned by the List operation.
+ */
 @Fluent
 public final class ListPrivateEndpointConnectionsResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ListPrivateEndpointConnectionsResult.class);
-
     /*
      * The collection of returned private endpoint connection.
      */
@@ -29,8 +27,14 @@ public final class ListPrivateEndpointConnectionsResult {
     private String nextLink;
 
     /**
+     * Creates an instance of ListPrivateEndpointConnectionsResult class.
+     */
+    public ListPrivateEndpointConnectionsResult() {
+    }
+
+    /**
      * Get the value property: The collection of returned private endpoint connection.
-     *
+     * 
      * @return the value value.
      */
     public List<PrivateEndpointConnectionInner> value() {
@@ -39,7 +43,7 @@ public final class ListPrivateEndpointConnectionsResult {
 
     /**
      * Set the value property: The collection of returned private endpoint connection.
-     *
+     * 
      * @param value the value value to set.
      * @return the ListPrivateEndpointConnectionsResult object itself.
      */
@@ -50,7 +54,7 @@ public final class ListPrivateEndpointConnectionsResult {
 
     /**
      * Get the nextLink property: The continuation token.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,7 +63,7 @@ public final class ListPrivateEndpointConnectionsResult {
 
     /**
      * Set the nextLink property: The continuation token.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the ListPrivateEndpointConnectionsResult object itself.
      */
@@ -70,7 +74,7 @@ public final class ListPrivateEndpointConnectionsResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

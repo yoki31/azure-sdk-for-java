@@ -5,46 +5,56 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** A copy activity SQL Data Warehouse source. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * A copy activity SQL Data Warehouse source.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = SqlDWSource.class, visible = true)
 @JsonTypeName("SqlDWSource")
 @Fluent
 public final class SqlDWSource extends TabularSource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SqlDWSource.class);
+    /*
+     * Copy source type.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "SqlDWSource";
 
     /*
-     * SQL Data Warehouse reader query. Type: string (or Expression with
-     * resultType string).
+     * SQL Data Warehouse reader query. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "sqlReaderQuery")
     private Object sqlReaderQuery;
 
     /*
-     * Name of the stored procedure for a SQL Data Warehouse source. This
-     * cannot be used at the same time as SqlReaderQuery. Type: string (or
-     * Expression with resultType string).
+     * Name of the stored procedure for a SQL Data Warehouse source. This cannot be used at the same time as
+     * SqlReaderQuery. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "sqlReaderStoredProcedureName")
     private Object sqlReaderStoredProcedureName;
 
     /*
-     * Value and type setting for stored procedure parameters. Example:
-     * "{Parameter1: {value: "1", type: "int"}}". Type: object (or Expression
-     * with resultType object), itemType: StoredProcedureParameter.
+     * Value and type setting for stored procedure parameters. Example: "{Parameter1: {value: "1", type: "int"}}". Type:
+     * object (or Expression with resultType object), itemType: StoredProcedureParameter.
      */
     @JsonProperty(value = "storedProcedureParameters")
     private Object storedProcedureParameters;
 
     /*
-     * The partition mechanism that will be used for Sql read in parallel.
-     * Possible values include: "None", "PhysicalPartitionsOfTable",
-     * "DynamicRange".
+     * Specifies the transaction locking behavior for the SQL source. Allowed values:
+     * ReadCommitted/ReadUncommitted/RepeatableRead/Serializable/Snapshot. The default value is ReadCommitted. Type:
+     * string (or Expression with resultType string).
+     */
+    @JsonProperty(value = "isolationLevel")
+    private Object isolationLevel;
+
+    /*
+     * The partition mechanism that will be used for Sql read in parallel. Possible values include: "None",
+     * "PhysicalPartitionsOfTable", "DynamicRange". Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "partitionOption")
     private Object partitionOption;
@@ -56,9 +66,25 @@ public final class SqlDWSource extends TabularSource {
     private SqlPartitionSettings partitionSettings;
 
     /**
+     * Creates an instance of SqlDWSource class.
+     */
+    public SqlDWSource() {
+    }
+
+    /**
+     * Get the type property: Copy source type.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the sqlReaderQuery property: SQL Data Warehouse reader query. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @return the sqlReaderQuery value.
      */
     public Object sqlReaderQuery() {
@@ -68,7 +94,7 @@ public final class SqlDWSource extends TabularSource {
     /**
      * Set the sqlReaderQuery property: SQL Data Warehouse reader query. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @param sqlReaderQuery the sqlReaderQuery value to set.
      * @return the SqlDWSource object itself.
      */
@@ -80,7 +106,7 @@ public final class SqlDWSource extends TabularSource {
     /**
      * Get the sqlReaderStoredProcedureName property: Name of the stored procedure for a SQL Data Warehouse source. This
      * cannot be used at the same time as SqlReaderQuery. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the sqlReaderStoredProcedureName value.
      */
     public Object sqlReaderStoredProcedureName() {
@@ -90,7 +116,7 @@ public final class SqlDWSource extends TabularSource {
     /**
      * Set the sqlReaderStoredProcedureName property: Name of the stored procedure for a SQL Data Warehouse source. This
      * cannot be used at the same time as SqlReaderQuery. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param sqlReaderStoredProcedureName the sqlReaderStoredProcedureName value to set.
      * @return the SqlDWSource object itself.
      */
@@ -103,7 +129,7 @@ public final class SqlDWSource extends TabularSource {
      * Get the storedProcedureParameters property: Value and type setting for stored procedure parameters. Example:
      * "{Parameter1: {value: "1", type: "int"}}". Type: object (or Expression with resultType object), itemType:
      * StoredProcedureParameter.
-     *
+     * 
      * @return the storedProcedureParameters value.
      */
     public Object storedProcedureParameters() {
@@ -114,7 +140,7 @@ public final class SqlDWSource extends TabularSource {
      * Set the storedProcedureParameters property: Value and type setting for stored procedure parameters. Example:
      * "{Parameter1: {value: "1", type: "int"}}". Type: object (or Expression with resultType object), itemType:
      * StoredProcedureParameter.
-     *
+     * 
      * @param storedProcedureParameters the storedProcedureParameters value to set.
      * @return the SqlDWSource object itself.
      */
@@ -124,9 +150,34 @@ public final class SqlDWSource extends TabularSource {
     }
 
     /**
+     * Get the isolationLevel property: Specifies the transaction locking behavior for the SQL source. Allowed values:
+     * ReadCommitted/ReadUncommitted/RepeatableRead/Serializable/Snapshot. The default value is ReadCommitted. Type:
+     * string (or Expression with resultType string).
+     * 
+     * @return the isolationLevel value.
+     */
+    public Object isolationLevel() {
+        return this.isolationLevel;
+    }
+
+    /**
+     * Set the isolationLevel property: Specifies the transaction locking behavior for the SQL source. Allowed values:
+     * ReadCommitted/ReadUncommitted/RepeatableRead/Serializable/Snapshot. The default value is ReadCommitted. Type:
+     * string (or Expression with resultType string).
+     * 
+     * @param isolationLevel the isolationLevel value to set.
+     * @return the SqlDWSource object itself.
+     */
+    public SqlDWSource withIsolationLevel(Object isolationLevel) {
+        this.isolationLevel = isolationLevel;
+        return this;
+    }
+
+    /**
      * Get the partitionOption property: The partition mechanism that will be used for Sql read in parallel. Possible
-     * values include: "None", "PhysicalPartitionsOfTable", "DynamicRange".
-     *
+     * values include: "None", "PhysicalPartitionsOfTable", "DynamicRange". Type: string (or Expression with resultType
+     * string).
+     * 
      * @return the partitionOption value.
      */
     public Object partitionOption() {
@@ -135,8 +186,9 @@ public final class SqlDWSource extends TabularSource {
 
     /**
      * Set the partitionOption property: The partition mechanism that will be used for Sql read in parallel. Possible
-     * values include: "None", "PhysicalPartitionsOfTable", "DynamicRange".
-     *
+     * values include: "None", "PhysicalPartitionsOfTable", "DynamicRange". Type: string (or Expression with resultType
+     * string).
+     * 
      * @param partitionOption the partitionOption value to set.
      * @return the SqlDWSource object itself.
      */
@@ -147,7 +199,7 @@ public final class SqlDWSource extends TabularSource {
 
     /**
      * Get the partitionSettings property: The settings that will be leveraged for Sql source partitioning.
-     *
+     * 
      * @return the partitionSettings value.
      */
     public SqlPartitionSettings partitionSettings() {
@@ -156,7 +208,7 @@ public final class SqlDWSource extends TabularSource {
 
     /**
      * Set the partitionSettings property: The settings that will be leveraged for Sql source partitioning.
-     *
+     * 
      * @param partitionSettings the partitionSettings value to set.
      * @return the SqlDWSource object itself.
      */
@@ -165,42 +217,54 @@ public final class SqlDWSource extends TabularSource {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SqlDWSource withQueryTimeout(Object queryTimeout) {
         super.withQueryTimeout(queryTimeout);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SqlDWSource withAdditionalColumns(Object additionalColumns) {
         super.withAdditionalColumns(additionalColumns);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SqlDWSource withSourceRetryCount(Object sourceRetryCount) {
         super.withSourceRetryCount(sourceRetryCount);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SqlDWSource withSourceRetryWait(Object sourceRetryWait) {
         super.withSourceRetryWait(sourceRetryWait);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SqlDWSource withMaxConcurrentConnections(Object maxConcurrentConnections) {
         super.withMaxConcurrentConnections(maxConcurrentConnections);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SqlDWSource withDisableMetricsCollection(Object disableMetricsCollection) {
         super.withDisableMetricsCollection(disableMetricsCollection);
@@ -209,7 +273,7 @@ public final class SqlDWSource extends TabularSource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

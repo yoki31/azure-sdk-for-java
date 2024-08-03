@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The CassandraKeyspaceGetPropertiesResource model. */
+/**
+ * The CassandraKeyspaceGetPropertiesResource model.
+ */
 @Fluent
 public final class CassandraKeyspaceGetPropertiesResource extends CassandraKeyspaceResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CassandraKeyspaceGetPropertiesResource.class);
-
     /*
      * A system generated property. A unique identifier.
      */
@@ -21,22 +19,26 @@ public final class CassandraKeyspaceGetPropertiesResource extends CassandraKeysp
     private String rid;
 
     /*
-     * A system generated property that denotes the last updated timestamp of
-     * the resource.
+     * A system generated property that denotes the last updated timestamp of the resource.
      */
     @JsonProperty(value = "_ts", access = JsonProperty.Access.WRITE_ONLY)
     private Float ts;
 
     /*
-     * A system generated property representing the resource etag required for
-     * optimistic concurrency control.
+     * A system generated property representing the resource etag required for optimistic concurrency control.
      */
     @JsonProperty(value = "_etag", access = JsonProperty.Access.WRITE_ONLY)
     private String etag;
 
     /**
+     * Creates an instance of CassandraKeyspaceGetPropertiesResource class.
+     */
+    public CassandraKeyspaceGetPropertiesResource() {
+    }
+
+    /**
      * Get the rid property: A system generated property. A unique identifier.
-     *
+     * 
      * @return the rid value.
      */
     public String rid() {
@@ -45,7 +47,7 @@ public final class CassandraKeyspaceGetPropertiesResource extends CassandraKeysp
 
     /**
      * Get the ts property: A system generated property that denotes the last updated timestamp of the resource.
-     *
+     * 
      * @return the ts value.
      */
     public Float ts() {
@@ -55,14 +57,16 @@ public final class CassandraKeyspaceGetPropertiesResource extends CassandraKeysp
     /**
      * Get the etag property: A system generated property representing the resource etag required for optimistic
      * concurrency control.
-     *
+     * 
      * @return the etag value.
      */
     public String etag() {
         return this.etag;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CassandraKeyspaceGetPropertiesResource withId(String id) {
         super.withId(id);
@@ -71,7 +75,7 @@ public final class CassandraKeyspaceGetPropertiesResource extends CassandraKeysp
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

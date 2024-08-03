@@ -6,19 +6,18 @@ package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.CoreUtils;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.HostingEnvironmentProfile;
 import com.azure.resourcemanager.appservice.models.KeyVaultSecretStatus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.OffsetDateTime;
 import java.util.List;
 
-/** Certificate resource specific properties. */
+/**
+ * Certificate resource specific properties.
+ */
 @Fluent
 public final class CertificateProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CertificateProperties.class);
-
     /*
      * Certificate password.
      */
@@ -104,8 +103,7 @@ public final class CertificateProperties {
     private String publicKeyHash;
 
     /*
-     * Specification for the App Service Environment to use for the
-     * certificate.
+     * Specification for the App Service Environment to use for the certificate.
      */
     @JsonProperty(value = "hostingEnvironmentProfile", access = JsonProperty.Access.WRITE_ONLY)
     private HostingEnvironmentProfile hostingEnvironmentProfile;
@@ -129,9 +127,7 @@ public final class CertificateProperties {
     private KeyVaultSecretStatus keyVaultSecretStatus;
 
     /*
-     * Resource ID of the associated App Service plan, formatted as:
-     * "/subscriptions/{subscriptionID}/resourceGroups/{groupName}/providers/Microsoft.Web/serverfarms"
-         + "/{appServicePlanName}".
+     * Resource ID of the associated App Service plan, formatted as: "/subscriptions/{subscriptionID}/resourceGroups/{groupName}/providers/Microsoft.Web/serverfarms/{appServicePlanName}".
      */
     @JsonProperty(value = "serverFarmId")
     private String serverFarmId;
@@ -147,6 +143,12 @@ public final class CertificateProperties {
      */
     @JsonProperty(value = "domainValidationMethod")
     private String domainValidationMethod;
+
+    /**
+     * Creates an instance of CertificateProperties class.
+     */
+    public CertificateProperties() {
+    }
 
     /**
      * Get the password property: Certificate password.
@@ -368,8 +370,7 @@ public final class CertificateProperties {
 
     /**
      * Get the serverFarmId property: Resource ID of the associated App Service plan, formatted as:
-     * "/subscriptions/{subscriptionID}/resourceGroups/{groupName}/providers/Microsoft.Web/serverfarms"
-         + "/{appServicePlanName}".
+     * "/subscriptions/{subscriptionID}/resourceGroups/{groupName}/providers/Microsoft.Web/serverfarms/{appServicePlanName}".
      *
      * @return the serverFarmId value.
      */
@@ -379,8 +380,7 @@ public final class CertificateProperties {
 
     /**
      * Set the serverFarmId property: Resource ID of the associated App Service plan, formatted as:
-     * "/subscriptions/{subscriptionID}/resourceGroups/{groupName}/providers/Microsoft.Web/serverfarms"
-         + "/{appServicePlanName}".
+     * "/subscriptions/{subscriptionID}/resourceGroups/{groupName}/providers/Microsoft.Web/serverfarms/{appServicePlanName}".
      *
      * @param serverFarmId the serverFarmId value to set.
      * @return the CertificateProperties object itself.

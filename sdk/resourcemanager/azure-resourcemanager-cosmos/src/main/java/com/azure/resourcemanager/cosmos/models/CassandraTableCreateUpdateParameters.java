@@ -7,20 +7,26 @@ package com.azure.resourcemanager.cosmos.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cosmos.fluent.models.CassandraTableCreateUpdateProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Map;
 
-/** Parameters to create and update Cosmos DB Cassandra table. */
+/**
+ * Parameters to create and update Cosmos DB Cassandra table.
+ */
 @Fluent
 public final class CassandraTableCreateUpdateParameters extends ArmResourceProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CassandraTableCreateUpdateParameters.class);
-
     /*
      * Properties to create and update Azure Cosmos DB Cassandra table.
      */
     @JsonProperty(value = "properties", required = true)
     private CassandraTableCreateUpdateProperties innerProperties = new CassandraTableCreateUpdateProperties();
+
+    /**
+     * Creates an instance of CassandraTableCreateUpdateParameters class.
+     */
+    public CassandraTableCreateUpdateParameters() {
+    }
 
     /**
      * Get the innerProperties property: Properties to create and update Azure Cosmos DB Cassandra table.
@@ -31,14 +37,18 @@ public final class CassandraTableCreateUpdateParameters extends ArmResourcePrope
         return this.innerProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CassandraTableCreateUpdateParameters withLocation(String location) {
         super.withLocation(location);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CassandraTableCreateUpdateParameters withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -102,12 +112,13 @@ public final class CassandraTableCreateUpdateParameters extends ArmResourcePrope
     public void validate() {
         super.validate();
         if (innerProperties() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property innerProperties in model CassandraTableCreateUpdateParameters"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property innerProperties in model CassandraTableCreateUpdateParameters"));
         } else {
             innerProperties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(CassandraTableCreateUpdateParameters.class);
 }

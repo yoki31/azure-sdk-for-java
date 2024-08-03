@@ -21,14 +21,11 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.synapse.fluent.IntegrationRuntimeCredentialsClient;
 import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in IntegrationRuntimeCredentialsClient. */
 public final class IntegrationRuntimeCredentialsClientImpl implements IntegrationRuntimeCredentialsClient {
-    private final ClientLogger logger = new ClientLogger(IntegrationRuntimeCredentialsClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final IntegrationRuntimeCredentialsService service;
 
@@ -56,7 +53,7 @@ public final class IntegrationRuntimeCredentialsClientImpl implements Integratio
      */
     @Host("{$host}")
     @ServiceInterface(name = "SynapseManagementCli")
-    private interface IntegrationRuntimeCredentialsService {
+    public interface IntegrationRuntimeCredentialsService {
         @Headers({"Content-Type: application/json"})
         @Post(
             "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
@@ -75,10 +72,12 @@ public final class IntegrationRuntimeCredentialsClientImpl implements Integratio
     }
 
     /**
-     * Force the integration runtime to synchronize credentials across integration runtime nodes, and this will override
-     * the credentials across all worker nodes with those available on the dispatcher node. If you already have the
-     * latest credential backup file, you should manually import it (preferred) on any self-hosted integration runtime
-     * node than using this API directly.
+     * Sync integration runtime credentials
+     *
+     * <p>Force the integration runtime to synchronize credentials across integration runtime nodes, and this will
+     * override the credentials across all worker nodes with those available on the dispatcher node. If you already have
+     * the latest credential backup file, you should manually import it (preferred) on any self-hosted integration
+     * runtime node than using this API directly.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -86,7 +85,7 @@ public final class IntegrationRuntimeCredentialsClientImpl implements Integratio
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> syncWithResponseAsync(
@@ -134,10 +133,12 @@ public final class IntegrationRuntimeCredentialsClientImpl implements Integratio
     }
 
     /**
-     * Force the integration runtime to synchronize credentials across integration runtime nodes, and this will override
-     * the credentials across all worker nodes with those available on the dispatcher node. If you already have the
-     * latest credential backup file, you should manually import it (preferred) on any self-hosted integration runtime
-     * node than using this API directly.
+     * Sync integration runtime credentials
+     *
+     * <p>Force the integration runtime to synchronize credentials across integration runtime nodes, and this will
+     * override the credentials across all worker nodes with those available on the dispatcher node. If you already have
+     * the latest credential backup file, you should manually import it (preferred) on any self-hosted integration
+     * runtime node than using this API directly.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -146,7 +147,7 @@ public final class IntegrationRuntimeCredentialsClientImpl implements Integratio
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> syncWithResponseAsync(
@@ -191,10 +192,12 @@ public final class IntegrationRuntimeCredentialsClientImpl implements Integratio
     }
 
     /**
-     * Force the integration runtime to synchronize credentials across integration runtime nodes, and this will override
-     * the credentials across all worker nodes with those available on the dispatcher node. If you already have the
-     * latest credential backup file, you should manually import it (preferred) on any self-hosted integration runtime
-     * node than using this API directly.
+     * Sync integration runtime credentials
+     *
+     * <p>Force the integration runtime to synchronize credentials across integration runtime nodes, and this will
+     * override the credentials across all worker nodes with those available on the dispatcher node. If you already have
+     * the latest credential backup file, you should manually import it (preferred) on any self-hosted integration
+     * runtime node than using this API directly.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -202,19 +205,44 @@ public final class IntegrationRuntimeCredentialsClientImpl implements Integratio
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> syncAsync(String resourceGroupName, String workspaceName, String integrationRuntimeName) {
         return syncWithResponseAsync(resourceGroupName, workspaceName, integrationRuntimeName)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
-     * Force the integration runtime to synchronize credentials across integration runtime nodes, and this will override
-     * the credentials across all worker nodes with those available on the dispatcher node. If you already have the
-     * latest credential backup file, you should manually import it (preferred) on any self-hosted integration runtime
-     * node than using this API directly.
+     * Sync integration runtime credentials
+     *
+     * <p>Force the integration runtime to synchronize credentials across integration runtime nodes, and this will
+     * override the credentials across all worker nodes with those available on the dispatcher node. If you already have
+     * the latest credential backup file, you should manually import it (preferred) on any self-hosted integration
+     * runtime node than using this API directly.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param integrationRuntimeName Integration runtime name.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> syncWithResponse(
+        String resourceGroupName, String workspaceName, String integrationRuntimeName, Context context) {
+        return syncWithResponseAsync(resourceGroupName, workspaceName, integrationRuntimeName, context).block();
+    }
+
+    /**
+     * Sync integration runtime credentials
+     *
+     * <p>Force the integration runtime to synchronize credentials across integration runtime nodes, and this will
+     * override the credentials across all worker nodes with those available on the dispatcher node. If you already have
+     * the latest credential backup file, you should manually import it (preferred) on any self-hosted integration
+     * runtime node than using this API directly.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -225,27 +253,6 @@ public final class IntegrationRuntimeCredentialsClientImpl implements Integratio
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public void sync(String resourceGroupName, String workspaceName, String integrationRuntimeName) {
-        syncAsync(resourceGroupName, workspaceName, integrationRuntimeName).block();
-    }
-
-    /**
-     * Force the integration runtime to synchronize credentials across integration runtime nodes, and this will override
-     * the credentials across all worker nodes with those available on the dispatcher node. If you already have the
-     * latest credential backup file, you should manually import it (preferred) on any self-hosted integration runtime
-     * node than using this API directly.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param integrationRuntimeName Integration runtime name.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> syncWithResponse(
-        String resourceGroupName, String workspaceName, String integrationRuntimeName, Context context) {
-        return syncWithResponseAsync(resourceGroupName, workspaceName, integrationRuntimeName, context).block();
+        syncWithResponse(resourceGroupName, workspaceName, integrationRuntimeName, Context.NONE);
     }
 }

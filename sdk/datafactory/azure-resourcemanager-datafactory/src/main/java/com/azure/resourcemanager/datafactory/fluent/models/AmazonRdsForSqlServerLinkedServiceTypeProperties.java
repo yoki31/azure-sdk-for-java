@@ -5,28 +5,31 @@
 package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.resourcemanager.datafactory.models.AmazonRdsForSqlAuthenticationType;
 import com.azure.resourcemanager.datafactory.models.SecretBase;
 import com.azure.resourcemanager.datafactory.models.SqlAlwaysEncryptedProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.azure.resourcemanager.datafactory.models.SqlServerBaseLinkedServiceTypeProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Amazon Rds for SQL Server linked service properties. */
+/**
+ * Amazon Rds for SQL Server linked service properties.
+ */
 @Fluent
-public final class AmazonRdsForSqlServerLinkedServiceTypeProperties {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(AmazonRdsForSqlServerLinkedServiceTypeProperties.class);
-
+public final class AmazonRdsForSqlServerLinkedServiceTypeProperties extends SqlServerBaseLinkedServiceTypeProperties {
     /*
-     * The connection string. Type: string, SecureString or
-     * AzureKeyVaultSecretReference.
+     * The connection string. Type: string, SecureString or AzureKeyVaultSecretReference.
      */
-    @JsonProperty(value = "connectionString", required = true)
+    @JsonProperty(value = "connectionString")
     private Object connectionString;
 
     /*
-     * The on-premises Windows authentication user name. Type: string (or
-     * Expression with resultType string).
+     * The type used for authentication. Type: string.
+     */
+    @JsonProperty(value = "authenticationType")
+    private AmazonRdsForSqlAuthenticationType authenticationType;
+
+    /*
+     * The on-premises Windows authentication user name. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "userName")
     private Object username;
@@ -38,12 +41,11 @@ public final class AmazonRdsForSqlServerLinkedServiceTypeProperties {
     private SecretBase password;
 
     /*
-     * The encrypted credential used for authentication. Credentials are
-     * encrypted using the integration runtime credential manager. Type: string
-     * (or Expression with resultType string).
+     * The encrypted credential used for authentication. Credentials are encrypted using the integration runtime
+     * credential manager. Type: string.
      */
     @JsonProperty(value = "encryptedCredential")
-    private Object encryptedCredential;
+    private String encryptedCredential;
 
     /*
      * Sql always encrypted properties.
@@ -52,9 +54,15 @@ public final class AmazonRdsForSqlServerLinkedServiceTypeProperties {
     private SqlAlwaysEncryptedProperties alwaysEncryptedSettings;
 
     /**
+     * Creates an instance of AmazonRdsForSqlServerLinkedServiceTypeProperties class.
+     */
+    public AmazonRdsForSqlServerLinkedServiceTypeProperties() {
+    }
+
+    /**
      * Get the connectionString property: The connection string. Type: string, SecureString or
      * AzureKeyVaultSecretReference.
-     *
+     * 
      * @return the connectionString value.
      */
     public Object connectionString() {
@@ -64,7 +72,7 @@ public final class AmazonRdsForSqlServerLinkedServiceTypeProperties {
     /**
      * Set the connectionString property: The connection string. Type: string, SecureString or
      * AzureKeyVaultSecretReference.
-     *
+     * 
      * @param connectionString the connectionString value to set.
      * @return the AmazonRdsForSqlServerLinkedServiceTypeProperties object itself.
      */
@@ -74,9 +82,30 @@ public final class AmazonRdsForSqlServerLinkedServiceTypeProperties {
     }
 
     /**
+     * Get the authenticationType property: The type used for authentication. Type: string.
+     * 
+     * @return the authenticationType value.
+     */
+    public AmazonRdsForSqlAuthenticationType authenticationType() {
+        return this.authenticationType;
+    }
+
+    /**
+     * Set the authenticationType property: The type used for authentication. Type: string.
+     * 
+     * @param authenticationType the authenticationType value to set.
+     * @return the AmazonRdsForSqlServerLinkedServiceTypeProperties object itself.
+     */
+    public AmazonRdsForSqlServerLinkedServiceTypeProperties
+        withAuthenticationType(AmazonRdsForSqlAuthenticationType authenticationType) {
+        this.authenticationType = authenticationType;
+        return this;
+    }
+
+    /**
      * Get the username property: The on-premises Windows authentication user name. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the username value.
      */
     public Object username() {
@@ -86,7 +115,7 @@ public final class AmazonRdsForSqlServerLinkedServiceTypeProperties {
     /**
      * Set the username property: The on-premises Windows authentication user name. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param username the username value to set.
      * @return the AmazonRdsForSqlServerLinkedServiceTypeProperties object itself.
      */
@@ -97,7 +126,7 @@ public final class AmazonRdsForSqlServerLinkedServiceTypeProperties {
 
     /**
      * Get the password property: The on-premises Windows authentication password.
-     *
+     * 
      * @return the password value.
      */
     public SecretBase password() {
@@ -106,7 +135,7 @@ public final class AmazonRdsForSqlServerLinkedServiceTypeProperties {
 
     /**
      * Set the password property: The on-premises Windows authentication password.
-     *
+     * 
      * @param password the password value to set.
      * @return the AmazonRdsForSqlServerLinkedServiceTypeProperties object itself.
      */
@@ -117,29 +146,29 @@ public final class AmazonRdsForSqlServerLinkedServiceTypeProperties {
 
     /**
      * Get the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @return the encryptedCredential value.
      */
-    public Object encryptedCredential() {
+    public String encryptedCredential() {
         return this.encryptedCredential;
     }
 
     /**
      * Set the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @param encryptedCredential the encryptedCredential value to set.
      * @return the AmazonRdsForSqlServerLinkedServiceTypeProperties object itself.
      */
-    public AmazonRdsForSqlServerLinkedServiceTypeProperties withEncryptedCredential(Object encryptedCredential) {
+    public AmazonRdsForSqlServerLinkedServiceTypeProperties withEncryptedCredential(String encryptedCredential) {
         this.encryptedCredential = encryptedCredential;
         return this;
     }
 
     /**
      * Get the alwaysEncryptedSettings property: Sql always encrypted properties.
-     *
+     * 
      * @return the alwaysEncryptedSettings value.
      */
     public SqlAlwaysEncryptedProperties alwaysEncryptedSettings() {
@@ -148,29 +177,196 @@ public final class AmazonRdsForSqlServerLinkedServiceTypeProperties {
 
     /**
      * Set the alwaysEncryptedSettings property: Sql always encrypted properties.
-     *
+     * 
      * @param alwaysEncryptedSettings the alwaysEncryptedSettings value to set.
      * @return the AmazonRdsForSqlServerLinkedServiceTypeProperties object itself.
      */
-    public AmazonRdsForSqlServerLinkedServiceTypeProperties withAlwaysEncryptedSettings(
-        SqlAlwaysEncryptedProperties alwaysEncryptedSettings) {
+    public AmazonRdsForSqlServerLinkedServiceTypeProperties
+        withAlwaysEncryptedSettings(SqlAlwaysEncryptedProperties alwaysEncryptedSettings) {
         this.alwaysEncryptedSettings = alwaysEncryptedSettings;
         return this;
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AmazonRdsForSqlServerLinkedServiceTypeProperties withServer(Object server) {
+        super.withServer(server);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AmazonRdsForSqlServerLinkedServiceTypeProperties withDatabase(Object database) {
+        super.withDatabase(database);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AmazonRdsForSqlServerLinkedServiceTypeProperties withEncrypt(Object encrypt) {
+        super.withEncrypt(encrypt);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AmazonRdsForSqlServerLinkedServiceTypeProperties withTrustServerCertificate(Object trustServerCertificate) {
+        super.withTrustServerCertificate(trustServerCertificate);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AmazonRdsForSqlServerLinkedServiceTypeProperties withHostnameInCertificate(Object hostnameInCertificate) {
+        super.withHostnameInCertificate(hostnameInCertificate);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AmazonRdsForSqlServerLinkedServiceTypeProperties withApplicationIntent(Object applicationIntent) {
+        super.withApplicationIntent(applicationIntent);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AmazonRdsForSqlServerLinkedServiceTypeProperties withConnectTimeout(Object connectTimeout) {
+        super.withConnectTimeout(connectTimeout);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AmazonRdsForSqlServerLinkedServiceTypeProperties withConnectRetryCount(Object connectRetryCount) {
+        super.withConnectRetryCount(connectRetryCount);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AmazonRdsForSqlServerLinkedServiceTypeProperties withConnectRetryInterval(Object connectRetryInterval) {
+        super.withConnectRetryInterval(connectRetryInterval);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AmazonRdsForSqlServerLinkedServiceTypeProperties withLoadBalanceTimeout(Object loadBalanceTimeout) {
+        super.withLoadBalanceTimeout(loadBalanceTimeout);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AmazonRdsForSqlServerLinkedServiceTypeProperties withCommandTimeout(Object commandTimeout) {
+        super.withCommandTimeout(commandTimeout);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AmazonRdsForSqlServerLinkedServiceTypeProperties withIntegratedSecurity(Object integratedSecurity) {
+        super.withIntegratedSecurity(integratedSecurity);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AmazonRdsForSqlServerLinkedServiceTypeProperties withFailoverPartner(Object failoverPartner) {
+        super.withFailoverPartner(failoverPartner);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AmazonRdsForSqlServerLinkedServiceTypeProperties withMaxPoolSize(Object maxPoolSize) {
+        super.withMaxPoolSize(maxPoolSize);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AmazonRdsForSqlServerLinkedServiceTypeProperties withMinPoolSize(Object minPoolSize) {
+        super.withMinPoolSize(minPoolSize);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AmazonRdsForSqlServerLinkedServiceTypeProperties
+        withMultipleActiveResultSets(Object multipleActiveResultSets) {
+        super.withMultipleActiveResultSets(multipleActiveResultSets);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AmazonRdsForSqlServerLinkedServiceTypeProperties withMultiSubnetFailover(Object multiSubnetFailover) {
+        super.withMultiSubnetFailover(multiSubnetFailover);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AmazonRdsForSqlServerLinkedServiceTypeProperties withPacketSize(Object packetSize) {
+        super.withPacketSize(packetSize);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AmazonRdsForSqlServerLinkedServiceTypeProperties withPooling(Object pooling) {
+        super.withPooling(pooling);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
+    @Override
     public void validate() {
-        if (connectionString() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property connectionString in model"
-                            + " AmazonRdsForSqlServerLinkedServiceTypeProperties"));
-        }
+        super.validate();
         if (password() != null) {
             password().validate();
         }

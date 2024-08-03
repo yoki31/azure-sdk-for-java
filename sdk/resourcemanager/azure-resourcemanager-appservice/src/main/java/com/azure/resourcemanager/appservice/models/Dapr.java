@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Container App Dapr configuration. */
+/**
+ * Container App Dapr configuration.
+ */
 @Fluent
 public final class Dapr {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Dapr.class);
-
     /*
      * Boolean indicating if the Dapr side car is enabled
      */
@@ -40,8 +38,14 @@ public final class Dapr {
     private List<DaprComponent> components;
 
     /**
+     * Creates an instance of Dapr class.
+     */
+    public Dapr() {
+    }
+
+    /**
      * Get the enabled property: Boolean indicating if the Dapr side car is enabled.
-     *
+     * 
      * @return the enabled value.
      */
     public Boolean enabled() {
@@ -50,7 +54,7 @@ public final class Dapr {
 
     /**
      * Set the enabled property: Boolean indicating if the Dapr side car is enabled.
-     *
+     * 
      * @param enabled the enabled value to set.
      * @return the Dapr object itself.
      */
@@ -61,7 +65,7 @@ public final class Dapr {
 
     /**
      * Get the appId property: Dapr application identifier.
-     *
+     * 
      * @return the appId value.
      */
     public String appId() {
@@ -70,7 +74,7 @@ public final class Dapr {
 
     /**
      * Set the appId property: Dapr application identifier.
-     *
+     * 
      * @param appId the appId value to set.
      * @return the Dapr object itself.
      */
@@ -81,7 +85,7 @@ public final class Dapr {
 
     /**
      * Get the appPort property: Port on which the Dapr side car.
-     *
+     * 
      * @return the appPort value.
      */
     public Integer appPort() {
@@ -90,7 +94,7 @@ public final class Dapr {
 
     /**
      * Set the appPort property: Port on which the Dapr side car.
-     *
+     * 
      * @param appPort the appPort value to set.
      * @return the Dapr object itself.
      */
@@ -101,7 +105,7 @@ public final class Dapr {
 
     /**
      * Get the components property: Collection of Dapr components.
-     *
+     * 
      * @return the components value.
      */
     public List<DaprComponent> components() {
@@ -110,7 +114,7 @@ public final class Dapr {
 
     /**
      * Set the components property: Collection of Dapr components.
-     *
+     * 
      * @param components the components value to set.
      * @return the Dapr object itself.
      */
@@ -121,7 +125,7 @@ public final class Dapr {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

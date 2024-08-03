@@ -6,25 +6,24 @@ package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.azure.resourcemanager.appservice.models.AppServiceCertificateOrderPatchResourcePropertiesAppServiceCertificateNotRenewableReasonsItem;
 import com.azure.resourcemanager.appservice.models.CertificateDetails;
 import com.azure.resourcemanager.appservice.models.CertificateOrderContact;
 import com.azure.resourcemanager.appservice.models.CertificateOrderStatus;
 import com.azure.resourcemanager.appservice.models.CertificateProductType;
 import com.azure.resourcemanager.appservice.models.ProvisioningState;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.azure.resourcemanager.appservice.models.ResourceNotRenewableReason;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 
-/** AppServiceCertificateOrderPatchResource resource specific properties. */
+/**
+ * AppServiceCertificateOrderPatchResource resource specific properties.
+ */
 @Fluent
 public final class AppServiceCertificateOrderPatchResourceProperties {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(AppServiceCertificateOrderPatchResourceProperties.class);
-
     /*
      * State of the Key Vault secret.
      */
@@ -63,8 +62,7 @@ public final class AppServiceCertificateOrderPatchResourceProperties {
     private CertificateProductType productType;
 
     /*
-     * <code>true</code> if the certificate should be automatically renewed
-     * when it expires; otherwise, <code>false</code>.
+     * <code>true</code> if the certificate should be automatically renewed when it expires; otherwise, <code>false</code>.
      */
     @JsonProperty(value = "autoRenew")
     private Boolean autoRenew;
@@ -124,19 +122,16 @@ public final class AppServiceCertificateOrderPatchResourceProperties {
     private OffsetDateTime expirationTime;
 
     /*
-     * <code>true</code> if private key is external; otherwise,
-     * <code>false</code>.
+     * <code>true</code> if private key is external; otherwise, <code>false</code>.
      */
     @JsonProperty(value = "isPrivateKeyExternal", access = JsonProperty.Access.WRITE_ONLY)
     private Boolean isPrivateKeyExternal;
 
     /*
-     * Reasons why App Service Certificate is not renewable at the current
-     * moment.
+     * Reasons why App Service Certificate is not renewable at the current moment.
      */
     @JsonProperty(value = "appServiceCertificateNotRenewableReasons", access = JsonProperty.Access.WRITE_ONLY)
-    private List<AppServiceCertificateOrderPatchResourcePropertiesAppServiceCertificateNotRenewableReasonsItem>
-        appServiceCertificateNotRenewableReasons;
+    private List<ResourceNotRenewableReason> appServiceCertificateNotRenewableReasons;
 
     /*
      * Time stamp when the certificate would be auto renewed next
@@ -149,6 +144,12 @@ public final class AppServiceCertificateOrderPatchResourceProperties {
      */
     @JsonProperty(value = "contact", access = JsonProperty.Access.WRITE_ONLY)
     private CertificateOrderContact contact;
+
+    /**
+     * Creates an instance of AppServiceCertificateOrderPatchResourceProperties class.
+     */
+    public AppServiceCertificateOrderPatchResourceProperties() {
+    }
 
     /**
      * Get the certificates property: State of the Key Vault secret.
@@ -165,8 +166,8 @@ public final class AppServiceCertificateOrderPatchResourceProperties {
      * @param certificates the certificates value to set.
      * @return the AppServiceCertificateOrderPatchResourceProperties object itself.
      */
-    public AppServiceCertificateOrderPatchResourceProperties withCertificates(
-        Map<String, AppServiceCertificateInner> certificates) {
+    public AppServiceCertificateOrderPatchResourceProperties
+        withCertificates(Map<String, AppServiceCertificateInner> certificates) {
         this.certificates = certificates;
         return this;
     }
@@ -390,8 +391,7 @@ public final class AppServiceCertificateOrderPatchResourceProperties {
      *
      * @return the appServiceCertificateNotRenewableReasons value.
      */
-    public List<AppServiceCertificateOrderPatchResourcePropertiesAppServiceCertificateNotRenewableReasonsItem>
-        appServiceCertificateNotRenewableReasons() {
+    public List<ResourceNotRenewableReason> appServiceCertificateNotRenewableReasons() {
         return this.appServiceCertificateNotRenewableReasons;
     }
 
@@ -420,21 +420,16 @@ public final class AppServiceCertificateOrderPatchResourceProperties {
      */
     public void validate() {
         if (certificates() != null) {
-            certificates()
-                .values()
-                .forEach(
-                    e -> {
-                        if (e != null) {
-                            e.validate();
-                        }
-                    });
+            certificates().values().forEach(e -> {
+                if (e != null) {
+                    e.validate();
+                }
+            });
         }
         if (productType() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property productType in model"
-                            + " AppServiceCertificateOrderPatchResourceProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property productType in model AppServiceCertificateOrderPatchResourceProperties"));
         }
         if (signedCertificate() != null) {
             signedCertificate().validate();
@@ -449,4 +444,7 @@ public final class AppServiceCertificateOrderPatchResourceProperties {
             contact().validate();
         }
     }
+
+    private static final ClientLogger LOGGER
+        = new ClientLogger(AppServiceCertificateOrderPatchResourceProperties.class);
 }

@@ -8,18 +8,33 @@ import com.azure.core.util.ExpandableStringEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collection;
 
-/** Defines values for ManagedCassandraResourceIdentityType. */
+/**
+ * The type of the resource.
+ */
 public final class ManagedCassandraResourceIdentityType
     extends ExpandableStringEnum<ManagedCassandraResourceIdentityType> {
-    /** Static value SystemAssigned for ManagedCassandraResourceIdentityType. */
+    /**
+     * Static value SystemAssigned for ManagedCassandraResourceIdentityType.
+     */
     public static final ManagedCassandraResourceIdentityType SYSTEM_ASSIGNED = fromString("SystemAssigned");
 
-    /** Static value None for ManagedCassandraResourceIdentityType. */
+    /**
+     * Static value None for ManagedCassandraResourceIdentityType.
+     */
     public static final ManagedCassandraResourceIdentityType NONE = fromString("None");
 
     /**
+     * Creates a new instance of ManagedCassandraResourceIdentityType value.
+     * 
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public ManagedCassandraResourceIdentityType() {
+    }
+
+    /**
      * Creates or finds a ManagedCassandraResourceIdentityType from its string representation.
-     *
+     * 
      * @param name a name to look for.
      * @return the corresponding ManagedCassandraResourceIdentityType.
      */
@@ -28,7 +43,11 @@ public final class ManagedCassandraResourceIdentityType
         return fromString(name, ManagedCassandraResourceIdentityType.class);
     }
 
-    /** @return known ManagedCassandraResourceIdentityType values. */
+    /**
+     * Gets known ManagedCassandraResourceIdentityType values.
+     * 
+     * @return known ManagedCassandraResourceIdentityType values.
+     */
     public static Collection<ManagedCassandraResourceIdentityType> values() {
         return values(ManagedCassandraResourceIdentityType.class);
     }

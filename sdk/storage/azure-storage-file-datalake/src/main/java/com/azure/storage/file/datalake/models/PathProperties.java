@@ -3,18 +3,17 @@
 
 package com.azure.storage.file.datalake.models;
 
-import com.azure.core.annotation.Immutable;
-
 import com.azure.core.util.CoreUtils;
 import com.azure.storage.common.implementation.Constants;
+import com.azure.storage.file.datalake.implementation.util.AccessorUtility;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Map;
 
 /**
  * This class contains the response information returned from the service when getting path properties.
  */
-@Immutable
 public class PathProperties {
     private final OffsetDateTime creationTime;
     private final OffsetDateTime lastModified;
@@ -44,6 +43,25 @@ public class PathProperties {
     private final Map<String, String> metadata;
     private final Boolean isDirectory;
     private final OffsetDateTime expiresOn;
+    private String encryptionScope;
+    private String encryptionContext;
+    private String owner;
+    private String group;
+    private String permissions;
+    private List<PathAccessControlEntry> accessControlList;
+
+    static {
+        AccessorUtility.setPathPropertiesAccessor((properties, encryptionScope, encryptionContext, owner, group, permissions, AccessControlList) -> {
+            properties.encryptionScope = encryptionScope;
+            properties.encryptionContext = encryptionContext;
+            properties.owner = owner;
+            properties.group = group;
+            properties.permissions = permissions;
+            properties.accessControlList = PathAccessControlEntry.parseList(AccessControlList);
+
+            return properties;
+        });
+    }
 
     /**
      * Constructs a {@link PathProperties}.
@@ -166,6 +184,7 @@ public class PathProperties {
         }
         this.expiresOn = expiresOn;
     }
+
     /**
      * @return the time when the path was created
      */
@@ -368,4 +387,55 @@ public class PathProperties {
     public OffsetDateTime getExpiresOn() {
         return expiresOn;
     }
+
+    /**
+     * @return the path's encryption scope.
+     */
+    public String getEncryptionScope() {
+        return encryptionScope;
+    }
+
+    /**
+     * @return the encryption context for this path. Only applicable for files.
+     */
+    public String getEncryptionContext() {
+        return encryptionContext;
+    }
+
+    /**
+     * Get the owner property of the path: The owner property.
+     *
+     * @return the owner value.
+     */
+    public String getOwner() {
+        return owner;
+    }
+
+    /**
+     * Get the group property of the path: The owner property.
+     *
+     * @return the group value.
+     */
+    public String getGroup() {
+        return group;
+    }
+
+    /**
+     * Get the permissions property of the path: The permissions property.
+     *
+     * @return the permissions value.
+     */
+    public String getPermissions() {
+        return permissions;
+    }
+
+    /**
+     * Optional. The POSIX access control list for the file or directory.
+     *
+     * @return the access control list.
+     */
+    public List<PathAccessControlEntry> getAccessControlList() {
+        return accessControlList;
+    }
+
 }

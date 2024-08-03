@@ -7,6 +7,7 @@ package com.azure.resourcemanager.botservice.models;
 import com.azure.core.management.Region;
 import com.azure.core.util.Context;
 import com.azure.resourcemanager.botservice.fluent.models.BotInner;
+import java.util.List;
 import java.util.Map;
 
 /** An immutable client-side representation of Bot. */
@@ -75,6 +76,13 @@ public interface Bot {
     String etag();
 
     /**
+     * Gets the zones property: Entity zones.
+     *
+     * @return the zones value.
+     */
+    List<String> zones();
+
+    /**
      * Gets the region of the resource.
      *
      * @return the region of the resource.
@@ -87,6 +95,13 @@ public interface Bot {
      * @return the name of the resource region.
      */
     String regionName();
+
+    /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
 
     /**
      * Gets the inner com.azure.resourcemanager.botservice.fluent.models.BotInner object.

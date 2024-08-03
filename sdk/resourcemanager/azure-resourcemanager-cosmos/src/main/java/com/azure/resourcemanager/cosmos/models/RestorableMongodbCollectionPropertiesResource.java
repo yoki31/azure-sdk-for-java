@@ -5,16 +5,13 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The resource of an Azure Cosmos DB MongoDB collection event. */
+/**
+ * The resource of an Azure Cosmos DB MongoDB collection event.
+ */
 @Immutable
 public final class RestorableMongodbCollectionPropertiesResource {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(RestorableMongodbCollectionPropertiesResource.class);
-
     /*
      * A system generated property. A unique identifier.
      */
@@ -26,6 +23,18 @@ public final class RestorableMongodbCollectionPropertiesResource {
      */
     @JsonProperty(value = "operationType", access = JsonProperty.Access.WRITE_ONLY)
     private OperationType operationType;
+
+    /*
+     * A state of this collection to identify if this container is restorable in same account.
+     */
+    @JsonProperty(value = "canUndelete", access = JsonProperty.Access.WRITE_ONLY)
+    private String canUndelete;
+
+    /*
+     * The reason why this collection can not be restored in same account.
+     */
+    @JsonProperty(value = "canUndeleteReason", access = JsonProperty.Access.WRITE_ONLY)
+    private String canUndeleteReason;
 
     /*
      * The time when this collection event happened.
@@ -46,8 +55,14 @@ public final class RestorableMongodbCollectionPropertiesResource {
     private String ownerResourceId;
 
     /**
+     * Creates an instance of RestorableMongodbCollectionPropertiesResource class.
+     */
+    public RestorableMongodbCollectionPropertiesResource() {
+    }
+
+    /**
      * Get the rid property: A system generated property. A unique identifier.
-     *
+     * 
      * @return the rid value.
      */
     public String rid() {
@@ -56,7 +71,7 @@ public final class RestorableMongodbCollectionPropertiesResource {
 
     /**
      * Get the operationType property: The operation type of this collection event.
-     *
+     * 
      * @return the operationType value.
      */
     public OperationType operationType() {
@@ -64,8 +79,27 @@ public final class RestorableMongodbCollectionPropertiesResource {
     }
 
     /**
+     * Get the canUndelete property: A state of this collection to identify if this container is restorable in same
+     * account.
+     * 
+     * @return the canUndelete value.
+     */
+    public String canUndelete() {
+        return this.canUndelete;
+    }
+
+    /**
+     * Get the canUndeleteReason property: The reason why this collection can not be restored in same account.
+     * 
+     * @return the canUndeleteReason value.
+     */
+    public String canUndeleteReason() {
+        return this.canUndeleteReason;
+    }
+
+    /**
      * Get the eventTimestamp property: The time when this collection event happened.
-     *
+     * 
      * @return the eventTimestamp value.
      */
     public String eventTimestamp() {
@@ -74,7 +108,7 @@ public final class RestorableMongodbCollectionPropertiesResource {
 
     /**
      * Get the ownerId property: The name of this MongoDB collection.
-     *
+     * 
      * @return the ownerId value.
      */
     public String ownerId() {
@@ -83,7 +117,7 @@ public final class RestorableMongodbCollectionPropertiesResource {
 
     /**
      * Get the ownerResourceId property: The resource ID of this MongoDB collection.
-     *
+     * 
      * @return the ownerResourceId value.
      */
     public String ownerResourceId() {
@@ -92,7 +126,7 @@ public final class RestorableMongodbCollectionPropertiesResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -5,19 +5,17 @@
 package com.azure.resourcemanager.mediaservices.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.annotation.JsonFlatten;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /** Represents an open restriction. License or key will be delivered on every request. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@odata\\.type")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@odata.type")
 @JsonTypeName("#Microsoft.Media.ContentKeyPolicyOpenRestriction")
-@JsonFlatten
 @Immutable
-public class ContentKeyPolicyOpenRestriction extends ContentKeyPolicyRestriction {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ContentKeyPolicyOpenRestriction.class);
+public final class ContentKeyPolicyOpenRestriction extends ContentKeyPolicyRestriction {
+    /** Creates an instance of ContentKeyPolicyOpenRestriction class. */
+    public ContentKeyPolicyOpenRestriction() {
+    }
 
     /**
      * Validates the instance.

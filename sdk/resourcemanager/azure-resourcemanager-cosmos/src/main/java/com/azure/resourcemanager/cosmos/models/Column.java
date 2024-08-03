@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Cosmos DB Cassandra table column. */
+/**
+ * Cosmos DB Cassandra table column.
+ */
 @Fluent
 public final class Column {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Column.class);
-
     /*
      * Name of the Cosmos DB Cassandra table column
      */
@@ -27,8 +25,14 @@ public final class Column {
     private String type;
 
     /**
+     * Creates an instance of Column class.
+     */
+    public Column() {
+    }
+
+    /**
      * Get the name property: Name of the Cosmos DB Cassandra table column.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -37,7 +41,7 @@ public final class Column {
 
     /**
      * Set the name property: Name of the Cosmos DB Cassandra table column.
-     *
+     * 
      * @param name the name value to set.
      * @return the Column object itself.
      */
@@ -48,7 +52,7 @@ public final class Column {
 
     /**
      * Get the type property: Type of the Cosmos DB Cassandra table column.
-     *
+     * 
      * @return the type value.
      */
     public String type() {
@@ -57,7 +61,7 @@ public final class Column {
 
     /**
      * Set the type property: Type of the Cosmos DB Cassandra table column.
-     *
+     * 
      * @param type the type value to set.
      * @return the Column object itself.
      */
@@ -68,7 +72,7 @@ public final class Column {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

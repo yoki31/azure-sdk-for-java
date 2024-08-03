@@ -1,5 +1,6 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
+
 package com.azure.resourcemanager.compute.implementation;
 
 import com.azure.core.http.rest.PagedIterable;
@@ -8,10 +9,17 @@ import com.azure.core.management.SubResource;
 import com.azure.core.management.provider.IdentifierProvider;
 import com.azure.core.management.serializer.SerializerFactory;
 import com.azure.core.util.Context;
+import com.azure.core.util.CoreUtils;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.core.util.serializer.SerializerAdapter;
 import com.azure.core.util.serializer.SerializerEncoding;
+import com.azure.resourcemanager.authorization.AuthorizationManager;
+import com.azure.resourcemanager.authorization.models.BuiltInRole;
+import com.azure.resourcemanager.authorization.utils.RoleAssignmentHelper;
 import com.azure.resourcemanager.compute.ComputeManager;
+import com.azure.resourcemanager.compute.fluent.models.ProximityPlacementGroupInner;
+import com.azure.resourcemanager.compute.fluent.models.VirtualMachineInner;
+import com.azure.resourcemanager.compute.fluent.models.VirtualMachineUpdateInner;
 import com.azure.resourcemanager.compute.models.AdditionalCapabilities;
 import com.azure.resourcemanager.compute.models.AvailabilitySet;
 import com.azure.resourcemanager.compute.models.AvailabilitySetSkuTypes;
@@ -19,9 +27,15 @@ import com.azure.resourcemanager.compute.models.BillingProfile;
 import com.azure.resourcemanager.compute.models.BootDiagnostics;
 import com.azure.resourcemanager.compute.models.CachingTypes;
 import com.azure.resourcemanager.compute.models.DataDisk;
+import com.azure.resourcemanager.compute.models.DeleteOptions;
 import com.azure.resourcemanager.compute.models.DiagnosticsProfile;
+import com.azure.resourcemanager.compute.models.DiffDiskOptions;
+import com.azure.resourcemanager.compute.models.DiffDiskPlacement;
+import com.azure.resourcemanager.compute.models.DiffDiskSettings;
 import com.azure.resourcemanager.compute.models.Disk;
 import com.azure.resourcemanager.compute.models.DiskCreateOptionTypes;
+import com.azure.resourcemanager.compute.models.DiskDeleteOptionTypes;
+import com.azure.resourcemanager.compute.models.DiskEncryptionSetParameters;
 import com.azure.resourcemanager.compute.models.DiskEncryptionSettings;
 import com.azure.resourcemanager.compute.models.HardwareProfile;
 import com.azure.resourcemanager.compute.models.ImageReference;
@@ -43,38 +57,38 @@ import com.azure.resourcemanager.compute.models.ResourceIdentityType;
 import com.azure.resourcemanager.compute.models.RunCommandInput;
 import com.azure.resourcemanager.compute.models.RunCommandInputParameter;
 import com.azure.resourcemanager.compute.models.RunCommandResult;
+import com.azure.resourcemanager.compute.models.SecurityProfile;
+import com.azure.resourcemanager.compute.models.SecurityTypes;
 import com.azure.resourcemanager.compute.models.SshConfiguration;
 import com.azure.resourcemanager.compute.models.SshPublicKey;
 import com.azure.resourcemanager.compute.models.StorageAccountTypes;
 import com.azure.resourcemanager.compute.models.StorageProfile;
+import com.azure.resourcemanager.compute.models.UefiSettings;
 import com.azure.resourcemanager.compute.models.VirtualHardDisk;
 import com.azure.resourcemanager.compute.models.VirtualMachine;
 import com.azure.resourcemanager.compute.models.VirtualMachineCaptureParameters;
+import com.azure.resourcemanager.compute.models.VirtualMachineCustomImage;
 import com.azure.resourcemanager.compute.models.VirtualMachineDataDisk;
+import com.azure.resourcemanager.compute.models.VirtualMachineDiskOptions;
 import com.azure.resourcemanager.compute.models.VirtualMachineEncryption;
 import com.azure.resourcemanager.compute.models.VirtualMachineEvictionPolicyTypes;
 import com.azure.resourcemanager.compute.models.VirtualMachineExtension;
 import com.azure.resourcemanager.compute.models.VirtualMachineIdentity;
 import com.azure.resourcemanager.compute.models.VirtualMachineInstanceView;
-import com.azure.resourcemanager.compute.models.VirtualMachineCustomImage;
 import com.azure.resourcemanager.compute.models.VirtualMachinePriorityTypes;
+import com.azure.resourcemanager.compute.models.VirtualMachineScaleSet;
 import com.azure.resourcemanager.compute.models.VirtualMachineSize;
 import com.azure.resourcemanager.compute.models.VirtualMachineSizeTypes;
 import com.azure.resourcemanager.compute.models.VirtualMachineUnmanagedDataDisk;
 import com.azure.resourcemanager.compute.models.WinRMConfiguration;
 import com.azure.resourcemanager.compute.models.WinRMListener;
 import com.azure.resourcemanager.compute.models.WindowsConfiguration;
-import com.azure.resourcemanager.compute.fluent.models.ProximityPlacementGroupInner;
-import com.azure.resourcemanager.compute.fluent.models.VirtualMachineInner;
-import com.azure.resourcemanager.compute.fluent.models.VirtualMachineUpdateInner;
-import com.azure.resourcemanager.authorization.models.BuiltInRole;
-import com.azure.resourcemanager.authorization.AuthorizationManager;
-import com.azure.resourcemanager.authorization.utils.RoleAssignmentHelper;
 import com.azure.resourcemanager.msi.models.Identity;
+import com.azure.resourcemanager.network.NetworkManager;
 import com.azure.resourcemanager.network.models.Network;
 import com.azure.resourcemanager.network.models.NetworkInterface;
+import com.azure.resourcemanager.network.models.PublicIPSkuType;
 import com.azure.resourcemanager.network.models.PublicIpAddress;
-import com.azure.resourcemanager.network.NetworkManager;
 import com.azure.resourcemanager.resources.fluentcore.arm.AvailabilityZoneId;
 import com.azure.resourcemanager.resources.fluentcore.arm.ResourceId;
 import com.azure.resourcemanager.resources.fluentcore.arm.ResourceUtils;
@@ -83,14 +97,11 @@ import com.azure.resourcemanager.resources.fluentcore.model.Accepted;
 import com.azure.resourcemanager.resources.fluentcore.model.Creatable;
 import com.azure.resourcemanager.resources.fluentcore.model.Indexable;
 import com.azure.resourcemanager.resources.fluentcore.model.implementation.AcceptedImpl;
+import com.azure.resourcemanager.resources.fluentcore.utils.PagedConverter;
 import com.azure.resourcemanager.resources.fluentcore.utils.ResourceManagerUtils;
-import com.azure.resourcemanager.storage.models.StorageAccount;
 import com.azure.resourcemanager.storage.StorageManager;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.azure.resourcemanager.storage.models.StorageAccount;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.introspect.Annotated;
-import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import reactor.core.Exceptions;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -98,16 +109,20 @@ import reactor.core.publisher.Mono;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Callable;
-import com.azure.resourcemanager.resources.fluentcore.utils.PagedConverter;
+import java.util.stream.Collectors;
 
 /** The implementation for VirtualMachine and its create and update interfaces. */
 class VirtualMachineImpl
@@ -181,23 +196,15 @@ class VirtualMachineImpl
     // To manage OS profile
     private boolean removeOsProfile;
 
+    // delete option for primary network interface
+    private DeleteOptions primaryNetworkInterfaceDeleteOptions;
+    // delete options for secondary network interface
+    private final Map<String, DeleteOptions> secondaryNetworkInterfaceDeleteOptions = new HashMap<>();
+
     // Snapshot of the updateParameter when update() is called, used to compare whether there is modification to VM during updateResourceAsync
-    VirtualMachineUpdateInner updateParameterSnapshotOnUpdate;
+    private VirtualMachineUpdateInner updateParameterSnapshotOnUpdate;
     private static final SerializerAdapter SERIALIZER_ADAPTER =
         SerializerFactory.createDefaultManagementSerializerAdapter();
-
-    private final ObjectMapper mapper;
-    private static final JacksonAnnotationIntrospector ANNOTATION_INTROSPECTOR =
-        new JacksonAnnotationIntrospector() {
-            @Override
-            public JsonProperty.Access findPropertyAccess(Annotated annotated) {
-                JsonProperty.Access access = super.findPropertyAccess(annotated);
-                if (access == JsonProperty.Access.WRITE_ONLY) {
-                    return JsonProperty.Access.AUTO;
-                }
-                return access;
-            }
-        };
 
     VirtualMachineImpl(
         String name,
@@ -224,9 +231,6 @@ class VirtualMachineImpl
         this.virtualMachineMsiHandler = new VirtualMachineMsiHandler(authorizationManager, this);
         this.newProximityPlacementGroupName = null;
         this.newProximityPlacementGroupType = null;
-
-        this.mapper = new ObjectMapper();
-        this.mapper.setAnnotationIntrospector(ANNOTATION_INTROSPECTOR);
     }
 
     // Verbs
@@ -235,7 +239,7 @@ class VirtualMachineImpl
     public VirtualMachineImpl update() {
         updateParameterSnapshotOnUpdate = this.deepCopyInnerToUpdateParameter();
         return super.update();
-    };
+    }
 
     @Override
     public Mono<VirtualMachine> refreshAsync() {
@@ -318,6 +322,20 @@ class VirtualMachineImpl
             .serviceClient()
             .getVirtualMachines()
             .powerOffAsync(this.resourceGroupName(), this.name(), null);
+    }
+
+    @Override
+    public void powerOff(boolean skipShutdown) {
+        this.powerOffAsync(skipShutdown).block();
+    }
+
+    @Override
+    public Mono<Void> powerOffAsync(boolean skipShutdown) {
+        return this
+            .manager()
+            .serviceClient()
+            .getVirtualMachines()
+            .powerOffAsync(this.resourceGroupName(), this.name(), skipShutdown);
     }
 
     @Override
@@ -419,7 +437,7 @@ class VirtualMachineImpl
             .map(
                 captureResultInner -> {
                     try {
-                        return mapper.writeValueAsString(captureResultInner);
+                        return SerializerUtils.getObjectMapper().writeValueAsString(captureResultInner);
                     } catch (JsonProcessingException ex) {
                         throw logger.logExceptionAsError(Exceptions.propagate(ex));
                     }
@@ -437,10 +455,11 @@ class VirtualMachineImpl
             .manager()
             .serviceClient()
             .getVirtualMachines()
-            .getByResourceGroupAsync(this.resourceGroupName(), this.name(), InstanceViewTypes.INSTANCE_VIEW)
+            .getByResourceGroupWithResponseAsync(
+                this.resourceGroupName(), this.name(), InstanceViewTypes.INSTANCE_VIEW)
             .map(
                 inner -> {
-                    virtualMachineInstanceView = new VirtualMachineInstanceViewImpl(inner.instanceView());
+                    virtualMachineInstanceView = new VirtualMachineInstanceViewImpl(inner.getValue().instanceView());
                     return virtualMachineInstanceView;
                 })
             .switchIfEmpty(
@@ -556,6 +575,11 @@ class VirtualMachineImpl
 
     @Override
     public VirtualMachineImpl withNewPrimaryPublicIPAddress(String leafDnsLabel) {
+        return withNewPrimaryPublicIPAddress(leafDnsLabel, null);
+    }
+
+//    @Override
+    public VirtualMachineImpl withNewPrimaryPublicIPAddress(String leafDnsLabel, DeleteOptions deleteOptions) {
         PublicIpAddress.DefinitionStages.WithGroup definitionWithGroup =
             this
                 .networkManager
@@ -569,6 +593,10 @@ class VirtualMachineImpl
             definitionAfterGroup = definitionWithGroup.withExistingResourceGroup(this.resourceGroupName());
         }
         this.implicitPipCreatable = definitionAfterGroup.withLeafDomainLabel(leafDnsLabel);
+//        if (deleteOptions != null) {
+//            this.implicitPipCreatable = this.implicitPipCreatable.withDeleteOptions(
+//                com.azure.resourcemanager.network.models.DeleteOptions.fromString(deleteOptions.toString()));
+//        }
         // Create NIC with creatable PIP
         Creatable<NetworkInterface> nicCreatable =
             this.nicDefinitionWithCreate.withNewPrimaryPublicIPAddress(this.implicitPipCreatable);
@@ -847,6 +875,12 @@ class VirtualMachineImpl
     }
 
     @Override
+    public VirtualMachineImpl withUserData(String base64EncodedUserData) {
+        this.innerModel().withUserData(base64EncodedUserData);
+        return this;
+    }
+
+    @Override
     public VirtualMachineImpl withComputerName(String computerName) {
         this.innerModel().osProfile().withComputerName(computerName);
         return this;
@@ -938,6 +972,19 @@ class VirtualMachineImpl
     }
 
     @Override
+    public VirtualMachineImpl withDataDiskDefaultDeleteOptions(DeleteOptions deleteOptions) {
+        this.managedDataDisks.setDefaultDeleteOptions(diskDeleteOptionsFromDeleteOptions(deleteOptions));
+        return this;
+    }
+
+    @Override
+    public VirtualMachineImpl withDataDiskDefaultDiskEncryptionSet(
+        String diskEncryptionSetId) {
+        this.managedDataDisks.setDefaultEncryptionSet(diskEncryptionSetId);
+        return this;
+    }
+
+    @Override
     public VirtualMachineImpl withOSDiskEncryptionSettings(DiskEncryptionSettings settings) {
         this.innerModel().storageProfile().osDisk().withEncryptionSettings(settings);
         return this;
@@ -952,6 +999,38 @@ class VirtualMachineImpl
     @Override
     public VirtualMachineImpl withOSDiskName(String name) {
         this.innerModel().storageProfile().osDisk().withName(name);
+        return this;
+    }
+
+    @Override
+    public VirtualMachineImpl withOSDiskDeleteOptions(DeleteOptions deleteOptions) {
+        this.innerModel().storageProfile().osDisk()
+            .withDeleteOption(DiskDeleteOptionTypes.fromString(deleteOptions.toString()));
+        return this;
+    }
+
+    @Override
+    public VirtualMachineImpl withOSDiskDiskEncryptionSet(String diskEncryptionSetId) {
+        if (this.innerModel().storageProfile().osDisk().managedDisk() == null) {
+            this.innerModel().storageProfile().osDisk()
+                .withManagedDisk(new ManagedDiskParameters());
+        }
+        if (this.innerModel().storageProfile().osDisk().managedDisk().diskEncryptionSet() == null) {
+            this.innerModel().storageProfile().osDisk().managedDisk()
+                .withDiskEncryptionSet(new DiskEncryptionSetParameters());
+        }
+        this.innerModel().storageProfile().osDisk().managedDisk().diskEncryptionSet().withId(diskEncryptionSetId);
+        return this;
+    }
+
+    @Override
+    public VirtualMachineImpl withEphemeralOSDisk() {
+        if (this.innerModel().storageProfile().osDisk().diffDiskSettings() == null) {
+            this.innerModel().storageProfile().osDisk().withDiffDiskSettings(new DiffDiskSettings());
+        }
+        this.innerModel().storageProfile().osDisk().diffDiskSettings().withOption(DiffDiskOptions.LOCAL);
+        // For vm with ephemeral os disk, cache should be read-only
+        withOSDiskCaching(CachingTypes.READ_ONLY);
         return this;
     }
 
@@ -1070,6 +1149,32 @@ class VirtualMachineImpl
     }
 
     @Override
+    public VirtualMachineImpl withNewDataDisk(int sizeInGB, int lun, VirtualMachineDiskOptions options) {
+        throwIfManagedDiskDisabled(ManagedUnmanagedDiskErrors.VM_BOTH_UNMANAGED_AND_MANAGED_DISK_NOT_ALLOWED);
+
+        ManagedDiskParameters managedDiskParameters = null;
+        if (options.storageAccountType() != null || options.isDiskEncryptionSetConfigured()) {
+            managedDiskParameters = new ManagedDiskParameters();
+            managedDiskParameters.withStorageAccountType(options.storageAccountType());
+            if (options.isDiskEncryptionSetConfigured()) {
+                managedDiskParameters.withDiskEncryptionSet(
+                    new DiskEncryptionSetParameters().withId(options.diskEncryptionSetId()));
+            }
+        }
+        this
+            .managedDataDisks
+            .implicitDisksToAssociate
+            .add(
+                new DataDisk()
+                    .withLun(lun)
+                    .withDiskSizeGB(sizeInGB)
+                    .withCaching(options.cachingTypes())
+                    .withDeleteOption(diskDeleteOptionsFromDeleteOptions(options.deleteOptions()))
+                    .withManagedDisk(managedDiskParameters));
+        return this;
+    }
+
+    @Override
     public VirtualMachineImpl withExistingDataDisk(Disk disk) {
         throwIfManagedDiskDisabled(ManagedUnmanagedDiskErrors.VM_BOTH_UNMANAGED_AND_MANAGED_DISK_NOT_ALLOWED);
         ManagedDiskParameters managedDiskParameters = new ManagedDiskParameters();
@@ -1111,6 +1216,32 @@ class VirtualMachineImpl
     }
 
     @Override
+    public VirtualMachineImpl withExistingDataDisk(
+        Disk disk, int newSizeInGB, int lun, VirtualMachineDiskOptions options) {
+        throwIfManagedDiskDisabled(ManagedUnmanagedDiskErrors.VM_BOTH_UNMANAGED_AND_MANAGED_DISK_NOT_ALLOWED);
+
+        // storageAccountType is not allowed to be modified
+
+        ManagedDiskParameters managedDiskParameters = new ManagedDiskParameters();
+        managedDiskParameters.withId(disk.id());
+        if (options.isDiskEncryptionSetConfigured()) {
+            managedDiskParameters.withDiskEncryptionSet(
+                new DiskEncryptionSetParameters().withId(options.diskEncryptionSetId()));
+        }
+        this
+            .managedDataDisks
+            .existingDisksToAttach
+            .add(
+                new DataDisk()
+                    .withLun(lun)
+                    .withDiskSizeGB(newSizeInGB)
+                    .withCaching(options.cachingTypes())
+                    .withDeleteOption(diskDeleteOptionsFromDeleteOptions(options.deleteOptions()))
+                    .withManagedDisk(managedDiskParameters));
+        return this;
+    }
+
+    @Override
     public VirtualMachineImpl withNewDataDiskFromImage(int imageLun) {
         this.managedDataDisks.newDisksFromImage.add(new DataDisk().withLun(imageLun));
         return this;
@@ -1139,6 +1270,33 @@ class VirtualMachineImpl
                     .withDiskSizeGB(newSizeInGB)
                     .withManagedDisk(managedDiskParameters)
                     .withCaching(cachingType));
+        return this;
+    }
+
+    @Override
+    public VirtualMachineImpl withNewDataDiskFromImage(
+        int imageLun, int newSizeInGB, VirtualMachineDiskOptions options) {
+        throwIfManagedDiskDisabled(ManagedUnmanagedDiskErrors.VM_BOTH_UNMANAGED_AND_MANAGED_DISK_NOT_ALLOWED);
+
+        ManagedDiskParameters managedDiskParameters = null;
+        if (options.storageAccountType() != null || options.isDiskEncryptionSetConfigured()) {
+            managedDiskParameters = new ManagedDiskParameters();
+            managedDiskParameters.withStorageAccountType(options.storageAccountType());
+            if (options.isDiskEncryptionSetConfigured()) {
+                managedDiskParameters.withDiskEncryptionSet(
+                    new DiskEncryptionSetParameters().withId(options.diskEncryptionSetId()));
+            }
+        }
+        this
+            .managedDataDisks
+            .implicitDisksToAssociate
+            .add(
+                new DataDisk()
+                    .withLun(imageLun)
+                    .withDiskSizeGB(newSizeInGB)
+                    .withCaching(options.cachingTypes())
+                    .withDeleteOption(diskDeleteOptionsFromDeleteOptions(options.deleteOptions()))
+                    .withManagedDisk(managedDiskParameters));
         return this;
     }
 
@@ -1242,6 +1400,17 @@ class VirtualMachineImpl
     @Override
     public VirtualMachineImpl withNewSecondaryNetworkInterface(Creatable<NetworkInterface> creatable) {
         this.creatableSecondaryNetworkInterfaceKeys.add(this.addDependency(creatable));
+        return this;
+    }
+
+    @Override
+    public VirtualMachineImpl withNewSecondaryNetworkInterface(Creatable<NetworkInterface> creatable,
+                                                               DeleteOptions deleteOptions) {
+        String key = this.addDependency(creatable);
+        this.creatableSecondaryNetworkInterfaceKeys.add(key);
+        if (deleteOptions != null) {
+            this.secondaryNetworkInterfaceDeleteOptions.put(key, deleteOptions);
+        }
         return this;
     }
 
@@ -1549,6 +1718,33 @@ class VirtualMachineImpl
     }
 
     @Override
+    public DeleteOptions osDiskDeleteOptions() {
+        if (!isManagedDiskEnabled() || this.storageProfile().osDisk().deleteOption() == null) {
+            return null;
+        }
+        return DeleteOptions.fromString(this.storageProfile().osDisk().deleteOption().toString());
+    }
+
+    @Override
+    public String osDiskDiskEncryptionSetId() {
+        if (!isManagedDiskEnabled() || this.storageProfile().osDisk().managedDisk() == null
+            || this.storageProfile().osDisk().managedDisk().diskEncryptionSet() == null) {
+            return null;
+        }
+        return this.storageProfile().osDisk().managedDisk().diskEncryptionSet().id();
+    }
+
+    @Override
+    public boolean isOSDiskEphemeral() {
+        return this.storageProfile().osDisk().diffDiskSettings() != null && this.storageProfile().osDisk().diffDiskSettings().placement() != null;
+    }
+
+    @Override
+    public boolean isEncryptionAtHost() {
+        return !Objects.isNull(this.innerModel().securityProfile()) && this.innerModel().securityProfile().encryptionAtHost();
+    }
+
+    @Override
     public Map<Integer, VirtualMachineUnmanagedDataDisk> unmanagedDataDisks() {
         Map<Integer, VirtualMachineUnmanagedDataDisk> dataDisks = new HashMap<>();
         if (!isManagedDiskEnabled()) {
@@ -1632,6 +1828,14 @@ class VirtualMachineImpl
     public String availabilitySetId() {
         if (innerModel().availabilitySet() != null) {
             return innerModel().availabilitySet().id();
+        }
+        return null;
+    }
+
+    @Override
+    public String virtualMachineScaleSetId() {
+        if (innerModel().virtualMachineScaleSet() != null) {
+            return innerModel().virtualMachineScaleSet().id();
         }
         return null;
     }
@@ -1785,6 +1989,54 @@ class VirtualMachineImpl
     }
 
     @Override
+    public SecurityTypes securityType() {
+        SecurityProfile securityProfile = this.innerModel().securityProfile();
+        if (securityProfile == null) {
+            return null;
+        }
+        return securityProfile.securityType();
+    }
+
+    @Override
+    public boolean isSecureBootEnabled() {
+        return securityType() != null && this.innerModel().securityProfile().uefiSettings() != null
+            && ResourceManagerUtils.toPrimitiveBoolean(this.innerModel().securityProfile().uefiSettings().secureBootEnabled());
+    }
+
+    @Override
+    public boolean isVTpmEnabled() {
+        return securityType() != null && this.innerModel().securityProfile().uefiSettings() != null
+            && ResourceManagerUtils.toPrimitiveBoolean(this.innerModel().securityProfile().uefiSettings().vTpmEnabled());
+    }
+
+    @Override
+    public OffsetDateTime timeCreated() {
+        return innerModel().timeCreated();
+    }
+
+    @Override
+    public DeleteOptions primaryNetworkInterfaceDeleteOptions() {
+        String nicId = primaryNetworkInterfaceId();
+        return networkInterfaceDeleteOptions(nicId);
+    }
+
+    @Override
+    public DeleteOptions networkInterfaceDeleteOptions(String networkInterfaceId) {
+        if (CoreUtils.isNullOrEmpty(networkInterfaceId)
+            || this.innerModel().networkProfile() == null
+            || this.innerModel().networkProfile().networkInterfaces() == null) {
+            return null;
+        }
+        return this.innerModel().networkProfile()
+            .networkInterfaces()
+            .stream()
+            .filter(nic -> networkInterfaceId.equalsIgnoreCase(nic.id()))
+            .findAny()
+            .map(NetworkInterfaceReference::deleteOption)
+            .orElse(null);
+    }
+
+    @Override
     public VirtualMachinePriorityTypes priority() {
         return this.innerModel().priority();
     }
@@ -1792,6 +2044,11 @@ class VirtualMachineImpl
     @Override
     public VirtualMachineEvictionPolicyTypes evictionPolicy() {
         return this.innerModel().evictionPolicy();
+    }
+
+    @Override
+    public String userData() {
+        return this.innerModel().userData();
     }
 
     // CreateUpdateTaskGroup.ResourceCreator.beforeGroupCreateOrUpdate implementation
@@ -1878,7 +2135,7 @@ class VirtualMachineImpl
                         .manager()
                         .serviceClient()
                         .getVirtualMachines()
-                        .createOrUpdateWithResponseAsync(resourceGroupName(), vmName, innerModel())
+                        .createOrUpdateWithResponseAsync(resourceGroupName(), vmName, innerModel(), null, null)
                         .block(),
                 inner ->
                     new VirtualMachineImpl(
@@ -1957,6 +2214,11 @@ class VirtualMachineImpl
         clearCachedRelatedResources();
         initializeDataDisks();
         virtualMachineMsiHandler.clear();
+
+        creatableSecondaryNetworkInterfaceKeys.clear();
+        existingSecondaryNetworkInterfacesToAssociate.clear();
+        secondaryNetworkInterfaceDeleteOptions.clear();
+        primaryNetworkInterfaceDeleteOptions = null;
     }
 
     VirtualMachineImpl withUnmanagedDataDisk(UnmanagedDataDiskImpl dataDisk) {
@@ -1980,9 +2242,77 @@ class VirtualMachineImpl
             this.innerModel().zones().add(zoneId.toString());
             // zone aware VM can be attached to only zone aware public IP.
             if (this.implicitPipCreatable != null) {
-                this.implicitPipCreatable.withAvailabilityZone(zoneId);
+                this.implicitPipCreatable
+                    .withAvailabilityZone(zoneId)
+                    .withSku(PublicIPSkuType.STANDARD) // standard sku is required for zone resiliency
+                    .withStaticIP(); // static allocation is required for standard sku
             }
         }
+        return this;
+    }
+
+    @Override
+    public VirtualMachineImpl withOsDiskDeleteOptions(DeleteOptions deleteOptions) {
+        if (deleteOptions == null
+            || this.innerModel().storageProfile() == null || this.innerModel().storageProfile().osDisk() == null) {
+            return null;
+        }
+        this.innerModel().storageProfile().osDisk().withDeleteOption(diskDeleteOptionsFromDeleteOptions(deleteOptions));
+        return this;
+    }
+
+    @Override
+    public VirtualMachineImpl withPrimaryNetworkInterfaceDeleteOptions(DeleteOptions deleteOptions) {
+        this.primaryNetworkInterfaceDeleteOptions = deleteOptions;
+        return this;
+    }
+
+    @Override
+    public VirtualMachineImpl withNetworkInterfacesDeleteOptions(DeleteOptions deleteOptions, String... nicIds) {
+        if (this.innerModel().networkProfile() != null
+            && this.innerModel().networkProfile().networkInterfaces() != null) {
+            // vararg "nicIds" will never be null, an array will always be created to hold the variables
+            Set<String> nicIdSet = Arrays.stream(nicIds).map(nicId -> nicId.toLowerCase(Locale.ROOT)).collect(Collectors.toSet());
+            this.innerModel().networkProfile().networkInterfaces().forEach(
+                nic -> {
+                    if (nicIdSet.contains(nic.id().toLowerCase(Locale.ROOT))) {
+                        nic.withDeleteOption(deleteOptions);
+                    }
+                }
+            );
+        }
+        return this;
+    }
+
+    @Override
+    public VirtualMachineImpl withNetworkInterfacesDeleteOptions(DeleteOptions deleteOptions) {
+        this.innerModel().networkProfile().networkInterfaces().forEach(
+            nic -> nic.withDeleteOption(deleteOptions)
+        );
+        return this;
+    }
+
+    @Override
+    public VirtualMachineImpl withDataDisksDeleteOptions(DeleteOptions deleteOptions, Integer... luns) {
+        if (this.innerModel().storageProfile() != null && this.innerModel().storageProfile().dataDisks() != null) {
+            // vararg "luns" will never be null, an array will always be created to hold the variables
+            Set<Integer> lunSet = Arrays.stream(luns).filter(Objects::nonNull).collect(Collectors.toSet());
+            this.innerModel().storageProfile().dataDisks().forEach(
+                dataDisk -> {
+                    if (lunSet.contains(dataDisk.lun())) {
+                        dataDisk.withDeleteOption(diskDeleteOptionsFromDeleteOptions(deleteOptions));
+                    }
+                }
+            );
+        }
+        return this;
+    }
+
+    @Override
+    public VirtualMachineImpl withDataDisksDeleteOptions(DeleteOptions deleteOptions) {
+        this.innerModel().storageProfile().dataDisks().forEach(
+            dataDisk -> dataDisk.withDeleteOption(diskDeleteOptionsFromDeleteOptions(deleteOptions))
+        );
         return this;
     }
 
@@ -2174,6 +2504,16 @@ class VirtualMachineImpl
             }
         }
 
+        // sets the delete options for primary network interface
+        if (this.primaryNetworkInterfaceDeleteOptions != null) {
+            String primaryNetworkInterfaceId = primaryNetworkInterfaceId();
+            if (primaryNetworkInterfaceId != null) {
+                this.innerModel().networkProfile().networkInterfaces().stream()
+                    .filter(nic -> primaryNetworkInterfaceId.equals(nic.id()))
+                    .forEach(nic -> nic.withDeleteOption(this.primaryNetworkInterfaceDeleteOptions));
+            }
+        }
+
         // sets the virtual machine secondary network interfaces
         //
         for (String creatableSecondaryNetworkInterfaceKey : this.creatableSecondaryNetworkInterfaceKeys) {
@@ -2181,6 +2521,11 @@ class VirtualMachineImpl
             NetworkInterfaceReference nicReference = new NetworkInterfaceReference();
             nicReference.withPrimary(false);
             nicReference.withId(secondaryNetworkInterface.id());
+            if (secondaryNetworkInterfaceDeleteOptions.containsKey(creatableSecondaryNetworkInterfaceKey)) {
+                DeleteOptions deleteOptions
+                    = secondaryNetworkInterfaceDeleteOptions.get(creatableSecondaryNetworkInterfaceKey);
+                nicReference.withDeleteOption(deleteOptions);
+            }
             this.innerModel().networkProfile().networkInterfaces().add(nicReference);
         }
 
@@ -2399,6 +2744,10 @@ class VirtualMachineImpl
         return !this.isInCreateMode();
     }
 
+    private DiskDeleteOptionTypes diskDeleteOptionsFromDeleteOptions(DeleteOptions deleteOptions) {
+        return deleteOptions == null ? null : DiskDeleteOptionTypes.fromString(deleteOptions.toString());
+    }
+
     boolean isVirtualMachineModifiedDuringUpdate(VirtualMachineUpdateInner updateParameter) {
         if (updateParameterSnapshotOnUpdate == null || updateParameter == null) {
             return true;
@@ -2454,6 +2803,7 @@ class VirtualMachineImpl
         updateParameter.withProximityPlacementGroup(this.innerModel().proximityPlacementGroup());
         updateParameter.withPriority(this.innerModel().priority());
         updateParameter.withEvictionPolicy(this.innerModel().evictionPolicy());
+        updateParameter.withUserData(this.innerModel().userData());
     }
 
     RoleAssignmentHelper.IdProvider idProvider() {
@@ -2478,6 +2828,120 @@ class VirtualMachineImpl
         };
     }
 
+    @Override
+    public VirtualMachineImpl withPlacement(DiffDiskPlacement placement) {
+        if (placement != null) {
+            this.innerModel().storageProfile().osDisk().diffDiskSettings().withPlacement(placement);
+        }
+        return this;
+    }
+
+    @Override
+    public VirtualMachineImpl withExistingVirtualMachineScaleSet(VirtualMachineScaleSet scaleSet) {
+        if (scaleSet != null) {
+            this.innerModel().withVirtualMachineScaleSet(new SubResource().withId(scaleSet.id()));
+        }
+        return this;
+    }
+
+    @Override
+    public VirtualMachineImpl withOSDisk(String diskId) {
+        if (diskId == null) {
+            return this;
+        }
+        if (!isManagedDiskEnabled() || this.innerModel().storageProfile().osDisk().managedDisk() == null) {
+            return this;
+        }
+        OSDisk osDisk = new OSDisk()
+            // CreateOption is marked "required" in swagger, but in actual update, it's not.
+            // This is a workaround for bypassing this swagger bug.
+            .withCreateOption(this.innerModel().storageProfile().osDisk().createOption());
+        osDisk.withManagedDisk(new ManagedDiskParameters().withId(diskId));
+        this.storageProfile().withOsDisk(osDisk);
+        this.storageProfile().osDisk().managedDisk().withId(diskId);
+        return this;
+    }
+
+    @Override
+    public VirtualMachineImpl withOSDisk(Disk disk) {
+        if (disk == null) {
+            return this;
+        }
+        return withOSDisk(disk.id());
+    }
+
+    @Override
+    public VirtualMachineImpl withTrustedLaunch() {
+        ensureSecurityProfile().withSecurityType(SecurityTypes.TRUSTED_LAUNCH);
+        return this;
+    }
+
+    @Override
+    public VirtualMachineImpl withSecureBoot() {
+        if (securityType() == null) {
+            return this;
+        }
+        ensureUefiSettings().withSecureBootEnabled(true);
+        return this;
+    }
+
+    @Override
+    public VirtualMachineImpl withoutSecureBoot() {
+        if (securityType() == null) {
+            return this;
+        }
+        ensureUefiSettings().withSecureBootEnabled(false);
+        return this;
+    }
+
+    @Override
+    public VirtualMachineImpl withVTpm() {
+        if (securityType() == null) {
+            return this;
+        }
+        ensureUefiSettings().withVTpmEnabled(true);
+        return this;
+    }
+
+    @Override
+    public VirtualMachineImpl withoutVTpm() {
+        if (securityType() == null) {
+            return this;
+        }
+        ensureUefiSettings().withVTpmEnabled(false);
+        return this;
+    }
+
+    private SecurityProfile ensureSecurityProfile() {
+        SecurityProfile securityProfile = this.innerModel().securityProfile();
+        if (securityProfile == null) {
+            securityProfile = new SecurityProfile();
+            this.innerModel().withSecurityProfile(securityProfile);
+        }
+        return securityProfile;
+    }
+
+    private UefiSettings ensureUefiSettings() {
+        UefiSettings uefiSettings = ensureSecurityProfile().uefiSettings();
+        if (uefiSettings == null) {
+            uefiSettings = new UefiSettings();
+            ensureSecurityProfile().withUefiSettings(uefiSettings);
+        }
+        return uefiSettings;
+    }
+
+    @Override
+    public VirtualMachineImpl withEncryptionAtHost() {
+        ensureSecurityProfile().withEncryptionAtHost(true);
+        return this;
+    }
+
+    @Override
+    public VirtualMachineImpl withoutEncryptionAtHost() {
+        ensureSecurityProfile().withEncryptionAtHost(false);
+        return this;
+    }
+
     /** Class to manage Data disk collection. */
     private class ManagedDataDiskCollection {
         private final Map<String, DataDisk> newDisksToAttach = new HashMap<>();
@@ -2488,6 +2952,8 @@ class VirtualMachineImpl
         private final VirtualMachineImpl vm;
         private CachingTypes defaultCachingType;
         private StorageAccountTypes defaultStorageAccountType;
+        private DiskDeleteOptionTypes defaultDeleteOptions;
+        private DiskEncryptionSetParameters defaultDiskEncryptionSet;
 
         ManagedDataDiskCollection(VirtualMachineImpl vm) {
             this.vm = vm;
@@ -2497,8 +2963,16 @@ class VirtualMachineImpl
             this.defaultCachingType = cachingType;
         }
 
+        void setDefaultDeleteOptions(DiskDeleteOptionTypes deleteOptions) {
+            this.defaultDeleteOptions = deleteOptions;
+        }
+
         void setDefaultStorageAccountType(StorageAccountTypes defaultStorageAccountType) {
             this.defaultStorageAccountType = defaultStorageAccountType;
+        }
+
+        void setDefaultEncryptionSet(String diskEncryptionSetId) {
+            this.defaultDiskEncryptionSet = new DiskEncryptionSetParameters().withId(diskEncryptionSetId);
         }
 
         void setDataDisksDefaults() {
@@ -2572,6 +3046,10 @@ class VirtualMachineImpl
             implicitDisksToAssociate.clear();
             diskLunsToRemove.clear();
             newDisksFromImage.clear();
+            defaultCachingType = null;
+            defaultStorageAccountType = null;
+            defaultDeleteOptions = null;
+            defaultDiskEncryptionSet = null;
         }
 
         private boolean isPending() {
@@ -2580,6 +3058,23 @@ class VirtualMachineImpl
                 || implicitDisksToAssociate.size() > 0
                 || diskLunsToRemove.size() > 0
                 || newDisksFromImage.size() > 0;
+        }
+
+        private void setDefaultDiskEncryptionSetOptions(DataDisk dataDisk) {
+            if (getDefaultDiskEncryptionSetOptions() != null) {
+                if (dataDisk.managedDisk() != null && dataDisk.managedDisk().diskEncryptionSet() != null) {
+                    if (dataDisk.managedDisk().diskEncryptionSet().id() == null) {
+                        // case that configuration on specific disk override the default, set DiskEncryptionSet to null
+                        dataDisk.managedDisk().withDiskEncryptionSet(null);
+                    }
+                    // else, keep the configuration on DiskEncryptionSet unmodified (via VirtualMachineDiskOptions)
+                } else {
+                    if (dataDisk.managedDisk() == null) {
+                        dataDisk.withManagedDisk(new ManagedDiskParameters());
+                    }
+                    dataDisk.managedDisk().withDiskEncryptionSet(getDefaultDiskEncryptionSetOptions());
+                }
+            }
         }
 
         private void setAttachableNewDataDisks(Callable<Integer> nextLun) throws Exception {
@@ -2596,6 +3091,10 @@ class VirtualMachineImpl
                 if (dataDisk.caching() == null) {
                     dataDisk.withCaching(getDefaultCachingType());
                 }
+                if (dataDisk.deleteOption() == null) {
+                    dataDisk.withDeleteOption(getDefaultDeleteOptions());
+                }
+                setDefaultDiskEncryptionSetOptions(dataDisk);
                 // Don't set default storage account type for the attachable managed disks, it is already
                 // defined in the managed disk and not allowed to change.
                 dataDisk.withName(null);
@@ -2613,6 +3112,10 @@ class VirtualMachineImpl
                 if (dataDisk.caching() == null) {
                     dataDisk.withCaching(getDefaultCachingType());
                 }
+                if (dataDisk.deleteOption() == null) {
+                    dataDisk.withDeleteOption(getDefaultDeleteOptions());
+                }
+                setDefaultDiskEncryptionSetOptions(dataDisk);
                 // Don't set default storage account type for the attachable managed disks, it is already
                 // defined in the managed disk and not allowed to change.
                 dataDisk.withName(null);
@@ -2636,6 +3139,10 @@ class VirtualMachineImpl
                 if (dataDisk.managedDisk().storageAccountType() == null) {
                     dataDisk.managedDisk().withStorageAccountType(getDefaultStorageAccountType());
                 }
+                if (dataDisk.deleteOption() == null) {
+                    dataDisk.withDeleteOption(getDefaultDeleteOptions());
+                }
+                setDefaultDiskEncryptionSetOptions(dataDisk);
                 dataDisk.withName(null);
                 dataDisks.add(dataDisk);
             }
@@ -2645,6 +3152,13 @@ class VirtualMachineImpl
             List<DataDisk> dataDisks = vm.innerModel().storageProfile().dataDisks();
             for (DataDisk dataDisk : this.newDisksFromImage) {
                 dataDisk.withCreateOption(DiskCreateOptionTypes.FROM_IMAGE);
+                if (dataDisk.caching() == null) {
+                    dataDisk.withCaching(getDefaultCachingType());
+                }
+                if (dataDisk.deleteOption() == null) {
+                    dataDisk.withDeleteOption(getDefaultDeleteOptions());
+                }
+                setDefaultDiskEncryptionSetOptions(dataDisk);
                 // Don't set default storage account type for the disk, either user has to specify it explicitly or let
                 // CRP pick it from the image
                 dataDisk.withName(null);
@@ -2678,6 +3192,14 @@ class VirtualMachineImpl
                 return StorageAccountTypes.STANDARD_LRS;
             }
             return defaultStorageAccountType;
+        }
+
+        private DiskDeleteOptionTypes getDefaultDeleteOptions() {
+            return defaultDeleteOptions;
+        }
+
+        private DiskEncryptionSetParameters getDefaultDiskEncryptionSetOptions() {
+            return defaultDiskEncryptionSet;
         }
     }
 

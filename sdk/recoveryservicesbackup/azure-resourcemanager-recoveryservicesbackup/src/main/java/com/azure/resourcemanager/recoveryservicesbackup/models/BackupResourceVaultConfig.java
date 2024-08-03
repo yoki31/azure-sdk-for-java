@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Backup resource vault config details. */
+/**
+ * Backup resource vault config details.
+ */
 @Fluent
 public final class BackupResourceVaultConfig {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(BackupResourceVaultConfig.class);
-
     /*
      * Storage type.
      */
@@ -28,8 +26,7 @@ public final class BackupResourceVaultConfig {
     private StorageType storageType;
 
     /*
-     * Locked or Unlocked. Once a machine is registered against a resource, the
-     * storageTypeState is always Locked.
+     * Locked or Unlocked. Once a machine is registered against a resource, the storageTypeState is always Locked.
      */
     @JsonProperty(value = "storageTypeState")
     private StorageTypeState storageTypeState;
@@ -47,14 +44,32 @@ public final class BackupResourceVaultConfig {
     private SoftDeleteFeatureState softDeleteFeatureState;
 
     /*
+     * Soft delete retention period in days
+     */
+    @JsonProperty(value = "softDeleteRetentionPeriodInDays")
+    private Integer softDeleteRetentionPeriodInDays;
+
+    /*
      * ResourceGuard Operation Requests
      */
     @JsonProperty(value = "resourceGuardOperationRequests")
     private List<String> resourceGuardOperationRequests;
 
+    /*
+     * This flag is no longer in use. Please use 'softDeleteFeatureState' to set the soft delete state for the vault
+     */
+    @JsonProperty(value = "isSoftDeleteFeatureStateEditable")
+    private Boolean isSoftDeleteFeatureStateEditable;
+
+    /**
+     * Creates an instance of BackupResourceVaultConfig class.
+     */
+    public BackupResourceVaultConfig() {
+    }
+
     /**
      * Get the storageModelType property: Storage type.
-     *
+     * 
      * @return the storageModelType value.
      */
     public StorageType storageModelType() {
@@ -63,7 +78,7 @@ public final class BackupResourceVaultConfig {
 
     /**
      * Set the storageModelType property: Storage type.
-     *
+     * 
      * @param storageModelType the storageModelType value to set.
      * @return the BackupResourceVaultConfig object itself.
      */
@@ -74,7 +89,7 @@ public final class BackupResourceVaultConfig {
 
     /**
      * Get the storageType property: Storage type.
-     *
+     * 
      * @return the storageType value.
      */
     public StorageType storageType() {
@@ -83,7 +98,7 @@ public final class BackupResourceVaultConfig {
 
     /**
      * Set the storageType property: Storage type.
-     *
+     * 
      * @param storageType the storageType value to set.
      * @return the BackupResourceVaultConfig object itself.
      */
@@ -95,7 +110,7 @@ public final class BackupResourceVaultConfig {
     /**
      * Get the storageTypeState property: Locked or Unlocked. Once a machine is registered against a resource, the
      * storageTypeState is always Locked.
-     *
+     * 
      * @return the storageTypeState value.
      */
     public StorageTypeState storageTypeState() {
@@ -105,7 +120,7 @@ public final class BackupResourceVaultConfig {
     /**
      * Set the storageTypeState property: Locked or Unlocked. Once a machine is registered against a resource, the
      * storageTypeState is always Locked.
-     *
+     * 
      * @param storageTypeState the storageTypeState value to set.
      * @return the BackupResourceVaultConfig object itself.
      */
@@ -116,7 +131,7 @@ public final class BackupResourceVaultConfig {
 
     /**
      * Get the enhancedSecurityState property: Enabled or Disabled.
-     *
+     * 
      * @return the enhancedSecurityState value.
      */
     public EnhancedSecurityState enhancedSecurityState() {
@@ -125,7 +140,7 @@ public final class BackupResourceVaultConfig {
 
     /**
      * Set the enhancedSecurityState property: Enabled or Disabled.
-     *
+     * 
      * @param enhancedSecurityState the enhancedSecurityState value to set.
      * @return the BackupResourceVaultConfig object itself.
      */
@@ -136,7 +151,7 @@ public final class BackupResourceVaultConfig {
 
     /**
      * Get the softDeleteFeatureState property: Soft Delete feature state.
-     *
+     * 
      * @return the softDeleteFeatureState value.
      */
     public SoftDeleteFeatureState softDeleteFeatureState() {
@@ -145,7 +160,7 @@ public final class BackupResourceVaultConfig {
 
     /**
      * Set the softDeleteFeatureState property: Soft Delete feature state.
-     *
+     * 
      * @param softDeleteFeatureState the softDeleteFeatureState value to set.
      * @return the BackupResourceVaultConfig object itself.
      */
@@ -155,8 +170,28 @@ public final class BackupResourceVaultConfig {
     }
 
     /**
+     * Get the softDeleteRetentionPeriodInDays property: Soft delete retention period in days.
+     * 
+     * @return the softDeleteRetentionPeriodInDays value.
+     */
+    public Integer softDeleteRetentionPeriodInDays() {
+        return this.softDeleteRetentionPeriodInDays;
+    }
+
+    /**
+     * Set the softDeleteRetentionPeriodInDays property: Soft delete retention period in days.
+     * 
+     * @param softDeleteRetentionPeriodInDays the softDeleteRetentionPeriodInDays value to set.
+     * @return the BackupResourceVaultConfig object itself.
+     */
+    public BackupResourceVaultConfig withSoftDeleteRetentionPeriodInDays(Integer softDeleteRetentionPeriodInDays) {
+        this.softDeleteRetentionPeriodInDays = softDeleteRetentionPeriodInDays;
+        return this;
+    }
+
+    /**
      * Get the resourceGuardOperationRequests property: ResourceGuard Operation Requests.
-     *
+     * 
      * @return the resourceGuardOperationRequests value.
      */
     public List<String> resourceGuardOperationRequests() {
@@ -165,7 +200,7 @@ public final class BackupResourceVaultConfig {
 
     /**
      * Set the resourceGuardOperationRequests property: ResourceGuard Operation Requests.
-     *
+     * 
      * @param resourceGuardOperationRequests the resourceGuardOperationRequests value to set.
      * @return the BackupResourceVaultConfig object itself.
      */
@@ -175,8 +210,30 @@ public final class BackupResourceVaultConfig {
     }
 
     /**
+     * Get the isSoftDeleteFeatureStateEditable property: This flag is no longer in use. Please use
+     * 'softDeleteFeatureState' to set the soft delete state for the vault.
+     * 
+     * @return the isSoftDeleteFeatureStateEditable value.
+     */
+    public Boolean isSoftDeleteFeatureStateEditable() {
+        return this.isSoftDeleteFeatureStateEditable;
+    }
+
+    /**
+     * Set the isSoftDeleteFeatureStateEditable property: This flag is no longer in use. Please use
+     * 'softDeleteFeatureState' to set the soft delete state for the vault.
+     * 
+     * @param isSoftDeleteFeatureStateEditable the isSoftDeleteFeatureStateEditable value to set.
+     * @return the BackupResourceVaultConfig object itself.
+     */
+    public BackupResourceVaultConfig withIsSoftDeleteFeatureStateEditable(Boolean isSoftDeleteFeatureStateEditable) {
+        this.isSoftDeleteFeatureStateEditable = isSoftDeleteFeatureStateEditable;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

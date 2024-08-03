@@ -8,14 +8,13 @@ import com.azure.core.annotation.Fluent;
 import com.azure.core.management.SubResource;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.models.DataFlow;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Data flow resource type. */
+/**
+ * Data flow resource type.
+ */
 @Fluent
 public final class DataFlowResourceInner extends SubResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DataFlowResourceInner.class);
-
     /*
      * Data flow properties.
      */
@@ -41,8 +40,14 @@ public final class DataFlowResourceInner extends SubResource {
     private String etag;
 
     /**
+     * Creates an instance of DataFlowResourceInner class.
+     */
+    public DataFlowResourceInner() {
+    }
+
+    /**
      * Get the properties property: Data flow properties.
-     *
+     * 
      * @return the properties value.
      */
     public DataFlow properties() {
@@ -51,7 +56,7 @@ public final class DataFlowResourceInner extends SubResource {
 
     /**
      * Set the properties property: Data flow properties.
-     *
+     * 
      * @param properties the properties value to set.
      * @return the DataFlowResourceInner object itself.
      */
@@ -62,7 +67,7 @@ public final class DataFlowResourceInner extends SubResource {
 
     /**
      * Get the name property: The resource name.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -71,7 +76,7 @@ public final class DataFlowResourceInner extends SubResource {
 
     /**
      * Get the type property: The resource type.
-     *
+     * 
      * @return the type value.
      */
     public String type() {
@@ -80,14 +85,16 @@ public final class DataFlowResourceInner extends SubResource {
 
     /**
      * Get the etag property: Etag identifies change in the resource.
-     *
+     * 
      * @return the etag value.
      */
     public String etag() {
         return this.etag;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DataFlowResourceInner withId(String id) {
         super.withId(id);
@@ -96,17 +103,18 @@ public final class DataFlowResourceInner extends SubResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (properties() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property properties in model DataFlowResourceInner"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property properties in model DataFlowResourceInner"));
         } else {
             properties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(DataFlowResourceInner.class);
 }

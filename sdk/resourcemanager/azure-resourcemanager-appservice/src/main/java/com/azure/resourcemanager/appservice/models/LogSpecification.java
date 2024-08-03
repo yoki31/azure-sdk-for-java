@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Log Definition of a single resource metric. */
+/**
+ * Log Definition of a single resource metric.
+ */
 @Fluent
 public final class LogSpecification {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(LogSpecification.class);
-
     /*
      * The name property.
      */
@@ -39,8 +37,14 @@ public final class LogSpecification {
     private String logFilterPattern;
 
     /**
+     * Creates an instance of LogSpecification class.
+     */
+    public LogSpecification() {
+    }
+
+    /**
      * Get the name property: The name property.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -49,7 +53,7 @@ public final class LogSpecification {
 
     /**
      * Set the name property: The name property.
-     *
+     * 
      * @param name the name value to set.
      * @return the LogSpecification object itself.
      */
@@ -60,7 +64,7 @@ public final class LogSpecification {
 
     /**
      * Get the displayName property: The displayName property.
-     *
+     * 
      * @return the displayName value.
      */
     public String displayName() {
@@ -69,7 +73,7 @@ public final class LogSpecification {
 
     /**
      * Set the displayName property: The displayName property.
-     *
+     * 
      * @param displayName the displayName value to set.
      * @return the LogSpecification object itself.
      */
@@ -80,7 +84,7 @@ public final class LogSpecification {
 
     /**
      * Get the blobDuration property: The blobDuration property.
-     *
+     * 
      * @return the blobDuration value.
      */
     public String blobDuration() {
@@ -89,7 +93,7 @@ public final class LogSpecification {
 
     /**
      * Set the blobDuration property: The blobDuration property.
-     *
+     * 
      * @param blobDuration the blobDuration value to set.
      * @return the LogSpecification object itself.
      */
@@ -100,7 +104,7 @@ public final class LogSpecification {
 
     /**
      * Get the logFilterPattern property: The logFilterPattern property.
-     *
+     * 
      * @return the logFilterPattern value.
      */
     public String logFilterPattern() {
@@ -109,7 +113,7 @@ public final class LogSpecification {
 
     /**
      * Set the logFilterPattern property: The logFilterPattern property.
-     *
+     * 
      * @param logFilterPattern the logFilterPattern value to set.
      * @return the LogSpecification object itself.
      */
@@ -120,7 +124,7 @@ public final class LogSpecification {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

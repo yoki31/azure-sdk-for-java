@@ -25,7 +25,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.synapse.fluent.RestorableDroppedSqlPoolsClient;
 import com.azure.resourcemanager.synapse.fluent.models.RestorableDroppedSqlPoolInner;
 import com.azure.resourcemanager.synapse.models.RestorableDroppedSqlPoolListResult;
@@ -33,8 +32,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in RestorableDroppedSqlPoolsClient. */
 public final class RestorableDroppedSqlPoolsClientImpl implements RestorableDroppedSqlPoolsClient {
-    private final ClientLogger logger = new ClientLogger(RestorableDroppedSqlPoolsClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final RestorableDroppedSqlPoolsService service;
 
@@ -60,7 +57,7 @@ public final class RestorableDroppedSqlPoolsClientImpl implements RestorableDrop
      */
     @Host("{$host}")
     @ServiceInterface(name = "SynapseManagementCli")
-    private interface RestorableDroppedSqlPoolsService {
+    public interface RestorableDroppedSqlPoolsService {
         @Headers({"Content-Type: application/json"})
         @Get(
             "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
@@ -103,7 +100,8 @@ public final class RestorableDroppedSqlPoolsClientImpl implements RestorableDrop
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a deleted sql pool that can be restored.
+     * @return a deleted sql pool that can be restored along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<RestorableDroppedSqlPoolInner>> getWithResponseAsync(
@@ -162,7 +160,8 @@ public final class RestorableDroppedSqlPoolsClientImpl implements RestorableDrop
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a deleted sql pool that can be restored.
+     * @return a deleted sql pool that can be restored along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<RestorableDroppedSqlPoolInner>> getWithResponseAsync(
@@ -217,20 +216,32 @@ public final class RestorableDroppedSqlPoolsClientImpl implements RestorableDrop
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a deleted sql pool that can be restored.
+     * @return a deleted sql pool that can be restored on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<RestorableDroppedSqlPoolInner> getAsync(
         String resourceGroupName, String workspaceName, String restorableDroppedSqlPoolId) {
         return getWithResponseAsync(resourceGroupName, workspaceName, restorableDroppedSqlPoolId)
-            .flatMap(
-                (Response<RestorableDroppedSqlPoolInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
+    }
+
+    /**
+     * Gets a deleted sql pool that can be restored.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param restorableDroppedSqlPoolId The id of the deleted Sql Pool in the form of
+     *     sqlPoolName,deletionTimeInFileTimeFormat.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a deleted sql pool that can be restored along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<RestorableDroppedSqlPoolInner> getWithResponse(
+        String resourceGroupName, String workspaceName, String restorableDroppedSqlPoolId, Context context) {
+        return getWithResponseAsync(resourceGroupName, workspaceName, restorableDroppedSqlPoolId, context).block();
     }
 
     /**
@@ -248,26 +259,7 @@ public final class RestorableDroppedSqlPoolsClientImpl implements RestorableDrop
     @ServiceMethod(returns = ReturnType.SINGLE)
     public RestorableDroppedSqlPoolInner get(
         String resourceGroupName, String workspaceName, String restorableDroppedSqlPoolId) {
-        return getAsync(resourceGroupName, workspaceName, restorableDroppedSqlPoolId).block();
-    }
-
-    /**
-     * Gets a deleted sql pool that can be restored.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param restorableDroppedSqlPoolId The id of the deleted Sql Pool in the form of
-     *     sqlPoolName,deletionTimeInFileTimeFormat.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a deleted sql pool that can be restored.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<RestorableDroppedSqlPoolInner> getWithResponse(
-        String resourceGroupName, String workspaceName, String restorableDroppedSqlPoolId, Context context) {
-        return getWithResponseAsync(resourceGroupName, workspaceName, restorableDroppedSqlPoolId, context).block();
+        return getWithResponse(resourceGroupName, workspaceName, restorableDroppedSqlPoolId, Context.NONE).getValue();
     }
 
     /**
@@ -278,7 +270,8 @@ public final class RestorableDroppedSqlPoolsClientImpl implements RestorableDrop
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of deleted Sql pools that can be restored.
+     * @return a list of deleted Sql pools that can be restored along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<RestorableDroppedSqlPoolInner>> listByWorkspaceSinglePageAsync(
@@ -332,7 +325,8 @@ public final class RestorableDroppedSqlPoolsClientImpl implements RestorableDrop
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of deleted Sql pools that can be restored.
+     * @return a list of deleted Sql pools that can be restored along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<RestorableDroppedSqlPoolInner>> listByWorkspaceSinglePageAsync(
@@ -382,7 +376,7 @@ public final class RestorableDroppedSqlPoolsClientImpl implements RestorableDrop
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of deleted Sql pools that can be restored.
+     * @return a list of deleted Sql pools that can be restored as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<RestorableDroppedSqlPoolInner> listByWorkspaceAsync(
@@ -399,7 +393,7 @@ public final class RestorableDroppedSqlPoolsClientImpl implements RestorableDrop
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of deleted Sql pools that can be restored.
+     * @return a list of deleted Sql pools that can be restored as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<RestorableDroppedSqlPoolInner> listByWorkspaceAsync(
@@ -415,7 +409,7 @@ public final class RestorableDroppedSqlPoolsClientImpl implements RestorableDrop
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of deleted Sql pools that can be restored.
+     * @return a list of deleted Sql pools that can be restored as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<RestorableDroppedSqlPoolInner> listByWorkspace(
@@ -432,7 +426,7 @@ public final class RestorableDroppedSqlPoolsClientImpl implements RestorableDrop
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of deleted Sql pools that can be restored.
+     * @return a list of deleted Sql pools that can be restored as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<RestorableDroppedSqlPoolInner> listByWorkspace(

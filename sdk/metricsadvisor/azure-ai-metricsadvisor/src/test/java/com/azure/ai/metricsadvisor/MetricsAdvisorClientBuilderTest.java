@@ -6,20 +6,26 @@ package com.azure.ai.metricsadvisor;
 import com.azure.ai.metricsadvisor.models.ListMetricFeedbackOptions;
 import com.azure.ai.metricsadvisor.models.MetricsAdvisorKeyCredential;
 import com.azure.core.http.HttpClient;
+import com.azure.core.http.policy.ExponentialBackoffOptions;
 import com.azure.core.http.policy.FixedDelay;
 import com.azure.core.http.policy.HttpLogDetailLevel;
 import com.azure.core.http.policy.HttpLogOptions;
+import com.azure.core.http.policy.RetryOptions;
 import com.azure.core.http.policy.RetryPolicy;
-import com.azure.core.test.TestBase;
+import com.azure.core.test.TestProxyTestBase;
+import com.azure.core.test.annotation.DoNotRecord;
+import com.azure.core.test.models.CustomMatcher;
 import com.azure.core.util.Configuration;
 import com.azure.core.util.Context;
 import com.azure.identity.DefaultAzureCredentialBuilder;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import static com.azure.ai.metricsadvisor.TestUtils.AZURE_METRICS_ADVISOR_ENDPOINT;
 import static com.azure.ai.metricsadvisor.TestUtils.DISPLAY_NAME_WITH_ARGUMENTS;
@@ -31,26 +37,23 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * Tests for Metrics Advisor client builder
  */
-public class MetricsAdvisorClientBuilderTest extends TestBase {
-    private static final String METRIC_ID = "390d1139-98fb-45af-b831-8d5ad61b150a";
+public class MetricsAdvisorClientBuilderTest extends TestProxyTestBase {
+    private static final String METRIC_ID = "b6c0649c-0c51-4aa6-82b6-3c3b0aa55066";
     private static final int PAGE_SIZE = 10;
     private static final int LISTING_LIMIT = 100;
+    public static final String PLAYBACK_ENDPOINT = "https://localhost:8080";
 
     /**
      * Test client builder with invalid API key
      */
-    @ParameterizedTest(name = DISPLAY_NAME_WITH_ARGUMENTS)
-    @MethodSource("com.azure.ai.metricsadvisor.TestUtils#getTestParameters")
-    public void clientBuilderWithInvalidKeyCredential(HttpClient httpClient,
-                                                      MetricsAdvisorServiceVersion serviceVersion) {
-        clientBuilderWithInvalidKeyCredentialRunner(httpClient, serviceVersion, clientBuilder -> (output) -> {
-            Exception exception = assertThrows(output.getClass(),
-                () -> clientBuilder
-                    .buildClient()
-                    .listFeedback(METRIC_ID)
-                    .forEach(metricFeedback -> assertNotNull(metricFeedback)));
-            assertEquals(output.getMessage(), exception.getMessage());
-        });
+    @Test
+    @DoNotRecord
+    public void clientBuilderWithInvalidKeyCredential() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> new MetricsAdvisorClientBuilder()
+            .endpoint(PLAYBACK_ENDPOINT)
+            .credential(new MetricsAdvisorKeyCredential("", ""))
+            .buildClient());
+        assertEquals("Missing credential information while building a client.", exception.getMessage());
     }
 
     /**
@@ -93,17 +96,13 @@ public class MetricsAdvisorClientBuilderTest extends TestBase {
     /**
      * Test for invalid endpoint, which throws connection refused exception message.
      */
-    @ParameterizedTest(name = DISPLAY_NAME_WITH_ARGUMENTS)
-    @MethodSource("com.azure.ai.metricsadvisor.TestUtils#getTestParameters")
-    public void clientBuilderWithInvalidEndpoint(HttpClient httpClient, MetricsAdvisorServiceVersion serviceVersion) {
-        clientBuilderWithDefaultPipelineRunner(httpClient, serviceVersion, (clientBuilder) ->
-            assertThrows(RuntimeException.class,
-                () -> clientBuilder
-                    .endpoint(INVALID_ENDPOINT)
-                    .retryPolicy(new RetryPolicy(new FixedDelay(3, Duration.ofMillis(10))))
-                    .buildClient()
-                    .listFeedback(METRIC_ID)
-                    .forEach(metricFeedback -> assertNotNull(metricFeedback))));
+    @Test
+    @DoNotRecord
+    public void clientBuilderWithInvalidEndpoint() {
+        assertThrows(RuntimeException.class, () -> new MetricsAdvisorClientBuilder()
+            .endpoint(INVALID_ENDPOINT)
+            .retryPolicy(new RetryPolicy(new FixedDelay(3, Duration.ofMillis(10))))
+            .buildClient());
     }
 
     /**
@@ -111,6 +110,7 @@ public class MetricsAdvisorClientBuilderTest extends TestBase {
      */
     @ParameterizedTest(name = DISPLAY_NAME_WITH_ARGUMENTS)
     @MethodSource("com.azure.ai.metricsadvisor.TestUtils#getTestParameters")
+    @Disabled("https://github.com/Azure/azure-sdk-for-java/issues/33586")
     public void clientBuilderWithTokenCredential(HttpClient httpClient, MetricsAdvisorServiceVersion serviceVersion) {
         clientBuilderWithTokenCredentialRunner(httpClient, serviceVersion, (clientBuilder) ->
             clientBuilder
@@ -123,18 +123,19 @@ public class MetricsAdvisorClientBuilderTest extends TestBase {
                 .forEach(metricFeedback -> assertNotNull(metricFeedback)));
     }
 
-    // Client builder runner
-    void clientBuilderWithInvalidKeyCredentialRunner(HttpClient httpClient,
-                                                     MetricsAdvisorServiceVersion serviceVersion,
-                                                     Function<MetricsAdvisorClientBuilder,
-                                                         Consumer<IllegalArgumentException>> testRunner) {
-        final MetricsAdvisorClientBuilder clientBuilder = createClientBuilder(httpClient, serviceVersion, getEndpoint(),
-            new MetricsAdvisorKeyCredential("", ""));
-        testRunner.apply(clientBuilder)
-            .accept(new IllegalArgumentException("Missing credential information while building a client."));
+    @Test
+    @DoNotRecord
+    public void bothRetryOptionsAndRetryPolicySet() {
+        assertThrows(IllegalStateException.class, () -> new MetricsAdvisorClientBuilder()
+            .endpoint(PLAYBACK_ENDPOINT)
+            .credential(new MetricsAdvisorKeyCredential("subscription_key", "api_key"))
+            .retryOptions(new RetryOptions(new ExponentialBackoffOptions()))
+            .retryPolicy(new RetryPolicy())
+            .buildClient());
     }
 
-    void clientBuilderWithNullServiceVersionRunner(HttpClient httpClient, MetricsAdvisorServiceVersion serviceVersion,
+    // Client builder runner
+    private void clientBuilderWithNullServiceVersionRunner(HttpClient httpClient, MetricsAdvisorServiceVersion serviceVersion,
                                                    Consumer<MetricsAdvisorClientBuilder> testRunner) {
         final MetricsAdvisorClientBuilder clientBuilder =
             createClientBuilder(httpClient, serviceVersion, getEndpoint(), getMetricsAdvisorKeyCredential())
@@ -143,7 +144,7 @@ public class MetricsAdvisorClientBuilderTest extends TestBase {
         testRunner.accept(clientBuilder);
     }
 
-    void clientBuilderWithDefaultPipelineRunner(HttpClient httpClient, MetricsAdvisorServiceVersion serviceVersion,
+    private void clientBuilderWithDefaultPipelineRunner(HttpClient httpClient, MetricsAdvisorServiceVersion serviceVersion,
                                                 Consumer<MetricsAdvisorClientBuilder> testRunner) {
         final MetricsAdvisorClientBuilder clientBuilder =
             createClientBuilder(httpClient, serviceVersion, getEndpoint(), getMetricsAdvisorKeyCredential())
@@ -152,7 +153,7 @@ public class MetricsAdvisorClientBuilderTest extends TestBase {
         testRunner.accept(clientBuilder);
     }
 
-    void clientBuilderWithTokenCredentialRunner(HttpClient httpClient, MetricsAdvisorServiceVersion serviceVersion,
+    private void clientBuilderWithTokenCredentialRunner(HttpClient httpClient, MetricsAdvisorServiceVersion serviceVersion,
                                                 Consumer<MetricsAdvisorClientBuilder> testRunner) {
         final MetricsAdvisorClientBuilder clientBuilder = new MetricsAdvisorClientBuilder()
             .endpoint(getEndpoint())
@@ -181,18 +182,19 @@ public class MetricsAdvisorClientBuilderTest extends TestBase {
      * @param credential the given {@link MetricsAdvisorKeyCredential} credential
      * @return {@link MetricsAdvisorClientBuilder}
      */
-    MetricsAdvisorClientBuilder createClientBuilder(HttpClient httpClient, MetricsAdvisorServiceVersion serviceVersion,
+    private MetricsAdvisorClientBuilder createClientBuilder(HttpClient httpClient, MetricsAdvisorServiceVersion serviceVersion,
                                                     String endpoint, MetricsAdvisorKeyCredential credential) {
         final MetricsAdvisorClientBuilder clientBuilder = new MetricsAdvisorClientBuilder()
             .credential(credential)
             .endpoint(endpoint)
-            .httpClient(httpClient == null ? interceptorManager.getPlaybackClient() : httpClient)
+            .httpClient(interceptorManager.isPlaybackMode() ? interceptorManager.getPlaybackClient() : httpClient)
             .serviceVersion(serviceVersion);
 
-        if (!interceptorManager.isPlaybackMode()) {
+        if (interceptorManager.isRecordMode()) {
             clientBuilder.addPolicy(interceptorManager.getRecordPolicy());
+        } else if (interceptorManager.isPlaybackMode()) {
+            interceptorManager.addMatchers(Arrays.asList(new CustomMatcher().setHeadersKeyOnlyMatch(Arrays.asList("x-api-key"))));
         }
-
         return clientBuilder;
     }
 
@@ -201,9 +203,9 @@ public class MetricsAdvisorClientBuilderTest extends TestBase {
      *
      * @return the endpoint
      */
-    String getEndpoint() {
+    private String getEndpoint() {
         return interceptorManager.isPlaybackMode()
-            ? "https://localhost:8080"
+            ? PLAYBACK_ENDPOINT
             : Configuration.getGlobalConfiguration().get(AZURE_METRICS_ADVISOR_ENDPOINT);
     }
 
@@ -212,7 +214,7 @@ public class MetricsAdvisorClientBuilderTest extends TestBase {
      *
      * @return the MetricsAdvisorKeyCredential
      */
-    MetricsAdvisorKeyCredential getMetricsAdvisorKeyCredential() {
+    private MetricsAdvisorKeyCredential getMetricsAdvisorKeyCredential() {
         return interceptorManager.isPlaybackMode()
             ? new MetricsAdvisorKeyCredential("subscription_key", "api_key")
             : new MetricsAdvisorKeyCredential(

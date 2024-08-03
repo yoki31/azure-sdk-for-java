@@ -5,10 +5,9 @@
 package com.azure.resourcemanager.iothub.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.iothub.fluent.models.PrivateEndpointConnectionInner;
 import com.azure.resourcemanager.iothub.fluent.models.SharedAccessSignatureAuthorizationRuleInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;
@@ -16,25 +15,21 @@ import java.util.Map;
 /** The properties of an IoT hub. */
 @Fluent
 public final class IotHubProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(IotHubProperties.class);
-
     /*
-     * The shared access policies you can use to secure a connection to the IoT
-     * hub.
+     * The shared access policies you can use to secure a connection to the IoT hub.
      */
     @JsonProperty(value = "authorizationPolicies")
     private List<SharedAccessSignatureAuthorizationRuleInner> authorizationPolicies;
 
     /*
-     * If true, SAS tokens with Iot hub scoped SAS keys cannot be used for
-     * authentication.
+     * If true, SAS tokens with Iot hub scoped SAS keys cannot be used for authentication.
      */
     @JsonProperty(value = "disableLocalAuth")
     private Boolean disableLocalAuth;
 
     /*
-     * If true, all device(including Edge devices but excluding modules) scoped
-     * SAS keys cannot be used for authentication.
+     * If true, all device(including Edge devices but excluding modules) scoped SAS keys cannot be used for
+     * authentication.
      */
     @JsonProperty(value = "disableDeviceSAS")
     private Boolean disableDeviceSas;
@@ -46,15 +41,14 @@ public final class IotHubProperties {
     private Boolean disableModuleSas;
 
     /*
-     * If true, egress from IotHub will be restricted to only the allowed FQDNs
-     * that are configured via allowedFqdnList.
+     * If true, egress from IotHub will be restricted to only the allowed FQDNs that are configured via
+     * allowedFqdnList.
      */
     @JsonProperty(value = "restrictOutboundNetworkAccess")
     private Boolean restrictOutboundNetworkAccess;
 
     /*
-     * List of allowed FQDNs(Fully Qualified Domain Name) for egress from Iot
-     * Hub.
+     * List of allowed FQDNs(Fully Qualified Domain Name) for egress from Iot Hub.
      */
     @JsonProperty(value = "allowedFqdnList")
     private List<String> allowedFqdnList;
@@ -78,8 +72,8 @@ public final class IotHubProperties {
     private NetworkRuleSetProperties networkRuleSets;
 
     /*
-     * Specifies the minimum TLS version to support for this hub. Can be set to
-     * "1.2" to have clients that use a TLS version below 1.2 to be rejected.
+     * Specifies the minimum TLS version to support for this hub. Can be set to "1.2" to have clients that use a TLS
+     * version below 1.2 to be rejected.
      */
     @JsonProperty(value = "minTlsVersion")
     private String minTlsVersion;
@@ -109,11 +103,11 @@ public final class IotHubProperties {
     private String hostname;
 
     /*
-     * The Event Hub-compatible endpoint properties. The only possible keys to
-     * this dictionary is events. This key has to be present in the dictionary
-     * while making create or update calls for the IoT hub.
+     * The Event Hub-compatible endpoint properties. The only possible keys to this dictionary is events. This key has
+     * to be present in the dictionary while making create or update calls for the IoT hub.
      */
     @JsonProperty(value = "eventHubEndpoints")
+    @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
     private Map<String, EventHubProperties> eventHubEndpoints;
 
     /*
@@ -124,21 +118,20 @@ public final class IotHubProperties {
     private RoutingProperties routing;
 
     /*
-     * The list of Azure Storage endpoints where you can upload files.
-     * Currently you can configure only one Azure Storage account and that MUST
-     * have its key as $default. Specifying more than one storage account
-     * causes an error to be thrown. Not specifying a value for this property
-     * when the enableFileUploadNotifications property is set to True, causes
-     * an error to be thrown.
+     * The list of Azure Storage endpoints where you can upload files. Currently you can configure only one Azure
+     * Storage account and that MUST have its key as $default. Specifying more than one storage account causes an error
+     * to be thrown. Not specifying a value for this property when the enableFileUploadNotifications property is set to
+     * True, causes an error to be thrown.
      */
     @JsonProperty(value = "storageEndpoints")
+    @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
     private Map<String, StorageEndpointProperties> storageEndpoints;
 
     /*
-     * The messaging endpoint properties for the file upload notification
-     * queue.
+     * The messaging endpoint properties for the file upload notification queue.
      */
     @JsonProperty(value = "messagingEndpoints")
+    @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
     private Map<String, MessagingEndpointProperties> messagingEndpoints;
 
     /*
@@ -170,6 +163,16 @@ public final class IotHubProperties {
      */
     @JsonProperty(value = "locations", access = JsonProperty.Access.WRITE_ONLY)
     private List<IotHubLocationDescription> locations;
+
+    /*
+     * This property when set to true, will enable data residency, thus, disabling disaster recovery.
+     */
+    @JsonProperty(value = "enableDataResidency")
+    private Boolean enableDataResidency;
+
+    /** Creates an instance of IotHubProperties class. */
+    public IotHubProperties() {
+    }
 
     /**
      * Get the authorizationPolicies property: The shared access policies you can use to secure a connection to the IoT
@@ -609,6 +612,28 @@ public final class IotHubProperties {
      */
     public List<IotHubLocationDescription> locations() {
         return this.locations;
+    }
+
+    /**
+     * Get the enableDataResidency property: This property when set to true, will enable data residency, thus, disabling
+     * disaster recovery.
+     *
+     * @return the enableDataResidency value.
+     */
+    public Boolean enableDataResidency() {
+        return this.enableDataResidency;
+    }
+
+    /**
+     * Set the enableDataResidency property: This property when set to true, will enable data residency, thus, disabling
+     * disaster recovery.
+     *
+     * @param enableDataResidency the enableDataResidency value to set.
+     * @return the IotHubProperties object itself.
+     */
+    public IotHubProperties withEnableDataResidency(Boolean enableDataResidency) {
+        this.enableDataResidency = enableDataResidency;
+        return this;
     }
 
     /**

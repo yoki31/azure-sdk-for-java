@@ -2,27 +2,30 @@
 // Licensed under the MIT License.
 package com.azure.data.appconfiguration;
 
+import com.azure.core.credential.TokenCredential;
 import com.azure.core.exception.HttpResponseException;
 import com.azure.core.http.HttpClient;
 import com.azure.core.http.HttpHeaders;
 import com.azure.core.http.rest.Response;
-import com.azure.core.test.TestBase;
+import com.azure.core.test.TestProxyTestBase;
 import com.azure.core.util.Configuration;
 import com.azure.core.util.CoreUtils;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.data.appconfiguration.implementation.ConfigurationClientCredentials;
 import com.azure.data.appconfiguration.implementation.ConfigurationSettingHelper;
 import com.azure.data.appconfiguration.models.ConfigurationSetting;
+import com.azure.data.appconfiguration.models.ConfigurationSettingsFilter;
+import com.azure.data.appconfiguration.models.ConfigurationSnapshot;
+import com.azure.data.appconfiguration.models.ConfigurationSnapshotStatus;
 import com.azure.data.appconfiguration.models.FeatureFlagConfigurationSetting;
 import com.azure.data.appconfiguration.models.FeatureFlagFilter;
 import com.azure.data.appconfiguration.models.SecretReferenceConfigurationSetting;
 import com.azure.data.appconfiguration.models.SettingFields;
 import com.azure.data.appconfiguration.models.SettingSelector;
+import com.azure.data.appconfiguration.models.SnapshotComposition;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -43,45 +46,45 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public abstract class ConfigurationClientTestBase extends TestBase {
-    private static final String AZURE_APPCONFIG_CONNECTION_STRING = "AZURE_APPCONFIG_CONNECTION_STRING";
+public abstract class ConfigurationClientTestBase extends TestProxyTestBase {
     private static final String KEY_PREFIX = "key";
     private static final String LABEL_PREFIX = "label";
     private static final int PREFIX_LENGTH = 8;
     private static final int RESOURCE_LENGTH = 16;
+    // Disable `("$.key")` and name sanitizer from the list of common sanitizers
+    public static final String[] REMOVE_SANITIZER_ID = {"AZSDK3493", "AZSDK3447"};
 
-    static String connectionString;
+    public static final String FAKE_CONNECTION_STRING =
+        "Endpoint=https://localhost:8080;Id=0000000000000;Secret=fakeSecrePlaceholder";
 
-    private final ClientLogger logger = new ClientLogger(ConfigurationClientTestBase.class);
+    static final Duration MINIMUM_RETENTION_PERIOD = Duration.ofHours(1);
+
+    static TokenCredential tokenCredential;
 
     String keyPrefix;
     String labelPrefix;
 
     void beforeTestSetup() {
         keyPrefix = testResourceNamer.randomName(KEY_PREFIX, PREFIX_LENGTH);
-        labelPrefix = testResourceNamer.randomName(LABEL_PREFIX, PREFIX_LENGTH);
+        labelPrefix = testResourceNamer.randomName(LABEL_PREFIX, PREFIX_LENGTH + 2);
     }
 
-    <T> T clientSetup(Function<ConfigurationClientCredentials, T> clientBuilder) {
-        if (CoreUtils.isNullOrEmpty(connectionString)) {
-            connectionString = interceptorManager.isPlaybackMode()
-                ? "Endpoint=http://localhost:8080;Id=0000000000000;Secret=MDAwMDAw"
-                : Configuration.getGlobalConfiguration().get(AZURE_APPCONFIG_CONNECTION_STRING);
+    <T> T clientSetup(BiFunction<TokenCredential, String, T> clientBuilder) {
+        if (tokenCredential == null) {
+            tokenCredential = TestHelper.getTokenCredential(interceptorManager);
         }
 
-        Objects.requireNonNull(connectionString, "AZURE_APPCONFIG_CONNECTION_STRING expected to be set.");
+        String endpoint = interceptorManager.isPlaybackMode()
+            ? new ConfigurationClientCredentials(FAKE_CONNECTION_STRING).getBaseUri()
+            : Configuration.getGlobalConfiguration().get("AZ_CONFIG_ENDPOINT");
 
-        T client;
-        try {
-            client = clientBuilder.apply(new ConfigurationClientCredentials(connectionString));
-        } catch (InvalidKeyException | NoSuchAlgorithmException e) {
-            logger.error("Could not create an configuration client credentials.", e);
-            fail();
-            client = null;
-        }
 
-        return Objects.requireNonNull(client);
+        Objects.requireNonNull(tokenCredential, "Token Credential expected to be set.");
+        Objects.requireNonNull(endpoint, "Az Config endpoint expected to be set.");
+
+        return Objects.requireNonNull(clientBuilder.apply(tokenCredential, endpoint));
     }
+
 
     String getKey() {
         return testResourceNamer.randomName(keyPrefix, RESOURCE_LENGTH);
@@ -111,6 +114,21 @@ public abstract class ConfigurationClientTestBase extends TestBase {
 
         testRunner.accept(newConfiguration);
         testRunner.accept(newConfiguration.setLabel(getLabel()));
+    }
+
+    ConfigurationSetting addConfigurationSettingWithTagsRunner(Consumer<ConfigurationSetting> testRunner) {
+        final Map<String, String> tags = new HashMap<>();
+        tags.put("MyTag", "TagValue");
+        tags.put("AnotherTag", "AnotherTagValue");
+
+        final ConfigurationSetting newConfiguration = new ConfigurationSetting()
+                .setKey(getKey())
+                .setValue("myNewValue")
+                .setContentType("text");
+
+        testRunner.accept(newConfiguration);
+        testRunner.accept(newConfiguration.setLabel(getLabel()).setTags(tags));
+        return newConfiguration;
     }
 
     @Test
@@ -190,6 +208,25 @@ public abstract class ConfigurationClientTestBase extends TestBase {
     }
 
     @Test
+    public abstract void featureFlagConfigurationSettingUnknownAttributesArePreserved(HttpClient httpClient,
+        ConfigurationServiceVersion serviceVersion);
+
+    void featureFlagConfigurationSettingUnknownAttributesArePreservedRunner(
+        Consumer<FeatureFlagConfigurationSetting> testRunner) {
+        String key = getKey();
+        FeatureFlagConfigurationSetting featureFlagX = getFeatureFlagConfigurationSetting(key, "Feature Flag X");
+        String valueWithAdditionalFieldAtFirstLayer =
+            String.format(
+                "{\"id\":\"%s\",\"k1\":\"v1\",\"description\":\"%s\",\"display_name\":\"%s\",\"enabled\":%s,"
+                + "\"conditions\":{\"requirement_type\":\"All\",\"client_filters\":"
+                + "[{\"name\":\"Microsoft.Percentage\",\"parameters\":{\"Value\":30}}]"
+                + "},\"additional_field\":\"additional_value\"}", featureFlagX.getFeatureId(),
+                featureFlagX.getDescription(), featureFlagX.getDisplayName(), featureFlagX.isEnabled());
+        featureFlagX.setValue(valueWithAdditionalFieldAtFirstLayer);
+        testRunner.accept(featureFlagX);
+    }
+
+    @Test
     public abstract void setSecretReferenceConfigurationSettingConvenience(HttpClient httpClient,
         ConfigurationServiceVersion serviceVersion);
 
@@ -198,6 +235,20 @@ public abstract class ConfigurationClientTestBase extends TestBase {
         String key = getKey();
         testRunner.accept(new SecretReferenceConfigurationSetting(key, "https://localhost"),
             new SecretReferenceConfigurationSetting(key, "https://localhost/100"));
+    }
+
+    @Test
+    public abstract void secretReferenceConfigurationSettingUnknownAttributesArePreserved(HttpClient httpClient,
+        ConfigurationServiceVersion serviceVersion);
+
+    void secretReferenceConfigurationSettingUnknownAttributesArePreservedRunner(
+        Consumer<SecretReferenceConfigurationSetting> testRunner) {
+        String key = getKey();
+        String valueWithAdditionalFields =
+            "{\"uri\":\"uriValue\",\"objectFiledName\":{\"unknown\":\"unknown\",\"unknown2\":\"unknown2\"},"
+                + "\"arrayFieldName\":[{\"name\":\"Microsoft.Percentage\",\"parameters\":{\"Value\":30}}]}";
+
+        testRunner.accept(new SecretReferenceConfigurationSetting(key, valueWithAdditionalFields));
     }
 
     @Test
@@ -550,6 +601,146 @@ public abstract class ConfigurationClientTestBase extends TestBase {
         testRunner.accept(newConfiguration);
     }
 
+    @Test
+    public abstract void createSnapshot(HttpClient httpClient, ConfigurationServiceVersion serviceVersion);
+
+    void createSnapshotRunner(BiConsumer<String, List<ConfigurationSettingsFilter>> testRunner) {
+        String snapshotName = getKey();
+        List<ConfigurationSettingsFilter> filters = new ArrayList<>();
+        filters.add(new ConfigurationSettingsFilter(snapshotName + "-*"));
+        testRunner.accept(snapshotName, filters);
+    }
+
+    @Test
+    public abstract void getSnapshot(HttpClient httpClient, ConfigurationServiceVersion serviceVersion);
+
+    @Test
+    public abstract void getSnapshotConvenience(HttpClient httpClient, ConfigurationServiceVersion serviceVersion);
+
+    @Test
+    public abstract void archiveSnapshot(HttpClient httpClient, ConfigurationServiceVersion serviceVersion);
+
+    @Test
+    public abstract void archiveSnapshotConvenience(HttpClient httpClient, ConfigurationServiceVersion serviceVersion);
+
+    @Test
+    public abstract void recoverSnapshot(HttpClient httpClient, ConfigurationServiceVersion serviceVersion);
+
+    @Test
+    public abstract void recoverSnapshotConvenience(HttpClient httpClient, ConfigurationServiceVersion serviceVersion);
+
+    @Test
+    public abstract void listSnapshots(HttpClient httpClient, ConfigurationServiceVersion serviceVersion);
+
+    @Test
+    public abstract void listSnapshotsWithFields(HttpClient httpClient, ConfigurationServiceVersion serviceVersion);
+
+    @Test
+    public abstract void listSettingFromSnapshot(HttpClient httpClient, ConfigurationServiceVersion serviceVersion);
+
+    @Test
+    public abstract void listSettingFromSnapshotWithFields(HttpClient httpClient, ConfigurationServiceVersion serviceVersion);
+
+    @Test
+    public abstract void listSettingsWithPageETag(HttpClient httpClient, ConfigurationServiceVersion serviceVersion);
+
+    @Test
+    public abstract void listLabels(HttpClient httpClient, ConfigurationServiceVersion serviceVersion);
+
+    List<ConfigurationSetting> listLabelsRunner(Consumer<ConfigurationSetting> testRunner) {
+        String key = getKey();
+        String label = getLabel();
+        String label2 = getLabel();
+        final ConfigurationSetting setting = new ConfigurationSetting().setKey(key).setValue("value").setLabel(label);
+        final ConfigurationSetting setting2 = new ConfigurationSetting().setKey(key).setValue("value").setLabel(label2);
+        testRunner.accept(setting);
+        testRunner.accept(setting2);
+        List<ConfigurationSetting> result = new ArrayList<>();
+        result.add(setting);
+        result.add(setting2);
+        return result;
+    }
+
+    @Test
+    public abstract void listSettingByTagsFilter(HttpClient httpClient, ConfigurationServiceVersion serviceVersion);
+
+    List<ConfigurationSetting> listSettingByTagsFilterRunner(Consumer<ConfigurationSetting> testRunner) {
+        String key = getKey();
+        String key2 = getKey();
+        Map<String, String> tags = new HashMap<>();
+        tags.put(key, "tagValue");
+        Map<String, String> tags2 = new HashMap<>();
+        tags2.put(key, "tagValue");
+        tags2.put(key2, "tagValue");
+        final ConfigurationSetting setting = new ConfigurationSetting().setKey(key).setValue("value").setTags(tags);
+        final ConfigurationSetting setting2 = new ConfigurationSetting().setKey(key2).setValue("value").setTags(tags2);
+
+        testRunner.accept(setting);
+        testRunner.accept(setting2);
+
+        List<ConfigurationSetting> result = new ArrayList<>();
+        result.add(setting);
+        result.add(setting2);
+        return result;
+    }
+
+    @Test
+    public abstract void listRevisionsWithTagsFilter(HttpClient httpClient, ConfigurationServiceVersion serviceVersion);
+
+    List<ConfigurationSetting> listRevisionsWithTagsFilterRunner(Consumer<ConfigurationSetting> testRunner) {
+        final String keyName = getKey();
+        final Map<String, String> tags = new HashMap<>();
+        tags.put("MyTag", "TagValue");
+        tags.put("AnotherTag", "AnotherTagValue");
+
+        final ConfigurationSetting original = new ConfigurationSetting().setKey(keyName).setValue("myValue").setTags(tags);
+        final ConfigurationSetting updated = new ConfigurationSetting().setKey(original.getKey()).setValue("anotherValue");
+        final ConfigurationSetting updated2 = new ConfigurationSetting().setKey(original.getKey()).setValue("anotherValue2");
+
+        testRunner.accept(original);
+        testRunner.accept(updated);
+        testRunner.accept(updated2);
+
+        List<ConfigurationSetting> result = new ArrayList<>();
+        result.add(original);
+        result.add(updated);
+        result.add(updated2);
+        return result;
+    }
+
+    @Test
+    public abstract void createSnapshotWithTagsFilter(HttpClient httpClient, ConfigurationServiceVersion serviceVersion);
+
+    List<ConfigurationSetting> createSnapshotWithTagsFilterPrepareRunner(Consumer<ConfigurationSetting> testRunner) {
+        String key = getKey();
+        String key2 = getKey();
+        Map<String, String> tags = new HashMap<>();
+        tags.put("MyTag", "TagValue");
+        tags.put("AnotherTag", "AnotherTagValue");
+
+        final ConfigurationSetting setting = new ConfigurationSetting().setKey(key).setValue("value");
+        final ConfigurationSetting setting2 = new ConfigurationSetting().setKey(key2).setValue("value").setTags(tags);
+
+        testRunner.accept(setting);
+        testRunner.accept(setting2);
+
+        List<ConfigurationSetting> result = new ArrayList<>();
+        result.add(setting);
+        result.add(setting2);
+        return result;
+    }
+
+    void createSnapshotWithTagsFilterRunner(BiConsumer<String, List<ConfigurationSettingsFilter>> testRunner) {
+        String snapshotName = getKey();
+        List<String> tagsFilter = new ArrayList<>();
+        tagsFilter.add("MyTag=TagValue");
+        tagsFilter.add("AnotherTag=AnotherTagValue");
+
+        List<ConfigurationSettingsFilter> filters = new ArrayList<>();
+        filters.add(new ConfigurationSettingsFilter(KEY_PREFIX + "*").setTags(tagsFilter));
+        testRunner.accept(snapshotName, filters);
+    }
+
     /**
      * Helper method to verify that the RestResponse matches what was expected. This method assumes a response status of 200.
      *
@@ -588,8 +779,6 @@ public abstract class ConfigurationClientTestBase extends TestBase {
      */
     static void assertConfigurationEquals(ConfigurationSetting expected, Response<ConfigurationSetting> response, final int expectedStatusCode) {
         assertNotNull(response);
-        assertEquals(expectedStatusCode, response.getStatusCode());
-
         assertConfigurationEquals(expected, response.getValue());
     }
 
@@ -773,12 +962,12 @@ public abstract class ConfigurationClientTestBase extends TestBase {
     private String getFeatureFlagConfigurationSettingValue(String key) {
         return "{\"id\":\"" + key + "\",\"description\":null,\"display_name\":\"Feature Flag X\""
                    + ",\"enabled\":false,\"conditions\":{\"client_filters\":[{\"name\":"
-                   + "\"Microsoft.Percentage\",\"parameters\":{\"Value\":\"30\"}}]}}";
+                   + "\"Microsoft.Percentage\",\"parameters\":{\"Value\":30}}]}}";
     }
 
     private FeatureFlagConfigurationSetting getFeatureFlagConfigurationSetting(String key, String displayName) {
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("Value", "30");
+        parameters.put("Value", 30);
         final List<FeatureFlagFilter> filters = new ArrayList<>();
         filters.add(new FeatureFlagFilter("Microsoft.Percentage")
                         .setParameters(parameters));
@@ -787,5 +976,48 @@ public abstract class ConfigurationClientTestBase extends TestBase {
                 .setDisplayName(displayName)
                 .setClientFilters(filters)
                 .setValue(getFeatureFlagConfigurationSettingValue(key));
+    }
+
+    void assertConfigurationSnapshotWithResponse(int expectedStatusCode, String name,
+        ConfigurationSnapshotStatus snapshotStatus, List<ConfigurationSettingsFilter> filters,
+        SnapshotComposition snapshotComposition,
+        Duration retentionPeriod, Long size, Long itemCount, Map<String, String> tags,
+        Response<ConfigurationSnapshot> response) {
+        assertNotNull(response);
+        assertEquals(expectedStatusCode, response.getStatusCode());
+
+        assertEqualsConfigurationSnapshot(name, snapshotStatus, filters, snapshotComposition, retentionPeriod,
+            size, itemCount, tags, response.getValue());
+    }
+
+    void assertEqualsConfigurationSnapshot(String name, ConfigurationSnapshotStatus snapshotStatus,
+        List<ConfigurationSettingsFilter> filters, SnapshotComposition snapshotComposition, Duration retentionPeriod, Long size,
+        Long itemCount, Map<String, String> tags, ConfigurationSnapshot actualSnapshot) {
+        assertEquals(name, actualSnapshot.getName());
+        assertEquals(snapshotStatus, actualSnapshot.getStatus());
+        assertEqualsSnapshotFilters(filters, actualSnapshot.getFilters());
+        assertEquals(snapshotComposition, actualSnapshot.getSnapshotComposition());
+        assertEquals(retentionPeriod, actualSnapshot.getRetentionPeriod());
+        assertNotNull(actualSnapshot.getCreatedAt());
+        assertEquals(itemCount, actualSnapshot.getItemCount());
+        assertNotNull(actualSnapshot.getSizeInBytes());
+        assertNotNull(actualSnapshot.getETag());
+
+        if (!CoreUtils.isNullOrEmpty(tags)) {
+            assertEquals(tags, actualSnapshot.getTags());
+        }
+    }
+
+    void assertEqualsSnapshotFilters(List<ConfigurationSettingsFilter> o1, List<ConfigurationSettingsFilter> o2) {
+        if (o1 == o2) {
+            return;
+        }
+        assertEquals(o1.size(), o2.size());
+        for (int i = 0; i < o1.size(); i++) {
+            ConfigurationSettingsFilter expectedFilter = o1.get(i);
+            ConfigurationSettingsFilter actualFilter = o2.get(i);
+            assertEquals(expectedFilter.getKey(), actualFilter.getKey());
+            assertEquals(expectedFilter.getLabel(), actualFilter.getLabel());
+        }
     }
 }

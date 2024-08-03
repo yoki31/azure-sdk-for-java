@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** A wrapper for an ARM resource id. */
+/**
+ * A wrapper for an ARM resource id.
+ */
 @Immutable
 public final class ArmIdWrapper {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ArmIdWrapper.class);
-
     /*
      * The id property.
      */
@@ -21,8 +19,14 @@ public final class ArmIdWrapper {
     private String id;
 
     /**
+     * Creates an instance of ArmIdWrapper class.
+     */
+    public ArmIdWrapper() {
+    }
+
+    /**
      * Get the id property: The id property.
-     *
+     * 
      * @return the id value.
      */
     public String id() {
@@ -31,7 +35,7 @@ public final class ArmIdWrapper {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

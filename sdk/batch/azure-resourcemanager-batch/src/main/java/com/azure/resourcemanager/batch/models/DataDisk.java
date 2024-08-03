@@ -5,8 +5,6 @@
 package com.azure.resourcemanager.batch.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -15,25 +13,25 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @Fluent
 public final class DataDisk {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DataDisk.class);
-
     /*
-     * The logical unit number. The lun is used to uniquely identify each data
-     * disk. If attaching multiple disks, each should have a distinct lun. The
-     * value must be between 0 and 63, inclusive.
+     * The logical unit number.
+     * 
+     * The lun is used to uniquely identify each data disk. If attaching multiple disks, each should have a distinct
+     * lun. The value must be between 0 and 63, inclusive.
      */
     @JsonProperty(value = "lun", required = true)
     private int lun;
 
     /*
-     * The type of caching to enable for the disk. Values are:
-     *
+     * The type of caching to enable for the disk.
+     * 
+     * Values are:
+     * 
      * none - The caching mode for the disk is not enabled.
      * readOnly - The caching mode for the disk is read only.
      * readWrite - The caching mode for the disk is read and write.
-     *
-     * The default value for caching is none. For information about the caching
-     * options see:
+     * 
+     * The default value for caching is none. For information about the caching options see:
      * https://blogs.msdn.microsoft.com/windowsazurestorage/2012/06/27/exploring-windows-azure-drives-disks-and-images/.
      */
     @JsonProperty(value = "caching")
@@ -46,21 +44,28 @@ public final class DataDisk {
     private int diskSizeGB;
 
     /*
-     * The storage account type for use in creating data disks. If omitted, the
-     * default is "Standard_LRS". Values are:
-     *
-     * Standard_LRS - The data disk should use standard locally redundant
-     * storage.
-     * Premium_LRS - The data disk should use premium locally redundant
-     * storage.
+     * The storage account type for use in creating data disks or OS disk.
+     * 
+     * If omitted, the default is "Standard_LRS". Values are:
+     * 
+     * Standard_LRS - The data disk should use standard locally redundant storage.
+     * Premium_LRS - The data disk should use premium locally redundant storage.
      */
     @JsonProperty(value = "storageAccountType")
     private StorageAccountType storageAccountType;
 
     /**
-     * Get the lun property: The logical unit number. The lun is used to uniquely identify each data disk. If attaching
-     * multiple disks, each should have a distinct lun. The value must be between 0 and 63, inclusive.
-     *
+     * Creates an instance of DataDisk class.
+     */
+    public DataDisk() {
+    }
+
+    /**
+     * Get the lun property: The logical unit number.
+     * 
+     * The lun is used to uniquely identify each data disk. If attaching multiple disks, each should have a distinct
+     * lun. The value must be between 0 and 63, inclusive.
+     * 
      * @return the lun value.
      */
     public int lun() {
@@ -68,9 +73,11 @@ public final class DataDisk {
     }
 
     /**
-     * Set the lun property: The logical unit number. The lun is used to uniquely identify each data disk. If attaching
-     * multiple disks, each should have a distinct lun. The value must be between 0 and 63, inclusive.
-     *
+     * Set the lun property: The logical unit number.
+     * 
+     * The lun is used to uniquely identify each data disk. If attaching multiple disks, each should have a distinct
+     * lun. The value must be between 0 and 63, inclusive.
+     * 
      * @param lun the lun value to set.
      * @return the DataDisk object itself.
      */
@@ -80,14 +87,17 @@ public final class DataDisk {
     }
 
     /**
-     * Get the caching property: The type of caching to enable for the disk. Values are:
-     *
-     * <p>none - The caching mode for the disk is not enabled. readOnly - The caching mode for the disk is read only.
+     * Get the caching property: The type of caching to enable for the disk.
+     * 
+     * Values are:
+     * 
+     * none - The caching mode for the disk is not enabled.
+     * readOnly - The caching mode for the disk is read only.
      * readWrite - The caching mode for the disk is read and write.
-     *
-     * <p>The default value for caching is none. For information about the caching options see:
+     * 
+     * The default value for caching is none. For information about the caching options see:
      * https://blogs.msdn.microsoft.com/windowsazurestorage/2012/06/27/exploring-windows-azure-drives-disks-and-images/.
-     *
+     * 
      * @return the caching value.
      */
     public CachingType caching() {
@@ -95,14 +105,17 @@ public final class DataDisk {
     }
 
     /**
-     * Set the caching property: The type of caching to enable for the disk. Values are:
-     *
-     * <p>none - The caching mode for the disk is not enabled. readOnly - The caching mode for the disk is read only.
+     * Set the caching property: The type of caching to enable for the disk.
+     * 
+     * Values are:
+     * 
+     * none - The caching mode for the disk is not enabled.
+     * readOnly - The caching mode for the disk is read only.
      * readWrite - The caching mode for the disk is read and write.
-     *
-     * <p>The default value for caching is none. For information about the caching options see:
+     * 
+     * The default value for caching is none. For information about the caching options see:
      * https://blogs.msdn.microsoft.com/windowsazurestorage/2012/06/27/exploring-windows-azure-drives-disks-and-images/.
-     *
+     * 
      * @param caching the caching value to set.
      * @return the DataDisk object itself.
      */
@@ -113,7 +126,7 @@ public final class DataDisk {
 
     /**
      * Get the diskSizeGB property: The initial disk size in GB when creating new data disk.
-     *
+     * 
      * @return the diskSizeGB value.
      */
     public int diskSizeGB() {
@@ -122,7 +135,7 @@ public final class DataDisk {
 
     /**
      * Set the diskSizeGB property: The initial disk size in GB when creating new data disk.
-     *
+     * 
      * @param diskSizeGB the diskSizeGB value to set.
      * @return the DataDisk object itself.
      */
@@ -132,12 +145,13 @@ public final class DataDisk {
     }
 
     /**
-     * Get the storageAccountType property: The storage account type for use in creating data disks. If omitted, the
-     * default is "Standard_LRS". Values are:
-     *
-     * <p>Standard_LRS - The data disk should use standard locally redundant storage. Premium_LRS - The data disk should
-     * use premium locally redundant storage.
-     *
+     * Get the storageAccountType property: The storage account type for use in creating data disks or OS disk.
+     * 
+     * If omitted, the default is "Standard_LRS". Values are:
+     * 
+     * Standard_LRS - The data disk should use standard locally redundant storage.
+     * Premium_LRS - The data disk should use premium locally redundant storage.
+     * 
      * @return the storageAccountType value.
      */
     public StorageAccountType storageAccountType() {
@@ -145,12 +159,13 @@ public final class DataDisk {
     }
 
     /**
-     * Set the storageAccountType property: The storage account type for use in creating data disks. If omitted, the
-     * default is "Standard_LRS". Values are:
-     *
-     * <p>Standard_LRS - The data disk should use standard locally redundant storage. Premium_LRS - The data disk should
-     * use premium locally redundant storage.
-     *
+     * Set the storageAccountType property: The storage account type for use in creating data disks or OS disk.
+     * 
+     * If omitted, the default is "Standard_LRS". Values are:
+     * 
+     * Standard_LRS - The data disk should use standard locally redundant storage.
+     * Premium_LRS - The data disk should use premium locally redundant storage.
+     * 
      * @param storageAccountType the storageAccountType value to set.
      * @return the DataDisk object itself.
      */
@@ -161,7 +176,7 @@ public final class DataDisk {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

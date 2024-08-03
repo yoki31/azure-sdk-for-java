@@ -4,14 +4,16 @@
 
 package com.azure.resourcemanager.appservice.generated;
 
-import com.azure.core.util.Context;
 import com.azure.resourcemanager.appservice.fluent.models.CertificateInner;
+
 import java.util.Arrays;
 
-/** Samples for Certificates CreateOrUpdate. */
+/**
+ * Samples for Certificates CreateOrUpdate.
+ */
 public final class CertificatesCreateOrUpdateSamples {
     /*
-     * x-ms-original-file: specification/web/resource-manager/Microsoft.Web/stable/2021-03-01/examples/CreateOrUpdateCertificate.json
+     * x-ms-original-file: specification/web/resource-manager/Microsoft.Web/stable/2023-12-01/examples/CreateOrUpdateCertificate.json
      */
     /**
      * Sample code: Create Or Update Certificate.
@@ -19,18 +21,14 @@ public final class CertificatesCreateOrUpdateSamples {
      * @param azure The entry point for accessing resource management APIs in Azure.
      */
     public static void createOrUpdateCertificate(com.azure.resourcemanager.AzureResourceManager azure) {
-        azure
-            .webApps()
+        azure.webApps()
             .manager()
             .serviceClient()
             .getCertificates()
-            .createOrUpdateWithResponse(
-                "testrg123",
-                "testc6282",
-                new CertificateInner()
-                    .withLocation("East US")
-                    .withPassword("<password>")
+            .createOrUpdateWithResponse("testrg123", "testc6282",
+                new CertificateInner().withLocation("East US")
+                    .withPassword("fakeTokenPlaceholder")
                     .withHostNames(Arrays.asList("ServerCert")),
-                Context.NONE);
+                com.azure.core.util.Context.NONE);
     }
 }

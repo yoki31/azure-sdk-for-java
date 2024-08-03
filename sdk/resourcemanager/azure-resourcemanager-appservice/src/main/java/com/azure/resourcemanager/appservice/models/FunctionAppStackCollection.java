@@ -7,15 +7,15 @@ package com.azure.resourcemanager.appservice.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.fluent.models.FunctionAppStackInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
-/** Collection of Function app Stacks. */
+/**
+ * Collection of Function app Stacks.
+ */
 @Fluent
 public final class FunctionAppStackCollection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(FunctionAppStackCollection.class);
-
     /*
      * Collection of resources.
      */
@@ -27,6 +27,12 @@ public final class FunctionAppStackCollection {
      */
     @JsonProperty(value = "nextLink", access = JsonProperty.Access.WRITE_ONLY)
     private String nextLink;
+
+    /**
+     * Creates an instance of FunctionAppStackCollection class.
+     */
+    public FunctionAppStackCollection() {
+    }
 
     /**
      * Get the value property: Collection of resources.
@@ -64,12 +70,13 @@ public final class FunctionAppStackCollection {
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property value in model FunctionAppStackCollection"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property value in model FunctionAppStackCollection"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(FunctionAppStackCollection.class);
 }

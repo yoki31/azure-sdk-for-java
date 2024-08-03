@@ -30,7 +30,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.CertificatesClient;
 import com.azure.resourcemanager.apimanagement.fluent.models.CertificateContractInner;
 import com.azure.resourcemanager.apimanagement.models.CertificateCollection;
@@ -43,8 +42,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in CertificatesClient. */
 public final class CertificatesClientImpl implements CertificatesClient {
-    private final ClientLogger logger = new ClientLogger(CertificatesClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final CertificatesService service;
 
@@ -68,11 +65,10 @@ public final class CertificatesClientImpl implements CertificatesClient {
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApiManagementClientC")
-    private interface CertificatesService {
+    public interface CertificatesService {
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/certificates")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/certificates")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<CertificateCollection>> listByService(
@@ -90,8 +86,7 @@ public final class CertificatesClientImpl implements CertificatesClient {
 
         @Headers({"Content-Type: application/json"})
         @Head(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/certificates/{certificateId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/certificates/{certificateId}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<CertificatesGetEntityTagResponse> getEntityTag(
@@ -106,8 +101,7 @@ public final class CertificatesClientImpl implements CertificatesClient {
 
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/certificates/{certificateId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/certificates/{certificateId}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<CertificatesGetResponse> get(
@@ -122,8 +116,7 @@ public final class CertificatesClientImpl implements CertificatesClient {
 
         @Headers({"Content-Type: application/json"})
         @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/certificates/{certificateId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/certificates/{certificateId}")
         @ExpectedResponses({200, 201})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<CertificatesCreateOrUpdateResponse> createOrUpdate(
@@ -140,8 +133,7 @@ public final class CertificatesClientImpl implements CertificatesClient {
 
         @Headers({"Content-Type: application/json"})
         @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/certificates/{certificateId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/certificates/{certificateId}")
         @ExpectedResponses({200, 204})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Void>> delete(
@@ -157,8 +149,7 @@ public final class CertificatesClientImpl implements CertificatesClient {
 
         @Headers({"Content-Type: application/json"})
         @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/certificates/{certificateId}/refreshSecret")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/certificates/{certificateId}/refreshSecret")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<CertificatesRefreshSecretResponse> refreshSecret(
@@ -185,7 +176,7 @@ public final class CertificatesClientImpl implements CertificatesClient {
     /**
      * Lists a collection of all certificates in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -200,7 +191,8 @@ public final class CertificatesClientImpl implements CertificatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Certificates list representation.
+     * @return paged Certificates list representation along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<CertificateContractInner>> listByServiceSinglePageAsync(
@@ -261,7 +253,7 @@ public final class CertificatesClientImpl implements CertificatesClient {
     /**
      * Lists a collection of all certificates in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -277,7 +269,8 @@ public final class CertificatesClientImpl implements CertificatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Certificates list representation.
+     * @return paged Certificates list representation along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<CertificateContractInner>> listByServiceSinglePageAsync(
@@ -336,7 +329,7 @@ public final class CertificatesClientImpl implements CertificatesClient {
     /**
      * Lists a collection of all certificates in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -351,7 +344,7 @@ public final class CertificatesClientImpl implements CertificatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Certificates list representation.
+     * @return paged Certificates list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<CertificateContractInner> listByServiceAsync(
@@ -371,12 +364,12 @@ public final class CertificatesClientImpl implements CertificatesClient {
     /**
      * Lists a collection of all certificates in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Certificates list representation.
+     * @return paged Certificates list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<CertificateContractInner> listByServiceAsync(String resourceGroupName, String serviceName) {
@@ -394,7 +387,7 @@ public final class CertificatesClientImpl implements CertificatesClient {
     /**
      * Lists a collection of all certificates in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -410,7 +403,7 @@ public final class CertificatesClientImpl implements CertificatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Certificates list representation.
+     * @return paged Certificates list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<CertificateContractInner> listByServiceAsync(
@@ -431,12 +424,12 @@ public final class CertificatesClientImpl implements CertificatesClient {
     /**
      * Lists a collection of all certificates in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Certificates list representation.
+     * @return paged Certificates list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<CertificateContractInner> listByService(String resourceGroupName, String serviceName) {
@@ -451,7 +444,7 @@ public final class CertificatesClientImpl implements CertificatesClient {
     /**
      * Lists a collection of all certificates in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -467,7 +460,7 @@ public final class CertificatesClientImpl implements CertificatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Certificates list representation.
+     * @return paged Certificates list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<CertificateContractInner> listByService(
@@ -485,14 +478,15 @@ public final class CertificatesClientImpl implements CertificatesClient {
     /**
      * Gets the entity state (Etag) version of the certificate specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
      *     instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the certificate specified by its identifier.
+     * @return the entity state (Etag) version of the certificate specified by its identifier on successful completion
+     *     of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<CertificatesGetEntityTagResponse> getEntityTagWithResponseAsync(
@@ -539,7 +533,7 @@ public final class CertificatesClientImpl implements CertificatesClient {
     /**
      * Gets the entity state (Etag) version of the certificate specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
      *     instance.
@@ -547,7 +541,8 @@ public final class CertificatesClientImpl implements CertificatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the certificate specified by its identifier.
+     * @return the entity state (Etag) version of the certificate specified by its identifier on successful completion
+     *     of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<CertificatesGetEntityTagResponse> getEntityTagWithResponseAsync(
@@ -591,41 +586,26 @@ public final class CertificatesClientImpl implements CertificatesClient {
     /**
      * Gets the entity state (Etag) version of the certificate specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
      *     instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the certificate specified by its identifier.
+     * @return the entity state (Etag) version of the certificate specified by its identifier on successful completion
+     *     of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> getEntityTagAsync(String resourceGroupName, String serviceName, String certificateId) {
         return getEntityTagWithResponseAsync(resourceGroupName, serviceName, certificateId)
-            .flatMap((CertificatesGetEntityTagResponse res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Gets the entity state (Etag) version of the certificate specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
-     *     instance.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public void getEntityTag(String resourceGroupName, String serviceName, String certificateId) {
-        getEntityTagAsync(resourceGroupName, serviceName, certificateId).block();
-    }
-
-    /**
-     * Gets the entity state (Etag) version of the certificate specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
      *     instance.
@@ -642,16 +622,32 @@ public final class CertificatesClientImpl implements CertificatesClient {
     }
 
     /**
-     * Gets the details of the certificate specified by its identifier.
+     * Gets the entity state (Etag) version of the certificate specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
      *     instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the certificate specified by its identifier.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public void getEntityTag(String resourceGroupName, String serviceName, String certificateId) {
+        getEntityTagWithResponse(resourceGroupName, serviceName, certificateId, Context.NONE);
+    }
+
+    /**
+     * Gets the details of the certificate specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
+     *     instance.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the details of the certificate specified by its identifier on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<CertificatesGetResponse> getWithResponseAsync(
@@ -698,7 +694,7 @@ public final class CertificatesClientImpl implements CertificatesClient {
     /**
      * Gets the details of the certificate specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
      *     instance.
@@ -706,7 +702,7 @@ public final class CertificatesClientImpl implements CertificatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the certificate specified by its identifier.
+     * @return the details of the certificate specified by its identifier on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<CertificatesGetResponse> getWithResponseAsync(
@@ -750,50 +746,26 @@ public final class CertificatesClientImpl implements CertificatesClient {
     /**
      * Gets the details of the certificate specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
      *     instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the certificate specified by its identifier.
+     * @return the details of the certificate specified by its identifier on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<CertificateContractInner> getAsync(
         String resourceGroupName, String serviceName, String certificateId) {
         return getWithResponseAsync(resourceGroupName, serviceName, certificateId)
-            .flatMap(
-                (CertificatesGetResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Gets the details of the certificate specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
-     *     instance.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the certificate specified by its identifier.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public CertificateContractInner get(String resourceGroupName, String serviceName, String certificateId) {
-        return getAsync(resourceGroupName, serviceName, certificateId).block();
-    }
-
-    /**
-     * Gets the details of the certificate specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
      *     instance.
@@ -810,9 +782,26 @@ public final class CertificatesClientImpl implements CertificatesClient {
     }
 
     /**
+     * Gets the details of the certificate specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
+     *     instance.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the details of the certificate specified by its identifier.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public CertificateContractInner get(String resourceGroupName, String serviceName, String certificateId) {
+        return getWithResponse(resourceGroupName, serviceName, certificateId, Context.NONE).getValue();
+    }
+
+    /**
      * Creates or updates the certificate being used for authentication with the backend.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
      *     instance.
@@ -821,7 +810,7 @@ public final class CertificatesClientImpl implements CertificatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return certificate details.
+     * @return certificate details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<CertificatesCreateOrUpdateResponse> createOrUpdateWithResponseAsync(
@@ -879,7 +868,7 @@ public final class CertificatesClientImpl implements CertificatesClient {
     /**
      * Creates or updates the certificate being used for authentication with the backend.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
      *     instance.
@@ -889,7 +878,7 @@ public final class CertificatesClientImpl implements CertificatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return certificate details.
+     * @return certificate details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<CertificatesCreateOrUpdateResponse> createOrUpdateWithResponseAsync(
@@ -945,39 +934,7 @@ public final class CertificatesClientImpl implements CertificatesClient {
     /**
      * Creates or updates the certificate being used for authentication with the backend.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
-     *     instance.
-     * @param parameters Create or Update parameters.
-     * @param ifMatch ETag of the Entity. Not required when creating an entity, but required when updating an entity.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return certificate details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<CertificateContractInner> createOrUpdateAsync(
-        String resourceGroupName,
-        String serviceName,
-        String certificateId,
-        CertificateCreateOrUpdateParameters parameters,
-        String ifMatch) {
-        return createOrUpdateWithResponseAsync(resourceGroupName, serviceName, certificateId, parameters, ifMatch)
-            .flatMap(
-                (CertificatesCreateOrUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
-    }
-
-    /**
-     * Creates or updates the certificate being used for authentication with the backend.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
      *     instance.
@@ -985,7 +942,7 @@ public final class CertificatesClientImpl implements CertificatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return certificate details.
+     * @return certificate details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<CertificateContractInner> createOrUpdateAsync(
@@ -995,43 +952,13 @@ public final class CertificatesClientImpl implements CertificatesClient {
         CertificateCreateOrUpdateParameters parameters) {
         final String ifMatch = null;
         return createOrUpdateWithResponseAsync(resourceGroupName, serviceName, certificateId, parameters, ifMatch)
-            .flatMap(
-                (CertificatesCreateOrUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Creates or updates the certificate being used for authentication with the backend.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
-     *     instance.
-     * @param parameters Create or Update parameters.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return certificate details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public CertificateContractInner createOrUpdate(
-        String resourceGroupName,
-        String serviceName,
-        String certificateId,
-        CertificateCreateOrUpdateParameters parameters) {
-        final String ifMatch = null;
-        return createOrUpdateAsync(resourceGroupName, serviceName, certificateId, parameters, ifMatch).block();
-    }
-
-    /**
-     * Creates or updates the certificate being used for authentication with the backend.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
      *     instance.
@@ -1057,9 +984,34 @@ public final class CertificatesClientImpl implements CertificatesClient {
     }
 
     /**
+     * Creates or updates the certificate being used for authentication with the backend.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
+     *     instance.
+     * @param parameters Create or Update parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return certificate details.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public CertificateContractInner createOrUpdate(
+        String resourceGroupName,
+        String serviceName,
+        String certificateId,
+        CertificateCreateOrUpdateParameters parameters) {
+        final String ifMatch = null;
+        return createOrUpdateWithResponse(
+                resourceGroupName, serviceName, certificateId, parameters, ifMatch, Context.NONE)
+            .getValue();
+    }
+
+    /**
      * Deletes specific certificate.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
      *     instance.
@@ -1068,7 +1020,7 @@ public final class CertificatesClientImpl implements CertificatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -1119,7 +1071,7 @@ public final class CertificatesClientImpl implements CertificatesClient {
     /**
      * Deletes specific certificate.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
      *     instance.
@@ -1129,7 +1081,7 @@ public final class CertificatesClientImpl implements CertificatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -1177,7 +1129,7 @@ public final class CertificatesClientImpl implements CertificatesClient {
     /**
      * Deletes specific certificate.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
      *     instance.
@@ -1186,18 +1138,39 @@ public final class CertificatesClientImpl implements CertificatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(String resourceGroupName, String serviceName, String certificateId, String ifMatch) {
         return deleteWithResponseAsync(resourceGroupName, serviceName, certificateId, ifMatch)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Deletes specific certificate.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
+     *     instance.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> deleteWithResponse(
+        String resourceGroupName, String serviceName, String certificateId, String ifMatch, Context context) {
+        return deleteWithResponseAsync(resourceGroupName, serviceName, certificateId, ifMatch, context).block();
+    }
+
+    /**
+     * Deletes specific certificate.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
      *     instance.
@@ -1209,41 +1182,20 @@ public final class CertificatesClientImpl implements CertificatesClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public void delete(String resourceGroupName, String serviceName, String certificateId, String ifMatch) {
-        deleteAsync(resourceGroupName, serviceName, certificateId, ifMatch).block();
-    }
-
-    /**
-     * Deletes specific certificate.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
-     *     instance.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> deleteWithResponse(
-        String resourceGroupName, String serviceName, String certificateId, String ifMatch, Context context) {
-        return deleteWithResponseAsync(resourceGroupName, serviceName, certificateId, ifMatch, context).block();
+        deleteWithResponse(resourceGroupName, serviceName, certificateId, ifMatch, Context.NONE);
     }
 
     /**
      * From KeyVault, Refresh the certificate being used for authentication with the backend.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
      *     instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return certificate details.
+     * @return certificate details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<CertificatesRefreshSecretResponse> refreshSecretWithResponseAsync(
@@ -1290,7 +1242,7 @@ public final class CertificatesClientImpl implements CertificatesClient {
     /**
      * From KeyVault, Refresh the certificate being used for authentication with the backend.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
      *     instance.
@@ -1298,7 +1250,7 @@ public final class CertificatesClientImpl implements CertificatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return certificate details.
+     * @return certificate details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<CertificatesRefreshSecretResponse> refreshSecretWithResponseAsync(
@@ -1342,50 +1294,26 @@ public final class CertificatesClientImpl implements CertificatesClient {
     /**
      * From KeyVault, Refresh the certificate being used for authentication with the backend.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
      *     instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return certificate details.
+     * @return certificate details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<CertificateContractInner> refreshSecretAsync(
         String resourceGroupName, String serviceName, String certificateId) {
         return refreshSecretWithResponseAsync(resourceGroupName, serviceName, certificateId)
-            .flatMap(
-                (CertificatesRefreshSecretResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * From KeyVault, Refresh the certificate being used for authentication with the backend.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
-     *     instance.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return certificate details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public CertificateContractInner refreshSecret(String resourceGroupName, String serviceName, String certificateId) {
-        return refreshSecretAsync(resourceGroupName, serviceName, certificateId).block();
-    }
-
-    /**
-     * From KeyVault, Refresh the certificate being used for authentication with the backend.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
      *     instance.
@@ -1402,13 +1330,32 @@ public final class CertificatesClientImpl implements CertificatesClient {
     }
 
     /**
-     * Get the next page of items.
+     * From KeyVault, Refresh the certificate being used for authentication with the backend.
      *
-     * @param nextLink The nextLink parameter.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param certificateId Identifier of the certificate entity. Must be unique in the current API Management service
+     *     instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Certificates list representation.
+     * @return certificate details.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public CertificateContractInner refreshSecret(String resourceGroupName, String serviceName, String certificateId) {
+        return refreshSecretWithResponse(resourceGroupName, serviceName, certificateId, Context.NONE).getValue();
+    }
+
+    /**
+     * Get the next page of items.
+     *
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return paged Certificates list representation along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<CertificateContractInner>> listByServiceNextSinglePageAsync(String nextLink) {
@@ -1439,12 +1386,14 @@ public final class CertificatesClientImpl implements CertificatesClient {
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Certificates list representation.
+     * @return paged Certificates list representation along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<CertificateContractInner>> listByServiceNextSinglePageAsync(

@@ -5,33 +5,27 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Cosmos DB SQL database resource object. */
+/**
+ * Cosmos DB SQL database resource object.
+ */
 @Fluent
 public final class RestorableSqlDatabasePropertiesResourceDatabase extends SqlDatabaseResource {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(RestorableSqlDatabasePropertiesResourceDatabase.class);
-
     /*
-     * A system generated property that specified the addressable path of the
-     * collections resource.
+     * A system generated property that specified the addressable path of the collections resource.
      */
     @JsonProperty(value = "_colls", access = JsonProperty.Access.WRITE_ONLY)
     private String colls;
 
     /*
-     * A system generated property that specifies the addressable path of the
-     * users resource.
+     * A system generated property that specifies the addressable path of the users resource.
      */
     @JsonProperty(value = "_users", access = JsonProperty.Access.WRITE_ONLY)
     private String users;
 
     /*
-     * A system generated property that specifies the addressable path of the
-     * database resource.
+     * A system generated property that specifies the addressable path of the database resource.
      */
     @JsonProperty(value = "_self", access = JsonProperty.Access.WRITE_ONLY)
     private String self;
@@ -43,23 +37,27 @@ public final class RestorableSqlDatabasePropertiesResourceDatabase extends SqlDa
     private String rid;
 
     /*
-     * A system generated property that denotes the last updated timestamp of
-     * the resource.
+     * A system generated property that denotes the last updated timestamp of the resource.
      */
     @JsonProperty(value = "_ts", access = JsonProperty.Access.WRITE_ONLY)
     private Float ts;
 
     /*
-     * A system generated property representing the resource etag required for
-     * optimistic concurrency control.
+     * A system generated property representing the resource etag required for optimistic concurrency control.
      */
     @JsonProperty(value = "_etag", access = JsonProperty.Access.WRITE_ONLY)
     private String etag;
 
     /**
+     * Creates an instance of RestorableSqlDatabasePropertiesResourceDatabase class.
+     */
+    public RestorableSqlDatabasePropertiesResourceDatabase() {
+    }
+
+    /**
      * Get the colls property: A system generated property that specified the addressable path of the collections
      * resource.
-     *
+     * 
      * @return the colls value.
      */
     public String colls() {
@@ -68,7 +66,7 @@ public final class RestorableSqlDatabasePropertiesResourceDatabase extends SqlDa
 
     /**
      * Get the users property: A system generated property that specifies the addressable path of the users resource.
-     *
+     * 
      * @return the users value.
      */
     public String users() {
@@ -77,7 +75,7 @@ public final class RestorableSqlDatabasePropertiesResourceDatabase extends SqlDa
 
     /**
      * Get the self property: A system generated property that specifies the addressable path of the database resource.
-     *
+     * 
      * @return the self value.
      */
     public String self() {
@@ -86,7 +84,7 @@ public final class RestorableSqlDatabasePropertiesResourceDatabase extends SqlDa
 
     /**
      * Get the rid property: A system generated property. A unique identifier.
-     *
+     * 
      * @return the rid value.
      */
     public String rid() {
@@ -95,7 +93,7 @@ public final class RestorableSqlDatabasePropertiesResourceDatabase extends SqlDa
 
     /**
      * Get the ts property: A system generated property that denotes the last updated timestamp of the resource.
-     *
+     * 
      * @return the ts value.
      */
     public Float ts() {
@@ -105,14 +103,16 @@ public final class RestorableSqlDatabasePropertiesResourceDatabase extends SqlDa
     /**
      * Get the etag property: A system generated property representing the resource etag required for optimistic
      * concurrency control.
-     *
+     * 
      * @return the etag value.
      */
     public String etag() {
         return this.etag;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RestorableSqlDatabasePropertiesResourceDatabase withId(String id) {
         super.withId(id);
@@ -120,8 +120,27 @@ public final class RestorableSqlDatabasePropertiesResourceDatabase extends SqlDa
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public RestorableSqlDatabasePropertiesResourceDatabase
+        withRestoreParameters(ResourceRestoreParameters restoreParameters) {
+        super.withRestoreParameters(restoreParameters);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public RestorableSqlDatabasePropertiesResourceDatabase withCreateMode(CreateMode createMode) {
+        super.withCreateMode(createMode);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

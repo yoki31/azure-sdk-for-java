@@ -5,29 +5,30 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** SSIS object metadata. */
-@JsonTypeInfo(
-    use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.PROPERTY,
-    property = "type",
-    defaultImpl = SsisObjectMetadata.class)
+/**
+ * SSIS object metadata.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = SsisObjectMetadata.class, visible = true)
 @JsonTypeName("SsisObjectMetadata")
 @JsonSubTypes({
     @JsonSubTypes.Type(name = "Folder", value = SsisFolder.class),
     @JsonSubTypes.Type(name = "Project", value = SsisProject.class),
     @JsonSubTypes.Type(name = "Package", value = SsisPackage.class),
-    @JsonSubTypes.Type(name = "Environment", value = SsisEnvironment.class)
-})
+    @JsonSubTypes.Type(name = "Environment", value = SsisEnvironment.class) })
 @Fluent
 public class SsisObjectMetadata {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SsisObjectMetadata.class);
+    /*
+     * Type of metadata.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private SsisObjectMetadataType type = SsisObjectMetadataType.fromString("SsisObjectMetadata");
 
     /*
      * Metadata id.
@@ -48,8 +49,23 @@ public class SsisObjectMetadata {
     private String description;
 
     /**
+     * Creates an instance of SsisObjectMetadata class.
+     */
+    public SsisObjectMetadata() {
+    }
+
+    /**
+     * Get the type property: Type of metadata.
+     * 
+     * @return the type value.
+     */
+    public SsisObjectMetadataType type() {
+        return this.type;
+    }
+
+    /**
      * Get the id property: Metadata id.
-     *
+     * 
      * @return the id value.
      */
     public Long id() {
@@ -58,7 +74,7 @@ public class SsisObjectMetadata {
 
     /**
      * Set the id property: Metadata id.
-     *
+     * 
      * @param id the id value to set.
      * @return the SsisObjectMetadata object itself.
      */
@@ -69,7 +85,7 @@ public class SsisObjectMetadata {
 
     /**
      * Get the name property: Metadata name.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -78,7 +94,7 @@ public class SsisObjectMetadata {
 
     /**
      * Set the name property: Metadata name.
-     *
+     * 
      * @param name the name value to set.
      * @return the SsisObjectMetadata object itself.
      */
@@ -89,7 +105,7 @@ public class SsisObjectMetadata {
 
     /**
      * Get the description property: Metadata description.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
@@ -98,7 +114,7 @@ public class SsisObjectMetadata {
 
     /**
      * Set the description property: Metadata description.
-     *
+     * 
      * @param description the description value to set.
      * @return the SsisObjectMetadata object itself.
      */
@@ -109,7 +125,7 @@ public class SsisObjectMetadata {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

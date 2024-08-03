@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.mediaservices.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** The EdgeUsageDataEventHub model. */
 @Fluent
 public final class EdgeUsageDataEventHub {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(EdgeUsageDataEventHub.class);
-
     /*
      * Name of the Event Hub where usage will be reported.
      */
@@ -31,6 +27,10 @@ public final class EdgeUsageDataEventHub {
      */
     @JsonProperty(value = "token")
     private String token;
+
+    /** Creates an instance of EdgeUsageDataEventHub class. */
+    public EdgeUsageDataEventHub() {
+    }
 
     /**
      * Get the name property: Name of the Event Hub where usage will be reported.

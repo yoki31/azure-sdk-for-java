@@ -5,19 +5,16 @@
 package com.azure.resourcemanager.servicefabric.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Describes a list of server certificates referenced by common name that are used to secure the cluster. */
+/**
+ * Describes a list of server certificates referenced by common name that are used to secure the cluster.
+ */
 @Fluent
 public final class ServerCertificateCommonNames {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ServerCertificateCommonNames.class);
-
     /*
-     * The list of server certificates referenced by common name that are used
-     * to secure the cluster.
+     * The list of server certificates referenced by common name that are used to secure the cluster.
      */
     @JsonProperty(value = "commonNames")
     private List<ServerCertificateCommonName> commonNames;
@@ -29,9 +26,15 @@ public final class ServerCertificateCommonNames {
     private StoreName x509StoreName;
 
     /**
+     * Creates an instance of ServerCertificateCommonNames class.
+     */
+    public ServerCertificateCommonNames() {
+    }
+
+    /**
      * Get the commonNames property: The list of server certificates referenced by common name that are used to secure
      * the cluster.
-     *
+     * 
      * @return the commonNames value.
      */
     public List<ServerCertificateCommonName> commonNames() {
@@ -41,7 +44,7 @@ public final class ServerCertificateCommonNames {
     /**
      * Set the commonNames property: The list of server certificates referenced by common name that are used to secure
      * the cluster.
-     *
+     * 
      * @param commonNames the commonNames value to set.
      * @return the ServerCertificateCommonNames object itself.
      */
@@ -52,7 +55,7 @@ public final class ServerCertificateCommonNames {
 
     /**
      * Get the x509StoreName property: The local certificate store location.
-     *
+     * 
      * @return the x509StoreName value.
      */
     public StoreName x509StoreName() {
@@ -61,7 +64,7 @@ public final class ServerCertificateCommonNames {
 
     /**
      * Set the x509StoreName property: The local certificate store location.
-     *
+     * 
      * @param x509StoreName the x509StoreName value to set.
      * @return the ServerCertificateCommonNames object itself.
      */
@@ -72,7 +75,7 @@ public final class ServerCertificateCommonNames {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

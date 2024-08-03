@@ -6,16 +6,13 @@ package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.SubResource;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Private Endpoint Connection Approval ARM resource. */
+/**
+ * Private Endpoint Connection Approval ARM resource.
+ */
 @Fluent
 public final class PrivateLinkConnectionApprovalRequestResource extends SubResource {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(PrivateLinkConnectionApprovalRequestResource.class);
-
     /*
      * Core resource properties
      */
@@ -41,8 +38,14 @@ public final class PrivateLinkConnectionApprovalRequestResource extends SubResou
     private String etag;
 
     /**
+     * Creates an instance of PrivateLinkConnectionApprovalRequestResource class.
+     */
+    public PrivateLinkConnectionApprovalRequestResource() {
+    }
+
+    /**
      * Get the properties property: Core resource properties.
-     *
+     * 
      * @return the properties value.
      */
     public PrivateLinkConnectionApprovalRequest properties() {
@@ -51,19 +54,19 @@ public final class PrivateLinkConnectionApprovalRequestResource extends SubResou
 
     /**
      * Set the properties property: Core resource properties.
-     *
+     * 
      * @param properties the properties value to set.
      * @return the PrivateLinkConnectionApprovalRequestResource object itself.
      */
-    public PrivateLinkConnectionApprovalRequestResource withProperties(
-        PrivateLinkConnectionApprovalRequest properties) {
+    public PrivateLinkConnectionApprovalRequestResource
+        withProperties(PrivateLinkConnectionApprovalRequest properties) {
         this.properties = properties;
         return this;
     }
 
     /**
      * Get the name property: The resource name.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -72,7 +75,7 @@ public final class PrivateLinkConnectionApprovalRequestResource extends SubResou
 
     /**
      * Get the type property: The resource type.
-     *
+     * 
      * @return the type value.
      */
     public String type() {
@@ -81,14 +84,16 @@ public final class PrivateLinkConnectionApprovalRequestResource extends SubResou
 
     /**
      * Get the etag property: Etag identifies change in the resource.
-     *
+     * 
      * @return the etag value.
      */
     public String etag() {
         return this.etag;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PrivateLinkConnectionApprovalRequestResource withId(String id) {
         super.withId(id);
@@ -97,7 +102,7 @@ public final class PrivateLinkConnectionApprovalRequestResource extends SubResou
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

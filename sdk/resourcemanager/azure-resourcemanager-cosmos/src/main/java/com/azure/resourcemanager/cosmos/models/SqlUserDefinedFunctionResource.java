@@ -6,14 +6,13 @@ package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Cosmos DB SQL userDefinedFunction resource object. */
+/**
+ * Cosmos DB SQL userDefinedFunction resource object.
+ */
 @Fluent
 public class SqlUserDefinedFunctionResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SqlUserDefinedFunctionResource.class);
-
     /*
      * Name of the Cosmos DB SQL userDefinedFunction
      */
@@ -27,8 +26,14 @@ public class SqlUserDefinedFunctionResource {
     private String body;
 
     /**
+     * Creates an instance of SqlUserDefinedFunctionResource class.
+     */
+    public SqlUserDefinedFunctionResource() {
+    }
+
+    /**
      * Get the id property: Name of the Cosmos DB SQL userDefinedFunction.
-     *
+     * 
      * @return the id value.
      */
     public String id() {
@@ -37,7 +42,7 @@ public class SqlUserDefinedFunctionResource {
 
     /**
      * Set the id property: Name of the Cosmos DB SQL userDefinedFunction.
-     *
+     * 
      * @param id the id value to set.
      * @return the SqlUserDefinedFunctionResource object itself.
      */
@@ -48,7 +53,7 @@ public class SqlUserDefinedFunctionResource {
 
     /**
      * Get the body property: Body of the User Defined Function.
-     *
+     * 
      * @return the body value.
      */
     public String body() {
@@ -57,7 +62,7 @@ public class SqlUserDefinedFunctionResource {
 
     /**
      * Set the body property: Body of the User Defined Function.
-     *
+     * 
      * @param body the body value to set.
      * @return the SqlUserDefinedFunctionResource object itself.
      */
@@ -68,15 +73,16 @@ public class SqlUserDefinedFunctionResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (id() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property id in model SqlUserDefinedFunctionResource"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property id in model SqlUserDefinedFunctionResource"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(SqlUserDefinedFunctionResource.class);
 }

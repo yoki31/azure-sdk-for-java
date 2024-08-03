@@ -5,34 +5,37 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
-/** The configuration settings of the Azure Active Directory login flow. */
+/**
+ * The configuration settings of the Azure Active Directory login flow.
+ */
 @Fluent
 public final class AzureActiveDirectoryLogin {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureActiveDirectoryLogin.class);
-
     /*
-     * Login parameters to send to the OpenID Connect authorization endpoint
-     * when
+     * Login parameters to send to the OpenID Connect authorization endpoint when
      * a user logs in. Each parameter must be in the form "key=value".
      */
     @JsonProperty(value = "loginParameters")
     private List<String> loginParameters;
 
     /*
-     * <code>true</code> if the www-authenticate provider should be omitted
-     * from the request; otherwise, <code>false</code>.
+     * <code>true</code> if the www-authenticate provider should be omitted from the request; otherwise, <code>false</code>.
      */
     @JsonProperty(value = "disableWWWAuthenticate")
     private Boolean disableWwwAuthenticate;
 
     /**
-     * Get the loginParameters property: Login parameters to send to the OpenID Connect authorization endpoint when a
-     * user logs in. Each parameter must be in the form "key=value".
+     * Creates an instance of AzureActiveDirectoryLogin class.
+     */
+    public AzureActiveDirectoryLogin() {
+    }
+
+    /**
+     * Get the loginParameters property: Login parameters to send to the OpenID Connect authorization endpoint when
+     * a user logs in. Each parameter must be in the form "key=value".
      *
      * @return the loginParameters value.
      */
@@ -41,8 +44,8 @@ public final class AzureActiveDirectoryLogin {
     }
 
     /**
-     * Set the loginParameters property: Login parameters to send to the OpenID Connect authorization endpoint when a
-     * user logs in. Each parameter must be in the form "key=value".
+     * Set the loginParameters property: Login parameters to send to the OpenID Connect authorization endpoint when
+     * a user logs in. Each parameter must be in the form "key=value".
      *
      * @param loginParameters the loginParameters value to set.
      * @return the AzureActiveDirectoryLogin object itself.

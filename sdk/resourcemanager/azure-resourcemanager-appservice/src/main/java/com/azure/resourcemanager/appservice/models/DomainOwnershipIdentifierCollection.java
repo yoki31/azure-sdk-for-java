@@ -7,15 +7,15 @@ package com.azure.resourcemanager.appservice.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.fluent.models.DomainOwnershipIdentifierInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
-/** Collection of domain ownership identifiers. */
+/**
+ * Collection of domain ownership identifiers.
+ */
 @Fluent
 public final class DomainOwnershipIdentifierCollection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DomainOwnershipIdentifierCollection.class);
-
     /*
      * Collection of resources.
      */
@@ -27,6 +27,12 @@ public final class DomainOwnershipIdentifierCollection {
      */
     @JsonProperty(value = "nextLink", access = JsonProperty.Access.WRITE_ONLY)
     private String nextLink;
+
+    /**
+     * Creates an instance of DomainOwnershipIdentifierCollection class.
+     */
+    public DomainOwnershipIdentifierCollection() {
+    }
 
     /**
      * Get the value property: Collection of resources.
@@ -64,12 +70,13 @@ public final class DomainOwnershipIdentifierCollection {
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property value in model DomainOwnershipIdentifierCollection"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property value in model DomainOwnershipIdentifierCollection"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(DomainOwnershipIdentifierCollection.class);
 }

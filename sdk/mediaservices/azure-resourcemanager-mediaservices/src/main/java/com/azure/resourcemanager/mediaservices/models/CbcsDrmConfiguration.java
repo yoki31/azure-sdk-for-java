@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.mediaservices.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Class to specify DRM configurations of CommonEncryptionCbcs scheme in Streaming Policy. */
 @Fluent
 public final class CbcsDrmConfiguration {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CbcsDrmConfiguration.class);
-
     /*
      * FairPlay configurations
      */
@@ -31,6 +27,10 @@ public final class CbcsDrmConfiguration {
      */
     @JsonProperty(value = "widevine")
     private StreamingPolicyWidevineConfiguration widevine;
+
+    /** Creates an instance of CbcsDrmConfiguration class. */
+    public CbcsDrmConfiguration() {
+    }
 
     /**
      * Get the fairPlay property: FairPlay configurations.

@@ -5,25 +5,28 @@
 package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** MySql table dataset properties. */
+/**
+ * MySql table dataset properties.
+ */
 @Fluent
 public final class MySqlTableDatasetTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MySqlTableDatasetTypeProperties.class);
-
     /*
-     * The MySQL table name. Type: string (or Expression with resultType
-     * string).
+     * The MySQL table name. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "tableName")
     private Object tableName;
 
     /**
+     * Creates an instance of MySqlTableDatasetTypeProperties class.
+     */
+    public MySqlTableDatasetTypeProperties() {
+    }
+
+    /**
      * Get the tableName property: The MySQL table name. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the tableName value.
      */
     public Object tableName() {
@@ -32,7 +35,7 @@ public final class MySqlTableDatasetTypeProperties {
 
     /**
      * Set the tableName property: The MySQL table name. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param tableName the tableName value to set.
      * @return the MySqlTableDatasetTypeProperties object itself.
      */
@@ -43,7 +46,7 @@ public final class MySqlTableDatasetTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

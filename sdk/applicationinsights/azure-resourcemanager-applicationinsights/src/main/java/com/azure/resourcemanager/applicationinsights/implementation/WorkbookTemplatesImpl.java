@@ -13,10 +13,9 @@ import com.azure.resourcemanager.applicationinsights.fluent.WorkbookTemplatesCli
 import com.azure.resourcemanager.applicationinsights.fluent.models.WorkbookTemplateInner;
 import com.azure.resourcemanager.applicationinsights.models.WorkbookTemplate;
 import com.azure.resourcemanager.applicationinsights.models.WorkbookTemplates;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class WorkbookTemplatesImpl implements WorkbookTemplates {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(WorkbookTemplatesImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(WorkbookTemplatesImpl.class);
 
     private final WorkbookTemplatesClient innerClient;
 
@@ -40,15 +39,6 @@ public final class WorkbookTemplatesImpl implements WorkbookTemplates {
         return Utils.mapPage(inner, inner1 -> new WorkbookTemplateImpl(inner1, this.manager()));
     }
 
-    public WorkbookTemplate getByResourceGroup(String resourceGroupName, String resourceName) {
-        WorkbookTemplateInner inner = this.serviceClient().getByResourceGroup(resourceGroupName, resourceName);
-        if (inner != null) {
-            return new WorkbookTemplateImpl(inner, this.manager());
-        } else {
-            return null;
-        }
-    }
-
     public Response<WorkbookTemplate> getByResourceGroupWithResponse(
         String resourceGroupName, String resourceName, Context context) {
         Response<WorkbookTemplateInner> inner =
@@ -64,18 +54,28 @@ public final class WorkbookTemplatesImpl implements WorkbookTemplates {
         }
     }
 
-    public void deleteByResourceGroup(String resourceGroupName, String resourceName) {
-        this.serviceClient().delete(resourceGroupName, resourceName);
+    public WorkbookTemplate getByResourceGroup(String resourceGroupName, String resourceName) {
+        WorkbookTemplateInner inner = this.serviceClient().getByResourceGroup(resourceGroupName, resourceName);
+        if (inner != null) {
+            return new WorkbookTemplateImpl(inner, this.manager());
+        } else {
+            return null;
+        }
     }
 
-    public Response<Void> deleteWithResponse(String resourceGroupName, String resourceName, Context context) {
+    public Response<Void> deleteByResourceGroupWithResponse(
+        String resourceGroupName, String resourceName, Context context) {
         return this.serviceClient().deleteWithResponse(resourceGroupName, resourceName, context);
+    }
+
+    public void deleteByResourceGroup(String resourceGroupName, String resourceName) {
+        this.serviceClient().delete(resourceGroupName, resourceName);
     }
 
     public WorkbookTemplate getById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -83,7 +83,7 @@ public final class WorkbookTemplatesImpl implements WorkbookTemplates {
         }
         String resourceName = Utils.getValueFromIdByName(id, "workbooktemplates");
         if (resourceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -96,7 +96,7 @@ public final class WorkbookTemplatesImpl implements WorkbookTemplates {
     public Response<WorkbookTemplate> getByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -104,7 +104,7 @@ public final class WorkbookTemplatesImpl implements WorkbookTemplates {
         }
         String resourceName = Utils.getValueFromIdByName(id, "workbooktemplates");
         if (resourceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -117,7 +117,7 @@ public final class WorkbookTemplatesImpl implements WorkbookTemplates {
     public void deleteById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -125,20 +125,20 @@ public final class WorkbookTemplatesImpl implements WorkbookTemplates {
         }
         String resourceName = Utils.getValueFromIdByName(id, "workbooktemplates");
         if (resourceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
                             .format(
                                 "The resource ID '%s' is not valid. Missing path segment 'workbooktemplates'.", id)));
         }
-        this.deleteWithResponse(resourceGroupName, resourceName, Context.NONE);
+        this.deleteByResourceGroupWithResponse(resourceGroupName, resourceName, Context.NONE);
     }
 
     public Response<Void> deleteByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -146,14 +146,14 @@ public final class WorkbookTemplatesImpl implements WorkbookTemplates {
         }
         String resourceName = Utils.getValueFromIdByName(id, "workbooktemplates");
         if (resourceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
                             .format(
                                 "The resource ID '%s' is not valid. Missing path segment 'workbooktemplates'.", id)));
         }
-        return this.deleteWithResponse(resourceGroupName, resourceName, context);
+        return this.deleteByResourceGroupWithResponse(resourceGroupName, resourceName, context);
     }
 
     private WorkbookTemplatesClient serviceClient() {

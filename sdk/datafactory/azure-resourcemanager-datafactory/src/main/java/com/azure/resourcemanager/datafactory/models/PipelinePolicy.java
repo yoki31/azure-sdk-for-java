@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Pipeline Policy. */
+/**
+ * Pipeline Policy.
+ */
 @Fluent
 public final class PipelinePolicy {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PipelinePolicy.class);
-
     /*
      * Pipeline ElapsedTime Metric Policy.
      */
@@ -21,8 +19,14 @@ public final class PipelinePolicy {
     private PipelineElapsedTimeMetricPolicy elapsedTimeMetric;
 
     /**
+     * Creates an instance of PipelinePolicy class.
+     */
+    public PipelinePolicy() {
+    }
+
+    /**
      * Get the elapsedTimeMetric property: Pipeline ElapsedTime Metric Policy.
-     *
+     * 
      * @return the elapsedTimeMetric value.
      */
     public PipelineElapsedTimeMetricPolicy elapsedTimeMetric() {
@@ -31,7 +35,7 @@ public final class PipelinePolicy {
 
     /**
      * Set the elapsedTimeMetric property: Pipeline ElapsedTime Metric Policy.
-     *
+     * 
      * @param elapsedTimeMetric the elapsedTimeMetric value to set.
      * @return the PipelinePolicy object itself.
      */
@@ -42,7 +46,7 @@ public final class PipelinePolicy {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

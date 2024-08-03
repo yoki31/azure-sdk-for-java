@@ -5,20 +5,24 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.Map;
 
-/** A copy activity Azure SQL source. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * A copy activity Azure SQL source.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = AzureSqlSource.class, visible = true)
 @JsonTypeName("AzureSqlSource")
 @Fluent
 public final class AzureSqlSource extends TabularSource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureSqlSource.class);
+    /*
+     * Copy source type.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "AzureSqlSource";
 
     /*
      * SQL reader query. Type: string (or Expression with resultType string).
@@ -27,20 +31,25 @@ public final class AzureSqlSource extends TabularSource {
     private Object sqlReaderQuery;
 
     /*
-     * Name of the stored procedure for a SQL Database source. This cannot be
-     * used at the same time as SqlReaderQuery. Type: string (or Expression
-     * with resultType string).
+     * Name of the stored procedure for a SQL Database source. This cannot be used at the same time as SqlReaderQuery.
+     * Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "sqlReaderStoredProcedureName")
     private Object sqlReaderStoredProcedureName;
 
     /*
-     * Value and type setting for stored procedure parameters. Example:
-     * "{Parameter1: {value: "1", type: "int"}}".
+     * Value and type setting for stored procedure parameters. Example: "{Parameter1: {value: "1", type: "int"}}".
      */
     @JsonProperty(value = "storedProcedureParameters")
-    @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
-    private Map<String, StoredProcedureParameter> storedProcedureParameters;
+    private Object storedProcedureParameters;
+
+    /*
+     * Specifies the transaction locking behavior for the SQL source. Allowed values:
+     * ReadCommitted/ReadUncommitted/RepeatableRead/Serializable/Snapshot. The default value is ReadCommitted. Type:
+     * string (or Expression with resultType string).
+     */
+    @JsonProperty(value = "isolationLevel")
+    private Object isolationLevel;
 
     /*
      * Which additional types to produce.
@@ -49,9 +58,8 @@ public final class AzureSqlSource extends TabularSource {
     private Object produceAdditionalTypes;
 
     /*
-     * The partition mechanism that will be used for Sql read in parallel.
-     * Possible values include: "None", "PhysicalPartitionsOfTable",
-     * "DynamicRange".
+     * The partition mechanism that will be used for Sql read in parallel. Possible values include: "None",
+     * "PhysicalPartitionsOfTable", "DynamicRange". Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "partitionOption")
     private Object partitionOption;
@@ -63,8 +71,24 @@ public final class AzureSqlSource extends TabularSource {
     private SqlPartitionSettings partitionSettings;
 
     /**
+     * Creates an instance of AzureSqlSource class.
+     */
+    public AzureSqlSource() {
+    }
+
+    /**
+     * Get the type property: Copy source type.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the sqlReaderQuery property: SQL reader query. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the sqlReaderQuery value.
      */
     public Object sqlReaderQuery() {
@@ -73,7 +97,7 @@ public final class AzureSqlSource extends TabularSource {
 
     /**
      * Set the sqlReaderQuery property: SQL reader query. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param sqlReaderQuery the sqlReaderQuery value to set.
      * @return the AzureSqlSource object itself.
      */
@@ -85,7 +109,7 @@ public final class AzureSqlSource extends TabularSource {
     /**
      * Get the sqlReaderStoredProcedureName property: Name of the stored procedure for a SQL Database source. This
      * cannot be used at the same time as SqlReaderQuery. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the sqlReaderStoredProcedureName value.
      */
     public Object sqlReaderStoredProcedureName() {
@@ -95,7 +119,7 @@ public final class AzureSqlSource extends TabularSource {
     /**
      * Set the sqlReaderStoredProcedureName property: Name of the stored procedure for a SQL Database source. This
      * cannot be used at the same time as SqlReaderQuery. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param sqlReaderStoredProcedureName the sqlReaderStoredProcedureName value to set.
      * @return the AzureSqlSource object itself.
      */
@@ -107,29 +131,52 @@ public final class AzureSqlSource extends TabularSource {
     /**
      * Get the storedProcedureParameters property: Value and type setting for stored procedure parameters. Example:
      * "{Parameter1: {value: "1", type: "int"}}".
-     *
+     * 
      * @return the storedProcedureParameters value.
      */
-    public Map<String, StoredProcedureParameter> storedProcedureParameters() {
+    public Object storedProcedureParameters() {
         return this.storedProcedureParameters;
     }
 
     /**
      * Set the storedProcedureParameters property: Value and type setting for stored procedure parameters. Example:
      * "{Parameter1: {value: "1", type: "int"}}".
-     *
+     * 
      * @param storedProcedureParameters the storedProcedureParameters value to set.
      * @return the AzureSqlSource object itself.
      */
-    public AzureSqlSource withStoredProcedureParameters(
-        Map<String, StoredProcedureParameter> storedProcedureParameters) {
+    public AzureSqlSource withStoredProcedureParameters(Object storedProcedureParameters) {
         this.storedProcedureParameters = storedProcedureParameters;
         return this;
     }
 
     /**
+     * Get the isolationLevel property: Specifies the transaction locking behavior for the SQL source. Allowed values:
+     * ReadCommitted/ReadUncommitted/RepeatableRead/Serializable/Snapshot. The default value is ReadCommitted. Type:
+     * string (or Expression with resultType string).
+     * 
+     * @return the isolationLevel value.
+     */
+    public Object isolationLevel() {
+        return this.isolationLevel;
+    }
+
+    /**
+     * Set the isolationLevel property: Specifies the transaction locking behavior for the SQL source. Allowed values:
+     * ReadCommitted/ReadUncommitted/RepeatableRead/Serializable/Snapshot. The default value is ReadCommitted. Type:
+     * string (or Expression with resultType string).
+     * 
+     * @param isolationLevel the isolationLevel value to set.
+     * @return the AzureSqlSource object itself.
+     */
+    public AzureSqlSource withIsolationLevel(Object isolationLevel) {
+        this.isolationLevel = isolationLevel;
+        return this;
+    }
+
+    /**
      * Get the produceAdditionalTypes property: Which additional types to produce.
-     *
+     * 
      * @return the produceAdditionalTypes value.
      */
     public Object produceAdditionalTypes() {
@@ -138,7 +185,7 @@ public final class AzureSqlSource extends TabularSource {
 
     /**
      * Set the produceAdditionalTypes property: Which additional types to produce.
-     *
+     * 
      * @param produceAdditionalTypes the produceAdditionalTypes value to set.
      * @return the AzureSqlSource object itself.
      */
@@ -149,8 +196,9 @@ public final class AzureSqlSource extends TabularSource {
 
     /**
      * Get the partitionOption property: The partition mechanism that will be used for Sql read in parallel. Possible
-     * values include: "None", "PhysicalPartitionsOfTable", "DynamicRange".
-     *
+     * values include: "None", "PhysicalPartitionsOfTable", "DynamicRange". Type: string (or Expression with resultType
+     * string).
+     * 
      * @return the partitionOption value.
      */
     public Object partitionOption() {
@@ -159,8 +207,9 @@ public final class AzureSqlSource extends TabularSource {
 
     /**
      * Set the partitionOption property: The partition mechanism that will be used for Sql read in parallel. Possible
-     * values include: "None", "PhysicalPartitionsOfTable", "DynamicRange".
-     *
+     * values include: "None", "PhysicalPartitionsOfTable", "DynamicRange". Type: string (or Expression with resultType
+     * string).
+     * 
      * @param partitionOption the partitionOption value to set.
      * @return the AzureSqlSource object itself.
      */
@@ -171,7 +220,7 @@ public final class AzureSqlSource extends TabularSource {
 
     /**
      * Get the partitionSettings property: The settings that will be leveraged for Sql source partitioning.
-     *
+     * 
      * @return the partitionSettings value.
      */
     public SqlPartitionSettings partitionSettings() {
@@ -180,7 +229,7 @@ public final class AzureSqlSource extends TabularSource {
 
     /**
      * Set the partitionSettings property: The settings that will be leveraged for Sql source partitioning.
-     *
+     * 
      * @param partitionSettings the partitionSettings value to set.
      * @return the AzureSqlSource object itself.
      */
@@ -189,42 +238,54 @@ public final class AzureSqlSource extends TabularSource {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureSqlSource withQueryTimeout(Object queryTimeout) {
         super.withQueryTimeout(queryTimeout);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureSqlSource withAdditionalColumns(Object additionalColumns) {
         super.withAdditionalColumns(additionalColumns);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureSqlSource withSourceRetryCount(Object sourceRetryCount) {
         super.withSourceRetryCount(sourceRetryCount);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureSqlSource withSourceRetryWait(Object sourceRetryWait) {
         super.withSourceRetryWait(sourceRetryWait);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureSqlSource withMaxConcurrentConnections(Object maxConcurrentConnections) {
         super.withMaxConcurrentConnections(maxConcurrentConnections);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureSqlSource withDisableMetricsCollection(Object disableMetricsCollection) {
         super.withDisableMetricsCollection(disableMetricsCollection);
@@ -233,22 +294,12 @@ public final class AzureSqlSource extends TabularSource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
-        if (storedProcedureParameters() != null) {
-            storedProcedureParameters()
-                .values()
-                .forEach(
-                    e -> {
-                        if (e != null) {
-                            e.validate();
-                        }
-                    });
-        }
         if (partitionSettings() != null) {
             partitionSettings().validate();
         }

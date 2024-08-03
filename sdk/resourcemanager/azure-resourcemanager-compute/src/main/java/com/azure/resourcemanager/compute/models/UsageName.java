@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The Usage Names. */
+/**
+ * The Usage Names.
+ */
 @Fluent
 public final class UsageName {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(UsageName.class);
-
     /*
      * The name of the resource.
      */
@@ -27,8 +25,14 @@ public final class UsageName {
     private String localizedValue;
 
     /**
+     * Creates an instance of UsageName class.
+     */
+    public UsageName() {
+    }
+
+    /**
      * Get the value property: The name of the resource.
-     *
+     * 
      * @return the value value.
      */
     public String value() {
@@ -37,7 +41,7 @@ public final class UsageName {
 
     /**
      * Set the value property: The name of the resource.
-     *
+     * 
      * @param value the value value to set.
      * @return the UsageName object itself.
      */
@@ -48,7 +52,7 @@ public final class UsageName {
 
     /**
      * Get the localizedValue property: The localized name of the resource.
-     *
+     * 
      * @return the localizedValue value.
      */
     public String localizedValue() {
@@ -57,7 +61,7 @@ public final class UsageName {
 
     /**
      * Set the localizedValue property: The localized name of the resource.
-     *
+     * 
      * @param localizedValue the localizedValue value to set.
      * @return the UsageName object itself.
      */
@@ -68,7 +72,7 @@ public final class UsageName {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

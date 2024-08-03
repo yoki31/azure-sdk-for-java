@@ -3,6 +3,7 @@
 
 package com.azure.cosmos.implementation;
 
+import com.azure.cosmos.CosmosItemSerializer;
 import com.azure.cosmos.implementation.directconnectivity.Address;
 import com.azure.cosmos.implementation.query.PartitionedQueryExecutionInfoInternal;
 import com.azure.cosmos.implementation.query.QueryInfo;
@@ -44,6 +45,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
+
+import static com.azure.cosmos.implementation.guava25.base.Preconditions.checkArgument;
+import static com.azure.cosmos.implementation.guava25.base.Preconditions.checkNotNull;
 
 /**
  * Represents a base resource that can be serialized to JSON in the Azure Cosmos DB database service.
@@ -51,6 +56,8 @@ import java.util.Objects;
 public class JsonSerializable {
     private static final ObjectMapper OBJECT_MAPPER = Utils.getSimpleObjectMapper();
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonSerializable.class);
+    private final static ImplementationBridgeHelpers.CosmosItemSerializerHelper.CosmosItemSerializerAccessor itemSerializerAccessor =
+        ImplementationBridgeHelpers.CosmosItemSerializerHelper.getCosmosItemSerializerAccessor();
     transient ObjectNode propertyBag = null;
     private ObjectMapper om;
 
@@ -141,8 +148,8 @@ public class JsonSerializable {
         } else {
             // This should rarely execute. Keeping this for sanity sake
             try {
-                return (JsonSerializable) klassType.getDeclaredConstructor(String.class)
-                                              .newInstance(Utils.toJson(Utils.getSimpleObjectMapper(), objectNode));
+                return (JsonSerializable) klassType.getDeclaredConstructor(ObjectNode.class)
+                                              .newInstance(objectNode);
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                 throw new IllegalArgumentException(e);
             }
@@ -184,18 +191,6 @@ public class JsonSerializable {
         return value;
     }
 
-    private ObjectMapper getMapper() {
-        // TODO: Made package private due to #153. #171 adding custom serialization options back.
-        if (this.om != null) {
-            return this.om;
-        }
-        return OBJECT_MAPPER;
-    }
-
-    void setMapper(ObjectMapper om) {
-        this.om = om;
-    }
-
     @JsonIgnore
     public Logger getLogger() {
         return LOGGER;
@@ -211,14 +206,14 @@ public class JsonSerializable {
      */
     @SuppressWarnings("unchecked")
     public Map<String, Object> getMap() {
-        return getMapper().convertValue(this.propertyBag, HashMap.class);
+        return OBJECT_MAPPER.convertValue(this.propertyBag, HashMap.class);
     }
 
     @SuppressWarnings("unchecked")
     public <T> Map<String, T> getMap(String propertyKey) {
         if (this.propertyBag.has(propertyKey)) {
             Object value = this.get(propertyKey);
-            return (Map<String, T>) getMapper().convertValue(value, HashMap.class);
+            return (Map<String, T>) OBJECT_MAPPER.convertValue(value, HashMap.class);
         }
         return null;
     }
@@ -250,29 +245,61 @@ public class JsonSerializable {
      * @param value the value of the property.
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public <T> void set(String propertyName, T value) {
+    public <T> void set(String propertyName, T value, CosmosItemSerializer itemSerializer) {
+        checkNotNull(itemSerializer, "Argument 'itemSerializer' must not be null.");
+        checkArgument(
+            itemSerializer == CosmosItemSerializer.DEFAULT_SERIALIZER,
+            "Argument 'itemSerializer' must be the DEFAULT_SERIALIZER when using this method.");
+        set(propertyName, value, itemSerializer, false);
+    }
+
+    /**
+     * Sets the value of a property.
+     *
+     * @param <T> the type of the object.
+     * @param propertyName the property to set.
+     * @param value the value of the property.
+     */
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public <T> void set(String propertyName, T value, CosmosItemSerializer itemSerializer, boolean forceSerialization) {
+        checkNotNull(itemSerializer, "Argument 'itemSerializer' must not be null.");
         if (value == null) {
             // Sets null.
             this.propertyBag.putNull(propertyName);
-        } else if (value instanceof Collection) {
+        } else if (!forceSerialization && value instanceof Collection) {
             // Collection.
             ArrayNode jsonArray = propertyBag.arrayNode();
             this.internalSetCollection(propertyName, (Collection) value, jsonArray);
             this.propertyBag.set(propertyName, jsonArray);
-        } else if (value instanceof JsonNode) {
+        } else if (!forceSerialization && value instanceof JsonNode) {
             this.propertyBag.set(propertyName, (JsonNode) value);
-        } else if (value instanceof JsonSerializable) {
+        } else if (!forceSerialization && value instanceof JsonSerializable) {
             // JsonSerializable
             JsonSerializable castedValue = (JsonSerializable) value;
             castedValue.populatePropertyBag();
             this.propertyBag.set(propertyName, castedValue.propertyBag);
-        } else if (containsJsonSerializable(value.getClass())) {
+        } else if (!forceSerialization && containsJsonSerializable(value.getClass())) {
             ModelBridgeInternal.populatePropertyBag(value);
             this.propertyBag.set(propertyName, ModelBridgeInternal.getJsonSerializable(value).propertyBag);
         } else {
-            // POJO, ObjectNode, number (includes int, float, double etc), boolean,
-            // and string.
-            this.propertyBag.set(propertyName, getMapper().valueToTree(value));
+            // Arrays, POJO, ObjectNode, number (includes int, float, double etc), boolean,
+            // and string
+            Map<String, Object> jsonTreeMap = itemSerializerAccessor.serializeSafe(itemSerializer, value);
+            if (jsonTreeMap instanceof ObjectNodeMap) {
+                this.propertyBag.set(propertyName, ((ObjectNodeMap) jsonTreeMap).getObjectNode());
+            } else if (jsonTreeMap instanceof PrimitiveJsonNodeMap) {
+                this.propertyBag.set(propertyName, ((PrimitiveJsonNodeMap) jsonTreeMap).getPrimitiveJsonNode());
+            } else {
+                if (jsonTreeMap.size() == 1 && jsonTreeMap.get(PrimitiveJsonNodeMap.VALUE_KEY) != null) {
+                    this.propertyBag.set(
+                        propertyName,
+                        OBJECT_MAPPER.convertValue(jsonTreeMap.get(PrimitiveJsonNodeMap.VALUE_KEY), JsonNode.class));
+                } else {
+                    this.propertyBag.set(
+                        propertyName,
+                        OBJECT_MAPPER.convertValue(jsonTreeMap, ObjectNode.class));
+                }
+            }
         }
     }
 
@@ -293,15 +320,15 @@ public class JsonSerializable {
                 JsonSerializable castedValue = (JsonSerializable) childValue;
                 castedValue.populatePropertyBag();
                 targetArray.add(castedValue.propertyBag != null ? castedValue.propertyBag
-                                    : this.getMapper().createObjectNode());
+                                    : OBJECT_MAPPER.createObjectNode());
             } else if (containsJsonSerializable(childValue.getClass())) {
                 ModelBridgeInternal.populatePropertyBag(childValue);
                 targetArray.add(ModelBridgeInternal.getJsonSerializable(childValue).propertyBag != null ?
-                    ModelBridgeInternal.getJsonSerializable(childValue).propertyBag : this.getMapper().createObjectNode());
+                    ModelBridgeInternal.getJsonSerializable(childValue).propertyBag : OBJECT_MAPPER.createObjectNode());
             } else {
                 // POJO, JsonNode, NUMBER (includes Int, Float, Double etc),
                 // Boolean, and STRING.
-                targetArray.add(this.getMapper().valueToTree(childValue));
+                targetArray.add(OBJECT_MAPPER.valueToTree(childValue));
             }
         }
     }
@@ -435,7 +462,7 @@ public class JsonSerializable {
                 // POJO
                 JsonSerializable.checkForValidPOJO(c);
                 try {
-                    return this.getMapper().treeToValue(jsonObj, c);
+                    return OBJECT_MAPPER.treeToValue(jsonObj, c);
                 } catch (IOException e) {
                     throw new IllegalStateException("Failed to get POJO.", e);
                 }
@@ -463,7 +490,7 @@ public class JsonSerializable {
     public <T> List<T> getList(String propertyName, Class<T> c, boolean... convertFromCamelCase) {
         if (this.propertyBag.has(propertyName) && this.propertyBag.hasNonNull(propertyName)) {
             JsonNode jsonArray = this.propertyBag.get(propertyName);
-            ArrayList<T> result = new ArrayList<T>();
+            ArrayList<T> result = new ArrayList<>();
 
             boolean isBaseClass = false;
             boolean isEnumClass = false;
@@ -509,7 +536,7 @@ public class JsonSerializable {
                 } else {
                     // POJO
                     try {
-                        result.add(this.getMapper().treeToValue(n, c));
+                        result.add(OBJECT_MAPPER.treeToValue(n, c));
                     } catch (IOException e) {
                         throw new IllegalStateException("Failed to get POJO.", e);
                     }
@@ -605,7 +632,7 @@ public class JsonSerializable {
 
     private ObjectNode fromJson(byte[] bytes) {
         try {
-            return (ObjectNode) getMapper().readTree(bytes);
+            return (ObjectNode) OBJECT_MAPPER.readTree(bytes);
         } catch (IOException e) {
             throw new IllegalArgumentException(
                 String.format("Unable to parse JSON %s", Arrays.toString(bytes)), e);
@@ -614,7 +641,7 @@ public class JsonSerializable {
 
     private ObjectNode fromJson(String json) {
         try {
-            return (ObjectNode) getMapper().readTree(json);
+            return (ObjectNode) OBJECT_MAPPER.readTree(json);
         } catch (IOException e) {
             throw new IllegalArgumentException(
                 String.format("Unable to parse JSON %s", json), e);
@@ -623,30 +650,24 @@ public class JsonSerializable {
 
     private ObjectNode fromJson(ByteBuffer json) {
         try {
-            return (ObjectNode) getMapper().readTree(new ByteBufferBackedInputStream(json));
+            return (ObjectNode) OBJECT_MAPPER.readTree(new ByteBufferBackedInputStream(json));
         } catch (IOException e) {
             throw new IllegalArgumentException("Unable to parse JSON from ByteBuffer", e);
         }
     }
 
-    /**
-     * Serialize json to byte buffer byte buffer.
-     *
-     * @return the byte buffer
-     */
-    public ByteBuffer serializeJsonToByteBuffer() {
+    public ByteBuffer serializeJsonToByteBuffer(CosmosItemSerializer itemSerializer, Consumer<Map<String, Object>> onAfterSerialization, boolean isIdValidationEnabled) {
         this.populatePropertyBag();
-        return Utils.serializeJsonToByteBuffer(getMapper(), propertyBag);
-    }
-
-    public ByteBuffer serializeJsonToByteBuffer(ObjectMapper objectMapper) {
-        this.populatePropertyBag();
-        return Utils.serializeJsonToByteBuffer(objectMapper, propertyBag);
+        return Utils.serializeJsonToByteBuffer(itemSerializer, propertyBag, onAfterSerialization, isIdValidationEnabled);
     }
 
     private String toJson(Object object) {
+        return toJson(OBJECT_MAPPER, object);
+    }
+
+    private static String toJson(ObjectMapper mapper, Object object) {
         try {
-            return getMapper().writeValueAsString(object);
+            return mapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
             throw new IllegalStateException("Unable to convert JSON to STRING", e);
         }
@@ -654,7 +675,7 @@ public class JsonSerializable {
 
     private String toPrettyJson(Object object) {
         try {
-            return getMapper().writerWithDefaultPrettyPrinter().writeValueAsString(object);
+            return OBJECT_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(object);
         } catch (JsonProcessingException e) {
             throw new IllegalStateException("Unable to convert JSON to STRING", e);
         }
@@ -689,7 +710,7 @@ public class JsonSerializable {
         if (List.class.isAssignableFrom(c)) {
             Object o = this.get(Constants.Properties.VALUE);
             try {
-                return this.getMapper().readValue(o.toString(), c);
+                return OBJECT_MAPPER.readValue(o.toString(), c);
             } catch (IOException e) {
                 throw new IllegalStateException("Failed to convert to collection.", e);
             }
@@ -707,9 +728,69 @@ public class JsonSerializable {
             // POJO
             JsonSerializable.checkForValidPOJO(c);
             try {
-                return this.getMapper().treeToValue(propertyBag, c);
+                return OBJECT_MAPPER.treeToValue(propertyBag, c);
             } catch (IOException e) {
                 throw new IllegalStateException("Failed to get POJO.", e);
+            }
+        }
+    }
+
+    /**
+     * Converts to an Object (only POJOs and JsonNode are supported).
+     *
+     * @param <T> the type of the object.
+     * @param c the class of the object, either a POJO class or JsonNode. If c is a POJO class, it must be a member
+     * (and not an anonymous or local) and a static one.
+     * @return the POJO.
+     * @throws IllegalArgumentException thrown if an error occurs
+     * @throws IllegalStateException thrown when objectmapper is unable to read tree
+     */
+    @SuppressWarnings("unchecked")
+    // Implicit or explicit cast to T is done after checking values are assignable from Class<T>.
+    public static <T> T toObjectFromObjectNode(JsonNode node, boolean isValueQuery, Class<T> c) {
+        if (isValueQuery && node.has(Constants.Properties.VALUE)) {
+            return OBJECT_MAPPER.convertValue(node.get(Constants.Properties.VALUE), c);
+        }
+
+        if (InternalObjectNode.class.isAssignableFrom(c)) {
+            return (T) new InternalObjectNode((ObjectNode)node);
+        }
+
+        if (node instanceof ObjectNode &&
+            (JsonSerializable.class.isAssignableFrom(c) || containsJsonSerializable(c))) {
+
+            return c.cast(instantiateFromObjectNodeAndType((ObjectNode)node, c));
+        }
+
+        if (List.class.isAssignableFrom(c)) {
+            try {
+                return OBJECT_MAPPER.readValue(node.toString(), c);
+            } catch (IOException e) {
+                throw new IllegalStateException("Failed to convert to collection.", e);
+            }
+        }
+        if (JsonNode.class.isAssignableFrom(c) || ObjectNode.class.isAssignableFrom(c)) {
+            // JsonNode
+            if (JsonNode.class != c) {
+                if (ObjectNode.class != c) {
+                    throw new IllegalArgumentException(
+                        "We support JsonNode but not its sub-classes.");
+                }
+            }
+
+            return c.cast(node);
+        } else {
+            // POJO
+            JsonSerializable.checkForValidPOJO(c);
+            try {
+                return OBJECT_MAPPER.treeToValue(node, c);
+            } catch (IOException e) {
+               throw new IllegalStateException(
+                    String.format(
+                        "Failed to get POJO of type '%s' for json '%s'.",
+                        c.getName(),
+                        toJson(OBJECT_MAPPER, node)),
+                    e);
             }
         }
     }
@@ -754,7 +835,7 @@ public class JsonSerializable {
         return this.propertyBag;
     }
 
-    <T> boolean containsJsonSerializable(Class<T> c) {
+    static <T> boolean containsJsonSerializable(Class<T> c) {
         return CompositePath.class.equals(c)
             || ConflictResolutionPolicy.class.equals(c)
             || ChangeFeedPolicy.class.equals(c)

@@ -6,17 +6,21 @@ package com.azure.storage.file.datalake;
 import com.azure.core.annotation.ReturnType;
 import com.azure.core.annotation.ServiceClient;
 import com.azure.core.annotation.ServiceMethod;
+import com.azure.core.credential.AzureSasCredential;
 import com.azure.core.credential.TokenCredential;
 import com.azure.core.http.HttpPipeline;
 import com.azure.core.http.rest.PagedIterable;
 import com.azure.core.http.rest.Response;
 import com.azure.core.http.rest.SimpleResponse;
 import com.azure.core.util.Context;
+import com.azure.core.util.CoreUtils;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.models.BlobServiceProperties;
 import com.azure.storage.common.StorageSharedKeyCredential;
 import com.azure.storage.common.sas.AccountSasSignatureValues;
+import com.azure.storage.file.datalake.implementation.AzureDataLakeStorageRestAPIImpl;
+import com.azure.storage.file.datalake.implementation.AzureDataLakeStorageRestAPIImplBuilder;
 import com.azure.storage.file.datalake.implementation.util.DataLakeImplUtils;
 import com.azure.storage.file.datalake.models.DataLakeRequestConditions;
 import com.azure.storage.file.datalake.models.DataLakeServiceProperties;
@@ -45,9 +49,14 @@ import java.util.Map;
 @ServiceClient(builder = DataLakeServiceClientBuilder.class)
 public class DataLakeServiceClient {
 
-    private final ClientLogger logger = new ClientLogger(DataLakeServiceClient.class);
+    private static final ClientLogger LOGGER = new ClientLogger(DataLakeServiceClient.class);
     private final DataLakeServiceAsyncClient dataLakeServiceAsyncClient;
-    private final BlobServiceClient blobServiceClient;
+    final BlobServiceClient blobServiceClient;
+    private final AzureDataLakeStorageRestAPIImpl azureDataLakeStorage;
+    private final String accountName;
+    private final DataLakeServiceVersion serviceVersion;
+    private final AzureSasCredential sasToken;
+    private final boolean isTokenCredentialAuthenticated;
 
     /**
      * Package-private constructor for use by {@link DataLakeServiceClientBuilder}.
@@ -55,9 +64,20 @@ public class DataLakeServiceClient {
      * @param dataLakeServiceAsyncClient the async data lake service client.
      * @param blobServiceClient the sync blob service client.
      */
-    DataLakeServiceClient(DataLakeServiceAsyncClient dataLakeServiceAsyncClient, BlobServiceClient blobServiceClient) {
+    DataLakeServiceClient(DataLakeServiceAsyncClient dataLakeServiceAsyncClient, BlobServiceClient blobServiceClient,
+        HttpPipeline pipeline, String url, DataLakeServiceVersion serviceVersion, String accountName,
+        AzureSasCredential sasToken, boolean isTokenCredentialAuthenticated) {
         this.dataLakeServiceAsyncClient = dataLakeServiceAsyncClient;
         this.blobServiceClient = blobServiceClient;
+        this.azureDataLakeStorage = new AzureDataLakeStorageRestAPIImplBuilder()
+            .pipeline(pipeline)
+            .url(url)
+            .version(serviceVersion.getVersion())
+            .buildClient();
+        this.serviceVersion = serviceVersion;
+        this.accountName = accountName;
+        this.sasToken = sasToken;
+        this.isTokenCredentialAuthenticated = isTokenCredentialAuthenticated;
     }
 
     /**
@@ -77,8 +97,12 @@ public class DataLakeServiceClient {
      * @return A {@link DataLakeFileSystemClient} object pointing to the specified file system
      */
     public DataLakeFileSystemClient getFileSystemClient(String fileSystemName) {
+        if (CoreUtils.isNullOrEmpty(fileSystemName)) {
+            fileSystemName = DataLakeFileSystemClient.ROOT_FILESYSTEM_NAME;
+        }
         return new DataLakeFileSystemClient(dataLakeServiceAsyncClient.getFileSystemAsyncClient(fileSystemName),
-            blobServiceClient.getBlobContainerClient(fileSystemName));
+            blobServiceClient.getBlobContainerClient(fileSystemName), getHttpPipeline(), getAccountUrl(),
+            getServiceVersion(), getAccountName(), fileSystemName, sasToken, isTokenCredentialAuthenticated);
     }
 
     /**
@@ -87,7 +111,7 @@ public class DataLakeServiceClient {
      * @return The pipeline.
      */
     public HttpPipeline getHttpPipeline() {
-        return dataLakeServiceAsyncClient.getHttpPipeline();
+        return azureDataLakeStorage.getHttpPipeline();
     }
 
     /**
@@ -96,7 +120,7 @@ public class DataLakeServiceClient {
      * @return the service version the client is using.
      */
     public DataLakeServiceVersion getServiceVersion() {
-        return this.dataLakeServiceAsyncClient.getServiceVersion();
+        return serviceVersion;
     }
 
     /**
@@ -215,7 +239,7 @@ public class DataLakeServiceClient {
      * @return the URL.
      */
     public String getAccountUrl() {
-        return dataLakeServiceAsyncClient.getAccountUrl();
+        return azureDataLakeStorage.getUrl();
     }
 
     /**
@@ -264,11 +288,14 @@ public class DataLakeServiceClient {
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<FileSystemItem> listFileSystems(ListFileSystemsOptions options, Duration timeout) {
+        // this method depends on BlobServiceAsyncClient.listContainers
         return new PagedIterable<>(dataLakeServiceAsyncClient.listFileSystemsWithOptionalTimeout(options, timeout));
     }
 
+
+
     /**
-     * Returns the resources's metadata and properties.
+     * Returns the resource's metadata and properties.
      *
      * <p><strong>Code Samples</strong></p>
      *
@@ -320,7 +347,7 @@ public class DataLakeServiceClient {
         return DataLakeImplUtils.returnOrConvertException(() -> {
             Response<BlobServiceProperties> response = blobServiceClient.getPropertiesWithResponse(timeout, context);
             return new SimpleResponse<>(response, Transforms.toDataLakeServiceProperties(response.getValue()));
-        }, logger);
+        }, LOGGER);
     }
 
     /**
@@ -342,12 +369,17 @@ public class DataLakeServiceClient {
      *     .setLogging&#40;new DataLakeAnalyticsLogging&#40;&#41;
      *         .setWrite&#40;true&#41;
      *         .setDelete&#40;true&#41;
+     *         .setVersion&#40;&quot;1.0&quot;&#41;
      *         .setRetentionPolicy&#40;loggingRetentionPolicy&#41;&#41;
      *     .setHourMetrics&#40;new DataLakeMetrics&#40;&#41;
      *         .setEnabled&#40;true&#41;
+     *         .setVersion&#40;&quot;1.0&quot;&#41;
+     *         .setIncludeApis&#40;true&#41;
      *         .setRetentionPolicy&#40;metricsRetentionPolicy&#41;&#41;
      *     .setMinuteMetrics&#40;new DataLakeMetrics&#40;&#41;
      *         .setEnabled&#40;true&#41;
+     *         .setVersion&#40;&quot;1.0&quot;&#41;
+     *         .setIncludeApis&#40;true&#41;
      *         .setRetentionPolicy&#40;metricsRetentionPolicy&#41;&#41;;
      *
      * try &#123;
@@ -385,12 +417,17 @@ public class DataLakeServiceClient {
      *     .setLogging&#40;new DataLakeAnalyticsLogging&#40;&#41;
      *         .setWrite&#40;true&#41;
      *         .setDelete&#40;true&#41;
+     *         .setVersion&#40;&quot;1.0&quot;&#41;
      *         .setRetentionPolicy&#40;loggingRetentionPolicy&#41;&#41;
      *     .setHourMetrics&#40;new DataLakeMetrics&#40;&#41;
      *         .setEnabled&#40;true&#41;
+     *         .setVersion&#40;&quot;1.0&quot;&#41;
+     *         .setIncludeApis&#40;true&#41;
      *         .setRetentionPolicy&#40;metricsRetentionPolicy&#41;&#41;
      *     .setMinuteMetrics&#40;new DataLakeMetrics&#40;&#41;
      *         .setEnabled&#40;true&#41;
+     *         .setVersion&#40;&quot;1.0&quot;&#41;
+     *         .setIncludeApis&#40;true&#41;
      *         .setRetentionPolicy&#40;metricsRetentionPolicy&#41;&#41;;
      *
      * Context context = new Context&#40;&quot;Key&quot;, &quot;Value&quot;&#41;;
@@ -410,7 +447,7 @@ public class DataLakeServiceClient {
         Context context) {
         return DataLakeImplUtils.returnOrConvertException(() ->
             blobServiceClient.setPropertiesWithResponse(Transforms.toBlobServiceProperties(properties),
-                timeout, context), logger);
+                timeout, context), LOGGER);
     }
 
     /**
@@ -461,7 +498,7 @@ public class DataLakeServiceClient {
             Response<com.azure.storage.blob.models.UserDelegationKey> response = blobServiceClient
                 .getUserDelegationKeyWithResponse(start, expiry, timeout, context);
             return new SimpleResponse<>(response, Transforms.toDataLakeUserDelegationKey(response.getValue()));
-        }, logger);
+        }, LOGGER);
     }
 
     /**
@@ -470,7 +507,7 @@ public class DataLakeServiceClient {
      * @return account name associated with this storage resource.
      */
     public String getAccountName() {
-        return this.dataLakeServiceAsyncClient.getAccountName();
+        return this.accountName;
     }
 
     /**
@@ -502,7 +539,7 @@ public class DataLakeServiceClient {
      * @return A {@code String} representing the SAS query parameters.
      */
     public String generateAccountSas(AccountSasSignatureValues accountSasSignatureValues) {
-        return dataLakeServiceAsyncClient.generateAccountSas(accountSasSignatureValues);
+        return generateAccountSas(accountSasSignatureValues, null);
     }
 
     /**
@@ -535,7 +572,7 @@ public class DataLakeServiceClient {
      * @return A {@code String} representing the SAS query parameters.
      */
     public String generateAccountSas(AccountSasSignatureValues accountSasSignatureValues, Context context) {
-        return dataLakeServiceAsyncClient.generateAccountSas(accountSasSignatureValues, context);
+        return blobServiceClient.generateAccountSas(accountSasSignatureValues, context);
     }
 
     /**
@@ -575,7 +612,7 @@ public class DataLakeServiceClient {
      * Restores a previously deleted file system. The restored file system
      * will be renamed to the <code>destinationFileSystemName</code> if provided in <code>options</code>.
      * Otherwise <code>deletedFileSystemName</code> is used as destination file system name.
-     * If the file system associated with provided <code>destinationFileSYstemName</code>
+     * If the file system associated with provided <code>destinationFileSystemName</code>
      * already exists, this call will result in a 409 (conflict).
      * This API is only functional if Container Soft Delete is enabled
      * for the storage account associated with the file system.
@@ -610,7 +647,7 @@ public class DataLakeServiceClient {
                 .undeleteBlobContainerWithResponse(Transforms.toBlobContainerUndeleteOptions(options), timeout,
                     context);
             return new SimpleResponse<>(response, getFileSystemClient(response.getValue().getBlobContainerName()));
-        }, logger);
+        }, LOGGER);
     }
 
 //    /**

@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Resource metrics service provided by Microsoft.Insights resource provider. */
+/**
+ * Resource metrics service provided by Microsoft.Insights resource provider.
+ */
 @Fluent
 public final class ServiceSpecification {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ServiceSpecification.class);
-
     /*
      * The metricSpecifications property.
      */
@@ -28,8 +26,14 @@ public final class ServiceSpecification {
     private List<LogSpecification> logSpecifications;
 
     /**
+     * Creates an instance of ServiceSpecification class.
+     */
+    public ServiceSpecification() {
+    }
+
+    /**
      * Get the metricSpecifications property: The metricSpecifications property.
-     *
+     * 
      * @return the metricSpecifications value.
      */
     public List<MetricSpecification> metricSpecifications() {
@@ -38,7 +42,7 @@ public final class ServiceSpecification {
 
     /**
      * Set the metricSpecifications property: The metricSpecifications property.
-     *
+     * 
      * @param metricSpecifications the metricSpecifications value to set.
      * @return the ServiceSpecification object itself.
      */
@@ -49,7 +53,7 @@ public final class ServiceSpecification {
 
     /**
      * Get the logSpecifications property: The logSpecifications property.
-     *
+     * 
      * @return the logSpecifications value.
      */
     public List<LogSpecification> logSpecifications() {
@@ -58,7 +62,7 @@ public final class ServiceSpecification {
 
     /**
      * Set the logSpecifications property: The logSpecifications property.
-     *
+     * 
      * @param logSpecifications the logSpecifications value to set.
      * @return the ServiceSpecification object itself.
      */
@@ -69,7 +73,7 @@ public final class ServiceSpecification {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

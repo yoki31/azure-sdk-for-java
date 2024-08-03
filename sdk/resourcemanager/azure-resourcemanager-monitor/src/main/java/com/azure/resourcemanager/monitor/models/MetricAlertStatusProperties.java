@@ -5,21 +5,21 @@
 package com.azure.resourcemanager.monitor.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 import java.util.Map;
 
-/** An alert status properties. */
+/**
+ * An alert status properties.
+ */
 @Fluent
 public final class MetricAlertStatusProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MetricAlertStatusProperties.class);
-
     /*
      * An object describing the type of the dimensions.
      */
     @JsonProperty(value = "dimensions")
+    @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
     private Map<String, String> dimensions;
 
     /*
@@ -35,8 +35,14 @@ public final class MetricAlertStatusProperties {
     private OffsetDateTime timestamp;
 
     /**
+     * Creates an instance of MetricAlertStatusProperties class.
+     */
+    public MetricAlertStatusProperties() {
+    }
+
+    /**
      * Get the dimensions property: An object describing the type of the dimensions.
-     *
+     * 
      * @return the dimensions value.
      */
     public Map<String, String> dimensions() {
@@ -45,7 +51,7 @@ public final class MetricAlertStatusProperties {
 
     /**
      * Set the dimensions property: An object describing the type of the dimensions.
-     *
+     * 
      * @param dimensions the dimensions value to set.
      * @return the MetricAlertStatusProperties object itself.
      */
@@ -56,7 +62,7 @@ public final class MetricAlertStatusProperties {
 
     /**
      * Get the status property: status value.
-     *
+     * 
      * @return the status value.
      */
     public String status() {
@@ -65,7 +71,7 @@ public final class MetricAlertStatusProperties {
 
     /**
      * Set the status property: status value.
-     *
+     * 
      * @param status the status value to set.
      * @return the MetricAlertStatusProperties object itself.
      */
@@ -76,7 +82,7 @@ public final class MetricAlertStatusProperties {
 
     /**
      * Get the timestamp property: UTC time when the status was checked.
-     *
+     * 
      * @return the timestamp value.
      */
     public OffsetDateTime timestamp() {
@@ -85,7 +91,7 @@ public final class MetricAlertStatusProperties {
 
     /**
      * Set the timestamp property: UTC time when the status was checked.
-     *
+     * 
      * @param timestamp the timestamp value to set.
      * @return the MetricAlertStatusProperties object itself.
      */
@@ -96,7 +102,7 @@ public final class MetricAlertStatusProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

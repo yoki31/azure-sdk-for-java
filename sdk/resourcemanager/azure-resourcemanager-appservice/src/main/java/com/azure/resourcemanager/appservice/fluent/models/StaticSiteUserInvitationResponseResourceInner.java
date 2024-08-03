@@ -5,18 +5,15 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.ProxyOnlyResource;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
-/** Static sites user roles invitation link resource. */
+/**
+ * Static sites user roles invitation link resource.
+ */
 @Fluent
 public final class StaticSiteUserInvitationResponseResourceInner extends ProxyOnlyResource {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(StaticSiteUserInvitationResponseResourceInner.class);
-
     /*
      * StaticSiteUserInvitationResponseResource resource specific properties
      */
@@ -24,15 +21,23 @@ public final class StaticSiteUserInvitationResponseResourceInner extends ProxyOn
     private StaticSiteUserInvitationResponseResourceProperties innerProperties;
 
     /**
+     * Creates an instance of StaticSiteUserInvitationResponseResourceInner class.
+     */
+    public StaticSiteUserInvitationResponseResourceInner() {
+    }
+
+    /**
      * Get the innerProperties property: StaticSiteUserInvitationResponseResource resource specific properties.
-     *
+     * 
      * @return the innerProperties value.
      */
     private StaticSiteUserInvitationResponseResourceProperties innerProperties() {
         return this.innerProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public StaticSiteUserInvitationResponseResourceInner withKind(String kind) {
         super.withKind(kind);
@@ -41,7 +46,7 @@ public final class StaticSiteUserInvitationResponseResourceInner extends ProxyOn
 
     /**
      * Get the expiresOn property: The expiration time of the invitation.
-     *
+     * 
      * @return the expiresOn value.
      */
     public OffsetDateTime expiresOn() {
@@ -50,7 +55,7 @@ public final class StaticSiteUserInvitationResponseResourceInner extends ProxyOn
 
     /**
      * Get the invitationUrl property: The url for the invitation link.
-     *
+     * 
      * @return the invitationUrl value.
      */
     public String invitationUrl() {
@@ -59,7 +64,7 @@ public final class StaticSiteUserInvitationResponseResourceInner extends ProxyOn
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

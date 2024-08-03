@@ -81,6 +81,20 @@ public interface ClusterPrincipalAssignment {
     ProvisioningState provisioningState();
 
     /**
+     * Gets the aadObjectId property: The service principal object id in AAD (Azure active directory).
+     *
+     * @return the aadObjectId value.
+     */
+    String aadObjectId();
+
+    /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.kusto.fluent.models.ClusterPrincipalAssignmentInner object.
      *
      * @return the inner object.
@@ -91,22 +105,25 @@ public interface ClusterPrincipalAssignment {
     interface Definition
         extends DefinitionStages.Blank, DefinitionStages.WithParentResource, DefinitionStages.WithCreate {
     }
+
     /** The ClusterPrincipalAssignment definition stages. */
     interface DefinitionStages {
         /** The first stage of the ClusterPrincipalAssignment definition. */
         interface Blank extends WithParentResource {
         }
+
         /** The stage of the ClusterPrincipalAssignment definition allowing to specify parent resource. */
         interface WithParentResource {
             /**
              * Specifies resourceGroupName, clusterName.
              *
-             * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+             * @param resourceGroupName The name of the resource group. The name is case insensitive.
              * @param clusterName The name of the Kusto cluster.
              * @return the next definition stage.
              */
             WithCreate withExistingCluster(String resourceGroupName, String clusterName);
         }
+
         /**
          * The stage of the ClusterPrincipalAssignment definition which contains all the minimum required properties for
          * the resource to be created, but also allows for any other optional properties to be specified.
@@ -131,6 +148,7 @@ public interface ClusterPrincipalAssignment {
              */
             ClusterPrincipalAssignment create(Context context);
         }
+
         /** The stage of the ClusterPrincipalAssignment definition allowing to specify principalId. */
         interface WithPrincipalId {
             /**
@@ -143,6 +161,7 @@ public interface ClusterPrincipalAssignment {
              */
             WithCreate withPrincipalId(String principalId);
         }
+
         /** The stage of the ClusterPrincipalAssignment definition allowing to specify role. */
         interface WithRole {
             /**
@@ -153,6 +172,7 @@ public interface ClusterPrincipalAssignment {
              */
             WithCreate withRole(ClusterPrincipalRole role);
         }
+
         /** The stage of the ClusterPrincipalAssignment definition allowing to specify tenantId. */
         interface WithTenantId {
             /**
@@ -163,6 +183,7 @@ public interface ClusterPrincipalAssignment {
              */
             WithCreate withTenantId(String tenantId);
         }
+
         /** The stage of the ClusterPrincipalAssignment definition allowing to specify principalType. */
         interface WithPrincipalType {
             /**
@@ -174,6 +195,7 @@ public interface ClusterPrincipalAssignment {
             WithCreate withPrincipalType(PrincipalType principalType);
         }
     }
+
     /**
      * Begins update for the ClusterPrincipalAssignment resource.
      *
@@ -202,6 +224,7 @@ public interface ClusterPrincipalAssignment {
          */
         ClusterPrincipalAssignment apply(Context context);
     }
+
     /** The ClusterPrincipalAssignment update stages. */
     interface UpdateStages {
         /** The stage of the ClusterPrincipalAssignment update allowing to specify principalId. */
@@ -216,6 +239,7 @@ public interface ClusterPrincipalAssignment {
              */
             Update withPrincipalId(String principalId);
         }
+
         /** The stage of the ClusterPrincipalAssignment update allowing to specify role. */
         interface WithRole {
             /**
@@ -226,6 +250,7 @@ public interface ClusterPrincipalAssignment {
              */
             Update withRole(ClusterPrincipalRole role);
         }
+
         /** The stage of the ClusterPrincipalAssignment update allowing to specify tenantId. */
         interface WithTenantId {
             /**
@@ -236,6 +261,7 @@ public interface ClusterPrincipalAssignment {
              */
             Update withTenantId(String tenantId);
         }
+
         /** The stage of the ClusterPrincipalAssignment update allowing to specify principalType. */
         interface WithPrincipalType {
             /**
@@ -247,6 +273,7 @@ public interface ClusterPrincipalAssignment {
             Update withPrincipalType(PrincipalType principalType);
         }
     }
+
     /**
      * Refreshes the resource to sync with Azure.
      *

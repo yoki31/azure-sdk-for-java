@@ -6,29 +6,32 @@ package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.Resource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.ClientCertMode;
 import com.azure.resourcemanager.appservice.models.CloningInfo;
+import com.azure.resourcemanager.appservice.models.DaprConfig;
 import com.azure.resourcemanager.appservice.models.ExtendedLocation;
+import com.azure.resourcemanager.appservice.models.FunctionAppConfig;
 import com.azure.resourcemanager.appservice.models.HostingEnvironmentProfile;
 import com.azure.resourcemanager.appservice.models.HostnameSslState;
 import com.azure.resourcemanager.appservice.models.ManagedServiceIdentity;
 import com.azure.resourcemanager.appservice.models.RedundancyMode;
+import com.azure.resourcemanager.appservice.models.ResourceConfig;
 import com.azure.resourcemanager.appservice.models.SiteAvailabilityState;
+import com.azure.resourcemanager.appservice.models.SiteDnsConfig;
 import com.azure.resourcemanager.appservice.models.SlotSwapStatus;
 import com.azure.resourcemanager.appservice.models.UsageState;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-/** A web app, a mobile app backend, or an API app. */
+/**
+ * A web app, a mobile app backend, or an API app.
+ */
 @Fluent
 public final class SiteInner extends Resource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SiteInner.class);
-
     /*
      * Site resource specific properties
      */
@@ -52,6 +55,12 @@ public final class SiteInner extends Resource {
      */
     @JsonProperty(value = "kind")
     private String kind;
+
+    /**
+     * Creates an instance of SiteInner class.
+     */
+    public SiteInner() {
+    }
 
     /**
      * Get the innerProperties property: Site resource specific properties.
@@ -122,14 +131,18 @@ public final class SiteInner extends Resource {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SiteInner withLocation(String location) {
         super.withLocation(location);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SiteInner withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -199,7 +212,8 @@ public final class SiteInner extends Resource {
 
     /**
      * Get the enabledHostNames property: Enabled hostnames for the app.Hostnames need to be assigned (see HostNames)
-     * AND enabled. Otherwise, the app is not served on those hostnames.
+     * AND enabled. Otherwise,
+     * the app is not served on those hostnames.
      *
      * @return the enabledHostNames value.
      */
@@ -241,8 +255,7 @@ public final class SiteInner extends Resource {
 
     /**
      * Get the serverFarmId property: Resource ID of the associated App Service plan, formatted as:
-     * "/subscriptions/{subscriptionID}/resourceGroups/{groupName}/providers/Microsoft.Web/serverfarms"
-         + "/{appServicePlanName}".
+     * "/subscriptions/{subscriptionID}/resourceGroups/{groupName}/providers/Microsoft.Web/serverfarms/{appServicePlanName}".
      *
      * @return the serverFarmId value.
      */
@@ -252,8 +265,7 @@ public final class SiteInner extends Resource {
 
     /**
      * Set the serverFarmId property: Resource ID of the associated App Service plan, formatted as:
-     * "/subscriptions/{subscriptionID}/resourceGroups/{groupName}/providers/Microsoft.Web/serverfarms"
-         + "/{appServicePlanName}".
+     * "/subscriptions/{subscriptionID}/resourceGroups/{groupName}/providers/Microsoft.Web/serverfarms/{appServicePlanName}".
      *
      * @param serverFarmId the serverFarmId value to set.
      * @return the SiteInner object itself.
@@ -345,6 +357,123 @@ public final class SiteInner extends Resource {
     }
 
     /**
+     * Get the dnsConfiguration property: Property to configure various DNS related settings for a site.
+     *
+     * @return the dnsConfiguration value.
+     */
+    public SiteDnsConfig dnsConfiguration() {
+        return this.innerProperties() == null ? null : this.innerProperties().dnsConfiguration();
+    }
+
+    /**
+     * Set the dnsConfiguration property: Property to configure various DNS related settings for a site.
+     *
+     * @param dnsConfiguration the dnsConfiguration value to set.
+     * @return the SiteInner object itself.
+     */
+    public SiteInner withDnsConfiguration(SiteDnsConfig dnsConfiguration) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new SitePropertiesInner();
+        }
+        this.innerProperties().withDnsConfiguration(dnsConfiguration);
+        return this;
+    }
+
+    /**
+     * Get the vnetRouteAllEnabled property: Virtual Network Route All enabled. This causes all outbound traffic to have
+     * Virtual Network Security Groups and User Defined Routes applied.
+     *
+     * @return the vnetRouteAllEnabled value.
+     */
+    public Boolean vnetRouteAllEnabled() {
+        return this.innerProperties() == null ? null : this.innerProperties().vnetRouteAllEnabled();
+    }
+
+    /**
+     * Set the vnetRouteAllEnabled property: Virtual Network Route All enabled. This causes all outbound traffic to have
+     * Virtual Network Security Groups and User Defined Routes applied.
+     *
+     * @param vnetRouteAllEnabled the vnetRouteAllEnabled value to set.
+     * @return the SiteInner object itself.
+     */
+    public SiteInner withVnetRouteAllEnabled(Boolean vnetRouteAllEnabled) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new SitePropertiesInner();
+        }
+        this.innerProperties().withVnetRouteAllEnabled(vnetRouteAllEnabled);
+        return this;
+    }
+
+    /**
+     * Get the vnetImagePullEnabled property: To enable pulling image over Virtual Network.
+     *
+     * @return the vnetImagePullEnabled value.
+     */
+    public Boolean vnetImagePullEnabled() {
+        return this.innerProperties() == null ? null : this.innerProperties().vnetImagePullEnabled();
+    }
+
+    /**
+     * Set the vnetImagePullEnabled property: To enable pulling image over Virtual Network.
+     *
+     * @param vnetImagePullEnabled the vnetImagePullEnabled value to set.
+     * @return the SiteInner object itself.
+     */
+    public SiteInner withVnetImagePullEnabled(Boolean vnetImagePullEnabled) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new SitePropertiesInner();
+        }
+        this.innerProperties().withVnetImagePullEnabled(vnetImagePullEnabled);
+        return this;
+    }
+
+    /**
+     * Get the vnetContentShareEnabled property: To enable accessing content over virtual network.
+     *
+     * @return the vnetContentShareEnabled value.
+     */
+    public Boolean vnetContentShareEnabled() {
+        return this.innerProperties() == null ? null : this.innerProperties().vnetContentShareEnabled();
+    }
+
+    /**
+     * Set the vnetContentShareEnabled property: To enable accessing content over virtual network.
+     *
+     * @param vnetContentShareEnabled the vnetContentShareEnabled value to set.
+     * @return the SiteInner object itself.
+     */
+    public SiteInner withVnetContentShareEnabled(Boolean vnetContentShareEnabled) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new SitePropertiesInner();
+        }
+        this.innerProperties().withVnetContentShareEnabled(vnetContentShareEnabled);
+        return this;
+    }
+
+    /**
+     * Get the vnetBackupRestoreEnabled property: To enable Backup and Restore operations over virtual network.
+     *
+     * @return the vnetBackupRestoreEnabled value.
+     */
+    public Boolean vnetBackupRestoreEnabled() {
+        return this.innerProperties() == null ? null : this.innerProperties().vnetBackupRestoreEnabled();
+    }
+
+    /**
+     * Set the vnetBackupRestoreEnabled property: To enable Backup and Restore operations over virtual network.
+     *
+     * @param vnetBackupRestoreEnabled the vnetBackupRestoreEnabled value to set.
+     * @return the SiteInner object itself.
+     */
+    public SiteInner withVnetBackupRestoreEnabled(Boolean vnetBackupRestoreEnabled) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new SitePropertiesInner();
+        }
+        this.innerProperties().withVnetBackupRestoreEnabled(vnetBackupRestoreEnabled);
+        return this;
+    }
+
+    /**
      * Get the siteConfig property: Configuration of the app.
      *
      * @return the siteConfig value.
@@ -364,6 +493,98 @@ public final class SiteInner extends Resource {
             this.innerProperties = new SitePropertiesInner();
         }
         this.innerProperties().withSiteConfig(siteConfig);
+        return this;
+    }
+
+    /**
+     * Get the functionAppConfig property: Configuration specific of the Azure Function app.
+     *
+     * @return the functionAppConfig value.
+     */
+    public FunctionAppConfig functionAppConfig() {
+        return this.innerProperties() == null ? null : this.innerProperties().functionAppConfig();
+    }
+
+    /**
+     * Set the functionAppConfig property: Configuration specific of the Azure Function app.
+     *
+     * @param functionAppConfig the functionAppConfig value to set.
+     * @return the SiteInner object itself.
+     */
+    public SiteInner withFunctionAppConfig(FunctionAppConfig functionAppConfig) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new SitePropertiesInner();
+        }
+        this.innerProperties().withFunctionAppConfig(functionAppConfig);
+        return this;
+    }
+
+    /**
+     * Get the daprConfig property: Dapr configuration of the app.
+     *
+     * @return the daprConfig value.
+     */
+    public DaprConfig daprConfig() {
+        return this.innerProperties() == null ? null : this.innerProperties().daprConfig();
+    }
+
+    /**
+     * Set the daprConfig property: Dapr configuration of the app.
+     *
+     * @param daprConfig the daprConfig value to set.
+     * @return the SiteInner object itself.
+     */
+    public SiteInner withDaprConfig(DaprConfig daprConfig) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new SitePropertiesInner();
+        }
+        this.innerProperties().withDaprConfig(daprConfig);
+        return this;
+    }
+
+    /**
+     * Get the workloadProfileName property: Workload profile name for function app to execute on.
+     *
+     * @return the workloadProfileName value.
+     */
+    public String workloadProfileName() {
+        return this.innerProperties() == null ? null : this.innerProperties().workloadProfileName();
+    }
+
+    /**
+     * Set the workloadProfileName property: Workload profile name for function app to execute on.
+     *
+     * @param workloadProfileName the workloadProfileName value to set.
+     * @return the SiteInner object itself.
+     */
+    public SiteInner withWorkloadProfileName(String workloadProfileName) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new SitePropertiesInner();
+        }
+        this.innerProperties().withWorkloadProfileName(workloadProfileName);
+        return this;
+    }
+
+    /**
+     * Get the resourceConfig property: Function app resource requirements.
+     *
+     * @return the resourceConfig value.
+     */
+    public ResourceConfig resourceConfig() {
+        return this.innerProperties() == null ? null : this.innerProperties().resourceConfig();
+    }
+
+    /**
+     * Set the resourceConfig property: Function app resource requirements.
+     *
+     * @param resourceConfig the resourceConfig value to set.
+     * @return the SiteInner object itself.
+     */
+    public SiteInner withResourceConfig(ResourceConfig resourceConfig) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new SitePropertiesInner();
+        }
+        this.innerProperties().withResourceConfig(resourceConfig);
         return this;
     }
 
@@ -488,9 +709,10 @@ public final class SiteInner extends Resource {
     }
 
     /**
-     * Get the clientCertMode property: This composes with ClientCertEnabled setting. - ClientCertEnabled: false means
-     * ClientCert is ignored. - ClientCertEnabled: true and ClientCertMode: Required means ClientCert is required. -
-     * ClientCertEnabled: true and ClientCertMode: Optional means ClientCert is optional or accepted.
+     * Get the clientCertMode property: This composes with ClientCertEnabled setting.
+     * - ClientCertEnabled: false means ClientCert is ignored.
+     * - ClientCertEnabled: true and ClientCertMode: Required means ClientCert is required.
+     * - ClientCertEnabled: true and ClientCertMode: Optional means ClientCert is optional or accepted.
      *
      * @return the clientCertMode value.
      */
@@ -499,9 +721,10 @@ public final class SiteInner extends Resource {
     }
 
     /**
-     * Set the clientCertMode property: This composes with ClientCertEnabled setting. - ClientCertEnabled: false means
-     * ClientCert is ignored. - ClientCertEnabled: true and ClientCertMode: Required means ClientCert is required. -
-     * ClientCertEnabled: true and ClientCertMode: Optional means ClientCert is optional or accepted.
+     * Set the clientCertMode property: This composes with ClientCertEnabled setting.
+     * - ClientCertEnabled: false means ClientCert is ignored.
+     * - ClientCertEnabled: true and ClientCertMode: Required means ClientCert is required.
+     * - ClientCertEnabled: true and ClientCertMode: Optional means ClientCert is optional or accepted.
      *
      * @param clientCertMode the clientCertMode value to set.
      * @return the SiteInner object itself.
@@ -539,8 +762,8 @@ public final class SiteInner extends Resource {
 
     /**
      * Get the hostNamesDisabled property: &lt;code&gt;true&lt;/code&gt; to disable the public hostnames of the app;
-     * otherwise, &lt;code&gt;false&lt;/code&gt;. If &lt;code&gt;true&lt;/code&gt;, the app is only accessible via API
-     * management process.
+     * otherwise, &lt;code&gt;false&lt;/code&gt;.
+     * If &lt;code&gt;true&lt;/code&gt;, the app is only accessible via API management process.
      *
      * @return the hostNamesDisabled value.
      */
@@ -550,8 +773,8 @@ public final class SiteInner extends Resource {
 
     /**
      * Set the hostNamesDisabled property: &lt;code&gt;true&lt;/code&gt; to disable the public hostnames of the app;
-     * otherwise, &lt;code&gt;false&lt;/code&gt;. If &lt;code&gt;true&lt;/code&gt;, the app is only accessible via API
-     * management process.
+     * otherwise, &lt;code&gt;false&lt;/code&gt;.
+     * If &lt;code&gt;true&lt;/code&gt;, the app is only accessible via API management process.
      *
      * @param hostNamesDisabled the hostNamesDisabled value to set.
      * @return the SiteInner object itself.
@@ -665,7 +888,8 @@ public final class SiteInner extends Resource {
     }
 
     /**
-     * Get the maxNumberOfWorkers property: Maximum number of workers. This only applies to Functions container.
+     * Get the maxNumberOfWorkers property: Maximum number of workers.
+     * This only applies to Functions container.
      *
      * @return the maxNumberOfWorkers value.
      */
@@ -791,6 +1015,31 @@ public final class SiteInner extends Resource {
     }
 
     /**
+     * Get the publicNetworkAccess property: Property to allow or block all public traffic. Allowed Values: 'Enabled',
+     * 'Disabled' or an empty string.
+     *
+     * @return the publicNetworkAccess value.
+     */
+    public String publicNetworkAccess() {
+        return this.innerProperties() == null ? null : this.innerProperties().publicNetworkAccess();
+    }
+
+    /**
+     * Set the publicNetworkAccess property: Property to allow or block all public traffic. Allowed Values: 'Enabled',
+     * 'Disabled' or an empty string.
+     *
+     * @param publicNetworkAccess the publicNetworkAccess value to set.
+     * @return the SiteInner object itself.
+     */
+    public SiteInner withPublicNetworkAccess(String publicNetworkAccess) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new SitePropertiesInner();
+        }
+        this.innerProperties().withPublicNetworkAccess(publicNetworkAccess);
+        return this;
+    }
+
+    /**
      * Get the storageAccountRequired property: Checks if Customer provided storage account is required.
      *
      * @return the storageAccountRequired value.
@@ -838,7 +1087,8 @@ public final class SiteInner extends Resource {
 
     /**
      * Get the virtualNetworkSubnetId property: Azure Resource Manager ID of the Virtual network and subnet to be joined
-     * by Regional VNET Integration. This must be of the form
+     * by Regional VNET Integration.
+     * This must be of the form
      * /subscriptions/{subscriptionName}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/{vnetName}/subnets/{subnetName}.
      *
      * @return the virtualNetworkSubnetId value.
@@ -849,7 +1099,8 @@ public final class SiteInner extends Resource {
 
     /**
      * Set the virtualNetworkSubnetId property: Azure Resource Manager ID of the Virtual network and subnet to be joined
-     * by Regional VNET Integration. This must be of the form
+     * by Regional VNET Integration.
+     * This must be of the form
      * /subscriptions/{subscriptionName}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/virtualNetworks/{vnetName}/subnets/{subnetName}.
      *
      * @param virtualNetworkSubnetId the virtualNetworkSubnetId value to set.
@@ -860,6 +1111,33 @@ public final class SiteInner extends Resource {
             this.innerProperties = new SitePropertiesInner();
         }
         this.innerProperties().withVirtualNetworkSubnetId(virtualNetworkSubnetId);
+        return this;
+    }
+
+    /**
+     * Get the managedEnvironmentId property: Azure Resource Manager ID of the customer's selected Managed Environment
+     * on which to host this app. This must be of the form
+     * /subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.App/managedEnvironments/{managedEnvironmentName}.
+     *
+     * @return the managedEnvironmentId value.
+     */
+    public String managedEnvironmentId() {
+        return this.innerProperties() == null ? null : this.innerProperties().managedEnvironmentId();
+    }
+
+    /**
+     * Set the managedEnvironmentId property: Azure Resource Manager ID of the customer's selected Managed Environment
+     * on which to host this app. This must be of the form
+     * /subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.App/managedEnvironments/{managedEnvironmentName}.
+     *
+     * @param managedEnvironmentId the managedEnvironmentId value to set.
+     * @return the SiteInner object itself.
+     */
+    public SiteInner withManagedEnvironmentId(String managedEnvironmentId) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new SitePropertiesInner();
+        }
+        this.innerProperties().withManagedEnvironmentId(managedEnvironmentId);
         return this;
     }
 

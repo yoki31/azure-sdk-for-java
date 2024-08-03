@@ -5,17 +5,14 @@
 package com.azure.resourcemanager.compute.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The List VMSS VM Extension operation response. */
+/**
+ * The List VMSS VM Extension operation response.
+ */
 @Fluent
 public final class VirtualMachineScaleSetVMExtensionsListResultInner {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(VirtualMachineScaleSetVMExtensionsListResultInner.class);
-
     /*
      * The list of VMSS VM extensions
      */
@@ -23,8 +20,14 @@ public final class VirtualMachineScaleSetVMExtensionsListResultInner {
     private List<VirtualMachineScaleSetVMExtensionInner> value;
 
     /**
+     * Creates an instance of VirtualMachineScaleSetVMExtensionsListResultInner class.
+     */
+    public VirtualMachineScaleSetVMExtensionsListResultInner() {
+    }
+
+    /**
      * Get the value property: The list of VMSS VM extensions.
-     *
+     * 
      * @return the value value.
      */
     public List<VirtualMachineScaleSetVMExtensionInner> value() {
@@ -33,19 +36,19 @@ public final class VirtualMachineScaleSetVMExtensionsListResultInner {
 
     /**
      * Set the value property: The list of VMSS VM extensions.
-     *
+     * 
      * @param value the value value to set.
      * @return the VirtualMachineScaleSetVMExtensionsListResultInner object itself.
      */
-    public VirtualMachineScaleSetVMExtensionsListResultInner withValue(
-        List<VirtualMachineScaleSetVMExtensionInner> value) {
+    public VirtualMachineScaleSetVMExtensionsListResultInner
+        withValue(List<VirtualMachineScaleSetVMExtensionInner> value) {
         this.value = value;
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

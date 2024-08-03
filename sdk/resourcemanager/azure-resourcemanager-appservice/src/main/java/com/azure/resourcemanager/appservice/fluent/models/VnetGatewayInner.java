@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.ProxyOnlyResource;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The Virtual Network gateway contract. This is used to give the Virtual Network gateway access to the VPN package. */
+/**
+ * The Virtual Network gateway contract. This is used to give the Virtual Network gateway access to the VPN package.
+ */
 @Fluent
 public final class VnetGatewayInner extends ProxyOnlyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VnetGatewayInner.class);
-
     /*
      * VnetGateway resource specific properties
      */
@@ -22,15 +20,23 @@ public final class VnetGatewayInner extends ProxyOnlyResource {
     private VnetGatewayProperties innerProperties;
 
     /**
+     * Creates an instance of VnetGatewayInner class.
+     */
+    public VnetGatewayInner() {
+    }
+
+    /**
      * Get the innerProperties property: VnetGateway resource specific properties.
-     *
+     * 
      * @return the innerProperties value.
      */
     private VnetGatewayProperties innerProperties() {
         return this.innerProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public VnetGatewayInner withKind(String kind) {
         super.withKind(kind);
@@ -39,7 +45,7 @@ public final class VnetGatewayInner extends ProxyOnlyResource {
 
     /**
      * Get the vnetName property: The Virtual Network name.
-     *
+     * 
      * @return the vnetName value.
      */
     public String vnetName() {
@@ -48,7 +54,7 @@ public final class VnetGatewayInner extends ProxyOnlyResource {
 
     /**
      * Set the vnetName property: The Virtual Network name.
-     *
+     * 
      * @param vnetName the vnetName value to set.
      * @return the VnetGatewayInner object itself.
      */
@@ -62,7 +68,7 @@ public final class VnetGatewayInner extends ProxyOnlyResource {
 
     /**
      * Get the vpnPackageUri property: The URI where the VPN package can be downloaded.
-     *
+     * 
      * @return the vpnPackageUri value.
      */
     public String vpnPackageUri() {
@@ -71,7 +77,7 @@ public final class VnetGatewayInner extends ProxyOnlyResource {
 
     /**
      * Set the vpnPackageUri property: The URI where the VPN package can be downloaded.
-     *
+     * 
      * @param vpnPackageUri the vpnPackageUri value to set.
      * @return the VnetGatewayInner object itself.
      */
@@ -85,7 +91,7 @@ public final class VnetGatewayInner extends ProxyOnlyResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

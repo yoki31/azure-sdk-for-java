@@ -5,6 +5,7 @@
 package com.azure.resourcemanager.netapp.implementation;
 
 import com.azure.core.management.Region;
+import com.azure.core.management.SystemData;
 import com.azure.core.util.Context;
 import com.azure.resourcemanager.netapp.fluent.models.CapacityPoolInner;
 import com.azure.resourcemanager.netapp.models.CapacityPool;
@@ -47,6 +48,10 @@ public final class CapacityPoolImpl implements CapacityPool, CapacityPool.Defini
 
     public String etag() {
         return this.innerModel().etag();
+    }
+
+    public SystemData systemData() {
+        return this.innerModel().systemData();
     }
 
     public String poolId() {
@@ -93,6 +98,10 @@ public final class CapacityPoolImpl implements CapacityPool, CapacityPool.Defini
         return this.location();
     }
 
+    public String resourceGroupName() {
+        return resourceGroupName;
+    }
+
     public CapacityPoolInner innerModel() {
         return this.innerObject;
     }
@@ -116,20 +125,16 @@ public final class CapacityPoolImpl implements CapacityPool, CapacityPool.Defini
     }
 
     public CapacityPool create() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getPools()
-                .createOrUpdate(resourceGroupName, accountName, poolName, this.innerModel(), Context.NONE);
+        this.innerObject = serviceManager.serviceClient()
+            .getPools()
+            .createOrUpdate(resourceGroupName, accountName, poolName, this.innerModel(), Context.NONE);
         return this;
     }
 
     public CapacityPool create(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getPools()
-                .createOrUpdate(resourceGroupName, accountName, poolName, this.innerModel(), context);
+        this.innerObject = serviceManager.serviceClient()
+            .getPools()
+            .createOrUpdate(resourceGroupName, accountName, poolName, this.innerModel(), context);
         return this;
     }
 
@@ -145,49 +150,41 @@ public final class CapacityPoolImpl implements CapacityPool, CapacityPool.Defini
     }
 
     public CapacityPool apply() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getPools()
-                .update(resourceGroupName, accountName, poolName, updateBody, Context.NONE);
+        this.innerObject = serviceManager.serviceClient()
+            .getPools()
+            .update(resourceGroupName, accountName, poolName, updateBody, Context.NONE);
         return this;
     }
 
     public CapacityPool apply(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getPools()
-                .update(resourceGroupName, accountName, poolName, updateBody, context);
+        this.innerObject = serviceManager.serviceClient()
+            .getPools()
+            .update(resourceGroupName, accountName, poolName, updateBody, context);
         return this;
     }
 
-    CapacityPoolImpl(
-        CapacityPoolInner innerObject, com.azure.resourcemanager.netapp.NetAppFilesManager serviceManager) {
+    CapacityPoolImpl(CapacityPoolInner innerObject,
+        com.azure.resourcemanager.netapp.NetAppFilesManager serviceManager) {
         this.innerObject = innerObject;
         this.serviceManager = serviceManager;
-        this.resourceGroupName = Utils.getValueFromIdByName(innerObject.id(), "resourceGroups");
-        this.accountName = Utils.getValueFromIdByName(innerObject.id(), "netAppAccounts");
-        this.poolName = Utils.getValueFromIdByName(innerObject.id(), "capacityPools");
+        this.resourceGroupName = ResourceManagerUtils.getValueFromIdByName(innerObject.id(), "resourceGroups");
+        this.accountName = ResourceManagerUtils.getValueFromIdByName(innerObject.id(), "netAppAccounts");
+        this.poolName = ResourceManagerUtils.getValueFromIdByName(innerObject.id(), "capacityPools");
     }
 
     public CapacityPool refresh() {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getPools()
-                .getWithResponse(resourceGroupName, accountName, poolName, Context.NONE)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getPools()
+            .getWithResponse(resourceGroupName, accountName, poolName, Context.NONE)
+            .getValue();
         return this;
     }
 
     public CapacityPool refresh(Context context) {
-        this.innerObject =
-            serviceManager
-                .serviceClient()
-                .getPools()
-                .getWithResponse(resourceGroupName, accountName, poolName, context)
-                .getValue();
+        this.innerObject = serviceManager.serviceClient()
+            .getPools()
+            .getWithResponse(resourceGroupName, accountName, poolName, context)
+            .getValue();
         return this;
     }
 
@@ -232,8 +229,13 @@ public final class CapacityPoolImpl implements CapacityPool, CapacityPool.Defini
     }
 
     public CapacityPoolImpl withCoolAccess(Boolean coolAccess) {
-        this.innerModel().withCoolAccess(coolAccess);
-        return this;
+        if (isInCreateMode()) {
+            this.innerModel().withCoolAccess(coolAccess);
+            return this;
+        } else {
+            this.updateBody.withCoolAccess(coolAccess);
+            return this;
+        }
     }
 
     public CapacityPoolImpl withEncryptionType(EncryptionType encryptionType) {

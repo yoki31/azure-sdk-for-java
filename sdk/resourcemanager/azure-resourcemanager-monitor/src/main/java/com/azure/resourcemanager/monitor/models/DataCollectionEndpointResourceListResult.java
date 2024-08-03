@@ -7,15 +7,14 @@ package com.azure.resourcemanager.monitor.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.monitor.fluent.models.DataCollectionEndpointResourceInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** A pageable list of resources. */
+/**
+ * A pageable list of resources.
+ */
 @Fluent
 public final class DataCollectionEndpointResourceListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DataCollectionEndpointResourceListResult.class);
-
     /*
      * A list of resources.
      */
@@ -29,8 +28,14 @@ public final class DataCollectionEndpointResourceListResult {
     private String nextLink;
 
     /**
+     * Creates an instance of DataCollectionEndpointResourceListResult class.
+     */
+    public DataCollectionEndpointResourceListResult() {
+    }
+
+    /**
      * Get the value property: A list of resources.
-     *
+     * 
      * @return the value value.
      */
     public List<DataCollectionEndpointResourceInner> value() {
@@ -39,7 +44,7 @@ public final class DataCollectionEndpointResourceListResult {
 
     /**
      * Set the value property: A list of resources.
-     *
+     * 
      * @param value the value value to set.
      * @return the DataCollectionEndpointResourceListResult object itself.
      */
@@ -50,7 +55,7 @@ public final class DataCollectionEndpointResourceListResult {
 
     /**
      * Get the nextLink property: The URL to use for getting the next set of results.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,7 +64,7 @@ public final class DataCollectionEndpointResourceListResult {
 
     /**
      * Set the nextLink property: The URL to use for getting the next set of results.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the DataCollectionEndpointResourceListResult object itself.
      */
@@ -70,17 +75,17 @@ public final class DataCollectionEndpointResourceListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property value in model DataCollectionEndpointResourceListResult"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property value in model DataCollectionEndpointResourceListResult"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(DataCollectionEndpointResourceListResult.class);
 }

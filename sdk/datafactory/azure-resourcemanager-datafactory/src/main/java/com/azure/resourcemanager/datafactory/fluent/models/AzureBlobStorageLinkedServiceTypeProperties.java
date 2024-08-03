@@ -5,22 +5,20 @@
 package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.models.AzureKeyVaultSecretReference;
+import com.azure.resourcemanager.datafactory.models.AzureStorageAuthenticationType;
 import com.azure.resourcemanager.datafactory.models.CredentialReference;
 import com.azure.resourcemanager.datafactory.models.SecretBase;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Azure Blob Storage linked service properties. */
+/**
+ * Azure Blob Storage linked service properties.
+ */
 @Fluent
 public final class AzureBlobStorageLinkedServiceTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureBlobStorageLinkedServiceTypeProperties.class);
-
     /*
-     * The connection string. It is mutually exclusive with sasUri,
-     * serviceEndpoint property. Type: string, SecureString or
-     * AzureKeyVaultSecretReference.
+     * The connection string. It is mutually exclusive with sasUri, serviceEndpoint property. Type: string, SecureString
+     * or AzureKeyVaultSecretReference.
      */
     @JsonProperty(value = "connectionString")
     private Object connectionString;
@@ -32,9 +30,8 @@ public final class AzureBlobStorageLinkedServiceTypeProperties {
     private AzureKeyVaultSecretReference accountKey;
 
     /*
-     * SAS URI of the Azure Blob Storage resource. It is mutually exclusive
-     * with connectionString, serviceEndpoint property. Type: string,
-     * SecureString or AzureKeyVaultSecretReference.
+     * SAS URI of the Azure Blob Storage resource. It is mutually exclusive with connectionString, serviceEndpoint
+     * property. Type: string, SecureString or AzureKeyVaultSecretReference.
      */
     @JsonProperty(value = "sasUri")
     private Object sasUri;
@@ -46,54 +43,50 @@ public final class AzureBlobStorageLinkedServiceTypeProperties {
     private AzureKeyVaultSecretReference sasToken;
 
     /*
-     * Blob service endpoint of the Azure Blob Storage resource. It is mutually
-     * exclusive with connectionString, sasUri property.
+     * Blob service endpoint of the Azure Blob Storage resource. It is mutually exclusive with connectionString, sasUri
+     * property.
      */
     @JsonProperty(value = "serviceEndpoint")
-    private String serviceEndpoint;
+    private Object serviceEndpoint;
 
     /*
-     * The ID of the service principal used to authenticate against Azure SQL
-     * Data Warehouse. Type: string (or Expression with resultType string).
+     * The ID of the service principal used to authenticate against Azure SQL Data Warehouse. Type: string (or
+     * Expression with resultType string).
      */
     @JsonProperty(value = "servicePrincipalId")
     private Object servicePrincipalId;
 
     /*
-     * The key of the service principal used to authenticate against Azure SQL
-     * Data Warehouse.
+     * The key of the service principal used to authenticate against Azure SQL Data Warehouse.
      */
     @JsonProperty(value = "servicePrincipalKey")
     private SecretBase servicePrincipalKey;
 
     /*
-     * The name or ID of the tenant to which the service principal belongs.
-     * Type: string (or Expression with resultType string).
+     * The name or ID of the tenant to which the service principal belongs. Type: string (or Expression with resultType
+     * string).
      */
     @JsonProperty(value = "tenant")
     private Object tenant;
 
     /*
-     * Indicates the azure cloud type of the service principle auth. Allowed
-     * values are AzurePublic, AzureChina, AzureUsGovernment, AzureGermany.
-     * Default value is the data factory regions’ cloud type. Type: string (or
+     * Indicates the azure cloud type of the service principle auth. Allowed values are AzurePublic, AzureChina,
+     * AzureUsGovernment, AzureGermany. Default value is the data factory regions’ cloud type. Type: string (or
      * Expression with resultType string).
      */
     @JsonProperty(value = "azureCloudType")
     private Object azureCloudType;
 
     /*
-     * Specify the kind of your storage account. Allowed values are: Storage
-     * (general purpose v1), StorageV2 (general purpose v2), BlobStorage, or
-     * BlockBlobStorage. Type: string (or Expression with resultType string).
+     * Specify the kind of your storage account. Allowed values are: Storage (general purpose v1), StorageV2 (general
+     * purpose v2), BlobStorage, or BlockBlobStorage. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "accountKind")
-    private String accountKind;
+    private Object accountKind;
 
     /*
-     * The encrypted credential used for authentication. Credentials are
-     * encrypted using the integration runtime credential manager. Type: string
-     * (or Expression with resultType string).
+     * The encrypted credential used for authentication. Credentials are encrypted using the integration runtime
+     * credential manager. Type: string.
      */
     @JsonProperty(value = "encryptedCredential")
     private String encryptedCredential;
@@ -104,10 +97,29 @@ public final class AzureBlobStorageLinkedServiceTypeProperties {
     @JsonProperty(value = "credential")
     private CredentialReference credential;
 
+    /*
+     * The type used for authentication. Type: string.
+     */
+    @JsonProperty(value = "authenticationType")
+    private AzureStorageAuthenticationType authenticationType;
+
+    /*
+     * Container uri of the Azure Blob Storage resource only support for anonymous access. Type: string (or Expression
+     * with resultType string).
+     */
+    @JsonProperty(value = "containerUri")
+    private Object containerUri;
+
+    /**
+     * Creates an instance of AzureBlobStorageLinkedServiceTypeProperties class.
+     */
+    public AzureBlobStorageLinkedServiceTypeProperties() {
+    }
+
     /**
      * Get the connectionString property: The connection string. It is mutually exclusive with sasUri, serviceEndpoint
      * property. Type: string, SecureString or AzureKeyVaultSecretReference.
-     *
+     * 
      * @return the connectionString value.
      */
     public Object connectionString() {
@@ -117,7 +129,7 @@ public final class AzureBlobStorageLinkedServiceTypeProperties {
     /**
      * Set the connectionString property: The connection string. It is mutually exclusive with sasUri, serviceEndpoint
      * property. Type: string, SecureString or AzureKeyVaultSecretReference.
-     *
+     * 
      * @param connectionString the connectionString value to set.
      * @return the AzureBlobStorageLinkedServiceTypeProperties object itself.
      */
@@ -128,7 +140,7 @@ public final class AzureBlobStorageLinkedServiceTypeProperties {
 
     /**
      * Get the accountKey property: The Azure key vault secret reference of accountKey in connection string.
-     *
+     * 
      * @return the accountKey value.
      */
     public AzureKeyVaultSecretReference accountKey() {
@@ -137,7 +149,7 @@ public final class AzureBlobStorageLinkedServiceTypeProperties {
 
     /**
      * Set the accountKey property: The Azure key vault secret reference of accountKey in connection string.
-     *
+     * 
      * @param accountKey the accountKey value to set.
      * @return the AzureBlobStorageLinkedServiceTypeProperties object itself.
      */
@@ -149,7 +161,7 @@ public final class AzureBlobStorageLinkedServiceTypeProperties {
     /**
      * Get the sasUri property: SAS URI of the Azure Blob Storage resource. It is mutually exclusive with
      * connectionString, serviceEndpoint property. Type: string, SecureString or AzureKeyVaultSecretReference.
-     *
+     * 
      * @return the sasUri value.
      */
     public Object sasUri() {
@@ -159,7 +171,7 @@ public final class AzureBlobStorageLinkedServiceTypeProperties {
     /**
      * Set the sasUri property: SAS URI of the Azure Blob Storage resource. It is mutually exclusive with
      * connectionString, serviceEndpoint property. Type: string, SecureString or AzureKeyVaultSecretReference.
-     *
+     * 
      * @param sasUri the sasUri value to set.
      * @return the AzureBlobStorageLinkedServiceTypeProperties object itself.
      */
@@ -170,7 +182,7 @@ public final class AzureBlobStorageLinkedServiceTypeProperties {
 
     /**
      * Get the sasToken property: The Azure key vault secret reference of sasToken in sas uri.
-     *
+     * 
      * @return the sasToken value.
      */
     public AzureKeyVaultSecretReference sasToken() {
@@ -179,7 +191,7 @@ public final class AzureBlobStorageLinkedServiceTypeProperties {
 
     /**
      * Set the sasToken property: The Azure key vault secret reference of sasToken in sas uri.
-     *
+     * 
      * @param sasToken the sasToken value to set.
      * @return the AzureBlobStorageLinkedServiceTypeProperties object itself.
      */
@@ -191,21 +203,21 @@ public final class AzureBlobStorageLinkedServiceTypeProperties {
     /**
      * Get the serviceEndpoint property: Blob service endpoint of the Azure Blob Storage resource. It is mutually
      * exclusive with connectionString, sasUri property.
-     *
+     * 
      * @return the serviceEndpoint value.
      */
-    public String serviceEndpoint() {
+    public Object serviceEndpoint() {
         return this.serviceEndpoint;
     }
 
     /**
      * Set the serviceEndpoint property: Blob service endpoint of the Azure Blob Storage resource. It is mutually
      * exclusive with connectionString, sasUri property.
-     *
+     * 
      * @param serviceEndpoint the serviceEndpoint value to set.
      * @return the AzureBlobStorageLinkedServiceTypeProperties object itself.
      */
-    public AzureBlobStorageLinkedServiceTypeProperties withServiceEndpoint(String serviceEndpoint) {
+    public AzureBlobStorageLinkedServiceTypeProperties withServiceEndpoint(Object serviceEndpoint) {
         this.serviceEndpoint = serviceEndpoint;
         return this;
     }
@@ -213,7 +225,7 @@ public final class AzureBlobStorageLinkedServiceTypeProperties {
     /**
      * Get the servicePrincipalId property: The ID of the service principal used to authenticate against Azure SQL Data
      * Warehouse. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the servicePrincipalId value.
      */
     public Object servicePrincipalId() {
@@ -223,7 +235,7 @@ public final class AzureBlobStorageLinkedServiceTypeProperties {
     /**
      * Set the servicePrincipalId property: The ID of the service principal used to authenticate against Azure SQL Data
      * Warehouse. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param servicePrincipalId the servicePrincipalId value to set.
      * @return the AzureBlobStorageLinkedServiceTypeProperties object itself.
      */
@@ -235,7 +247,7 @@ public final class AzureBlobStorageLinkedServiceTypeProperties {
     /**
      * Get the servicePrincipalKey property: The key of the service principal used to authenticate against Azure SQL
      * Data Warehouse.
-     *
+     * 
      * @return the servicePrincipalKey value.
      */
     public SecretBase servicePrincipalKey() {
@@ -245,7 +257,7 @@ public final class AzureBlobStorageLinkedServiceTypeProperties {
     /**
      * Set the servicePrincipalKey property: The key of the service principal used to authenticate against Azure SQL
      * Data Warehouse.
-     *
+     * 
      * @param servicePrincipalKey the servicePrincipalKey value to set.
      * @return the AzureBlobStorageLinkedServiceTypeProperties object itself.
      */
@@ -257,7 +269,7 @@ public final class AzureBlobStorageLinkedServiceTypeProperties {
     /**
      * Get the tenant property: The name or ID of the tenant to which the service principal belongs. Type: string (or
      * Expression with resultType string).
-     *
+     * 
      * @return the tenant value.
      */
     public Object tenant() {
@@ -267,7 +279,7 @@ public final class AzureBlobStorageLinkedServiceTypeProperties {
     /**
      * Set the tenant property: The name or ID of the tenant to which the service principal belongs. Type: string (or
      * Expression with resultType string).
-     *
+     * 
      * @param tenant the tenant value to set.
      * @return the AzureBlobStorageLinkedServiceTypeProperties object itself.
      */
@@ -280,7 +292,7 @@ public final class AzureBlobStorageLinkedServiceTypeProperties {
      * Get the azureCloudType property: Indicates the azure cloud type of the service principle auth. Allowed values are
      * AzurePublic, AzureChina, AzureUsGovernment, AzureGermany. Default value is the data factory regions’ cloud type.
      * Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the azureCloudType value.
      */
     public Object azureCloudType() {
@@ -291,7 +303,7 @@ public final class AzureBlobStorageLinkedServiceTypeProperties {
      * Set the azureCloudType property: Indicates the azure cloud type of the service principle auth. Allowed values are
      * AzurePublic, AzureChina, AzureUsGovernment, AzureGermany. Default value is the data factory regions’ cloud type.
      * Type: string (or Expression with resultType string).
-     *
+     * 
      * @param azureCloudType the azureCloudType value to set.
      * @return the AzureBlobStorageLinkedServiceTypeProperties object itself.
      */
@@ -304,10 +316,10 @@ public final class AzureBlobStorageLinkedServiceTypeProperties {
      * Get the accountKind property: Specify the kind of your storage account. Allowed values are: Storage (general
      * purpose v1), StorageV2 (general purpose v2), BlobStorage, or BlockBlobStorage. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the accountKind value.
      */
-    public String accountKind() {
+    public Object accountKind() {
         return this.accountKind;
     }
 
@@ -315,19 +327,19 @@ public final class AzureBlobStorageLinkedServiceTypeProperties {
      * Set the accountKind property: Specify the kind of your storage account. Allowed values are: Storage (general
      * purpose v1), StorageV2 (general purpose v2), BlobStorage, or BlockBlobStorage. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param accountKind the accountKind value to set.
      * @return the AzureBlobStorageLinkedServiceTypeProperties object itself.
      */
-    public AzureBlobStorageLinkedServiceTypeProperties withAccountKind(String accountKind) {
+    public AzureBlobStorageLinkedServiceTypeProperties withAccountKind(Object accountKind) {
         this.accountKind = accountKind;
         return this;
     }
 
     /**
      * Get the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @return the encryptedCredential value.
      */
     public String encryptedCredential() {
@@ -336,8 +348,8 @@ public final class AzureBlobStorageLinkedServiceTypeProperties {
 
     /**
      * Set the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @param encryptedCredential the encryptedCredential value to set.
      * @return the AzureBlobStorageLinkedServiceTypeProperties object itself.
      */
@@ -348,7 +360,7 @@ public final class AzureBlobStorageLinkedServiceTypeProperties {
 
     /**
      * Get the credential property: The credential reference containing authentication information.
-     *
+     * 
      * @return the credential value.
      */
     public CredentialReference credential() {
@@ -357,7 +369,7 @@ public final class AzureBlobStorageLinkedServiceTypeProperties {
 
     /**
      * Set the credential property: The credential reference containing authentication information.
-     *
+     * 
      * @param credential the credential value to set.
      * @return the AzureBlobStorageLinkedServiceTypeProperties object itself.
      */
@@ -367,8 +379,51 @@ public final class AzureBlobStorageLinkedServiceTypeProperties {
     }
 
     /**
+     * Get the authenticationType property: The type used for authentication. Type: string.
+     * 
+     * @return the authenticationType value.
+     */
+    public AzureStorageAuthenticationType authenticationType() {
+        return this.authenticationType;
+    }
+
+    /**
+     * Set the authenticationType property: The type used for authentication. Type: string.
+     * 
+     * @param authenticationType the authenticationType value to set.
+     * @return the AzureBlobStorageLinkedServiceTypeProperties object itself.
+     */
+    public AzureBlobStorageLinkedServiceTypeProperties
+        withAuthenticationType(AzureStorageAuthenticationType authenticationType) {
+        this.authenticationType = authenticationType;
+        return this;
+    }
+
+    /**
+     * Get the containerUri property: Container uri of the Azure Blob Storage resource only support for anonymous
+     * access. Type: string (or Expression with resultType string).
+     * 
+     * @return the containerUri value.
+     */
+    public Object containerUri() {
+        return this.containerUri;
+    }
+
+    /**
+     * Set the containerUri property: Container uri of the Azure Blob Storage resource only support for anonymous
+     * access. Type: string (or Expression with resultType string).
+     * 
+     * @param containerUri the containerUri value to set.
+     * @return the AzureBlobStorageLinkedServiceTypeProperties object itself.
+     */
+    public AzureBlobStorageLinkedServiceTypeProperties withContainerUri(Object containerUri) {
+        this.containerUri = containerUri;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

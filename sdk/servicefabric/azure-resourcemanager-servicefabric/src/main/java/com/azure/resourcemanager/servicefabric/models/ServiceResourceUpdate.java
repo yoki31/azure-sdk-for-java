@@ -7,27 +7,23 @@ package com.azure.resourcemanager.servicefabric.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.ProxyResource;
 import com.azure.core.management.SystemData;
-import com.azure.core.util.logging.ClientLogger;
-import com.azure.resourcemanager.servicefabric.fluent.models.ServiceResourceUpdateProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** The service resource for patch operations. */
+/**
+ * The service resource for patch operations.
+ */
 @Fluent
 public final class ServiceResourceUpdate extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ServiceResourceUpdate.class);
-
     /*
      * The service resource properties for patch operations.
      */
     @JsonProperty(value = "properties")
-    private ServiceResourceUpdateProperties innerProperties;
+    private ServiceResourceUpdateProperties properties;
 
     /*
-     * It will be deprecated in New API, resource location depends on the
-     * parent resource.
+     * It will be deprecated in New API, resource location depends on the parent resource.
      */
     @JsonProperty(value = "location")
     private String location;
@@ -52,17 +48,34 @@ public final class ServiceResourceUpdate extends ProxyResource {
     private SystemData systemData;
 
     /**
-     * Get the innerProperties property: The service resource properties for patch operations.
-     *
-     * @return the innerProperties value.
+     * Creates an instance of ServiceResourceUpdate class.
      */
-    private ServiceResourceUpdateProperties innerProperties() {
-        return this.innerProperties;
+    public ServiceResourceUpdate() {
+    }
+
+    /**
+     * Get the properties property: The service resource properties for patch operations.
+     * 
+     * @return the properties value.
+     */
+    public ServiceResourceUpdateProperties properties() {
+        return this.properties;
+    }
+
+    /**
+     * Set the properties property: The service resource properties for patch operations.
+     * 
+     * @param properties the properties value to set.
+     * @return the ServiceResourceUpdate object itself.
+     */
+    public ServiceResourceUpdate withProperties(ServiceResourceUpdateProperties properties) {
+        this.properties = properties;
+        return this;
     }
 
     /**
      * Get the location property: It will be deprecated in New API, resource location depends on the parent resource.
-     *
+     * 
      * @return the location value.
      */
     public String location() {
@@ -71,7 +84,7 @@ public final class ServiceResourceUpdate extends ProxyResource {
 
     /**
      * Set the location property: It will be deprecated in New API, resource location depends on the parent resource.
-     *
+     * 
      * @param location the location value to set.
      * @return the ServiceResourceUpdate object itself.
      */
@@ -82,7 +95,7 @@ public final class ServiceResourceUpdate extends ProxyResource {
 
     /**
      * Get the tags property: Azure resource tags.
-     *
+     * 
      * @return the tags value.
      */
     public Map<String, String> tags() {
@@ -91,7 +104,7 @@ public final class ServiceResourceUpdate extends ProxyResource {
 
     /**
      * Set the tags property: Azure resource tags.
-     *
+     * 
      * @param tags the tags value to set.
      * @return the ServiceResourceUpdate object itself.
      */
@@ -102,7 +115,7 @@ public final class ServiceResourceUpdate extends ProxyResource {
 
     /**
      * Get the etag property: Azure resource etag.
-     *
+     * 
      * @return the etag value.
      */
     public String etag() {
@@ -111,7 +124,7 @@ public final class ServiceResourceUpdate extends ProxyResource {
 
     /**
      * Get the systemData property: Metadata pertaining to creation and last modification of the resource.
-     *
+     * 
      * @return the systemData value.
      */
     public SystemData systemData() {
@@ -120,12 +133,12 @@ public final class ServiceResourceUpdate extends ProxyResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
-        if (innerProperties() != null) {
-            innerProperties().validate();
+        if (properties() != null) {
+            properties().validate();
         }
     }
 }

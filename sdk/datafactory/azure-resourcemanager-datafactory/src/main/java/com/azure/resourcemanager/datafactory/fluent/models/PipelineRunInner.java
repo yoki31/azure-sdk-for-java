@@ -5,7 +5,6 @@
 package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.models.PipelineRunInvokedBy;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
@@ -13,14 +12,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-/** Information about a pipeline run. */
+/**
+ * Information about a pipeline run.
+ */
 @Fluent
 public final class PipelineRunInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PipelineRunInner.class);
-
     /*
      * Identifier of a run.
      */
@@ -46,8 +45,7 @@ public final class PipelineRunInner {
     private String pipelineName;
 
     /*
-     * The full or partial list of parameter name, value pair used in the
-     * pipeline run.
+     * The full or partial list of parameter name, value pair used in the pipeline run.
      */
     @JsonProperty(value = "parameters", access = JsonProperty.Access.WRITE_ONLY)
     @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
@@ -91,8 +89,7 @@ public final class PipelineRunInner {
     private Integer durationInMs;
 
     /*
-     * The status of a pipeline run. Possible values: Queued, InProgress,
-     * Succeeded, Failed, Canceling, Cancelled
+     * The status of a pipeline run. Possible values: Queued, InProgress, Succeeded, Failed, Canceling, Cancelled
      */
     @JsonProperty(value = "status", access = JsonProperty.Access.WRITE_ONLY)
     private String status;
@@ -106,11 +103,18 @@ public final class PipelineRunInner {
     /*
      * Information about a pipeline run.
      */
-    @JsonIgnore private Map<String, Object> additionalProperties;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties;
+
+    /**
+     * Creates an instance of PipelineRunInner class.
+     */
+    public PipelineRunInner() {
+    }
 
     /**
      * Get the runId property: Identifier of a run.
-     *
+     * 
      * @return the runId value.
      */
     public String runId() {
@@ -119,7 +123,7 @@ public final class PipelineRunInner {
 
     /**
      * Get the runGroupId property: Identifier that correlates all the recovery runs of a pipeline run.
-     *
+     * 
      * @return the runGroupId value.
      */
     public String runGroupId() {
@@ -128,7 +132,7 @@ public final class PipelineRunInner {
 
     /**
      * Get the isLatest property: Indicates if the recovered pipeline run is the latest in its group.
-     *
+     * 
      * @return the isLatest value.
      */
     public Boolean isLatest() {
@@ -137,7 +141,7 @@ public final class PipelineRunInner {
 
     /**
      * Get the pipelineName property: The pipeline name.
-     *
+     * 
      * @return the pipelineName value.
      */
     public String pipelineName() {
@@ -146,7 +150,7 @@ public final class PipelineRunInner {
 
     /**
      * Get the parameters property: The full or partial list of parameter name, value pair used in the pipeline run.
-     *
+     * 
      * @return the parameters value.
      */
     public Map<String, String> parameters() {
@@ -155,7 +159,7 @@ public final class PipelineRunInner {
 
     /**
      * Get the runDimensions property: Run dimensions emitted by Pipeline run.
-     *
+     * 
      * @return the runDimensions value.
      */
     public Map<String, String> runDimensions() {
@@ -164,7 +168,7 @@ public final class PipelineRunInner {
 
     /**
      * Get the invokedBy property: Entity that started the pipeline run.
-     *
+     * 
      * @return the invokedBy value.
      */
     public PipelineRunInvokedBy invokedBy() {
@@ -173,7 +177,7 @@ public final class PipelineRunInner {
 
     /**
      * Get the lastUpdated property: The last updated timestamp for the pipeline run event in ISO8601 format.
-     *
+     * 
      * @return the lastUpdated value.
      */
     public OffsetDateTime lastUpdated() {
@@ -182,7 +186,7 @@ public final class PipelineRunInner {
 
     /**
      * Get the runStart property: The start time of a pipeline run in ISO8601 format.
-     *
+     * 
      * @return the runStart value.
      */
     public OffsetDateTime runStart() {
@@ -191,7 +195,7 @@ public final class PipelineRunInner {
 
     /**
      * Get the runEnd property: The end time of a pipeline run in ISO8601 format.
-     *
+     * 
      * @return the runEnd value.
      */
     public OffsetDateTime runEnd() {
@@ -200,7 +204,7 @@ public final class PipelineRunInner {
 
     /**
      * Get the durationInMs property: The duration of a pipeline run.
-     *
+     * 
      * @return the durationInMs value.
      */
     public Integer durationInMs() {
@@ -210,7 +214,7 @@ public final class PipelineRunInner {
     /**
      * Get the status property: The status of a pipeline run. Possible values: Queued, InProgress, Succeeded, Failed,
      * Canceling, Cancelled.
-     *
+     * 
      * @return the status value.
      */
     public String status() {
@@ -219,7 +223,7 @@ public final class PipelineRunInner {
 
     /**
      * Get the message property: The message from a pipeline run.
-     *
+     * 
      * @return the message value.
      */
     public String message() {
@@ -228,7 +232,7 @@ public final class PipelineRunInner {
 
     /**
      * Get the additionalProperties property: Information about a pipeline run.
-     *
+     * 
      * @return the additionalProperties value.
      */
     @JsonAnyGetter
@@ -238,7 +242,7 @@ public final class PipelineRunInner {
 
     /**
      * Set the additionalProperties property: Information about a pipeline run.
-     *
+     * 
      * @param additionalProperties the additionalProperties value to set.
      * @return the PipelineRunInner object itself.
      */
@@ -250,14 +254,14 @@ public final class PipelineRunInner {
     @JsonAnySetter
     void withAdditionalProperties(String key, Object value) {
         if (additionalProperties == null) {
-            additionalProperties = new HashMap<>();
+            additionalProperties = new LinkedHashMap<>();
         }
         additionalProperties.put(key, value);
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.batch.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The properties associated with the Application. */
+/**
+ * The properties associated with the Application.
+ */
 @Fluent
 public final class ApplicationProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApplicationProperties.class);
-
     /*
      * The display name for the application.
      */
@@ -21,23 +19,27 @@ public final class ApplicationProperties {
     private String displayName;
 
     /*
-     * A value indicating whether packages within the application may be
-     * overwritten using the same version string.
+     * A value indicating whether packages within the application may be overwritten using the same version string.
      */
     @JsonProperty(value = "allowUpdates")
     private Boolean allowUpdates;
 
     /*
-     * The package to use if a client requests the application but does not
-     * specify a version. This property can only be set to the name of an
-     * existing package.
+     * The package to use if a client requests the application but does not specify a version. This property can only
+     * be set to the name of an existing package.
      */
     @JsonProperty(value = "defaultVersion")
     private String defaultVersion;
 
     /**
+     * Creates an instance of ApplicationProperties class.
+     */
+    public ApplicationProperties() {
+    }
+
+    /**
      * Get the displayName property: The display name for the application.
-     *
+     * 
      * @return the displayName value.
      */
     public String displayName() {
@@ -46,7 +48,7 @@ public final class ApplicationProperties {
 
     /**
      * Set the displayName property: The display name for the application.
-     *
+     * 
      * @param displayName the displayName value to set.
      * @return the ApplicationProperties object itself.
      */
@@ -58,7 +60,7 @@ public final class ApplicationProperties {
     /**
      * Get the allowUpdates property: A value indicating whether packages within the application may be overwritten
      * using the same version string.
-     *
+     * 
      * @return the allowUpdates value.
      */
     public Boolean allowUpdates() {
@@ -68,7 +70,7 @@ public final class ApplicationProperties {
     /**
      * Set the allowUpdates property: A value indicating whether packages within the application may be overwritten
      * using the same version string.
-     *
+     * 
      * @param allowUpdates the allowUpdates value to set.
      * @return the ApplicationProperties object itself.
      */
@@ -80,7 +82,7 @@ public final class ApplicationProperties {
     /**
      * Get the defaultVersion property: The package to use if a client requests the application but does not specify a
      * version. This property can only be set to the name of an existing package.
-     *
+     * 
      * @return the defaultVersion value.
      */
     public String defaultVersion() {
@@ -90,7 +92,7 @@ public final class ApplicationProperties {
     /**
      * Set the defaultVersion property: The package to use if a client requests the application but does not specify a
      * version. This property can only be set to the name of an existing package.
-     *
+     * 
      * @param defaultVersion the defaultVersion value to set.
      * @return the ApplicationProperties object itself.
      */
@@ -101,7 +103,7 @@ public final class ApplicationProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

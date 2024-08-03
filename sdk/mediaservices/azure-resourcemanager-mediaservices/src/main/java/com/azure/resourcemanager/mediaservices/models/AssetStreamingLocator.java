@@ -5,8 +5,6 @@
 package com.azure.resourcemanager.mediaservices.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -14,8 +12,6 @@ import java.util.UUID;
 /** Properties of the Streaming Locator. */
 @Immutable
 public final class AssetStreamingLocator {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AssetStreamingLocator.class);
-
     /*
      * Streaming Locator name.
      */
@@ -63,6 +59,10 @@ public final class AssetStreamingLocator {
      */
     @JsonProperty(value = "defaultContentKeyPolicyName", access = JsonProperty.Access.WRITE_ONLY)
     private String defaultContentKeyPolicyName;
+
+    /** Creates an instance of AssetStreamingLocator class. */
+    public AssetStreamingLocator() {
+    }
 
     /**
      * Get the name property: Streaming Locator name.

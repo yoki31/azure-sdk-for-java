@@ -5,35 +5,31 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-/** Describes the basic gallery artifact publishing profile. */
+/**
+ * Describes the basic gallery artifact publishing profile.
+ */
 @Fluent
 public class GalleryArtifactPublishingProfileBase {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GalleryArtifactPublishingProfileBase.class);
-
     /*
-     * The target regions where the Image Version is going to be replicated to.
-     * This property is updatable.
+     * The target regions where the Image Version is going to be replicated to. This property is updatable.
      */
     @JsonProperty(value = "targetRegions")
     private List<TargetRegion> targetRegions;
 
     /*
-     * The number of replicas of the Image Version to be created per region.
-     * This property would take effect for a region when regionalReplicaCount
-     * is not specified. This property is updatable.
+     * The number of replicas of the Image Version to be created per region. This property would take effect for a
+     * region when regionalReplicaCount is not specified. This property is updatable.
      */
     @JsonProperty(value = "replicaCount")
     private Integer replicaCount;
 
     /*
-     * If set to true, Virtual Machines deployed from the latest version of the
-     * Image Definition won't use this Image Version.
+     * If set to true, Virtual Machines deployed from the latest version of the Image Definition won't use this Image
+     * Version.
      */
     @JsonProperty(value = "excludeFromLatest")
     private Boolean excludeFromLatest;
@@ -45,30 +41,40 @@ public class GalleryArtifactPublishingProfileBase {
     private OffsetDateTime publishedDate;
 
     /*
-     * The end of life date of the gallery image version. This property can be
-     * used for decommissioning purposes. This property is updatable.
+     * The end of life date of the gallery image version. This property can be used for decommissioning purposes. This
+     * property is updatable.
      */
     @JsonProperty(value = "endOfLifeDate")
     private OffsetDateTime endOfLifeDate;
 
     /*
-     * Specifies the storage account type to be used to store the image. This
-     * property is not updatable.
+     * Specifies the storage account type to be used to store the image. This property is not updatable.
      */
     @JsonProperty(value = "storageAccountType")
     private StorageAccountType storageAccountType;
 
     /*
-     * Optional parameter which specifies the mode to be used for replication.
-     * This property is not updatable.
+     * Optional parameter which specifies the mode to be used for replication. This property is not updatable.
      */
     @JsonProperty(value = "replicationMode")
     private ReplicationMode replicationMode;
 
+    /*
+     * The target extended locations where the Image Version is going to be replicated to. This property is updatable.
+     */
+    @JsonProperty(value = "targetExtendedLocations")
+    private List<GalleryTargetExtendedLocation> targetExtendedLocations;
+
+    /**
+     * Creates an instance of GalleryArtifactPublishingProfileBase class.
+     */
+    public GalleryArtifactPublishingProfileBase() {
+    }
+
     /**
      * Get the targetRegions property: The target regions where the Image Version is going to be replicated to. This
      * property is updatable.
-     *
+     * 
      * @return the targetRegions value.
      */
     public List<TargetRegion> targetRegions() {
@@ -78,7 +84,7 @@ public class GalleryArtifactPublishingProfileBase {
     /**
      * Set the targetRegions property: The target regions where the Image Version is going to be replicated to. This
      * property is updatable.
-     *
+     * 
      * @param targetRegions the targetRegions value to set.
      * @return the GalleryArtifactPublishingProfileBase object itself.
      */
@@ -90,7 +96,7 @@ public class GalleryArtifactPublishingProfileBase {
     /**
      * Get the replicaCount property: The number of replicas of the Image Version to be created per region. This
      * property would take effect for a region when regionalReplicaCount is not specified. This property is updatable.
-     *
+     * 
      * @return the replicaCount value.
      */
     public Integer replicaCount() {
@@ -100,7 +106,7 @@ public class GalleryArtifactPublishingProfileBase {
     /**
      * Set the replicaCount property: The number of replicas of the Image Version to be created per region. This
      * property would take effect for a region when regionalReplicaCount is not specified. This property is updatable.
-     *
+     * 
      * @param replicaCount the replicaCount value to set.
      * @return the GalleryArtifactPublishingProfileBase object itself.
      */
@@ -112,7 +118,7 @@ public class GalleryArtifactPublishingProfileBase {
     /**
      * Get the excludeFromLatest property: If set to true, Virtual Machines deployed from the latest version of the
      * Image Definition won't use this Image Version.
-     *
+     * 
      * @return the excludeFromLatest value.
      */
     public Boolean excludeFromLatest() {
@@ -122,7 +128,7 @@ public class GalleryArtifactPublishingProfileBase {
     /**
      * Set the excludeFromLatest property: If set to true, Virtual Machines deployed from the latest version of the
      * Image Definition won't use this Image Version.
-     *
+     * 
      * @param excludeFromLatest the excludeFromLatest value to set.
      * @return the GalleryArtifactPublishingProfileBase object itself.
      */
@@ -133,7 +139,7 @@ public class GalleryArtifactPublishingProfileBase {
 
     /**
      * Get the publishedDate property: The timestamp for when the gallery image version is published.
-     *
+     * 
      * @return the publishedDate value.
      */
     public OffsetDateTime publishedDate() {
@@ -143,7 +149,7 @@ public class GalleryArtifactPublishingProfileBase {
     /**
      * Get the endOfLifeDate property: The end of life date of the gallery image version. This property can be used for
      * decommissioning purposes. This property is updatable.
-     *
+     * 
      * @return the endOfLifeDate value.
      */
     public OffsetDateTime endOfLifeDate() {
@@ -153,7 +159,7 @@ public class GalleryArtifactPublishingProfileBase {
     /**
      * Set the endOfLifeDate property: The end of life date of the gallery image version. This property can be used for
      * decommissioning purposes. This property is updatable.
-     *
+     * 
      * @param endOfLifeDate the endOfLifeDate value to set.
      * @return the GalleryArtifactPublishingProfileBase object itself.
      */
@@ -165,7 +171,7 @@ public class GalleryArtifactPublishingProfileBase {
     /**
      * Get the storageAccountType property: Specifies the storage account type to be used to store the image. This
      * property is not updatable.
-     *
+     * 
      * @return the storageAccountType value.
      */
     public StorageAccountType storageAccountType() {
@@ -175,7 +181,7 @@ public class GalleryArtifactPublishingProfileBase {
     /**
      * Set the storageAccountType property: Specifies the storage account type to be used to store the image. This
      * property is not updatable.
-     *
+     * 
      * @param storageAccountType the storageAccountType value to set.
      * @return the GalleryArtifactPublishingProfileBase object itself.
      */
@@ -187,7 +193,7 @@ public class GalleryArtifactPublishingProfileBase {
     /**
      * Get the replicationMode property: Optional parameter which specifies the mode to be used for replication. This
      * property is not updatable.
-     *
+     * 
      * @return the replicationMode value.
      */
     public ReplicationMode replicationMode() {
@@ -197,7 +203,7 @@ public class GalleryArtifactPublishingProfileBase {
     /**
      * Set the replicationMode property: Optional parameter which specifies the mode to be used for replication. This
      * property is not updatable.
-     *
+     * 
      * @param replicationMode the replicationMode value to set.
      * @return the GalleryArtifactPublishingProfileBase object itself.
      */
@@ -207,13 +213,39 @@ public class GalleryArtifactPublishingProfileBase {
     }
 
     /**
+     * Get the targetExtendedLocations property: The target extended locations where the Image Version is going to be
+     * replicated to. This property is updatable.
+     * 
+     * @return the targetExtendedLocations value.
+     */
+    public List<GalleryTargetExtendedLocation> targetExtendedLocations() {
+        return this.targetExtendedLocations;
+    }
+
+    /**
+     * Set the targetExtendedLocations property: The target extended locations where the Image Version is going to be
+     * replicated to. This property is updatable.
+     * 
+     * @param targetExtendedLocations the targetExtendedLocations value to set.
+     * @return the GalleryArtifactPublishingProfileBase object itself.
+     */
+    public GalleryArtifactPublishingProfileBase
+        withTargetExtendedLocations(List<GalleryTargetExtendedLocation> targetExtendedLocations) {
+        this.targetExtendedLocations = targetExtendedLocations;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (targetRegions() != null) {
             targetRegions().forEach(e -> e.validate());
+        }
+        if (targetExtendedLocations() != null) {
+            targetExtendedLocations().forEach(e -> e.validate());
         }
     }
 }

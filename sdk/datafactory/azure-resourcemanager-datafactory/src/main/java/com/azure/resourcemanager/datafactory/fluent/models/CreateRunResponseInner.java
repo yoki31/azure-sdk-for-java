@@ -6,14 +6,13 @@ package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Response body with a run identifier. */
+/**
+ * Response body with a run identifier.
+ */
 @Fluent
 public final class CreateRunResponseInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CreateRunResponseInner.class);
-
     /*
      * Identifier of a run.
      */
@@ -21,8 +20,14 @@ public final class CreateRunResponseInner {
     private String runId;
 
     /**
+     * Creates an instance of CreateRunResponseInner class.
+     */
+    public CreateRunResponseInner() {
+    }
+
+    /**
      * Get the runId property: Identifier of a run.
-     *
+     * 
      * @return the runId value.
      */
     public String runId() {
@@ -31,7 +36,7 @@ public final class CreateRunResponseInner {
 
     /**
      * Set the runId property: Identifier of a run.
-     *
+     * 
      * @param runId the runId value to set.
      * @return the CreateRunResponseInner object itself.
      */
@@ -42,14 +47,15 @@ public final class CreateRunResponseInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (runId() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property runId in model CreateRunResponseInner"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property runId in model CreateRunResponseInner"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(CreateRunResponseInner.class);
 }

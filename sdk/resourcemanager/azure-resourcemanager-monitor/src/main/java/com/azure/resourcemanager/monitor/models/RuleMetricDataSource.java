@@ -5,21 +5,17 @@
 package com.azure.resourcemanager.monitor.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** A rule metric data source. The discriminator value is always RuleMetricDataSource in this case. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "odata\\.type")
+/**
+ * A rule metric data source. The discriminator value is always RuleMetricDataSource in this case.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "odata.type")
 @JsonTypeName("Microsoft.Azure.Management.Insights.Models.RuleMetricDataSource")
-@JsonFlatten
 @Fluent
-public class RuleMetricDataSource extends RuleDataSource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RuleMetricDataSource.class);
-
+public final class RuleMetricDataSource extends RuleDataSource {
     /*
      * the name of the metric that defines what the rule monitors.
      */
@@ -27,8 +23,14 @@ public class RuleMetricDataSource extends RuleDataSource {
     private String metricName;
 
     /**
+     * Creates an instance of RuleMetricDataSource class.
+     */
+    public RuleMetricDataSource() {
+    }
+
+    /**
      * Get the metricName property: the name of the metric that defines what the rule monitors.
-     *
+     * 
      * @return the metricName value.
      */
     public String metricName() {
@@ -37,7 +39,7 @@ public class RuleMetricDataSource extends RuleDataSource {
 
     /**
      * Set the metricName property: the name of the metric that defines what the rule monitors.
-     *
+     * 
      * @param metricName the metricName value to set.
      * @return the RuleMetricDataSource object itself.
      */
@@ -46,28 +48,36 @@ public class RuleMetricDataSource extends RuleDataSource {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RuleMetricDataSource withResourceUri(String resourceUri) {
         super.withResourceUri(resourceUri);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RuleMetricDataSource withLegacyResourceId(String legacyResourceId) {
         super.withLegacyResourceId(legacyResourceId);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RuleMetricDataSource withResourceLocation(String resourceLocation) {
         super.withResourceLocation(resourceLocation);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RuleMetricDataSource withMetricNamespace(String metricNamespace) {
         super.withMetricNamespace(metricNamespace);
@@ -76,7 +86,7 @@ public class RuleMetricDataSource extends RuleDataSource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

@@ -6,14 +6,13 @@ package com.azure.resourcemanager.batch.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The private link service connection state of the private endpoint connection. */
+/**
+ * The private link service connection state of the private endpoint connection.
+ */
 @Fluent
 public final class PrivateLinkServiceConnectionState {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PrivateLinkServiceConnectionState.class);
-
     /*
      * The status of the Batch private endpoint connection
      */
@@ -29,12 +28,18 @@ public final class PrivateLinkServiceConnectionState {
     /*
      * Action required on the private connection state
      */
-    @JsonProperty(value = "actionRequired", access = JsonProperty.Access.WRITE_ONLY)
-    private String actionRequired;
+    @JsonProperty(value = "actionsRequired", access = JsonProperty.Access.WRITE_ONLY)
+    private String actionsRequired;
+
+    /**
+     * Creates an instance of PrivateLinkServiceConnectionState class.
+     */
+    public PrivateLinkServiceConnectionState() {
+    }
 
     /**
      * Get the status property: The status of the Batch private endpoint connection.
-     *
+     * 
      * @return the status value.
      */
     public PrivateLinkServiceConnectionStatus status() {
@@ -43,7 +48,7 @@ public final class PrivateLinkServiceConnectionState {
 
     /**
      * Set the status property: The status of the Batch private endpoint connection.
-     *
+     * 
      * @param status the status value to set.
      * @return the PrivateLinkServiceConnectionState object itself.
      */
@@ -54,7 +59,7 @@ public final class PrivateLinkServiceConnectionState {
 
     /**
      * Get the description property: Description of the private Connection state.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
@@ -63,7 +68,7 @@ public final class PrivateLinkServiceConnectionState {
 
     /**
      * Set the description property: Description of the private Connection state.
-     *
+     * 
      * @param description the description value to set.
      * @return the PrivateLinkServiceConnectionState object itself.
      */
@@ -73,25 +78,25 @@ public final class PrivateLinkServiceConnectionState {
     }
 
     /**
-     * Get the actionRequired property: Action required on the private connection state.
-     *
-     * @return the actionRequired value.
+     * Get the actionsRequired property: Action required on the private connection state.
+     * 
+     * @return the actionsRequired value.
      */
-    public String actionRequired() {
-        return this.actionRequired;
+    public String actionsRequired() {
+        return this.actionsRequired;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (status() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property status in model PrivateLinkServiceConnectionState"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property status in model PrivateLinkServiceConnectionState"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(PrivateLinkServiceConnectionState.class);
 }

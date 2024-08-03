@@ -5,34 +5,42 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Describes the parameters of a ScaleSet managed disk. */
+/**
+ * Describes the parameters of a ScaleSet managed disk.
+ */
 @Fluent
 public final class VirtualMachineScaleSetManagedDiskParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VirtualMachineScaleSetManagedDiskParameters.class);
-
     /*
-     * Specifies the storage account type for the managed disk. NOTE:
-     * UltraSSD_LRS can only be used with data disks, it cannot be used with OS
-     * Disk.
+     * Specifies the storage account type for the managed disk. NOTE: UltraSSD_LRS can only be used with data disks, it
+     * cannot be used with OS Disk.
      */
     @JsonProperty(value = "storageAccountType")
     private StorageAccountTypes storageAccountType;
 
     /*
-     * Specifies the customer managed disk encryption set resource id for the
-     * managed disk.
+     * Specifies the customer managed disk encryption set resource id for the managed disk.
      */
     @JsonProperty(value = "diskEncryptionSet")
     private DiskEncryptionSetParameters diskEncryptionSet;
 
+    /*
+     * Specifies the security profile for the managed disk.
+     */
+    @JsonProperty(value = "securityProfile")
+    private VMDiskSecurityProfile securityProfile;
+
+    /**
+     * Creates an instance of VirtualMachineScaleSetManagedDiskParameters class.
+     */
+    public VirtualMachineScaleSetManagedDiskParameters() {
+    }
+
     /**
      * Get the storageAccountType property: Specifies the storage account type for the managed disk. NOTE: UltraSSD_LRS
      * can only be used with data disks, it cannot be used with OS Disk.
-     *
+     * 
      * @return the storageAccountType value.
      */
     public StorageAccountTypes storageAccountType() {
@@ -42,7 +50,7 @@ public final class VirtualMachineScaleSetManagedDiskParameters {
     /**
      * Set the storageAccountType property: Specifies the storage account type for the managed disk. NOTE: UltraSSD_LRS
      * can only be used with data disks, it cannot be used with OS Disk.
-     *
+     * 
      * @param storageAccountType the storageAccountType value to set.
      * @return the VirtualMachineScaleSetManagedDiskParameters object itself.
      */
@@ -54,7 +62,7 @@ public final class VirtualMachineScaleSetManagedDiskParameters {
     /**
      * Get the diskEncryptionSet property: Specifies the customer managed disk encryption set resource id for the
      * managed disk.
-     *
+     * 
      * @return the diskEncryptionSet value.
      */
     public DiskEncryptionSetParameters diskEncryptionSet() {
@@ -64,24 +72,47 @@ public final class VirtualMachineScaleSetManagedDiskParameters {
     /**
      * Set the diskEncryptionSet property: Specifies the customer managed disk encryption set resource id for the
      * managed disk.
-     *
+     * 
      * @param diskEncryptionSet the diskEncryptionSet value to set.
      * @return the VirtualMachineScaleSetManagedDiskParameters object itself.
      */
-    public VirtualMachineScaleSetManagedDiskParameters withDiskEncryptionSet(
-        DiskEncryptionSetParameters diskEncryptionSet) {
+    public VirtualMachineScaleSetManagedDiskParameters
+        withDiskEncryptionSet(DiskEncryptionSetParameters diskEncryptionSet) {
         this.diskEncryptionSet = diskEncryptionSet;
         return this;
     }
 
     /**
+     * Get the securityProfile property: Specifies the security profile for the managed disk.
+     * 
+     * @return the securityProfile value.
+     */
+    public VMDiskSecurityProfile securityProfile() {
+        return this.securityProfile;
+    }
+
+    /**
+     * Set the securityProfile property: Specifies the security profile for the managed disk.
+     * 
+     * @param securityProfile the securityProfile value to set.
+     * @return the VirtualMachineScaleSetManagedDiskParameters object itself.
+     */
+    public VirtualMachineScaleSetManagedDiskParameters withSecurityProfile(VMDiskSecurityProfile securityProfile) {
+        this.securityProfile = securityProfile;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (diskEncryptionSet() != null) {
             diskEncryptionSet().validate();
+        }
+        if (securityProfile() != null) {
+            securityProfile().validate();
         }
     }
 }

@@ -18,10 +18,9 @@ import com.azure.resourcemanager.apimanagement.models.PolicyCollection;
 import com.azure.resourcemanager.apimanagement.models.PolicyContract;
 import com.azure.resourcemanager.apimanagement.models.PolicyExportFormat;
 import com.azure.resourcemanager.apimanagement.models.PolicyIdName;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class ApiOperationPoliciesImpl implements ApiOperationPolicies {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiOperationPoliciesImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(ApiOperationPoliciesImpl.class);
 
     private final ApiOperationPoliciesClient innerClient;
 
@@ -32,17 +31,6 @@ public final class ApiOperationPoliciesImpl implements ApiOperationPolicies {
         com.azure.resourcemanager.apimanagement.ApiManagementManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
-    }
-
-    public PolicyCollection listByOperation(
-        String resourceGroupName, String serviceName, String apiId, String operationId) {
-        PolicyCollectionInner inner =
-            this.serviceClient().listByOperation(resourceGroupName, serviceName, apiId, operationId);
-        if (inner != null) {
-            return new PolicyCollectionImpl(inner, this.manager());
-        } else {
-            return null;
-        }
     }
 
     public Response<PolicyCollection> listByOperationWithResponse(
@@ -62,9 +50,15 @@ public final class ApiOperationPoliciesImpl implements ApiOperationPolicies {
         }
     }
 
-    public void getEntityTag(
-        String resourceGroupName, String serviceName, String apiId, String operationId, PolicyIdName policyId) {
-        this.serviceClient().getEntityTag(resourceGroupName, serviceName, apiId, operationId, policyId);
+    public PolicyCollection listByOperation(
+        String resourceGroupName, String serviceName, String apiId, String operationId) {
+        PolicyCollectionInner inner =
+            this.serviceClient().listByOperation(resourceGroupName, serviceName, apiId, operationId);
+        if (inner != null) {
+            return new PolicyCollectionImpl(inner, this.manager());
+        } else {
+            return null;
+        }
     }
 
     public ApiOperationPoliciesGetEntityTagResponse getEntityTagWithResponse(
@@ -79,15 +73,9 @@ public final class ApiOperationPoliciesImpl implements ApiOperationPolicies {
             .getEntityTagWithResponse(resourceGroupName, serviceName, apiId, operationId, policyId, context);
     }
 
-    public PolicyContract get(
+    public void getEntityTag(
         String resourceGroupName, String serviceName, String apiId, String operationId, PolicyIdName policyId) {
-        PolicyContractInner inner =
-            this.serviceClient().get(resourceGroupName, serviceName, apiId, operationId, policyId);
-        if (inner != null) {
-            return new PolicyContractImpl(inner, this.manager());
-        } else {
-            return null;
-        }
+        this.serviceClient().getEntityTag(resourceGroupName, serviceName, apiId, operationId, policyId);
     }
 
     public Response<PolicyContract> getWithResponse(
@@ -113,14 +101,15 @@ public final class ApiOperationPoliciesImpl implements ApiOperationPolicies {
         }
     }
 
-    public void delete(
-        String resourceGroupName,
-        String serviceName,
-        String apiId,
-        String operationId,
-        PolicyIdName policyId,
-        String ifMatch) {
-        this.serviceClient().delete(resourceGroupName, serviceName, apiId, operationId, policyId, ifMatch);
+    public PolicyContract get(
+        String resourceGroupName, String serviceName, String apiId, String operationId, PolicyIdName policyId) {
+        PolicyContractInner inner =
+            this.serviceClient().get(resourceGroupName, serviceName, apiId, operationId, policyId);
+        if (inner != null) {
+            return new PolicyContractImpl(inner, this.manager());
+        } else {
+            return null;
+        }
     }
 
     public Response<Void> deleteWithResponse(
@@ -136,10 +125,20 @@ public final class ApiOperationPoliciesImpl implements ApiOperationPolicies {
             .deleteWithResponse(resourceGroupName, serviceName, apiId, operationId, policyId, ifMatch, context);
     }
 
+    public void delete(
+        String resourceGroupName,
+        String serviceName,
+        String apiId,
+        String operationId,
+        PolicyIdName policyId,
+        String ifMatch) {
+        this.serviceClient().delete(resourceGroupName, serviceName, apiId, operationId, policyId, ifMatch);
+    }
+
     public PolicyContract getById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -147,32 +146,33 @@ public final class ApiOperationPoliciesImpl implements ApiOperationPolicies {
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String apiId = Utils.getValueFromIdByName(id, "apis");
         if (apiId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'apis'.", id)));
         }
         String operationId = Utils.getValueFromIdByName(id, "operations");
         if (operationId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'operations'.", id)));
         }
-        PolicyIdName policyId = PolicyIdName.fromString(Utils.getValueFromIdByName(id, "policies"));
-        if (policyId == null) {
-            throw logger
+        String policyIdLocal = Utils.getValueFromIdByName(id, "policies");
+        if (policyIdLocal == null) {
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'policies'.", id)));
         }
+        PolicyIdName policyId = PolicyIdName.fromString(policyIdLocal);
         PolicyExportFormat localFormat = null;
         return this
             .getWithResponse(resourceGroupName, serviceName, apiId, operationId, policyId, localFormat, Context.NONE)
@@ -182,7 +182,7 @@ public final class ApiOperationPoliciesImpl implements ApiOperationPolicies {
     public Response<PolicyContract> getByIdWithResponse(String id, PolicyExportFormat format, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -190,39 +190,40 @@ public final class ApiOperationPoliciesImpl implements ApiOperationPolicies {
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String apiId = Utils.getValueFromIdByName(id, "apis");
         if (apiId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'apis'.", id)));
         }
         String operationId = Utils.getValueFromIdByName(id, "operations");
         if (operationId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'operations'.", id)));
         }
-        PolicyIdName policyId = PolicyIdName.fromString(Utils.getValueFromIdByName(id, "policies"));
-        if (policyId == null) {
-            throw logger
+        String policyIdLocal = Utils.getValueFromIdByName(id, "policies");
+        if (policyIdLocal == null) {
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'policies'.", id)));
         }
+        PolicyIdName policyId = PolicyIdName.fromString(policyIdLocal);
         return this.getWithResponse(resourceGroupName, serviceName, apiId, operationId, policyId, format, context);
     }
 
     public void deleteById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -230,43 +231,43 @@ public final class ApiOperationPoliciesImpl implements ApiOperationPolicies {
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String apiId = Utils.getValueFromIdByName(id, "apis");
         if (apiId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'apis'.", id)));
         }
         String operationId = Utils.getValueFromIdByName(id, "operations");
         if (operationId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'operations'.", id)));
         }
-        PolicyIdName policyId = PolicyIdName.fromString(Utils.getValueFromIdByName(id, "policies"));
-        if (policyId == null) {
-            throw logger
+        String policyIdLocal = Utils.getValueFromIdByName(id, "policies");
+        if (policyIdLocal == null) {
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'policies'.", id)));
         }
+        PolicyIdName policyId = PolicyIdName.fromString(policyIdLocal);
         String localIfMatch = null;
         this
             .deleteWithResponse(
-                resourceGroupName, serviceName, apiId, operationId, policyId, localIfMatch, Context.NONE)
-            .getValue();
+                resourceGroupName, serviceName, apiId, operationId, policyId, localIfMatch, Context.NONE);
     }
 
     public Response<Void> deleteByIdWithResponse(String id, String ifMatch, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -274,32 +275,33 @@ public final class ApiOperationPoliciesImpl implements ApiOperationPolicies {
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String apiId = Utils.getValueFromIdByName(id, "apis");
         if (apiId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'apis'.", id)));
         }
         String operationId = Utils.getValueFromIdByName(id, "operations");
         if (operationId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'operations'.", id)));
         }
-        PolicyIdName policyId = PolicyIdName.fromString(Utils.getValueFromIdByName(id, "policies"));
-        if (policyId == null) {
-            throw logger
+        String policyIdLocal = Utils.getValueFromIdByName(id, "policies");
+        if (policyIdLocal == null) {
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'policies'.", id)));
         }
+        PolicyIdName policyId = PolicyIdName.fromString(policyIdLocal);
         return this.deleteWithResponse(resourceGroupName, serviceName, apiId, operationId, policyId, ifMatch, context);
     }
 

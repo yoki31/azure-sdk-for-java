@@ -6,12 +6,10 @@ package com.azure.resourcemanager.kubernetesconfiguration.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.exception.ManagementError;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.kubernetesconfiguration.models.ExtensionPropertiesAksAssignedIdentity;
 import com.azure.resourcemanager.kubernetesconfiguration.models.ExtensionStatus;
 import com.azure.resourcemanager.kubernetesconfiguration.models.ProvisioningState;
 import com.azure.resourcemanager.kubernetesconfiguration.models.Scope;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
@@ -20,33 +18,29 @@ import java.util.Map;
 /** Properties of an Extension resource. */
 @Fluent
 public final class ExtensionProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ExtensionProperties.class);
-
     /*
-     * Type of the Extension, of which this resource is an instance of.  It
-     * must be one of the Extension Types registered with
-     * Microsoft.KubernetesConfiguration by the Extension publisher.
+     * Type of the Extension, of which this resource is an instance of.  It must be one of the Extension Types
+     * registered with Microsoft.KubernetesConfiguration by the Extension publisher.
      */
     @JsonProperty(value = "extensionType")
     private String extensionType;
 
     /*
-     * Flag to note if this extension participates in auto upgrade of minor
-     * version, or not.
+     * Flag to note if this extension participates in auto upgrade of minor version, or not.
      */
     @JsonProperty(value = "autoUpgradeMinorVersion")
     private Boolean autoUpgradeMinorVersion;
 
     /*
-     * ReleaseTrain this extension participates in for auto-upgrade (e.g.
-     * Stable, Preview, etc.) - only if autoUpgradeMinorVersion is 'true'.
+     * ReleaseTrain this extension participates in for auto-upgrade (e.g. Stable, Preview, etc.) - only if
+     * autoUpgradeMinorVersion is 'true'.
      */
     @JsonProperty(value = "releaseTrain")
     private String releaseTrain;
 
     /*
-     * Version of the extension for this extension, if it is 'pinned' to a
-     * specific version. autoUpgradeMinorVersion must be 'false'.
+     * User-specified version of the extension for this extension to 'pin'. To use 'version', autoUpgradeMinorVersion
+     * must be 'false'.
      */
     @JsonProperty(value = "version")
     private String version;
@@ -58,23 +52,27 @@ public final class ExtensionProperties {
     private Scope scope;
 
     /*
-     * Configuration settings, as name-value pairs for configuring this
-     * extension.
+     * Configuration settings, as name-value pairs for configuring this extension.
      */
     @JsonProperty(value = "configurationSettings")
     @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
     private Map<String, String> configurationSettings;
 
     /*
-     * Configuration settings that are sensitive, as name-value pairs for
-     * configuring this extension.
+     * Configuration settings that are sensitive, as name-value pairs for configuring this extension.
      */
     @JsonProperty(value = "configurationProtectedSettings")
     @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
     private Map<String, String> configurationProtectedSettings;
 
     /*
-     * The provisioning state of the extension resource.
+     * Currently installed version of the extension.
+     */
+    @JsonProperty(value = "currentVersion", access = JsonProperty.Access.WRITE_ONLY)
+    private String currentVersion;
+
+    /*
+     * Status of installation of this extension.
      */
     @JsonProperty(value = "provisioningState", access = JsonProperty.Access.WRITE_ONLY)
     private ProvisioningState provisioningState;
@@ -86,9 +84,9 @@ public final class ExtensionProperties {
     private List<ExtensionStatus> statuses;
 
     /*
-     * The error detail.
+     * Error information from the Agent - e.g. errors during installation.
      */
-    @JsonProperty(value = "errorInfo")
+    @JsonProperty(value = "errorInfo", access = JsonProperty.Access.WRITE_ONLY)
     private ManagementError errorInfo;
 
     /*
@@ -109,6 +107,16 @@ public final class ExtensionProperties {
      */
     @JsonProperty(value = "aksAssignedIdentity")
     private ExtensionPropertiesAksAssignedIdentity aksAssignedIdentity;
+
+    /*
+     * Flag to note if this extension is a system extension
+     */
+    @JsonProperty(value = "isSystemExtension", access = JsonProperty.Access.WRITE_ONLY)
+    private Boolean isSystemExtension;
+
+    /** Creates an instance of ExtensionProperties class. */
+    public ExtensionProperties() {
+    }
 
     /**
      * Get the extensionType property: Type of the Extension, of which this resource is an instance of. It must be one
@@ -177,7 +185,7 @@ public final class ExtensionProperties {
     }
 
     /**
-     * Get the version property: Version of the extension for this extension, if it is 'pinned' to a specific version.
+     * Get the version property: User-specified version of the extension for this extension to 'pin'. To use 'version',
      * autoUpgradeMinorVersion must be 'false'.
      *
      * @return the version value.
@@ -187,7 +195,7 @@ public final class ExtensionProperties {
     }
 
     /**
-     * Set the version property: Version of the extension for this extension, if it is 'pinned' to a specific version.
+     * Set the version property: User-specified version of the extension for this extension to 'pin'. To use 'version',
      * autoUpgradeMinorVersion must be 'false'.
      *
      * @param version the version value to set.
@@ -263,7 +271,16 @@ public final class ExtensionProperties {
     }
 
     /**
-     * Get the provisioningState property: The provisioning state of the extension resource.
+     * Get the currentVersion property: Currently installed version of the extension.
+     *
+     * @return the currentVersion value.
+     */
+    public String currentVersion() {
+        return this.currentVersion;
+    }
+
+    /**
+     * Get the provisioningState property: Status of installation of this extension.
      *
      * @return the provisioningState value.
      */
@@ -292,23 +309,12 @@ public final class ExtensionProperties {
     }
 
     /**
-     * Get the errorInfo property: The error detail.
+     * Get the errorInfo property: Error information from the Agent - e.g. errors during installation.
      *
      * @return the errorInfo value.
      */
     public ManagementError errorInfo() {
         return this.errorInfo;
-    }
-
-    /**
-     * Set the errorInfo property: The error detail.
-     *
-     * @param errorInfo the errorInfo value to set.
-     * @return the ExtensionProperties object itself.
-     */
-    public ExtensionProperties withErrorInfo(ManagementError errorInfo) {
-        this.errorInfo = errorInfo;
-        return this;
     }
 
     /**
@@ -347,6 +353,15 @@ public final class ExtensionProperties {
     public ExtensionProperties withAksAssignedIdentity(ExtensionPropertiesAksAssignedIdentity aksAssignedIdentity) {
         this.aksAssignedIdentity = aksAssignedIdentity;
         return this;
+    }
+
+    /**
+     * Get the isSystemExtension property: Flag to note if this extension is a system extension.
+     *
+     * @return the isSystemExtension value.
+     */
+    public Boolean isSystemExtension() {
+        return this.isSystemExtension;
     }
 
     /**

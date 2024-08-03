@@ -6,15 +6,14 @@ package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** A rule that specifies a set of actions and conditions. */
+/**
+ * A rule that specifies a set of actions and conditions.
+ */
 @Fluent
 public final class DeliveryRule {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DeliveryRule.class);
-
     /*
      * Name of the rule
      */
@@ -22,11 +21,9 @@ public final class DeliveryRule {
     private String name;
 
     /*
-     * The order in which the rules are applied for the endpoint. Possible
-     * values {0,1,2,3,………}. A rule with a lesser order will be applied before
-     * a rule with a greater order. Rule with order 0 is a special rule. It
-     * does not require any condition and actions listed in it will always be
-     * applied.
+     * The order in which the rules are applied for the endpoint. Possible values {0,1,2,3,………}. A rule with a lesser
+     * order will be applied before a rule with a greater order. Rule with order 0 is a special rule. It does not
+     * require any condition and actions listed in it will always be applied.
      */
     @JsonProperty(value = "order", required = true)
     private int order;
@@ -38,15 +35,20 @@ public final class DeliveryRule {
     private List<DeliveryRuleCondition> conditions;
 
     /*
-     * A list of actions that are executed when all the conditions of a rule
-     * are satisfied.
+     * A list of actions that are executed when all the conditions of a rule are satisfied.
      */
     @JsonProperty(value = "actions", required = true)
     private List<DeliveryRuleAction> actions;
 
     /**
+     * Creates an instance of DeliveryRule class.
+     */
+    public DeliveryRule() {
+    }
+
+    /**
      * Get the name property: Name of the rule.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -55,7 +57,7 @@ public final class DeliveryRule {
 
     /**
      * Set the name property: Name of the rule.
-     *
+     * 
      * @param name the name value to set.
      * @return the DeliveryRule object itself.
      */
@@ -65,10 +67,10 @@ public final class DeliveryRule {
     }
 
     /**
-     * Get the order property: The order in which the rules are applied for the endpoint. Possible values {0,1,2,3,………}.
-     * A rule with a lesser order will be applied before a rule with a greater order. Rule with order 0 is a special
-     * rule. It does not require any condition and actions listed in it will always be applied.
-     *
+     * Get the order property: The order in which the rules are applied for the endpoint. Possible values
+     * {0,1,2,3,………}. A rule with a lesser order will be applied before a rule with a greater order. Rule with order 0
+     * is a special rule. It does not require any condition and actions listed in it will always be applied.
+     * 
      * @return the order value.
      */
     public int order() {
@@ -76,10 +78,10 @@ public final class DeliveryRule {
     }
 
     /**
-     * Set the order property: The order in which the rules are applied for the endpoint. Possible values {0,1,2,3,………}.
-     * A rule with a lesser order will be applied before a rule with a greater order. Rule with order 0 is a special
-     * rule. It does not require any condition and actions listed in it will always be applied.
-     *
+     * Set the order property: The order in which the rules are applied for the endpoint. Possible values
+     * {0,1,2,3,………}. A rule with a lesser order will be applied before a rule with a greater order. Rule with order 0
+     * is a special rule. It does not require any condition and actions listed in it will always be applied.
+     * 
      * @param order the order value to set.
      * @return the DeliveryRule object itself.
      */
@@ -90,7 +92,7 @@ public final class DeliveryRule {
 
     /**
      * Get the conditions property: A list of conditions that must be matched for the actions to be executed.
-     *
+     * 
      * @return the conditions value.
      */
     public List<DeliveryRuleCondition> conditions() {
@@ -99,7 +101,7 @@ public final class DeliveryRule {
 
     /**
      * Set the conditions property: A list of conditions that must be matched for the actions to be executed.
-     *
+     * 
      * @param conditions the conditions value to set.
      * @return the DeliveryRule object itself.
      */
@@ -110,7 +112,7 @@ public final class DeliveryRule {
 
     /**
      * Get the actions property: A list of actions that are executed when all the conditions of a rule are satisfied.
-     *
+     * 
      * @return the actions value.
      */
     public List<DeliveryRuleAction> actions() {
@@ -119,7 +121,7 @@ public final class DeliveryRule {
 
     /**
      * Set the actions property: A list of actions that are executed when all the conditions of a rule are satisfied.
-     *
+     * 
      * @param actions the actions value to set.
      * @return the DeliveryRule object itself.
      */
@@ -130,7 +132,7 @@ public final class DeliveryRule {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
@@ -138,11 +140,12 @@ public final class DeliveryRule {
             conditions().forEach(e -> e.validate());
         }
         if (actions() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property actions in model DeliveryRule"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property actions in model DeliveryRule"));
         } else {
             actions().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(DeliveryRule.class);
 }

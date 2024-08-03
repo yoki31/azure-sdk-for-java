@@ -5,19 +5,18 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 
-/** Function App runtime settings. */
+/**
+ * Function App runtime settings.
+ */
 @Immutable
 public final class FunctionAppRuntimeSettings {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(FunctionAppRuntimeSettings.class);
-
     /*
      * Function App stack minor version (runtime only).
      */
@@ -25,8 +24,7 @@ public final class FunctionAppRuntimeSettings {
     private String runtimeVersion;
 
     /*
-     * <code>true</code> if remote debugging is supported for the stack;
-     * otherwise, <code>false</code>.
+     * <code>true</code> if remote debugging is supported for the stack; otherwise, <code>false</code>.
      */
     @JsonProperty(value = "remoteDebuggingSupported", access = JsonProperty.Access.WRITE_ONLY)
     private Boolean remoteDebuggingSupported;
@@ -63,22 +61,19 @@ public final class FunctionAppRuntimeSettings {
     private List<String> supportedFunctionsExtensionVersions;
 
     /*
-     * <code>true</code> if the stack is in preview; otherwise,
-     * <code>false</code>.
+     * <code>true</code> if the stack is in preview; otherwise, <code>false</code>.
      */
     @JsonProperty(value = "isPreview", access = JsonProperty.Access.WRITE_ONLY)
     private Boolean isPreview;
 
     /*
-     * <code>true</code> if the stack is deprecated; otherwise,
-     * <code>false</code>.
+     * <code>true</code> if the stack is deprecated; otherwise, <code>false</code>.
      */
     @JsonProperty(value = "isDeprecated", access = JsonProperty.Access.WRITE_ONLY)
     private Boolean isDeprecated;
 
     /*
-     * <code>true</code> if the stack should be hidden; otherwise,
-     * <code>false</code>.
+     * <code>true</code> if the stack should be hidden; otherwise, <code>false</code>.
      */
     @JsonProperty(value = "isHidden", access = JsonProperty.Access.WRITE_ONLY)
     private Boolean isHidden;
@@ -90,25 +85,28 @@ public final class FunctionAppRuntimeSettings {
     private OffsetDateTime endOfLifeDate;
 
     /*
-     * <code>true</code> if the stack version is auto-updated; otherwise,
-     * <code>false</code>.
+     * <code>true</code> if the stack version is auto-updated; otherwise, <code>false</code>.
      */
     @JsonProperty(value = "isAutoUpdate", access = JsonProperty.Access.WRITE_ONLY)
     private Boolean isAutoUpdate;
 
     /*
-     * <code>true</code> if the minor version is early-access; otherwise,
-     * <code>false</code>.
+     * <code>true</code> if the minor version is early-access; otherwise, <code>false</code>.
      */
     @JsonProperty(value = "isEarlyAccess", access = JsonProperty.Access.WRITE_ONLY)
     private Boolean isEarlyAccess;
 
     /*
-     * <code>true</code> if the minor version the default; otherwise,
-     * <code>false</code>.
+     * <code>true</code> if the minor version the default; otherwise, <code>false</code>.
      */
     @JsonProperty(value = "isDefault", access = JsonProperty.Access.WRITE_ONLY)
     private Boolean isDefault;
+
+    /**
+     * Creates an instance of FunctionAppRuntimeSettings class.
+     */
+    public FunctionAppRuntimeSettings() {
+    }
 
     /**
      * Get the runtimeVersion property: Function App stack minor version (runtime only).

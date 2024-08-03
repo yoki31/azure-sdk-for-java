@@ -7,19 +7,26 @@ package com.azure.resourcemanager.datafactory.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.fluent.models.Db2LinkedServiceTypeProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.List;
 import java.util.Map;
 
-/** Linked service for DB2 data source. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * Linked service for DB2 data source.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = Db2LinkedService.class, visible = true)
 @JsonTypeName("Db2")
 @Fluent
 public final class Db2LinkedService extends LinkedService {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Db2LinkedService.class);
+    /*
+     * Type of linked service.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "Db2";
 
     /*
      * DB2 linked service properties.
@@ -28,36 +35,60 @@ public final class Db2LinkedService extends LinkedService {
     private Db2LinkedServiceTypeProperties innerTypeProperties = new Db2LinkedServiceTypeProperties();
 
     /**
+     * Creates an instance of Db2LinkedService class.
+     */
+    public Db2LinkedService() {
+    }
+
+    /**
+     * Get the type property: Type of linked service.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the innerTypeProperties property: DB2 linked service properties.
-     *
+     * 
      * @return the innerTypeProperties value.
      */
     private Db2LinkedServiceTypeProperties innerTypeProperties() {
         return this.innerTypeProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Db2LinkedService withConnectVia(IntegrationRuntimeReference connectVia) {
         super.withConnectVia(connectVia);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Db2LinkedService withDescription(String description) {
         super.withDescription(description);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Db2LinkedService withParameters(Map<String, ParameterSpecification> parameters) {
         super.withParameters(parameters);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Db2LinkedService withAnnotations(List<Object> annotations) {
         super.withAnnotations(annotations);
@@ -68,7 +99,7 @@ public final class Db2LinkedService extends LinkedService {
      * Get the connectionString property: The connection string. It is mutually exclusive with server, database,
      * authenticationType, userName, packageCollection and certificateCommonName property. Type: string, SecureString or
      * AzureKeyVaultSecretReference.
-     *
+     * 
      * @return the connectionString value.
      */
     public Object connectionString() {
@@ -79,7 +110,7 @@ public final class Db2LinkedService extends LinkedService {
      * Set the connectionString property: The connection string. It is mutually exclusive with server, database,
      * authenticationType, userName, packageCollection and certificateCommonName property. Type: string, SecureString or
      * AzureKeyVaultSecretReference.
-     *
+     * 
      * @param connectionString the connectionString value to set.
      * @return the Db2LinkedService object itself.
      */
@@ -94,7 +125,7 @@ public final class Db2LinkedService extends LinkedService {
     /**
      * Get the server property: Server name for connection. It is mutually exclusive with connectionString property.
      * Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the server value.
      */
     public Object server() {
@@ -104,7 +135,7 @@ public final class Db2LinkedService extends LinkedService {
     /**
      * Set the server property: Server name for connection. It is mutually exclusive with connectionString property.
      * Type: string (or Expression with resultType string).
-     *
+     * 
      * @param server the server value to set.
      * @return the Db2LinkedService object itself.
      */
@@ -119,7 +150,7 @@ public final class Db2LinkedService extends LinkedService {
     /**
      * Get the database property: Database name for connection. It is mutually exclusive with connectionString property.
      * Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the database value.
      */
     public Object database() {
@@ -129,7 +160,7 @@ public final class Db2LinkedService extends LinkedService {
     /**
      * Set the database property: Database name for connection. It is mutually exclusive with connectionString property.
      * Type: string (or Expression with resultType string).
-     *
+     * 
      * @param database the database value to set.
      * @return the Db2LinkedService object itself.
      */
@@ -144,7 +175,7 @@ public final class Db2LinkedService extends LinkedService {
     /**
      * Get the authenticationType property: AuthenticationType to be used for connection. It is mutually exclusive with
      * connectionString property.
-     *
+     * 
      * @return the authenticationType value.
      */
     public Db2AuthenticationType authenticationType() {
@@ -154,7 +185,7 @@ public final class Db2LinkedService extends LinkedService {
     /**
      * Set the authenticationType property: AuthenticationType to be used for connection. It is mutually exclusive with
      * connectionString property.
-     *
+     * 
      * @param authenticationType the authenticationType value to set.
      * @return the Db2LinkedService object itself.
      */
@@ -169,7 +200,7 @@ public final class Db2LinkedService extends LinkedService {
     /**
      * Get the username property: Username for authentication. It is mutually exclusive with connectionString property.
      * Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the username value.
      */
     public Object username() {
@@ -179,7 +210,7 @@ public final class Db2LinkedService extends LinkedService {
     /**
      * Set the username property: Username for authentication. It is mutually exclusive with connectionString property.
      * Type: string (or Expression with resultType string).
-     *
+     * 
      * @param username the username value to set.
      * @return the Db2LinkedService object itself.
      */
@@ -193,7 +224,7 @@ public final class Db2LinkedService extends LinkedService {
 
     /**
      * Get the password property: Password for authentication.
-     *
+     * 
      * @return the password value.
      */
     public SecretBase password() {
@@ -202,7 +233,7 @@ public final class Db2LinkedService extends LinkedService {
 
     /**
      * Set the password property: Password for authentication.
-     *
+     * 
      * @param password the password value to set.
      * @return the Db2LinkedService object itself.
      */
@@ -217,7 +248,7 @@ public final class Db2LinkedService extends LinkedService {
     /**
      * Get the packageCollection property: Under where packages are created when querying database. It is mutually
      * exclusive with connectionString property. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the packageCollection value.
      */
     public Object packageCollection() {
@@ -227,7 +258,7 @@ public final class Db2LinkedService extends LinkedService {
     /**
      * Set the packageCollection property: Under where packages are created when querying database. It is mutually
      * exclusive with connectionString property. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param packageCollection the packageCollection value to set.
      * @return the Db2LinkedService object itself.
      */
@@ -242,7 +273,7 @@ public final class Db2LinkedService extends LinkedService {
     /**
      * Get the certificateCommonName property: Certificate Common Name when TLS is enabled. It is mutually exclusive
      * with connectionString property. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the certificateCommonName value.
      */
     public Object certificateCommonName() {
@@ -252,7 +283,7 @@ public final class Db2LinkedService extends LinkedService {
     /**
      * Set the certificateCommonName property: Certificate Common Name when TLS is enabled. It is mutually exclusive
      * with connectionString property. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param certificateCommonName the certificateCommonName value to set.
      * @return the Db2LinkedService object itself.
      */
@@ -267,23 +298,23 @@ public final class Db2LinkedService extends LinkedService {
     /**
      * Get the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
      * using the integration runtime credential manager. It is mutually exclusive with connectionString property. Type:
-     * string (or Expression with resultType string).
-     *
+     * string.
+     * 
      * @return the encryptedCredential value.
      */
-    public Object encryptedCredential() {
+    public String encryptedCredential() {
         return this.innerTypeProperties() == null ? null : this.innerTypeProperties().encryptedCredential();
     }
 
     /**
      * Set the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
      * using the integration runtime credential manager. It is mutually exclusive with connectionString property. Type:
-     * string (or Expression with resultType string).
-     *
+     * string.
+     * 
      * @param encryptedCredential the encryptedCredential value to set.
      * @return the Db2LinkedService object itself.
      */
-    public Db2LinkedService withEncryptedCredential(Object encryptedCredential) {
+    public Db2LinkedService withEncryptedCredential(String encryptedCredential) {
         if (this.innerTypeProperties() == null) {
             this.innerTypeProperties = new Db2LinkedServiceTypeProperties();
         }
@@ -293,19 +324,20 @@ public final class Db2LinkedService extends LinkedService {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
         if (innerTypeProperties() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property innerTypeProperties in model Db2LinkedService"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property innerTypeProperties in model Db2LinkedService"));
         } else {
             innerTypeProperties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(Db2LinkedService.class);
 }

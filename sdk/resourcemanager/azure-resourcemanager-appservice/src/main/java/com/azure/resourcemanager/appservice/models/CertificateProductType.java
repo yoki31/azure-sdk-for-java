@@ -7,15 +7,23 @@ package com.azure.resourcemanager.appservice.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** Defines values for CertificateProductType. */
+/**
+ * Certificate product type.
+ */
 public enum CertificateProductType {
-    /** Enum value StandardDomainValidatedSsl. */
+    /**
+     * Enum value StandardDomainValidatedSsl.
+     */
     STANDARD_DOMAIN_VALIDATED_SSL("StandardDomainValidatedSsl"),
 
-    /** Enum value StandardDomainValidatedWildCardSsl. */
+    /**
+     * Enum value StandardDomainValidatedWildCardSsl.
+     */
     STANDARD_DOMAIN_VALIDATED_WILD_CARD_SSL("StandardDomainValidatedWildCardSsl");
 
-    /** The actual serialized value for a CertificateProductType instance. */
+    /**
+     * The actual serialized value for a CertificateProductType instance.
+     */
     private final String value;
 
     CertificateProductType(String value) {
@@ -24,12 +32,15 @@ public enum CertificateProductType {
 
     /**
      * Parses a serialized value to a CertificateProductType instance.
-     *
+     * 
      * @param value the serialized value to parse.
      * @return the parsed CertificateProductType object, or null if unable to parse.
      */
     @JsonCreator
     public static CertificateProductType fromString(String value) {
+        if (value == null) {
+            return null;
+        }
         CertificateProductType[] items = CertificateProductType.values();
         for (CertificateProductType item : items) {
             if (item.toString().equalsIgnoreCase(value)) {
@@ -39,6 +50,9 @@ public enum CertificateProductType {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @JsonValue
     @Override
     public String toString() {

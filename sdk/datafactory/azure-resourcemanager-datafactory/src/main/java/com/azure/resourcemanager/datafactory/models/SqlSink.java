@@ -5,38 +5,39 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.Map;
 
-/** A copy activity SQL sink. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * A copy activity SQL sink.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = SqlSink.class, visible = true)
 @JsonTypeName("SqlSink")
 @Fluent
 public final class SqlSink extends CopySink {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SqlSink.class);
+    /*
+     * Copy sink type.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "SqlSink";
 
     /*
-     * SQL writer stored procedure name. Type: string (or Expression with
-     * resultType string).
+     * SQL writer stored procedure name. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "sqlWriterStoredProcedureName")
     private Object sqlWriterStoredProcedureName;
 
     /*
-     * SQL writer table type. Type: string (or Expression with resultType
-     * string).
+     * SQL writer table type. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "sqlWriterTableType")
     private Object sqlWriterTableType;
 
     /*
-     * SQL pre-copy script. Type: string (or Expression with resultType
-     * string).
+     * SQL pre-copy script. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "preCopyScript")
     private Object preCopyScript;
@@ -45,34 +46,29 @@ public final class SqlSink extends CopySink {
      * SQL stored procedure parameters.
      */
     @JsonProperty(value = "storedProcedureParameters")
-    @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
-    private Map<String, StoredProcedureParameter> storedProcedureParameters;
+    private Object storedProcedureParameters;
 
     /*
-     * The stored procedure parameter name of the table type. Type: string (or
-     * Expression with resultType string).
+     * The stored procedure parameter name of the table type. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "storedProcedureTableTypeParameterName")
     private Object storedProcedureTableTypeParameterName;
 
     /*
-     * The option to handle sink table, such as autoCreate. For now only
-     * 'autoCreate' value is supported. Type: string (or Expression with
-     * resultType string).
+     * The option to handle sink table, such as autoCreate. For now only 'autoCreate' value is supported. Type: string
+     * (or Expression with resultType string).
      */
     @JsonProperty(value = "tableOption")
     private Object tableOption;
 
     /*
-     * Whether to use table lock during bulk copy. Type: boolean (or Expression
-     * with resultType boolean).
+     * Whether to use table lock during bulk copy. Type: boolean (or Expression with resultType boolean).
      */
     @JsonProperty(value = "sqlWriterUseTableLock")
     private Object sqlWriterUseTableLock;
 
     /*
-     * Write behavior when copying data into sql. Type: SqlWriteBehaviorEnum
-     * (or Expression with resultType SqlWriteBehaviorEnum)
+     * Write behavior when copying data into sql. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "writeBehavior")
     private Object writeBehavior;
@@ -84,9 +80,25 @@ public final class SqlSink extends CopySink {
     private SqlUpsertSettings upsertSettings;
 
     /**
+     * Creates an instance of SqlSink class.
+     */
+    public SqlSink() {
+    }
+
+    /**
+     * Get the type property: Copy sink type.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the sqlWriterStoredProcedureName property: SQL writer stored procedure name. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the sqlWriterStoredProcedureName value.
      */
     public Object sqlWriterStoredProcedureName() {
@@ -96,7 +108,7 @@ public final class SqlSink extends CopySink {
     /**
      * Set the sqlWriterStoredProcedureName property: SQL writer stored procedure name. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param sqlWriterStoredProcedureName the sqlWriterStoredProcedureName value to set.
      * @return the SqlSink object itself.
      */
@@ -107,7 +119,7 @@ public final class SqlSink extends CopySink {
 
     /**
      * Get the sqlWriterTableType property: SQL writer table type. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the sqlWriterTableType value.
      */
     public Object sqlWriterTableType() {
@@ -116,7 +128,7 @@ public final class SqlSink extends CopySink {
 
     /**
      * Set the sqlWriterTableType property: SQL writer table type. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param sqlWriterTableType the sqlWriterTableType value to set.
      * @return the SqlSink object itself.
      */
@@ -127,7 +139,7 @@ public final class SqlSink extends CopySink {
 
     /**
      * Get the preCopyScript property: SQL pre-copy script. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the preCopyScript value.
      */
     public Object preCopyScript() {
@@ -136,7 +148,7 @@ public final class SqlSink extends CopySink {
 
     /**
      * Set the preCopyScript property: SQL pre-copy script. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param preCopyScript the preCopyScript value to set.
      * @return the SqlSink object itself.
      */
@@ -147,20 +159,20 @@ public final class SqlSink extends CopySink {
 
     /**
      * Get the storedProcedureParameters property: SQL stored procedure parameters.
-     *
+     * 
      * @return the storedProcedureParameters value.
      */
-    public Map<String, StoredProcedureParameter> storedProcedureParameters() {
+    public Object storedProcedureParameters() {
         return this.storedProcedureParameters;
     }
 
     /**
      * Set the storedProcedureParameters property: SQL stored procedure parameters.
-     *
+     * 
      * @param storedProcedureParameters the storedProcedureParameters value to set.
      * @return the SqlSink object itself.
      */
-    public SqlSink withStoredProcedureParameters(Map<String, StoredProcedureParameter> storedProcedureParameters) {
+    public SqlSink withStoredProcedureParameters(Object storedProcedureParameters) {
         this.storedProcedureParameters = storedProcedureParameters;
         return this;
     }
@@ -168,7 +180,7 @@ public final class SqlSink extends CopySink {
     /**
      * Get the storedProcedureTableTypeParameterName property: The stored procedure parameter name of the table type.
      * Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the storedProcedureTableTypeParameterName value.
      */
     public Object storedProcedureTableTypeParameterName() {
@@ -178,7 +190,7 @@ public final class SqlSink extends CopySink {
     /**
      * Set the storedProcedureTableTypeParameterName property: The stored procedure parameter name of the table type.
      * Type: string (or Expression with resultType string).
-     *
+     * 
      * @param storedProcedureTableTypeParameterName the storedProcedureTableTypeParameterName value to set.
      * @return the SqlSink object itself.
      */
@@ -190,7 +202,7 @@ public final class SqlSink extends CopySink {
     /**
      * Get the tableOption property: The option to handle sink table, such as autoCreate. For now only 'autoCreate'
      * value is supported. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the tableOption value.
      */
     public Object tableOption() {
@@ -200,7 +212,7 @@ public final class SqlSink extends CopySink {
     /**
      * Set the tableOption property: The option to handle sink table, such as autoCreate. For now only 'autoCreate'
      * value is supported. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param tableOption the tableOption value to set.
      * @return the SqlSink object itself.
      */
@@ -212,7 +224,7 @@ public final class SqlSink extends CopySink {
     /**
      * Get the sqlWriterUseTableLock property: Whether to use table lock during bulk copy. Type: boolean (or Expression
      * with resultType boolean).
-     *
+     * 
      * @return the sqlWriterUseTableLock value.
      */
     public Object sqlWriterUseTableLock() {
@@ -222,7 +234,7 @@ public final class SqlSink extends CopySink {
     /**
      * Set the sqlWriterUseTableLock property: Whether to use table lock during bulk copy. Type: boolean (or Expression
      * with resultType boolean).
-     *
+     * 
      * @param sqlWriterUseTableLock the sqlWriterUseTableLock value to set.
      * @return the SqlSink object itself.
      */
@@ -232,9 +244,9 @@ public final class SqlSink extends CopySink {
     }
 
     /**
-     * Get the writeBehavior property: Write behavior when copying data into sql. Type: SqlWriteBehaviorEnum (or
-     * Expression with resultType SqlWriteBehaviorEnum).
-     *
+     * Get the writeBehavior property: Write behavior when copying data into sql. Type: string (or Expression with
+     * resultType string).
+     * 
      * @return the writeBehavior value.
      */
     public Object writeBehavior() {
@@ -242,9 +254,9 @@ public final class SqlSink extends CopySink {
     }
 
     /**
-     * Set the writeBehavior property: Write behavior when copying data into sql. Type: SqlWriteBehaviorEnum (or
-     * Expression with resultType SqlWriteBehaviorEnum).
-     *
+     * Set the writeBehavior property: Write behavior when copying data into sql. Type: string (or Expression with
+     * resultType string).
+     * 
      * @param writeBehavior the writeBehavior value to set.
      * @return the SqlSink object itself.
      */
@@ -255,7 +267,7 @@ public final class SqlSink extends CopySink {
 
     /**
      * Get the upsertSettings property: SQL upsert settings.
-     *
+     * 
      * @return the upsertSettings value.
      */
     public SqlUpsertSettings upsertSettings() {
@@ -264,7 +276,7 @@ public final class SqlSink extends CopySink {
 
     /**
      * Set the upsertSettings property: SQL upsert settings.
-     *
+     * 
      * @param upsertSettings the upsertSettings value to set.
      * @return the SqlSink object itself.
      */
@@ -273,42 +285,54 @@ public final class SqlSink extends CopySink {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SqlSink withWriteBatchSize(Object writeBatchSize) {
         super.withWriteBatchSize(writeBatchSize);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SqlSink withWriteBatchTimeout(Object writeBatchTimeout) {
         super.withWriteBatchTimeout(writeBatchTimeout);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SqlSink withSinkRetryCount(Object sinkRetryCount) {
         super.withSinkRetryCount(sinkRetryCount);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SqlSink withSinkRetryWait(Object sinkRetryWait) {
         super.withSinkRetryWait(sinkRetryWait);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SqlSink withMaxConcurrentConnections(Object maxConcurrentConnections) {
         super.withMaxConcurrentConnections(maxConcurrentConnections);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SqlSink withDisableMetricsCollection(Object disableMetricsCollection) {
         super.withDisableMetricsCollection(disableMetricsCollection);
@@ -317,22 +341,12 @@ public final class SqlSink extends CopySink {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
-        if (storedProcedureParameters() != null) {
-            storedProcedureParameters()
-                .values()
-                .forEach(
-                    e -> {
-                        if (e != null) {
-                            e.validate();
-                        }
-                    });
-        }
         if (upsertSettings() != null) {
             upsertSettings().validate();
         }

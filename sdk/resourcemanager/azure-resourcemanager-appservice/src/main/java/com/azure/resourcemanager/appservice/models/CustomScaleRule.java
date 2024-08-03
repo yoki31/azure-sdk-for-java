@@ -5,18 +5,16 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;
 
-/** Container App container Custom scaling rule. */
+/**
+ * Container App container Custom scaling rule.
+ */
 @Fluent
 public final class CustomScaleRule {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CustomScaleRule.class);
-
     /*
      * Type of the custom scale rule
      * eg: azure-servicebus, redis etc.
@@ -38,8 +36,15 @@ public final class CustomScaleRule {
     private List<ScaleRuleAuth> auth;
 
     /**
-     * Get the type property: Type of the custom scale rule eg: azure-servicebus, redis etc.
-     *
+     * Creates an instance of CustomScaleRule class.
+     */
+    public CustomScaleRule() {
+    }
+
+    /**
+     * Get the type property: Type of the custom scale rule
+     * eg: azure-servicebus, redis etc.
+     * 
      * @return the type value.
      */
     public String type() {
@@ -47,8 +52,9 @@ public final class CustomScaleRule {
     }
 
     /**
-     * Set the type property: Type of the custom scale rule eg: azure-servicebus, redis etc.
-     *
+     * Set the type property: Type of the custom scale rule
+     * eg: azure-servicebus, redis etc.
+     * 
      * @param type the type value to set.
      * @return the CustomScaleRule object itself.
      */
@@ -59,7 +65,7 @@ public final class CustomScaleRule {
 
     /**
      * Get the metadata property: Metadata properties to describe custom scale rule.
-     *
+     * 
      * @return the metadata value.
      */
     public Map<String, String> metadata() {
@@ -68,7 +74,7 @@ public final class CustomScaleRule {
 
     /**
      * Set the metadata property: Metadata properties to describe custom scale rule.
-     *
+     * 
      * @param metadata the metadata value to set.
      * @return the CustomScaleRule object itself.
      */
@@ -79,7 +85,7 @@ public final class CustomScaleRule {
 
     /**
      * Get the auth property: Authentication secrets for the custom scale rule.
-     *
+     * 
      * @return the auth value.
      */
     public List<ScaleRuleAuth> auth() {
@@ -88,7 +94,7 @@ public final class CustomScaleRule {
 
     /**
      * Set the auth property: Authentication secrets for the custom scale rule.
-     *
+     * 
      * @param auth the auth value to set.
      * @return the CustomScaleRule object itself.
      */
@@ -99,7 +105,7 @@ public final class CustomScaleRule {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

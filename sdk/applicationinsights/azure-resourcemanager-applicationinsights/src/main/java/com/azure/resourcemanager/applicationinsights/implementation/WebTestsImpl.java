@@ -13,10 +13,9 @@ import com.azure.resourcemanager.applicationinsights.fluent.WebTestsClient;
 import com.azure.resourcemanager.applicationinsights.fluent.models.WebTestInner;
 import com.azure.resourcemanager.applicationinsights.models.WebTest;
 import com.azure.resourcemanager.applicationinsights.models.WebTests;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class WebTestsImpl implements WebTests {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(WebTestsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(WebTestsImpl.class);
 
     private final WebTestsClient innerClient;
 
@@ -39,15 +38,6 @@ public final class WebTestsImpl implements WebTests {
         return Utils.mapPage(inner, inner1 -> new WebTestImpl(inner1, this.manager()));
     }
 
-    public WebTest getByResourceGroup(String resourceGroupName, String webTestName) {
-        WebTestInner inner = this.serviceClient().getByResourceGroup(resourceGroupName, webTestName);
-        if (inner != null) {
-            return new WebTestImpl(inner, this.manager());
-        } else {
-            return null;
-        }
-    }
-
     public Response<WebTest> getByResourceGroupWithResponse(
         String resourceGroupName, String webTestName, Context context) {
         Response<WebTestInner> inner =
@@ -63,12 +53,22 @@ public final class WebTestsImpl implements WebTests {
         }
     }
 
-    public void deleteByResourceGroup(String resourceGroupName, String webTestName) {
-        this.serviceClient().delete(resourceGroupName, webTestName);
+    public WebTest getByResourceGroup(String resourceGroupName, String webTestName) {
+        WebTestInner inner = this.serviceClient().getByResourceGroup(resourceGroupName, webTestName);
+        if (inner != null) {
+            return new WebTestImpl(inner, this.manager());
+        } else {
+            return null;
+        }
     }
 
-    public Response<Void> deleteWithResponse(String resourceGroupName, String webTestName, Context context) {
+    public Response<Void> deleteByResourceGroupWithResponse(
+        String resourceGroupName, String webTestName, Context context) {
         return this.serviceClient().deleteWithResponse(resourceGroupName, webTestName, context);
+    }
+
+    public void deleteByResourceGroup(String resourceGroupName, String webTestName) {
+        this.serviceClient().delete(resourceGroupName, webTestName);
     }
 
     public PagedIterable<WebTest> list() {
@@ -95,7 +95,7 @@ public final class WebTestsImpl implements WebTests {
     public WebTest getById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -103,7 +103,7 @@ public final class WebTestsImpl implements WebTests {
         }
         String webTestName = Utils.getValueFromIdByName(id, "webtests");
         if (webTestName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'webtests'.", id)));
@@ -114,7 +114,7 @@ public final class WebTestsImpl implements WebTests {
     public Response<WebTest> getByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -122,7 +122,7 @@ public final class WebTestsImpl implements WebTests {
         }
         String webTestName = Utils.getValueFromIdByName(id, "webtests");
         if (webTestName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'webtests'.", id)));
@@ -133,7 +133,7 @@ public final class WebTestsImpl implements WebTests {
     public void deleteById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -141,18 +141,18 @@ public final class WebTestsImpl implements WebTests {
         }
         String webTestName = Utils.getValueFromIdByName(id, "webtests");
         if (webTestName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'webtests'.", id)));
         }
-        this.deleteWithResponse(resourceGroupName, webTestName, Context.NONE);
+        this.deleteByResourceGroupWithResponse(resourceGroupName, webTestName, Context.NONE);
     }
 
     public Response<Void> deleteByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -160,12 +160,12 @@ public final class WebTestsImpl implements WebTests {
         }
         String webTestName = Utils.getValueFromIdByName(id, "webtests");
         if (webTestName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'webtests'.", id)));
         }
-        return this.deleteWithResponse(resourceGroupName, webTestName, context);
+        return this.deleteByResourceGroupWithResponse(resourceGroupName, webTestName, context);
     }
 
     private WebTestsClient serviceClient() {

@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.monitor.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.azure.resourcemanager.monitor.models.ErrorResponseCommon;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.azure.core.management.exception.ManagementError;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
-/** The status of operation. */
+/**
+ * The status of operation.
+ */
 @Fluent
 public final class OperationStatusInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationStatusInner.class);
-
     /*
      * The operation Id.
      */
@@ -50,11 +48,17 @@ public final class OperationStatusInner {
      * The error detail of the operation if any.
      */
     @JsonProperty(value = "error")
-    private ErrorResponseCommon error;
+    private ManagementError error;
+
+    /**
+     * Creates an instance of OperationStatusInner class.
+     */
+    public OperationStatusInner() {
+    }
 
     /**
      * Get the id property: The operation Id.
-     *
+     * 
      * @return the id value.
      */
     public String id() {
@@ -63,7 +67,7 @@ public final class OperationStatusInner {
 
     /**
      * Set the id property: The operation Id.
-     *
+     * 
      * @param id the id value to set.
      * @return the OperationStatusInner object itself.
      */
@@ -74,7 +78,7 @@ public final class OperationStatusInner {
 
     /**
      * Get the name property: The operation name.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -83,7 +87,7 @@ public final class OperationStatusInner {
 
     /**
      * Set the name property: The operation name.
-     *
+     * 
      * @param name the name value to set.
      * @return the OperationStatusInner object itself.
      */
@@ -94,7 +98,7 @@ public final class OperationStatusInner {
 
     /**
      * Get the startTime property: Start time of the job in standard ISO8601 format.
-     *
+     * 
      * @return the startTime value.
      */
     public OffsetDateTime startTime() {
@@ -103,7 +107,7 @@ public final class OperationStatusInner {
 
     /**
      * Set the startTime property: Start time of the job in standard ISO8601 format.
-     *
+     * 
      * @param startTime the startTime value to set.
      * @return the OperationStatusInner object itself.
      */
@@ -114,7 +118,7 @@ public final class OperationStatusInner {
 
     /**
      * Get the endTime property: End time of the job in standard ISO8601 format.
-     *
+     * 
      * @return the endTime value.
      */
     public OffsetDateTime endTime() {
@@ -123,7 +127,7 @@ public final class OperationStatusInner {
 
     /**
      * Set the endTime property: End time of the job in standard ISO8601 format.
-     *
+     * 
      * @param endTime the endTime value to set.
      * @return the OperationStatusInner object itself.
      */
@@ -134,7 +138,7 @@ public final class OperationStatusInner {
 
     /**
      * Get the status property: The status of the operation.
-     *
+     * 
      * @return the status value.
      */
     public String status() {
@@ -143,7 +147,7 @@ public final class OperationStatusInner {
 
     /**
      * Set the status property: The status of the operation.
-     *
+     * 
      * @param status the status value to set.
      * @return the OperationStatusInner object itself.
      */
@@ -154,32 +158,29 @@ public final class OperationStatusInner {
 
     /**
      * Get the error property: The error detail of the operation if any.
-     *
+     * 
      * @return the error value.
      */
-    public ErrorResponseCommon error() {
+    public ManagementError error() {
         return this.error;
     }
 
     /**
      * Set the error property: The error detail of the operation if any.
-     *
+     * 
      * @param error the error value to set.
      * @return the OperationStatusInner object itself.
      */
-    public OperationStatusInner withError(ErrorResponseCommon error) {
+    public OperationStatusInner withError(ManagementError error) {
         this.error = error;
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
-        if (error() != null) {
-            error().validate();
-        }
     }
 }

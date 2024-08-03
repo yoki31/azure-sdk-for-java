@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.redis.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Details of single instance of redis. */
+/**
+ * Details of single instance of redis.
+ */
 @Immutable
 public final class RedisInstanceDetails {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RedisInstanceDetails.class);
-
     /*
      * Redis instance SSL port.
      */
@@ -27,8 +25,7 @@ public final class RedisInstanceDetails {
     private Integer nonSslPort;
 
     /*
-     * If the Cache uses availability zones, specifies availability zone where
-     * this instance is located.
+     * If the Cache uses availability zones, specifies availability zone where this instance is located.
      */
     @JsonProperty(value = "zone", access = JsonProperty.Access.WRITE_ONLY)
     private String zone;
@@ -52,8 +49,14 @@ public final class RedisInstanceDetails {
     private Boolean isPrimary;
 
     /**
+     * Creates an instance of RedisInstanceDetails class.
+     */
+    public RedisInstanceDetails() {
+    }
+
+    /**
      * Get the sslPort property: Redis instance SSL port.
-     *
+     * 
      * @return the sslPort value.
      */
     public Integer sslPort() {
@@ -62,7 +65,7 @@ public final class RedisInstanceDetails {
 
     /**
      * Get the nonSslPort property: If enableNonSslPort is true, provides Redis instance Non-SSL port.
-     *
+     * 
      * @return the nonSslPort value.
      */
     public Integer nonSslPort() {
@@ -72,7 +75,7 @@ public final class RedisInstanceDetails {
     /**
      * Get the zone property: If the Cache uses availability zones, specifies availability zone where this instance is
      * located.
-     *
+     * 
      * @return the zone value.
      */
     public String zone() {
@@ -81,7 +84,7 @@ public final class RedisInstanceDetails {
 
     /**
      * Get the shardId property: If clustering is enabled, the Shard ID of Redis Instance.
-     *
+     * 
      * @return the shardId value.
      */
     public Integer shardId() {
@@ -90,7 +93,7 @@ public final class RedisInstanceDetails {
 
     /**
      * Get the isMaster property: Specifies whether the instance is a primary node.
-     *
+     * 
      * @return the isMaster value.
      */
     public Boolean isMaster() {
@@ -99,7 +102,7 @@ public final class RedisInstanceDetails {
 
     /**
      * Get the isPrimary property: Specifies whether the instance is a primary node.
-     *
+     * 
      * @return the isPrimary value.
      */
     public Boolean isPrimary() {
@@ -108,7 +111,7 @@ public final class RedisInstanceDetails {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

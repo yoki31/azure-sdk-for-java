@@ -5,16 +5,13 @@
 package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The RankingsResponseTablesPropertiesItemsMetricsItem model. */
+/**
+ * The RankingsResponseTablesPropertiesItemsMetricsItem model.
+ */
 @Fluent
 public final class RankingsResponseTablesPropertiesItemsMetricsItem {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(RankingsResponseTablesPropertiesItemsMetricsItem.class);
-
     /*
      * The metric property.
      */
@@ -34,8 +31,14 @@ public final class RankingsResponseTablesPropertiesItemsMetricsItem {
     private Float percentage;
 
     /**
+     * Creates an instance of RankingsResponseTablesPropertiesItemsMetricsItem class.
+     */
+    public RankingsResponseTablesPropertiesItemsMetricsItem() {
+    }
+
+    /**
      * Get the metric property: The metric property.
-     *
+     * 
      * @return the metric value.
      */
     public String metric() {
@@ -44,7 +47,7 @@ public final class RankingsResponseTablesPropertiesItemsMetricsItem {
 
     /**
      * Set the metric property: The metric property.
-     *
+     * 
      * @param metric the metric value to set.
      * @return the RankingsResponseTablesPropertiesItemsMetricsItem object itself.
      */
@@ -55,7 +58,7 @@ public final class RankingsResponseTablesPropertiesItemsMetricsItem {
 
     /**
      * Get the value property: The value property.
-     *
+     * 
      * @return the value value.
      */
     public Long value() {
@@ -64,7 +67,7 @@ public final class RankingsResponseTablesPropertiesItemsMetricsItem {
 
     /**
      * Set the value property: The value property.
-     *
+     * 
      * @param value the value value to set.
      * @return the RankingsResponseTablesPropertiesItemsMetricsItem object itself.
      */
@@ -75,7 +78,7 @@ public final class RankingsResponseTablesPropertiesItemsMetricsItem {
 
     /**
      * Get the percentage property: The percentage property.
-     *
+     * 
      * @return the percentage value.
      */
     public Float percentage() {
@@ -84,7 +87,7 @@ public final class RankingsResponseTablesPropertiesItemsMetricsItem {
 
     /**
      * Set the percentage property: The percentage property.
-     *
+     * 
      * @param percentage the percentage value to set.
      * @return the RankingsResponseTablesPropertiesItemsMetricsItem object itself.
      */
@@ -95,7 +98,7 @@ public final class RankingsResponseTablesPropertiesItemsMetricsItem {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

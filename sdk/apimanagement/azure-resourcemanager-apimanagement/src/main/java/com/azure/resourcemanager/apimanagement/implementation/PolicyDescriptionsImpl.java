@@ -13,10 +13,9 @@ import com.azure.resourcemanager.apimanagement.fluent.models.PolicyDescriptionCo
 import com.azure.resourcemanager.apimanagement.models.PolicyDescriptionCollection;
 import com.azure.resourcemanager.apimanagement.models.PolicyDescriptions;
 import com.azure.resourcemanager.apimanagement.models.PolicyScopeContract;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class PolicyDescriptionsImpl implements PolicyDescriptions {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PolicyDescriptionsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(PolicyDescriptionsImpl.class);
 
     private final PolicyDescriptionsClient innerClient;
 
@@ -29,15 +28,6 @@ public final class PolicyDescriptionsImpl implements PolicyDescriptions {
         this.serviceManager = serviceManager;
     }
 
-    public PolicyDescriptionCollection listByService(String resourceGroupName, String serviceName) {
-        PolicyDescriptionCollectionInner inner = this.serviceClient().listByService(resourceGroupName, serviceName);
-        if (inner != null) {
-            return new PolicyDescriptionCollectionImpl(inner, this.manager());
-        } else {
-            return null;
-        }
-    }
-
     public Response<PolicyDescriptionCollection> listByServiceWithResponse(
         String resourceGroupName, String serviceName, PolicyScopeContract scope, Context context) {
         Response<PolicyDescriptionCollectionInner> inner =
@@ -48,6 +38,15 @@ public final class PolicyDescriptionsImpl implements PolicyDescriptions {
                 inner.getStatusCode(),
                 inner.getHeaders(),
                 new PolicyDescriptionCollectionImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
+    }
+
+    public PolicyDescriptionCollection listByService(String resourceGroupName, String serviceName) {
+        PolicyDescriptionCollectionInner inner = this.serviceClient().listByService(resourceGroupName, serviceName);
+        if (inner != null) {
+            return new PolicyDescriptionCollectionImpl(inner, this.manager());
         } else {
             return null;
         }

@@ -7,16 +7,15 @@ package com.azure.resourcemanager.datafactory.fluent.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.models.PipelineReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** Execute pipeline activity properties. */
+/**
+ * Execute pipeline activity properties.
+ */
 @Fluent
 public final class ExecutePipelineActivityTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ExecutePipelineActivityTypeProperties.class);
-
     /*
      * Pipeline reference.
      */
@@ -31,15 +30,20 @@ public final class ExecutePipelineActivityTypeProperties {
     private Map<String, Object> parameters;
 
     /*
-     * Defines whether activity execution will wait for the dependent pipeline
-     * execution to finish. Default is false.
+     * Defines whether activity execution will wait for the dependent pipeline execution to finish. Default is false.
      */
     @JsonProperty(value = "waitOnCompletion")
     private Boolean waitOnCompletion;
 
     /**
+     * Creates an instance of ExecutePipelineActivityTypeProperties class.
+     */
+    public ExecutePipelineActivityTypeProperties() {
+    }
+
+    /**
      * Get the pipeline property: Pipeline reference.
-     *
+     * 
      * @return the pipeline value.
      */
     public PipelineReference pipeline() {
@@ -48,7 +52,7 @@ public final class ExecutePipelineActivityTypeProperties {
 
     /**
      * Set the pipeline property: Pipeline reference.
-     *
+     * 
      * @param pipeline the pipeline value to set.
      * @return the ExecutePipelineActivityTypeProperties object itself.
      */
@@ -59,7 +63,7 @@ public final class ExecutePipelineActivityTypeProperties {
 
     /**
      * Get the parameters property: Pipeline parameters.
-     *
+     * 
      * @return the parameters value.
      */
     public Map<String, Object> parameters() {
@@ -68,7 +72,7 @@ public final class ExecutePipelineActivityTypeProperties {
 
     /**
      * Set the parameters property: Pipeline parameters.
-     *
+     * 
      * @param parameters the parameters value to set.
      * @return the ExecutePipelineActivityTypeProperties object itself.
      */
@@ -80,7 +84,7 @@ public final class ExecutePipelineActivityTypeProperties {
     /**
      * Get the waitOnCompletion property: Defines whether activity execution will wait for the dependent pipeline
      * execution to finish. Default is false.
-     *
+     * 
      * @return the waitOnCompletion value.
      */
     public Boolean waitOnCompletion() {
@@ -90,7 +94,7 @@ public final class ExecutePipelineActivityTypeProperties {
     /**
      * Set the waitOnCompletion property: Defines whether activity execution will wait for the dependent pipeline
      * execution to finish. Default is false.
-     *
+     * 
      * @param waitOnCompletion the waitOnCompletion value to set.
      * @return the ExecutePipelineActivityTypeProperties object itself.
      */
@@ -101,17 +105,18 @@ public final class ExecutePipelineActivityTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (pipeline() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property pipeline in model ExecutePipelineActivityTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property pipeline in model ExecutePipelineActivityTypeProperties"));
         } else {
             pipeline().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ExecutePipelineActivityTypeProperties.class);
 }

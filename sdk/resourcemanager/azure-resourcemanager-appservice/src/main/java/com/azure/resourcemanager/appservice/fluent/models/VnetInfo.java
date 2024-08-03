@@ -5,16 +5,15 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
-/** Virtual Network information contract. */
+/**
+ * Virtual Network information contract.
+ */
 @Fluent
 public final class VnetInfo {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VnetInfo.class);
-
     /*
      * The Virtual Network's resource ID.
      */
@@ -28,8 +27,7 @@ public final class VnetInfo {
     private String certThumbprint;
 
     /*
-     * A certificate file (.cer) blob containing the public key of the private
-     * key used to authenticate a
+     * A certificate file (.cer) blob containing the public key of the private key used to authenticate a
      * Point-To-Site VPN connection.
      */
     @JsonProperty(value = "certBlob")
@@ -42,15 +40,13 @@ public final class VnetInfo {
     private List<VnetRouteInner> routes;
 
     /*
-     * <code>true</code> if a resync is required; otherwise,
-     * <code>false</code>.
+     * <code>true</code> if a resync is required; otherwise, <code>false</code>.
      */
     @JsonProperty(value = "resyncRequired", access = JsonProperty.Access.WRITE_ONLY)
     private Boolean resyncRequired;
 
     /*
-     * DNS servers to be used by this Virtual Network. This should be a
-     * comma-separated list of IP addresses.
+     * DNS servers to be used by this Virtual Network. This should be a comma-separated list of IP addresses.
      */
     @JsonProperty(value = "dnsServers")
     private String dnsServers;
@@ -60,6 +56,12 @@ public final class VnetInfo {
      */
     @JsonProperty(value = "isSwift")
     private Boolean isSwift;
+
+    /**
+     * Creates an instance of VnetInfo class.
+     */
+    public VnetInfo() {
+    }
 
     /**
      * Get the vnetResourceId property: The Virtual Network's resource ID.
@@ -92,7 +94,8 @@ public final class VnetInfo {
 
     /**
      * Get the certBlob property: A certificate file (.cer) blob containing the public key of the private key used to
-     * authenticate a Point-To-Site VPN connection.
+     * authenticate a
+     * Point-To-Site VPN connection.
      *
      * @return the certBlob value.
      */
@@ -102,7 +105,8 @@ public final class VnetInfo {
 
     /**
      * Set the certBlob property: A certificate file (.cer) blob containing the public key of the private key used to
-     * authenticate a Point-To-Site VPN connection.
+     * authenticate a
+     * Point-To-Site VPN connection.
      *
      * @param certBlob the certBlob value to set.
      * @return the VnetInfo object itself.

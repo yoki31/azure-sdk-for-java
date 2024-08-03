@@ -6,14 +6,13 @@ package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Legal agreement for a top level domain. */
+/**
+ * Legal agreement for a top level domain.
+ */
 @Fluent
 public final class TldLegalAgreementInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TldLegalAgreementInner.class);
-
     /*
      * Unique identifier for the agreement.
      */
@@ -39,8 +38,14 @@ public final class TldLegalAgreementInner {
     private String url;
 
     /**
+     * Creates an instance of TldLegalAgreementInner class.
+     */
+    public TldLegalAgreementInner() {
+    }
+
+    /**
      * Get the agreementKey property: Unique identifier for the agreement.
-     *
+     * 
      * @return the agreementKey value.
      */
     public String agreementKey() {
@@ -49,7 +54,7 @@ public final class TldLegalAgreementInner {
 
     /**
      * Set the agreementKey property: Unique identifier for the agreement.
-     *
+     * 
      * @param agreementKey the agreementKey value to set.
      * @return the TldLegalAgreementInner object itself.
      */
@@ -60,7 +65,7 @@ public final class TldLegalAgreementInner {
 
     /**
      * Get the title property: Agreement title.
-     *
+     * 
      * @return the title value.
      */
     public String title() {
@@ -69,7 +74,7 @@ public final class TldLegalAgreementInner {
 
     /**
      * Set the title property: Agreement title.
-     *
+     * 
      * @param title the title value to set.
      * @return the TldLegalAgreementInner object itself.
      */
@@ -80,7 +85,7 @@ public final class TldLegalAgreementInner {
 
     /**
      * Get the content property: Agreement details.
-     *
+     * 
      * @return the content value.
      */
     public String content() {
@@ -89,7 +94,7 @@ public final class TldLegalAgreementInner {
 
     /**
      * Set the content property: Agreement details.
-     *
+     * 
      * @param content the content value to set.
      * @return the TldLegalAgreementInner object itself.
      */
@@ -100,7 +105,7 @@ public final class TldLegalAgreementInner {
 
     /**
      * Get the url property: URL where a copy of the agreement details is hosted.
-     *
+     * 
      * @return the url value.
      */
     public String url() {
@@ -109,7 +114,7 @@ public final class TldLegalAgreementInner {
 
     /**
      * Set the url property: URL where a copy of the agreement details is hosted.
-     *
+     * 
      * @param url the url value to set.
      * @return the TldLegalAgreementInner object itself.
      */
@@ -120,25 +125,24 @@ public final class TldLegalAgreementInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (agreementKey() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property agreementKey in model TldLegalAgreementInner"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property agreementKey in model TldLegalAgreementInner"));
         }
         if (title() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property title in model TldLegalAgreementInner"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property title in model TldLegalAgreementInner"));
         }
         if (content() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property content in model TldLegalAgreementInner"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property content in model TldLegalAgreementInner"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(TldLegalAgreementInner.class);
 }

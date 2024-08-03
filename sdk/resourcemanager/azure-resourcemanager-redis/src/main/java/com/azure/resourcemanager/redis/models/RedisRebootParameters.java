@@ -5,19 +5,16 @@
 package com.azure.resourcemanager.redis.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Specifies which Redis node(s) to reboot. */
+/**
+ * Specifies which Redis node(s) to reboot.
+ */
 @Fluent
 public final class RedisRebootParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RedisRebootParameters.class);
-
     /*
-     * Which Redis node(s) to reboot. Depending on this value data loss is
-     * possible.
+     * Which Redis node(s) to reboot. Depending on this value data loss is possible.
      */
     @JsonProperty(value = "rebootType")
     private RebootType rebootType;
@@ -29,15 +26,20 @@ public final class RedisRebootParameters {
     private Integer shardId;
 
     /*
-     * A list of redis instances to reboot, specified by per-instance SSL ports
-     * or non-SSL ports.
+     * A list of redis instances to reboot, specified by per-instance SSL ports or non-SSL ports.
      */
     @JsonProperty(value = "ports")
     private List<Integer> ports;
 
     /**
+     * Creates an instance of RedisRebootParameters class.
+     */
+    public RedisRebootParameters() {
+    }
+
+    /**
      * Get the rebootType property: Which Redis node(s) to reboot. Depending on this value data loss is possible.
-     *
+     * 
      * @return the rebootType value.
      */
     public RebootType rebootType() {
@@ -46,7 +48,7 @@ public final class RedisRebootParameters {
 
     /**
      * Set the rebootType property: Which Redis node(s) to reboot. Depending on this value data loss is possible.
-     *
+     * 
      * @param rebootType the rebootType value to set.
      * @return the RedisRebootParameters object itself.
      */
@@ -57,7 +59,7 @@ public final class RedisRebootParameters {
 
     /**
      * Get the shardId property: If clustering is enabled, the ID of the shard to be rebooted.
-     *
+     * 
      * @return the shardId value.
      */
     public Integer shardId() {
@@ -66,7 +68,7 @@ public final class RedisRebootParameters {
 
     /**
      * Set the shardId property: If clustering is enabled, the ID of the shard to be rebooted.
-     *
+     * 
      * @param shardId the shardId value to set.
      * @return the RedisRebootParameters object itself.
      */
@@ -78,7 +80,7 @@ public final class RedisRebootParameters {
     /**
      * Get the ports property: A list of redis instances to reboot, specified by per-instance SSL ports or non-SSL
      * ports.
-     *
+     * 
      * @return the ports value.
      */
     public List<Integer> ports() {
@@ -88,7 +90,7 @@ public final class RedisRebootParameters {
     /**
      * Set the ports property: A list of redis instances to reboot, specified by per-instance SSL ports or non-SSL
      * ports.
-     *
+     * 
      * @param ports the ports value to set.
      * @return the RedisRebootParameters object itself.
      */
@@ -99,7 +101,7 @@ public final class RedisRebootParameters {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

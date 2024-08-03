@@ -6,15 +6,14 @@ package com.azure.resourcemanager.servicefabric.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Describes the notification channel for cluster events. */
+/**
+ * Describes the notification channel for cluster events.
+ */
 @Fluent
 public final class Notification {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Notification.class);
-
     /*
      * Indicates if the notification is enabled.
      */
@@ -40,8 +39,14 @@ public final class Notification {
     private List<NotificationTarget> notificationTargets;
 
     /**
+     * Creates an instance of Notification class.
+     */
+    public Notification() {
+    }
+
+    /**
      * Get the isEnabled property: Indicates if the notification is enabled.
-     *
+     * 
      * @return the isEnabled value.
      */
     public boolean isEnabled() {
@@ -50,7 +55,7 @@ public final class Notification {
 
     /**
      * Set the isEnabled property: Indicates if the notification is enabled.
-     *
+     * 
      * @param isEnabled the isEnabled value to set.
      * @return the Notification object itself.
      */
@@ -61,7 +66,7 @@ public final class Notification {
 
     /**
      * Get the notificationCategory property: The category of notification.
-     *
+     * 
      * @return the notificationCategory value.
      */
     public NotificationCategory notificationCategory() {
@@ -70,7 +75,7 @@ public final class Notification {
 
     /**
      * Set the notificationCategory property: The category of notification.
-     *
+     * 
      * @param notificationCategory the notificationCategory value to set.
      * @return the Notification object itself.
      */
@@ -81,7 +86,7 @@ public final class Notification {
 
     /**
      * Get the notificationLevel property: The level of notification.
-     *
+     * 
      * @return the notificationLevel value.
      */
     public NotificationLevel notificationLevel() {
@@ -90,7 +95,7 @@ public final class Notification {
 
     /**
      * Set the notificationLevel property: The level of notification.
-     *
+     * 
      * @param notificationLevel the notificationLevel value to set.
      * @return the Notification object itself.
      */
@@ -101,7 +106,7 @@ public final class Notification {
 
     /**
      * Get the notificationTargets property: List of targets that subscribe to the notification.
-     *
+     * 
      * @return the notificationTargets value.
      */
     public List<NotificationTarget> notificationTargets() {
@@ -110,7 +115,7 @@ public final class Notification {
 
     /**
      * Set the notificationTargets property: List of targets that subscribe to the notification.
-     *
+     * 
      * @param notificationTargets the notificationTargets value to set.
      * @return the Notification object itself.
      */
@@ -121,28 +126,25 @@ public final class Notification {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (notificationCategory() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property notificationCategory in model Notification"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property notificationCategory in model Notification"));
         }
         if (notificationLevel() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property notificationLevel in model Notification"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property notificationLevel in model Notification"));
         }
         if (notificationTargets() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property notificationTargets in model Notification"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property notificationTargets in model Notification"));
         } else {
             notificationTargets().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(Notification.class);
 }

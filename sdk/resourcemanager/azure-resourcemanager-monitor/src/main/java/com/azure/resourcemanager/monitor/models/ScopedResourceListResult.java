@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.monitor.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.monitor.fluent.models.ScopedResourceInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** A list of scoped resources in a private link scope. */
+/**
+ * A list of scoped resources in a private link scope.
+ */
 @Immutable
 public final class ScopedResourceListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ScopedResourceListResult.class);
-
     /*
      * Array of results.
      */
@@ -29,8 +27,14 @@ public final class ScopedResourceListResult {
     private String nextLink;
 
     /**
+     * Creates an instance of ScopedResourceListResult class.
+     */
+    public ScopedResourceListResult() {
+    }
+
+    /**
      * Get the value property: Array of results.
-     *
+     * 
      * @return the value value.
      */
     public List<ScopedResourceInner> value() {
@@ -39,7 +43,7 @@ public final class ScopedResourceListResult {
 
     /**
      * Get the nextLink property: Link to retrieve next page of results.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -48,7 +52,7 @@ public final class ScopedResourceListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

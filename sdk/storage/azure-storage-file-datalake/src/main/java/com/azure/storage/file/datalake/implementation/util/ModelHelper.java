@@ -3,11 +3,21 @@
 
 package com.azure.storage.file.datalake.implementation.util;
 
+import com.azure.core.util.CoreUtils;
+import com.azure.core.util.logging.ClientLogger;
 import com.azure.storage.common.ParallelTransferOptions;
 import com.azure.storage.common.implementation.Constants;
 import com.azure.storage.common.implementation.StorageImplUtils;
+import com.azure.storage.file.datalake.implementation.models.PathExpiryOptions;
+import com.azure.storage.file.datalake.implementation.models.PathResourceType;
 import com.azure.storage.file.datalake.models.DataLakeAclChangeFailedException;
 import com.azure.storage.file.datalake.models.DataLakeStorageException;
+import com.azure.storage.file.datalake.options.DataLakePathCreateOptions;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * This class provides helper methods for common model patterns.
@@ -15,6 +25,7 @@ import com.azure.storage.file.datalake.models.DataLakeStorageException;
  * RESERVED FOR INTERNAL USE.
  */
 public class ModelHelper {
+    private static final ClientLogger LOGGER = new ClientLogger(ModelHelper.class);
 
     /**
      * Indicates the maximum number of bytes that can be sent in a call to upload.
@@ -24,7 +35,7 @@ public class ModelHelper {
     /**
      * Indicates the default size above which the upload will be broken into blocks and parallelized.
      */
-    private static final long FILE_DEFAULT_MAX_SINGLE_UPLOAD_SIZE = 100L * Constants.MB;
+    public static final long FILE_DEFAULT_MAX_SINGLE_UPLOAD_SIZE = 100L * Constants.MB;
 
     /**
      * The block size to use if none is specified in parallel operations.
@@ -75,7 +86,7 @@ public class ModelHelper {
         return new ParallelTransferOptions()
             .setBlockSizeLong(blockSize)
             .setMaxConcurrency(maxConcurrency)
-            .setProgressReceiver(other.getProgressReceiver())
+            .setProgressListener(other.getProgressListener())
             .setMaxSingleUploadSizeLong(maxSingleUploadSize);
     }
 
@@ -93,5 +104,84 @@ public class ModelHelper {
                 + "exception of type %s for more information. You can resume changing the access control list using "
                 + "continuationToken=%s after addressing the error.", e.getClass(), continuationToken);
         return new DataLakeAclChangeFailedException(message, e, continuationToken);
+    }
+
+    /**
+     * Grab the proper {@link PathExpiryOptions} based on the options set in {@link DataLakePathCreateOptions}.
+     *
+     * @param options {@link DataLakePathCreateOptions}
+     * @param pathResourceType {@link PathResourceType}
+     * @return {@link PathExpiryOptions}
+     * @throws IllegalArgumentException if the options are invalid for the pathResourceType
+     */
+    public static PathExpiryOptions setFieldsIfNull(DataLakePathCreateOptions options, PathResourceType pathResourceType) {
+        if (pathResourceType == PathResourceType.DIRECTORY) {
+            if (options.getProposedLeaseId() != null) {
+                throw LOGGER.logExceptionAsError(new IllegalArgumentException("ProposedLeaseId does not apply to directories."));
+            }
+            if (options.getLeaseDuration() != null) {
+                throw LOGGER.logExceptionAsError(new IllegalArgumentException("LeaseDuration does not apply to directories."));
+            }
+            if (options.getScheduleDeletionOptions() != null && options.getScheduleDeletionOptions().getTimeToExpire() != null) {
+                throw LOGGER.logExceptionAsError(new IllegalArgumentException("TimeToExpire does not apply to directories."));
+            }
+            if (options.getScheduleDeletionOptions() != null && options.getScheduleDeletionOptions().getExpiresOn() != null) {
+                throw LOGGER.logExceptionAsError(new IllegalArgumentException("ExpiresOn does not apply to directories."));
+            }
+        }
+        if (options.getScheduleDeletionOptions() == null) {
+            return null;
+        }
+        if (options.getScheduleDeletionOptions().getTimeToExpire() != null && options.getScheduleDeletionOptions().getExpiresOn() != null) {
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException("TimeToExpire and ExpiresOn both cannot be set."));
+        }
+        if (options.getScheduleDeletionOptions().getTimeToExpire() != null) {
+            return PathExpiryOptions.RELATIVE_TO_NOW;
+        } else if (options.getScheduleDeletionOptions().getExpiresOn() != null) {
+            return PathExpiryOptions.ABSOLUTE;
+        }
+        return null;
+    }
+
+    /**
+     * Converts the metadata into a string of format "key1=value1, key2=value2" and Base64 encodes the values.
+     *
+     * @param metadata The metadata.
+     *
+     * @return The metadata represented as a String.
+     * @throws IllegalArgumentException If the metadata contains invalid characters.
+     */
+    public static String buildMetadataString(Map<String, String> metadata) {
+        if (!CoreUtils.isNullOrEmpty(metadata)) {
+            StringBuilder sb = new StringBuilder();
+            boolean firstMetadata = true;
+            for (final Map.Entry<String, String> entry : metadata.entrySet()) {
+                if (Objects.isNull(entry.getKey()) || entry.getKey().isEmpty()) {
+                    throw new IllegalArgumentException("The key for one of the metadata key-value pairs is null, "
+                        + "empty, or whitespace.");
+                } else if (Objects.isNull(entry.getValue()) || entry.getValue().isEmpty()) {
+                    throw new IllegalArgumentException("The value for one of the metadata key-value pairs is null, "
+                        + "empty, or whitespace.");
+                }
+
+                /*
+                The service has an internal base64 decode when metadata is copied from ADLS to Storage, so getMetadata
+                will work as normal. Doing this encoding for the customers preserves the existing behavior of
+                metadata.
+                 */
+                if (!firstMetadata) {
+                    sb.append(',');
+                }
+
+                sb.append(entry.getKey())
+                    .append('=')
+                    .append(new String(Base64.getEncoder().encode(entry.getValue().getBytes(StandardCharsets.UTF_8)),
+                        StandardCharsets.UTF_8));
+                firstMetadata = false;
+            }
+            return sb.toString();
+        } else {
+            return null;
+        }
     }
 }

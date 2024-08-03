@@ -5,40 +5,41 @@
 package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Phoenix Dataset Properties. */
+/**
+ * Phoenix Dataset Properties.
+ */
 @Fluent
 public final class PhoenixDatasetTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PhoenixDatasetTypeProperties.class);
-
     /*
-     * This property will be retired. Please consider using schema + table
-     * properties instead.
+     * This property will be retired. Please consider using schema + table properties instead.
      */
     @JsonProperty(value = "tableName")
     private Object tableName;
 
     /*
-     * The table name of the Phoenix. Type: string (or Expression with
-     * resultType string).
+     * The table name of the Phoenix. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "table")
     private Object table;
 
     /*
-     * The schema name of the Phoenix. Type: string (or Expression with
-     * resultType string).
+     * The schema name of the Phoenix. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "schema")
     private Object schema;
 
     /**
+     * Creates an instance of PhoenixDatasetTypeProperties class.
+     */
+    public PhoenixDatasetTypeProperties() {
+    }
+
+    /**
      * Get the tableName property: This property will be retired. Please consider using schema + table properties
      * instead.
-     *
+     * 
      * @return the tableName value.
      */
     public Object tableName() {
@@ -48,7 +49,7 @@ public final class PhoenixDatasetTypeProperties {
     /**
      * Set the tableName property: This property will be retired. Please consider using schema + table properties
      * instead.
-     *
+     * 
      * @param tableName the tableName value to set.
      * @return the PhoenixDatasetTypeProperties object itself.
      */
@@ -59,7 +60,7 @@ public final class PhoenixDatasetTypeProperties {
 
     /**
      * Get the table property: The table name of the Phoenix. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the table value.
      */
     public Object table() {
@@ -68,7 +69,7 @@ public final class PhoenixDatasetTypeProperties {
 
     /**
      * Set the table property: The table name of the Phoenix. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param table the table value to set.
      * @return the PhoenixDatasetTypeProperties object itself.
      */
@@ -79,7 +80,7 @@ public final class PhoenixDatasetTypeProperties {
 
     /**
      * Get the schema property: The schema name of the Phoenix. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the schema value.
      */
     public Object schema() {
@@ -88,7 +89,7 @@ public final class PhoenixDatasetTypeProperties {
 
     /**
      * Set the schema property: The schema name of the Phoenix. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param schema the schema value to set.
      * @return the PhoenixDatasetTypeProperties object itself.
      */
@@ -99,7 +100,7 @@ public final class PhoenixDatasetTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

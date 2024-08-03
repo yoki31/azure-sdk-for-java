@@ -5,20 +5,19 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.HostingEnvironmentProfile;
 import com.azure.resourcemanager.appservice.models.KubeEnvironmentProfile;
 import com.azure.resourcemanager.appservice.models.ProvisioningState;
 import com.azure.resourcemanager.appservice.models.StatusOptions;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.OffsetDateTime;
 
-/** AppServicePlanPatchResource resource specific properties. */
+/**
+ * AppServicePlanPatchResource resource specific properties.
+ */
 @Fluent
 public final class AppServicePlanPatchResourceProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AppServicePlanPatchResourceProperties.class);
-
     /*
      * Target worker tier assigned to the App Service plan.
      */
@@ -38,18 +37,22 @@ public final class AppServicePlanPatchResourceProperties {
     private String subscription;
 
     /*
-     * Specification for the App Service Environment to use for the App Service
-     * plan.
+     * Specification for the App Service Environment to use for the App Service plan.
      */
     @JsonProperty(value = "hostingEnvironmentProfile")
     private HostingEnvironmentProfile hostingEnvironmentProfile;
 
     /*
-     * Maximum number of instances that can be assigned to this App Service
-     * plan.
+     * Maximum number of instances that can be assigned to this App Service plan.
      */
     @JsonProperty(value = "maximumNumberOfWorkers", access = JsonProperty.Access.WRITE_ONLY)
     private Integer maximumNumberOfWorkers;
+
+    /*
+     * The number of instances that are assigned to this App Service plan.
+     */
+    @JsonProperty(value = "numberOfWorkers", access = JsonProperty.Access.WRITE_ONLY)
+    private Integer numberOfWorkers;
 
     /*
      * Geographical location for the App Service plan.
@@ -58,24 +61,20 @@ public final class AppServicePlanPatchResourceProperties {
     private String geoRegion;
 
     /*
-     * If <code>true</code>, apps assigned to this App Service plan can be
-     * scaled independently.
-     * If <code>false</code>, apps assigned to this App Service plan will scale
-     * to all instances of the plan.
+     * If <code>true</code>, apps assigned to this App Service plan can be scaled independently.
+     * If <code>false</code>, apps assigned to this App Service plan will scale to all instances of the plan.
      */
     @JsonProperty(value = "perSiteScaling")
     private Boolean perSiteScaling;
 
     /*
-     * ServerFarm supports ElasticScale. Apps in this plan will scale as if the
-     * ServerFarm was ElasticPremium sku
+     * ServerFarm supports ElasticScale. Apps in this plan will scale as if the ServerFarm was ElasticPremium sku
      */
     @JsonProperty(value = "elasticScaleEnabled")
     private Boolean elasticScaleEnabled;
 
     /*
-     * Maximum number of total workers allowed for this ElasticScaleEnabled App
-     * Service Plan
+     * Maximum number of total workers allowed for this ElasticScaleEnabled App Service Plan
      */
     @JsonProperty(value = "maximumElasticWorkerCount")
     private Integer maximumElasticWorkerCount;
@@ -93,8 +92,7 @@ public final class AppServicePlanPatchResourceProperties {
     private Boolean isSpot;
 
     /*
-     * The time when the server farm expires. Valid only if it is a spot server
-     * farm.
+     * The time when the server farm expires. Valid only if it is a spot server farm.
      */
     @JsonProperty(value = "spotExpirationTime")
     private OffsetDateTime spotExpirationTime;
@@ -112,22 +110,19 @@ public final class AppServicePlanPatchResourceProperties {
     private String resourceGroup;
 
     /*
-     * If Linux app service plan <code>true</code>, <code>false</code>
-     * otherwise.
+     * If Linux app service plan <code>true</code>, <code>false</code> otherwise.
      */
     @JsonProperty(value = "reserved")
     private Boolean reserved;
 
     /*
-     * Obsolete: If Hyper-V container app service plan <code>true</code>,
-     * <code>false</code> otherwise.
+     * Obsolete: If Hyper-V container app service plan <code>true</code>, <code>false</code> otherwise.
      */
     @JsonProperty(value = "isXenon")
     private Boolean isXenon;
 
     /*
-     * If Hyper-V container app service plan <code>true</code>,
-     * <code>false</code> otherwise.
+     * If Hyper-V container app service plan <code>true</code>, <code>false</code> otherwise.
      */
     @JsonProperty(value = "hyperV")
     private Boolean hyperV;
@@ -151,20 +146,23 @@ public final class AppServicePlanPatchResourceProperties {
     private ProvisioningState provisioningState;
 
     /*
-     * Specification for the Kubernetes Environment to use for the App Service
-     * plan.
+     * Specification for the Kubernetes Environment to use for the App Service plan.
      */
     @JsonProperty(value = "kubeEnvironmentProfile")
     private KubeEnvironmentProfile kubeEnvironmentProfile;
 
     /*
-     * If <code>true</code>, this App Service Plan will perform availability
-     * zone balancing.
-     * If <code>false</code>, this App Service Plan will not perform
-     * availability zone balancing.
+     * If <code>true</code>, this App Service Plan will perform availability zone balancing.
+     * If <code>false</code>, this App Service Plan will not perform availability zone balancing.
      */
     @JsonProperty(value = "zoneRedundant")
     private Boolean zoneRedundant;
+
+    /**
+     * Creates an instance of AppServicePlanPatchResourceProperties class.
+     */
+    public AppServicePlanPatchResourceProperties() {
+    }
 
     /**
      * Get the workerTierName property: Target worker tier assigned to the App Service plan.
@@ -221,8 +219,8 @@ public final class AppServicePlanPatchResourceProperties {
      * @param hostingEnvironmentProfile the hostingEnvironmentProfile value to set.
      * @return the AppServicePlanPatchResourceProperties object itself.
      */
-    public AppServicePlanPatchResourceProperties withHostingEnvironmentProfile(
-        HostingEnvironmentProfile hostingEnvironmentProfile) {
+    public AppServicePlanPatchResourceProperties
+        withHostingEnvironmentProfile(HostingEnvironmentProfile hostingEnvironmentProfile) {
         this.hostingEnvironmentProfile = hostingEnvironmentProfile;
         return this;
     }
@@ -238,6 +236,15 @@ public final class AppServicePlanPatchResourceProperties {
     }
 
     /**
+     * Get the numberOfWorkers property: The number of instances that are assigned to this App Service plan.
+     *
+     * @return the numberOfWorkers value.
+     */
+    public Integer numberOfWorkers() {
+        return this.numberOfWorkers;
+    }
+
+    /**
      * Get the geoRegion property: Geographical location for the App Service plan.
      *
      * @return the geoRegion value.
@@ -248,8 +255,9 @@ public final class AppServicePlanPatchResourceProperties {
 
     /**
      * Get the perSiteScaling property: If &lt;code&gt;true&lt;/code&gt;, apps assigned to this App Service plan can be
-     * scaled independently. If &lt;code&gt;false&lt;/code&gt;, apps assigned to this App Service plan will scale to all
-     * instances of the plan.
+     * scaled independently.
+     * If &lt;code&gt;false&lt;/code&gt;, apps assigned to this App Service plan will scale to all instances of the
+     * plan.
      *
      * @return the perSiteScaling value.
      */
@@ -259,8 +267,9 @@ public final class AppServicePlanPatchResourceProperties {
 
     /**
      * Set the perSiteScaling property: If &lt;code&gt;true&lt;/code&gt;, apps assigned to this App Service plan can be
-     * scaled independently. If &lt;code&gt;false&lt;/code&gt;, apps assigned to this App Service plan will scale to all
-     * instances of the plan.
+     * scaled independently.
+     * If &lt;code&gt;false&lt;/code&gt;, apps assigned to this App Service plan will scale to all instances of the
+     * plan.
      *
      * @param perSiteScaling the perSiteScaling value to set.
      * @return the AppServicePlanPatchResourceProperties object itself.
@@ -526,16 +535,16 @@ public final class AppServicePlanPatchResourceProperties {
      * @param kubeEnvironmentProfile the kubeEnvironmentProfile value to set.
      * @return the AppServicePlanPatchResourceProperties object itself.
      */
-    public AppServicePlanPatchResourceProperties withKubeEnvironmentProfile(
-        KubeEnvironmentProfile kubeEnvironmentProfile) {
+    public AppServicePlanPatchResourceProperties
+        withKubeEnvironmentProfile(KubeEnvironmentProfile kubeEnvironmentProfile) {
         this.kubeEnvironmentProfile = kubeEnvironmentProfile;
         return this;
     }
 
     /**
      * Get the zoneRedundant property: If &lt;code&gt;true&lt;/code&gt;, this App Service Plan will perform availability
-     * zone balancing. If &lt;code&gt;false&lt;/code&gt;, this App Service Plan will not perform availability zone
-     * balancing.
+     * zone balancing.
+     * If &lt;code&gt;false&lt;/code&gt;, this App Service Plan will not perform availability zone balancing.
      *
      * @return the zoneRedundant value.
      */
@@ -545,8 +554,8 @@ public final class AppServicePlanPatchResourceProperties {
 
     /**
      * Set the zoneRedundant property: If &lt;code&gt;true&lt;/code&gt;, this App Service Plan will perform availability
-     * zone balancing. If &lt;code&gt;false&lt;/code&gt;, this App Service Plan will not perform availability zone
-     * balancing.
+     * zone balancing.
+     * If &lt;code&gt;false&lt;/code&gt;, this App Service Plan will not perform availability zone balancing.
      *
      * @param zoneRedundant the zoneRedundant value to set.
      * @return the AppServicePlanPatchResourceProperties object itself.

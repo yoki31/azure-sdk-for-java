@@ -5,18 +5,16 @@
 package com.azure.resourcemanager.cdn.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cdn.models.ContinentsResponseContinentsItem;
 import com.azure.resourcemanager.cdn.models.ContinentsResponseCountryOrRegionsItem;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Continents Response. */
+/**
+ * Continents Response.
+ */
 @Fluent
 public final class ContinentsResponseInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ContinentsResponseInner.class);
-
     /*
      * The continents property.
      */
@@ -30,8 +28,14 @@ public final class ContinentsResponseInner {
     private List<ContinentsResponseCountryOrRegionsItem> countryOrRegions;
 
     /**
+     * Creates an instance of ContinentsResponseInner class.
+     */
+    public ContinentsResponseInner() {
+    }
+
+    /**
      * Get the continents property: The continents property.
-     *
+     * 
      * @return the continents value.
      */
     public List<ContinentsResponseContinentsItem> continents() {
@@ -40,7 +44,7 @@ public final class ContinentsResponseInner {
 
     /**
      * Set the continents property: The continents property.
-     *
+     * 
      * @param continents the continents value to set.
      * @return the ContinentsResponseInner object itself.
      */
@@ -51,7 +55,7 @@ public final class ContinentsResponseInner {
 
     /**
      * Get the countryOrRegions property: The countryOrRegions property.
-     *
+     * 
      * @return the countryOrRegions value.
      */
     public List<ContinentsResponseCountryOrRegionsItem> countryOrRegions() {
@@ -60,7 +64,7 @@ public final class ContinentsResponseInner {
 
     /**
      * Set the countryOrRegions property: The countryOrRegions property.
-     *
+     * 
      * @param countryOrRegions the countryOrRegions value to set.
      * @return the ContinentsResponseInner object itself.
      */
@@ -71,7 +75,7 @@ public final class ContinentsResponseInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

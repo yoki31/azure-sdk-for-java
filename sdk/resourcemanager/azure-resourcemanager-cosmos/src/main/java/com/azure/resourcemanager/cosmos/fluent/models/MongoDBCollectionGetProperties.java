@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.cosmos.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cosmos.models.MongoDBCollectionGetPropertiesOptions;
 import com.azure.resourcemanager.cosmos.models.MongoDBCollectionGetPropertiesResource;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The properties of an Azure Cosmos DB MongoDB collection. */
+/**
+ * The properties of an Azure Cosmos DB MongoDB collection.
+ */
 @Fluent
 public final class MongoDBCollectionGetProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MongoDBCollectionGetProperties.class);
-
     /*
      * The resource property.
      */
@@ -29,8 +27,14 @@ public final class MongoDBCollectionGetProperties {
     private MongoDBCollectionGetPropertiesOptions options;
 
     /**
+     * Creates an instance of MongoDBCollectionGetProperties class.
+     */
+    public MongoDBCollectionGetProperties() {
+    }
+
+    /**
      * Get the resource property: The resource property.
-     *
+     * 
      * @return the resource value.
      */
     public MongoDBCollectionGetPropertiesResource resource() {
@@ -39,7 +43,7 @@ public final class MongoDBCollectionGetProperties {
 
     /**
      * Set the resource property: The resource property.
-     *
+     * 
      * @param resource the resource value to set.
      * @return the MongoDBCollectionGetProperties object itself.
      */
@@ -50,7 +54,7 @@ public final class MongoDBCollectionGetProperties {
 
     /**
      * Get the options property: The options property.
-     *
+     * 
      * @return the options value.
      */
     public MongoDBCollectionGetPropertiesOptions options() {
@@ -59,7 +63,7 @@ public final class MongoDBCollectionGetProperties {
 
     /**
      * Set the options property: The options property.
-     *
+     * 
      * @param options the options value to set.
      * @return the MongoDBCollectionGetProperties object itself.
      */
@@ -70,7 +74,7 @@ public final class MongoDBCollectionGetProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

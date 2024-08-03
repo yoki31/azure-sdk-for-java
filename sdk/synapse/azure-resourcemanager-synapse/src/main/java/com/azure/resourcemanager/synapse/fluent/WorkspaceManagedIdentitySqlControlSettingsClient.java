@@ -22,6 +22,21 @@ public interface WorkspaceManagedIdentitySqlControlSettingsClient {
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return managed Identity Sql Control Settings along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<ManagedIdentitySqlControlSettingsModelInner> getWithResponse(
+        String resourceGroupName, String workspaceName, Context context);
+
+    /**
+     * Get Managed Identity Sql Control Settings.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
@@ -29,21 +44,6 @@ public interface WorkspaceManagedIdentitySqlControlSettingsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     ManagedIdentitySqlControlSettingsModelInner get(String resourceGroupName, String workspaceName);
-
-    /**
-     * Get Managed Identity Sql Control Settings.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return managed Identity Sql Control Settings.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<ManagedIdentitySqlControlSettingsModelInner> getWithResponse(
-        String resourceGroupName, String workspaceName, Context context);
 
     /**
      * Create or update Managed Identity Sql Control Settings.
@@ -54,7 +54,7 @@ public interface WorkspaceManagedIdentitySqlControlSettingsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return managed Identity Sql Control Settings.
+     * @return the {@link SyncPoller} for polling of managed Identity Sql Control Settings.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<ManagedIdentitySqlControlSettingsModelInner>, ManagedIdentitySqlControlSettingsModelInner>
@@ -73,7 +73,7 @@ public interface WorkspaceManagedIdentitySqlControlSettingsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return managed Identity Sql Control Settings.
+     * @return the {@link SyncPoller} for polling of managed Identity Sql Control Settings.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<ManagedIdentitySqlControlSettingsModelInner>, ManagedIdentitySqlControlSettingsModelInner>

@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** DeletedSite resource specific properties. */
+/**
+ * DeletedSite resource specific properties.
+ */
 @Immutable
 public final class DeletedSiteProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DeletedSiteProperties.class);
-
     /*
      * Numeric id for the deleted site
      */
@@ -63,8 +61,14 @@ public final class DeletedSiteProperties {
     private String geoRegionName;
 
     /**
+     * Creates an instance of DeletedSiteProperties class.
+     */
+    public DeletedSiteProperties() {
+    }
+
+    /**
      * Get the deletedSiteId property: Numeric id for the deleted site.
-     *
+     * 
      * @return the deletedSiteId value.
      */
     public Integer deletedSiteId() {
@@ -73,7 +77,7 @@ public final class DeletedSiteProperties {
 
     /**
      * Get the deletedTimestamp property: Time in UTC when the app was deleted.
-     *
+     * 
      * @return the deletedTimestamp value.
      */
     public String deletedTimestamp() {
@@ -82,7 +86,7 @@ public final class DeletedSiteProperties {
 
     /**
      * Get the subscription property: Subscription containing the deleted site.
-     *
+     * 
      * @return the subscription value.
      */
     public String subscription() {
@@ -91,7 +95,7 @@ public final class DeletedSiteProperties {
 
     /**
      * Get the resourceGroup property: ResourceGroup that contained the deleted site.
-     *
+     * 
      * @return the resourceGroup value.
      */
     public String resourceGroup() {
@@ -100,7 +104,7 @@ public final class DeletedSiteProperties {
 
     /**
      * Get the deletedSiteName property: Name of the deleted site.
-     *
+     * 
      * @return the deletedSiteName value.
      */
     public String deletedSiteName() {
@@ -109,7 +113,7 @@ public final class DeletedSiteProperties {
 
     /**
      * Get the slot property: Slot of the deleted site.
-     *
+     * 
      * @return the slot value.
      */
     public String slot() {
@@ -118,7 +122,7 @@ public final class DeletedSiteProperties {
 
     /**
      * Get the kind property: Kind of site that was deleted.
-     *
+     * 
      * @return the kind value.
      */
     public String kind() {
@@ -127,7 +131,7 @@ public final class DeletedSiteProperties {
 
     /**
      * Get the geoRegionName property: Geo Region of the deleted site.
-     *
+     * 
      * @return the geoRegionName value.
      */
     public String geoRegionName() {
@@ -136,7 +140,7 @@ public final class DeletedSiteProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

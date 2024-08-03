@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.ProxyOnlyResource;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Definition of Analysis. */
+/**
+ * Definition of Analysis.
+ */
 @Fluent
 public final class AnalysisDefinitionInner extends ProxyOnlyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AnalysisDefinitionInner.class);
-
     /*
      * AnalysisDefinition resource specific properties
      */
@@ -22,15 +20,23 @@ public final class AnalysisDefinitionInner extends ProxyOnlyResource {
     private AnalysisDefinitionProperties innerProperties;
 
     /**
+     * Creates an instance of AnalysisDefinitionInner class.
+     */
+    public AnalysisDefinitionInner() {
+    }
+
+    /**
      * Get the innerProperties property: AnalysisDefinition resource specific properties.
-     *
+     * 
      * @return the innerProperties value.
      */
     private AnalysisDefinitionProperties innerProperties() {
         return this.innerProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AnalysisDefinitionInner withKind(String kind) {
         super.withKind(kind);
@@ -39,7 +45,7 @@ public final class AnalysisDefinitionInner extends ProxyOnlyResource {
 
     /**
      * Get the description property: Description of the Analysis.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
@@ -48,7 +54,7 @@ public final class AnalysisDefinitionInner extends ProxyOnlyResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

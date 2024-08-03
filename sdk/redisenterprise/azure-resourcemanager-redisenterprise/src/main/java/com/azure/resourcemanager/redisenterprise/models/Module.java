@@ -6,24 +6,23 @@ package com.azure.resourcemanager.redisenterprise.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Specifies configuration of a redis module. */
+/**
+ * Module settings
+ * 
+ * Specifies configuration of a redis module.
+ */
 @Fluent
 public final class Module {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Module.class);
-
     /*
-     * The name of the module, e.g. 'RedisBloom', 'RediSearch',
-     * 'RedisTimeSeries'
+     * The name of the module, e.g. 'RedisBloom', 'RediSearch', 'RedisTimeSeries'
      */
     @JsonProperty(value = "name", required = true)
     private String name;
 
     /*
-     * Configuration options for the module, e.g. 'ERROR_RATE 0.00 INITIAL_SIZE
-     * 400'.
+     * Configuration options for the module, e.g. 'ERROR_RATE 0.01 INITIAL_SIZE 400'.
      */
     @JsonProperty(value = "args")
     private String args;
@@ -35,8 +34,14 @@ public final class Module {
     private String version;
 
     /**
+     * Creates an instance of Module class.
+     */
+    public Module() {
+    }
+
+    /**
      * Get the name property: The name of the module, e.g. 'RedisBloom', 'RediSearch', 'RedisTimeSeries'.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -45,7 +50,7 @@ public final class Module {
 
     /**
      * Set the name property: The name of the module, e.g. 'RedisBloom', 'RediSearch', 'RedisTimeSeries'.
-     *
+     * 
      * @param name the name value to set.
      * @return the Module object itself.
      */
@@ -55,8 +60,8 @@ public final class Module {
     }
 
     /**
-     * Get the args property: Configuration options for the module, e.g. 'ERROR_RATE 0.00 INITIAL_SIZE 400'.
-     *
+     * Get the args property: Configuration options for the module, e.g. 'ERROR_RATE 0.01 INITIAL_SIZE 400'.
+     * 
      * @return the args value.
      */
     public String args() {
@@ -64,8 +69,8 @@ public final class Module {
     }
 
     /**
-     * Set the args property: Configuration options for the module, e.g. 'ERROR_RATE 0.00 INITIAL_SIZE 400'.
-     *
+     * Set the args property: Configuration options for the module, e.g. 'ERROR_RATE 0.01 INITIAL_SIZE 400'.
+     * 
      * @param args the args value to set.
      * @return the Module object itself.
      */
@@ -76,7 +81,7 @@ public final class Module {
 
     /**
      * Get the version property: The version of the module, e.g. '1.0'.
-     *
+     * 
      * @return the version value.
      */
     public String version() {
@@ -85,13 +90,14 @@ public final class Module {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (name() == null) {
-            throw logger
-                .logExceptionAsError(new IllegalArgumentException("Missing required property name in model Module"));
+            throw LOGGER.atError().log(new IllegalArgumentException("Missing required property name in model Module"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(Module.class);
 }

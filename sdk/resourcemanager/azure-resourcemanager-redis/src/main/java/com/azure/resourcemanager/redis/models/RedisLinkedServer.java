@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.redis.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Linked server Id. */
+/**
+ * Linked server Id.
+ */
 @Immutable
 public final class RedisLinkedServer {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RedisLinkedServer.class);
-
     /*
      * Linked server Id.
      */
@@ -21,8 +19,14 @@ public final class RedisLinkedServer {
     private String id;
 
     /**
+     * Creates an instance of RedisLinkedServer class.
+     */
+    public RedisLinkedServer() {
+    }
+
+    /**
      * Get the id property: Linked server Id.
-     *
+     * 
      * @return the id value.
      */
     public String id() {
@@ -31,7 +35,7 @@ public final class RedisLinkedServer {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

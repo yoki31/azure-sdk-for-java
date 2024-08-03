@@ -4,12 +4,10 @@
 
 package com.azure.resourcemanager.applicationinsights.generated;
 
-import com.azure.core.util.Context;
-
 /** Samples for Components Delete. */
 public final class ComponentsDeleteSamples {
     /*
-     * x-ms-original-file: specification/applicationinsights/resource-manager/Microsoft.Insights/preview/2018-05-01-preview/examples/ComponentsDelete.json
+     * x-ms-original-file: specification/applicationinsights/resource-manager/Microsoft.Insights/stable/2020-02-02/examples/ComponentsDelete.json
      */
     /**
      * Sample code: ComponentsDelete.
@@ -18,6 +16,8 @@ public final class ComponentsDeleteSamples {
      */
     public static void componentsDelete(
         com.azure.resourcemanager.applicationinsights.ApplicationInsightsManager manager) {
-        manager.components().deleteWithResponse("my-resource-group", "my-component", Context.NONE);
+        manager
+            .components()
+            .deleteByResourceGroupWithResponse("my-resource-group", "my-component", com.azure.core.util.Context.NONE);
     }
 }

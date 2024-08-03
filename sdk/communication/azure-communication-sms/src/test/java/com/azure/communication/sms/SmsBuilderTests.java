@@ -15,12 +15,20 @@ import com.azure.core.http.HttpPipelineBuilder;
 import com.azure.core.http.HttpRequest;
 import com.azure.core.http.HttpResponse;
 
+import com.azure.core.http.policy.ExponentialBackoffOptions;
+import com.azure.core.http.policy.HttpLogOptions;
+import com.azure.core.http.policy.RetryOptions;
+import com.azure.core.http.policy.RetryPolicy;
+import com.azure.core.util.ClientOptions;
+import com.azure.core.util.Configuration;
+import com.azure.identity.DefaultAzureCredentialBuilder;
 import org.junit.jupiter.api.Test;
 
 import reactor.core.publisher.Mono;
 
 public class SmsBuilderTests {
     static final String MOCK_URL = "https://REDACTED.communication.azure.com";
+    static final String MOCK_APP_ID = "appId";
     static final String MOCK_ACCESS_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaGfQSflKxwRJSMeKKF2QT4fwpMeJf36POk6yJVadQssw5c";
     static final String MOCK_CONNECTION_STRING = "endpoint=https://REDACTED.communication.azure.com/;accesskey=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaGfQSflKxwRJSMeKKF2QT4fwpMeJf36POk6yJVadQssw5c";
 
@@ -38,10 +46,9 @@ public class SmsBuilderTests {
         throws NullPointerException, MalformedURLException, InvalidKeyException, NoSuchAlgorithmException {
         builder
             .endpoint(MOCK_URL)
+            .configuration(Configuration.NONE)
             .httpClient(new NoOpHttpClient());
-        assertThrows(Exception.class, () -> {
-            builder.buildAsyncClient();
-        });
+        assertThrows(Exception.class, builder::buildAsyncClient);
     }
 
     @Test
@@ -50,9 +57,7 @@ public class SmsBuilderTests {
         builder
             .credential(new AzureKeyCredential(MOCK_ACCESS_KEY))
             .httpClient(new NoOpHttpClient());
-        assertThrows(Exception.class, () -> {
-            builder.buildAsyncClient();
-        });
+        assertThrows(Exception.class, builder::buildAsyncClient);
     }
 
     @Test
@@ -96,22 +101,61 @@ public class SmsBuilderTests {
     }
 
     @Test
-    public void nullRetryPolicyTest() {
-        assertThrows(NullPointerException.class, () -> {
-            builder
-                .connectionString(MOCK_CONNECTION_STRING)
-                .httpClient(new NoOpHttpClient())
-                .retryPolicy(null);
-        });
+    public void buildPipelineWithNullClientOptions() {
+        SmsAsyncClient smsClient = builder
+            .connectionString(MOCK_CONNECTION_STRING)
+            .httpClient(new NoOpHttpClient())
+            .httpLogOptions(new HttpLogOptions())
+            .clientOptions(null)
+            .buildAsyncClient();
+        assertNotNull(smsClient);
     }
 
     @Test
-    public void buildPiplineForClient() {
+    public void buildPipelineWithClientOptionsApplicationId() {
+        SmsAsyncClient smsClient = builder
+            .connectionString(MOCK_CONNECTION_STRING)
+            .httpClient(new NoOpHttpClient())
+            .clientOptions(new ClientOptions().setApplicationId(MOCK_APP_ID))
+            .buildAsyncClient();
+        assertNotNull(smsClient);
+    }
+
+    @Test
+    public void buildPipelineWithLogOptionsApplicationId() {
+        SmsAsyncClient smsClient = builder
+            .connectionString(MOCK_CONNECTION_STRING)
+            .httpClient(new NoOpHttpClient())
+            .httpLogOptions(new HttpLogOptions().setApplicationId(MOCK_APP_ID))
+            .buildAsyncClient();
+        assertNotNull(smsClient);
+    }
+
+    @Test
+    public void buildPipelineForClient() {
         SmsAsyncClient smsClient = builder
             .connectionString(MOCK_CONNECTION_STRING)
             .httpClient(new NoOpHttpClient())
             .pipeline(new HttpPipelineBuilder().build())
             .buildAsyncClient();
         assertNotNull(smsClient);
+    }
+
+    @Test
+    public void bothRetryOptionsAndRetryPolicySet() {
+        assertThrows(IllegalStateException.class, () -> builder
+            .connectionString(MOCK_CONNECTION_STRING)
+            .retryOptions(new RetryOptions(new ExponentialBackoffOptions()))
+            .retryPolicy(new RetryPolicy())
+            .buildClient());
+    }
+
+    @Test
+    public void bothAzureKeyCredentialAndTokenCredentialSet() {
+        assertThrows(IllegalArgumentException.class, () -> builder
+            .connectionString(MOCK_CONNECTION_STRING)
+            .credential(new AzureKeyCredential(MOCK_ACCESS_KEY))
+            .credential(new DefaultAzureCredentialBuilder().build())
+            .buildClient());
     }
 }

@@ -5,33 +5,44 @@
 package com.azure.resourcemanager.netapp.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonSerializable;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
 import com.azure.resourcemanager.netapp.models.QosType;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.IOException;
 
-/** Patchable pool properties. */
+/**
+ * Patchable pool properties.
+ */
 @Fluent
-public final class PoolPatchProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PoolPatchProperties.class);
-
+public final class PoolPatchProperties implements JsonSerializable<PoolPatchProperties> {
     /*
-     * size Provisioned size of the pool (in bytes). Allowed values are in 4TiB
-     * chunks (value must be multiply of 4398046511104).
+     * Provisioned size of the pool (in bytes). Allowed values are in 1TiB chunks (value must be multiply of
+     * 1099511627776).
      */
-    @JsonProperty(value = "size")
     private Long size;
 
     /*
      * The qos type of the pool
      */
-    @JsonProperty(value = "qosType")
     private QosType qosType;
 
+    /*
+     * If enabled (true) the pool can contain cool Access enabled volumes.
+     */
+    private Boolean coolAccess;
+
     /**
-     * Get the size property: size Provisioned size of the pool (in bytes). Allowed values are in 4TiB chunks (value
-     * must be multiply of 4398046511104).
-     *
+     * Creates an instance of PoolPatchProperties class.
+     */
+    public PoolPatchProperties() {
+    }
+
+    /**
+     * Get the size property: Provisioned size of the pool (in bytes). Allowed values are in 1TiB chunks (value must be
+     * multiply of 1099511627776).
+     * 
      * @return the size value.
      */
     public Long size() {
@@ -39,9 +50,9 @@ public final class PoolPatchProperties {
     }
 
     /**
-     * Set the size property: size Provisioned size of the pool (in bytes). Allowed values are in 4TiB chunks (value
-     * must be multiply of 4398046511104).
-     *
+     * Set the size property: Provisioned size of the pool (in bytes). Allowed values are in 1TiB chunks (value must be
+     * multiply of 1099511627776).
+     * 
      * @param size the size value to set.
      * @return the PoolPatchProperties object itself.
      */
@@ -52,7 +63,7 @@ public final class PoolPatchProperties {
 
     /**
      * Get the qosType property: The qos type of the pool.
-     *
+     * 
      * @return the qosType value.
      */
     public QosType qosType() {
@@ -61,7 +72,7 @@ public final class PoolPatchProperties {
 
     /**
      * Set the qosType property: The qos type of the pool.
-     *
+     * 
      * @param qosType the qosType value to set.
      * @return the PoolPatchProperties object itself.
      */
@@ -71,10 +82,72 @@ public final class PoolPatchProperties {
     }
 
     /**
+     * Get the coolAccess property: If enabled (true) the pool can contain cool Access enabled volumes.
+     * 
+     * @return the coolAccess value.
+     */
+    public Boolean coolAccess() {
+        return this.coolAccess;
+    }
+
+    /**
+     * Set the coolAccess property: If enabled (true) the pool can contain cool Access enabled volumes.
+     * 
+     * @param coolAccess the coolAccess value to set.
+     * @return the PoolPatchProperties object itself.
+     */
+    public PoolPatchProperties withCoolAccess(Boolean coolAccess) {
+        this.coolAccess = coolAccess;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeNumberField("size", this.size);
+        jsonWriter.writeStringField("qosType", this.qosType == null ? null : this.qosType.toString());
+        jsonWriter.writeBooleanField("coolAccess", this.coolAccess);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of PoolPatchProperties from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of PoolPatchProperties if the JsonReader was pointing to an instance of it, or null if it was
+     * pointing to JSON null.
+     * @throws IOException If an error occurs while reading the PoolPatchProperties.
+     */
+    public static PoolPatchProperties fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            PoolPatchProperties deserializedPoolPatchProperties = new PoolPatchProperties();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("size".equals(fieldName)) {
+                    deserializedPoolPatchProperties.size = reader.getNullable(JsonReader::getLong);
+                } else if ("qosType".equals(fieldName)) {
+                    deserializedPoolPatchProperties.qosType = QosType.fromString(reader.getString());
+                } else if ("coolAccess".equals(fieldName)) {
+                    deserializedPoolPatchProperties.coolAccess = reader.getNullable(JsonReader::getBoolean);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedPoolPatchProperties;
+        });
     }
 }

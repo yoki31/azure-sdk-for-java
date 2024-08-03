@@ -6,14 +6,13 @@ package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Definition of a single parameter for an entity. */
+/**
+ * Definition of a single parameter for an entity.
+ */
 @Fluent
 public final class GlobalParameterSpecification {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GlobalParameterSpecification.class);
-
     /*
      * Global Parameter type.
      */
@@ -27,8 +26,14 @@ public final class GlobalParameterSpecification {
     private Object value;
 
     /**
+     * Creates an instance of GlobalParameterSpecification class.
+     */
+    public GlobalParameterSpecification() {
+    }
+
+    /**
      * Get the type property: Global Parameter type.
-     *
+     * 
      * @return the type value.
      */
     public GlobalParameterType type() {
@@ -37,7 +42,7 @@ public final class GlobalParameterSpecification {
 
     /**
      * Set the type property: Global Parameter type.
-     *
+     * 
      * @param type the type value to set.
      * @return the GlobalParameterSpecification object itself.
      */
@@ -48,7 +53,7 @@ public final class GlobalParameterSpecification {
 
     /**
      * Get the value property: Value of parameter.
-     *
+     * 
      * @return the value value.
      */
     public Object value() {
@@ -57,7 +62,7 @@ public final class GlobalParameterSpecification {
 
     /**
      * Set the value property: Value of parameter.
-     *
+     * 
      * @param value the value value to set.
      * @return the GlobalParameterSpecification object itself.
      */
@@ -68,21 +73,21 @@ public final class GlobalParameterSpecification {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (type() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property type in model GlobalParameterSpecification"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property type in model GlobalParameterSpecification"));
         }
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property value in model GlobalParameterSpecification"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property value in model GlobalParameterSpecification"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(GlobalParameterSpecification.class);
 }

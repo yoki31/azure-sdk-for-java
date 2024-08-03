@@ -7,15 +7,15 @@ package com.azure.resourcemanager.appservice.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.fluent.models.CertificateInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
-/** Collection of certificates. */
+/**
+ * Collection of certificates.
+ */
 @Fluent
 public final class CertificateCollection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CertificateCollection.class);
-
     /*
      * Collection of resources.
      */
@@ -27,6 +27,12 @@ public final class CertificateCollection {
      */
     @JsonProperty(value = "nextLink", access = JsonProperty.Access.WRITE_ONLY)
     private String nextLink;
+
+    /**
+     * Creates an instance of CertificateCollection class.
+     */
+    public CertificateCollection() {
+    }
 
     /**
      * Get the value property: Collection of resources.
@@ -64,11 +70,12 @@ public final class CertificateCollection {
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property value in model CertificateCollection"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property value in model CertificateCollection"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(CertificateCollection.class);
 }

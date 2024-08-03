@@ -16,7 +16,34 @@ import com.azure.resourcemanager.synapse.fluent.models.WorkloadClassifierInner;
 /** An instance of this class provides access to all the operations defined in SqlPoolWorkloadClassifiersClient. */
 public interface SqlPoolWorkloadClassifiersClient {
     /**
-     * Get a workload classifier of Sql pool's workload group.
+     * Get workload classifier
+     *
+     * <p>Get a workload classifier of Sql pool's workload group.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param sqlPoolName SQL pool name.
+     * @param workloadGroupName The name of the workload group.
+     * @param workloadClassifierName The name of the workload classifier.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a workload classifier of Sql pool's workload group along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<WorkloadClassifierInner> getWithResponse(
+        String resourceGroupName,
+        String workspaceName,
+        String sqlPoolName,
+        String workloadGroupName,
+        String workloadClassifierName,
+        Context context);
+
+    /**
+     * Get workload classifier
+     *
+     * <p>Get a workload classifier of Sql pool's workload group.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -37,30 +64,9 @@ public interface SqlPoolWorkloadClassifiersClient {
         String workloadClassifierName);
 
     /**
-     * Get a workload classifier of Sql pool's workload group.
+     * Create Or Update workload classifier
      *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param sqlPoolName SQL pool name.
-     * @param workloadGroupName The name of the workload group.
-     * @param workloadClassifierName The name of the workload classifier.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a workload classifier of Sql pool's workload group.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<WorkloadClassifierInner> getWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        String workloadGroupName,
-        String workloadClassifierName,
-        Context context);
-
-    /**
-     * Create Or Update workload classifier for a Sql pool's workload group.
+     * <p>Create Or Update workload classifier for a Sql pool's workload group.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -71,7 +77,7 @@ public interface SqlPoolWorkloadClassifiersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return workload classifier operations for a data warehouse.
+     * @return the {@link SyncPoller} for polling of workload classifier operations for a data warehouse.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<WorkloadClassifierInner>, WorkloadClassifierInner> beginCreateOrUpdate(
@@ -83,7 +89,9 @@ public interface SqlPoolWorkloadClassifiersClient {
         WorkloadClassifierInner parameters);
 
     /**
-     * Create Or Update workload classifier for a Sql pool's workload group.
+     * Create Or Update workload classifier
+     *
+     * <p>Create Or Update workload classifier for a Sql pool's workload group.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -95,7 +103,7 @@ public interface SqlPoolWorkloadClassifiersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return workload classifier operations for a data warehouse.
+     * @return the {@link SyncPoller} for polling of workload classifier operations for a data warehouse.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<WorkloadClassifierInner>, WorkloadClassifierInner> beginCreateOrUpdate(
@@ -108,7 +116,9 @@ public interface SqlPoolWorkloadClassifiersClient {
         Context context);
 
     /**
-     * Create Or Update workload classifier for a Sql pool's workload group.
+     * Create Or Update workload classifier
+     *
+     * <p>Create Or Update workload classifier for a Sql pool's workload group.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -131,7 +141,9 @@ public interface SqlPoolWorkloadClassifiersClient {
         WorkloadClassifierInner parameters);
 
     /**
-     * Create Or Update workload classifier for a Sql pool's workload group.
+     * Create Or Update workload classifier
+     *
+     * <p>Create Or Update workload classifier for a Sql pool's workload group.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -156,7 +168,9 @@ public interface SqlPoolWorkloadClassifiersClient {
         Context context);
 
     /**
-     * Remove workload classifier of a Sql pool's workload group.
+     * Remove workload classifier
+     *
+     * <p>Remove workload classifier of a Sql pool's workload group.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -166,7 +180,7 @@ public interface SqlPoolWorkloadClassifiersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginDelete(
@@ -177,7 +191,9 @@ public interface SqlPoolWorkloadClassifiersClient {
         String workloadClassifierName);
 
     /**
-     * Remove workload classifier of a Sql pool's workload group.
+     * Remove workload classifier
+     *
+     * <p>Remove workload classifier of a Sql pool's workload group.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -188,7 +204,7 @@ public interface SqlPoolWorkloadClassifiersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginDelete(
@@ -200,7 +216,9 @@ public interface SqlPoolWorkloadClassifiersClient {
         Context context);
 
     /**
-     * Remove workload classifier of a Sql pool's workload group.
+     * Remove workload classifier
+     *
+     * <p>Remove workload classifier of a Sql pool's workload group.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -220,7 +238,9 @@ public interface SqlPoolWorkloadClassifiersClient {
         String workloadClassifierName);
 
     /**
-     * Remove workload classifier of a Sql pool's workload group.
+     * Remove workload classifier
+     *
+     * <p>Remove workload classifier of a Sql pool's workload group.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -242,7 +262,9 @@ public interface SqlPoolWorkloadClassifiersClient {
         Context context);
 
     /**
-     * Get list of Sql pool's workload classifier for workload groups.
+     * Sql pool's workload classifier
+     *
+     * <p>Get list of Sql pool's workload classifier for workload groups.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -251,14 +273,17 @@ public interface SqlPoolWorkloadClassifiersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of Sql pool's workload classifier for workload groups.
+     * @return list of Sql pool's workload classifier for workload groups as paginated response with {@link
+     *     PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<WorkloadClassifierInner> list(
         String resourceGroupName, String workspaceName, String sqlPoolName, String workloadGroupName);
 
     /**
-     * Get list of Sql pool's workload classifier for workload groups.
+     * Sql pool's workload classifier
+     *
+     * <p>Get list of Sql pool's workload classifier for workload groups.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -268,7 +293,8 @@ public interface SqlPoolWorkloadClassifiersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of Sql pool's workload classifier for workload groups.
+     * @return list of Sql pool's workload classifier for workload groups as paginated response with {@link
+     *     PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<WorkloadClassifierInner> list(

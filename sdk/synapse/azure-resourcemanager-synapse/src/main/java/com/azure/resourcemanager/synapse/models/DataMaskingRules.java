@@ -17,12 +17,18 @@ public interface DataMaskingRules {
      * @param workspaceName The name of the workspace.
      * @param sqlPoolName SQL pool name.
      * @param dataMaskingRuleName The name of the data masking rule.
+     * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the specific Sql pool data masking rule.
+     * @return the specific Sql pool data masking rule along with {@link Response}.
      */
-    DataMaskingRule get(String resourceGroupName, String workspaceName, String sqlPoolName, String dataMaskingRuleName);
+    Response<DataMaskingRule> getWithResponse(
+        String resourceGroupName,
+        String workspaceName,
+        String sqlPoolName,
+        String dataMaskingRuleName,
+        Context context);
 
     /**
      * Gets the specific Sql pool data masking rule.
@@ -31,18 +37,12 @@ public interface DataMaskingRules {
      * @param workspaceName The name of the workspace.
      * @param sqlPoolName SQL pool name.
      * @param dataMaskingRuleName The name of the data masking rule.
-     * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the specific Sql pool data masking rule.
      */
-    Response<DataMaskingRule> getWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        String dataMaskingRuleName,
-        Context context);
+    DataMaskingRule get(String resourceGroupName, String workspaceName, String sqlPoolName, String dataMaskingRuleName);
 
     /**
      * Gets a list of Sql pool data masking rules.
@@ -53,7 +53,7 @@ public interface DataMaskingRules {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Sql pool data masking rules.
+     * @return a list of Sql pool data masking rules as paginated response with {@link PagedIterable}.
      */
     PagedIterable<DataMaskingRule> listBySqlPool(String resourceGroupName, String workspaceName, String sqlPoolName);
 
@@ -67,7 +67,7 @@ public interface DataMaskingRules {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Sql pool data masking rules.
+     * @return a list of Sql pool data masking rules as paginated response with {@link PagedIterable}.
      */
     PagedIterable<DataMaskingRule> listBySqlPool(
         String resourceGroupName, String workspaceName, String sqlPoolName, Context context);
@@ -79,7 +79,7 @@ public interface DataMaskingRules {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the specific Sql pool data masking rule.
+     * @return the specific Sql pool data masking rule along with {@link Response}.
      */
     DataMaskingRule getById(String id);
 
@@ -91,7 +91,7 @@ public interface DataMaskingRules {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the specific Sql pool data masking rule.
+     * @return the specific Sql pool data masking rule along with {@link Response}.
      */
     Response<DataMaskingRule> getByIdWithResponse(String id, Context context);
 

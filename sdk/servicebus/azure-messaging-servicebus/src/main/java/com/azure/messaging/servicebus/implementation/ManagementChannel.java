@@ -20,9 +20,12 @@ import com.azure.messaging.servicebus.ServiceBusException;
 import com.azure.messaging.servicebus.ServiceBusMessage;
 import com.azure.messaging.servicebus.ServiceBusReceivedMessage;
 import com.azure.messaging.servicebus.ServiceBusTransactionContext;
+import com.azure.messaging.servicebus.administration.models.CreateRuleOptions;
+import com.azure.messaging.servicebus.administration.models.RuleProperties;
 import com.azure.messaging.servicebus.models.ServiceBusReceiveMode;
 import org.apache.qpid.proton.Proton;
 import org.apache.qpid.proton.amqp.Binary;
+import org.apache.qpid.proton.amqp.DescribedType;
 import org.apache.qpid.proton.amqp.UnsignedInteger;
 import org.apache.qpid.proton.amqp.messaging.AmqpValue;
 import org.apache.qpid.proton.amqp.messaging.ApplicationProperties;
@@ -39,7 +42,6 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -50,14 +52,20 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+import static com.azure.core.amqp.implementation.ClientConstants.ENTITY_PATH_KEY;
 import static com.azure.core.util.FluxUtil.fluxError;
 import static com.azure.core.util.FluxUtil.monoError;
+import static com.azure.messaging.servicebus.implementation.ManagementConstants.OPERATION_ADD_RULE;
+import static com.azure.messaging.servicebus.implementation.ManagementConstants.OPERATION_GET_RULES;
 import static com.azure.messaging.servicebus.implementation.ManagementConstants.OPERATION_GET_SESSION_STATE;
 import static com.azure.messaging.servicebus.implementation.ManagementConstants.OPERATION_PEEK;
+import static com.azure.messaging.servicebus.implementation.ManagementConstants.OPERATION_REMOVE_RULE;
 import static com.azure.messaging.servicebus.implementation.ManagementConstants.OPERATION_RENEW_SESSION_LOCK;
 import static com.azure.messaging.servicebus.implementation.ManagementConstants.OPERATION_SCHEDULE_MESSAGE;
 import static com.azure.messaging.servicebus.implementation.ManagementConstants.OPERATION_SET_SESSION_STATE;
 import static com.azure.messaging.servicebus.implementation.ManagementConstants.OPERATION_UPDATE_DISPOSITION;
+import static com.azure.messaging.servicebus.implementation.ServiceBusConstants.DISPOSITION_STATUS_KEY;
+import static com.azure.messaging.servicebus.implementation.ServiceBusConstants.SESSION_ID_KEY;
 
 /**
  * Channel responsible for Service Bus related metadata, peek  and management plane operations. Management plane
@@ -79,8 +87,12 @@ public class ManagementChannel implements ServiceBusManagementNode {
         this.createChannel = Objects.requireNonNull(createChannel, "'createChannel' cannot be null.");
         this.fullyQualifiedNamespace = Objects.requireNonNull(fullyQualifiedNamespace,
             "'fullyQualifiedNamespace' cannot be null.");
-        this.logger = new ClientLogger(String.format("%s<%s>", ManagementChannel.class, entityPath));
         this.entityPath = Objects.requireNonNull(entityPath, "'entityPath' cannot be null.");
+
+        Map<String, Object> loggingContext = new HashMap<>(1);
+        loggingContext.put(ENTITY_PATH_KEY, entityPath);
+        this.logger = new ClientLogger(ManagementChannel.class, loggingContext);
+
         this.messageSerializer = Objects.requireNonNull(messageSerializer, "'messageSerializer' cannot be null.");
         this.tokenManager = Objects.requireNonNull(tokenManager, "'tokenManager' cannot be null.");
         this.operationTimeout = Objects.requireNonNull(operationTimeout, "'operationTimeout' cannot be null.");
@@ -135,16 +147,18 @@ public class ManagementChannel implements ServiceBusManagementNode {
             final Object value = ((AmqpValue) response.getBody()).getValue();
 
             if (!(value instanceof Map)) {
-                return monoError(logger, Exceptions.propagate(new AmqpException(false, String.format(
+                return monoError(logger, new AmqpException(false, String.format(
                     "Body not expected when renewing session. Id: %s. Value: %s", sessionId, value),
-                    getErrorContext())));
+                    getErrorContext()));
             }
 
             @SuppressWarnings("unchecked") final Map<String, Object> map = (Map<String, Object>) value;
             final Object sessionState = map.get(ManagementConstants.SESSION_STATE);
 
             if (sessionState == null) {
-                logger.info("sessionId[{}]. Does not have a session state.", sessionId);
+                logger.atInfo()
+                    .addKeyValue(SESSION_ID_KEY, sessionId)
+                    .log("Does not have a session state.");
                 return Mono.empty();
             }
 
@@ -249,7 +263,7 @@ public class ManagementChannel implements ServiceBusManagementNode {
      */
     @Override
     public Mono<OffsetDateTime> renewMessageLock(String lockToken, String associatedLinkName) {
-        return isAuthorized(OPERATION_PEEK).then(createChannel.flatMap(channel -> {
+        return isAuthorized(ManagementConstants.OPERATION_RENEW_LOCK).then(createChannel.flatMap(channel -> {
             final Message requestMessage = createManagementMessage(ManagementConstants.OPERATION_RENEW_LOCK,
                 associatedLinkName);
             final Map<String, Object> requestBody = new HashMap<>();
@@ -338,8 +352,8 @@ public class ManagementChannel implements ServiceBusManagementNode {
                         "Error sending. Size of the payload exceeded maximum message size: %s kb", maxLinkSize / 1024);
                     final AmqpErrorContext errorContext = channel.getErrorContext();
 
-                    return monoError(logger, Exceptions.propagate(new AmqpException(false,
-                        AmqpErrorCondition.LINK_PAYLOAD_SIZE_EXCEEDED, errorMessage, exception, errorContext)));
+                    return monoError(logger, new AmqpException(false,
+                        AmqpErrorCondition.LINK_PAYLOAD_SIZE_EXCEEDED, errorMessage, exception, errorContext));
                 }
 
                 final Map<String, Object> messageEntry = new HashMap<>();
@@ -369,7 +383,7 @@ public class ManagementChannel implements ServiceBusManagementNode {
             TransactionalState transactionalState = null;
             if (transactionContext != null && transactionContext.getTransactionId() != null) {
                 transactionalState = new TransactionalState();
-                transactionalState.setTxnId(new Binary(transactionContext.getTransactionId().array()));
+                transactionalState.setTxnId(Binary.create(transactionContext.getTransactionId()));
             }
 
             return sendWithVerify(channel, requestMessage, transactionalState);
@@ -410,15 +424,17 @@ public class ManagementChannel implements ServiceBusManagementNode {
         String deadLetterErrorDescription, Map<String, Object> propertiesToModify, String sessionId,
         String associatedLinkName, ServiceBusTransactionContext transactionContext) {
 
-        final UUID[] lockTokens = new UUID[]{UUID.fromString(lockToken)};
         return isAuthorized(OPERATION_UPDATE_DISPOSITION).then(createChannel.flatMap(channel -> {
-            logger.verbose("Update disposition of deliveries '{}' to '{}' on entity '{}', session '{}'",
-                Arrays.toString(lockTokens), dispositionStatus, entityPath, sessionId);
+            logger.atVerbose()
+                .addKeyValue(ServiceBusConstants.LOCK_TOKEN_KEY, lockToken)
+                .addKeyValue(DISPOSITION_STATUS_KEY, dispositionStatus)
+                .addKeyValue(SESSION_ID_KEY, sessionId)
+                .log("Scheduling disposition (via management node).");
 
             final Message message = createManagementMessage(OPERATION_UPDATE_DISPOSITION, associatedLinkName);
 
             final Map<String, Object> requestBody = new HashMap<>();
-            requestBody.put(ManagementConstants.LOCK_TOKENS_KEY, lockTokens);
+            requestBody.put(ManagementConstants.LOCK_TOKENS_KEY, new UUID[]{UUID.fromString(lockToken)});
             requestBody.put(ManagementConstants.DISPOSITION_STATUS_KEY, dispositionStatus.getValue());
 
             if (deadLetterReason != null) {
@@ -442,11 +458,79 @@ public class ManagementChannel implements ServiceBusManagementNode {
             TransactionalState transactionalState = null;
             if (transactionContext != null && transactionContext.getTransactionId() != null) {
                 transactionalState = new TransactionalState();
-                transactionalState.setTxnId(new Binary(transactionContext.getTransactionId().array()));
+                transactionalState.setTxnId(Binary.create(transactionContext.getTransactionId()));
             }
 
             return sendWithVerify(channel, message, transactionalState);
         })).then();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Mono<Void> createRule(String ruleName, CreateRuleOptions ruleOptions) {
+        return isAuthorized(OPERATION_ADD_RULE).then(createChannel.flatMap(channel -> {
+            final Message message = createManagementMessage(OPERATION_ADD_RULE, null);
+
+            final Map<String, Object> body = new HashMap<>(2);
+            body.put(ManagementConstants.RULE_NAME, ruleName);
+            body.put(ManagementConstants.RULE_DESCRIPTION, MessageUtils.encodeRuleOptionToMap(ruleName, ruleOptions));
+
+            message.setBody(new AmqpValue(body));
+
+            return sendWithVerify(channel, message, null);
+        })).then();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Mono<Void> deleteRule(String ruleName) {
+        return isAuthorized(OPERATION_REMOVE_RULE).then(createChannel.flatMap(channel -> {
+            final Message message = createManagementMessage(OPERATION_REMOVE_RULE, null);
+
+            final Map<String, Object> body = new HashMap<>(1);
+            body.put(ManagementConstants.RULE_NAME, ruleName);
+
+            message.setBody(new AmqpValue(body));
+
+            return sendWithVerify(channel, message, null);
+        })).then();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Flux<RuleProperties> listRules() {
+        return isAuthorized(OPERATION_GET_RULES).then(createChannel.flatMap(channel -> {
+            final Message message = createManagementMessage(OPERATION_GET_RULES, null);
+
+            final Map<String, Object> body = new HashMap<>(2);
+            body.put(ManagementConstants.SKIP, 0);
+            body.put(ManagementConstants.TOP, Integer.MAX_VALUE);
+
+            message.setBody(new AmqpValue(body));
+
+            return sendWithVerify(channel, message, null);
+        })).flatMapMany(response -> {
+            AmqpResponseCode statusCode = RequestResponseUtils.getStatusCode(response);
+
+            List<RuleProperties> list;
+            if (statusCode == AmqpResponseCode.OK) {
+                list = getRuleProperties((AmqpValue) response.getBody());
+            } else if (statusCode == AmqpResponseCode.NO_CONTENT) {
+                list = Collections.emptyList();
+            } else {
+                throw logger.logExceptionAsWarning(new AmqpException(true,
+                    "Get rules response error. Could not get rules.",
+                    getErrorContext()));
+            }
+
+            return Flux.fromIterable(list);
+        });
     }
 
     /**
@@ -498,14 +582,23 @@ public class ManagementChannel implements ServiceBusManagementNode {
                 final Throwable throwable = ExceptionUtil.toException(errorCondition, statusDescription,
                     channel.getErrorContext());
 
-                logger.warning("status[{}] description[{}] condition[{}] Operation not successful.",
-                    statusCode, statusDescription, errorCondition);
+                logger.atWarning()
+                    .addKeyValue("status", statusCode)
+                    .addKeyValue("description", statusDescription)
+                    .addKeyValue("condition", errorCondition)
+                    .log("Operation not successful.");
 
                 sink.error(throwable);
             })
-            .switchIfEmpty(Mono.error(new AmqpException(true, "No response received from management channel.",
-                channel.getErrorContext())))
+            .switchIfEmpty(errorIfEmpty(channel))
             .onErrorMap(this::mapError);
+    }
+
+    private <T> Mono<T> errorIfEmpty(RequestResponseChannel channel) {
+        return Mono.error(() -> {
+            String error = String.format("entityPath[%s] No response received from management channel.", entityPath);
+            return logger.logExceptionAsWarning(new AmqpException(true, error, channel.getErrorContext()));
+        });
     }
 
     private Mono<Void> isAuthorized(String operation) {
@@ -550,5 +643,33 @@ public class ManagementChannel implements ServiceBusManagementNode {
 
     private AmqpErrorContext getErrorContext() {
         return new SessionErrorContext(fullyQualifiedNamespace, entityPath);
+    }
+
+    /**
+     * Get {@link RuleProperties} from message body.
+     *
+     * @param messageBody A message body which is {@link AmqpValue} type.
+     * @return A collection of {@link RuleProperties}.
+     *
+     * @throws UnsupportedOperationException if client cannot support filter with descriptor in message body.
+     */
+    private List<RuleProperties> getRuleProperties(AmqpValue messageBody) {
+        if (messageBody == null) {
+            return Collections.emptyList();
+        }
+
+        @SuppressWarnings("unchecked") List<Map<String, DescribedType>> rules = ((Map<String, List<Map<String, DescribedType>>>) messageBody.getValue())
+            .get(ManagementConstants.RULES);
+        if (rules == null) {
+            return Collections.emptyList();
+        }
+
+        List<RuleProperties> ruleProperties = new ArrayList<>();
+        for (Map<String, DescribedType> rule : rules) {
+            DescribedType ruleDescription = rule.get(ManagementConstants.RULE_DESCRIPTION);
+            ruleProperties.add(MessageUtils.decodeRuleDescribedType(ruleDescription));
+        }
+
+        return ruleProperties;
     }
 }

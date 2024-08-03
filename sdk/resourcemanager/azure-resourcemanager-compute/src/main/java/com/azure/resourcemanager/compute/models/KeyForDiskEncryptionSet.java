@@ -6,34 +6,37 @@ package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Key Vault Key Url to be used for server side encryption of Managed Disks and Snapshots. */
+/**
+ * Key Vault Key Url to be used for server side encryption of Managed Disks and Snapshots.
+ */
 @Fluent
 public final class KeyForDiskEncryptionSet {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(KeyForDiskEncryptionSet.class);
-
     /*
-     * Resource id of the KeyVault containing the key or secret. This property
-     * is optional and cannot be used if the KeyVault subscription is not the
-     * same as the Disk Encryption Set subscription.
+     * Resource id of the KeyVault containing the key or secret. This property is optional and cannot be used if the
+     * KeyVault subscription is not the same as the Disk Encryption Set subscription.
      */
     @JsonProperty(value = "sourceVault")
     private SourceVault sourceVault;
 
     /*
-     * Fully versioned Key Url pointing to a key in KeyVault. Version segment
-     * of the Url is required regardless of rotationToLatestKeyVersionEnabled
-     * value.
+     * Fully versioned Key Url pointing to a key in KeyVault. Version segment of the Url is required regardless of
+     * rotationToLatestKeyVersionEnabled value.
      */
     @JsonProperty(value = "keyUrl", required = true)
     private String keyUrl;
 
     /**
+     * Creates an instance of KeyForDiskEncryptionSet class.
+     */
+    public KeyForDiskEncryptionSet() {
+    }
+
+    /**
      * Get the sourceVault property: Resource id of the KeyVault containing the key or secret. This property is optional
      * and cannot be used if the KeyVault subscription is not the same as the Disk Encryption Set subscription.
-     *
+     * 
      * @return the sourceVault value.
      */
     public SourceVault sourceVault() {
@@ -43,7 +46,7 @@ public final class KeyForDiskEncryptionSet {
     /**
      * Set the sourceVault property: Resource id of the KeyVault containing the key or secret. This property is optional
      * and cannot be used if the KeyVault subscription is not the same as the Disk Encryption Set subscription.
-     *
+     * 
      * @param sourceVault the sourceVault value to set.
      * @return the KeyForDiskEncryptionSet object itself.
      */
@@ -55,7 +58,7 @@ public final class KeyForDiskEncryptionSet {
     /**
      * Get the keyUrl property: Fully versioned Key Url pointing to a key in KeyVault. Version segment of the Url is
      * required regardless of rotationToLatestKeyVersionEnabled value.
-     *
+     * 
      * @return the keyUrl value.
      */
     public String keyUrl() {
@@ -65,7 +68,7 @@ public final class KeyForDiskEncryptionSet {
     /**
      * Set the keyUrl property: Fully versioned Key Url pointing to a key in KeyVault. Version segment of the Url is
      * required regardless of rotationToLatestKeyVersionEnabled value.
-     *
+     * 
      * @param keyUrl the keyUrl value to set.
      * @return the KeyForDiskEncryptionSet object itself.
      */
@@ -76,7 +79,7 @@ public final class KeyForDiskEncryptionSet {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
@@ -84,9 +87,10 @@ public final class KeyForDiskEncryptionSet {
             sourceVault().validate();
         }
         if (keyUrl() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property keyUrl in model KeyForDiskEncryptionSet"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property keyUrl in model KeyForDiskEncryptionSet"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(KeyForDiskEncryptionSet.class);
 }

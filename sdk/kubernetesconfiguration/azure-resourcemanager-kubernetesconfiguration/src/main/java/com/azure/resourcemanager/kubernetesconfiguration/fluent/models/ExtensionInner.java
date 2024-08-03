@@ -8,13 +8,12 @@ import com.azure.core.annotation.Fluent;
 import com.azure.core.management.ProxyResource;
 import com.azure.core.management.SystemData;
 import com.azure.core.management.exception.ManagementError;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.kubernetesconfiguration.models.ExtensionPropertiesAksAssignedIdentity;
 import com.azure.resourcemanager.kubernetesconfiguration.models.ExtensionStatus;
 import com.azure.resourcemanager.kubernetesconfiguration.models.Identity;
+import com.azure.resourcemanager.kubernetesconfiguration.models.Plan;
 import com.azure.resourcemanager.kubernetesconfiguration.models.ProvisioningState;
 import com.azure.resourcemanager.kubernetesconfiguration.models.Scope;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;
@@ -22,8 +21,6 @@ import java.util.Map;
 /** The Extension object. */
 @Fluent
 public final class ExtensionInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ExtensionInner.class);
-
     /*
      * Properties of an Extension resource
      */
@@ -42,6 +39,16 @@ public final class ExtensionInner extends ProxyResource {
      */
     @JsonProperty(value = "systemData", access = JsonProperty.Access.WRITE_ONLY)
     private SystemData systemData;
+
+    /*
+     * The plan information.
+     */
+    @JsonProperty(value = "plan")
+    private Plan plan;
+
+    /** Creates an instance of ExtensionInner class. */
+    public ExtensionInner() {
+    }
 
     /**
      * Get the innerProperties property: Properties of an Extension resource.
@@ -80,6 +87,26 @@ public final class ExtensionInner extends ProxyResource {
      */
     public SystemData systemData() {
         return this.systemData;
+    }
+
+    /**
+     * Get the plan property: The plan information.
+     *
+     * @return the plan value.
+     */
+    public Plan plan() {
+        return this.plan;
+    }
+
+    /**
+     * Set the plan property: The plan information.
+     *
+     * @param plan the plan value to set.
+     * @return the ExtensionInner object itself.
+     */
+    public ExtensionInner withPlan(Plan plan) {
+        this.plan = plan;
+        return this;
     }
 
     /**
@@ -158,7 +185,7 @@ public final class ExtensionInner extends ProxyResource {
     }
 
     /**
-     * Get the version property: Version of the extension for this extension, if it is 'pinned' to a specific version.
+     * Get the version property: User-specified version of the extension for this extension to 'pin'. To use 'version',
      * autoUpgradeMinorVersion must be 'false'.
      *
      * @return the version value.
@@ -168,7 +195,7 @@ public final class ExtensionInner extends ProxyResource {
     }
 
     /**
-     * Set the version property: Version of the extension for this extension, if it is 'pinned' to a specific version.
+     * Set the version property: User-specified version of the extension for this extension to 'pin'. To use 'version',
      * autoUpgradeMinorVersion must be 'false'.
      *
      * @param version the version value to set.
@@ -256,7 +283,16 @@ public final class ExtensionInner extends ProxyResource {
     }
 
     /**
-     * Get the provisioningState property: The provisioning state of the extension resource.
+     * Get the currentVersion property: Currently installed version of the extension.
+     *
+     * @return the currentVersion value.
+     */
+    public String currentVersion() {
+        return this.innerProperties() == null ? null : this.innerProperties().currentVersion();
+    }
+
+    /**
+     * Get the provisioningState property: Status of installation of this extension.
      *
      * @return the provisioningState value.
      */
@@ -288,26 +324,12 @@ public final class ExtensionInner extends ProxyResource {
     }
 
     /**
-     * Get the errorInfo property: The error detail.
+     * Get the errorInfo property: Error information from the Agent - e.g. errors during installation.
      *
      * @return the errorInfo value.
      */
     public ManagementError errorInfo() {
         return this.innerProperties() == null ? null : this.innerProperties().errorInfo();
-    }
-
-    /**
-     * Set the errorInfo property: The error detail.
-     *
-     * @param errorInfo the errorInfo value to set.
-     * @return the ExtensionInner object itself.
-     */
-    public ExtensionInner withErrorInfo(ManagementError errorInfo) {
-        if (this.innerProperties() == null) {
-            this.innerProperties = new ExtensionProperties();
-        }
-        this.innerProperties().withErrorInfo(errorInfo);
-        return this;
     }
 
     /**
@@ -352,6 +374,15 @@ public final class ExtensionInner extends ProxyResource {
     }
 
     /**
+     * Get the isSystemExtension property: Flag to note if this extension is a system extension.
+     *
+     * @return the isSystemExtension value.
+     */
+    public Boolean isSystemExtension() {
+        return this.innerProperties() == null ? null : this.innerProperties().isSystemExtension();
+    }
+
+    /**
      * Validates the instance.
      *
      * @throws IllegalArgumentException thrown if the instance is not valid.
@@ -362,6 +393,9 @@ public final class ExtensionInner extends ProxyResource {
         }
         if (identity() != null) {
             identity().validate();
+        }
+        if (plan() != null) {
+            plan().validate();
         }
     }
 }

@@ -5,8 +5,13 @@ package com.azure.perf.test.core;
 
 import java.net.URI;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
+import com.azure.core.http.netty.NettyAsyncHttpClientProvider;
+import com.azure.core.util.ExpandableStringEnum;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.IParameterSplitter;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -17,7 +22,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder(alphabetic = true)
 public class PerfStressOptions {
     @Parameter(names = { "-d", "--duration" }, description = "duration of test in seconds")
-    private int duration = 10;
+    private int duration = 15;
 
     @Parameter(names = { "--insecure" }, description = "Allow untrusted SSL server certs")
     private boolean insecure = false;
@@ -35,7 +40,7 @@ public class PerfStressOptions {
     private int parallel = 1;
 
     @Parameter(names = { "-w", "--warmup" }, description = "duration of warmup in seconds")
-    private int warmup = 10;
+    private int warmup = 15;
 
     @Parameter(names = { "--sync" }, description = "Runs sync version of test")
     private boolean sync = false;
@@ -45,6 +50,9 @@ public class PerfStressOptions {
 
     @Parameter(names = { "-c", "--count" }, description = "Number of items")
     private int count = 10;
+
+    @Parameter(names = { "--http-client" }, description = "The http client to use. Can be netty, okhttp, jdk, vertx or a full name of HttpClientProvider implementation class.")
+    private String httpClient = HttpClientType.NETTY.toString();
 
     /**
      * Get the configured count for performance test.
@@ -126,9 +134,36 @@ public class PerfStressOptions {
         return sync;
     }
 
+    /**
+     * The http client to use. Can be netty, okhttp.
+     * @return The http client to use.
+     */
+    public HttpClientType getHttpClient() {
+        return HttpClientType.fromString(httpClient);
+    }
+
     private static class SemiColonSplitter implements IParameterSplitter {
         public List<String> split(String value) {
             return Arrays.asList(value.split(";"));
+        }
+    }
+
+    public static class HttpClientType extends ExpandableStringEnum<HttpClientType> {
+        public static final HttpClientType NETTY = fromString("netty", HttpClientType.class);
+        public static final HttpClientType OKHTTP = fromString("okhttp", HttpClientType.class);
+        public static final HttpClientType JDK = fromString("jdk", HttpClientType.class);
+        public static final HttpClientType VERTX = fromString("vertx", HttpClientType.class);
+
+        public static HttpClientType fromString(String name) {
+            return fromString(name, HttpClientType.class);
+        }
+
+        public static Collection<HttpClientType> values() {
+            return values(HttpClientType.class);
+        }
+
+        @Deprecated
+        public HttpClientType() {
         }
     }
 }

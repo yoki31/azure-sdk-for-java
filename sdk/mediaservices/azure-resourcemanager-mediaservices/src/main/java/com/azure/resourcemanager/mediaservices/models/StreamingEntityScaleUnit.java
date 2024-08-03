@@ -5,20 +5,20 @@
 package com.azure.resourcemanager.mediaservices.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** scale units definition. */
 @Fluent
 public final class StreamingEntityScaleUnit {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(StreamingEntityScaleUnit.class);
-
     /*
      * The scale unit number of the streaming endpoint.
      */
     @JsonProperty(value = "scaleUnit")
     private Integer scaleUnit;
+
+    /** Creates an instance of StreamingEntityScaleUnit class. */
+    public StreamingEntityScaleUnit() {
+    }
 
     /**
      * Get the scaleUnit property: The scale unit number of the streaming endpoint.

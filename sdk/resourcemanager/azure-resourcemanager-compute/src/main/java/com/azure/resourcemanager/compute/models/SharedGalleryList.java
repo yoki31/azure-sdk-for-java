@@ -7,15 +7,14 @@ package com.azure.resourcemanager.compute.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.compute.fluent.models.SharedGalleryInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The List Shared Galleries operation response. */
+/**
+ * The List Shared Galleries operation response.
+ */
 @Fluent
 public final class SharedGalleryList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SharedGalleryList.class);
-
     /*
      * A list of shared galleries.
      */
@@ -23,15 +22,21 @@ public final class SharedGalleryList {
     private List<SharedGalleryInner> value;
 
     /*
-     * The uri to fetch the next page of shared galleries. Call ListNext() with
-     * this to fetch the next page of shared galleries.
+     * The uri to fetch the next page of shared galleries. Call ListNext() with this to fetch the next page of shared
+     * galleries.
      */
     @JsonProperty(value = "nextLink")
     private String nextLink;
 
     /**
+     * Creates an instance of SharedGalleryList class.
+     */
+    public SharedGalleryList() {
+    }
+
+    /**
      * Get the value property: A list of shared galleries.
-     *
+     * 
      * @return the value value.
      */
     public List<SharedGalleryInner> value() {
@@ -40,7 +45,7 @@ public final class SharedGalleryList {
 
     /**
      * Set the value property: A list of shared galleries.
-     *
+     * 
      * @param value the value value to set.
      * @return the SharedGalleryList object itself.
      */
@@ -52,7 +57,7 @@ public final class SharedGalleryList {
     /**
      * Get the nextLink property: The uri to fetch the next page of shared galleries. Call ListNext() with this to fetch
      * the next page of shared galleries.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -62,7 +67,7 @@ public final class SharedGalleryList {
     /**
      * Set the nextLink property: The uri to fetch the next page of shared galleries. Call ListNext() with this to fetch
      * the next page of shared galleries.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the SharedGalleryList object itself.
      */
@@ -73,16 +78,17 @@ public final class SharedGalleryList {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property value in model SharedGalleryList"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property value in model SharedGalleryList"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(SharedGalleryList.class);
 }

@@ -5,18 +5,15 @@
 package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The JSON object that contains the properties to send health probes to origin. */
+/**
+ * The JSON object that contains the properties to send health probes to origin.
+ */
 @Fluent
 public final class HealthProbeParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(HealthProbeParameters.class);
-
     /*
-     * The path relative to the origin that is used to determine the health of
-     * the origin.
+     * The path relative to the origin that is used to determine the health of the origin.
      */
     @JsonProperty(value = "probePath")
     private String probePath;
@@ -40,8 +37,14 @@ public final class HealthProbeParameters {
     private Integer probeIntervalInSeconds;
 
     /**
+     * Creates an instance of HealthProbeParameters class.
+     */
+    public HealthProbeParameters() {
+    }
+
+    /**
      * Get the probePath property: The path relative to the origin that is used to determine the health of the origin.
-     *
+     * 
      * @return the probePath value.
      */
     public String probePath() {
@@ -50,7 +53,7 @@ public final class HealthProbeParameters {
 
     /**
      * Set the probePath property: The path relative to the origin that is used to determine the health of the origin.
-     *
+     * 
      * @param probePath the probePath value to set.
      * @return the HealthProbeParameters object itself.
      */
@@ -61,7 +64,7 @@ public final class HealthProbeParameters {
 
     /**
      * Get the probeRequestType property: The type of health probe request that is made.
-     *
+     * 
      * @return the probeRequestType value.
      */
     public HealthProbeRequestType probeRequestType() {
@@ -70,7 +73,7 @@ public final class HealthProbeParameters {
 
     /**
      * Set the probeRequestType property: The type of health probe request that is made.
-     *
+     * 
      * @param probeRequestType the probeRequestType value to set.
      * @return the HealthProbeParameters object itself.
      */
@@ -81,7 +84,7 @@ public final class HealthProbeParameters {
 
     /**
      * Get the probeProtocol property: Protocol to use for health probe.
-     *
+     * 
      * @return the probeProtocol value.
      */
     public ProbeProtocol probeProtocol() {
@@ -90,7 +93,7 @@ public final class HealthProbeParameters {
 
     /**
      * Set the probeProtocol property: Protocol to use for health probe.
-     *
+     * 
      * @param probeProtocol the probeProtocol value to set.
      * @return the HealthProbeParameters object itself.
      */
@@ -101,7 +104,7 @@ public final class HealthProbeParameters {
 
     /**
      * Get the probeIntervalInSeconds property: The number of seconds between health probes.Default is 240sec.
-     *
+     * 
      * @return the probeIntervalInSeconds value.
      */
     public Integer probeIntervalInSeconds() {
@@ -110,7 +113,7 @@ public final class HealthProbeParameters {
 
     /**
      * Set the probeIntervalInSeconds property: The number of seconds between health probes.Default is 240sec.
-     *
+     * 
      * @param probeIntervalInSeconds the probeIntervalInSeconds value to set.
      * @return the HealthProbeParameters object itself.
      */
@@ -121,7 +124,7 @@ public final class HealthProbeParameters {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -5,7 +5,11 @@
 package com.azure.monitor.opentelemetry.exporter.implementation.models;
 
 import com.azure.core.annotation.Fluent;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -17,26 +21,28 @@ public final class MessageData extends MonitorDomain {
     /*
      * Trace message
      */
-    @JsonProperty(value = "message", required = true)
     private String message;
 
     /*
      * Trace severity level.
      */
-    @JsonProperty(value = "severityLevel")
     private SeverityLevel severityLevel;
 
     /*
      * Collection of custom properties.
      */
-    @JsonProperty(value = "properties")
     private Map<String, String> properties;
 
     /*
      * Collection of custom measurements.
      */
-    @JsonProperty(value = "measurements")
     private Map<String, Double> measurements;
+
+    /**
+     * Creates an instance of MessageData class.
+     */
+    public MessageData() {
+    }
 
     /**
      * Get the message property: Trace message.
@@ -116,5 +122,74 @@ public final class MessageData extends MonitorDomain {
     public MessageData setMeasurements(Map<String, Double> measurements) {
         this.measurements = measurements;
         return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public MessageData setVersion(int version) {
+        super.setVersion(version);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeIntField("ver", getVersion());
+        jsonWriter.writeStringField("message", this.message);
+        jsonWriter.writeStringField("severityLevel", this.severityLevel == null ? null : this.severityLevel.toString());
+        jsonWriter.writeMapField("properties", this.properties, JsonWriter::writeString);
+        jsonWriter.writeMapField("measurements", this.measurements, JsonWriter::writeDouble);
+        if (getAdditionalProperties() != null) {
+            for (Map.Entry<String, Object> additionalProperty : getAdditionalProperties().entrySet()) {
+                jsonWriter.writeUntypedField(additionalProperty.getKey(), additionalProperty.getValue());
+            }
+        }
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of MessageData from the JsonReader.
+     *
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of MessageData if the JsonReader was pointing to an instance of it, or null if it was
+     * pointing to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the MessageData.
+     */
+    public static MessageData fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            MessageData deserializedMessageData = new MessageData();
+            Map<String, Object> additionalProperties = null;
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("ver".equals(fieldName)) {
+                    deserializedMessageData.setVersion(reader.getInt());
+                } else if ("message".equals(fieldName)) {
+                    deserializedMessageData.message = reader.getString();
+                } else if ("severityLevel".equals(fieldName)) {
+                    deserializedMessageData.severityLevel = SeverityLevel.fromString(reader.getString());
+                } else if ("properties".equals(fieldName)) {
+                    deserializedMessageData.properties = reader.readMap(JsonReader::getString);
+                } else if ("measurements".equals(fieldName)) {
+                    deserializedMessageData.measurements = reader.readMap(JsonReader::getDouble);
+                } else {
+                    if (additionalProperties == null) {
+                        additionalProperties = new LinkedHashMap<>();
+                    }
+
+                    additionalProperties.put(fieldName, reader.readUntyped());
+                }
+            }
+            deserializedMessageData.setAdditionalProperties(additionalProperties);
+
+            return deserializedMessageData;
+        });
     }
 }

@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.monitor.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The claims for a rule management event data source. */
+/**
+ * The claims for a rule management event data source.
+ */
 @Fluent
 public final class RuleManagementEventClaimsDataSource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RuleManagementEventClaimsDataSource.class);
-
     /*
      * the email address.
      */
@@ -21,8 +19,14 @@ public final class RuleManagementEventClaimsDataSource {
     private String emailAddress;
 
     /**
+     * Creates an instance of RuleManagementEventClaimsDataSource class.
+     */
+    public RuleManagementEventClaimsDataSource() {
+    }
+
+    /**
      * Get the emailAddress property: the email address.
-     *
+     * 
      * @return the emailAddress value.
      */
     public String emailAddress() {
@@ -31,7 +35,7 @@ public final class RuleManagementEventClaimsDataSource {
 
     /**
      * Set the emailAddress property: the email address.
-     *
+     * 
      * @param emailAddress the emailAddress value to set.
      * @return the RuleManagementEventClaimsDataSource object itself.
      */
@@ -42,7 +46,7 @@ public final class RuleManagementEventClaimsDataSource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

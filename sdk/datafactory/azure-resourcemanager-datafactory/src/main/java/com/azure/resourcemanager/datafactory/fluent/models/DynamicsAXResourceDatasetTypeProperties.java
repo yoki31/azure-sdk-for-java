@@ -6,25 +6,29 @@ package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Dynamics AX OData resource dataset properties. */
+/**
+ * Dynamics AX OData resource dataset properties.
+ */
 @Fluent
 public final class DynamicsAXResourceDatasetTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DynamicsAXResourceDatasetTypeProperties.class);
-
     /*
-     * The path of the Dynamics AX OData entity. Type: string (or Expression
-     * with resultType string).
+     * The path of the Dynamics AX OData entity. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "path", required = true)
     private Object path;
 
     /**
+     * Creates an instance of DynamicsAXResourceDatasetTypeProperties class.
+     */
+    public DynamicsAXResourceDatasetTypeProperties() {
+    }
+
+    /**
      * Get the path property: The path of the Dynamics AX OData entity. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @return the path value.
      */
     public Object path() {
@@ -34,7 +38,7 @@ public final class DynamicsAXResourceDatasetTypeProperties {
     /**
      * Set the path property: The path of the Dynamics AX OData entity. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @param path the path value to set.
      * @return the DynamicsAXResourceDatasetTypeProperties object itself.
      */
@@ -45,15 +49,16 @@ public final class DynamicsAXResourceDatasetTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (path() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property path in model DynamicsAXResourceDatasetTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property path in model DynamicsAXResourceDatasetTypeProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(DynamicsAXResourceDatasetTypeProperties.class);
 }

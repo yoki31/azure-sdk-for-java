@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** IaaS VM workload specific restore details for restores using managed identity. */
+/**
+ * IaaS VM workload specific restore details for restores using managed identity.
+ */
 @Fluent
 public final class IdentityBasedRestoreDetails {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(IdentityBasedRestoreDetails.class);
-
     /*
      * Gets the class type.
      */
@@ -27,8 +25,14 @@ public final class IdentityBasedRestoreDetails {
     private String targetStorageAccountId;
 
     /**
+     * Creates an instance of IdentityBasedRestoreDetails class.
+     */
+    public IdentityBasedRestoreDetails() {
+    }
+
+    /**
      * Get the objectType property: Gets the class type.
-     *
+     * 
      * @return the objectType value.
      */
     public String objectType() {
@@ -37,7 +41,7 @@ public final class IdentityBasedRestoreDetails {
 
     /**
      * Set the objectType property: Gets the class type.
-     *
+     * 
      * @param objectType the objectType value to set.
      * @return the IdentityBasedRestoreDetails object itself.
      */
@@ -48,7 +52,7 @@ public final class IdentityBasedRestoreDetails {
 
     /**
      * Get the targetStorageAccountId property: Fully qualified ARM ID of the target storage account.
-     *
+     * 
      * @return the targetStorageAccountId value.
      */
     public String targetStorageAccountId() {
@@ -57,7 +61,7 @@ public final class IdentityBasedRestoreDetails {
 
     /**
      * Set the targetStorageAccountId property: Fully qualified ARM ID of the target storage account.
-     *
+     * 
      * @param targetStorageAccountId the targetStorageAccountId value to set.
      * @return the IdentityBasedRestoreDetails object itself.
      */
@@ -68,7 +72,7 @@ public final class IdentityBasedRestoreDetails {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

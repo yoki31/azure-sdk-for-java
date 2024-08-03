@@ -6,14 +6,13 @@ package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** A private link resource. */
+/**
+ * A private link resource.
+ */
 @Fluent
 public final class PrivateLinkResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PrivateLinkResource.class);
-
     /*
      * The id property.
      */
@@ -39,8 +38,14 @@ public final class PrivateLinkResource {
     private PrivateLinkResourceProperties properties;
 
     /**
+     * Creates an instance of PrivateLinkResource class.
+     */
+    public PrivateLinkResource() {
+    }
+
+    /**
      * Get the id property: The id property.
-     *
+     * 
      * @return the id value.
      */
     public String id() {
@@ -49,7 +54,7 @@ public final class PrivateLinkResource {
 
     /**
      * Set the id property: The id property.
-     *
+     * 
      * @param id the id value to set.
      * @return the PrivateLinkResource object itself.
      */
@@ -60,7 +65,7 @@ public final class PrivateLinkResource {
 
     /**
      * Get the name property: Name of a private link resource.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -69,7 +74,7 @@ public final class PrivateLinkResource {
 
     /**
      * Set the name property: Name of a private link resource.
-     *
+     * 
      * @param name the name value to set.
      * @return the PrivateLinkResource object itself.
      */
@@ -80,7 +85,7 @@ public final class PrivateLinkResource {
 
     /**
      * Get the type property: The type property.
-     *
+     * 
      * @return the type value.
      */
     public String type() {
@@ -89,7 +94,7 @@ public final class PrivateLinkResource {
 
     /**
      * Set the type property: The type property.
-     *
+     * 
      * @param type the type value to set.
      * @return the PrivateLinkResource object itself.
      */
@@ -100,7 +105,7 @@ public final class PrivateLinkResource {
 
     /**
      * Get the properties property: Properties of a private link resource.
-     *
+     * 
      * @return the properties value.
      */
     public PrivateLinkResourceProperties properties() {
@@ -109,7 +114,7 @@ public final class PrivateLinkResource {
 
     /**
      * Set the properties property: Properties of a private link resource.
-     *
+     * 
      * @param properties the properties value to set.
      * @return the PrivateLinkResource object itself.
      */
@@ -120,31 +125,29 @@ public final class PrivateLinkResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (id() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property id in model PrivateLinkResource"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property id in model PrivateLinkResource"));
         }
         if (name() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property name in model PrivateLinkResource"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property name in model PrivateLinkResource"));
         }
         if (type() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property type in model PrivateLinkResource"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property type in model PrivateLinkResource"));
         }
         if (properties() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property properties in model PrivateLinkResource"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property properties in model PrivateLinkResource"));
         } else {
             properties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(PrivateLinkResource.class);
 }

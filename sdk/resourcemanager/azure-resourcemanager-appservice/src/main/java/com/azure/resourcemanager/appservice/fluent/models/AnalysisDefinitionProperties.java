@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** AnalysisDefinition resource specific properties. */
+/**
+ * AnalysisDefinition resource specific properties.
+ */
 @Immutable
 public final class AnalysisDefinitionProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AnalysisDefinitionProperties.class);
-
     /*
      * Description of the Analysis
      */
@@ -21,8 +19,14 @@ public final class AnalysisDefinitionProperties {
     private String description;
 
     /**
+     * Creates an instance of AnalysisDefinitionProperties class.
+     */
+    public AnalysisDefinitionProperties() {
+    }
+
+    /**
      * Get the description property: Description of the Analysis.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
@@ -31,7 +35,7 @@ public final class AnalysisDefinitionProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

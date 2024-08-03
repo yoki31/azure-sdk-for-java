@@ -7,11 +7,13 @@ import com.azure.cosmos.implementation.RequestTimeline;
 import com.azure.cosmos.implementation.DiagnosticsInstantSerializer;
 import com.azure.cosmos.implementation.query.aggregation.AggregateOperator;
 import com.azure.cosmos.implementation.JsonSerializable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.azure.cosmos.implementation.apachecommons.lang.StringUtils;
 import com.azure.cosmos.implementation.Strings;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
@@ -34,6 +36,7 @@ public final class QueryInfo extends JsonSerializable {
     private DistinctQueryType distinctQueryType;
     private QueryPlanDiagnosticsContext queryPlanDiagnosticsContext;
     private DCountInfo dCountInfo;
+    private boolean nonStreamingOrderBy;
 
     public QueryInfo() {
     }
@@ -158,6 +161,11 @@ public final class QueryInfo extends JsonSerializable {
         return groupByExpressions != null && !groupByExpressions.isEmpty();
     }
 
+    public boolean hasNonStreamingOrderBy() {
+        this.nonStreamingOrderBy = Boolean.TRUE.equals(super.getBoolean("hasNonStreamingOrderBy"));
+        return this.nonStreamingOrderBy;
+    }
+
     public Map<String, AggregateOperator> getGroupByAliasToAggregateType(){
             Map<String, AggregateOperator>  groupByAliasToAggregateMap;
             groupByAliasToAggregateMap = super.getMap("groupByAliasToAggregateType");
@@ -216,6 +224,17 @@ public final class QueryInfo extends JsonSerializable {
 
         public Instant getEndTimeUTC() {
             return endTimeUTC;
+        }
+
+        @JsonIgnore
+        public Duration getDuration() {
+            if (startTimeUTC == null ||
+                endTimeUTC == null ||
+                endTimeUTC.isBefore(startTimeUTC)) {
+                return null;
+            }
+
+            return Duration.between(startTimeUTC, endTimeUTC);
         }
 
         public RequestTimeline getRequestTimeline() {

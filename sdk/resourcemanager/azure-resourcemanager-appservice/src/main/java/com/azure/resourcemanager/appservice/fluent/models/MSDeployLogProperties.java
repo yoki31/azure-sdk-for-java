@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.MSDeployLogEntry;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** MSDeployLog resource specific properties. */
+/**
+ * MSDeployLog resource specific properties.
+ */
 @Immutable
 public final class MSDeployLogProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MSDeployLogProperties.class);
-
     /*
      * List of log entry messages
      */
@@ -23,8 +21,14 @@ public final class MSDeployLogProperties {
     private List<MSDeployLogEntry> entries;
 
     /**
+     * Creates an instance of MSDeployLogProperties class.
+     */
+    public MSDeployLogProperties() {
+    }
+
+    /**
      * Get the entries property: List of log entry messages.
-     *
+     * 
      * @return the entries value.
      */
     public List<MSDeployLogEntry> entries() {
@@ -33,7 +37,7 @@ public final class MSDeployLogProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

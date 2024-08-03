@@ -7,33 +7,36 @@ package com.azure.resourcemanager.compute.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.SubResource;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Describes an Operating System disk. */
+/**
+ * Describes an Operating System disk.
+ */
 @Fluent
 public final class ImageOSDisk extends ImageDisk {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ImageOSDisk.class);
-
     /*
-     * This property allows you to specify the type of the OS that is included
-     * in the disk if creating a VM from a custom image. <br><br> Possible
-     * values are: <br><br> **Windows** <br><br> **Linux**
+     * This property allows you to specify the type of the OS that is included in the disk if creating a VM from a
+     * custom image. Possible values are: **Windows,** **Linux.**
      */
     @JsonProperty(value = "osType", required = true)
     private OperatingSystemTypes osType;
 
     /*
-     * The OS State.
+     * The OS State. For managed images, use Generalized.
      */
     @JsonProperty(value = "osState", required = true)
     private OperatingSystemStateTypes osState;
 
     /**
+     * Creates an instance of ImageOSDisk class.
+     */
+    public ImageOSDisk() {
+    }
+
+    /**
      * Get the osType property: This property allows you to specify the type of the OS that is included in the disk if
-     * creating a VM from a custom image. &lt;br&gt;&lt;br&gt; Possible values are: &lt;br&gt;&lt;br&gt; **Windows**
-     * &lt;br&gt;&lt;br&gt; **Linux**.
-     *
+     * creating a VM from a custom image. Possible values are: **Windows,** **Linux.**.
+     * 
      * @return the osType value.
      */
     public OperatingSystemTypes osType() {
@@ -42,9 +45,8 @@ public final class ImageOSDisk extends ImageDisk {
 
     /**
      * Set the osType property: This property allows you to specify the type of the OS that is included in the disk if
-     * creating a VM from a custom image. &lt;br&gt;&lt;br&gt; Possible values are: &lt;br&gt;&lt;br&gt; **Windows**
-     * &lt;br&gt;&lt;br&gt; **Linux**.
-     *
+     * creating a VM from a custom image. Possible values are: **Windows,** **Linux.**.
+     * 
      * @param osType the osType value to set.
      * @return the ImageOSDisk object itself.
      */
@@ -54,8 +56,8 @@ public final class ImageOSDisk extends ImageDisk {
     }
 
     /**
-     * Get the osState property: The OS State.
-     *
+     * Get the osState property: The OS State. For managed images, use Generalized.
+     * 
      * @return the osState value.
      */
     public OperatingSystemStateTypes osState() {
@@ -63,8 +65,8 @@ public final class ImageOSDisk extends ImageDisk {
     }
 
     /**
-     * Set the osState property: The OS State.
-     *
+     * Set the osState property: The OS State. For managed images, use Generalized.
+     * 
      * @param osState the osState value to set.
      * @return the ImageOSDisk object itself.
      */
@@ -73,49 +75,63 @@ public final class ImageOSDisk extends ImageDisk {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ImageOSDisk withSnapshot(SubResource snapshot) {
         super.withSnapshot(snapshot);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ImageOSDisk withManagedDisk(SubResource managedDisk) {
         super.withManagedDisk(managedDisk);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ImageOSDisk withBlobUri(String blobUri) {
         super.withBlobUri(blobUri);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ImageOSDisk withCaching(CachingTypes caching) {
         super.withCaching(caching);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ImageOSDisk withDiskSizeGB(Integer diskSizeGB) {
         super.withDiskSizeGB(diskSizeGB);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ImageOSDisk withStorageAccountType(StorageAccountTypes storageAccountType) {
         super.withStorageAccountType(storageAccountType);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ImageOSDisk withDiskEncryptionSet(DiskEncryptionSetParameters diskEncryptionSet) {
         super.withDiskEncryptionSet(diskEncryptionSet);
@@ -124,21 +140,21 @@ public final class ImageOSDisk extends ImageDisk {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
         if (osType() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property osType in model ImageOSDisk"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property osType in model ImageOSDisk"));
         }
         if (osState() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property osState in model ImageOSDisk"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property osState in model ImageOSDisk"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ImageOSDisk.class);
 }

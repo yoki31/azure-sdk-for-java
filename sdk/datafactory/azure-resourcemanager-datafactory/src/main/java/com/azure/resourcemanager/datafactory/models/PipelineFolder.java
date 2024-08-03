@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The folder that this Pipeline is in. If not specified, Pipeline will appear at the root level. */
+/**
+ * The folder that this Pipeline is in. If not specified, Pipeline will appear at the root level.
+ */
 @Fluent
 public final class PipelineFolder {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PipelineFolder.class);
-
     /*
      * The name of the folder that this Pipeline is in.
      */
@@ -21,8 +19,14 @@ public final class PipelineFolder {
     private String name;
 
     /**
+     * Creates an instance of PipelineFolder class.
+     */
+    public PipelineFolder() {
+    }
+
+    /**
      * Get the name property: The name of the folder that this Pipeline is in.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -31,7 +35,7 @@ public final class PipelineFolder {
 
     /**
      * Set the name property: The name of the folder that this Pipeline is in.
-     *
+     * 
      * @param name the name value to set.
      * @return the PipelineFolder object itself.
      */
@@ -42,7 +46,7 @@ public final class PipelineFolder {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

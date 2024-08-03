@@ -5,40 +5,46 @@
 package com.azure.resourcemanager.batch.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Base certificate properties. */
+/**
+ * Base certificate properties.
+ */
 @Fluent
 public class CertificateBaseProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CertificateBaseProperties.class);
-
     /*
-     * The algorithm of the certificate thumbprint. This must match the first
-     * portion of the certificate name. Currently required to be 'SHA1'.
+     * The algorithm of the certificate thumbprint.
+     * 
+     * This must match the first portion of the certificate name. Currently required to be 'SHA1'.
      */
     @JsonProperty(value = "thumbprintAlgorithm")
     private String thumbprintAlgorithm;
 
     /*
-     * The thumbprint of the certificate. This must match the thumbprint from
-     * the name.
+     * The thumbprint of the certificate.
+     * 
+     * This must match the thumbprint from the name.
      */
     @JsonProperty(value = "thumbprint")
     private String thumbprint;
 
     /*
-     * The format of the certificate - either Pfx or Cer. If omitted, the
-     * default is Pfx.
+     * The format of the certificate - either Pfx or Cer. If omitted, the default is Pfx.
      */
     @JsonProperty(value = "format")
     private CertificateFormat format;
 
     /**
-     * Get the thumbprintAlgorithm property: The algorithm of the certificate thumbprint. This must match the first
-     * portion of the certificate name. Currently required to be 'SHA1'.
-     *
+     * Creates an instance of CertificateBaseProperties class.
+     */
+    public CertificateBaseProperties() {
+    }
+
+    /**
+     * Get the thumbprintAlgorithm property: The algorithm of the certificate thumbprint.
+     * 
+     * This must match the first portion of the certificate name. Currently required to be 'SHA1'.
+     * 
      * @return the thumbprintAlgorithm value.
      */
     public String thumbprintAlgorithm() {
@@ -46,9 +52,10 @@ public class CertificateBaseProperties {
     }
 
     /**
-     * Set the thumbprintAlgorithm property: The algorithm of the certificate thumbprint. This must match the first
-     * portion of the certificate name. Currently required to be 'SHA1'.
-     *
+     * Set the thumbprintAlgorithm property: The algorithm of the certificate thumbprint.
+     * 
+     * This must match the first portion of the certificate name. Currently required to be 'SHA1'.
+     * 
      * @param thumbprintAlgorithm the thumbprintAlgorithm value to set.
      * @return the CertificateBaseProperties object itself.
      */
@@ -58,8 +65,10 @@ public class CertificateBaseProperties {
     }
 
     /**
-     * Get the thumbprint property: The thumbprint of the certificate. This must match the thumbprint from the name.
-     *
+     * Get the thumbprint property: The thumbprint of the certificate.
+     * 
+     * This must match the thumbprint from the name.
+     * 
      * @return the thumbprint value.
      */
     public String thumbprint() {
@@ -67,8 +76,10 @@ public class CertificateBaseProperties {
     }
 
     /**
-     * Set the thumbprint property: The thumbprint of the certificate. This must match the thumbprint from the name.
-     *
+     * Set the thumbprint property: The thumbprint of the certificate.
+     * 
+     * This must match the thumbprint from the name.
+     * 
      * @param thumbprint the thumbprint value to set.
      * @return the CertificateBaseProperties object itself.
      */
@@ -79,7 +90,7 @@ public class CertificateBaseProperties {
 
     /**
      * Get the format property: The format of the certificate - either Pfx or Cer. If omitted, the default is Pfx.
-     *
+     * 
      * @return the format value.
      */
     public CertificateFormat format() {
@@ -88,7 +99,7 @@ public class CertificateBaseProperties {
 
     /**
      * Set the format property: The format of the certificate - either Pfx or Cer. If omitted, the default is Pfx.
-     *
+     * 
      * @param format the format value to set.
      * @return the CertificateBaseProperties object itself.
      */
@@ -99,7 +110,7 @@ public class CertificateBaseProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

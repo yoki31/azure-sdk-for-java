@@ -25,7 +25,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.synapse.fluent.SqlPoolOperationsClient;
 import com.azure.resourcemanager.synapse.fluent.models.SqlPoolOperationInner;
 import com.azure.resourcemanager.synapse.models.SqlPoolBlobAuditingPolicySqlPoolOperationListResult;
@@ -33,8 +32,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in SqlPoolOperationsClient. */
 public final class SqlPoolOperationsClientImpl implements SqlPoolOperationsClient {
-    private final ClientLogger logger = new ClientLogger(SqlPoolOperationsClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final SqlPoolOperationsService service;
 
@@ -58,7 +55,7 @@ public final class SqlPoolOperationsClientImpl implements SqlPoolOperationsClien
      */
     @Host("{$host}")
     @ServiceInterface(name = "SynapseManagementCli")
-    private interface SqlPoolOperationsService {
+    public interface SqlPoolOperationsService {
         @Headers({"Content-Type: application/json"})
         @Get(
             "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
@@ -87,7 +84,9 @@ public final class SqlPoolOperationsClientImpl implements SqlPoolOperationsClien
     }
 
     /**
-     * Gets a list of operations performed on the SQL pool.
+     * Gets a list of operations performed on the SQL pool
+     *
+     * <p>Gets a list of operations performed on the SQL pool.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -95,7 +94,8 @@ public final class SqlPoolOperationsClientImpl implements SqlPoolOperationsClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of operations performed on the SQL pool.
+     * @return a list of operations performed on the SQL pool along with {@link PagedResponse} on successful completion
+     *     of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SqlPoolOperationInner>> listSinglePageAsync(
@@ -150,7 +150,9 @@ public final class SqlPoolOperationsClientImpl implements SqlPoolOperationsClien
     }
 
     /**
-     * Gets a list of operations performed on the SQL pool.
+     * Gets a list of operations performed on the SQL pool
+     *
+     * <p>Gets a list of operations performed on the SQL pool.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -159,7 +161,8 @@ public final class SqlPoolOperationsClientImpl implements SqlPoolOperationsClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of operations performed on the SQL pool.
+     * @return a list of operations performed on the SQL pool along with {@link PagedResponse} on successful completion
+     *     of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SqlPoolOperationInner>> listSinglePageAsync(
@@ -211,7 +214,9 @@ public final class SqlPoolOperationsClientImpl implements SqlPoolOperationsClien
     }
 
     /**
-     * Gets a list of operations performed on the SQL pool.
+     * Gets a list of operations performed on the SQL pool
+     *
+     * <p>Gets a list of operations performed on the SQL pool.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -219,7 +224,7 @@ public final class SqlPoolOperationsClientImpl implements SqlPoolOperationsClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of operations performed on the SQL pool.
+     * @return a list of operations performed on the SQL pool as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<SqlPoolOperationInner> listAsync(
@@ -230,7 +235,9 @@ public final class SqlPoolOperationsClientImpl implements SqlPoolOperationsClien
     }
 
     /**
-     * Gets a list of operations performed on the SQL pool.
+     * Gets a list of operations performed on the SQL pool
+     *
+     * <p>Gets a list of operations performed on the SQL pool.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -239,7 +246,7 @@ public final class SqlPoolOperationsClientImpl implements SqlPoolOperationsClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of operations performed on the SQL pool.
+     * @return a list of operations performed on the SQL pool as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<SqlPoolOperationInner> listAsync(
@@ -250,7 +257,9 @@ public final class SqlPoolOperationsClientImpl implements SqlPoolOperationsClien
     }
 
     /**
-     * Gets a list of operations performed on the SQL pool.
+     * Gets a list of operations performed on the SQL pool
+     *
+     * <p>Gets a list of operations performed on the SQL pool.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -258,7 +267,7 @@ public final class SqlPoolOperationsClientImpl implements SqlPoolOperationsClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of operations performed on the SQL pool.
+     * @return a list of operations performed on the SQL pool as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<SqlPoolOperationInner> list(
@@ -267,7 +276,9 @@ public final class SqlPoolOperationsClientImpl implements SqlPoolOperationsClien
     }
 
     /**
-     * Gets a list of operations performed on the SQL pool.
+     * Gets a list of operations performed on the SQL pool
+     *
+     * <p>Gets a list of operations performed on the SQL pool.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -276,7 +287,7 @@ public final class SqlPoolOperationsClientImpl implements SqlPoolOperationsClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of operations performed on the SQL pool.
+     * @return a list of operations performed on the SQL pool as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<SqlPoolOperationInner> list(
@@ -287,11 +298,13 @@ public final class SqlPoolOperationsClientImpl implements SqlPoolOperationsClien
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response to a list Sql pool operations request.
+     * @return the response to a list Sql pool operations request along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SqlPoolOperationInner>> listNextSinglePageAsync(String nextLink) {
@@ -322,12 +335,14 @@ public final class SqlPoolOperationsClientImpl implements SqlPoolOperationsClien
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response to a list Sql pool operations request.
+     * @return the response to a list Sql pool operations request along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SqlPoolOperationInner>> listNextSinglePageAsync(String nextLink, Context context) {

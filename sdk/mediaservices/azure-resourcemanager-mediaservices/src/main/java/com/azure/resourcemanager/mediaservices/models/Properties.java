@@ -5,20 +5,20 @@
 package com.azure.resourcemanager.mediaservices.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** The service specification property. */
 @Immutable
 public final class Properties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Properties.class);
-
     /*
      * The service specifications.
      */
     @JsonProperty(value = "serviceSpecification", access = JsonProperty.Access.WRITE_ONLY)
     private ServiceSpecification serviceSpecification;
+
+    /** Creates an instance of Properties class. */
+    public Properties() {
+    }
 
     /**
      * Get the serviceSpecification property: The service specifications.

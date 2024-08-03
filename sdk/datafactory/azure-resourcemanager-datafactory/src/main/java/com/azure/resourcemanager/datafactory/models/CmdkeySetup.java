@@ -7,17 +7,24 @@ package com.azure.resourcemanager.datafactory.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.fluent.models.CmdkeySetupTypeProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** The custom setup of running cmdkey commands. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * The custom setup of running cmdkey commands.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = CmdkeySetup.class, visible = true)
 @JsonTypeName("CmdkeySetup")
 @Fluent
 public final class CmdkeySetup extends CustomSetupBase {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CmdkeySetup.class);
+    /*
+     * The type of custom setup.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "CmdkeySetup";
 
     /*
      * Cmdkey command custom setup type properties.
@@ -26,8 +33,24 @@ public final class CmdkeySetup extends CustomSetupBase {
     private CmdkeySetupTypeProperties innerTypeProperties = new CmdkeySetupTypeProperties();
 
     /**
+     * Creates an instance of CmdkeySetup class.
+     */
+    public CmdkeySetup() {
+    }
+
+    /**
+     * Get the type property: The type of custom setup.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the innerTypeProperties property: Cmdkey command custom setup type properties.
-     *
+     * 
      * @return the innerTypeProperties value.
      */
     private CmdkeySetupTypeProperties innerTypeProperties() {
@@ -35,8 +58,8 @@ public final class CmdkeySetup extends CustomSetupBase {
     }
 
     /**
-     * Get the targetName property: The server name of data source access.
-     *
+     * Get the targetName property: The server name of data source access. Type: string.
+     * 
      * @return the targetName value.
      */
     public Object targetName() {
@@ -44,8 +67,8 @@ public final class CmdkeySetup extends CustomSetupBase {
     }
 
     /**
-     * Set the targetName property: The server name of data source access.
-     *
+     * Set the targetName property: The server name of data source access. Type: string.
+     * 
      * @param targetName the targetName value to set.
      * @return the CmdkeySetup object itself.
      */
@@ -58,8 +81,8 @@ public final class CmdkeySetup extends CustomSetupBase {
     }
 
     /**
-     * Get the username property: The user name of data source access.
-     *
+     * Get the username property: The user name of data source access. Type: string.
+     * 
      * @return the username value.
      */
     public Object username() {
@@ -67,8 +90,8 @@ public final class CmdkeySetup extends CustomSetupBase {
     }
 
     /**
-     * Set the username property: The user name of data source access.
-     *
+     * Set the username property: The user name of data source access. Type: string.
+     * 
      * @param username the username value to set.
      * @return the CmdkeySetup object itself.
      */
@@ -82,7 +105,7 @@ public final class CmdkeySetup extends CustomSetupBase {
 
     /**
      * Get the password property: The password of data source access.
-     *
+     * 
      * @return the password value.
      */
     public SecretBase password() {
@@ -91,7 +114,7 @@ public final class CmdkeySetup extends CustomSetupBase {
 
     /**
      * Set the password property: The password of data source access.
-     *
+     * 
      * @param password the password value to set.
      * @return the CmdkeySetup object itself.
      */
@@ -105,18 +128,20 @@ public final class CmdkeySetup extends CustomSetupBase {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
         if (innerTypeProperties() == null) {
-            throw logger
-                .logExceptionAsError(
+            throw LOGGER.atError()
+                .log(
                     new IllegalArgumentException("Missing required property innerTypeProperties in model CmdkeySetup"));
         } else {
             innerTypeProperties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(CmdkeySetup.class);
 }

@@ -12,10 +12,9 @@ import com.azure.resourcemanager.applicationinsights.fluent.ComponentQuotaStatus
 import com.azure.resourcemanager.applicationinsights.fluent.models.ApplicationInsightsComponentQuotaStatusInner;
 import com.azure.resourcemanager.applicationinsights.models.ApplicationInsightsComponentQuotaStatus;
 import com.azure.resourcemanager.applicationinsights.models.ComponentQuotaStatus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class ComponentQuotaStatusImpl implements ComponentQuotaStatus {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ComponentQuotaStatusImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(ComponentQuotaStatusImpl.class);
 
     private final ComponentQuotaStatusClient innerClient;
 
@@ -28,15 +27,6 @@ public final class ComponentQuotaStatusImpl implements ComponentQuotaStatus {
         this.serviceManager = serviceManager;
     }
 
-    public ApplicationInsightsComponentQuotaStatus get(String resourceGroupName, String resourceName) {
-        ApplicationInsightsComponentQuotaStatusInner inner = this.serviceClient().get(resourceGroupName, resourceName);
-        if (inner != null) {
-            return new ApplicationInsightsComponentQuotaStatusImpl(inner, this.manager());
-        } else {
-            return null;
-        }
-    }
-
     public Response<ApplicationInsightsComponentQuotaStatus> getWithResponse(
         String resourceGroupName, String resourceName, Context context) {
         Response<ApplicationInsightsComponentQuotaStatusInner> inner =
@@ -47,6 +37,15 @@ public final class ComponentQuotaStatusImpl implements ComponentQuotaStatus {
                 inner.getStatusCode(),
                 inner.getHeaders(),
                 new ApplicationInsightsComponentQuotaStatusImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
+    }
+
+    public ApplicationInsightsComponentQuotaStatus get(String resourceGroupName, String resourceName) {
+        ApplicationInsightsComponentQuotaStatusInner inner = this.serviceClient().get(resourceGroupName, resourceName);
+        if (inner != null) {
+            return new ApplicationInsightsComponentQuotaStatusImpl(inner, this.manager());
         } else {
             return null;
         }

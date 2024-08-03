@@ -5,21 +5,21 @@
 package com.azure.resourcemanager.mediaservices.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.mediaservices.models.EdgeUsageDataCollectionPolicy;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** The EdgePolicies model. */
 @Fluent
 public final class EdgePoliciesInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(EdgePoliciesInner.class);
-
     /*
      * The usageDataCollectionPolicy property.
      */
     @JsonProperty(value = "usageDataCollectionPolicy")
     private EdgeUsageDataCollectionPolicy usageDataCollectionPolicy;
+
+    /** Creates an instance of EdgePoliciesInner class. */
+    public EdgePoliciesInner() {
+    }
 
     /**
      * Get the usageDataCollectionPolicy property: The usageDataCollectionPolicy property.

@@ -5,19 +5,17 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.ProxyOnlyResource;
 import com.azure.resourcemanager.appservice.models.ResourceMetricAvailability;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;
 
-/** Metadata for the metrics. */
+/**
+ * Metadata for the metrics.
+ */
 @Fluent
 public final class ResourceMetricDefinitionInner extends ProxyOnlyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ResourceMetricDefinitionInner.class);
-
     /*
      * ResourceMetricDefinition resource specific properties
      */
@@ -25,15 +23,23 @@ public final class ResourceMetricDefinitionInner extends ProxyOnlyResource {
     private ResourceMetricDefinitionProperties innerProperties;
 
     /**
+     * Creates an instance of ResourceMetricDefinitionInner class.
+     */
+    public ResourceMetricDefinitionInner() {
+    }
+
+    /**
      * Get the innerProperties property: ResourceMetricDefinition resource specific properties.
-     *
+     * 
      * @return the innerProperties value.
      */
     private ResourceMetricDefinitionProperties innerProperties() {
         return this.innerProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ResourceMetricDefinitionInner withKind(String kind) {
         super.withKind(kind);
@@ -42,7 +48,7 @@ public final class ResourceMetricDefinitionInner extends ProxyOnlyResource {
 
     /**
      * Get the unit property: Unit of the metric.
-     *
+     * 
      * @return the unit value.
      */
     public String unit() {
@@ -51,7 +57,7 @@ public final class ResourceMetricDefinitionInner extends ProxyOnlyResource {
 
     /**
      * Get the primaryAggregationType property: Primary aggregation type.
-     *
+     * 
      * @return the primaryAggregationType value.
      */
     public String primaryAggregationType() {
@@ -61,7 +67,7 @@ public final class ResourceMetricDefinitionInner extends ProxyOnlyResource {
     /**
      * Get the metricAvailabilities property: List of time grains supported for the metric together with retention
      * period.
-     *
+     * 
      * @return the metricAvailabilities value.
      */
     public List<ResourceMetricAvailability> metricAvailabilities() {
@@ -70,7 +76,7 @@ public final class ResourceMetricDefinitionInner extends ProxyOnlyResource {
 
     /**
      * Get the resourceUri property: Resource URI.
-     *
+     * 
      * @return the resourceUri value.
      */
     public String resourceUri() {
@@ -79,7 +85,7 @@ public final class ResourceMetricDefinitionInner extends ProxyOnlyResource {
 
     /**
      * Get the properties property: Resource metric definition properties.
-     *
+     * 
      * @return the properties value.
      */
     public Map<String, String> properties() {
@@ -88,7 +94,7 @@ public final class ResourceMetricDefinitionInner extends ProxyOnlyResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

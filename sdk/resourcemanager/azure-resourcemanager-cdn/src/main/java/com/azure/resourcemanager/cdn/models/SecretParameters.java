@@ -5,13 +5,13 @@
 package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** The json object containing secret parameters. */
+/**
+ * The json object containing secret parameters.
+ */
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
     include = JsonTypeInfo.As.PROPERTY,
@@ -21,15 +21,21 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonSubTypes({
     @JsonSubTypes.Type(name = "UrlSigningKey", value = UrlSigningKeyParameters.class),
     @JsonSubTypes.Type(name = "ManagedCertificate", value = ManagedCertificateParameters.class),
-    @JsonSubTypes.Type(name = "CustomerCertificate", value = CustomerCertificateParameters.class)
-})
+    @JsonSubTypes.Type(name = "CustomerCertificate", value = CustomerCertificateParameters.class),
+    @JsonSubTypes.Type(
+        name = "AzureFirstPartyManagedCertificate",
+        value = AzureFirstPartyManagedCertificateParameters.class) })
 @Immutable
 public class SecretParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SecretParameters.class);
+    /**
+     * Creates an instance of SecretParameters class.
+     */
+    public SecretParameters() {
+    }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

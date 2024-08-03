@@ -5,26 +5,25 @@
 package com.azure.resourcemanager.compute.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.resourcemanager.compute.models.ArchitectureTypes;
 import com.azure.resourcemanager.compute.models.AutomaticOSUpgradeProperties;
 import com.azure.resourcemanager.compute.models.DataDiskImage;
 import com.azure.resourcemanager.compute.models.DisallowedConfiguration;
 import com.azure.resourcemanager.compute.models.HyperVGenerationTypes;
+import com.azure.resourcemanager.compute.models.ImageDeprecationStatus;
 import com.azure.resourcemanager.compute.models.OSDiskImage;
 import com.azure.resourcemanager.compute.models.PurchasePlan;
 import com.azure.resourcemanager.compute.models.VirtualMachineImageFeature;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Describes the properties of a Virtual Machine Image. */
+/**
+ * Describes the properties of a Virtual Machine Image.
+ */
 @Fluent
 public final class VirtualMachineImageProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VirtualMachineImageProperties.class);
-
     /*
-     * Used for establishing the purchase context of any 3rd Party artifact
-     * through MarketPlace.
+     * Used for establishing the purchase context of any 3rd Party artifact through MarketPlace.
      */
     @JsonProperty(value = "plan")
     private PurchasePlan plan;
@@ -54,8 +53,7 @@ public final class VirtualMachineImageProperties {
     private HyperVGenerationTypes hyperVGeneration;
 
     /*
-     * Specifies disallowed configuration for the VirtualMachine created from
-     * the image
+     * Specifies disallowed configuration for the VirtualMachine created from the image
      */
     @JsonProperty(value = "disallowed")
     private DisallowedConfiguration disallowed;
@@ -66,9 +64,27 @@ public final class VirtualMachineImageProperties {
     @JsonProperty(value = "features")
     private List<VirtualMachineImageFeature> features;
 
+    /*
+     * Specifies the Architecture Type
+     */
+    @JsonProperty(value = "architecture")
+    private ArchitectureTypes architecture;
+
+    /*
+     * Describes image deprecation status properties on the image.
+     */
+    @JsonProperty(value = "imageDeprecationStatus")
+    private ImageDeprecationStatus imageDeprecationStatus;
+
+    /**
+     * Creates an instance of VirtualMachineImageProperties class.
+     */
+    public VirtualMachineImageProperties() {
+    }
+
     /**
      * Get the plan property: Used for establishing the purchase context of any 3rd Party artifact through MarketPlace.
-     *
+     * 
      * @return the plan value.
      */
     public PurchasePlan plan() {
@@ -77,7 +93,7 @@ public final class VirtualMachineImageProperties {
 
     /**
      * Set the plan property: Used for establishing the purchase context of any 3rd Party artifact through MarketPlace.
-     *
+     * 
      * @param plan the plan value to set.
      * @return the VirtualMachineImageProperties object itself.
      */
@@ -88,7 +104,7 @@ public final class VirtualMachineImageProperties {
 
     /**
      * Get the osDiskImage property: Contains the os disk image information.
-     *
+     * 
      * @return the osDiskImage value.
      */
     public OSDiskImage osDiskImage() {
@@ -97,7 +113,7 @@ public final class VirtualMachineImageProperties {
 
     /**
      * Set the osDiskImage property: Contains the os disk image information.
-     *
+     * 
      * @param osDiskImage the osDiskImage value to set.
      * @return the VirtualMachineImageProperties object itself.
      */
@@ -108,7 +124,7 @@ public final class VirtualMachineImageProperties {
 
     /**
      * Get the dataDiskImages property: The dataDiskImages property.
-     *
+     * 
      * @return the dataDiskImages value.
      */
     public List<DataDiskImage> dataDiskImages() {
@@ -117,7 +133,7 @@ public final class VirtualMachineImageProperties {
 
     /**
      * Set the dataDiskImages property: The dataDiskImages property.
-     *
+     * 
      * @param dataDiskImages the dataDiskImages value to set.
      * @return the VirtualMachineImageProperties object itself.
      */
@@ -128,7 +144,7 @@ public final class VirtualMachineImageProperties {
 
     /**
      * Get the automaticOSUpgradeProperties property: Describes automatic OS upgrade properties on the image.
-     *
+     * 
      * @return the automaticOSUpgradeProperties value.
      */
     public AutomaticOSUpgradeProperties automaticOSUpgradeProperties() {
@@ -137,19 +153,19 @@ public final class VirtualMachineImageProperties {
 
     /**
      * Set the automaticOSUpgradeProperties property: Describes automatic OS upgrade properties on the image.
-     *
+     * 
      * @param automaticOSUpgradeProperties the automaticOSUpgradeProperties value to set.
      * @return the VirtualMachineImageProperties object itself.
      */
-    public VirtualMachineImageProperties withAutomaticOSUpgradeProperties(
-        AutomaticOSUpgradeProperties automaticOSUpgradeProperties) {
+    public VirtualMachineImageProperties
+        withAutomaticOSUpgradeProperties(AutomaticOSUpgradeProperties automaticOSUpgradeProperties) {
         this.automaticOSUpgradeProperties = automaticOSUpgradeProperties;
         return this;
     }
 
     /**
      * Get the hyperVGeneration property: Specifies the HyperVGeneration Type.
-     *
+     * 
      * @return the hyperVGeneration value.
      */
     public HyperVGenerationTypes hyperVGeneration() {
@@ -158,7 +174,7 @@ public final class VirtualMachineImageProperties {
 
     /**
      * Set the hyperVGeneration property: Specifies the HyperVGeneration Type.
-     *
+     * 
      * @param hyperVGeneration the hyperVGeneration value to set.
      * @return the VirtualMachineImageProperties object itself.
      */
@@ -169,7 +185,7 @@ public final class VirtualMachineImageProperties {
 
     /**
      * Get the disallowed property: Specifies disallowed configuration for the VirtualMachine created from the image.
-     *
+     * 
      * @return the disallowed value.
      */
     public DisallowedConfiguration disallowed() {
@@ -178,7 +194,7 @@ public final class VirtualMachineImageProperties {
 
     /**
      * Set the disallowed property: Specifies disallowed configuration for the VirtualMachine created from the image.
-     *
+     * 
      * @param disallowed the disallowed value to set.
      * @return the VirtualMachineImageProperties object itself.
      */
@@ -189,7 +205,7 @@ public final class VirtualMachineImageProperties {
 
     /**
      * Get the features property: The features property.
-     *
+     * 
      * @return the features value.
      */
     public List<VirtualMachineImageFeature> features() {
@@ -198,7 +214,7 @@ public final class VirtualMachineImageProperties {
 
     /**
      * Set the features property: The features property.
-     *
+     * 
      * @param features the features value to set.
      * @return the VirtualMachineImageProperties object itself.
      */
@@ -208,8 +224,48 @@ public final class VirtualMachineImageProperties {
     }
 
     /**
+     * Get the architecture property: Specifies the Architecture Type.
+     * 
+     * @return the architecture value.
+     */
+    public ArchitectureTypes architecture() {
+        return this.architecture;
+    }
+
+    /**
+     * Set the architecture property: Specifies the Architecture Type.
+     * 
+     * @param architecture the architecture value to set.
+     * @return the VirtualMachineImageProperties object itself.
+     */
+    public VirtualMachineImageProperties withArchitecture(ArchitectureTypes architecture) {
+        this.architecture = architecture;
+        return this;
+    }
+
+    /**
+     * Get the imageDeprecationStatus property: Describes image deprecation status properties on the image.
+     * 
+     * @return the imageDeprecationStatus value.
+     */
+    public ImageDeprecationStatus imageDeprecationStatus() {
+        return this.imageDeprecationStatus;
+    }
+
+    /**
+     * Set the imageDeprecationStatus property: Describes image deprecation status properties on the image.
+     * 
+     * @param imageDeprecationStatus the imageDeprecationStatus value to set.
+     * @return the VirtualMachineImageProperties object itself.
+     */
+    public VirtualMachineImageProperties withImageDeprecationStatus(ImageDeprecationStatus imageDeprecationStatus) {
+        this.imageDeprecationStatus = imageDeprecationStatus;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
@@ -230,6 +286,9 @@ public final class VirtualMachineImageProperties {
         }
         if (features() != null) {
             features().forEach(e -> e.validate());
+        }
+        if (imageDeprecationStatus() != null) {
+            imageDeprecationStatus().validate();
         }
     }
 }

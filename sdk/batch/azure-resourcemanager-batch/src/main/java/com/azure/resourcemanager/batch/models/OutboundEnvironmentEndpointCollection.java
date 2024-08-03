@@ -5,20 +5,17 @@
 package com.azure.resourcemanager.batch.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.batch.fluent.models.OutboundEnvironmentEndpointInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Values returned by the List operation. */
+/**
+ * Values returned by the List operation.
+ */
 @Fluent
 public final class OutboundEnvironmentEndpointCollection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OutboundEnvironmentEndpointCollection.class);
-
     /*
-     * The collection of outbound network dependency endpoints returned by the
-     * listing operation.
+     * The collection of outbound network dependency endpoints returned by the listing operation.
      */
     @JsonProperty(value = "value", access = JsonProperty.Access.WRITE_ONLY)
     private List<OutboundEnvironmentEndpointInner> value;
@@ -30,9 +27,15 @@ public final class OutboundEnvironmentEndpointCollection {
     private String nextLink;
 
     /**
+     * Creates an instance of OutboundEnvironmentEndpointCollection class.
+     */
+    public OutboundEnvironmentEndpointCollection() {
+    }
+
+    /**
      * Get the value property: The collection of outbound network dependency endpoints returned by the listing
      * operation.
-     *
+     * 
      * @return the value value.
      */
     public List<OutboundEnvironmentEndpointInner> value() {
@@ -41,7 +44,7 @@ public final class OutboundEnvironmentEndpointCollection {
 
     /**
      * Get the nextLink property: The continuation token.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -50,7 +53,7 @@ public final class OutboundEnvironmentEndpointCollection {
 
     /**
      * Set the nextLink property: The continuation token.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the OutboundEnvironmentEndpointCollection object itself.
      */
@@ -61,7 +64,7 @@ public final class OutboundEnvironmentEndpointCollection {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -5,18 +5,15 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Site seal request. */
+/**
+ * Site seal request.
+ */
 @Fluent
 public final class SiteSealRequest {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SiteSealRequest.class);
-
     /*
-     * If <code>true</code> use the light color theme for site seal; otherwise,
-     * use the default color theme.
+     * If <code>true</code> use the light color theme for site seal; otherwise, use the default color theme.
      */
     @JsonProperty(value = "lightTheme")
     private Boolean lightTheme;
@@ -28,9 +25,15 @@ public final class SiteSealRequest {
     private String locale;
 
     /**
+     * Creates an instance of SiteSealRequest class.
+     */
+    public SiteSealRequest() {
+    }
+
+    /**
      * Get the lightTheme property: If &lt;code&gt;true&lt;/code&gt; use the light color theme for site seal; otherwise,
      * use the default color theme.
-     *
+     * 
      * @return the lightTheme value.
      */
     public Boolean lightTheme() {
@@ -40,7 +43,7 @@ public final class SiteSealRequest {
     /**
      * Set the lightTheme property: If &lt;code&gt;true&lt;/code&gt; use the light color theme for site seal; otherwise,
      * use the default color theme.
-     *
+     * 
      * @param lightTheme the lightTheme value to set.
      * @return the SiteSealRequest object itself.
      */
@@ -51,7 +54,7 @@ public final class SiteSealRequest {
 
     /**
      * Get the locale property: Locale of site seal.
-     *
+     * 
      * @return the locale value.
      */
     public String locale() {
@@ -60,7 +63,7 @@ public final class SiteSealRequest {
 
     /**
      * Set the locale property: Locale of site seal.
-     *
+     * 
      * @param locale the locale value to set.
      * @return the SiteSealRequest object itself.
      */
@@ -71,7 +74,7 @@ public final class SiteSealRequest {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

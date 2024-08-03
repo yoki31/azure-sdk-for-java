@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Details about an operation related to logs. */
+/**
+ * Details about an operation related to logs.
+ */
 @Fluent
 public final class OperationLogSpecification {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationLogSpecification.class);
-
     /*
      * The name of the log category.
      */
@@ -33,8 +31,14 @@ public final class OperationLogSpecification {
     private String blobDuration;
 
     /**
+     * Creates an instance of OperationLogSpecification class.
+     */
+    public OperationLogSpecification() {
+    }
+
+    /**
      * Get the name property: The name of the log category.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -43,7 +47,7 @@ public final class OperationLogSpecification {
 
     /**
      * Set the name property: The name of the log category.
-     *
+     * 
      * @param name the name value to set.
      * @return the OperationLogSpecification object itself.
      */
@@ -54,7 +58,7 @@ public final class OperationLogSpecification {
 
     /**
      * Get the displayName property: Localized display name.
-     *
+     * 
      * @return the displayName value.
      */
     public String displayName() {
@@ -63,7 +67,7 @@ public final class OperationLogSpecification {
 
     /**
      * Set the displayName property: Localized display name.
-     *
+     * 
      * @param displayName the displayName value to set.
      * @return the OperationLogSpecification object itself.
      */
@@ -74,7 +78,7 @@ public final class OperationLogSpecification {
 
     /**
      * Get the blobDuration property: Blobs created in the customer storage account, per hour.
-     *
+     * 
      * @return the blobDuration value.
      */
     public String blobDuration() {
@@ -83,7 +87,7 @@ public final class OperationLogSpecification {
 
     /**
      * Set the blobDuration property: Blobs created in the customer storage account, per hour.
-     *
+     * 
      * @param blobDuration the blobDuration value to set.
      * @return the OperationLogSpecification object itself.
      */
@@ -94,7 +98,7 @@ public final class OperationLogSpecification {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

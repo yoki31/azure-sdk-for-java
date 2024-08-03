@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.models.UserAccessPolicy;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Get Data Plane read only token response definition. */
+/**
+ * Get Data Plane read only token response definition.
+ */
 @Fluent
 public final class AccessPolicyResponseInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AccessPolicyResponseInner.class);
-
     /*
      * The user access policy.
      */
@@ -34,8 +32,14 @@ public final class AccessPolicyResponseInner {
     private String dataPlaneUrl;
 
     /**
+     * Creates an instance of AccessPolicyResponseInner class.
+     */
+    public AccessPolicyResponseInner() {
+    }
+
+    /**
      * Get the policy property: The user access policy.
-     *
+     * 
      * @return the policy value.
      */
     public UserAccessPolicy policy() {
@@ -44,7 +48,7 @@ public final class AccessPolicyResponseInner {
 
     /**
      * Set the policy property: The user access policy.
-     *
+     * 
      * @param policy the policy value to set.
      * @return the AccessPolicyResponseInner object itself.
      */
@@ -55,7 +59,7 @@ public final class AccessPolicyResponseInner {
 
     /**
      * Get the accessToken property: Data Plane read only access token.
-     *
+     * 
      * @return the accessToken value.
      */
     public String accessToken() {
@@ -64,7 +68,7 @@ public final class AccessPolicyResponseInner {
 
     /**
      * Set the accessToken property: Data Plane read only access token.
-     *
+     * 
      * @param accessToken the accessToken value to set.
      * @return the AccessPolicyResponseInner object itself.
      */
@@ -75,7 +79,7 @@ public final class AccessPolicyResponseInner {
 
     /**
      * Get the dataPlaneUrl property: Data Plane service base URL.
-     *
+     * 
      * @return the dataPlaneUrl value.
      */
     public String dataPlaneUrl() {
@@ -84,7 +88,7 @@ public final class AccessPolicyResponseInner {
 
     /**
      * Set the dataPlaneUrl property: Data Plane service base URL.
-     *
+     * 
      * @param dataPlaneUrl the dataPlaneUrl value to set.
      * @return the AccessPolicyResponseInner object itself.
      */
@@ -95,7 +99,7 @@ public final class AccessPolicyResponseInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

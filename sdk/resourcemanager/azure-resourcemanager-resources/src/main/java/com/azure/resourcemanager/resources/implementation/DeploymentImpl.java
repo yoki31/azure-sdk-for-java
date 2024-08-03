@@ -3,22 +3,34 @@
 
 package com.azure.resourcemanager.resources.implementation;
 
+import com.azure.core.management.Region;
 import com.azure.core.management.exception.ManagementError;
 import com.azure.core.management.serializer.SerializerFactory;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
 import com.azure.core.util.logging.ClientLogger;
+import com.azure.core.util.serializer.SerializerAdapter;
 import com.azure.core.util.serializer.SerializerEncoding;
+import com.azure.core.util.serializer.TypeReference;
+import com.azure.json.JsonProviders;
+import com.azure.json.JsonReader;
 import com.azure.resourcemanager.resources.ResourceManager;
+import com.azure.resourcemanager.resources.fluent.models.DeploymentExtendedInner;
+import com.azure.resourcemanager.resources.fluent.models.DeploymentInner;
+import com.azure.resourcemanager.resources.fluent.models.ProviderInner;
+import com.azure.resourcemanager.resources.fluentcore.arm.ResourceUtils;
 import com.azure.resourcemanager.resources.fluentcore.model.Accepted;
+import com.azure.resourcemanager.resources.fluentcore.model.Creatable;
 import com.azure.resourcemanager.resources.fluentcore.model.Indexable;
 import com.azure.resourcemanager.resources.fluentcore.model.implementation.AcceptedImpl;
+import com.azure.resourcemanager.resources.fluentcore.model.implementation.CreatableUpdatableImpl;
 import com.azure.resourcemanager.resources.models.DebugSetting;
 import com.azure.resourcemanager.resources.models.Dependency;
 import com.azure.resourcemanager.resources.models.Deployment;
 import com.azure.resourcemanager.resources.models.DeploymentExportResult;
 import com.azure.resourcemanager.resources.models.DeploymentMode;
 import com.azure.resourcemanager.resources.models.DeploymentOperations;
+import com.azure.resourcemanager.resources.models.DeploymentParameter;
 import com.azure.resourcemanager.resources.models.DeploymentProperties;
 import com.azure.resourcemanager.resources.models.DeploymentWhatIf;
 import com.azure.resourcemanager.resources.models.DeploymentWhatIfProperties;
@@ -32,21 +44,15 @@ import com.azure.resourcemanager.resources.models.ResourceReference;
 import com.azure.resourcemanager.resources.models.TemplateLink;
 import com.azure.resourcemanager.resources.models.WhatIfOperationResult;
 import com.azure.resourcemanager.resources.models.WhatIfResultFormat;
-import com.azure.core.management.Region;
-import com.azure.resourcemanager.resources.fluentcore.arm.ResourceUtils;
-import com.azure.resourcemanager.resources.fluentcore.model.Creatable;
-import com.azure.resourcemanager.resources.fluentcore.model.implementation.CreatableUpdatableImpl;
-import com.azure.resourcemanager.resources.fluent.models.DeploymentExtendedInner;
-import com.azure.resourcemanager.resources.fluent.models.DeploymentInner;
-import com.azure.resourcemanager.resources.fluent.models.ProviderInner;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * The implementation of {@link Deployment} and its nested interfaces.
@@ -61,10 +67,15 @@ public final class DeploymentImpl extends
 
     private final ClientLogger logger = new ClientLogger(DeploymentImpl.class);
 
+    private static final SerializerAdapter SERIALIZER_ADAPTER =
+        SerializerFactory.createDefaultManagementSerializerAdapter();
+    private static final TypeReference<Map<String, DeploymentParameter>> TYPE_REFERENCE_MAP_DEPLOYMENT_PARAMETER =
+        new TypeReference<Map<String, DeploymentParameter>>() {
+        };
+
     private final ResourceManager resourceManager;
     private String resourceGroupName;
     private Creatable<ResourceGroup> creatableResourceGroup;
-    private ObjectMapper objectMapper;
     private DeploymentWhatIf deploymentWhatIf;
     private DeploymentInner deploymentCreateUpdateParameters;
 
@@ -72,7 +83,6 @@ public final class DeploymentImpl extends
         super(name, innerModel);
         this.resourceGroupName = ResourceUtils.groupFromResourceId(innerModel.id());
         this.resourceManager = resourceManager;
-        this.objectMapper = new ObjectMapper();
         this.deploymentWhatIf = new DeploymentWhatIf();
         this.deploymentCreateUpdateParameters = new DeploymentInner();
     }
@@ -266,7 +276,9 @@ public final class DeploymentImpl extends
 
     @Override
     public DeploymentImpl withTemplate(String templateJson) throws IOException {
-        return withTemplate(objectMapper.readTree(templateJson));
+        try (JsonReader jsonReader = JsonProviders.createReader(templateJson)) {
+            return withTemplate(jsonReader.readUntyped());
+        }
     }
 
     @Override
@@ -294,14 +306,21 @@ public final class DeploymentImpl extends
         if (this.deploymentCreateUpdateParameters.properties() == null) {
             this.deploymentCreateUpdateParameters.withProperties(new DeploymentProperties());
         }
-        this.deploymentCreateUpdateParameters.properties().withParameters(parameters);
-        this.deploymentCreateUpdateParameters.properties().withParametersLink(null);
+        this.deploymentCreateUpdateParameters.properties()
+            .withParameters(getParametersFromObject(parameters))
+            .withParametersLink(null);
         return this;
     }
 
     @Override
     public DeploymentImpl withParameters(String parametersJson) throws IOException {
-        return withParameters(objectMapper.readTree(parametersJson));
+        if (this.deploymentCreateUpdateParameters.properties() == null) {
+            this.deploymentCreateUpdateParameters.withProperties(new DeploymentProperties());
+        }
+        this.deploymentCreateUpdateParameters.properties()
+            .withParameters(getParametersFromJsonString(parametersJson))
+            .withParametersLink(null);
+        return this;
     }
 
     @Override
@@ -345,32 +364,31 @@ public final class DeploymentImpl extends
 
     @Override
     public Mono<Deployment> beginCreateAsync() {
-        return Mono.just(creatableResourceGroup)
-                .flatMap(resourceGroupCreatable -> {
-                    if (resourceGroupCreatable != null) {
-                        return creatableResourceGroup.createAsync();
-                    } else {
-                        return Mono.just((Indexable) DeploymentImpl.this);
-                    }
-                })
-                .flatMap(indexable -> manager().serviceClient().getDeployments()
-                    .createOrUpdateWithResponseAsync(resourceGroupName(), name(), deploymentCreateUpdateParameters))
-                .flatMap(activationResponse -> FluxUtil.collectBytesInByteBufferStream(activationResponse.getValue()))
-                .map(response -> {
-                    try {
-                        return (DeploymentExtendedInner) SerializerFactory.createDefaultManagementSerializerAdapter()
-                            .deserialize(new String(response, StandardCharsets.UTF_8),
-                                DeploymentExtendedInner.class, SerializerEncoding.JSON);
-                    } catch (IOException ioe) {
-                        throw logger.logExceptionAsError(
-                            new IllegalStateException("Failed to deserialize activation response body", ioe));
-                    }
-                })
-                .map(deploymentExtendedInner -> {
-                    prepareForUpdate(deploymentExtendedInner);
-                    return deploymentExtendedInner;
-                })
-                .map(innerToFluentMap(this));
+        return Mono.defer(() -> {
+            if (creatableResourceGroup != null) {
+                return creatableResourceGroup.createAsync();
+            } else {
+                return Mono.just((Indexable) DeploymentImpl.this);
+            }
+        })
+        .flatMap(indexable -> manager().serviceClient().getDeployments()
+            .createOrUpdateWithResponseAsync(resourceGroupName(), name(), deploymentCreateUpdateParameters))
+        .flatMap(activationResponse -> FluxUtil.collectBytesInByteBufferStream(activationResponse.getValue()))
+        .map(response -> {
+            try {
+                return (DeploymentExtendedInner) SerializerFactory.createDefaultManagementSerializerAdapter()
+                    .deserialize(new String(response, StandardCharsets.UTF_8),
+                        DeploymentExtendedInner.class, SerializerEncoding.JSON);
+            } catch (IOException ioe) {
+                throw logger.logExceptionAsError(
+                    new IllegalStateException("Failed to deserialize activation response body", ioe));
+            }
+        })
+        .map(deploymentExtendedInner -> {
+            prepareForUpdate(deploymentExtendedInner);
+            return deploymentExtendedInner;
+        })
+        .map(innerToFluentMap(this));
     }
 
     @Override
@@ -392,7 +410,8 @@ public final class DeploymentImpl extends
             deploymentCreateUpdateParameters.withProperties(new DeploymentProperties());
             deploymentCreateUpdateParameters.properties().withDebugSetting(inner.properties().debugSetting());
             deploymentCreateUpdateParameters.properties().withMode(inner.properties().mode());
-            deploymentCreateUpdateParameters.properties().withParameters(inner.properties().parameters());
+            deploymentCreateUpdateParameters.properties()
+                .withParameters(getParametersFromObject(inner.properties().parameters()));
             deploymentCreateUpdateParameters.properties().withParametersLink(inner.properties().parametersLink());
             deploymentCreateUpdateParameters.properties().withTemplateLink(inner.properties().templateLink());
             if (inner.properties().onErrorDeployment() != null) {
@@ -548,7 +567,7 @@ public final class DeploymentImpl extends
         if (deploymentWhatIf.properties() == null) {
             deploymentWhatIf.withProperties(new DeploymentWhatIfProperties());
         }
-        deploymentWhatIf.properties().withParameters(parameters);
+        deploymentWhatIf.properties().withParameters(getParametersFromObject(parameters));
         return this;
     }
 
@@ -584,5 +603,23 @@ public final class DeploymentImpl extends
     public Mono<WhatIfOperationResult> whatIfAtSubscriptionScopeAsync() {
         return this.manager().serviceClient().getDeployments().whatIfAtSubscriptionScopeAsync(name(), deploymentWhatIf)
             .map(WhatIfOperationResultImpl::new);
+    }
+
+    private Map<String, DeploymentParameter> getParametersFromObject(Object parameters) {
+        try {
+            String parametersJson = SERIALIZER_ADAPTER.serialize(
+                parameters,
+                SerializerEncoding.JSON);
+            return getParametersFromJsonString(parametersJson);
+        } catch (IOException ex) {
+            throw logger.logExceptionAsError(new UncheckedIOException(ex));
+        }
+    }
+
+    private Map<String, DeploymentParameter> getParametersFromJsonString(String parametersJson) throws IOException {
+        return SERIALIZER_ADAPTER.deserialize(
+            parametersJson,
+            TYPE_REFERENCE_MAP_DEPLOYMENT_PARAMETER.getJavaType(),
+            SerializerEncoding.JSON);
     }
 }

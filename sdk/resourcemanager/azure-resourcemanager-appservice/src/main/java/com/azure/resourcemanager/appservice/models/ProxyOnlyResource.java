@@ -6,15 +6,13 @@ package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Azure proxy only resource. This resource is not tracked by Azure Resource Manager. */
+/**
+ * Azure proxy only resource. This resource is not tracked by Azure Resource Manager.
+ */
 @Fluent
 public class ProxyOnlyResource extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ProxyOnlyResource.class);
-
     /*
      * Kind of resource.
      */
@@ -22,8 +20,14 @@ public class ProxyOnlyResource extends ProxyResource {
     private String kind;
 
     /**
+     * Creates an instance of ProxyOnlyResource class.
+     */
+    public ProxyOnlyResource() {
+    }
+
+    /**
      * Get the kind property: Kind of resource.
-     *
+     * 
      * @return the kind value.
      */
     public String kind() {
@@ -32,7 +36,7 @@ public class ProxyOnlyResource extends ProxyResource {
 
     /**
      * Set the kind property: Kind of resource.
-     *
+     * 
      * @param kind the kind value to set.
      * @return the ProxyOnlyResource object itself.
      */
@@ -43,7 +47,7 @@ public class ProxyOnlyResource extends ProxyResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -5,9 +5,7 @@
 package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cdn.fluent.models.RuleInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
@@ -17,8 +15,6 @@ import java.util.List;
  */
 @Fluent
 public final class RuleListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RuleListResult.class);
-
     /*
      * List of AzureFrontDoor rules within a rule set.
      */
@@ -32,8 +28,14 @@ public final class RuleListResult {
     private String nextLink;
 
     /**
+     * Creates an instance of RuleListResult class.
+     */
+    public RuleListResult() {
+    }
+
+    /**
      * Get the value property: List of AzureFrontDoor rules within a rule set.
-     *
+     * 
      * @return the value value.
      */
     public List<RuleInner> value() {
@@ -42,7 +44,7 @@ public final class RuleListResult {
 
     /**
      * Get the nextLink property: URL to get the next set of rule objects if there are any.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -51,7 +53,7 @@ public final class RuleListResult {
 
     /**
      * Set the nextLink property: URL to get the next set of rule objects if there are any.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the RuleListResult object itself.
      */
@@ -62,7 +64,7 @@ public final class RuleListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

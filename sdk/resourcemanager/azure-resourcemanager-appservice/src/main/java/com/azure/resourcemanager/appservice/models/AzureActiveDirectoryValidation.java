@@ -5,26 +5,22 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The configuration settings of the Azure Active Directory token validation flow. */
+/**
+ * The configuration settings of the Azure Active Directory token validation flow.
+ */
 @Fluent
 public final class AzureActiveDirectoryValidation {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureActiveDirectoryValidation.class);
-
     /*
-     * The configuration settings of the checks that should be made while
-     * validating the JWT Claims.
+     * The configuration settings of the checks that should be made while validating the JWT Claims.
      */
     @JsonProperty(value = "jwtClaimChecks")
     private JwtClaimChecks jwtClaimChecks;
 
     /*
-     * The list of audiences that can make successful
-     * authentication/authorization requests.
+     * The list of audiences that can make successful authentication/authorization requests.
      */
     @JsonProperty(value = "allowedAudiences")
     private List<String> allowedAudiences;
@@ -36,9 +32,15 @@ public final class AzureActiveDirectoryValidation {
     private DefaultAuthorizationPolicy defaultAuthorizationPolicy;
 
     /**
+     * Creates an instance of AzureActiveDirectoryValidation class.
+     */
+    public AzureActiveDirectoryValidation() {
+    }
+
+    /**
      * Get the jwtClaimChecks property: The configuration settings of the checks that should be made while validating
      * the JWT Claims.
-     *
+     * 
      * @return the jwtClaimChecks value.
      */
     public JwtClaimChecks jwtClaimChecks() {
@@ -48,7 +50,7 @@ public final class AzureActiveDirectoryValidation {
     /**
      * Set the jwtClaimChecks property: The configuration settings of the checks that should be made while validating
      * the JWT Claims.
-     *
+     * 
      * @param jwtClaimChecks the jwtClaimChecks value to set.
      * @return the AzureActiveDirectoryValidation object itself.
      */
@@ -60,7 +62,7 @@ public final class AzureActiveDirectoryValidation {
     /**
      * Get the allowedAudiences property: The list of audiences that can make successful authentication/authorization
      * requests.
-     *
+     * 
      * @return the allowedAudiences value.
      */
     public List<String> allowedAudiences() {
@@ -70,7 +72,7 @@ public final class AzureActiveDirectoryValidation {
     /**
      * Set the allowedAudiences property: The list of audiences that can make successful authentication/authorization
      * requests.
-     *
+     * 
      * @param allowedAudiences the allowedAudiences value to set.
      * @return the AzureActiveDirectoryValidation object itself.
      */
@@ -81,7 +83,7 @@ public final class AzureActiveDirectoryValidation {
 
     /**
      * Get the defaultAuthorizationPolicy property: The configuration settings of the default authorization policy.
-     *
+     * 
      * @return the defaultAuthorizationPolicy value.
      */
     public DefaultAuthorizationPolicy defaultAuthorizationPolicy() {
@@ -90,19 +92,19 @@ public final class AzureActiveDirectoryValidation {
 
     /**
      * Set the defaultAuthorizationPolicy property: The configuration settings of the default authorization policy.
-     *
+     * 
      * @param defaultAuthorizationPolicy the defaultAuthorizationPolicy value to set.
      * @return the AzureActiveDirectoryValidation object itself.
      */
-    public AzureActiveDirectoryValidation withDefaultAuthorizationPolicy(
-        DefaultAuthorizationPolicy defaultAuthorizationPolicy) {
+    public AzureActiveDirectoryValidation
+        withDefaultAuthorizationPolicy(DefaultAuthorizationPolicy defaultAuthorizationPolicy) {
         this.defaultAuthorizationPolicy = defaultAuthorizationPolicy;
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

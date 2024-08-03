@@ -6,14 +6,13 @@ package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Key Vault Key Url and vault id of KeK, KeK is optional and when provided is used to unwrap the encryptionKey. */
+/**
+ * Key Vault Key Url and vault id of KeK, KeK is optional and when provided is used to unwrap the encryptionKey.
+ */
 @Fluent
 public final class KeyVaultAndKeyReference {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(KeyVaultAndKeyReference.class);
-
     /*
      * Resource id of the KeyVault containing the key or secret
      */
@@ -27,8 +26,14 @@ public final class KeyVaultAndKeyReference {
     private String keyUrl;
 
     /**
+     * Creates an instance of KeyVaultAndKeyReference class.
+     */
+    public KeyVaultAndKeyReference() {
+    }
+
+    /**
      * Get the sourceVault property: Resource id of the KeyVault containing the key or secret.
-     *
+     * 
      * @return the sourceVault value.
      */
     public SourceVault sourceVault() {
@@ -37,7 +42,7 @@ public final class KeyVaultAndKeyReference {
 
     /**
      * Set the sourceVault property: Resource id of the KeyVault containing the key or secret.
-     *
+     * 
      * @param sourceVault the sourceVault value to set.
      * @return the KeyVaultAndKeyReference object itself.
      */
@@ -48,7 +53,7 @@ public final class KeyVaultAndKeyReference {
 
     /**
      * Get the keyUrl property: Url pointing to a key or secret in KeyVault.
-     *
+     * 
      * @return the keyUrl value.
      */
     public String keyUrl() {
@@ -57,7 +62,7 @@ public final class KeyVaultAndKeyReference {
 
     /**
      * Set the keyUrl property: Url pointing to a key or secret in KeyVault.
-     *
+     * 
      * @param keyUrl the keyUrl value to set.
      * @return the KeyVaultAndKeyReference object itself.
      */
@@ -68,22 +73,22 @@ public final class KeyVaultAndKeyReference {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (sourceVault() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property sourceVault in model KeyVaultAndKeyReference"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property sourceVault in model KeyVaultAndKeyReference"));
         } else {
             sourceVault().validate();
         }
         if (keyUrl() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property keyUrl in model KeyVaultAndKeyReference"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property keyUrl in model KeyVaultAndKeyReference"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(KeyVaultAndKeyReference.class);
 }

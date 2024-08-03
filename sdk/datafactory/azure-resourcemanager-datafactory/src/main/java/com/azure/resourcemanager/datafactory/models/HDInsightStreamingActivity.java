@@ -7,72 +7,129 @@ package com.azure.resourcemanager.datafactory.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.fluent.models.HDInsightStreamingActivityTypeProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.List;
 import java.util.Map;
 
-/** HDInsight streaming activity type. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * HDInsight streaming activity type.
+ */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "type",
+    defaultImpl = HDInsightStreamingActivity.class,
+    visible = true)
 @JsonTypeName("HDInsightStreaming")
 @Fluent
 public final class HDInsightStreamingActivity extends ExecutionActivity {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(HDInsightStreamingActivity.class);
+    /*
+     * Type of activity.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "HDInsightStreaming";
 
     /*
      * HDInsight streaming activity properties.
      */
     @JsonProperty(value = "typeProperties", required = true)
-    private HDInsightStreamingActivityTypeProperties innerTypeProperties =
-        new HDInsightStreamingActivityTypeProperties();
+    private HDInsightStreamingActivityTypeProperties innerTypeProperties
+        = new HDInsightStreamingActivityTypeProperties();
+
+    /**
+     * Creates an instance of HDInsightStreamingActivity class.
+     */
+    public HDInsightStreamingActivity() {
+    }
+
+    /**
+     * Get the type property: Type of activity.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
 
     /**
      * Get the innerTypeProperties property: HDInsight streaming activity properties.
-     *
+     * 
      * @return the innerTypeProperties value.
      */
     private HDInsightStreamingActivityTypeProperties innerTypeProperties() {
         return this.innerTypeProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public HDInsightStreamingActivity withLinkedServiceName(LinkedServiceReference linkedServiceName) {
         super.withLinkedServiceName(linkedServiceName);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public HDInsightStreamingActivity withPolicy(ActivityPolicy policy) {
         super.withPolicy(policy);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public HDInsightStreamingActivity withName(String name) {
         super.withName(name);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public HDInsightStreamingActivity withDescription(String description) {
         super.withDescription(description);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public HDInsightStreamingActivity withState(ActivityState state) {
+        super.withState(state);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public HDInsightStreamingActivity withOnInactiveMarkAs(ActivityOnInactiveMarkAs onInactiveMarkAs) {
+        super.withOnInactiveMarkAs(onInactiveMarkAs);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public HDInsightStreamingActivity withDependsOn(List<ActivityDependency> dependsOn) {
         super.withDependsOn(dependsOn);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public HDInsightStreamingActivity withUserProperties(List<UserProperty> userProperties) {
         super.withUserProperties(userProperties);
@@ -81,7 +138,7 @@ public final class HDInsightStreamingActivity extends ExecutionActivity {
 
     /**
      * Get the storageLinkedServices property: Storage linked service references.
-     *
+     * 
      * @return the storageLinkedServices value.
      */
     public List<LinkedServiceReference> storageLinkedServices() {
@@ -90,7 +147,7 @@ public final class HDInsightStreamingActivity extends ExecutionActivity {
 
     /**
      * Set the storageLinkedServices property: Storage linked service references.
-     *
+     * 
      * @param storageLinkedServices the storageLinkedServices value to set.
      * @return the HDInsightStreamingActivity object itself.
      */
@@ -104,7 +161,7 @@ public final class HDInsightStreamingActivity extends ExecutionActivity {
 
     /**
      * Get the arguments property: User specified arguments to HDInsightActivity.
-     *
+     * 
      * @return the arguments value.
      */
     public List<Object> arguments() {
@@ -113,7 +170,7 @@ public final class HDInsightStreamingActivity extends ExecutionActivity {
 
     /**
      * Set the arguments property: User specified arguments to HDInsightActivity.
-     *
+     * 
      * @param arguments the arguments value to set.
      * @return the HDInsightStreamingActivity object itself.
      */
@@ -127,7 +184,7 @@ public final class HDInsightStreamingActivity extends ExecutionActivity {
 
     /**
      * Get the getDebugInfo property: Debug info option.
-     *
+     * 
      * @return the getDebugInfo value.
      */
     public HDInsightActivityDebugInfoOption getDebugInfo() {
@@ -136,7 +193,7 @@ public final class HDInsightStreamingActivity extends ExecutionActivity {
 
     /**
      * Set the getDebugInfo property: Debug info option.
-     *
+     * 
      * @param getDebugInfo the getDebugInfo value to set.
      * @return the HDInsightStreamingActivity object itself.
      */
@@ -150,7 +207,7 @@ public final class HDInsightStreamingActivity extends ExecutionActivity {
 
     /**
      * Get the mapper property: Mapper executable name. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the mapper value.
      */
     public Object mapper() {
@@ -159,7 +216,7 @@ public final class HDInsightStreamingActivity extends ExecutionActivity {
 
     /**
      * Set the mapper property: Mapper executable name. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param mapper the mapper value to set.
      * @return the HDInsightStreamingActivity object itself.
      */
@@ -173,7 +230,7 @@ public final class HDInsightStreamingActivity extends ExecutionActivity {
 
     /**
      * Get the reducer property: Reducer executable name. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the reducer value.
      */
     public Object reducer() {
@@ -182,7 +239,7 @@ public final class HDInsightStreamingActivity extends ExecutionActivity {
 
     /**
      * Set the reducer property: Reducer executable name. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param reducer the reducer value to set.
      * @return the HDInsightStreamingActivity object itself.
      */
@@ -196,7 +253,7 @@ public final class HDInsightStreamingActivity extends ExecutionActivity {
 
     /**
      * Get the input property: Input blob path. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the input value.
      */
     public Object input() {
@@ -205,7 +262,7 @@ public final class HDInsightStreamingActivity extends ExecutionActivity {
 
     /**
      * Set the input property: Input blob path. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param input the input value to set.
      * @return the HDInsightStreamingActivity object itself.
      */
@@ -219,7 +276,7 @@ public final class HDInsightStreamingActivity extends ExecutionActivity {
 
     /**
      * Get the output property: Output blob path. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the output value.
      */
     public Object output() {
@@ -228,7 +285,7 @@ public final class HDInsightStreamingActivity extends ExecutionActivity {
 
     /**
      * Set the output property: Output blob path. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param output the output value to set.
      * @return the HDInsightStreamingActivity object itself.
      */
@@ -242,7 +299,7 @@ public final class HDInsightStreamingActivity extends ExecutionActivity {
 
     /**
      * Get the filePaths property: Paths to streaming job files. Can be directories.
-     *
+     * 
      * @return the filePaths value.
      */
     public List<Object> filePaths() {
@@ -251,7 +308,7 @@ public final class HDInsightStreamingActivity extends ExecutionActivity {
 
     /**
      * Set the filePaths property: Paths to streaming job files. Can be directories.
-     *
+     * 
      * @param filePaths the filePaths value to set.
      * @return the HDInsightStreamingActivity object itself.
      */
@@ -265,7 +322,7 @@ public final class HDInsightStreamingActivity extends ExecutionActivity {
 
     /**
      * Get the fileLinkedService property: Linked service reference where the files are located.
-     *
+     * 
      * @return the fileLinkedService value.
      */
     public LinkedServiceReference fileLinkedService() {
@@ -274,7 +331,7 @@ public final class HDInsightStreamingActivity extends ExecutionActivity {
 
     /**
      * Set the fileLinkedService property: Linked service reference where the files are located.
-     *
+     * 
      * @param fileLinkedService the fileLinkedService value to set.
      * @return the HDInsightStreamingActivity object itself.
      */
@@ -288,7 +345,7 @@ public final class HDInsightStreamingActivity extends ExecutionActivity {
 
     /**
      * Get the combiner property: Combiner executable name. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the combiner value.
      */
     public Object combiner() {
@@ -297,7 +354,7 @@ public final class HDInsightStreamingActivity extends ExecutionActivity {
 
     /**
      * Set the combiner property: Combiner executable name. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param combiner the combiner value to set.
      * @return the HDInsightStreamingActivity object itself.
      */
@@ -311,7 +368,7 @@ public final class HDInsightStreamingActivity extends ExecutionActivity {
 
     /**
      * Get the commandEnvironment property: Command line environment values.
-     *
+     * 
      * @return the commandEnvironment value.
      */
     public List<Object> commandEnvironment() {
@@ -320,7 +377,7 @@ public final class HDInsightStreamingActivity extends ExecutionActivity {
 
     /**
      * Set the commandEnvironment property: Command line environment values.
-     *
+     * 
      * @param commandEnvironment the commandEnvironment value to set.
      * @return the HDInsightStreamingActivity object itself.
      */
@@ -334,7 +391,7 @@ public final class HDInsightStreamingActivity extends ExecutionActivity {
 
     /**
      * Get the defines property: Allows user to specify defines for streaming job request.
-     *
+     * 
      * @return the defines value.
      */
     public Map<String, Object> defines() {
@@ -343,7 +400,7 @@ public final class HDInsightStreamingActivity extends ExecutionActivity {
 
     /**
      * Set the defines property: Allows user to specify defines for streaming job request.
-     *
+     * 
      * @param defines the defines value to set.
      * @return the HDInsightStreamingActivity object itself.
      */
@@ -357,19 +414,20 @@ public final class HDInsightStreamingActivity extends ExecutionActivity {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
         if (innerTypeProperties() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property innerTypeProperties in model HDInsightStreamingActivity"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property innerTypeProperties in model HDInsightStreamingActivity"));
         } else {
             innerTypeProperties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(HDInsightStreamingActivity.class);
 }

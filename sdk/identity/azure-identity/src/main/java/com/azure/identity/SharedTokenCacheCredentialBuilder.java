@@ -7,10 +7,20 @@ package com.azure.identity;
 /**
  * Fluent credential builder for instantiating a {@link SharedTokenCacheCredential}.
  *
+ * <p>This credential is a legacy mechanism for authenticating clients using credentials provided to Visual Studio Code.
+ * This mechanism for Visual Studio authentication has been replaced by the {@link VisualStudioCodeCredential}/>.</p>
+ *
  * @see SharedTokenCacheCredential
  */
 public class SharedTokenCacheCredentialBuilder extends AadCredentialBuilderBase<SharedTokenCacheCredentialBuilder> {
     private String username;
+
+    /**
+     * Constructs an instance of SharedTokenCacheCredentialBuilder.
+     */
+    public SharedTokenCacheCredentialBuilder() {
+        super();
+    }
     private TokenCachePersistenceOptions tokenCachePersistenceOptions = new TokenCachePersistenceOptions()
         .setUnencryptedStorageAllowed(true);
 

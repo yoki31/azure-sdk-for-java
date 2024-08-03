@@ -5,44 +5,63 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** A copy activity Azure Data Explorer sink. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * A copy activity Azure Data Explorer sink.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = AzureDataExplorerSink.class, visible = true)
 @JsonTypeName("AzureDataExplorerSink")
 @Fluent
 public final class AzureDataExplorerSink extends CopySink {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureDataExplorerSink.class);
+    /*
+     * Copy sink type.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "AzureDataExplorerSink";
 
     /*
-     * A name of a pre-created csv mapping that was defined on the target Kusto
-     * table. Type: string.
+     * A name of a pre-created csv mapping that was defined on the target Kusto table. Type: string.
      */
     @JsonProperty(value = "ingestionMappingName")
     private Object ingestionMappingName;
 
     /*
-     * An explicit column mapping description provided in a json format. Type:
-     * string.
+     * An explicit column mapping description provided in a json format. Type: string.
      */
     @JsonProperty(value = "ingestionMappingAsJson")
     private Object ingestionMappingAsJson;
 
     /*
-     * If set to true, any aggregation will be skipped. Default is false. Type:
-     * boolean.
+     * If set to true, any aggregation will be skipped. Default is false. Type: boolean.
      */
     @JsonProperty(value = "flushImmediately")
     private Object flushImmediately;
 
     /**
+     * Creates an instance of AzureDataExplorerSink class.
+     */
+    public AzureDataExplorerSink() {
+    }
+
+    /**
+     * Get the type property: Copy sink type.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the ingestionMappingName property: A name of a pre-created csv mapping that was defined on the target Kusto
      * table. Type: string.
-     *
+     * 
      * @return the ingestionMappingName value.
      */
     public Object ingestionMappingName() {
@@ -52,7 +71,7 @@ public final class AzureDataExplorerSink extends CopySink {
     /**
      * Set the ingestionMappingName property: A name of a pre-created csv mapping that was defined on the target Kusto
      * table. Type: string.
-     *
+     * 
      * @param ingestionMappingName the ingestionMappingName value to set.
      * @return the AzureDataExplorerSink object itself.
      */
@@ -64,7 +83,7 @@ public final class AzureDataExplorerSink extends CopySink {
     /**
      * Get the ingestionMappingAsJson property: An explicit column mapping description provided in a json format. Type:
      * string.
-     *
+     * 
      * @return the ingestionMappingAsJson value.
      */
     public Object ingestionMappingAsJson() {
@@ -74,7 +93,7 @@ public final class AzureDataExplorerSink extends CopySink {
     /**
      * Set the ingestionMappingAsJson property: An explicit column mapping description provided in a json format. Type:
      * string.
-     *
+     * 
      * @param ingestionMappingAsJson the ingestionMappingAsJson value to set.
      * @return the AzureDataExplorerSink object itself.
      */
@@ -86,7 +105,7 @@ public final class AzureDataExplorerSink extends CopySink {
     /**
      * Get the flushImmediately property: If set to true, any aggregation will be skipped. Default is false. Type:
      * boolean.
-     *
+     * 
      * @return the flushImmediately value.
      */
     public Object flushImmediately() {
@@ -96,7 +115,7 @@ public final class AzureDataExplorerSink extends CopySink {
     /**
      * Set the flushImmediately property: If set to true, any aggregation will be skipped. Default is false. Type:
      * boolean.
-     *
+     * 
      * @param flushImmediately the flushImmediately value to set.
      * @return the AzureDataExplorerSink object itself.
      */
@@ -105,42 +124,54 @@ public final class AzureDataExplorerSink extends CopySink {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureDataExplorerSink withWriteBatchSize(Object writeBatchSize) {
         super.withWriteBatchSize(writeBatchSize);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureDataExplorerSink withWriteBatchTimeout(Object writeBatchTimeout) {
         super.withWriteBatchTimeout(writeBatchTimeout);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureDataExplorerSink withSinkRetryCount(Object sinkRetryCount) {
         super.withSinkRetryCount(sinkRetryCount);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureDataExplorerSink withSinkRetryWait(Object sinkRetryWait) {
         super.withSinkRetryWait(sinkRetryWait);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureDataExplorerSink withMaxConcurrentConnections(Object maxConcurrentConnections) {
         super.withMaxConcurrentConnections(maxConcurrentConnections);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureDataExplorerSink withDisableMetricsCollection(Object disableMetricsCollection) {
         super.withDisableMetricsCollection(disableMetricsCollection);
@@ -149,7 +180,7 @@ public final class AzureDataExplorerSink extends CopySink {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

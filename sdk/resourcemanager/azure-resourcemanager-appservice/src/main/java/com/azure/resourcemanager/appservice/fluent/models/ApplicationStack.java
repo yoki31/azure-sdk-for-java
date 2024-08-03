@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.StackMajorVersion;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Application stack. */
+/**
+ * Application stack.
+ */
 @Fluent
 public final class ApplicationStack {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApplicationStack.class);
-
     /*
      * Application stack name.
      */
@@ -47,15 +45,20 @@ public final class ApplicationStack {
     private List<ApplicationStack> frameworks;
 
     /*
-     * <code>true</code> if this is the stack is deprecated; otherwise,
-     * <code>false</code>.
+     * <code>true</code> if this is the stack is deprecated; otherwise, <code>false</code>.
      */
     @JsonProperty(value = "isDeprecated")
     private List<ApplicationStack> isDeprecated;
 
     /**
+     * Creates an instance of ApplicationStack class.
+     */
+    public ApplicationStack() {
+    }
+
+    /**
      * Get the name property: Application stack name.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -64,7 +67,7 @@ public final class ApplicationStack {
 
     /**
      * Set the name property: Application stack name.
-     *
+     * 
      * @param name the name value to set.
      * @return the ApplicationStack object itself.
      */
@@ -75,7 +78,7 @@ public final class ApplicationStack {
 
     /**
      * Get the display property: Application stack display name.
-     *
+     * 
      * @return the display value.
      */
     public String display() {
@@ -84,7 +87,7 @@ public final class ApplicationStack {
 
     /**
      * Set the display property: Application stack display name.
-     *
+     * 
      * @param display the display value to set.
      * @return the ApplicationStack object itself.
      */
@@ -95,7 +98,7 @@ public final class ApplicationStack {
 
     /**
      * Get the dependency property: Application stack dependency.
-     *
+     * 
      * @return the dependency value.
      */
     public String dependency() {
@@ -104,7 +107,7 @@ public final class ApplicationStack {
 
     /**
      * Set the dependency property: Application stack dependency.
-     *
+     * 
      * @param dependency the dependency value to set.
      * @return the ApplicationStack object itself.
      */
@@ -115,7 +118,7 @@ public final class ApplicationStack {
 
     /**
      * Get the majorVersions property: List of major versions available.
-     *
+     * 
      * @return the majorVersions value.
      */
     public List<StackMajorVersion> majorVersions() {
@@ -124,7 +127,7 @@ public final class ApplicationStack {
 
     /**
      * Set the majorVersions property: List of major versions available.
-     *
+     * 
      * @param majorVersions the majorVersions value to set.
      * @return the ApplicationStack object itself.
      */
@@ -135,7 +138,7 @@ public final class ApplicationStack {
 
     /**
      * Get the frameworks property: List of frameworks associated with application stack.
-     *
+     * 
      * @return the frameworks value.
      */
     public List<ApplicationStack> frameworks() {
@@ -144,7 +147,7 @@ public final class ApplicationStack {
 
     /**
      * Set the frameworks property: List of frameworks associated with application stack.
-     *
+     * 
      * @param frameworks the frameworks value to set.
      * @return the ApplicationStack object itself.
      */
@@ -156,7 +159,7 @@ public final class ApplicationStack {
     /**
      * Get the isDeprecated property: &lt;code&gt;true&lt;/code&gt; if this is the stack is deprecated; otherwise,
      * &lt;code&gt;false&lt;/code&gt;.
-     *
+     * 
      * @return the isDeprecated value.
      */
     public List<ApplicationStack> isDeprecated() {
@@ -166,7 +169,7 @@ public final class ApplicationStack {
     /**
      * Set the isDeprecated property: &lt;code&gt;true&lt;/code&gt; if this is the stack is deprecated; otherwise,
      * &lt;code&gt;false&lt;/code&gt;.
-     *
+     * 
      * @param isDeprecated the isDeprecated value to set.
      * @return the ApplicationStack object itself.
      */
@@ -177,7 +180,7 @@ public final class ApplicationStack {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

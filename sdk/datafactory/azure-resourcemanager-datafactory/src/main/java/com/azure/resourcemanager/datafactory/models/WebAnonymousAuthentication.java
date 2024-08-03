@@ -5,19 +5,48 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** A WebLinkedService that uses anonymous authentication to communicate with an HTTP endpoint. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "authenticationType")
+/**
+ * A WebLinkedService that uses anonymous authentication to communicate with an HTTP endpoint.
+ */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "authenticationType",
+    defaultImpl = WebAnonymousAuthentication.class,
+    visible = true)
 @JsonTypeName("Anonymous")
 @Fluent
 public final class WebAnonymousAuthentication extends WebLinkedServiceTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(WebAnonymousAuthentication.class);
+    /*
+     * Type of authentication used to connect to the web table source.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "authenticationType", required = true)
+    private WebAuthenticationType authenticationType = WebAuthenticationType.ANONYMOUS;
 
-    /** {@inheritDoc} */
+    /**
+     * Creates an instance of WebAnonymousAuthentication class.
+     */
+    public WebAnonymousAuthentication() {
+    }
+
+    /**
+     * Get the authenticationType property: Type of authentication used to connect to the web table source.
+     * 
+     * @return the authenticationType value.
+     */
+    @Override
+    public WebAuthenticationType authenticationType() {
+        return this.authenticationType;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public WebAnonymousAuthentication withUrl(Object url) {
         super.withUrl(url);
@@ -26,7 +55,7 @@ public final class WebAnonymousAuthentication extends WebLinkedServiceTypeProper
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

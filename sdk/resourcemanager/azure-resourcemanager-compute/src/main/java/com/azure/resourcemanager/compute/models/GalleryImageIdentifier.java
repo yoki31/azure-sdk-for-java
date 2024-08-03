@@ -6,14 +6,13 @@ package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** This is the gallery image definition identifier. */
+/**
+ * This is the gallery image definition identifier.
+ */
 @Fluent
 public final class GalleryImageIdentifier {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GalleryImageIdentifier.class);
-
     /*
      * The name of the gallery image definition publisher.
      */
@@ -33,8 +32,14 @@ public final class GalleryImageIdentifier {
     private String sku;
 
     /**
+     * Creates an instance of GalleryImageIdentifier class.
+     */
+    public GalleryImageIdentifier() {
+    }
+
+    /**
      * Get the publisher property: The name of the gallery image definition publisher.
-     *
+     * 
      * @return the publisher value.
      */
     public String publisher() {
@@ -43,7 +48,7 @@ public final class GalleryImageIdentifier {
 
     /**
      * Set the publisher property: The name of the gallery image definition publisher.
-     *
+     * 
      * @param publisher the publisher value to set.
      * @return the GalleryImageIdentifier object itself.
      */
@@ -54,7 +59,7 @@ public final class GalleryImageIdentifier {
 
     /**
      * Get the offer property: The name of the gallery image definition offer.
-     *
+     * 
      * @return the offer value.
      */
     public String offer() {
@@ -63,7 +68,7 @@ public final class GalleryImageIdentifier {
 
     /**
      * Set the offer property: The name of the gallery image definition offer.
-     *
+     * 
      * @param offer the offer value to set.
      * @return the GalleryImageIdentifier object itself.
      */
@@ -74,7 +79,7 @@ public final class GalleryImageIdentifier {
 
     /**
      * Get the sku property: The name of the gallery image definition SKU.
-     *
+     * 
      * @return the sku value.
      */
     public String sku() {
@@ -83,7 +88,7 @@ public final class GalleryImageIdentifier {
 
     /**
      * Set the sku property: The name of the gallery image definition SKU.
-     *
+     * 
      * @param sku the sku value to set.
      * @return the GalleryImageIdentifier object itself.
      */
@@ -94,25 +99,24 @@ public final class GalleryImageIdentifier {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (publisher() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property publisher in model GalleryImageIdentifier"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property publisher in model GalleryImageIdentifier"));
         }
         if (offer() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property offer in model GalleryImageIdentifier"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property offer in model GalleryImageIdentifier"));
         }
         if (sku() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property sku in model GalleryImageIdentifier"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property sku in model GalleryImageIdentifier"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(GalleryImageIdentifier.class);
 }

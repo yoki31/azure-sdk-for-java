@@ -6,68 +6,70 @@ package com.azure.resourcemanager.batch.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The configuration for container-enabled pools. */
+/**
+ * The configuration for container-enabled pools.
+ */
 @Fluent
 public final class ContainerConfiguration {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ContainerConfiguration.class);
-
     /*
      * The container technology to be used.
      */
     @JsonProperty(value = "type", required = true)
-    private String type;
+    private ContainerType type;
 
     /*
-     * The collection of container image names. This is the full image
-     * reference, as would be specified to "docker pull". An image will be
-     * sourced from the default Docker registry unless the image is fully
-     * qualified with an alternative registry.
+     * The collection of container image names.
+     * 
+     * This is the full image reference, as would be specified to "docker pull". An image will be sourced from the
+     * default Docker registry unless the image is fully qualified with an alternative registry.
      */
     @JsonProperty(value = "containerImageNames")
     private List<String> containerImageNames;
 
     /*
-     * Additional private registries from which containers can be pulled. If
-     * any images must be downloaded from a private registry which requires
-     * credentials, then those credentials must be provided here.
+     * Additional private registries from which containers can be pulled.
+     * 
+     * If any images must be downloaded from a private registry which requires credentials, then those credentials must
+     * be provided here.
      */
     @JsonProperty(value = "containerRegistries")
     private List<ContainerRegistry> containerRegistries;
 
-    /** Creates an instance of ContainerConfiguration class. */
+    /**
+     * Creates an instance of ContainerConfiguration class.
+     */
     public ContainerConfiguration() {
-        type = "DockerCompatible";
     }
 
     /**
      * Get the type property: The container technology to be used.
-     *
+     * 
      * @return the type value.
      */
-    public String type() {
+    public ContainerType type() {
         return this.type;
     }
 
     /**
      * Set the type property: The container technology to be used.
-     *
+     * 
      * @param type the type value to set.
      * @return the ContainerConfiguration object itself.
      */
-    public ContainerConfiguration withType(String type) {
+    public ContainerConfiguration withType(ContainerType type) {
         this.type = type;
         return this;
     }
 
     /**
-     * Get the containerImageNames property: The collection of container image names. This is the full image reference,
-     * as would be specified to "docker pull". An image will be sourced from the default Docker registry unless the
-     * image is fully qualified with an alternative registry.
-     *
+     * Get the containerImageNames property: The collection of container image names.
+     * 
+     * This is the full image reference, as would be specified to "docker pull". An image will be sourced from the
+     * default Docker registry unless the image is fully qualified with an alternative registry.
+     * 
      * @return the containerImageNames value.
      */
     public List<String> containerImageNames() {
@@ -75,10 +77,11 @@ public final class ContainerConfiguration {
     }
 
     /**
-     * Set the containerImageNames property: The collection of container image names. This is the full image reference,
-     * as would be specified to "docker pull". An image will be sourced from the default Docker registry unless the
-     * image is fully qualified with an alternative registry.
-     *
+     * Set the containerImageNames property: The collection of container image names.
+     * 
+     * This is the full image reference, as would be specified to "docker pull". An image will be sourced from the
+     * default Docker registry unless the image is fully qualified with an alternative registry.
+     * 
      * @param containerImageNames the containerImageNames value to set.
      * @return the ContainerConfiguration object itself.
      */
@@ -88,10 +91,11 @@ public final class ContainerConfiguration {
     }
 
     /**
-     * Get the containerRegistries property: Additional private registries from which containers can be pulled. If any
-     * images must be downloaded from a private registry which requires credentials, then those credentials must be
-     * provided here.
-     *
+     * Get the containerRegistries property: Additional private registries from which containers can be pulled.
+     * 
+     * If any images must be downloaded from a private registry which requires credentials, then those credentials must
+     * be provided here.
+     * 
      * @return the containerRegistries value.
      */
     public List<ContainerRegistry> containerRegistries() {
@@ -99,10 +103,11 @@ public final class ContainerConfiguration {
     }
 
     /**
-     * Set the containerRegistries property: Additional private registries from which containers can be pulled. If any
-     * images must be downloaded from a private registry which requires credentials, then those credentials must be
-     * provided here.
-     *
+     * Set the containerRegistries property: Additional private registries from which containers can be pulled.
+     * 
+     * If any images must be downloaded from a private registry which requires credentials, then those credentials must
+     * be provided here.
+     * 
      * @param containerRegistries the containerRegistries value to set.
      * @return the ContainerConfiguration object itself.
      */
@@ -113,12 +118,18 @@ public final class ContainerConfiguration {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
+        if (type() == null) {
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property type in model ContainerConfiguration"));
+        }
         if (containerRegistries() != null) {
             containerRegistries().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ContainerConfiguration.class);
 }

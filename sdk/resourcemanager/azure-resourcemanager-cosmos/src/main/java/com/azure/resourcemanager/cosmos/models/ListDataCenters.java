@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cosmos.fluent.models.DataCenterResourceInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** List of managed Cassandra data centers and their properties. */
+/**
+ * List of managed Cassandra data centers and their properties.
+ */
 @Immutable
 public final class ListDataCenters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ListDataCenters.class);
-
     /*
      * Container for array of data centers.
      */
@@ -23,8 +21,14 @@ public final class ListDataCenters {
     private List<DataCenterResourceInner> value;
 
     /**
+     * Creates an instance of ListDataCenters class.
+     */
+    public ListDataCenters() {
+    }
+
+    /**
      * Get the value property: Container for array of data centers.
-     *
+     * 
      * @return the value value.
      */
     public List<DataCenterResourceInner> value() {
@@ -33,7 +37,7 @@ public final class ListDataCenters {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

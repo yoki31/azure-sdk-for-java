@@ -5,15 +5,51 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Describes a Virtual Machine Scale Set VM Reimage Parameters. */
+/**
+ * Describes a Virtual Machine Scale Set VM Reimage Parameters.
+ */
 @Fluent
 public class VirtualMachineScaleSetVMReimageParameters extends VirtualMachineReimageParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VirtualMachineScaleSetVMReimageParameters.class);
+    /*
+     * Parameter to force update ephemeral OS disk for a virtual machine scale set VM
+     */
+    @JsonProperty(value = "forceUpdateOSDiskForEphemeral")
+    private Boolean forceUpdateOSDiskForEphemeral;
 
-    /** {@inheritDoc} */
+    /**
+     * Creates an instance of VirtualMachineScaleSetVMReimageParameters class.
+     */
+    public VirtualMachineScaleSetVMReimageParameters() {
+    }
+
+    /**
+     * Get the forceUpdateOSDiskForEphemeral property: Parameter to force update ephemeral OS disk for a virtual machine
+     * scale set VM.
+     * 
+     * @return the forceUpdateOSDiskForEphemeral value.
+     */
+    public Boolean forceUpdateOSDiskForEphemeral() {
+        return this.forceUpdateOSDiskForEphemeral;
+    }
+
+    /**
+     * Set the forceUpdateOSDiskForEphemeral property: Parameter to force update ephemeral OS disk for a virtual machine
+     * scale set VM.
+     * 
+     * @param forceUpdateOSDiskForEphemeral the forceUpdateOSDiskForEphemeral value to set.
+     * @return the VirtualMachineScaleSetVMReimageParameters object itself.
+     */
+    public VirtualMachineScaleSetVMReimageParameters
+        withForceUpdateOSDiskForEphemeral(Boolean forceUpdateOSDiskForEphemeral) {
+        this.forceUpdateOSDiskForEphemeral = forceUpdateOSDiskForEphemeral;
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public VirtualMachineScaleSetVMReimageParameters withTempDisk(Boolean tempDisk) {
         super.withTempDisk(tempDisk);
@@ -21,8 +57,26 @@ public class VirtualMachineScaleSetVMReimageParameters extends VirtualMachineRei
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public VirtualMachineScaleSetVMReimageParameters withExactVersion(String exactVersion) {
+        super.withExactVersion(exactVersion);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public VirtualMachineScaleSetVMReimageParameters withOsProfile(OSProfileProvisioningData osProfile) {
+        super.withOsProfile(osProfile);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

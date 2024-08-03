@@ -5,15 +5,14 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Custom action to be executed when an auto heal rule is triggered. */
+/**
+ * Custom action to be executed
+ * when an auto heal rule is triggered.
+ */
 @Fluent
 public final class AutoHealCustomAction {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AutoHealCustomAction.class);
-
     /*
      * Executable to be run.
      */
@@ -27,8 +26,14 @@ public final class AutoHealCustomAction {
     private String parameters;
 
     /**
+     * Creates an instance of AutoHealCustomAction class.
+     */
+    public AutoHealCustomAction() {
+    }
+
+    /**
      * Get the exe property: Executable to be run.
-     *
+     * 
      * @return the exe value.
      */
     public String exe() {
@@ -37,7 +42,7 @@ public final class AutoHealCustomAction {
 
     /**
      * Set the exe property: Executable to be run.
-     *
+     * 
      * @param exe the exe value to set.
      * @return the AutoHealCustomAction object itself.
      */
@@ -48,7 +53,7 @@ public final class AutoHealCustomAction {
 
     /**
      * Get the parameters property: Parameters for the executable.
-     *
+     * 
      * @return the parameters value.
      */
     public String parameters() {
@@ -57,7 +62,7 @@ public final class AutoHealCustomAction {
 
     /**
      * Set the parameters property: Parameters for the executable.
-     *
+     * 
      * @param parameters the parameters value to set.
      * @return the AutoHealCustomAction object itself.
      */
@@ -68,7 +73,7 @@ public final class AutoHealCustomAction {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

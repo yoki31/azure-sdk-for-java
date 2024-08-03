@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The connection state of a managed private endpoint. */
+/**
+ * The connection state of a managed private endpoint.
+ */
 @Immutable
 public final class ConnectionStateProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ConnectionStateProperties.class);
-
     /*
      * The actions required on the managed private endpoint
      */
@@ -33,8 +31,14 @@ public final class ConnectionStateProperties {
     private String status;
 
     /**
+     * Creates an instance of ConnectionStateProperties class.
+     */
+    public ConnectionStateProperties() {
+    }
+
+    /**
      * Get the actionsRequired property: The actions required on the managed private endpoint.
-     *
+     * 
      * @return the actionsRequired value.
      */
     public String actionsRequired() {
@@ -43,7 +47,7 @@ public final class ConnectionStateProperties {
 
     /**
      * Get the description property: The managed private endpoint description.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
@@ -52,7 +56,7 @@ public final class ConnectionStateProperties {
 
     /**
      * Get the status property: The approval status.
-     *
+     * 
      * @return the status value.
      */
     public String status() {
@@ -61,7 +65,7 @@ public final class ConnectionStateProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -42,6 +42,11 @@ public final class LogsBatchQuery {
     }
 
     /**
+     * Creates an instance of LogsBatchQuery.
+     */
+    public LogsBatchQuery() { }
+
+    /**
      * Adds a new logs query to the batch.
      * @param workspaceId The workspaceId on which the query is executed.
      * @param query The Kusto query.
@@ -72,7 +77,8 @@ public final class LogsBatchQuery {
 
         String preferHeader = buildPreferHeaderString(logsQueryOptions);
         if (logsQueryOptions != null && logsQueryOptions.getServerTimeout() != null) {
-            if (logsQueryOptions.getServerTimeout().compareTo(this.maxServerTimeout) > 0) {
+            // Set the server timeout to max server timeout among all the queries in the batch
+            if (maxServerTimeout == null || logsQueryOptions.getServerTimeout().compareTo(maxServerTimeout) > 0) {
                 maxServerTimeout = logsQueryOptions.getServerTimeout();
             }
         }

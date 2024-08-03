@@ -5,30 +5,51 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** The location of http server. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * The location of http server.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = HttpServerLocation.class, visible = true)
 @JsonTypeName("HttpServerLocation")
 @Fluent
 public final class HttpServerLocation extends DatasetLocation {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(HttpServerLocation.class);
+    /*
+     * Type of dataset storage location.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "HttpServerLocation";
 
     /*
-     * Specify the relativeUrl of http server. Type: string (or Expression with
-     * resultType string)
+     * Specify the relativeUrl of http server. Type: string (or Expression with resultType string)
      */
     @JsonProperty(value = "relativeUrl")
     private Object relativeUrl;
 
     /**
+     * Creates an instance of HttpServerLocation class.
+     */
+    public HttpServerLocation() {
+    }
+
+    /**
+     * Get the type property: Type of dataset storage location.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the relativeUrl property: Specify the relativeUrl of http server. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @return the relativeUrl value.
      */
     public Object relativeUrl() {
@@ -38,7 +59,7 @@ public final class HttpServerLocation extends DatasetLocation {
     /**
      * Set the relativeUrl property: Specify the relativeUrl of http server. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @param relativeUrl the relativeUrl value to set.
      * @return the HttpServerLocation object itself.
      */
@@ -47,14 +68,18 @@ public final class HttpServerLocation extends DatasetLocation {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public HttpServerLocation withFolderPath(Object folderPath) {
         super.withFolderPath(folderPath);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public HttpServerLocation withFileName(Object fileName) {
         super.withFileName(fileName);
@@ -63,7 +88,7 @@ public final class HttpServerLocation extends DatasetLocation {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

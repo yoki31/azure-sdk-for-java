@@ -5,18 +5,24 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** Avro write settings. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * Avro write settings.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = AvroWriteSettings.class, visible = true)
 @JsonTypeName("AvroWriteSettings")
 @Fluent
 public final class AvroWriteSettings extends FormatWriteSettings {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AvroWriteSettings.class);
+    /*
+     * The write setting type.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "AvroWriteSettings";
 
     /*
      * Top level record name in write result, which is required in AVRO spec.
@@ -31,24 +37,38 @@ public final class AvroWriteSettings extends FormatWriteSettings {
     private String recordNamespace;
 
     /*
-     * Limit the written file's row count to be smaller than or equal to the
-     * specified count. Type: integer (or Expression with resultType integer).
+     * Limit the written file's row count to be smaller than or equal to the specified count. Type: integer (or
+     * Expression with resultType integer).
      */
     @JsonProperty(value = "maxRowsPerFile")
     private Object maxRowsPerFile;
 
     /*
-     * Specifies the file name pattern
-     * <fileNamePrefix>_<fileIndex>.<fileExtension> when copy from non-file
-     * based store without partitionOptions. Type: string (or Expression with
-     * resultType string).
+     * Specifies the file name pattern <fileNamePrefix>_<fileIndex>.<fileExtension> when copy from non-file based store
+     * without partitionOptions. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "fileNamePrefix")
     private Object fileNamePrefix;
 
     /**
+     * Creates an instance of AvroWriteSettings class.
+     */
+    public AvroWriteSettings() {
+    }
+
+    /**
+     * Get the type property: The write setting type.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the recordName property: Top level record name in write result, which is required in AVRO spec.
-     *
+     * 
      * @return the recordName value.
      */
     public String recordName() {
@@ -57,7 +77,7 @@ public final class AvroWriteSettings extends FormatWriteSettings {
 
     /**
      * Set the recordName property: Top level record name in write result, which is required in AVRO spec.
-     *
+     * 
      * @param recordName the recordName value to set.
      * @return the AvroWriteSettings object itself.
      */
@@ -68,7 +88,7 @@ public final class AvroWriteSettings extends FormatWriteSettings {
 
     /**
      * Get the recordNamespace property: Record namespace in the write result.
-     *
+     * 
      * @return the recordNamespace value.
      */
     public String recordNamespace() {
@@ -77,7 +97,7 @@ public final class AvroWriteSettings extends FormatWriteSettings {
 
     /**
      * Set the recordNamespace property: Record namespace in the write result.
-     *
+     * 
      * @param recordNamespace the recordNamespace value to set.
      * @return the AvroWriteSettings object itself.
      */
@@ -89,7 +109,7 @@ public final class AvroWriteSettings extends FormatWriteSettings {
     /**
      * Get the maxRowsPerFile property: Limit the written file's row count to be smaller than or equal to the specified
      * count. Type: integer (or Expression with resultType integer).
-     *
+     * 
      * @return the maxRowsPerFile value.
      */
     public Object maxRowsPerFile() {
@@ -99,7 +119,7 @@ public final class AvroWriteSettings extends FormatWriteSettings {
     /**
      * Set the maxRowsPerFile property: Limit the written file's row count to be smaller than or equal to the specified
      * count. Type: integer (or Expression with resultType integer).
-     *
+     * 
      * @param maxRowsPerFile the maxRowsPerFile value to set.
      * @return the AvroWriteSettings object itself.
      */
@@ -112,7 +132,7 @@ public final class AvroWriteSettings extends FormatWriteSettings {
      * Get the fileNamePrefix property: Specifies the file name pattern
      * &lt;fileNamePrefix&gt;_&lt;fileIndex&gt;.&lt;fileExtension&gt; when copy from non-file based store without
      * partitionOptions. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the fileNamePrefix value.
      */
     public Object fileNamePrefix() {
@@ -123,7 +143,7 @@ public final class AvroWriteSettings extends FormatWriteSettings {
      * Set the fileNamePrefix property: Specifies the file name pattern
      * &lt;fileNamePrefix&gt;_&lt;fileIndex&gt;.&lt;fileExtension&gt; when copy from non-file based store without
      * partitionOptions. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param fileNamePrefix the fileNamePrefix value to set.
      * @return the AvroWriteSettings object itself.
      */
@@ -134,7 +154,7 @@ public final class AvroWriteSettings extends FormatWriteSettings {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

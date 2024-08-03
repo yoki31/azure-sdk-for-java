@@ -165,6 +165,31 @@ public interface ExtendedServerBlobAuditingPolicy {
     Integer queueDelayMs();
 
     /**
+     * Gets the isDevopsAuditEnabled property: Specifies the state of devops audit. If state is Enabled, devops logs
+     * will be sent to Azure Monitor. In order to send the events to Azure Monitor, specify 'State' as 'Enabled',
+     * 'IsAzureMonitorTargetEnabled' as true and 'IsDevopsAuditEnabled' as true
+     *
+     * <p>When using REST API to configure auditing, Diagnostic Settings with 'DevOpsOperationsAudit' diagnostic logs
+     * category on the master database should also be created.
+     *
+     * <p>Diagnostic Settings URI format: PUT
+     * https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Sql/servers/{serverName}/databases/master/providers/microsoft.insights/diagnosticSettings/{settingsName}?api-version=2017-05-01-preview
+     *
+     * <p>For more information, see [Diagnostic Settings REST API](https://go.microsoft.com/fwlink/?linkid=2033207) or
+     * [Diagnostic Settings PowerShell](https://go.microsoft.com/fwlink/?linkid=2033043).
+     *
+     * @return the isDevopsAuditEnabled value.
+     */
+    Boolean isDevopsAuditEnabled();
+
+    /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.synapse.fluent.models.ExtendedServerBlobAuditingPolicyInner object.
      *
      * @return the inner object.
@@ -205,7 +230,8 @@ public interface ExtendedServerBlobAuditingPolicy {
                 DefinitionStages.WithStorageAccountSubscriptionId,
                 DefinitionStages.WithIsStorageSecondaryKeyInUse,
                 DefinitionStages.WithIsAzureMonitorTargetEnabled,
-                DefinitionStages.WithQueueDelayMs {
+                DefinitionStages.WithQueueDelayMs,
+                DefinitionStages.WithIsDevopsAuditEnabled {
             /**
              * Executes the create request.
              *
@@ -449,6 +475,37 @@ public interface ExtendedServerBlobAuditingPolicy {
              */
             WithCreate withQueueDelayMs(Integer queueDelayMs);
         }
+        /** The stage of the ExtendedServerBlobAuditingPolicy definition allowing to specify isDevopsAuditEnabled. */
+        interface WithIsDevopsAuditEnabled {
+            /**
+             * Specifies the isDevopsAuditEnabled property: Specifies the state of devops audit. If state is Enabled,
+             * devops logs will be sent to Azure Monitor. In order to send the events to Azure Monitor, specify 'State'
+             * as 'Enabled', 'IsAzureMonitorTargetEnabled' as true and 'IsDevopsAuditEnabled' as true
+             *
+             * <p>When using REST API to configure auditing, Diagnostic Settings with 'DevOpsOperationsAudit' diagnostic
+             * logs category on the master database should also be created.
+             *
+             * <p>Diagnostic Settings URI format: PUT
+             * https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Sql/servers/{serverName}/databases/master/providers/microsoft.insights/diagnosticSettings/{settingsName}?api-version=2017-05-01-preview
+             *
+             * <p>For more information, see [Diagnostic Settings REST
+             * API](https://go.microsoft.com/fwlink/?linkid=2033207) or [Diagnostic Settings
+             * PowerShell](https://go.microsoft.com/fwlink/?linkid=2033043) .
+             *
+             * @param isDevopsAuditEnabled Specifies the state of devops audit. If state is Enabled, devops logs will be
+             *     sent to Azure Monitor. In order to send the events to Azure Monitor, specify 'State' as 'Enabled',
+             *     'IsAzureMonitorTargetEnabled' as true and 'IsDevopsAuditEnabled' as true
+             *     <p>When using REST API to configure auditing, Diagnostic Settings with 'DevOpsOperationsAudit'
+             *     diagnostic logs category on the master database should also be created.
+             *     <p>Diagnostic Settings URI format: PUT
+             *     https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Sql/servers/{serverName}/databases/master/providers/microsoft.insights/diagnosticSettings/{settingsName}?api-version=2017-05-01-preview
+             *     <p>For more information, see [Diagnostic Settings REST
+             *     API](https://go.microsoft.com/fwlink/?linkid=2033207) or [Diagnostic Settings
+             *     PowerShell](https://go.microsoft.com/fwlink/?linkid=2033043).
+             * @return the next definition stage.
+             */
+            WithCreate withIsDevopsAuditEnabled(Boolean isDevopsAuditEnabled);
+        }
     }
     /**
      * Begins update for the ExtendedServerBlobAuditingPolicy resource.
@@ -463,12 +520,11 @@ public interface ExtendedServerBlobAuditingPolicy {
             UpdateStages.WithState,
             UpdateStages.WithStorageEndpoint,
             UpdateStages.WithStorageAccountAccessKey,
-            UpdateStages.WithRetentionDays,
             UpdateStages.WithAuditActionsAndGroups,
-            UpdateStages.WithStorageAccountSubscriptionId,
             UpdateStages.WithIsStorageSecondaryKeyInUse,
             UpdateStages.WithIsAzureMonitorTargetEnabled,
-            UpdateStages.WithQueueDelayMs {
+            UpdateStages.WithQueueDelayMs,
+            UpdateStages.WithIsDevopsAuditEnabled {
         /**
          * Executes the update request.
          *
@@ -543,17 +599,6 @@ public interface ExtendedServerBlobAuditingPolicy {
              * @return the next definition stage.
              */
             Update withStorageAccountAccessKey(String storageAccountAccessKey);
-        }
-        /** The stage of the ExtendedServerBlobAuditingPolicy update allowing to specify retentionDays. */
-        interface WithRetentionDays {
-            /**
-             * Specifies the retentionDays property: Specifies the number of days to keep in the audit logs in the
-             * storage account..
-             *
-             * @param retentionDays Specifies the number of days to keep in the audit logs in the storage account.
-             * @return the next definition stage.
-             */
-            Update withRetentionDays(Integer retentionDays);
         }
         /** The stage of the ExtendedServerBlobAuditingPolicy update allowing to specify auditActionsAndGroups. */
         interface WithAuditActionsAndGroups {
@@ -639,18 +684,6 @@ public interface ExtendedServerBlobAuditingPolicy {
              */
             Update withAuditActionsAndGroups(List<String> auditActionsAndGroups);
         }
-        /**
-         * The stage of the ExtendedServerBlobAuditingPolicy update allowing to specify storageAccountSubscriptionId.
-         */
-        interface WithStorageAccountSubscriptionId {
-            /**
-             * Specifies the storageAccountSubscriptionId property: Specifies the blob storage subscription Id..
-             *
-             * @param storageAccountSubscriptionId Specifies the blob storage subscription Id.
-             * @return the next definition stage.
-             */
-            Update withStorageAccountSubscriptionId(UUID storageAccountSubscriptionId);
-        }
         /** The stage of the ExtendedServerBlobAuditingPolicy update allowing to specify isStorageSecondaryKeyInUse. */
         interface WithIsStorageSecondaryKeyInUse {
             /**
@@ -708,6 +741,37 @@ public interface ExtendedServerBlobAuditingPolicy {
              * @return the next definition stage.
              */
             Update withQueueDelayMs(Integer queueDelayMs);
+        }
+        /** The stage of the ExtendedServerBlobAuditingPolicy update allowing to specify isDevopsAuditEnabled. */
+        interface WithIsDevopsAuditEnabled {
+            /**
+             * Specifies the isDevopsAuditEnabled property: Specifies the state of devops audit. If state is Enabled,
+             * devops logs will be sent to Azure Monitor. In order to send the events to Azure Monitor, specify 'State'
+             * as 'Enabled', 'IsAzureMonitorTargetEnabled' as true and 'IsDevopsAuditEnabled' as true
+             *
+             * <p>When using REST API to configure auditing, Diagnostic Settings with 'DevOpsOperationsAudit' diagnostic
+             * logs category on the master database should also be created.
+             *
+             * <p>Diagnostic Settings URI format: PUT
+             * https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Sql/servers/{serverName}/databases/master/providers/microsoft.insights/diagnosticSettings/{settingsName}?api-version=2017-05-01-preview
+             *
+             * <p>For more information, see [Diagnostic Settings REST
+             * API](https://go.microsoft.com/fwlink/?linkid=2033207) or [Diagnostic Settings
+             * PowerShell](https://go.microsoft.com/fwlink/?linkid=2033043) .
+             *
+             * @param isDevopsAuditEnabled Specifies the state of devops audit. If state is Enabled, devops logs will be
+             *     sent to Azure Monitor. In order to send the events to Azure Monitor, specify 'State' as 'Enabled',
+             *     'IsAzureMonitorTargetEnabled' as true and 'IsDevopsAuditEnabled' as true
+             *     <p>When using REST API to configure auditing, Diagnostic Settings with 'DevOpsOperationsAudit'
+             *     diagnostic logs category on the master database should also be created.
+             *     <p>Diagnostic Settings URI format: PUT
+             *     https://management.azure.com/subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Sql/servers/{serverName}/databases/master/providers/microsoft.insights/diagnosticSettings/{settingsName}?api-version=2017-05-01-preview
+             *     <p>For more information, see [Diagnostic Settings REST
+             *     API](https://go.microsoft.com/fwlink/?linkid=2033207) or [Diagnostic Settings
+             *     PowerShell](https://go.microsoft.com/fwlink/?linkid=2033043).
+             * @return the next definition stage.
+             */
+            Update withIsDevopsAuditEnabled(Boolean isDevopsAuditEnabled);
         }
     }
     /**

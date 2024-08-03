@@ -8,15 +8,15 @@ import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.BackupRestoreOperationType;
 import com.azure.resourcemanager.appservice.models.DatabaseBackupSetting;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
-/** RestoreRequest resource specific properties. */
+/**
+ * RestoreRequest resource specific properties.
+ */
 @Fluent
 public final class RestoreRequestProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RestoreRequestProperties.class);
-
     /*
      * SAS URL to the container.
      */
@@ -30,9 +30,7 @@ public final class RestoreRequestProperties {
     private String blobName;
 
     /*
-     * <code>true</code> if the restore operation can overwrite target app;
-     * otherwise, <code>false</code>. <code>true</code> is needed if trying to
-     * restore over an existing app.
+     * <code>true</code> if the restore operation can overwrite target app; otherwise, <code>false</code>. <code>true</code> is needed if trying to restore over an existing app.
      */
     @JsonProperty(value = "overwrite", required = true)
     private boolean overwrite;
@@ -44,18 +42,14 @@ public final class RestoreRequestProperties {
     private String siteName;
 
     /*
-     * Collection of databases which should be restored. This list has to match
-     * the list of databases included in the backup.
+     * Collection of databases which should be restored. This list has to match the list of databases included in the backup.
      */
     @JsonProperty(value = "databases")
     private List<DatabaseBackupSetting> databases;
 
     /*
-     * Changes a logic when restoring an app with custom domains.
-     * <code>true</code> to remove custom domains automatically. If
-     * <code>false</code>, custom domains are added to
-     * the app's object when it is being restored, but that might fail due to
-     * conflicts during the operation.
+     * Changes a logic when restoring an app with custom domains. <code>true</code> to remove custom domains automatically. If <code>false</code>, custom domains are added to
+     * the app's object when it is being restored, but that might fail due to conflicts during the operation.
      */
     @JsonProperty(value = "ignoreConflictingHostNames")
     private Boolean ignoreConflictingHostNames;
@@ -79,18 +73,22 @@ public final class RestoreRequestProperties {
     private BackupRestoreOperationType operationType;
 
     /*
-     * <code>true</code> if SiteConfig.ConnectionStrings should be set in new
-     * app; otherwise, <code>false</code>.
+     * <code>true</code> if SiteConfig.ConnectionStrings should be set in new app; otherwise, <code>false</code>.
      */
     @JsonProperty(value = "adjustConnectionStrings")
     private Boolean adjustConnectionStrings;
 
     /*
-     * App Service Environment name, if needed (only when restoring an app to
-     * an App Service Environment).
+     * App Service Environment name, if needed (only when restoring an app to an App Service Environment).
      */
     @JsonProperty(value = "hostingEnvironment")
     private String hostingEnvironment;
+
+    /**
+     * Creates an instance of RestoreRequestProperties class.
+     */
+    public RestoreRequestProperties() {
+    }
 
     /**
      * Get the storageAccountUrl property: SAS URL to the container.
@@ -201,8 +199,8 @@ public final class RestoreRequestProperties {
     /**
      * Get the ignoreConflictingHostNames property: Changes a logic when restoring an app with custom domains.
      * &lt;code&gt;true&lt;/code&gt; to remove custom domains automatically. If &lt;code&gt;false&lt;/code&gt;, custom
-     * domains are added to the app's object when it is being restored, but that might fail due to conflicts during the
-     * operation.
+     * domains are added to
+     * the app's object when it is being restored, but that might fail due to conflicts during the operation.
      *
      * @return the ignoreConflictingHostNames value.
      */
@@ -213,8 +211,8 @@ public final class RestoreRequestProperties {
     /**
      * Set the ignoreConflictingHostNames property: Changes a logic when restoring an app with custom domains.
      * &lt;code&gt;true&lt;/code&gt; to remove custom domains automatically. If &lt;code&gt;false&lt;/code&gt;, custom
-     * domains are added to the app's object when it is being restored, but that might fail due to conflicts during the
-     * operation.
+     * domains are added to
+     * the app's object when it is being restored, but that might fail due to conflicts during the operation.
      *
      * @param ignoreConflictingHostNames the ignoreConflictingHostNames value to set.
      * @return the RestoreRequestProperties object itself.
@@ -335,13 +333,14 @@ public final class RestoreRequestProperties {
      */
     public void validate() {
         if (storageAccountUrl() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property storageAccountUrl in model RestoreRequestProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property storageAccountUrl in model RestoreRequestProperties"));
         }
         if (databases() != null) {
             databases().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(RestoreRequestProperties.class);
 }

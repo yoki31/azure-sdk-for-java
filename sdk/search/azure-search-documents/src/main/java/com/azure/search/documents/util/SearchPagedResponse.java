@@ -7,9 +7,12 @@ import com.azure.core.annotation.Immutable;
 import com.azure.core.http.rest.Page;
 import com.azure.core.http.rest.PagedResponseBase;
 import com.azure.core.http.rest.Response;
-import com.azure.search.documents.models.AnswerResult;
+import com.azure.search.documents.implementation.util.SearchPagedResponseAccessHelper;
 import com.azure.search.documents.models.FacetResult;
+import com.azure.search.documents.models.QueryAnswerResult;
 import com.azure.search.documents.models.SearchResult;
+import com.azure.search.documents.models.SemanticErrorReason;
+import com.azure.search.documents.models.SemanticSearchResultsType;
 
 import java.util.List;
 import java.util.Map;
@@ -27,7 +30,43 @@ public final class SearchPagedResponse extends PagedResponseBase<Void, SearchRes
     private final Long count;
     private final Double coverage;
     private final Map<String, List<FacetResult>> facets;
-    private final List<AnswerResult> answers;
+    private final List<QueryAnswerResult> queryAnswers;
+    private final SemanticErrorReason semanticErrorReason;
+    private final SemanticSearchResultsType semanticSearchResultsType;
+
+    static {
+        SearchPagedResponseAccessHelper.setAccessor(new SearchPagedResponseAccessHelper.SearchPagedResponseAccessor() {
+            @Override
+            public Double getCoverage(SearchPagedResponse response) {
+                return response.getCoverage();
+            }
+
+            @Override
+            public Map<String, List<FacetResult>> getFacets(SearchPagedResponse response) {
+                return response.getFacets();
+            }
+
+            @Override
+            public Long getCount(SearchPagedResponse response) {
+                return response.getCount();
+            }
+
+            @Override
+            public List<QueryAnswerResult> getQueryAnswers(SearchPagedResponse response) {
+                return response.getQueryAnswers();
+            }
+
+            @Override
+            public SemanticErrorReason getSemanticErrorReason(SearchPagedResponse response) {
+                return response.getSemanticErrorReason();
+            }
+
+            @Override
+            public SemanticSearchResultsType getSemanticSearchResultsType(SearchPagedResponse response) {
+                return response.getSemanticSearchResultsType();
+            }
+        });
+    }
 
     /**
      * Constructor
@@ -40,8 +79,10 @@ public final class SearchPagedResponse extends PagedResponseBase<Void, SearchRes
      */
     public SearchPagedResponse(Response<List<SearchResult>> response, String continuationToken,
         Map<String, List<FacetResult>> facets, Long count, Double coverage) {
-        this(response, continuationToken, facets, count, coverage, null);
+        this(response, continuationToken, facets, count, coverage, null, null, null);
     }
+
+
 
     /**
      * Constructor
@@ -51,10 +92,13 @@ public final class SearchPagedResponse extends PagedResponseBase<Void, SearchRes
      * @param facets Facets contained in the search.
      * @param count Total number of documents available as a result for the search.
      * @param coverage Percent of the index used in the search operation.
-     * @param answers Answers contained in the search.
+     * @param queryAnswers Answers contained in the search.
+     * @param semanticErrorReason Reason that a partial response was returned for a semantic search request.
+     * @param semanticSearchResultsType Type of the partial response returned for a semantic search request.
      */
     public SearchPagedResponse(Response<List<SearchResult>> response, String continuationToken,
-        Map<String, List<FacetResult>> facets, Long count, Double coverage, List<AnswerResult> answers) {
+        Map<String, List<FacetResult>> facets, Long count, Double coverage, List<QueryAnswerResult> queryAnswers,
+        SemanticErrorReason semanticErrorReason, SemanticSearchResultsType semanticSearchResultsType) {
         super(response.getRequest(), response.getStatusCode(), response.getHeaders(), response.getValue(),
             continuationToken, null);
 
@@ -62,7 +106,9 @@ public final class SearchPagedResponse extends PagedResponseBase<Void, SearchRes
         this.facets = facets;
         this.count = count;
         this.coverage = coverage;
-        this.answers = answers;
+        this.queryAnswers = queryAnswers;
+        this.semanticErrorReason = semanticErrorReason;
+        this.semanticSearchResultsType = semanticSearchResultsType;
     }
 
     /**
@@ -107,8 +153,26 @@ public final class SearchPagedResponse extends PagedResponseBase<Void, SearchRes
      *
      * @return The answer results if {@code answers} were supplied in the request, otherwise null.
      */
-    List<AnswerResult> getAnswers() {
-        return answers;
+    List<QueryAnswerResult> getQueryAnswers() {
+        return queryAnswers;
+    }
+
+    /**
+     * The reason that a partial response was returned for a semantic search request.
+     *
+     * @return Reason that a partial response was returned for a semantic search request if response was partial.
+     */
+    SemanticErrorReason getSemanticErrorReason() {
+        return semanticErrorReason;
+    }
+
+    /**
+     * The type of the partial response returned for a semantic search request.
+     *
+     * @return Type of the partial response returned for a semantic search request if response was partial.
+     */
+    SemanticSearchResultsType getSemanticSearchResultsType() {
+        return semanticSearchResultsType;
     }
 
     @Override

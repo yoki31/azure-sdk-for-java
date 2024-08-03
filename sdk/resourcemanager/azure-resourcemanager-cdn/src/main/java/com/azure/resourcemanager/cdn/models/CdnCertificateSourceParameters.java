@@ -6,19 +6,18 @@ package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Defines the parameters for using CDN managed certificate for securing custom domain. */
+/**
+ * Defines the parameters for using CDN managed certificate for securing custom domain.
+ */
 @Fluent
 public final class CdnCertificateSourceParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CdnCertificateSourceParameters.class);
-
     /*
-     * The @odata.type property.
+     * The typeName property.
      */
-    @JsonProperty(value = "@odata.type", required = true)
-    private String odataType;
+    @JsonProperty(value = "typeName", required = true)
+    private String typeName = "CdnCertificateSourceParameters";
 
     /*
      * Type of certificate used
@@ -26,34 +25,35 @@ public final class CdnCertificateSourceParameters {
     @JsonProperty(value = "certificateType", required = true)
     private CertificateType certificateType;
 
-    /** Creates an instance of CdnCertificateSourceParameters class. */
-    public CdnCertificateSourceParameters() {
-        odataType = "#Microsoft.Azure.Cdn.Models.CdnCertificateSourceParameters";
-    }
-
     /**
-     * Get the odataType property: The @odata.type property.
-     *
-     * @return the odataType value.
+     * Creates an instance of CdnCertificateSourceParameters class.
      */
-    public String odataType() {
-        return this.odataType;
+    public CdnCertificateSourceParameters() {
     }
 
     /**
-     * Set the odataType property: The @odata.type property.
-     *
-     * @param odataType the odataType value to set.
+     * Get the typeName property: The typeName property.
+     * 
+     * @return the typeName value.
+     */
+    public String typeName() {
+        return this.typeName;
+    }
+
+    /**
+     * Set the typeName property: The typeName property.
+     * 
+     * @param typeName the typeName value to set.
      * @return the CdnCertificateSourceParameters object itself.
      */
-    public CdnCertificateSourceParameters withOdataType(String odataType) {
-        this.odataType = odataType;
+    public CdnCertificateSourceParameters withTypeName(String typeName) {
+        this.typeName = typeName;
         return this;
     }
 
     /**
      * Get the certificateType property: Type of certificate used.
-     *
+     * 
      * @return the certificateType value.
      */
     public CertificateType certificateType() {
@@ -62,7 +62,7 @@ public final class CdnCertificateSourceParameters {
 
     /**
      * Set the certificateType property: Type of certificate used.
-     *
+     * 
      * @param certificateType the certificateType value to set.
      * @return the CdnCertificateSourceParameters object itself.
      */
@@ -73,15 +73,15 @@ public final class CdnCertificateSourceParameters {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (certificateType() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property certificateType in model CdnCertificateSourceParameters"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property certificateType in model CdnCertificateSourceParameters"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(CdnCertificateSourceParameters.class);
 }

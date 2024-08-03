@@ -6,16 +6,15 @@ package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** Linked service reference type. */
+/**
+ * Linked service reference type.
+ */
 @Fluent
 public final class LinkedServiceReference {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(LinkedServiceReference.class);
-
     /*
      * Linked service reference type.
      */
@@ -35,14 +34,15 @@ public final class LinkedServiceReference {
     @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
     private Map<String, Object> parameters;
 
-    /** Creates an instance of LinkedServiceReference class. */
+    /**
+     * Creates an instance of LinkedServiceReference class.
+     */
     public LinkedServiceReference() {
-        type = "LinkedServiceReference";
     }
 
     /**
      * Get the type property: Linked service reference type.
-     *
+     * 
      * @return the type value.
      */
     public String type() {
@@ -51,7 +51,7 @@ public final class LinkedServiceReference {
 
     /**
      * Set the type property: Linked service reference type.
-     *
+     * 
      * @param type the type value to set.
      * @return the LinkedServiceReference object itself.
      */
@@ -62,7 +62,7 @@ public final class LinkedServiceReference {
 
     /**
      * Get the referenceName property: Reference LinkedService name.
-     *
+     * 
      * @return the referenceName value.
      */
     public String referenceName() {
@@ -71,7 +71,7 @@ public final class LinkedServiceReference {
 
     /**
      * Set the referenceName property: Reference LinkedService name.
-     *
+     * 
      * @param referenceName the referenceName value to set.
      * @return the LinkedServiceReference object itself.
      */
@@ -82,7 +82,7 @@ public final class LinkedServiceReference {
 
     /**
      * Get the parameters property: Arguments for LinkedService.
-     *
+     * 
      * @return the parameters value.
      */
     public Map<String, Object> parameters() {
@@ -91,7 +91,7 @@ public final class LinkedServiceReference {
 
     /**
      * Set the parameters property: Arguments for LinkedService.
-     *
+     * 
      * @param parameters the parameters value to set.
      * @return the LinkedServiceReference object itself.
      */
@@ -102,15 +102,16 @@ public final class LinkedServiceReference {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (referenceName() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property referenceName in model LinkedServiceReference"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property referenceName in model LinkedServiceReference"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(LinkedServiceReference.class);
 }

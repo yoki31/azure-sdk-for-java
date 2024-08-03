@@ -13,13 +13,12 @@ import com.azure.resourcemanager.applicationinsights.fluent.models.ApplicationIn
 import com.azure.resourcemanager.applicationinsights.models.ApplicationInsightsComponentExportConfiguration;
 import com.azure.resourcemanager.applicationinsights.models.ApplicationInsightsComponentExportRequest;
 import com.azure.resourcemanager.applicationinsights.models.ExportConfigurations;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public final class ExportConfigurationsImpl implements ExportConfigurations {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ExportConfigurationsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(ExportConfigurationsImpl.class);
 
     private final ExportConfigurationsClient innerClient;
 
@@ -30,21 +29,6 @@ public final class ExportConfigurationsImpl implements ExportConfigurations {
         com.azure.resourcemanager.applicationinsights.ApplicationInsightsManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
-    }
-
-    public List<ApplicationInsightsComponentExportConfiguration> list(String resourceGroupName, String resourceName) {
-        List<ApplicationInsightsComponentExportConfigurationInner> inner =
-            this.serviceClient().list(resourceGroupName, resourceName);
-        if (inner != null) {
-            return Collections
-                .unmodifiableList(
-                    inner
-                        .stream()
-                        .map(inner1 -> new ApplicationInsightsComponentExportConfigurationImpl(inner1, this.manager()))
-                        .collect(Collectors.toList()));
-        } else {
-            return Collections.emptyList();
-        }
     }
 
     public Response<List<ApplicationInsightsComponentExportConfiguration>> listWithResponse(
@@ -66,10 +50,9 @@ public final class ExportConfigurationsImpl implements ExportConfigurations {
         }
     }
 
-    public List<ApplicationInsightsComponentExportConfiguration> create(
-        String resourceGroupName, String resourceName, ApplicationInsightsComponentExportRequest exportProperties) {
+    public List<ApplicationInsightsComponentExportConfiguration> list(String resourceGroupName, String resourceName) {
         List<ApplicationInsightsComponentExportConfigurationInner> inner =
-            this.serviceClient().create(resourceGroupName, resourceName, exportProperties);
+            this.serviceClient().list(resourceGroupName, resourceName);
         if (inner != null) {
             return Collections
                 .unmodifiableList(
@@ -104,14 +87,19 @@ public final class ExportConfigurationsImpl implements ExportConfigurations {
         }
     }
 
-    public ApplicationInsightsComponentExportConfiguration delete(
-        String resourceGroupName, String resourceName, String exportId) {
-        ApplicationInsightsComponentExportConfigurationInner inner =
-            this.serviceClient().delete(resourceGroupName, resourceName, exportId);
+    public List<ApplicationInsightsComponentExportConfiguration> create(
+        String resourceGroupName, String resourceName, ApplicationInsightsComponentExportRequest exportProperties) {
+        List<ApplicationInsightsComponentExportConfigurationInner> inner =
+            this.serviceClient().create(resourceGroupName, resourceName, exportProperties);
         if (inner != null) {
-            return new ApplicationInsightsComponentExportConfigurationImpl(inner, this.manager());
+            return Collections
+                .unmodifiableList(
+                    inner
+                        .stream()
+                        .map(inner1 -> new ApplicationInsightsComponentExportConfigurationImpl(inner1, this.manager()))
+                        .collect(Collectors.toList()));
         } else {
-            return null;
+            return Collections.emptyList();
         }
     }
 
@@ -130,10 +118,10 @@ public final class ExportConfigurationsImpl implements ExportConfigurations {
         }
     }
 
-    public ApplicationInsightsComponentExportConfiguration get(
+    public ApplicationInsightsComponentExportConfiguration delete(
         String resourceGroupName, String resourceName, String exportId) {
         ApplicationInsightsComponentExportConfigurationInner inner =
-            this.serviceClient().get(resourceGroupName, resourceName, exportId);
+            this.serviceClient().delete(resourceGroupName, resourceName, exportId);
         if (inner != null) {
             return new ApplicationInsightsComponentExportConfigurationImpl(inner, this.manager());
         } else {
@@ -156,13 +144,10 @@ public final class ExportConfigurationsImpl implements ExportConfigurations {
         }
     }
 
-    public ApplicationInsightsComponentExportConfiguration update(
-        String resourceGroupName,
-        String resourceName,
-        String exportId,
-        ApplicationInsightsComponentExportRequest exportProperties) {
+    public ApplicationInsightsComponentExportConfiguration get(
+        String resourceGroupName, String resourceName, String exportId) {
         ApplicationInsightsComponentExportConfigurationInner inner =
-            this.serviceClient().update(resourceGroupName, resourceName, exportId, exportProperties);
+            this.serviceClient().get(resourceGroupName, resourceName, exportId);
         if (inner != null) {
             return new ApplicationInsightsComponentExportConfigurationImpl(inner, this.manager());
         } else {
@@ -186,6 +171,20 @@ public final class ExportConfigurationsImpl implements ExportConfigurations {
                 inner.getStatusCode(),
                 inner.getHeaders(),
                 new ApplicationInsightsComponentExportConfigurationImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
+    }
+
+    public ApplicationInsightsComponentExportConfiguration update(
+        String resourceGroupName,
+        String resourceName,
+        String exportId,
+        ApplicationInsightsComponentExportRequest exportProperties) {
+        ApplicationInsightsComponentExportConfigurationInner inner =
+            this.serviceClient().update(resourceGroupName, resourceName, exportId, exportProperties);
+        if (inner != null) {
+            return new ApplicationInsightsComponentExportConfigurationImpl(inner, this.manager());
         } else {
             return null;
         }

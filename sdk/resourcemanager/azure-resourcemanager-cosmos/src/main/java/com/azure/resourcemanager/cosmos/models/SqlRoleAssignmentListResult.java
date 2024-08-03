@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cosmos.fluent.models.SqlRoleAssignmentGetResultsInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The relevant Role Assignments. */
+/**
+ * The relevant Role Assignments.
+ */
 @Immutable
 public final class SqlRoleAssignmentListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SqlRoleAssignmentListResult.class);
-
     /*
      * List of Role Assignments and their properties
      */
@@ -23,8 +21,14 @@ public final class SqlRoleAssignmentListResult {
     private List<SqlRoleAssignmentGetResultsInner> value;
 
     /**
+     * Creates an instance of SqlRoleAssignmentListResult class.
+     */
+    public SqlRoleAssignmentListResult() {
+    }
+
+    /**
      * Get the value property: List of Role Assignments and their properties.
-     *
+     * 
      * @return the value value.
      */
     public List<SqlRoleAssignmentGetResultsInner> value() {
@@ -33,7 +37,7 @@ public final class SqlRoleAssignmentListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

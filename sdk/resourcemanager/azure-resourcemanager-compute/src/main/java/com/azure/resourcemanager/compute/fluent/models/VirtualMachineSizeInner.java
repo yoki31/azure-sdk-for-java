@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.compute.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Describes the properties of a VM size. */
+/**
+ * Describes the properties of a VM size.
+ */
 @Fluent
 public final class VirtualMachineSizeInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VirtualMachineSizeInner.class);
-
     /*
      * The name of the virtual machine size.
      */
@@ -21,10 +19,9 @@ public final class VirtualMachineSizeInner {
     private String name;
 
     /*
-     * The number of cores supported by the virtual machine size. For
-     * Constrained vCPU capable VM sizes, this number represents the total
-     * vCPUs of quota that the VM uses. For accurate vCPU count, please refer
-     * to https://docs.microsoft.com/azure/virtual-machines/constrained-vcpu or
+     * The number of cores supported by the virtual machine size. For Constrained vCPU capable VM sizes, this number
+     * represents the total vCPUs of quota that the VM uses. For accurate vCPU count, please refer to
+     * https://docs.microsoft.com/azure/virtual-machines/constrained-vcpu or
      * https://docs.microsoft.com/rest/api/compute/resourceskus/list
      */
     @JsonProperty(value = "numberOfCores")
@@ -49,15 +46,20 @@ public final class VirtualMachineSizeInner {
     private Integer memoryInMB;
 
     /*
-     * The maximum number of data disks that can be attached to the virtual
-     * machine size.
+     * The maximum number of data disks that can be attached to the virtual machine size.
      */
     @JsonProperty(value = "maxDataDiskCount")
     private Integer maxDataDiskCount;
 
     /**
+     * Creates an instance of VirtualMachineSizeInner class.
+     */
+    public VirtualMachineSizeInner() {
+    }
+
+    /**
      * Get the name property: The name of the virtual machine size.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -66,7 +68,7 @@ public final class VirtualMachineSizeInner {
 
     /**
      * Set the name property: The name of the virtual machine size.
-     *
+     * 
      * @param name the name value to set.
      * @return the VirtualMachineSizeInner object itself.
      */
@@ -80,7 +82,7 @@ public final class VirtualMachineSizeInner {
      * capable VM sizes, this number represents the total vCPUs of quota that the VM uses. For accurate vCPU count,
      * please refer to https://docs.microsoft.com/azure/virtual-machines/constrained-vcpu or
      * https://docs.microsoft.com/rest/api/compute/resourceskus/list.
-     *
+     * 
      * @return the numberOfCores value.
      */
     public Integer numberOfCores() {
@@ -92,7 +94,7 @@ public final class VirtualMachineSizeInner {
      * capable VM sizes, this number represents the total vCPUs of quota that the VM uses. For accurate vCPU count,
      * please refer to https://docs.microsoft.com/azure/virtual-machines/constrained-vcpu or
      * https://docs.microsoft.com/rest/api/compute/resourceskus/list.
-     *
+     * 
      * @param numberOfCores the numberOfCores value to set.
      * @return the VirtualMachineSizeInner object itself.
      */
@@ -103,7 +105,7 @@ public final class VirtualMachineSizeInner {
 
     /**
      * Get the osDiskSizeInMB property: The OS disk size, in MB, allowed by the virtual machine size.
-     *
+     * 
      * @return the osDiskSizeInMB value.
      */
     public Integer osDiskSizeInMB() {
@@ -112,7 +114,7 @@ public final class VirtualMachineSizeInner {
 
     /**
      * Set the osDiskSizeInMB property: The OS disk size, in MB, allowed by the virtual machine size.
-     *
+     * 
      * @param osDiskSizeInMB the osDiskSizeInMB value to set.
      * @return the VirtualMachineSizeInner object itself.
      */
@@ -123,7 +125,7 @@ public final class VirtualMachineSizeInner {
 
     /**
      * Get the resourceDiskSizeInMB property: The resource disk size, in MB, allowed by the virtual machine size.
-     *
+     * 
      * @return the resourceDiskSizeInMB value.
      */
     public Integer resourceDiskSizeInMB() {
@@ -132,7 +134,7 @@ public final class VirtualMachineSizeInner {
 
     /**
      * Set the resourceDiskSizeInMB property: The resource disk size, in MB, allowed by the virtual machine size.
-     *
+     * 
      * @param resourceDiskSizeInMB the resourceDiskSizeInMB value to set.
      * @return the VirtualMachineSizeInner object itself.
      */
@@ -143,7 +145,7 @@ public final class VirtualMachineSizeInner {
 
     /**
      * Get the memoryInMB property: The amount of memory, in MB, supported by the virtual machine size.
-     *
+     * 
      * @return the memoryInMB value.
      */
     public Integer memoryInMB() {
@@ -152,7 +154,7 @@ public final class VirtualMachineSizeInner {
 
     /**
      * Set the memoryInMB property: The amount of memory, in MB, supported by the virtual machine size.
-     *
+     * 
      * @param memoryInMB the memoryInMB value to set.
      * @return the VirtualMachineSizeInner object itself.
      */
@@ -164,7 +166,7 @@ public final class VirtualMachineSizeInner {
     /**
      * Get the maxDataDiskCount property: The maximum number of data disks that can be attached to the virtual machine
      * size.
-     *
+     * 
      * @return the maxDataDiskCount value.
      */
     public Integer maxDataDiskCount() {
@@ -174,7 +176,7 @@ public final class VirtualMachineSizeInner {
     /**
      * Set the maxDataDiskCount property: The maximum number of data disks that can be attached to the virtual machine
      * size.
-     *
+     * 
      * @param maxDataDiskCount the maxDataDiskCount value to set.
      * @return the VirtualMachineSizeInner object itself.
      */
@@ -185,7 +187,7 @@ public final class VirtualMachineSizeInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

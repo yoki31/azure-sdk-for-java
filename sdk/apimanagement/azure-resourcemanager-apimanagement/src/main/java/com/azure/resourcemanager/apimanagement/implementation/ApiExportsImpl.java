@@ -14,10 +14,9 @@ import com.azure.resourcemanager.apimanagement.models.ApiExportResult;
 import com.azure.resourcemanager.apimanagement.models.ApiExports;
 import com.azure.resourcemanager.apimanagement.models.ExportApi;
 import com.azure.resourcemanager.apimanagement.models.ExportFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class ApiExportsImpl implements ApiExports {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiExportsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(ApiExportsImpl.class);
 
     private final ApiExportsClient innerClient;
 
@@ -27,16 +26,6 @@ public final class ApiExportsImpl implements ApiExports {
         ApiExportsClient innerClient, com.azure.resourcemanager.apimanagement.ApiManagementManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
-    }
-
-    public ApiExportResult get(
-        String resourceGroupName, String serviceName, String apiId, ExportFormat format, ExportApi export) {
-        ApiExportResultInner inner = this.serviceClient().get(resourceGroupName, serviceName, apiId, format, export);
-        if (inner != null) {
-            return new ApiExportResultImpl(inner, this.manager());
-        } else {
-            return null;
-        }
     }
 
     public Response<ApiExportResult> getWithResponse(
@@ -54,6 +43,16 @@ public final class ApiExportsImpl implements ApiExports {
                 inner.getStatusCode(),
                 inner.getHeaders(),
                 new ApiExportResultImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
+    }
+
+    public ApiExportResult get(
+        String resourceGroupName, String serviceName, String apiId, ExportFormat format, ExportApi export) {
+        ApiExportResultInner inner = this.serviceClient().get(resourceGroupName, serviceName, apiId, format, export);
+        if (inner != null) {
+            return new ApiExportResultImpl(inner, this.manager());
         } else {
             return null;
         }

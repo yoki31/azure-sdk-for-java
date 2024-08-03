@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Describes the resource range. */
+/**
+ * Describes the resource range.
+ */
 @Fluent
 public final class ResourceRange {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ResourceRange.class);
-
     /*
      * The minimum number of the resource.
      */
@@ -27,8 +25,14 @@ public final class ResourceRange {
     private Integer max;
 
     /**
+     * Creates an instance of ResourceRange class.
+     */
+    public ResourceRange() {
+    }
+
+    /**
      * Get the min property: The minimum number of the resource.
-     *
+     * 
      * @return the min value.
      */
     public Integer min() {
@@ -37,7 +41,7 @@ public final class ResourceRange {
 
     /**
      * Set the min property: The minimum number of the resource.
-     *
+     * 
      * @param min the min value to set.
      * @return the ResourceRange object itself.
      */
@@ -48,7 +52,7 @@ public final class ResourceRange {
 
     /**
      * Get the max property: The maximum number of the resource.
-     *
+     * 
      * @return the max value.
      */
     public Integer max() {
@@ -57,7 +61,7 @@ public final class ResourceRange {
 
     /**
      * Set the max property: The maximum number of the resource.
-     *
+     * 
      * @param max the max value to set.
      * @return the ResourceRange object itself.
      */
@@ -68,7 +72,7 @@ public final class ResourceRange {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

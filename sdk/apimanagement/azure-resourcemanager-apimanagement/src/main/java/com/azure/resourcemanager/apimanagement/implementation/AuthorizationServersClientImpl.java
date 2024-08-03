@@ -31,7 +31,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.AuthorizationServersClient;
 import com.azure.resourcemanager.apimanagement.fluent.models.AuthorizationServerContractInner;
 import com.azure.resourcemanager.apimanagement.fluent.models.AuthorizationServerSecretsContractInner;
@@ -46,8 +45,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in AuthorizationServersClient. */
 public final class AuthorizationServersClientImpl implements AuthorizationServersClient {
-    private final ClientLogger logger = new ClientLogger(AuthorizationServersClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final AuthorizationServersService service;
 
@@ -72,11 +69,10 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApiManagementClientA")
-    private interface AuthorizationServersService {
+    public interface AuthorizationServersService {
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/authorizationServers")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/authorizationServers")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<AuthorizationServerCollection>> listByService(
@@ -93,8 +89,7 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
 
         @Headers({"Content-Type: application/json"})
         @Head(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/authorizationServers/{authsid}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/authorizationServers/{authsid}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<AuthorizationServersGetEntityTagResponse> getEntityTag(
@@ -109,8 +104,7 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
 
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/authorizationServers/{authsid}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/authorizationServers/{authsid}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<AuthorizationServersGetResponse> get(
@@ -125,8 +119,7 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
 
         @Headers({"Content-Type: application/json"})
         @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/authorizationServers/{authsid}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/authorizationServers/{authsid}")
         @ExpectedResponses({200, 201})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<AuthorizationServersCreateOrUpdateResponse> createOrUpdate(
@@ -143,8 +136,7 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
 
         @Headers({"Content-Type: application/json"})
         @Patch(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/authorizationServers/{authsid}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/authorizationServers/{authsid}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<AuthorizationServersUpdateResponse> update(
@@ -161,8 +153,7 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
 
         @Headers({"Content-Type: application/json"})
         @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/authorizationServers/{authsid}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/authorizationServers/{authsid}")
         @ExpectedResponses({200, 204})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Void>> delete(
@@ -178,8 +169,7 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
 
         @Headers({"Content-Type: application/json"})
         @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/authorizationServers/{authsid}/listSecrets")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/authorizationServers/{authsid}/listSecrets")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<AuthorizationServersListSecretsResponse> listSecrets(
@@ -206,7 +196,7 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
     /**
      * Lists a collection of authorization servers defined within a service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -217,7 +207,8 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged OAuth2 Authorization Servers list representation.
+     * @return paged OAuth2 Authorization Servers list representation along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<AuthorizationServerContractInner>> listByServiceSinglePageAsync(
@@ -272,7 +263,7 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
     /**
      * Lists a collection of authorization servers defined within a service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -284,7 +275,8 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged OAuth2 Authorization Servers list representation.
+     * @return paged OAuth2 Authorization Servers list representation along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<AuthorizationServerContractInner>> listByServiceSinglePageAsync(
@@ -336,7 +328,7 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
     /**
      * Lists a collection of authorization servers defined within a service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -347,7 +339,7 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged OAuth2 Authorization Servers list representation.
+     * @return paged OAuth2 Authorization Servers list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<AuthorizationServerContractInner> listByServiceAsync(
@@ -360,12 +352,12 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
     /**
      * Lists a collection of authorization servers defined within a service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged OAuth2 Authorization Servers list representation.
+     * @return paged OAuth2 Authorization Servers list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<AuthorizationServerContractInner> listByServiceAsync(
@@ -381,7 +373,7 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
     /**
      * Lists a collection of authorization servers defined within a service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -393,7 +385,7 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged OAuth2 Authorization Servers list representation.
+     * @return paged OAuth2 Authorization Servers list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<AuthorizationServerContractInner> listByServiceAsync(
@@ -406,12 +398,12 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
     /**
      * Lists a collection of authorization servers defined within a service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged OAuth2 Authorization Servers list representation.
+     * @return paged OAuth2 Authorization Servers list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<AuthorizationServerContractInner> listByService(String resourceGroupName, String serviceName) {
@@ -424,7 +416,7 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
     /**
      * Lists a collection of authorization servers defined within a service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -436,7 +428,7 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged OAuth2 Authorization Servers list representation.
+     * @return paged OAuth2 Authorization Servers list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<AuthorizationServerContractInner> listByService(
@@ -447,13 +439,14 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
     /**
      * Gets the entity state (Etag) version of the authorizationServer specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param authsid Identifier of the authorization server.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the authorizationServer specified by its identifier.
+     * @return the entity state (Etag) version of the authorizationServer specified by its identifier on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<AuthorizationServersGetEntityTagResponse> getEntityTagWithResponseAsync(
@@ -500,14 +493,15 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
     /**
      * Gets the entity state (Etag) version of the authorizationServer specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param authsid Identifier of the authorization server.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the authorizationServer specified by its identifier.
+     * @return the entity state (Etag) version of the authorizationServer specified by its identifier on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<AuthorizationServersGetEntityTagResponse> getEntityTagWithResponseAsync(
@@ -551,39 +545,24 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
     /**
      * Gets the entity state (Etag) version of the authorizationServer specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param authsid Identifier of the authorization server.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the authorizationServer specified by its identifier.
+     * @return the entity state (Etag) version of the authorizationServer specified by its identifier on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> getEntityTagAsync(String resourceGroupName, String serviceName, String authsid) {
-        return getEntityTagWithResponseAsync(resourceGroupName, serviceName, authsid)
-            .flatMap((AuthorizationServersGetEntityTagResponse res) -> Mono.empty());
+        return getEntityTagWithResponseAsync(resourceGroupName, serviceName, authsid).flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Gets the entity state (Etag) version of the authorizationServer specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param authsid Identifier of the authorization server.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public void getEntityTag(String resourceGroupName, String serviceName, String authsid) {
-        getEntityTagAsync(resourceGroupName, serviceName, authsid).block();
-    }
-
-    /**
-     * Gets the entity state (Etag) version of the authorizationServer specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param authsid Identifier of the authorization server.
      * @param context The context to associate with this operation.
@@ -599,15 +578,31 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
     }
 
     /**
-     * Gets the details of the authorization server specified by its identifier.
+     * Gets the entity state (Etag) version of the authorizationServer specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param authsid Identifier of the authorization server.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the authorization server specified by its identifier.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public void getEntityTag(String resourceGroupName, String serviceName, String authsid) {
+        getEntityTagWithResponse(resourceGroupName, serviceName, authsid, Context.NONE);
+    }
+
+    /**
+     * Gets the details of the authorization server specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param authsid Identifier of the authorization server.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the details of the authorization server specified by its identifier on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<AuthorizationServersGetResponse> getWithResponseAsync(
@@ -654,14 +649,15 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
     /**
      * Gets the details of the authorization server specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param authsid Identifier of the authorization server.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the authorization server specified by its identifier.
+     * @return the details of the authorization server specified by its identifier on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<AuthorizationServersGetResponse> getWithResponseAsync(
@@ -705,48 +701,26 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
     /**
      * Gets the details of the authorization server specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param authsid Identifier of the authorization server.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the authorization server specified by its identifier.
+     * @return the details of the authorization server specified by its identifier on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<AuthorizationServerContractInner> getAsync(
         String resourceGroupName, String serviceName, String authsid) {
         return getWithResponseAsync(resourceGroupName, serviceName, authsid)
-            .flatMap(
-                (AuthorizationServersGetResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Gets the details of the authorization server specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param authsid Identifier of the authorization server.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the authorization server specified by its identifier.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public AuthorizationServerContractInner get(String resourceGroupName, String serviceName, String authsid) {
-        return getAsync(resourceGroupName, serviceName, authsid).block();
-    }
-
-    /**
-     * Gets the details of the authorization server specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param authsid Identifier of the authorization server.
      * @param context The context to associate with this operation.
@@ -762,9 +736,25 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
     }
 
     /**
+     * Gets the details of the authorization server specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param authsid Identifier of the authorization server.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the details of the authorization server specified by its identifier.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public AuthorizationServerContractInner get(String resourceGroupName, String serviceName, String authsid) {
+        return getWithResponse(resourceGroupName, serviceName, authsid, Context.NONE).getValue();
+    }
+
+    /**
      * Creates new authorization server or updates an existing authorization server.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param authsid Identifier of the authorization server.
      * @param parameters Create or update parameters.
@@ -772,7 +762,7 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return external OAuth authorization server settings.
+     * @return external OAuth authorization server settings on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<AuthorizationServersCreateOrUpdateResponse> createOrUpdateWithResponseAsync(
@@ -830,7 +820,7 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
     /**
      * Creates new authorization server or updates an existing authorization server.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param authsid Identifier of the authorization server.
      * @param parameters Create or update parameters.
@@ -839,7 +829,7 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return external OAuth authorization server settings.
+     * @return external OAuth authorization server settings on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<AuthorizationServersCreateOrUpdateResponse> createOrUpdateWithResponseAsync(
@@ -895,84 +885,27 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
     /**
      * Creates new authorization server or updates an existing authorization server.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param authsid Identifier of the authorization server.
-     * @param parameters Create or update parameters.
-     * @param ifMatch ETag of the Entity. Not required when creating an entity, but required when updating an entity.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return external OAuth authorization server settings.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<AuthorizationServerContractInner> createOrUpdateAsync(
-        String resourceGroupName,
-        String serviceName,
-        String authsid,
-        AuthorizationServerContractInner parameters,
-        String ifMatch) {
-        return createOrUpdateWithResponseAsync(resourceGroupName, serviceName, authsid, parameters, ifMatch)
-            .flatMap(
-                (AuthorizationServersCreateOrUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
-    }
-
-    /**
-     * Creates new authorization server or updates an existing authorization server.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param authsid Identifier of the authorization server.
      * @param parameters Create or update parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return external OAuth authorization server settings.
+     * @return external OAuth authorization server settings on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<AuthorizationServerContractInner> createOrUpdateAsync(
         String resourceGroupName, String serviceName, String authsid, AuthorizationServerContractInner parameters) {
         final String ifMatch = null;
         return createOrUpdateWithResponseAsync(resourceGroupName, serviceName, authsid, parameters, ifMatch)
-            .flatMap(
-                (AuthorizationServersCreateOrUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Creates new authorization server or updates an existing authorization server.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param authsid Identifier of the authorization server.
-     * @param parameters Create or update parameters.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return external OAuth authorization server settings.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public AuthorizationServerContractInner createOrUpdate(
-        String resourceGroupName, String serviceName, String authsid, AuthorizationServerContractInner parameters) {
-        final String ifMatch = null;
-        return createOrUpdateAsync(resourceGroupName, serviceName, authsid, parameters, ifMatch).block();
-    }
-
-    /**
-     * Creates new authorization server or updates an existing authorization server.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param authsid Identifier of the authorization server.
      * @param parameters Create or update parameters.
@@ -996,9 +929,29 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
     }
 
     /**
+     * Creates new authorization server or updates an existing authorization server.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param authsid Identifier of the authorization server.
+     * @param parameters Create or update parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return external OAuth authorization server settings.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public AuthorizationServerContractInner createOrUpdate(
+        String resourceGroupName, String serviceName, String authsid, AuthorizationServerContractInner parameters) {
+        final String ifMatch = null;
+        return createOrUpdateWithResponse(resourceGroupName, serviceName, authsid, parameters, ifMatch, Context.NONE)
+            .getValue();
+    }
+
+    /**
      * Updates the details of the authorization server specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param authsid Identifier of the authorization server.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1007,7 +960,7 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return external OAuth authorization server settings.
+     * @return external OAuth authorization server settings on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<AuthorizationServersUpdateResponse> updateWithResponseAsync(
@@ -1068,7 +1021,7 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
     /**
      * Updates the details of the authorization server specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param authsid Identifier of the authorization server.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1078,7 +1031,7 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return external OAuth authorization server settings.
+     * @return external OAuth authorization server settings on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<AuthorizationServersUpdateResponse> updateWithResponseAsync(
@@ -1137,7 +1090,7 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
     /**
      * Updates the details of the authorization server specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param authsid Identifier of the authorization server.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1146,7 +1099,7 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return external OAuth authorization server settings.
+     * @return external OAuth authorization server settings on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<AuthorizationServerContractInner> updateAsync(
@@ -1156,44 +1109,13 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
         String ifMatch,
         AuthorizationServerUpdateContract parameters) {
         return updateWithResponseAsync(resourceGroupName, serviceName, authsid, ifMatch, parameters)
-            .flatMap(
-                (AuthorizationServersUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Updates the details of the authorization server specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param authsid Identifier of the authorization server.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param parameters OAuth2 Server settings Update parameters.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return external OAuth authorization server settings.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public AuthorizationServerContractInner update(
-        String resourceGroupName,
-        String serviceName,
-        String authsid,
-        String ifMatch,
-        AuthorizationServerUpdateContract parameters) {
-        return updateAsync(resourceGroupName, serviceName, authsid, ifMatch, parameters).block();
-    }
-
-    /**
-     * Updates the details of the authorization server specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param authsid Identifier of the authorization server.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1217,9 +1139,34 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
     }
 
     /**
+     * Updates the details of the authorization server specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param authsid Identifier of the authorization server.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param parameters OAuth2 Server settings Update parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return external OAuth authorization server settings.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public AuthorizationServerContractInner update(
+        String resourceGroupName,
+        String serviceName,
+        String authsid,
+        String ifMatch,
+        AuthorizationServerUpdateContract parameters) {
+        return updateWithResponse(resourceGroupName, serviceName, authsid, ifMatch, parameters, Context.NONE)
+            .getValue();
+    }
+
+    /**
      * Deletes specific authorization server instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param authsid Identifier of the authorization server.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1227,7 +1174,7 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -1278,7 +1225,7 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
     /**
      * Deletes specific authorization server instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param authsid Identifier of the authorization server.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1287,7 +1234,7 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -1335,7 +1282,7 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
     /**
      * Deletes specific authorization server instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param authsid Identifier of the authorization server.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1343,18 +1290,38 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(String resourceGroupName, String serviceName, String authsid, String ifMatch) {
         return deleteWithResponseAsync(resourceGroupName, serviceName, authsid, ifMatch)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Deletes specific authorization server instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param authsid Identifier of the authorization server.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> deleteWithResponse(
+        String resourceGroupName, String serviceName, String authsid, String ifMatch, Context context) {
+        return deleteWithResponseAsync(resourceGroupName, serviceName, authsid, ifMatch, context).block();
+    }
+
+    /**
+     * Deletes specific authorization server instance.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param authsid Identifier of the authorization server.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1365,39 +1332,19 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public void delete(String resourceGroupName, String serviceName, String authsid, String ifMatch) {
-        deleteAsync(resourceGroupName, serviceName, authsid, ifMatch).block();
-    }
-
-    /**
-     * Deletes specific authorization server instance.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param authsid Identifier of the authorization server.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> deleteWithResponse(
-        String resourceGroupName, String serviceName, String authsid, String ifMatch, Context context) {
-        return deleteWithResponseAsync(resourceGroupName, serviceName, authsid, ifMatch, context).block();
+        deleteWithResponse(resourceGroupName, serviceName, authsid, ifMatch, Context.NONE);
     }
 
     /**
      * Gets the client secret details of the authorization server.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param authsid Identifier of the authorization server.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the client secret details of the authorization server.
+     * @return the client secret details of the authorization server on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<AuthorizationServersListSecretsResponse> listSecretsWithResponseAsync(
@@ -1444,14 +1391,14 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
     /**
      * Gets the client secret details of the authorization server.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param authsid Identifier of the authorization server.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the client secret details of the authorization server.
+     * @return the client secret details of the authorization server on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<AuthorizationServersListSecretsResponse> listSecretsWithResponseAsync(
@@ -1495,49 +1442,25 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
     /**
      * Gets the client secret details of the authorization server.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param authsid Identifier of the authorization server.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the client secret details of the authorization server.
+     * @return the client secret details of the authorization server on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<AuthorizationServerSecretsContractInner> listSecretsAsync(
         String resourceGroupName, String serviceName, String authsid) {
         return listSecretsWithResponseAsync(resourceGroupName, serviceName, authsid)
-            .flatMap(
-                (AuthorizationServersListSecretsResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Gets the client secret details of the authorization server.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param authsid Identifier of the authorization server.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the client secret details of the authorization server.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public AuthorizationServerSecretsContractInner listSecrets(
-        String resourceGroupName, String serviceName, String authsid) {
-        return listSecretsAsync(resourceGroupName, serviceName, authsid).block();
-    }
-
-    /**
-     * Gets the client secret details of the authorization server.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param authsid Identifier of the authorization server.
      * @param context The context to associate with this operation.
@@ -1553,13 +1476,32 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
     }
 
     /**
-     * Get the next page of items.
+     * Gets the client secret details of the authorization server.
      *
-     * @param nextLink The nextLink parameter.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param authsid Identifier of the authorization server.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged OAuth2 Authorization Servers list representation.
+     * @return the client secret details of the authorization server.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public AuthorizationServerSecretsContractInner listSecrets(
+        String resourceGroupName, String serviceName, String authsid) {
+        return listSecretsWithResponse(resourceGroupName, serviceName, authsid, Context.NONE).getValue();
+    }
+
+    /**
+     * Get the next page of items.
+     *
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return paged OAuth2 Authorization Servers list representation along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<AuthorizationServerContractInner>> listByServiceNextSinglePageAsync(String nextLink) {
@@ -1590,12 +1532,14 @@ public final class AuthorizationServersClientImpl implements AuthorizationServer
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged OAuth2 Authorization Servers list representation.
+     * @return paged OAuth2 Authorization Servers list representation along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<AuthorizationServerContractInner>> listByServiceNextSinglePageAsync(

@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Describes an available Compute SKU Restriction Information. */
+/**
+ * Describes an available Compute SKU Restriction Information.
+ */
 @Immutable
 public final class ResourceSkuRestrictionInfo {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ResourceSkuRestrictionInfo.class);
-
     /*
      * Locations where the SKU is restricted
      */
@@ -28,8 +26,14 @@ public final class ResourceSkuRestrictionInfo {
     private List<String> zones;
 
     /**
+     * Creates an instance of ResourceSkuRestrictionInfo class.
+     */
+    public ResourceSkuRestrictionInfo() {
+    }
+
+    /**
      * Get the locations property: Locations where the SKU is restricted.
-     *
+     * 
      * @return the locations value.
      */
     public List<String> locations() {
@@ -38,7 +42,7 @@ public final class ResourceSkuRestrictionInfo {
 
     /**
      * Get the zones property: List of availability zones where the SKU is restricted.
-     *
+     * 
      * @return the zones value.
      */
     public List<String> zones() {
@@ -47,7 +51,7 @@ public final class ResourceSkuRestrictionInfo {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

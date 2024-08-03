@@ -6,14 +6,13 @@ package com.azure.resourcemanager.batch.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Specifies how tasks should be distributed across compute nodes. */
+/**
+ * Specifies how tasks should be distributed across compute nodes.
+ */
 @Fluent
 public final class TaskSchedulingPolicy {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TaskSchedulingPolicy.class);
-
     /*
      * How tasks should be distributed across compute nodes.
      */
@@ -21,8 +20,14 @@ public final class TaskSchedulingPolicy {
     private ComputeNodeFillType nodeFillType;
 
     /**
+     * Creates an instance of TaskSchedulingPolicy class.
+     */
+    public TaskSchedulingPolicy() {
+    }
+
+    /**
      * Get the nodeFillType property: How tasks should be distributed across compute nodes.
-     *
+     * 
      * @return the nodeFillType value.
      */
     public ComputeNodeFillType nodeFillType() {
@@ -31,7 +36,7 @@ public final class TaskSchedulingPolicy {
 
     /**
      * Set the nodeFillType property: How tasks should be distributed across compute nodes.
-     *
+     * 
      * @param nodeFillType the nodeFillType value to set.
      * @return the TaskSchedulingPolicy object itself.
      */
@@ -42,15 +47,15 @@ public final class TaskSchedulingPolicy {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (nodeFillType() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property nodeFillType in model TaskSchedulingPolicy"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property nodeFillType in model TaskSchedulingPolicy"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(TaskSchedulingPolicy.class);
 }

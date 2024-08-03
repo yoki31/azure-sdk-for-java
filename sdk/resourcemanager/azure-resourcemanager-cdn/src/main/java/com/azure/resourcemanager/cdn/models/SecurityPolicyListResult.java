@@ -5,9 +5,7 @@
 package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cdn.fluent.models.SecurityPolicyInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
@@ -17,8 +15,6 @@ import java.util.List;
  */
 @Fluent
 public final class SecurityPolicyListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SecurityPolicyListResult.class);
-
     /*
      * List of Security policies within a profile
      */
@@ -32,8 +28,14 @@ public final class SecurityPolicyListResult {
     private String nextLink;
 
     /**
+     * Creates an instance of SecurityPolicyListResult class.
+     */
+    public SecurityPolicyListResult() {
+    }
+
+    /**
      * Get the value property: List of Security policies within a profile.
-     *
+     * 
      * @return the value value.
      */
     public List<SecurityPolicyInner> value() {
@@ -42,7 +44,7 @@ public final class SecurityPolicyListResult {
 
     /**
      * Get the nextLink property: URL to get the next set of security policy objects if there is any.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -51,7 +53,7 @@ public final class SecurityPolicyListResult {
 
     /**
      * Set the nextLink property: URL to get the next set of security policy objects if there is any.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the SecurityPolicyListResult object itself.
      */
@@ -62,7 +64,7 @@ public final class SecurityPolicyListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

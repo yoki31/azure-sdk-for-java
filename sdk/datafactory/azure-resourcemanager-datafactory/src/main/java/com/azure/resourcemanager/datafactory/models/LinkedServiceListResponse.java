@@ -7,15 +7,14 @@ package com.azure.resourcemanager.datafactory.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.fluent.models.LinkedServiceResourceInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** A list of linked service resources. */
+/**
+ * A list of linked service resources.
+ */
 @Fluent
 public final class LinkedServiceListResponse {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(LinkedServiceListResponse.class);
-
     /*
      * List of linked services.
      */
@@ -29,8 +28,14 @@ public final class LinkedServiceListResponse {
     private String nextLink;
 
     /**
+     * Creates an instance of LinkedServiceListResponse class.
+     */
+    public LinkedServiceListResponse() {
+    }
+
+    /**
      * Get the value property: List of linked services.
-     *
+     * 
      * @return the value value.
      */
     public List<LinkedServiceResourceInner> value() {
@@ -39,7 +44,7 @@ public final class LinkedServiceListResponse {
 
     /**
      * Set the value property: List of linked services.
-     *
+     * 
      * @param value the value value to set.
      * @return the LinkedServiceListResponse object itself.
      */
@@ -50,7 +55,7 @@ public final class LinkedServiceListResponse {
 
     /**
      * Get the nextLink property: The link to the next page of results, if any remaining results exist.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,7 +64,7 @@ public final class LinkedServiceListResponse {
 
     /**
      * Set the nextLink property: The link to the next page of results, if any remaining results exist.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the LinkedServiceListResponse object itself.
      */
@@ -70,16 +75,18 @@ public final class LinkedServiceListResponse {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
+            throw LOGGER.atError()
+                .log(
                     new IllegalArgumentException("Missing required property value in model LinkedServiceListResponse"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(LinkedServiceListResponse.class);
 }

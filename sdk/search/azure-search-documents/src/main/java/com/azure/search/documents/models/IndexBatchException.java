@@ -13,7 +13,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * An {@code IndexBatchException} is thrown whenever Azure Cognitive Search index call was only partially successful.
+ * An {@code IndexBatchException} is thrown whenever Azure AI Search index call was only partially successful.
  * Users can inspect the indexingResults to determine the operation(s) that have failed.
  */
 public final class IndexBatchException extends AzureException {
@@ -63,6 +63,8 @@ public final class IndexBatchException extends AzureException {
     }
 
     /**
+     * Gets the indexing results returned by the service.
+     *
      * @return The indexing results returned by the service.
      */
     public List<IndexingResult> getIndexingResults() {
@@ -85,7 +87,6 @@ public final class IndexBatchException extends AzureException {
             .collect(Collectors.toList());
     }
 
-    @SuppressWarnings("unchecked")
     private <T> boolean isActionIncluded(IndexAction<T> action, Set<String> uniqueRetriableKeys,
         Function<T, String> keySelector) {
         if (action.getDocument() != null) {

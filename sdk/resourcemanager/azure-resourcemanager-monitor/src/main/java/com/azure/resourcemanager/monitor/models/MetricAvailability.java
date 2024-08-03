@@ -5,8 +5,6 @@
 package com.azure.resourcemanager.monitor.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Duration;
 
@@ -16,26 +14,28 @@ import java.time.Duration;
  */
 @Fluent
 public final class MetricAvailability {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MetricAvailability.class);
-
     /*
-     * the time grain specifies the aggregation interval for the metric.
-     * Expressed as a duration 'PT1M', 'P1D', etc.
+     * the time grain specifies the aggregation interval for the metric. Expressed as a duration 'PT1M', 'P1D', etc.
      */
     @JsonProperty(value = "timeGrain")
     private Duration timeGrain;
 
     /*
-     * the retention period for the metric at the specified timegrain.
-     * Expressed as a duration 'PT1M', 'P1D', etc.
+     * the retention period for the metric at the specified timegrain. Expressed as a duration 'PT1M', 'P1D', etc.
      */
     @JsonProperty(value = "retention")
     private Duration retention;
 
     /**
+     * Creates an instance of MetricAvailability class.
+     */
+    public MetricAvailability() {
+    }
+
+    /**
      * Get the timeGrain property: the time grain specifies the aggregation interval for the metric. Expressed as a
      * duration 'PT1M', 'P1D', etc.
-     *
+     * 
      * @return the timeGrain value.
      */
     public Duration timeGrain() {
@@ -45,7 +45,7 @@ public final class MetricAvailability {
     /**
      * Set the timeGrain property: the time grain specifies the aggregation interval for the metric. Expressed as a
      * duration 'PT1M', 'P1D', etc.
-     *
+     * 
      * @param timeGrain the timeGrain value to set.
      * @return the MetricAvailability object itself.
      */
@@ -57,7 +57,7 @@ public final class MetricAvailability {
     /**
      * Get the retention property: the retention period for the metric at the specified timegrain. Expressed as a
      * duration 'PT1M', 'P1D', etc.
-     *
+     * 
      * @return the retention value.
      */
     public Duration retention() {
@@ -67,7 +67,7 @@ public final class MetricAvailability {
     /**
      * Set the retention property: the retention period for the metric at the specified timegrain. Expressed as a
      * duration 'PT1M', 'P1D', etc.
-     *
+     * 
      * @param retention the retention value to set.
      * @return the MetricAvailability object itself.
      */
@@ -78,7 +78,7 @@ public final class MetricAvailability {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

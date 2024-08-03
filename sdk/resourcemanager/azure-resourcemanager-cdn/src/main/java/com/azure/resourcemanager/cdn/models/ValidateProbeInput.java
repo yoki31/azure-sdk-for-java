@@ -6,14 +6,13 @@ package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Input of the validate probe API. */
+/**
+ * Input of the validate probe API.
+ */
 @Fluent
 public final class ValidateProbeInput {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ValidateProbeInput.class);
-
     /*
      * The probe URL to validate.
      */
@@ -21,8 +20,14 @@ public final class ValidateProbeInput {
     private String probeUrl;
 
     /**
+     * Creates an instance of ValidateProbeInput class.
+     */
+    public ValidateProbeInput() {
+    }
+
+    /**
      * Get the probeUrl property: The probe URL to validate.
-     *
+     * 
      * @return the probeUrl value.
      */
     public String probeUrl() {
@@ -31,7 +36,7 @@ public final class ValidateProbeInput {
 
     /**
      * Set the probeUrl property: The probe URL to validate.
-     *
+     * 
      * @param probeUrl the probeUrl value to set.
      * @return the ValidateProbeInput object itself.
      */
@@ -42,14 +47,15 @@ public final class ValidateProbeInput {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (probeUrl() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property probeUrl in model ValidateProbeInput"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property probeUrl in model ValidateProbeInput"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ValidateProbeInput.class);
 }

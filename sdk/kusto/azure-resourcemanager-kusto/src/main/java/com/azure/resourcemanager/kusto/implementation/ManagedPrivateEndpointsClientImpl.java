@@ -31,7 +31,6 @@ import com.azure.core.management.exception.ManagementException;
 import com.azure.core.management.polling.PollResult;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.core.util.polling.PollerFlux;
 import com.azure.core.util.polling.SyncPoller;
 import com.azure.resourcemanager.kusto.fluent.ManagedPrivateEndpointsClient;
@@ -45,8 +44,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in ManagedPrivateEndpointsClient. */
 public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEndpointsClient {
-    private final ClientLogger logger = new ClientLogger(ManagedPrivateEndpointsClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final ManagedPrivateEndpointsService service;
 
@@ -71,11 +68,10 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
      */
     @Host("{$host}")
     @ServiceInterface(name = "KustoManagementClien")
-    private interface ManagedPrivateEndpointsService {
+    public interface ManagedPrivateEndpointsService {
         @Headers({"Content-Type: application/json"})
         @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Kusto/clusters"
-                + "/{clusterName}/managedPrivateEndpointsCheckNameAvailability")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Kusto/clusters/{clusterName}/managedPrivateEndpointsCheckNameAvailability")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<CheckNameResultInner>> checkNameAvailability(
@@ -90,8 +86,7 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
 
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Kusto/clusters"
-                + "/{clusterName}/managedPrivateEndpoints")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Kusto/clusters/{clusterName}/managedPrivateEndpoints")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<ManagedPrivateEndpointListResult>> list(
@@ -105,8 +100,7 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
 
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Kusto/clusters"
-                + "/{clusterName}/managedPrivateEndpoints/{managedPrivateEndpointName}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Kusto/clusters/{clusterName}/managedPrivateEndpoints/{managedPrivateEndpointName}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<ManagedPrivateEndpointInner>> get(
@@ -121,8 +115,7 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
 
         @Headers({"Content-Type: application/json"})
         @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Kusto/clusters"
-                + "/{clusterName}/managedPrivateEndpoints/{managedPrivateEndpointName}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Kusto/clusters/{clusterName}/managedPrivateEndpoints/{managedPrivateEndpointName}")
         @ExpectedResponses({200, 201, 202})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Flux<ByteBuffer>>> createOrUpdate(
@@ -138,8 +131,7 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
 
         @Headers({"Content-Type: application/json"})
         @Patch(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Kusto/clusters"
-                + "/{clusterName}/managedPrivateEndpoints/{managedPrivateEndpointName}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Kusto/clusters/{clusterName}/managedPrivateEndpoints/{managedPrivateEndpointName}")
         @ExpectedResponses({200, 202})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Flux<ByteBuffer>>> update(
@@ -155,8 +147,7 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
 
         @Headers({"Content-Type: application/json"})
         @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Kusto/clusters"
-                + "/{clusterName}/managedPrivateEndpoints/{managedPrivateEndpointName}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Kusto/clusters/{clusterName}/managedPrivateEndpoints/{managedPrivateEndpointName}")
         @ExpectedResponses({200, 202, 204})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Flux<ByteBuffer>>> delete(
@@ -173,13 +164,14 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Checks that the managed private endpoints resource name is valid and is not already in use.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param resourceName The name of the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
+     * @return the result returned from a check name availability request along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<CheckNameResultInner>> checkNameAvailabilityWithResponseAsync(
@@ -228,14 +220,15 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Checks that the managed private endpoints resource name is valid and is not already in use.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param resourceName The name of the resource.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
+     * @return the result returned from a check name availability request along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<CheckNameResultInner>> checkNameAvailabilityWithResponseAsync(
@@ -284,56 +277,32 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Checks that the managed private endpoints resource name is valid and is not already in use.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param resourceName The name of the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
+     * @return the result returned from a check name availability request on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<CheckNameResultInner> checkNameAvailabilityAsync(
         String resourceGroupName, String clusterName, ManagedPrivateEndpointsCheckNameRequest resourceName) {
         return checkNameAvailabilityWithResponseAsync(resourceGroupName, clusterName, resourceName)
-            .flatMap(
-                (Response<CheckNameResultInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Checks that the managed private endpoints resource name is valid and is not already in use.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
-     * @param clusterName The name of the Kusto cluster.
-     * @param resourceName The name of the resource.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public CheckNameResultInner checkNameAvailability(
-        String resourceGroupName, String clusterName, ManagedPrivateEndpointsCheckNameRequest resourceName) {
-        return checkNameAvailabilityAsync(resourceGroupName, clusterName, resourceName).block();
-    }
-
-    /**
-     * Checks that the managed private endpoints resource name is valid and is not already in use.
-     *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param resourceName The name of the resource.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
+     * @return the result returned from a check name availability request along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<CheckNameResultInner> checkNameAvailabilityWithResponse(
@@ -345,14 +314,32 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     }
 
     /**
+     * Checks that the managed private endpoints resource name is valid and is not already in use.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param clusterName The name of the Kusto cluster.
+     * @param resourceName The name of the resource.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the result returned from a check name availability request.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public CheckNameResultInner checkNameAvailability(
+        String resourceGroupName, String clusterName, ManagedPrivateEndpointsCheckNameRequest resourceName) {
+        return checkNameAvailabilityWithResponse(resourceGroupName, clusterName, resourceName, Context.NONE).getValue();
+    }
+
+    /**
      * Returns the list of managed private endpoints.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list managed private endpoints operation response.
+     * @return the list managed private endpoints operation response along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ManagedPrivateEndpointInner>> listSinglePageAsync(
@@ -399,13 +386,14 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Returns the list of managed private endpoints.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list managed private endpoints operation response.
+     * @return the list managed private endpoints operation response along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ManagedPrivateEndpointInner>> listSinglePageAsync(
@@ -449,12 +437,12 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Returns the list of managed private endpoints.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list managed private endpoints operation response.
+     * @return the list managed private endpoints operation response as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<ManagedPrivateEndpointInner> listAsync(String resourceGroupName, String clusterName) {
@@ -464,13 +452,13 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Returns the list of managed private endpoints.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list managed private endpoints operation response.
+     * @return the list managed private endpoints operation response as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<ManagedPrivateEndpointInner> listAsync(
@@ -481,12 +469,12 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Returns the list of managed private endpoints.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list managed private endpoints operation response.
+     * @return the list managed private endpoints operation response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<ManagedPrivateEndpointInner> list(String resourceGroupName, String clusterName) {
@@ -496,13 +484,13 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Returns the list of managed private endpoints.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list managed private endpoints operation response.
+     * @return the list managed private endpoints operation response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<ManagedPrivateEndpointInner> list(
@@ -513,13 +501,13 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Gets a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a managed private endpoint.
+     * @return a managed private endpoint along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<ManagedPrivateEndpointInner>> getWithResponseAsync(
@@ -569,14 +557,14 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Gets a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a managed private endpoint.
+     * @return a managed private endpoint along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<ManagedPrivateEndpointInner>> getWithResponseAsync(
@@ -623,32 +611,43 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Gets a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a managed private endpoint.
+     * @return a managed private endpoint on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ManagedPrivateEndpointInner> getAsync(
         String resourceGroupName, String clusterName, String managedPrivateEndpointName) {
         return getWithResponseAsync(resourceGroupName, clusterName, managedPrivateEndpointName)
-            .flatMap(
-                (Response<ManagedPrivateEndpointInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Gets a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param clusterName The name of the Kusto cluster.
+     * @param managedPrivateEndpointName The name of the managed private endpoint.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a managed private endpoint along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<ManagedPrivateEndpointInner> getWithResponse(
+        String resourceGroupName, String clusterName, String managedPrivateEndpointName, Context context) {
+        return getWithResponseAsync(resourceGroupName, clusterName, managedPrivateEndpointName, context).block();
+    }
+
+    /**
+     * Gets a managed private endpoint.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -659,38 +658,21 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     @ServiceMethod(returns = ReturnType.SINGLE)
     public ManagedPrivateEndpointInner get(
         String resourceGroupName, String clusterName, String managedPrivateEndpointName) {
-        return getAsync(resourceGroupName, clusterName, managedPrivateEndpointName).block();
-    }
-
-    /**
-     * Gets a managed private endpoint.
-     *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
-     * @param clusterName The name of the Kusto cluster.
-     * @param managedPrivateEndpointName The name of the managed private endpoint.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a managed private endpoint.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<ManagedPrivateEndpointInner> getWithResponse(
-        String resourceGroupName, String clusterName, String managedPrivateEndpointName, Context context) {
-        return getWithResponseAsync(resourceGroupName, clusterName, managedPrivateEndpointName, context).block();
+        return getWithResponse(resourceGroupName, clusterName, managedPrivateEndpointName, Context.NONE).getValue();
     }
 
     /**
      * Creates a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @param parameters The managed private endpoint parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a managed private endpoint.
+     * @return class representing a managed private endpoint along with {@link Response} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(
@@ -749,7 +731,7 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Creates a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @param parameters The managed private endpoint parameters.
@@ -757,7 +739,8 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a managed private endpoint.
+     * @return class representing a managed private endpoint along with {@link Response} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(
@@ -814,16 +797,16 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Creates a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @param parameters The managed private endpoint parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a managed private endpoint.
+     * @return the {@link PollerFlux} for polling of class representing a managed private endpoint.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<ManagedPrivateEndpointInner>, ManagedPrivateEndpointInner> beginCreateOrUpdateAsync(
         String resourceGroupName,
         String clusterName,
@@ -838,13 +821,13 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
                 this.client.getHttpPipeline(),
                 ManagedPrivateEndpointInner.class,
                 ManagedPrivateEndpointInner.class,
-                Context.NONE);
+                this.client.getContext());
     }
 
     /**
      * Creates a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @param parameters The managed private endpoint parameters.
@@ -852,9 +835,9 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a managed private endpoint.
+     * @return the {@link PollerFlux} for polling of class representing a managed private endpoint.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<ManagedPrivateEndpointInner>, ManagedPrivateEndpointInner> beginCreateOrUpdateAsync(
         String resourceGroupName,
         String clusterName,
@@ -878,29 +861,30 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Creates a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @param parameters The managed private endpoint parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a managed private endpoint.
+     * @return the {@link SyncPoller} for polling of class representing a managed private endpoint.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<ManagedPrivateEndpointInner>, ManagedPrivateEndpointInner> beginCreateOrUpdate(
         String resourceGroupName,
         String clusterName,
         String managedPrivateEndpointName,
         ManagedPrivateEndpointInner parameters) {
-        return beginCreateOrUpdateAsync(resourceGroupName, clusterName, managedPrivateEndpointName, parameters)
+        return this
+            .beginCreateOrUpdateAsync(resourceGroupName, clusterName, managedPrivateEndpointName, parameters)
             .getSyncPoller();
     }
 
     /**
      * Creates a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @param parameters The managed private endpoint parameters.
@@ -908,30 +892,31 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a managed private endpoint.
+     * @return the {@link SyncPoller} for polling of class representing a managed private endpoint.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<ManagedPrivateEndpointInner>, ManagedPrivateEndpointInner> beginCreateOrUpdate(
         String resourceGroupName,
         String clusterName,
         String managedPrivateEndpointName,
         ManagedPrivateEndpointInner parameters,
         Context context) {
-        return beginCreateOrUpdateAsync(resourceGroupName, clusterName, managedPrivateEndpointName, parameters, context)
+        return this
+            .beginCreateOrUpdateAsync(resourceGroupName, clusterName, managedPrivateEndpointName, parameters, context)
             .getSyncPoller();
     }
 
     /**
      * Creates a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @param parameters The managed private endpoint parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a managed private endpoint.
+     * @return class representing a managed private endpoint on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ManagedPrivateEndpointInner> createOrUpdateAsync(
@@ -947,7 +932,7 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Creates a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @param parameters The managed private endpoint parameters.
@@ -955,7 +940,7 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a managed private endpoint.
+     * @return class representing a managed private endpoint on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ManagedPrivateEndpointInner> createOrUpdateAsync(
@@ -972,7 +957,7 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Creates a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @param parameters The managed private endpoint parameters.
@@ -993,7 +978,7 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Creates a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @param parameters The managed private endpoint parameters.
@@ -1017,14 +1002,15 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Updates a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @param parameters The managed private endpoint parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a managed private endpoint.
+     * @return class representing a managed private endpoint along with {@link Response} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(
@@ -1083,7 +1069,7 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Updates a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @param parameters The managed private endpoint parameters.
@@ -1091,7 +1077,8 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a managed private endpoint.
+     * @return class representing a managed private endpoint along with {@link Response} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(
@@ -1148,16 +1135,16 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Updates a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @param parameters The managed private endpoint parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a managed private endpoint.
+     * @return the {@link PollerFlux} for polling of class representing a managed private endpoint.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<ManagedPrivateEndpointInner>, ManagedPrivateEndpointInner> beginUpdateAsync(
         String resourceGroupName,
         String clusterName,
@@ -1172,13 +1159,13 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
                 this.client.getHttpPipeline(),
                 ManagedPrivateEndpointInner.class,
                 ManagedPrivateEndpointInner.class,
-                Context.NONE);
+                this.client.getContext());
     }
 
     /**
      * Updates a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @param parameters The managed private endpoint parameters.
@@ -1186,9 +1173,9 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a managed private endpoint.
+     * @return the {@link PollerFlux} for polling of class representing a managed private endpoint.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<ManagedPrivateEndpointInner>, ManagedPrivateEndpointInner> beginUpdateAsync(
         String resourceGroupName,
         String clusterName,
@@ -1211,28 +1198,30 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Updates a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @param parameters The managed private endpoint parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a managed private endpoint.
+     * @return the {@link SyncPoller} for polling of class representing a managed private endpoint.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<ManagedPrivateEndpointInner>, ManagedPrivateEndpointInner> beginUpdate(
         String resourceGroupName,
         String clusterName,
         String managedPrivateEndpointName,
         ManagedPrivateEndpointInner parameters) {
-        return beginUpdateAsync(resourceGroupName, clusterName, managedPrivateEndpointName, parameters).getSyncPoller();
+        return this
+            .beginUpdateAsync(resourceGroupName, clusterName, managedPrivateEndpointName, parameters)
+            .getSyncPoller();
     }
 
     /**
      * Updates a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @param parameters The managed private endpoint parameters.
@@ -1240,30 +1229,31 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a managed private endpoint.
+     * @return the {@link SyncPoller} for polling of class representing a managed private endpoint.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<ManagedPrivateEndpointInner>, ManagedPrivateEndpointInner> beginUpdate(
         String resourceGroupName,
         String clusterName,
         String managedPrivateEndpointName,
         ManagedPrivateEndpointInner parameters,
         Context context) {
-        return beginUpdateAsync(resourceGroupName, clusterName, managedPrivateEndpointName, parameters, context)
+        return this
+            .beginUpdateAsync(resourceGroupName, clusterName, managedPrivateEndpointName, parameters, context)
             .getSyncPoller();
     }
 
     /**
      * Updates a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @param parameters The managed private endpoint parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a managed private endpoint.
+     * @return class representing a managed private endpoint on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ManagedPrivateEndpointInner> updateAsync(
@@ -1279,7 +1269,7 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Updates a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @param parameters The managed private endpoint parameters.
@@ -1287,7 +1277,7 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a managed private endpoint.
+     * @return class representing a managed private endpoint on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ManagedPrivateEndpointInner> updateAsync(
@@ -1304,7 +1294,7 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Updates a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @param parameters The managed private endpoint parameters.
@@ -1325,7 +1315,7 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Updates a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @param parameters The managed private endpoint parameters.
@@ -1348,13 +1338,13 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Deletes a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(
@@ -1404,14 +1394,14 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Deletes a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(
@@ -1458,37 +1448,38 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Deletes a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(
         String resourceGroupName, String clusterName, String managedPrivateEndpointName) {
         Mono<Response<Flux<ByteBuffer>>> mono =
             deleteWithResponseAsync(resourceGroupName, clusterName, managedPrivateEndpointName);
         return this
             .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, Context.NONE);
+            .<Void, Void>getLroResult(
+                mono, this.client.getHttpPipeline(), Void.class, Void.class, this.client.getContext());
     }
 
     /**
      * Deletes a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(
         String resourceGroupName, String clusterName, String managedPrivateEndpointName, Context context) {
         context = this.client.mergeContext(context);
@@ -1502,48 +1493,50 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Deletes a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<Void>, Void> beginDelete(
         String resourceGroupName, String clusterName, String managedPrivateEndpointName) {
-        return beginDeleteAsync(resourceGroupName, clusterName, managedPrivateEndpointName).getSyncPoller();
+        return this.beginDeleteAsync(resourceGroupName, clusterName, managedPrivateEndpointName).getSyncPoller();
     }
 
     /**
      * Deletes a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<Void>, Void> beginDelete(
         String resourceGroupName, String clusterName, String managedPrivateEndpointName, Context context) {
-        return beginDeleteAsync(resourceGroupName, clusterName, managedPrivateEndpointName, context).getSyncPoller();
+        return this
+            .beginDeleteAsync(resourceGroupName, clusterName, managedPrivateEndpointName, context)
+            .getSyncPoller();
     }
 
     /**
      * Deletes a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(String resourceGroupName, String clusterName, String managedPrivateEndpointName) {
@@ -1555,14 +1548,14 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Deletes a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(
@@ -1575,7 +1568,7 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Deletes a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -1590,7 +1583,7 @@ public final class ManagedPrivateEndpointsClientImpl implements ManagedPrivateEn
     /**
      * Deletes a managed private endpoint.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param managedPrivateEndpointName The name of the managed private endpoint.
      * @param context The context to associate with this operation.

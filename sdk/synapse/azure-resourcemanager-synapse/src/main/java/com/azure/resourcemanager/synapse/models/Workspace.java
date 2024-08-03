@@ -142,7 +142,7 @@ public interface Workspace {
      *
      * @return the extraProperties value.
      */
-    Map<String, Object> extraProperties();
+    Object extraProperties();
 
     /**
      * Gets the managedVirtualNetworkSettings property: Managed Virtual Network Settings.
@@ -202,6 +202,13 @@ public interface Workspace {
     Boolean azureADOnlyAuthentication();
 
     /**
+     * Gets the trustedServiceBypassEnabled property: Is trustedServiceBypassEnabled for the workspace.
+     *
+     * @return the trustedServiceBypassEnabled value.
+     */
+    Boolean trustedServiceBypassEnabled();
+
+    /**
      * Gets the region of the resource.
      *
      * @return the region of the resource.
@@ -214,6 +221,13 @@ public interface Workspace {
      * @return the name of the resource region.
      */
     String regionName();
+
+    /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
 
     /**
      * Gets the inner com.azure.resourcemanager.synapse.fluent.models.WorkspaceInner object.
@@ -274,7 +288,6 @@ public interface Workspace {
                 DefinitionStages.WithManagedResourceGroupName,
                 DefinitionStages.WithSqlAdministratorLogin,
                 DefinitionStages.WithVirtualNetworkProfile,
-                DefinitionStages.WithConnectivityEndpoints,
                 DefinitionStages.WithManagedVirtualNetwork,
                 DefinitionStages.WithPrivateEndpointConnections,
                 DefinitionStages.WithEncryption,
@@ -283,7 +296,8 @@ public interface Workspace {
                 DefinitionStages.WithPurviewConfiguration,
                 DefinitionStages.WithPublicNetworkAccess,
                 DefinitionStages.WithCspWorkspaceAdminProperties,
-                DefinitionStages.WithAzureADOnlyAuthentication {
+                DefinitionStages.WithAzureADOnlyAuthentication,
+                DefinitionStages.WithTrustedServiceBypassEnabled {
             /**
              * Executes the create request.
              *
@@ -374,16 +388,6 @@ public interface Workspace {
              * @return the next definition stage.
              */
             WithCreate withVirtualNetworkProfile(VirtualNetworkProfile virtualNetworkProfile);
-        }
-        /** The stage of the Workspace definition allowing to specify connectivityEndpoints. */
-        interface WithConnectivityEndpoints {
-            /**
-             * Specifies the connectivityEndpoints property: Connectivity endpoints.
-             *
-             * @param connectivityEndpoints Connectivity endpoints.
-             * @return the next definition stage.
-             */
-            WithCreate withConnectivityEndpoints(Map<String, String> connectivityEndpoints);
         }
         /** The stage of the Workspace definition allowing to specify managedVirtualNetwork. */
         interface WithManagedVirtualNetwork {
@@ -480,6 +484,16 @@ public interface Workspace {
              * @return the next definition stage.
              */
             WithCreate withAzureADOnlyAuthentication(Boolean azureADOnlyAuthentication);
+        }
+        /** The stage of the Workspace definition allowing to specify trustedServiceBypassEnabled. */
+        interface WithTrustedServiceBypassEnabled {
+            /**
+             * Specifies the trustedServiceBypassEnabled property: Is trustedServiceBypassEnabled for the workspace.
+             *
+             * @param trustedServiceBypassEnabled Is trustedServiceBypassEnabled for the workspace.
+             * @return the next definition stage.
+             */
+            WithCreate withTrustedServiceBypassEnabled(Boolean trustedServiceBypassEnabled);
         }
     }
     /**

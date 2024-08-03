@@ -33,6 +33,9 @@ import static com.azure.core.test.TestBase.getHttpClients;
 public final class TestUtils {
     private static final String AZURE_METRICS_ADVISOR_TEST_SERVICE_VERSIONS =
         "AZURE_METRIC_ADVISOR_TEST_SERVICE_VERSIONS";
+    public static final String AZURE_METRICS_ADVISOR_ENDPOINT = "AZURE_METRICS_ADVISOR_ENDPOINT";
+    public static final String[] REMOVE_SANITIZER_ID = {"AZSDK2003", "AZSDK2030"};
+
     static final String DISPLAY_NAME_WITH_ARGUMENTS = "{displayName} with [{arguments}]";
     static final String INVALID_ENDPOINT = "https://notreal.azure.com";
 
@@ -40,9 +43,6 @@ public final class TestUtils {
     static final String INCORRECT_UUID_ERROR = "Invalid UUID string: " + INCORRECT_UUID;
     static final String DATAFEED_ID_REQUIRED_ERROR = "'dataFeedId' cannot be null.";
     static final OffsetDateTime INGESTION_START_TIME = OffsetDateTime.parse("2019-10-01T00:00:00Z");
-
-    public static final String AZURE_METRICS_ADVISOR_ENDPOINT = "AZURE_METRICS_ADVISOR_ENDPOINT";
-
     static final String TEMPLATE_QUERY = "select * from adsample2 where Timestamp = @StartTime";
     static final String TABLE_QUERY = "PartitionKey ge '@StartTime' and PartitionKey lt '@EndTime'";
     static final String DATA_EXPLORER_QUERY = "let StartDateTime = datetime(@StartTime);"
@@ -131,6 +131,7 @@ public final class TestUtils {
         .get("AZURE_METRICS_ADVISOR_LOG_ANALYTICS_WORKSPACE_ID", "azWorkspaceId");
 
     static final long DEFAULT_SUBSCRIBER_TIMEOUT_SECONDS = 60;
+    // Disables OperationLocation and Location Sanitizer
 
     private TestUtils() {
     }

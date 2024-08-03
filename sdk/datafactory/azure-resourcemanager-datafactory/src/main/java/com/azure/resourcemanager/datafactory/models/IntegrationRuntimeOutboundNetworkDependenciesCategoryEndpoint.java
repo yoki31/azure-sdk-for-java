@@ -5,18 +5,14 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Azure-SSIS integration runtime outbound network dependency endpoints for one category. */
+/**
+ * Azure-SSIS integration runtime outbound network dependency endpoints for one category.
+ */
 @Fluent
 public final class IntegrationRuntimeOutboundNetworkDependenciesCategoryEndpoint {
-    @JsonIgnore
-    private final ClientLogger logger =
-        new ClientLogger(IntegrationRuntimeOutboundNetworkDependenciesCategoryEndpoint.class);
-
     /*
      * The category of outbound network dependency.
      */
@@ -30,8 +26,14 @@ public final class IntegrationRuntimeOutboundNetworkDependenciesCategoryEndpoint
     private List<IntegrationRuntimeOutboundNetworkDependenciesEndpoint> endpoints;
 
     /**
+     * Creates an instance of IntegrationRuntimeOutboundNetworkDependenciesCategoryEndpoint class.
+     */
+    public IntegrationRuntimeOutboundNetworkDependenciesCategoryEndpoint() {
+    }
+
+    /**
      * Get the category property: The category of outbound network dependency.
-     *
+     * 
      * @return the category value.
      */
     public String category() {
@@ -40,7 +42,7 @@ public final class IntegrationRuntimeOutboundNetworkDependenciesCategoryEndpoint
 
     /**
      * Set the category property: The category of outbound network dependency.
-     *
+     * 
      * @param category the category value to set.
      * @return the IntegrationRuntimeOutboundNetworkDependenciesCategoryEndpoint object itself.
      */
@@ -51,7 +53,7 @@ public final class IntegrationRuntimeOutboundNetworkDependenciesCategoryEndpoint
 
     /**
      * Get the endpoints property: The endpoints for outbound network dependency.
-     *
+     * 
      * @return the endpoints value.
      */
     public List<IntegrationRuntimeOutboundNetworkDependenciesEndpoint> endpoints() {
@@ -60,19 +62,19 @@ public final class IntegrationRuntimeOutboundNetworkDependenciesCategoryEndpoint
 
     /**
      * Set the endpoints property: The endpoints for outbound network dependency.
-     *
+     * 
      * @param endpoints the endpoints value to set.
      * @return the IntegrationRuntimeOutboundNetworkDependenciesCategoryEndpoint object itself.
      */
-    public IntegrationRuntimeOutboundNetworkDependenciesCategoryEndpoint withEndpoints(
-        List<IntegrationRuntimeOutboundNetworkDependenciesEndpoint> endpoints) {
+    public IntegrationRuntimeOutboundNetworkDependenciesCategoryEndpoint
+        withEndpoints(List<IntegrationRuntimeOutboundNetworkDependenciesEndpoint> endpoints) {
         this.endpoints = endpoints;
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

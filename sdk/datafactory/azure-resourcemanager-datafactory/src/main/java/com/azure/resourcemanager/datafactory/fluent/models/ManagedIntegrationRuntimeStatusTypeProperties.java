@@ -5,24 +5,20 @@
 package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.models.ManagedIntegrationRuntimeError;
 import com.azure.resourcemanager.datafactory.models.ManagedIntegrationRuntimeNode;
 import com.azure.resourcemanager.datafactory.models.ManagedIntegrationRuntimeOperationResult;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-/** Managed integration runtime status type properties. */
+/**
+ * Managed integration runtime status type properties.
+ */
 @Immutable
 public final class ManagedIntegrationRuntimeStatusTypeProperties {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(ManagedIntegrationRuntimeStatusTypeProperties.class);
-
     /*
-     * The time at which the integration runtime was created, in ISO8601
-     * format.
+     * The time at which the integration runtime was created, in ISO8601 format.
      */
     @JsonProperty(value = "createTime", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createTime;
@@ -46,8 +42,14 @@ public final class ManagedIntegrationRuntimeStatusTypeProperties {
     private ManagedIntegrationRuntimeOperationResult lastOperation;
 
     /**
+     * Creates an instance of ManagedIntegrationRuntimeStatusTypeProperties class.
+     */
+    public ManagedIntegrationRuntimeStatusTypeProperties() {
+    }
+
+    /**
      * Get the createTime property: The time at which the integration runtime was created, in ISO8601 format.
-     *
+     * 
      * @return the createTime value.
      */
     public OffsetDateTime createTime() {
@@ -56,7 +58,7 @@ public final class ManagedIntegrationRuntimeStatusTypeProperties {
 
     /**
      * Get the nodes property: The list of nodes for managed integration runtime.
-     *
+     * 
      * @return the nodes value.
      */
     public List<ManagedIntegrationRuntimeNode> nodes() {
@@ -65,7 +67,7 @@ public final class ManagedIntegrationRuntimeStatusTypeProperties {
 
     /**
      * Get the otherErrors property: The errors that occurred on this integration runtime.
-     *
+     * 
      * @return the otherErrors value.
      */
     public List<ManagedIntegrationRuntimeError> otherErrors() {
@@ -74,7 +76,7 @@ public final class ManagedIntegrationRuntimeStatusTypeProperties {
 
     /**
      * Get the lastOperation property: The last operation result that occurred on this integration runtime.
-     *
+     * 
      * @return the lastOperation value.
      */
     public ManagedIntegrationRuntimeOperationResult lastOperation() {
@@ -83,7 +85,7 @@ public final class ManagedIntegrationRuntimeStatusTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -14,6 +14,8 @@ import com.azure.resourcemanager.resources.fluentcore.model.Appliable;
 import com.azure.resourcemanager.resources.fluentcore.model.HasInnerModel;
 import com.azure.resourcemanager.resources.fluentcore.model.Refreshable;
 import com.azure.resourcemanager.resources.fluentcore.model.Updatable;
+
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 import reactor.core.publisher.Mono;
@@ -146,6 +148,16 @@ public interface VirtualMachineScaleSetVM
     /** @return true if managed disk is used for the virtual machine's disks (os, data) */
     boolean isManagedDiskEnabled();
 
+    /** Shuts down the virtual machine instance, move them to new node, and powers them back on. */
+    void redeploy();
+
+    /**
+     * Shuts down the virtual machine instance, move them to new node, and powers them back on.
+     *
+     * @return a representation of the deferred computation of this call
+     */
+    Mono<Void> redeployAsync();
+
     /** Updates the version of the installed operating system in the virtual machine instance. */
     void reimage();
 
@@ -175,6 +187,21 @@ public interface VirtualMachineScaleSetVM
      * @return a representation of the deferred computation of this call
      */
     Mono<Void> powerOffAsync();
+
+    /**
+     * Stops the virtual machine instance.
+     *
+     * @param skipShutdown power off without graceful shutdown
+     */
+    void powerOff(boolean skipShutdown);
+
+    /**
+     * Stops the virtual machine instances.
+     *
+     * @param skipShutdown power off without graceful shutdown
+     * @return a representation of the deferred computation of this call.
+     */
+    Mono<Void> powerOffAsync(boolean skipShutdown);
 
     /** Starts the virtual machine instance. */
     void start();
@@ -265,6 +292,9 @@ public interface VirtualMachineScaleSetVM
 
     /** @return The network profile config for the vm. */
     VirtualMachineScaleSetVMNetworkProfileConfiguration networkProfileConfiguration();
+
+    /** @return the time at which the Virtual Machine resource was created */
+    OffsetDateTime timeCreated();
 
     /** The template for an update operation, containing all the settings that can be modified. */
     interface Update extends Appliable<VirtualMachineScaleSetVM> {

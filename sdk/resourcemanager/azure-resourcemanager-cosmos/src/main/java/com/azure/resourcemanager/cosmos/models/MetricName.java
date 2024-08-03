@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** A metric name. */
+/**
+ * A metric name.
+ */
 @Immutable
 public final class MetricName {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MetricName.class);
-
     /*
      * The name of the metric.
      */
@@ -27,8 +25,14 @@ public final class MetricName {
     private String localizedValue;
 
     /**
+     * Creates an instance of MetricName class.
+     */
+    public MetricName() {
+    }
+
+    /**
      * Get the value property: The name of the metric.
-     *
+     * 
      * @return the value value.
      */
     public String value() {
@@ -37,7 +41,7 @@ public final class MetricName {
 
     /**
      * Get the localizedValue property: The friendly name of the metric.
-     *
+     * 
      * @return the localizedValue value.
      */
     public String localizedValue() {
@@ -46,7 +50,7 @@ public final class MetricName {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Identity for the resource. */
+/**
+ * Identity for the resource.
+ */
 @Fluent
-public class ManagedCassandraManagedServiceIdentity {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ManagedCassandraManagedServiceIdentity.class);
-
+public final class ManagedCassandraManagedServiceIdentity {
     /*
      * The object id of the identity resource.
      */
@@ -33,8 +31,14 @@ public class ManagedCassandraManagedServiceIdentity {
     private ManagedCassandraResourceIdentityType type;
 
     /**
+     * Creates an instance of ManagedCassandraManagedServiceIdentity class.
+     */
+    public ManagedCassandraManagedServiceIdentity() {
+    }
+
+    /**
      * Get the principalId property: The object id of the identity resource.
-     *
+     * 
      * @return the principalId value.
      */
     public String principalId() {
@@ -43,7 +47,7 @@ public class ManagedCassandraManagedServiceIdentity {
 
     /**
      * Get the tenantId property: The tenant id of the resource.
-     *
+     * 
      * @return the tenantId value.
      */
     public String tenantId() {
@@ -52,7 +56,7 @@ public class ManagedCassandraManagedServiceIdentity {
 
     /**
      * Get the type property: The type of the resource.
-     *
+     * 
      * @return the type value.
      */
     public ManagedCassandraResourceIdentityType type() {
@@ -61,7 +65,7 @@ public class ManagedCassandraManagedServiceIdentity {
 
     /**
      * Set the type property: The type of the resource.
-     *
+     * 
      * @param type the type value to set.
      * @return the ManagedCassandraManagedServiceIdentity object itself.
      */
@@ -72,7 +76,7 @@ public class ManagedCassandraManagedServiceIdentity {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

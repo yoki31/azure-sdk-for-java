@@ -5,22 +5,30 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
-/** The TableGetPropertiesOptions model. */
+/**
+ * The TableGetPropertiesOptions model.
+ */
 @Fluent
 public final class TableGetPropertiesOptions extends OptionsResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TableGetPropertiesOptions.class);
+    /**
+     * Creates an instance of TableGetPropertiesOptions class.
+     */
+    public TableGetPropertiesOptions() {
+    }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public TableGetPropertiesOptions withThroughput(Integer throughput) {
         super.withThroughput(throughput);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public TableGetPropertiesOptions withAutoscaleSettings(AutoscaleSettings autoscaleSettings) {
         super.withAutoscaleSettings(autoscaleSettings);
@@ -29,7 +37,7 @@ public final class TableGetPropertiesOptions extends OptionsResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

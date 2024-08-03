@@ -7,19 +7,26 @@ package com.azure.resourcemanager.datafactory.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.fluent.models.ResponsysLinkedServiceTypeProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.List;
 import java.util.Map;
 
-/** Responsys linked service. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * Responsys linked service.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = ResponsysLinkedService.class, visible = true)
 @JsonTypeName("Responsys")
 @Fluent
 public final class ResponsysLinkedService extends LinkedService {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ResponsysLinkedService.class);
+    /*
+     * Type of linked service.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "Responsys";
 
     /*
      * Responsys linked service properties.
@@ -28,36 +35,60 @@ public final class ResponsysLinkedService extends LinkedService {
     private ResponsysLinkedServiceTypeProperties innerTypeProperties = new ResponsysLinkedServiceTypeProperties();
 
     /**
+     * Creates an instance of ResponsysLinkedService class.
+     */
+    public ResponsysLinkedService() {
+    }
+
+    /**
+     * Get the type property: Type of linked service.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the innerTypeProperties property: Responsys linked service properties.
-     *
+     * 
      * @return the innerTypeProperties value.
      */
     private ResponsysLinkedServiceTypeProperties innerTypeProperties() {
         return this.innerTypeProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ResponsysLinkedService withConnectVia(IntegrationRuntimeReference connectVia) {
         super.withConnectVia(connectVia);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ResponsysLinkedService withDescription(String description) {
         super.withDescription(description);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ResponsysLinkedService withParameters(Map<String, ParameterSpecification> parameters) {
         super.withParameters(parameters);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ResponsysLinkedService withAnnotations(List<Object> annotations) {
         super.withAnnotations(annotations);
@@ -66,7 +97,7 @@ public final class ResponsysLinkedService extends LinkedService {
 
     /**
      * Get the endpoint property: The endpoint of the Responsys server.
-     *
+     * 
      * @return the endpoint value.
      */
     public Object endpoint() {
@@ -75,7 +106,7 @@ public final class ResponsysLinkedService extends LinkedService {
 
     /**
      * Set the endpoint property: The endpoint of the Responsys server.
-     *
+     * 
      * @param endpoint the endpoint value to set.
      * @return the ResponsysLinkedService object itself.
      */
@@ -90,7 +121,7 @@ public final class ResponsysLinkedService extends LinkedService {
     /**
      * Get the clientId property: The client ID associated with the Responsys application. Type: string (or Expression
      * with resultType string).
-     *
+     * 
      * @return the clientId value.
      */
     public Object clientId() {
@@ -100,7 +131,7 @@ public final class ResponsysLinkedService extends LinkedService {
     /**
      * Set the clientId property: The client ID associated with the Responsys application. Type: string (or Expression
      * with resultType string).
-     *
+     * 
      * @param clientId the clientId value to set.
      * @return the ResponsysLinkedService object itself.
      */
@@ -115,7 +146,7 @@ public final class ResponsysLinkedService extends LinkedService {
     /**
      * Get the clientSecret property: The client secret associated with the Responsys application. Type: string (or
      * Expression with resultType string).
-     *
+     * 
      * @return the clientSecret value.
      */
     public SecretBase clientSecret() {
@@ -125,7 +156,7 @@ public final class ResponsysLinkedService extends LinkedService {
     /**
      * Set the clientSecret property: The client secret associated with the Responsys application. Type: string (or
      * Expression with resultType string).
-     *
+     * 
      * @param clientSecret the clientSecret value to set.
      * @return the ResponsysLinkedService object itself.
      */
@@ -140,7 +171,7 @@ public final class ResponsysLinkedService extends LinkedService {
     /**
      * Get the useEncryptedEndpoints property: Specifies whether the data source endpoints are encrypted using HTTPS.
      * The default value is true. Type: boolean (or Expression with resultType boolean).
-     *
+     * 
      * @return the useEncryptedEndpoints value.
      */
     public Object useEncryptedEndpoints() {
@@ -150,7 +181,7 @@ public final class ResponsysLinkedService extends LinkedService {
     /**
      * Set the useEncryptedEndpoints property: Specifies whether the data source endpoints are encrypted using HTTPS.
      * The default value is true. Type: boolean (or Expression with resultType boolean).
-     *
+     * 
      * @param useEncryptedEndpoints the useEncryptedEndpoints value to set.
      * @return the ResponsysLinkedService object itself.
      */
@@ -166,7 +197,7 @@ public final class ResponsysLinkedService extends LinkedService {
      * Get the useHostVerification property: Specifies whether to require the host name in the server's certificate to
      * match the host name of the server when connecting over SSL. The default value is true. Type: boolean (or
      * Expression with resultType boolean).
-     *
+     * 
      * @return the useHostVerification value.
      */
     public Object useHostVerification() {
@@ -177,7 +208,7 @@ public final class ResponsysLinkedService extends LinkedService {
      * Set the useHostVerification property: Specifies whether to require the host name in the server's certificate to
      * match the host name of the server when connecting over SSL. The default value is true. Type: boolean (or
      * Expression with resultType boolean).
-     *
+     * 
      * @param useHostVerification the useHostVerification value to set.
      * @return the ResponsysLinkedService object itself.
      */
@@ -192,7 +223,7 @@ public final class ResponsysLinkedService extends LinkedService {
     /**
      * Get the usePeerVerification property: Specifies whether to verify the identity of the server when connecting over
      * SSL. The default value is true. Type: boolean (or Expression with resultType boolean).
-     *
+     * 
      * @return the usePeerVerification value.
      */
     public Object usePeerVerification() {
@@ -202,7 +233,7 @@ public final class ResponsysLinkedService extends LinkedService {
     /**
      * Set the usePeerVerification property: Specifies whether to verify the identity of the server when connecting over
      * SSL. The default value is true. Type: boolean (or Expression with resultType boolean).
-     *
+     * 
      * @param usePeerVerification the usePeerVerification value to set.
      * @return the ResponsysLinkedService object itself.
      */
@@ -216,22 +247,22 @@ public final class ResponsysLinkedService extends LinkedService {
 
     /**
      * Get the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @return the encryptedCredential value.
      */
-    public Object encryptedCredential() {
+    public String encryptedCredential() {
         return this.innerTypeProperties() == null ? null : this.innerTypeProperties().encryptedCredential();
     }
 
     /**
      * Set the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @param encryptedCredential the encryptedCredential value to set.
      * @return the ResponsysLinkedService object itself.
      */
-    public ResponsysLinkedService withEncryptedCredential(Object encryptedCredential) {
+    public ResponsysLinkedService withEncryptedCredential(String encryptedCredential) {
         if (this.innerTypeProperties() == null) {
             this.innerTypeProperties = new ResponsysLinkedServiceTypeProperties();
         }
@@ -241,19 +272,20 @@ public final class ResponsysLinkedService extends LinkedService {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
         if (innerTypeProperties() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property innerTypeProperties in model ResponsysLinkedService"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property innerTypeProperties in model ResponsysLinkedService"));
         } else {
             innerTypeProperties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ResponsysLinkedService.class);
 }

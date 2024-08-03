@@ -15,10 +15,9 @@ import com.azure.resourcemanager.apimanagement.models.PortalRevisionContract;
 import com.azure.resourcemanager.apimanagement.models.PortalRevisions;
 import com.azure.resourcemanager.apimanagement.models.PortalRevisionsGetEntityTagResponse;
 import com.azure.resourcemanager.apimanagement.models.PortalRevisionsGetResponse;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class PortalRevisionsImpl implements PortalRevisions {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PortalRevisionsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(PortalRevisionsImpl.class);
 
     private final PortalRevisionsClient innerClient;
 
@@ -44,22 +43,13 @@ public final class PortalRevisionsImpl implements PortalRevisions {
         return Utils.mapPage(inner, inner1 -> new PortalRevisionContractImpl(inner1, this.manager()));
     }
 
-    public void getEntityTag(String resourceGroupName, String serviceName, String portalRevisionId) {
-        this.serviceClient().getEntityTag(resourceGroupName, serviceName, portalRevisionId);
-    }
-
     public PortalRevisionsGetEntityTagResponse getEntityTagWithResponse(
         String resourceGroupName, String serviceName, String portalRevisionId, Context context) {
         return this.serviceClient().getEntityTagWithResponse(resourceGroupName, serviceName, portalRevisionId, context);
     }
 
-    public PortalRevisionContract get(String resourceGroupName, String serviceName, String portalRevisionId) {
-        PortalRevisionContractInner inner = this.serviceClient().get(resourceGroupName, serviceName, portalRevisionId);
-        if (inner != null) {
-            return new PortalRevisionContractImpl(inner, this.manager());
-        } else {
-            return null;
-        }
+    public void getEntityTag(String resourceGroupName, String serviceName, String portalRevisionId) {
+        this.serviceClient().getEntityTag(resourceGroupName, serviceName, portalRevisionId);
     }
 
     public Response<PortalRevisionContract> getWithResponse(
@@ -77,10 +67,19 @@ public final class PortalRevisionsImpl implements PortalRevisions {
         }
     }
 
+    public PortalRevisionContract get(String resourceGroupName, String serviceName, String portalRevisionId) {
+        PortalRevisionContractInner inner = this.serviceClient().get(resourceGroupName, serviceName, portalRevisionId);
+        if (inner != null) {
+            return new PortalRevisionContractImpl(inner, this.manager());
+        } else {
+            return null;
+        }
+    }
+
     public PortalRevisionContract getById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -88,14 +87,14 @@ public final class PortalRevisionsImpl implements PortalRevisions {
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String portalRevisionId = Utils.getValueFromIdByName(id, "portalRevisions");
         if (portalRevisionId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -107,7 +106,7 @@ public final class PortalRevisionsImpl implements PortalRevisions {
     public Response<PortalRevisionContract> getByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -115,14 +114,14 @@ public final class PortalRevisionsImpl implements PortalRevisions {
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String portalRevisionId = Utils.getValueFromIdByName(id, "portalRevisions");
         if (portalRevisionId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String

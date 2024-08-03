@@ -7,27 +7,43 @@ package com.azure.resourcemanager.appservice.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** Defines values for AppServicePlanRestrictions. */
+/**
+ * App Service plans this offer is restricted to.
+ */
 public enum AppServicePlanRestrictions {
-    /** Enum value None. */
+    /**
+     * Enum value None.
+     */
     NONE("None"),
 
-    /** Enum value Free. */
+    /**
+     * Enum value Free.
+     */
     FREE("Free"),
 
-    /** Enum value Shared. */
+    /**
+     * Enum value Shared.
+     */
     SHARED("Shared"),
 
-    /** Enum value Basic. */
+    /**
+     * Enum value Basic.
+     */
     BASIC("Basic"),
 
-    /** Enum value Standard. */
+    /**
+     * Enum value Standard.
+     */
     STANDARD("Standard"),
 
-    /** Enum value Premium. */
+    /**
+     * Enum value Premium.
+     */
     PREMIUM("Premium");
 
-    /** The actual serialized value for a AppServicePlanRestrictions instance. */
+    /**
+     * The actual serialized value for a AppServicePlanRestrictions instance.
+     */
     private final String value;
 
     AppServicePlanRestrictions(String value) {
@@ -36,12 +52,15 @@ public enum AppServicePlanRestrictions {
 
     /**
      * Parses a serialized value to a AppServicePlanRestrictions instance.
-     *
+     * 
      * @param value the serialized value to parse.
      * @return the parsed AppServicePlanRestrictions object, or null if unable to parse.
      */
     @JsonCreator
     public static AppServicePlanRestrictions fromString(String value) {
+        if (value == null) {
+            return null;
+        }
         AppServicePlanRestrictions[] items = AppServicePlanRestrictions.values();
         for (AppServicePlanRestrictions item : items) {
             if (item.toString().equalsIgnoreCase(value)) {
@@ -51,6 +70,9 @@ public enum AppServicePlanRestrictions {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @JsonValue
     @Override
     public String toString() {

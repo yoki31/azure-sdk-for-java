@@ -5,17 +5,13 @@
 package com.azure.resourcemanager.kubernetesconfiguration.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.kubernetesconfiguration.fluent.models.OperationStatusResultInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** The async operations in progress, in the cluster. */
 @Immutable
 public final class OperationStatusList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationStatusList.class);
-
     /*
      * List of async operations in progress, in the cluster.
      */
@@ -27,6 +23,10 @@ public final class OperationStatusList {
      */
     @JsonProperty(value = "nextLink", access = JsonProperty.Access.WRITE_ONLY)
     private String nextLink;
+
+    /** Creates an instance of OperationStatusList class. */
+    public OperationStatusList() {
+    }
 
     /**
      * Get the value property: List of async operations in progress, in the cluster.

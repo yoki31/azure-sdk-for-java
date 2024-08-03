@@ -5,19 +5,17 @@
 package com.azure.resourcemanager.cosmos.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cosmos.models.ApiType;
 import com.azure.resourcemanager.cosmos.models.RestorableLocationResource;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-/** The properties of a restorable database account. */
+/**
+ * The properties of a restorable database account.
+ */
 @Fluent
 public final class RestorableDatabaseAccountProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RestorableDatabaseAccountProperties.class);
-
     /*
      * The name of the global database account
      */
@@ -31,11 +29,16 @@ public final class RestorableDatabaseAccountProperties {
     private OffsetDateTime creationTime;
 
     /*
-     * The time at which the restorable database account has been deleted
-     * (ISO-8601 format).
+     * The time at which the restorable database account has been deleted (ISO-8601 format).
      */
     @JsonProperty(value = "deletionTime")
     private OffsetDateTime deletionTime;
+
+    /*
+     * The least recent time at which the database account can be restored to (ISO-8601 format).
+     */
+    @JsonProperty(value = "oldestRestorableTime")
+    private OffsetDateTime oldestRestorableTime;
 
     /*
      * The API type of the restorable database account.
@@ -50,8 +53,14 @@ public final class RestorableDatabaseAccountProperties {
     private List<RestorableLocationResource> restorableLocations;
 
     /**
+     * Creates an instance of RestorableDatabaseAccountProperties class.
+     */
+    public RestorableDatabaseAccountProperties() {
+    }
+
+    /**
      * Get the accountName property: The name of the global database account.
-     *
+     * 
      * @return the accountName value.
      */
     public String accountName() {
@@ -60,7 +69,7 @@ public final class RestorableDatabaseAccountProperties {
 
     /**
      * Set the accountName property: The name of the global database account.
-     *
+     * 
      * @param accountName the accountName value to set.
      * @return the RestorableDatabaseAccountProperties object itself.
      */
@@ -71,7 +80,7 @@ public final class RestorableDatabaseAccountProperties {
 
     /**
      * Get the creationTime property: The creation time of the restorable database account (ISO-8601 format).
-     *
+     * 
      * @return the creationTime value.
      */
     public OffsetDateTime creationTime() {
@@ -80,7 +89,7 @@ public final class RestorableDatabaseAccountProperties {
 
     /**
      * Set the creationTime property: The creation time of the restorable database account (ISO-8601 format).
-     *
+     * 
      * @param creationTime the creationTime value to set.
      * @return the RestorableDatabaseAccountProperties object itself.
      */
@@ -92,7 +101,7 @@ public final class RestorableDatabaseAccountProperties {
     /**
      * Get the deletionTime property: The time at which the restorable database account has been deleted (ISO-8601
      * format).
-     *
+     * 
      * @return the deletionTime value.
      */
     public OffsetDateTime deletionTime() {
@@ -102,7 +111,7 @@ public final class RestorableDatabaseAccountProperties {
     /**
      * Set the deletionTime property: The time at which the restorable database account has been deleted (ISO-8601
      * format).
-     *
+     * 
      * @param deletionTime the deletionTime value to set.
      * @return the RestorableDatabaseAccountProperties object itself.
      */
@@ -112,8 +121,30 @@ public final class RestorableDatabaseAccountProperties {
     }
 
     /**
+     * Get the oldestRestorableTime property: The least recent time at which the database account can be restored to
+     * (ISO-8601 format).
+     * 
+     * @return the oldestRestorableTime value.
+     */
+    public OffsetDateTime oldestRestorableTime() {
+        return this.oldestRestorableTime;
+    }
+
+    /**
+     * Set the oldestRestorableTime property: The least recent time at which the database account can be restored to
+     * (ISO-8601 format).
+     * 
+     * @param oldestRestorableTime the oldestRestorableTime value to set.
+     * @return the RestorableDatabaseAccountProperties object itself.
+     */
+    public RestorableDatabaseAccountProperties withOldestRestorableTime(OffsetDateTime oldestRestorableTime) {
+        this.oldestRestorableTime = oldestRestorableTime;
+        return this;
+    }
+
+    /**
      * Get the apiType property: The API type of the restorable database account.
-     *
+     * 
      * @return the apiType value.
      */
     public ApiType apiType() {
@@ -122,7 +153,7 @@ public final class RestorableDatabaseAccountProperties {
 
     /**
      * Get the restorableLocations property: List of regions where the of the database account can be restored from.
-     *
+     * 
      * @return the restorableLocations value.
      */
     public List<RestorableLocationResource> restorableLocations() {
@@ -131,7 +162,7 @@ public final class RestorableDatabaseAccountProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

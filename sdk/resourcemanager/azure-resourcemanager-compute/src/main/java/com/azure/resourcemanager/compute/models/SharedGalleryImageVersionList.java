@@ -7,15 +7,14 @@ package com.azure.resourcemanager.compute.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.compute.fluent.models.SharedGalleryImageVersionInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The List Shared Gallery Image versions operation response. */
+/**
+ * The List Shared Gallery Image versions operation response.
+ */
 @Fluent
 public final class SharedGalleryImageVersionList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SharedGalleryImageVersionList.class);
-
     /*
      * A list of shared gallery images versions.
      */
@@ -23,16 +22,21 @@ public final class SharedGalleryImageVersionList {
     private List<SharedGalleryImageVersionInner> value;
 
     /*
-     * The uri to fetch the next page of shared gallery image versions. Call
-     * ListNext() with this to fetch the next page of shared gallery image
-     * versions.
+     * The uri to fetch the next page of shared gallery image versions. Call ListNext() with this to fetch the next page
+     * of shared gallery image versions.
      */
     @JsonProperty(value = "nextLink")
     private String nextLink;
 
     /**
+     * Creates an instance of SharedGalleryImageVersionList class.
+     */
+    public SharedGalleryImageVersionList() {
+    }
+
+    /**
      * Get the value property: A list of shared gallery images versions.
-     *
+     * 
      * @return the value value.
      */
     public List<SharedGalleryImageVersionInner> value() {
@@ -41,7 +45,7 @@ public final class SharedGalleryImageVersionList {
 
     /**
      * Set the value property: A list of shared gallery images versions.
-     *
+     * 
      * @param value the value value to set.
      * @return the SharedGalleryImageVersionList object itself.
      */
@@ -53,7 +57,7 @@ public final class SharedGalleryImageVersionList {
     /**
      * Get the nextLink property: The uri to fetch the next page of shared gallery image versions. Call ListNext() with
      * this to fetch the next page of shared gallery image versions.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -63,7 +67,7 @@ public final class SharedGalleryImageVersionList {
     /**
      * Set the nextLink property: The uri to fetch the next page of shared gallery image versions. Call ListNext() with
      * this to fetch the next page of shared gallery image versions.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the SharedGalleryImageVersionList object itself.
      */
@@ -74,17 +78,18 @@ public final class SharedGalleryImageVersionList {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property value in model SharedGalleryImageVersionList"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property value in model SharedGalleryImageVersionList"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(SharedGalleryImageVersionList.class);
 }

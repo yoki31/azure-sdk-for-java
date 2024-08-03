@@ -7,41 +7,36 @@ package com.azure.resourcemanager.datafactory.fluent.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.models.SecretBase;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** HDFS linked service properties. */
+/**
+ * HDFS linked service properties.
+ */
 @Fluent
 public final class HdfsLinkedServiceTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(HdfsLinkedServiceTypeProperties.class);
-
     /*
-     * The URL of the HDFS service endpoint, e.g.
-     * http://myhostname:50070/webhdfs/v1 . Type: string (or Expression with
+     * The URL of the HDFS service endpoint, e.g. http://myhostname:50070/webhdfs/v1 . Type: string (or Expression with
      * resultType string).
      */
     @JsonProperty(value = "url", required = true)
     private Object url;
 
     /*
-     * Type of authentication used to connect to the HDFS. Possible values are:
-     * Anonymous and Windows. Type: string (or Expression with resultType
-     * string).
+     * Type of authentication used to connect to the HDFS. Possible values are: Anonymous and Windows. Type: string (or
+     * Expression with resultType string).
      */
     @JsonProperty(value = "authenticationType")
     private Object authenticationType;
 
     /*
-     * The encrypted credential used for authentication. Credentials are
-     * encrypted using the integration runtime credential manager. Type: string
-     * (or Expression with resultType string).
+     * The encrypted credential used for authentication. Credentials are encrypted using the integration runtime
+     * credential manager. Type: string.
      */
     @JsonProperty(value = "encryptedCredential")
-    private Object encryptedCredential;
+    private String encryptedCredential;
 
     /*
-     * User name for Windows authentication. Type: string (or Expression with
-     * resultType string).
+     * User name for Windows authentication. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "userName")
     private Object username;
@@ -53,9 +48,15 @@ public final class HdfsLinkedServiceTypeProperties {
     private SecretBase password;
 
     /**
+     * Creates an instance of HdfsLinkedServiceTypeProperties class.
+     */
+    public HdfsLinkedServiceTypeProperties() {
+    }
+
+    /**
      * Get the url property: The URL of the HDFS service endpoint, e.g. http://myhostname:50070/webhdfs/v1 . Type:
      * string (or Expression with resultType string).
-     *
+     * 
      * @return the url value.
      */
     public Object url() {
@@ -65,7 +66,7 @@ public final class HdfsLinkedServiceTypeProperties {
     /**
      * Set the url property: The URL of the HDFS service endpoint, e.g. http://myhostname:50070/webhdfs/v1 . Type:
      * string (or Expression with resultType string).
-     *
+     * 
      * @param url the url value to set.
      * @return the HdfsLinkedServiceTypeProperties object itself.
      */
@@ -77,7 +78,7 @@ public final class HdfsLinkedServiceTypeProperties {
     /**
      * Get the authenticationType property: Type of authentication used to connect to the HDFS. Possible values are:
      * Anonymous and Windows. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the authenticationType value.
      */
     public Object authenticationType() {
@@ -87,7 +88,7 @@ public final class HdfsLinkedServiceTypeProperties {
     /**
      * Set the authenticationType property: Type of authentication used to connect to the HDFS. Possible values are:
      * Anonymous and Windows. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param authenticationType the authenticationType value to set.
      * @return the HdfsLinkedServiceTypeProperties object itself.
      */
@@ -98,22 +99,22 @@ public final class HdfsLinkedServiceTypeProperties {
 
     /**
      * Get the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @return the encryptedCredential value.
      */
-    public Object encryptedCredential() {
+    public String encryptedCredential() {
         return this.encryptedCredential;
     }
 
     /**
      * Set the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @param encryptedCredential the encryptedCredential value to set.
      * @return the HdfsLinkedServiceTypeProperties object itself.
      */
-    public HdfsLinkedServiceTypeProperties withEncryptedCredential(Object encryptedCredential) {
+    public HdfsLinkedServiceTypeProperties withEncryptedCredential(String encryptedCredential) {
         this.encryptedCredential = encryptedCredential;
         return this;
     }
@@ -121,7 +122,7 @@ public final class HdfsLinkedServiceTypeProperties {
     /**
      * Get the username property: User name for Windows authentication. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @return the username value.
      */
     public Object username() {
@@ -131,7 +132,7 @@ public final class HdfsLinkedServiceTypeProperties {
     /**
      * Set the username property: User name for Windows authentication. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @param username the username value to set.
      * @return the HdfsLinkedServiceTypeProperties object itself.
      */
@@ -142,7 +143,7 @@ public final class HdfsLinkedServiceTypeProperties {
 
     /**
      * Get the password property: Password for Windows authentication.
-     *
+     * 
      * @return the password value.
      */
     public SecretBase password() {
@@ -151,7 +152,7 @@ public final class HdfsLinkedServiceTypeProperties {
 
     /**
      * Set the password property: Password for Windows authentication.
-     *
+     * 
      * @param password the password value to set.
      * @return the HdfsLinkedServiceTypeProperties object itself.
      */
@@ -162,18 +163,19 @@ public final class HdfsLinkedServiceTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (url() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property url in model HdfsLinkedServiceTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property url in model HdfsLinkedServiceTypeProperties"));
         }
         if (password() != null) {
             password().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(HdfsLinkedServiceTypeProperties.class);
 }

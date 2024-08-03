@@ -21,10 +21,18 @@ import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * A credential provider that provides token credentials from the MSAL shared token cache.
- * Requires a username and client Id. If a username is not provided, then the
+ * Requires a username and client ID. If a username is not provided, then the
  * {@link Configuration#PROPERTY_AZURE_USERNAME AZURE_USERNAME} environment variable will be used.
+ *
+ * <p>This credential is a legacy mechanism for authenticating clients using credentials provided to Visual Studio Code.
+ * This mechanism for Visual Studio authentication has been replaced by the {@link VisualStudioCodeCredential}/>.</p>
+ *
+ * @see com.azure.identity
+ * @see VisualStudioCodeCredential
  */
 public class SharedTokenCacheCredential implements TokenCredential {
+    private static final ClientLogger LOGGER = new ClientLogger(SharedTokenCacheCredential.class);
+
     private final String username;
     private final String clientId;
     private final String tenantId;
@@ -32,7 +40,6 @@ public class SharedTokenCacheCredential implements TokenCredential {
 
 
     private final IdentityClient identityClient;
-    private final ClientLogger logger = new ClientLogger(SharedTokenCacheCredential.class);
 
     /**
      * Creates an instance of the Shared Token Cache Credential Provider.
@@ -59,7 +66,7 @@ public class SharedTokenCacheCredential implements TokenCredential {
         if (tenantId == null) {
             this.tenantId = configuration.contains(Configuration.PROPERTY_AZURE_TENANT_ID)
                     ? configuration.get(Configuration.PROPERTY_AZURE_TENANT_ID) : "common";
-            ValidationUtil.validateTenantIdCharacterRange(getClass().getSimpleName(), this.tenantId);
+            ValidationUtil.validateTenantIdCharacterRange(this.tenantId, LOGGER);
         } else {
             this.tenantId = tenantId;
         }
@@ -74,7 +81,7 @@ public class SharedTokenCacheCredential implements TokenCredential {
         if (identityClientOptions.getAuthenticationRecord() != null) {
             cachedToken.set(new MsalAuthenticationAccount(identityClientOptions.getAuthenticationRecord()));
         }
-        LoggingUtil.logAvailableEnvironmentVariables(logger, configuration);
+        LoggingUtil.logAvailableEnvironmentVariables(LOGGER, configuration);
     }
 
     /**
@@ -92,8 +99,16 @@ public class SharedTokenCacheCredential implements TokenCredential {
         }).switchIfEmpty(
             Mono.defer(() -> identityClient.authenticateWithSharedTokenCache(request, username)))
             .map(this::updateCache)
-            .doOnNext(token -> LoggingUtil.logTokenSuccess(logger, request))
-            .doOnError(error -> LoggingUtil.logTokenError(logger, request, error));
+            .doOnNext(token -> LoggingUtil.logTokenSuccess(LOGGER, request))
+            .doOnError(error -> LoggingUtil.logTokenError(LOGGER, identityClient.getIdentityClientOptions(),
+                request, error))
+            .onErrorMap(error -> {
+                if (identityClient.getIdentityClientOptions().isChained()) {
+                    return new CredentialUnavailableException(error.getMessage(), error);
+                } else {
+                    return error;
+                }
+            });
     }
 
     private AccessToken updateCache(MsalToken msalToken) {

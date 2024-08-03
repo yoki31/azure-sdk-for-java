@@ -7,15 +7,14 @@ package com.azure.resourcemanager.compute.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.compute.fluent.models.DiskAccessInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The List disk access operation response. */
+/**
+ * The List disk access operation response.
+ */
 @Fluent
 public final class DiskAccessList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DiskAccessList.class);
-
     /*
      * A list of disk access resources.
      */
@@ -23,15 +22,21 @@ public final class DiskAccessList {
     private List<DiskAccessInner> value;
 
     /*
-     * The uri to fetch the next page of disk access resources. Call ListNext()
-     * with this to fetch the next page of disk access resources.
+     * The uri to fetch the next page of disk access resources. Call ListNext() with this to fetch the next page of disk
+     * access resources.
      */
     @JsonProperty(value = "nextLink")
     private String nextLink;
 
     /**
+     * Creates an instance of DiskAccessList class.
+     */
+    public DiskAccessList() {
+    }
+
+    /**
      * Get the value property: A list of disk access resources.
-     *
+     * 
      * @return the value value.
      */
     public List<DiskAccessInner> value() {
@@ -40,7 +45,7 @@ public final class DiskAccessList {
 
     /**
      * Set the value property: A list of disk access resources.
-     *
+     * 
      * @param value the value value to set.
      * @return the DiskAccessList object itself.
      */
@@ -52,7 +57,7 @@ public final class DiskAccessList {
     /**
      * Get the nextLink property: The uri to fetch the next page of disk access resources. Call ListNext() with this to
      * fetch the next page of disk access resources.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -62,7 +67,7 @@ public final class DiskAccessList {
     /**
      * Set the nextLink property: The uri to fetch the next page of disk access resources. Call ListNext() with this to
      * fetch the next page of disk access resources.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the DiskAccessList object itself.
      */
@@ -73,16 +78,17 @@ public final class DiskAccessList {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property value in model DiskAccessList"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property value in model DiskAccessList"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(DiskAccessList.class);
 }

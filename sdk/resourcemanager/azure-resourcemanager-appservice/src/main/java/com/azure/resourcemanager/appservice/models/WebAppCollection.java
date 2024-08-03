@@ -7,15 +7,15 @@ package com.azure.resourcemanager.appservice.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.fluent.models.SiteInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
-/** Collection of App Service apps. */
+/**
+ * Collection of App Service apps.
+ */
 @Fluent
 public final class WebAppCollection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(WebAppCollection.class);
-
     /*
      * Collection of resources.
      */
@@ -27,6 +27,12 @@ public final class WebAppCollection {
      */
     @JsonProperty(value = "nextLink", access = JsonProperty.Access.WRITE_ONLY)
     private String nextLink;
+
+    /**
+     * Creates an instance of WebAppCollection class.
+     */
+    public WebAppCollection() {
+    }
 
     /**
      * Get the value property: Collection of resources.
@@ -64,11 +70,12 @@ public final class WebAppCollection {
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property value in model WebAppCollection"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property value in model WebAppCollection"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(WebAppCollection.class);
 }

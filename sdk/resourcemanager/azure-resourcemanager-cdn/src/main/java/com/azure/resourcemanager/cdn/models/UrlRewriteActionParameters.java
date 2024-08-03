@@ -6,30 +6,28 @@ package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Defines the parameters for the url rewrite action. */
+/**
+ * Defines the parameters for the url rewrite action.
+ */
 @Fluent
 public final class UrlRewriteActionParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(UrlRewriteActionParameters.class);
-
     /*
-     * The @odata.type property.
+     * The typeName property.
      */
-    @JsonProperty(value = "@odata.type", required = true)
-    private String odataType;
+    @JsonProperty(value = "typeName", required = true)
+    private String typeName = "DeliveryRuleUrlRewriteActionParameters";
 
     /*
-     * define a request URI pattern that identifies the type of requests that
-     * may be rewritten. If value is blank, all strings are matched.
+     * define a request URI pattern that identifies the type of requests that may be rewritten. If value is blank, all
+     * strings are matched.
      */
     @JsonProperty(value = "sourcePattern", required = true)
     private String sourcePattern;
 
     /*
-     * Define the relative URL to which the above requests will be rewritten
-     * by.
+     * Define the relative URL to which the above requests will be rewritten by.
      */
     @JsonProperty(value = "destination", required = true)
     private String destination;
@@ -40,35 +38,36 @@ public final class UrlRewriteActionParameters {
     @JsonProperty(value = "preserveUnmatchedPath")
     private Boolean preserveUnmatchedPath;
 
-    /** Creates an instance of UrlRewriteActionParameters class. */
-    public UrlRewriteActionParameters() {
-        odataType = "#Microsoft.Azure.Cdn.Models.DeliveryRuleUrlRewriteActionParameters";
-    }
-
     /**
-     * Get the odataType property: The @odata.type property.
-     *
-     * @return the odataType value.
+     * Creates an instance of UrlRewriteActionParameters class.
      */
-    public String odataType() {
-        return this.odataType;
+    public UrlRewriteActionParameters() {
     }
 
     /**
-     * Set the odataType property: The @odata.type property.
-     *
-     * @param odataType the odataType value to set.
+     * Get the typeName property: The typeName property.
+     * 
+     * @return the typeName value.
+     */
+    public String typeName() {
+        return this.typeName;
+    }
+
+    /**
+     * Set the typeName property: The typeName property.
+     * 
+     * @param typeName the typeName value to set.
      * @return the UrlRewriteActionParameters object itself.
      */
-    public UrlRewriteActionParameters withOdataType(String odataType) {
-        this.odataType = odataType;
+    public UrlRewriteActionParameters withTypeName(String typeName) {
+        this.typeName = typeName;
         return this;
     }
 
     /**
      * Get the sourcePattern property: define a request URI pattern that identifies the type of requests that may be
      * rewritten. If value is blank, all strings are matched.
-     *
+     * 
      * @return the sourcePattern value.
      */
     public String sourcePattern() {
@@ -78,7 +77,7 @@ public final class UrlRewriteActionParameters {
     /**
      * Set the sourcePattern property: define a request URI pattern that identifies the type of requests that may be
      * rewritten. If value is blank, all strings are matched.
-     *
+     * 
      * @param sourcePattern the sourcePattern value to set.
      * @return the UrlRewriteActionParameters object itself.
      */
@@ -89,7 +88,7 @@ public final class UrlRewriteActionParameters {
 
     /**
      * Get the destination property: Define the relative URL to which the above requests will be rewritten by.
-     *
+     * 
      * @return the destination value.
      */
     public String destination() {
@@ -98,7 +97,7 @@ public final class UrlRewriteActionParameters {
 
     /**
      * Set the destination property: Define the relative URL to which the above requests will be rewritten by.
-     *
+     * 
      * @param destination the destination value to set.
      * @return the UrlRewriteActionParameters object itself.
      */
@@ -109,7 +108,7 @@ public final class UrlRewriteActionParameters {
 
     /**
      * Get the preserveUnmatchedPath property: Whether to preserve unmatched path. Default value is true.
-     *
+     * 
      * @return the preserveUnmatchedPath value.
      */
     public Boolean preserveUnmatchedPath() {
@@ -118,7 +117,7 @@ public final class UrlRewriteActionParameters {
 
     /**
      * Set the preserveUnmatchedPath property: Whether to preserve unmatched path. Default value is true.
-     *
+     * 
      * @param preserveUnmatchedPath the preserveUnmatchedPath value to set.
      * @return the UrlRewriteActionParameters object itself.
      */
@@ -129,21 +128,19 @@ public final class UrlRewriteActionParameters {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (sourcePattern() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property sourcePattern in model UrlRewriteActionParameters"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property sourcePattern in model UrlRewriteActionParameters"));
         }
         if (destination() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property destination in model UrlRewriteActionParameters"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property destination in model UrlRewriteActionParameters"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(UrlRewriteActionParameters.class);
 }

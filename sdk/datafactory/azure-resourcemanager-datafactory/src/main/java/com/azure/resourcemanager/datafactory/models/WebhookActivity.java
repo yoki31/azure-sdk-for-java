@@ -7,18 +7,26 @@ package com.azure.resourcemanager.datafactory.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.fluent.models.WebhookActivityTypeProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.List;
+import java.util.Map;
 
-/** WebHook activity. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * WebHook activity.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = WebhookActivity.class, visible = true)
 @JsonTypeName("WebHook")
 @Fluent
 public final class WebhookActivity extends ControlActivity {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(WebhookActivity.class);
+    /*
+     * Type of activity.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "WebHook";
 
     /*
      * WebHook activity properties.
@@ -26,37 +34,105 @@ public final class WebhookActivity extends ControlActivity {
     @JsonProperty(value = "typeProperties", required = true)
     private WebhookActivityTypeProperties innerTypeProperties = new WebhookActivityTypeProperties();
 
+    /*
+     * Activity policy.
+     */
+    @JsonProperty(value = "policy")
+    private SecureInputOutputPolicy policy;
+
+    /**
+     * Creates an instance of WebhookActivity class.
+     */
+    public WebhookActivity() {
+    }
+
+    /**
+     * Get the type property: Type of activity.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
     /**
      * Get the innerTypeProperties property: WebHook activity properties.
-     *
+     * 
      * @return the innerTypeProperties value.
      */
     private WebhookActivityTypeProperties innerTypeProperties() {
         return this.innerTypeProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * Get the policy property: Activity policy.
+     * 
+     * @return the policy value.
+     */
+    public SecureInputOutputPolicy policy() {
+        return this.policy;
+    }
+
+    /**
+     * Set the policy property: Activity policy.
+     * 
+     * @param policy the policy value to set.
+     * @return the WebhookActivity object itself.
+     */
+    public WebhookActivity withPolicy(SecureInputOutputPolicy policy) {
+        this.policy = policy;
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public WebhookActivity withName(String name) {
         super.withName(name);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public WebhookActivity withDescription(String description) {
         super.withDescription(description);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public WebhookActivity withState(ActivityState state) {
+        super.withState(state);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public WebhookActivity withOnInactiveMarkAs(ActivityOnInactiveMarkAs onInactiveMarkAs) {
+        super.withOnInactiveMarkAs(onInactiveMarkAs);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public WebhookActivity withDependsOn(List<ActivityDependency> dependsOn) {
         super.withDependsOn(dependsOn);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public WebhookActivity withUserProperties(List<UserProperty> userProperties) {
         super.withUserProperties(userProperties);
@@ -65,7 +141,7 @@ public final class WebhookActivity extends ControlActivity {
 
     /**
      * Get the method property: Rest API method for target endpoint.
-     *
+     * 
      * @return the method value.
      */
     public WebhookActivityMethod method() {
@@ -74,7 +150,7 @@ public final class WebhookActivity extends ControlActivity {
 
     /**
      * Set the method property: Rest API method for target endpoint.
-     *
+     * 
      * @param method the method value to set.
      * @return the WebhookActivity object itself.
      */
@@ -89,7 +165,7 @@ public final class WebhookActivity extends ControlActivity {
     /**
      * Get the url property: WebHook activity target endpoint and path. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @return the url value.
      */
     public Object url() {
@@ -99,7 +175,7 @@ public final class WebhookActivity extends ControlActivity {
     /**
      * Set the url property: WebHook activity target endpoint and path. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @param url the url value to set.
      * @return the WebhookActivity object itself.
      */
@@ -115,7 +191,7 @@ public final class WebhookActivity extends ControlActivity {
      * Get the timeout property: The timeout within which the webhook should be called back. If there is no value
      * specified, it defaults to 10 minutes. Type: string. Pattern:
      * ((\d+)\.)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
-     *
+     * 
      * @return the timeout value.
      */
     public String timeout() {
@@ -126,7 +202,7 @@ public final class WebhookActivity extends ControlActivity {
      * Set the timeout property: The timeout within which the webhook should be called back. If there is no value
      * specified, it defaults to 10 minutes. Type: string. Pattern:
      * ((\d+)\.)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9])).
-     *
+     * 
      * @param timeout the timeout value to set.
      * @return the WebhookActivity object itself.
      */
@@ -142,10 +218,10 @@ public final class WebhookActivity extends ControlActivity {
      * Get the headers property: Represents the headers that will be sent to the request. For example, to set the
      * language and type on a request: "headers" : { "Accept-Language": "en-us", "Content-Type": "application/json" }.
      * Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the headers value.
      */
-    public Object headers() {
+    public Map<String, Object> headers() {
         return this.innerTypeProperties() == null ? null : this.innerTypeProperties().headers();
     }
 
@@ -153,11 +229,11 @@ public final class WebhookActivity extends ControlActivity {
      * Set the headers property: Represents the headers that will be sent to the request. For example, to set the
      * language and type on a request: "headers" : { "Accept-Language": "en-us", "Content-Type": "application/json" }.
      * Type: string (or Expression with resultType string).
-     *
+     * 
      * @param headers the headers value to set.
      * @return the WebhookActivity object itself.
      */
-    public WebhookActivity withHeaders(Object headers) {
+    public WebhookActivity withHeaders(Map<String, Object> headers) {
         if (this.innerTypeProperties() == null) {
             this.innerTypeProperties = new WebhookActivityTypeProperties();
         }
@@ -168,7 +244,7 @@ public final class WebhookActivity extends ControlActivity {
     /**
      * Get the body property: Represents the payload that will be sent to the endpoint. Required for POST/PUT method,
      * not allowed for GET method Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the body value.
      */
     public Object body() {
@@ -178,7 +254,7 @@ public final class WebhookActivity extends ControlActivity {
     /**
      * Set the body property: Represents the payload that will be sent to the endpoint. Required for POST/PUT method,
      * not allowed for GET method Type: string (or Expression with resultType string).
-     *
+     * 
      * @param body the body value to set.
      * @return the WebhookActivity object itself.
      */
@@ -192,7 +268,7 @@ public final class WebhookActivity extends ControlActivity {
 
     /**
      * Get the authentication property: Authentication method used for calling the endpoint.
-     *
+     * 
      * @return the authentication value.
      */
     public WebActivityAuthentication authentication() {
@@ -201,7 +277,7 @@ public final class WebhookActivity extends ControlActivity {
 
     /**
      * Set the authentication property: Authentication method used for calling the endpoint.
-     *
+     * 
      * @param authentication the authentication value to set.
      * @return the WebhookActivity object itself.
      */
@@ -217,7 +293,7 @@ public final class WebhookActivity extends ControlActivity {
      * Get the reportStatusOnCallBack property: When set to true, statusCode, output and error in callback request body
      * will be consumed by activity. The activity can be marked as failed by setting statusCode &gt;= 400 in callback
      * request. Default is false. Type: boolean (or Expression with resultType boolean).
-     *
+     * 
      * @return the reportStatusOnCallBack value.
      */
     public Object reportStatusOnCallBack() {
@@ -228,7 +304,7 @@ public final class WebhookActivity extends ControlActivity {
      * Set the reportStatusOnCallBack property: When set to true, statusCode, output and error in callback request body
      * will be consumed by activity. The activity can be marked as failed by setting statusCode &gt;= 400 in callback
      * request. Default is false. Type: boolean (or Expression with resultType boolean).
-     *
+     * 
      * @param reportStatusOnCallBack the reportStatusOnCallBack value to set.
      * @return the WebhookActivity object itself.
      */
@@ -242,19 +318,23 @@ public final class WebhookActivity extends ControlActivity {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
         if (innerTypeProperties() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property innerTypeProperties in model WebhookActivity"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property innerTypeProperties in model WebhookActivity"));
         } else {
             innerTypeProperties().validate();
         }
+        if (policy() != null) {
+            policy().validate();
+        }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(WebhookActivity.class);
 }

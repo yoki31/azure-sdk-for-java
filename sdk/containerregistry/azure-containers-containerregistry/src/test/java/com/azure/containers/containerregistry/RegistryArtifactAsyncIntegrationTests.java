@@ -10,8 +10,11 @@ import com.azure.core.exception.ResourceNotFoundException;
 import com.azure.core.http.HttpClient;
 import com.azure.core.http.rest.Response;
 import com.azure.core.test.TestMode;
+import com.azure.core.test.http.AssertingHttpClientBuilder;
 import com.azure.core.util.Context;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import reactor.core.publisher.Mono;
@@ -35,41 +38,57 @@ import static com.azure.containers.containerregistry.TestUtils.V1_TAG_NAME;
 import static com.azure.containers.containerregistry.TestUtils.V2_TAG_NAME;
 import static com.azure.containers.containerregistry.TestUtils.V3_TAG_NAME;
 import static com.azure.containers.containerregistry.TestUtils.V4_TAG_NAME;
+import static com.azure.containers.containerregistry.TestUtils.importImage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Execution(ExecutionMode.SAME_THREAD)
 public class RegistryArtifactAsyncIntegrationTests extends ContainerRegistryClientsTestBase {
     private RegistryArtifactAsync asyncClient;
     private RegistryArtifact client;
 
     @BeforeEach
-    void beforeEach() {
-        TestUtils.importImage(
+    void beforeEach() throws InterruptedException {
+        importImage(
             getTestMode(),
+            REGISTRY_NAME,
             HELLO_WORLD_REPOSITORY_NAME,
             Arrays.asList(
                 LATEST_TAG_NAME,
                 V1_TAG_NAME,
                 V2_TAG_NAME,
                 V3_TAG_NAME,
-                V4_TAG_NAME));
+                V4_TAG_NAME),
+            REGISTRY_ENDPOINT);
+    }
+
+    private HttpClient buildAsyncAssertingClient(HttpClient httpClient) {
+        return new AssertingHttpClientBuilder(httpClient)
+            .assertAsync()
+            .build();
+    }
+
+    private HttpClient buildSyncAssertingClient(HttpClient httpClient) {
+        return new AssertingHttpClientBuilder(httpClient)
+            .assertSync()
+            .build();
     }
 
     private String getDigest(HttpClient httpClient) {
-        return getContainerRegistryBuilder(httpClient)
+        return getContainerRegistryBuilder(buildSyncAssertingClient(interceptorManager.isPlaybackMode() ? interceptorManager.getPlaybackClient() : httpClient))
             .buildClient()
             .getArtifact(HELLO_WORLD_REPOSITORY_NAME, LATEST_TAG_NAME).getManifestProperties().getDigest();
     }
 
     private RegistryArtifactAsync getRegistryArtifactAsyncClient(HttpClient httpClient, String digest) {
-        return getContainerRegistryBuilder(httpClient)
+        return getContainerRegistryBuilder(buildAsyncAssertingClient(interceptorManager.isPlaybackMode() ? interceptorManager.getPlaybackClient() : httpClient))
             .buildAsyncClient()
             .getArtifact(HELLO_WORLD_REPOSITORY_NAME, digest);
     }
 
     private RegistryArtifact getRegistryArtifactClient(HttpClient httpClient, String digest) {
-        return getContainerRegistryBuilder(httpClient)
+        return getContainerRegistryBuilder(buildSyncAssertingClient(interceptorManager.isPlaybackMode() ? interceptorManager.getPlaybackClient() : httpClient))
             .buildClient()
             .getArtifact(HELLO_WORLD_REPOSITORY_NAME, digest);
     }

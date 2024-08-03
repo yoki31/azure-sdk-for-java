@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Properties specific to this dataset type. */
+/**
+ * Properties specific to this dataset type.
+ */
 @Fluent
 public final class GenericDatasetTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GenericDatasetTypeProperties.class);
-
     /*
      * The table name. Type: string (or Expression with resultType string).
      */
@@ -21,8 +19,14 @@ public final class GenericDatasetTypeProperties {
     private Object tableName;
 
     /**
+     * Creates an instance of GenericDatasetTypeProperties class.
+     */
+    public GenericDatasetTypeProperties() {
+    }
+
+    /**
      * Get the tableName property: The table name. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the tableName value.
      */
     public Object tableName() {
@@ -31,7 +35,7 @@ public final class GenericDatasetTypeProperties {
 
     /**
      * Set the tableName property: The table name. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param tableName the tableName value to set.
      * @return the GenericDatasetTypeProperties object itself.
      */
@@ -42,7 +46,7 @@ public final class GenericDatasetTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

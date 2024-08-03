@@ -14,6 +14,7 @@ import com.azure.core.amqp.models.AmqpMessageProperties;
 import com.azure.core.util.BinaryData;
 import com.azure.core.util.Context;
 import com.azure.core.util.logging.ClientLogger;
+import com.azure.messaging.servicebus.implementation.instrumentation.ContextAccessor;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -50,11 +51,15 @@ public class ServiceBusMessage {
     private static final int MAX_MESSAGE_ID_LENGTH = 128;
     private static final int MAX_PARTITION_KEY_LENGTH = 128;
     private static final int MAX_SESSION_ID_LENGTH = 128;
+    private static final ClientLogger LOGGER = new ClientLogger(ServiceBusMessage.class);
 
     private final AmqpAnnotatedMessage amqpAnnotatedMessage;
-    private final ClientLogger logger = new ClientLogger(ServiceBusMessage.class);
 
     private Context context;
+
+    static {
+        ContextAccessor.setSendMessageContextAccessor(message -> message.getContext());
+    }
 
     /**
      * Creates a {@link ServiceBusMessage} with given byte array body.
@@ -138,8 +143,8 @@ public class ServiceBusMessage {
                     .getValue());
                 break;
             default:
-                throw logger.logExceptionAsError(new IllegalStateException("Body type not valid "
-                    + bodyType.toString()));
+                throw LOGGER.logExceptionAsError(new IllegalStateException("Body type not valid "
+                    + bodyType));
         }
         this.amqpAnnotatedMessage = new AmqpAnnotatedMessage(amqpMessageBody);
 
@@ -174,12 +179,13 @@ public class ServiceBusMessage {
         final Map<String, Object> newAnnotations = this.amqpAnnotatedMessage.getMessageAnnotations();
 
         for (Map.Entry<String, Object> entry : receivedAnnotations.entrySet()) {
-            if (AmqpMessageConstant.fromString(entry.getKey()) == LOCKED_UNTIL_KEY_ANNOTATION_NAME
-                || AmqpMessageConstant.fromString(entry.getKey()) == SEQUENCE_NUMBER_ANNOTATION_NAME
-                || AmqpMessageConstant.fromString(entry.getKey()) == DEAD_LETTER_SOURCE_KEY_ANNOTATION_NAME
-                || AmqpMessageConstant.fromString(entry.getKey()) == ENQUEUED_SEQUENCE_NUMBER_ANNOTATION_NAME
-                || AmqpMessageConstant.fromString(entry.getKey()) == ENQUEUED_TIME_UTC_ANNOTATION_NAME) {
-
+            AmqpMessageConstant key = AmqpMessageConstant.fromString(entry.getKey());
+            if (key == LOCKED_UNTIL_KEY_ANNOTATION_NAME
+                || key == SEQUENCE_NUMBER_ANNOTATION_NAME
+                || key == DEAD_LETTER_SOURCE_KEY_ANNOTATION_NAME
+                || key == ENQUEUED_SEQUENCE_NUMBER_ANNOTATION_NAME
+                || key == ENQUEUED_TIME_UTC_ANNOTATION_NAME
+                || key == SCHEDULED_ENQUEUE_UTC_TIME_NAME) {
                 continue;
             }
             newAnnotations.put(entry.getKey(), entry.getValue());
@@ -250,11 +256,11 @@ public class ServiceBusMessage {
                 return BinaryData.fromBytes(amqpAnnotatedMessage.getBody().getFirstData());
             case SEQUENCE:
             case VALUE:
-                throw logger.logExceptionAsError(new IllegalStateException("Message  body type is not DATA, instead "
-                    + "it is: " + type.toString()));
+                throw LOGGER.logExceptionAsError(new IllegalStateException("Message body type is not DATA, instead "
+                    + "it is: " + type));
             default:
-                throw logger.logExceptionAsError(new IllegalArgumentException("Unknown AmqpBodyType: "
-                    + type.toString()));
+                throw LOGGER.logExceptionAsError(new IllegalArgumentException("Unknown AmqpBodyType: "
+                    + type));
         }
     }
 
@@ -561,9 +567,15 @@ public class ServiceBusMessage {
      */
     public OffsetDateTime getScheduledEnqueueTime() {
         Object value = amqpAnnotatedMessage.getMessageAnnotations().get(SCHEDULED_ENQUEUE_UTC_TIME_NAME.getValue());
-        return value != null
-            ? ((OffsetDateTime) value).toInstant().atOffset(ZoneOffset.UTC)
-            : null;
+        if (value instanceof OffsetDateTime) {
+            return ((OffsetDateTime) value).toInstant().atOffset(ZoneOffset.UTC);
+        } else if (value != null) {
+            LOGGER.atWarning()
+                .addKeyValue("expectedType", OffsetDateTime.class.getName())
+                .addKeyValue("actualType", value.getClass().getName())
+                .log("Unexpected type for scheduled enqueue time.");
+        }
+        return null;
     }
 
     /**
@@ -679,7 +691,7 @@ public class ServiceBusMessage {
     private void checkIdLength(String fieldName, String value, int maxLength) {
         if (value != null && value.length() > maxLength) {
             final String message = String.format("%s cannot be longer than %d characters.", fieldName, maxLength);
-            throw logger.logExceptionAsError(new IllegalArgumentException(message));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(message));
         }
     }
 
@@ -697,7 +709,7 @@ public class ServiceBusMessage {
                 "sessionId:%s cannot be set to a different value than partitionKey:%s.",
                 proposedSessionId,
                 this.getPartitionKey());
-            throw logger.logExceptionAsError(new IllegalArgumentException(message));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(message));
         }
     }
 
@@ -716,7 +728,7 @@ public class ServiceBusMessage {
                 proposedPartitionKey,
                 this.getSessionId());
 
-            throw logger.logExceptionAsError(new IllegalArgumentException(message));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(message));
         }
     }
 

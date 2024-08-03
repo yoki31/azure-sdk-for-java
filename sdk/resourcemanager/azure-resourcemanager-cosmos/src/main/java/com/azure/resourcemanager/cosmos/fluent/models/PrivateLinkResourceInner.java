@@ -4,18 +4,16 @@
 
 package com.azure.resourcemanager.cosmos.fluent.models;
 
-import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.core.annotation.Immutable;
 import com.azure.resourcemanager.cosmos.models.ArmProxyResource;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** A private link resource. */
-@Fluent
+/**
+ * A private link resource.
+ */
+@Immutable
 public final class PrivateLinkResourceInner extends ArmProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PrivateLinkResourceInner.class);
-
     /*
      * Resource properties.
      */
@@ -23,8 +21,14 @@ public final class PrivateLinkResourceInner extends ArmProxyResource {
     private PrivateLinkResourceProperties innerProperties;
 
     /**
+     * Creates an instance of PrivateLinkResourceInner class.
+     */
+    public PrivateLinkResourceInner() {
+    }
+
+    /**
      * Get the innerProperties property: Resource properties.
-     *
+     * 
      * @return the innerProperties value.
      */
     private PrivateLinkResourceProperties innerProperties() {
@@ -33,7 +37,7 @@ public final class PrivateLinkResourceInner extends ArmProxyResource {
 
     /**
      * Get the groupId property: The private link resource group id.
-     *
+     * 
      * @return the groupId value.
      */
     public String groupId() {
@@ -42,7 +46,7 @@ public final class PrivateLinkResourceInner extends ArmProxyResource {
 
     /**
      * Get the requiredMembers property: The private link resource required member names.
-     *
+     * 
      * @return the requiredMembers value.
      */
     public List<String> requiredMembers() {
@@ -51,7 +55,7 @@ public final class PrivateLinkResourceInner extends ArmProxyResource {
 
     /**
      * Get the requiredZoneNames property: The private link resource required zone names.
-     *
+     * 
      * @return the requiredZoneNames value.
      */
     public List<String> requiredZoneNames() {
@@ -60,7 +64,7 @@ public final class PrivateLinkResourceInner extends ArmProxyResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

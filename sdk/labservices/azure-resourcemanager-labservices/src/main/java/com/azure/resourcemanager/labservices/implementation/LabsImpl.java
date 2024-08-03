@@ -11,43 +11,43 @@ import com.azure.core.util.Context;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.labservices.fluent.LabsClient;
 import com.azure.resourcemanager.labservices.fluent.models.LabInner;
-import com.azure.resourcemanager.labservices.models.AddUsersPayload;
 import com.azure.resourcemanager.labservices.models.Lab;
 import com.azure.resourcemanager.labservices.models.Labs;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class LabsImpl implements Labs {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(LabsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(LabsImpl.class);
 
     private final LabsClient innerClient;
 
-    private final com.azure.resourcemanager.labservices.ManagedLabsManager serviceManager;
+    private final com.azure.resourcemanager.labservices.LabServicesManager serviceManager;
 
-    public LabsImpl(LabsClient innerClient, com.azure.resourcemanager.labservices.ManagedLabsManager serviceManager) {
+    public LabsImpl(LabsClient innerClient, com.azure.resourcemanager.labservices.LabServicesManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
     }
 
-    public PagedIterable<Lab> list(String resourceGroupName, String labAccountName) {
-        PagedIterable<LabInner> inner = this.serviceClient().list(resourceGroupName, labAccountName);
+    public PagedIterable<Lab> list() {
+        PagedIterable<LabInner> inner = this.serviceClient().list();
         return Utils.mapPage(inner, inner1 -> new LabImpl(inner1, this.manager()));
     }
 
-    public PagedIterable<Lab> list(
-        String resourceGroupName,
-        String labAccountName,
-        String expand,
-        String filter,
-        Integer top,
-        String orderby,
-        Context context) {
-        PagedIterable<LabInner> inner =
-            this.serviceClient().list(resourceGroupName, labAccountName, expand, filter, top, orderby, context);
+    public PagedIterable<Lab> list(String filter, Context context) {
+        PagedIterable<LabInner> inner = this.serviceClient().list(filter, context);
         return Utils.mapPage(inner, inner1 -> new LabImpl(inner1, this.manager()));
     }
 
-    public Lab get(String resourceGroupName, String labAccountName, String labName) {
-        LabInner inner = this.serviceClient().get(resourceGroupName, labAccountName, labName);
+    public PagedIterable<Lab> listByResourceGroup(String resourceGroupName) {
+        PagedIterable<LabInner> inner = this.serviceClient().listByResourceGroup(resourceGroupName);
+        return Utils.mapPage(inner, inner1 -> new LabImpl(inner1, this.manager()));
+    }
+
+    public PagedIterable<Lab> listByResourceGroup(String resourceGroupName, Context context) {
+        PagedIterable<LabInner> inner = this.serviceClient().listByResourceGroup(resourceGroupName, context);
+        return Utils.mapPage(inner, inner1 -> new LabImpl(inner1, this.manager()));
+    }
+
+    public Lab getByResourceGroup(String resourceGroupName, String labName) {
+        LabInner inner = this.serviceClient().getByResourceGroup(resourceGroupName, labName);
         if (inner != null) {
             return new LabImpl(inner, this.manager());
         } else {
@@ -55,10 +55,9 @@ public final class LabsImpl implements Labs {
         }
     }
 
-    public Response<Lab> getWithResponse(
-        String resourceGroupName, String labAccountName, String labName, String expand, Context context) {
+    public Response<Lab> getByResourceGroupWithResponse(String resourceGroupName, String labName, Context context) {
         Response<LabInner> inner =
-            this.serviceClient().getWithResponse(resourceGroupName, labAccountName, labName, expand, context);
+            this.serviceClient().getByResourceGroupWithResponse(resourceGroupName, labName, context);
         if (inner != null) {
             return new SimpleResponse<>(
                 inner.getRequest(),
@@ -70,149 +69,111 @@ public final class LabsImpl implements Labs {
         }
     }
 
-    public void delete(String resourceGroupName, String labAccountName, String labName) {
-        this.serviceClient().delete(resourceGroupName, labAccountName, labName);
+    public void deleteByResourceGroup(String resourceGroupName, String labName) {
+        this.serviceClient().delete(resourceGroupName, labName);
     }
 
-    public void delete(String resourceGroupName, String labAccountName, String labName, Context context) {
-        this.serviceClient().delete(resourceGroupName, labAccountName, labName, context);
+    public void delete(String resourceGroupName, String labName, Context context) {
+        this.serviceClient().delete(resourceGroupName, labName, context);
     }
 
-    public void addUsers(
-        String resourceGroupName, String labAccountName, String labName, AddUsersPayload addUsersPayload) {
-        this.serviceClient().addUsers(resourceGroupName, labAccountName, labName, addUsersPayload);
+    public void publish(String resourceGroupName, String labName) {
+        this.serviceClient().publish(resourceGroupName, labName);
     }
 
-    public Response<Void> addUsersWithResponse(
-        String resourceGroupName,
-        String labAccountName,
-        String labName,
-        AddUsersPayload addUsersPayload,
-        Context context) {
-        return this
-            .serviceClient()
-            .addUsersWithResponse(resourceGroupName, labAccountName, labName, addUsersPayload, context);
+    public void publish(String resourceGroupName, String labName, Context context) {
+        this.serviceClient().publish(resourceGroupName, labName, context);
     }
 
-    public void register(String resourceGroupName, String labAccountName, String labName) {
-        this.serviceClient().register(resourceGroupName, labAccountName, labName);
+    public void syncGroup(String resourceGroupName, String labName) {
+        this.serviceClient().syncGroup(resourceGroupName, labName);
     }
 
-    public Response<Void> registerWithResponse(
-        String resourceGroupName, String labAccountName, String labName, Context context) {
-        return this.serviceClient().registerWithResponse(resourceGroupName, labAccountName, labName, context);
+    public void syncGroup(String resourceGroupName, String labName, Context context) {
+        this.serviceClient().syncGroup(resourceGroupName, labName, context);
     }
 
     public Lab getById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
                             .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
-        String labAccountName = Utils.getValueFromIdByName(id, "labaccounts");
-        if (labAccountName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'labaccounts'.", id)));
-        }
         String labName = Utils.getValueFromIdByName(id, "labs");
         if (labName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'labs'.", id)));
         }
-        String localExpand = null;
-        return this.getWithResponse(resourceGroupName, labAccountName, labName, localExpand, Context.NONE).getValue();
+        return this.getByResourceGroupWithResponse(resourceGroupName, labName, Context.NONE).getValue();
     }
 
-    public Response<Lab> getByIdWithResponse(String id, String expand, Context context) {
+    public Response<Lab> getByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
                             .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
-        String labAccountName = Utils.getValueFromIdByName(id, "labaccounts");
-        if (labAccountName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'labaccounts'.", id)));
-        }
         String labName = Utils.getValueFromIdByName(id, "labs");
         if (labName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'labs'.", id)));
         }
-        return this.getWithResponse(resourceGroupName, labAccountName, labName, expand, context);
+        return this.getByResourceGroupWithResponse(resourceGroupName, labName, context);
     }
 
     public void deleteById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
                             .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
-        String labAccountName = Utils.getValueFromIdByName(id, "labaccounts");
-        if (labAccountName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'labaccounts'.", id)));
-        }
         String labName = Utils.getValueFromIdByName(id, "labs");
         if (labName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'labs'.", id)));
         }
-        this.delete(resourceGroupName, labAccountName, labName, Context.NONE);
+        this.delete(resourceGroupName, labName, Context.NONE);
     }
 
     public void deleteByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
                             .format("The resource ID '%s' is not valid. Missing path segment 'resourceGroups'.", id)));
         }
-        String labAccountName = Utils.getValueFromIdByName(id, "labaccounts");
-        if (labAccountName == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        String.format("The resource ID '%s' is not valid. Missing path segment 'labaccounts'.", id)));
-        }
         String labName = Utils.getValueFromIdByName(id, "labs");
         if (labName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'labs'.", id)));
         }
-        this.delete(resourceGroupName, labAccountName, labName, context);
+        this.delete(resourceGroupName, labName, context);
     }
 
     private LabsClient serviceClient() {
         return this.innerClient;
     }
 
-    private com.azure.resourcemanager.labservices.ManagedLabsManager manager() {
+    private com.azure.resourcemanager.labservices.LabServicesManager manager() {
         return this.serviceManager;
     }
 

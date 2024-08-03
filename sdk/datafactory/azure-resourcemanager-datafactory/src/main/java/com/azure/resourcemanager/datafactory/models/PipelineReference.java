@@ -6,14 +6,13 @@ package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Pipeline reference type. */
+/**
+ * Pipeline reference type.
+ */
 @Fluent
 public final class PipelineReference {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PipelineReference.class);
-
     /*
      * Pipeline reference type.
      */
@@ -32,14 +31,15 @@ public final class PipelineReference {
     @JsonProperty(value = "name")
     private String name;
 
-    /** Creates an instance of PipelineReference class. */
+    /**
+     * Creates an instance of PipelineReference class.
+     */
     public PipelineReference() {
-        type = "PipelineReference";
     }
 
     /**
      * Get the type property: Pipeline reference type.
-     *
+     * 
      * @return the type value.
      */
     public String type() {
@@ -48,7 +48,7 @@ public final class PipelineReference {
 
     /**
      * Set the type property: Pipeline reference type.
-     *
+     * 
      * @param type the type value to set.
      * @return the PipelineReference object itself.
      */
@@ -59,7 +59,7 @@ public final class PipelineReference {
 
     /**
      * Get the referenceName property: Reference pipeline name.
-     *
+     * 
      * @return the referenceName value.
      */
     public String referenceName() {
@@ -68,7 +68,7 @@ public final class PipelineReference {
 
     /**
      * Set the referenceName property: Reference pipeline name.
-     *
+     * 
      * @param referenceName the referenceName value to set.
      * @return the PipelineReference object itself.
      */
@@ -79,7 +79,7 @@ public final class PipelineReference {
 
     /**
      * Get the name property: Reference name.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -88,7 +88,7 @@ public final class PipelineReference {
 
     /**
      * Set the name property: Reference name.
-     *
+     * 
      * @param name the name value to set.
      * @return the PipelineReference object itself.
      */
@@ -99,14 +99,16 @@ public final class PipelineReference {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (referenceName() == null) {
-            throw logger
-                .logExceptionAsError(
+            throw LOGGER.atError()
+                .log(
                     new IllegalArgumentException("Missing required property referenceName in model PipelineReference"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(PipelineReference.class);
 }

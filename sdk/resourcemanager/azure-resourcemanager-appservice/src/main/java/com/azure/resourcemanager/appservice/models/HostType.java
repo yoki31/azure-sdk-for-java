@@ -7,15 +7,23 @@ package com.azure.resourcemanager.appservice.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** Defines values for HostType. */
+/**
+ * Indicates whether the hostname is a standard or repository hostname.
+ */
 public enum HostType {
-    /** Enum value Standard. */
+    /**
+     * Enum value Standard.
+     */
     STANDARD("Standard"),
 
-    /** Enum value Repository. */
+    /**
+     * Enum value Repository.
+     */
     REPOSITORY("Repository");
 
-    /** The actual serialized value for a HostType instance. */
+    /**
+     * The actual serialized value for a HostType instance.
+     */
     private final String value;
 
     HostType(String value) {
@@ -24,12 +32,15 @@ public enum HostType {
 
     /**
      * Parses a serialized value to a HostType instance.
-     *
+     * 
      * @param value the serialized value to parse.
      * @return the parsed HostType object, or null if unable to parse.
      */
     @JsonCreator
     public static HostType fromString(String value) {
+        if (value == null) {
+            return null;
+        }
         HostType[] items = HostType.values();
         for (HostType item : items) {
             if (item.toString().equalsIgnoreCase(value)) {
@@ -39,6 +50,9 @@ public enum HostType {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @JsonValue
     @Override
     public String toString() {

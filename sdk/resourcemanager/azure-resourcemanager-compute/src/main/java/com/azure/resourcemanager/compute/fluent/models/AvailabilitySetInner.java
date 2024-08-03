@@ -7,10 +7,8 @@ package com.azure.resourcemanager.compute.fluent.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.Resource;
 import com.azure.core.management.SubResource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.compute.models.InstanceViewStatus;
 import com.azure.resourcemanager.compute.models.Sku;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;
@@ -19,15 +17,13 @@ import java.util.Map;
  * Specifies information about the availability set that the virtual machine should be assigned to. Virtual machines
  * specified in the same availability set are allocated to different nodes to maximize availability. For more
  * information about availability sets, see [Availability sets
- * overview](https://docs.microsoft.com/azure/virtual-machines/availability-set-overview). &lt;br&gt;&lt;br&gt; For more
- * information on Azure planned maintenance, see [Maintenance and updates for Virtual Machines in
- * Azure](https://docs.microsoft.com/azure/virtual-machines/maintenance-and-updates) &lt;br&gt;&lt;br&gt; Currently, a
- * VM can only be added to availability set at creation time. An existing VM cannot be added to an availability set.
+ * overview](https://docs.microsoft.com/azure/virtual-machines/availability-set-overview). For more information on Azure
+ * planned maintenance, see [Maintenance and updates for Virtual Machines in
+ * Azure](https://docs.microsoft.com/azure/virtual-machines/maintenance-and-updates). Currently, a VM can only be added
+ * to an availability set at creation time. An existing VM cannot be added to an availability set.
  */
 @Fluent
 public final class AvailabilitySetInner extends Resource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AvailabilitySetInner.class);
-
     /*
      * The instance view of a resource.
      */
@@ -35,17 +31,22 @@ public final class AvailabilitySetInner extends Resource {
     private AvailabilitySetProperties innerProperties;
 
     /*
-     * Sku of the availability set, only name is required to be set. See
-     * AvailabilitySetSkuTypes for possible set of values. Use 'Aligned' for
-     * virtual machines with managed disks and 'Classic' for virtual machines
-     * with unmanaged disks. Default value is 'Classic'.
+     * Sku of the availability set, only name is required to be set. See AvailabilitySetSkuTypes for possible set of
+     * values. Use 'Aligned' for virtual machines with managed disks and 'Classic' for virtual machines with unmanaged
+     * disks. Default value is 'Classic'.
      */
     @JsonProperty(value = "sku")
     private Sku sku;
 
     /**
+     * Creates an instance of AvailabilitySetInner class.
+     */
+    public AvailabilitySetInner() {
+    }
+
+    /**
      * Get the innerProperties property: The instance view of a resource.
-     *
+     * 
      * @return the innerProperties value.
      */
     private AvailabilitySetProperties innerProperties() {
@@ -56,7 +57,7 @@ public final class AvailabilitySetInner extends Resource {
      * Get the sku property: Sku of the availability set, only name is required to be set. See AvailabilitySetSkuTypes
      * for possible set of values. Use 'Aligned' for virtual machines with managed disks and 'Classic' for virtual
      * machines with unmanaged disks. Default value is 'Classic'.
-     *
+     * 
      * @return the sku value.
      */
     public Sku sku() {
@@ -67,7 +68,7 @@ public final class AvailabilitySetInner extends Resource {
      * Set the sku property: Sku of the availability set, only name is required to be set. See AvailabilitySetSkuTypes
      * for possible set of values. Use 'Aligned' for virtual machines with managed disks and 'Classic' for virtual
      * machines with unmanaged disks. Default value is 'Classic'.
-     *
+     * 
      * @param sku the sku value to set.
      * @return the AvailabilitySetInner object itself.
      */
@@ -76,14 +77,18 @@ public final class AvailabilitySetInner extends Resource {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AvailabilitySetInner withLocation(String location) {
         super.withLocation(location);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AvailabilitySetInner withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -92,7 +97,7 @@ public final class AvailabilitySetInner extends Resource {
 
     /**
      * Get the platformUpdateDomainCount property: Update Domain count.
-     *
+     * 
      * @return the platformUpdateDomainCount value.
      */
     public Integer platformUpdateDomainCount() {
@@ -101,7 +106,7 @@ public final class AvailabilitySetInner extends Resource {
 
     /**
      * Set the platformUpdateDomainCount property: Update Domain count.
-     *
+     * 
      * @param platformUpdateDomainCount the platformUpdateDomainCount value to set.
      * @return the AvailabilitySetInner object itself.
      */
@@ -115,7 +120,7 @@ public final class AvailabilitySetInner extends Resource {
 
     /**
      * Get the platformFaultDomainCount property: Fault Domain count.
-     *
+     * 
      * @return the platformFaultDomainCount value.
      */
     public Integer platformFaultDomainCount() {
@@ -124,7 +129,7 @@ public final class AvailabilitySetInner extends Resource {
 
     /**
      * Set the platformFaultDomainCount property: Fault Domain count.
-     *
+     * 
      * @param platformFaultDomainCount the platformFaultDomainCount value to set.
      * @return the AvailabilitySetInner object itself.
      */
@@ -138,7 +143,7 @@ public final class AvailabilitySetInner extends Resource {
 
     /**
      * Get the virtualMachines property: A list of references to all virtual machines in the availability set.
-     *
+     * 
      * @return the virtualMachines value.
      */
     public List<SubResource> virtualMachines() {
@@ -147,7 +152,7 @@ public final class AvailabilitySetInner extends Resource {
 
     /**
      * Set the virtualMachines property: A list of references to all virtual machines in the availability set.
-     *
+     * 
      * @param virtualMachines the virtualMachines value to set.
      * @return the AvailabilitySetInner object itself.
      */
@@ -161,8 +166,8 @@ public final class AvailabilitySetInner extends Resource {
 
     /**
      * Get the proximityPlacementGroup property: Specifies information about the proximity placement group that the
-     * availability set should be assigned to. &lt;br&gt;&lt;br&gt;Minimum api-version: 2018-04-01.
-     *
+     * availability set should be assigned to. Minimum api-version: 2018-04-01.
+     * 
      * @return the proximityPlacementGroup value.
      */
     public SubResource proximityPlacementGroup() {
@@ -171,8 +176,8 @@ public final class AvailabilitySetInner extends Resource {
 
     /**
      * Set the proximityPlacementGroup property: Specifies information about the proximity placement group that the
-     * availability set should be assigned to. &lt;br&gt;&lt;br&gt;Minimum api-version: 2018-04-01.
-     *
+     * availability set should be assigned to. Minimum api-version: 2018-04-01.
+     * 
      * @param proximityPlacementGroup the proximityPlacementGroup value to set.
      * @return the AvailabilitySetInner object itself.
      */
@@ -186,7 +191,7 @@ public final class AvailabilitySetInner extends Resource {
 
     /**
      * Get the statuses property: The resource status information.
-     *
+     * 
      * @return the statuses value.
      */
     public List<InstanceViewStatus> statuses() {
@@ -195,7 +200,7 @@ public final class AvailabilitySetInner extends Resource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

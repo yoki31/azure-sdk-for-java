@@ -13,10 +13,9 @@ import com.azure.resourcemanager.apimanagement.fluent.models.QuotaCounterCollect
 import com.azure.resourcemanager.apimanagement.models.QuotaByCounterKeys;
 import com.azure.resourcemanager.apimanagement.models.QuotaCounterCollection;
 import com.azure.resourcemanager.apimanagement.models.QuotaCounterValueUpdateContract;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class QuotaByCounterKeysImpl implements QuotaByCounterKeys {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(QuotaByCounterKeysImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(QuotaByCounterKeysImpl.class);
 
     private final QuotaByCounterKeysClient innerClient;
 
@@ -27,16 +26,6 @@ public final class QuotaByCounterKeysImpl implements QuotaByCounterKeys {
         com.azure.resourcemanager.apimanagement.ApiManagementManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
-    }
-
-    public QuotaCounterCollection listByService(String resourceGroupName, String serviceName, String quotaCounterKey) {
-        QuotaCounterCollectionInner inner =
-            this.serviceClient().listByService(resourceGroupName, serviceName, quotaCounterKey);
-        if (inner != null) {
-            return new QuotaCounterCollectionImpl(inner, this.manager());
-        } else {
-            return null;
-        }
     }
 
     public Response<QuotaCounterCollection> listByServiceWithResponse(
@@ -54,13 +43,9 @@ public final class QuotaByCounterKeysImpl implements QuotaByCounterKeys {
         }
     }
 
-    public QuotaCounterCollection update(
-        String resourceGroupName,
-        String serviceName,
-        String quotaCounterKey,
-        QuotaCounterValueUpdateContract parameters) {
+    public QuotaCounterCollection listByService(String resourceGroupName, String serviceName, String quotaCounterKey) {
         QuotaCounterCollectionInner inner =
-            this.serviceClient().update(resourceGroupName, serviceName, quotaCounterKey, parameters);
+            this.serviceClient().listByService(resourceGroupName, serviceName, quotaCounterKey);
         if (inner != null) {
             return new QuotaCounterCollectionImpl(inner, this.manager());
         } else {
@@ -84,6 +69,20 @@ public final class QuotaByCounterKeysImpl implements QuotaByCounterKeys {
                 inner.getStatusCode(),
                 inner.getHeaders(),
                 new QuotaCounterCollectionImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
+    }
+
+    public QuotaCounterCollection update(
+        String resourceGroupName,
+        String serviceName,
+        String quotaCounterKey,
+        QuotaCounterValueUpdateContract parameters) {
+        QuotaCounterCollectionInner inner =
+            this.serviceClient().update(resourceGroupName, serviceName, quotaCounterKey, parameters);
+        if (inner != null) {
+            return new QuotaCounterCollectionImpl(inner, this.manager());
         } else {
             return null;
         }

@@ -5,25 +5,28 @@
 package com.azure.resourcemanager.mediaservices.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.List;
+import java.util.Map;
 
 /** Describes all the settings to be used when encoding the input video with the Standard Encoder. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@odata\\.type")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@odata.type")
 @JsonTypeName("#Microsoft.Media.StandardEncoderPreset")
-@JsonFlatten
 @Fluent
-public class StandardEncoderPreset extends Preset {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(StandardEncoderPreset.class);
+public final class StandardEncoderPreset extends Preset {
+    /*
+     * Dictionary containing key value pairs for parameters not exposed in the preset itself
+     */
+    @JsonProperty(value = "experimentalOptions")
+    @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
+    private Map<String, String> experimentalOptions;
 
     /*
-     * One or more filtering operations that are applied to the input media
-     * before encoding.
+     * One or more filtering operations that are applied to the input media before encoding.
      */
     @JsonProperty(value = "filters")
     private Filters filters;
@@ -39,6 +42,32 @@ public class StandardEncoderPreset extends Preset {
      */
     @JsonProperty(value = "formats", required = true)
     private List<Format> formats;
+
+    /** Creates an instance of StandardEncoderPreset class. */
+    public StandardEncoderPreset() {
+    }
+
+    /**
+     * Get the experimentalOptions property: Dictionary containing key value pairs for parameters not exposed in the
+     * preset itself.
+     *
+     * @return the experimentalOptions value.
+     */
+    public Map<String, String> experimentalOptions() {
+        return this.experimentalOptions;
+    }
+
+    /**
+     * Set the experimentalOptions property: Dictionary containing key value pairs for parameters not exposed in the
+     * preset itself.
+     *
+     * @param experimentalOptions the experimentalOptions value to set.
+     * @return the StandardEncoderPreset object itself.
+     */
+    public StandardEncoderPreset withExperimentalOptions(Map<String, String> experimentalOptions) {
+        this.experimentalOptions = experimentalOptions;
+        return this;
+    }
 
     /**
      * Get the filters property: One or more filtering operations that are applied to the input media before encoding.
@@ -112,18 +141,20 @@ public class StandardEncoderPreset extends Preset {
             filters().validate();
         }
         if (codecs() == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException("Missing required property codecs in model StandardEncoderPreset"));
         } else {
             codecs().forEach(e -> e.validate());
         }
         if (formats() == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException("Missing required property formats in model StandardEncoderPreset"));
         } else {
             formats().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(StandardEncoderPreset.class);
 }

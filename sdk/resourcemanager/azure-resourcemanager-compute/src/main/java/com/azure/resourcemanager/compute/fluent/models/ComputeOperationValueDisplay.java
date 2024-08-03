@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.compute.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Describes the properties of a Compute Operation Value Display. */
+/**
+ * Describes the properties of a Compute Operation Value Display.
+ */
 @Immutable
 public final class ComputeOperationValueDisplay {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ComputeOperationValueDisplay.class);
-
     /*
      * The display name of the compute operation.
      */
@@ -39,8 +37,14 @@ public final class ComputeOperationValueDisplay {
     private String provider;
 
     /**
+     * Creates an instance of ComputeOperationValueDisplay class.
+     */
+    public ComputeOperationValueDisplay() {
+    }
+
+    /**
      * Get the operation property: The display name of the compute operation.
-     *
+     * 
      * @return the operation value.
      */
     public String operation() {
@@ -49,7 +53,7 @@ public final class ComputeOperationValueDisplay {
 
     /**
      * Get the resource property: The display name of the resource the operation applies to.
-     *
+     * 
      * @return the resource value.
      */
     public String resource() {
@@ -58,7 +62,7 @@ public final class ComputeOperationValueDisplay {
 
     /**
      * Get the description property: The description of the operation.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
@@ -67,7 +71,7 @@ public final class ComputeOperationValueDisplay {
 
     /**
      * Get the provider property: The resource provider for the operation.
-     *
+     * 
      * @return the provider value.
      */
     public String provider() {
@@ -76,7 +80,7 @@ public final class ComputeOperationValueDisplay {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

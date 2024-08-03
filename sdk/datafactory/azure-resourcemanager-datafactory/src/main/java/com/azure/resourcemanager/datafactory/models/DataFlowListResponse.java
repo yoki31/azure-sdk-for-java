@@ -7,15 +7,14 @@ package com.azure.resourcemanager.datafactory.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.fluent.models.DataFlowResourceInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** A list of data flow resources. */
+/**
+ * A list of data flow resources.
+ */
 @Fluent
 public final class DataFlowListResponse {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DataFlowListResponse.class);
-
     /*
      * List of data flows.
      */
@@ -29,8 +28,14 @@ public final class DataFlowListResponse {
     private String nextLink;
 
     /**
+     * Creates an instance of DataFlowListResponse class.
+     */
+    public DataFlowListResponse() {
+    }
+
+    /**
      * Get the value property: List of data flows.
-     *
+     * 
      * @return the value value.
      */
     public List<DataFlowResourceInner> value() {
@@ -39,7 +44,7 @@ public final class DataFlowListResponse {
 
     /**
      * Set the value property: List of data flows.
-     *
+     * 
      * @param value the value value to set.
      * @return the DataFlowListResponse object itself.
      */
@@ -50,7 +55,7 @@ public final class DataFlowListResponse {
 
     /**
      * Get the nextLink property: The link to the next page of results, if any remaining results exist.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,7 +64,7 @@ public final class DataFlowListResponse {
 
     /**
      * Set the nextLink property: The link to the next page of results, if any remaining results exist.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the DataFlowListResponse object itself.
      */
@@ -70,16 +75,17 @@ public final class DataFlowListResponse {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property value in model DataFlowListResponse"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property value in model DataFlowListResponse"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(DataFlowListResponse.class);
 }

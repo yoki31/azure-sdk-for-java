@@ -6,36 +6,34 @@ package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.azure.resourcemanager.datafactory.models.StoredProcedureParameter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.Map;
 
-/** SQL stored procedure activity properties. */
+/**
+ * SQL stored procedure activity properties.
+ */
 @Fluent
 public final class SqlServerStoredProcedureActivityTypeProperties {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(SqlServerStoredProcedureActivityTypeProperties.class);
-
     /*
-     * Stored procedure name. Type: string (or Expression with resultType
-     * string).
+     * Stored procedure name. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "storedProcedureName", required = true)
     private Object storedProcedureName;
 
     /*
-     * Value and type setting for stored procedure parameters. Example:
-     * "{Parameter1: {value: "1", type: "int"}}".
+     * Value and type setting for stored procedure parameters. Example: "{Parameter1: {value: "1", type: "int"}}".
      */
     @JsonProperty(value = "storedProcedureParameters")
-    @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
-    private Map<String, StoredProcedureParameter> storedProcedureParameters;
+    private Object storedProcedureParameters;
+
+    /**
+     * Creates an instance of SqlServerStoredProcedureActivityTypeProperties class.
+     */
+    public SqlServerStoredProcedureActivityTypeProperties() {
+    }
 
     /**
      * Get the storedProcedureName property: Stored procedure name. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the storedProcedureName value.
      */
     public Object storedProcedureName() {
@@ -44,7 +42,7 @@ public final class SqlServerStoredProcedureActivityTypeProperties {
 
     /**
      * Set the storedProcedureName property: Stored procedure name. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param storedProcedureName the storedProcedureName value to set.
      * @return the SqlServerStoredProcedureActivityTypeProperties object itself.
      */
@@ -56,48 +54,38 @@ public final class SqlServerStoredProcedureActivityTypeProperties {
     /**
      * Get the storedProcedureParameters property: Value and type setting for stored procedure parameters. Example:
      * "{Parameter1: {value: "1", type: "int"}}".
-     *
+     * 
      * @return the storedProcedureParameters value.
      */
-    public Map<String, StoredProcedureParameter> storedProcedureParameters() {
+    public Object storedProcedureParameters() {
         return this.storedProcedureParameters;
     }
 
     /**
      * Set the storedProcedureParameters property: Value and type setting for stored procedure parameters. Example:
      * "{Parameter1: {value: "1", type: "int"}}".
-     *
+     * 
      * @param storedProcedureParameters the storedProcedureParameters value to set.
      * @return the SqlServerStoredProcedureActivityTypeProperties object itself.
      */
-    public SqlServerStoredProcedureActivityTypeProperties withStoredProcedureParameters(
-        Map<String, StoredProcedureParameter> storedProcedureParameters) {
+    public SqlServerStoredProcedureActivityTypeProperties
+        withStoredProcedureParameters(Object storedProcedureParameters) {
         this.storedProcedureParameters = storedProcedureParameters;
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (storedProcedureName() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property storedProcedureName in model"
-                            + " SqlServerStoredProcedureActivityTypeProperties"));
-        }
-        if (storedProcedureParameters() != null) {
-            storedProcedureParameters()
-                .values()
-                .forEach(
-                    e -> {
-                        if (e != null) {
-                            e.validate();
-                        }
-                    });
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property storedProcedureName in model SqlServerStoredProcedureActivityTypeProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(SqlServerStoredProcedureActivityTypeProperties.class);
 }

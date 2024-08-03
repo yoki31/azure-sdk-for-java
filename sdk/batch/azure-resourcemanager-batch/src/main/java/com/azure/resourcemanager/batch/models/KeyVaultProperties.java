@@ -5,36 +5,40 @@
 package com.azure.resourcemanager.batch.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** KeyVault configuration when using an encryption KeySource of Microsoft.KeyVault. */
+/**
+ * KeyVault configuration when using an encryption KeySource of Microsoft.KeyVault.
+ */
 @Fluent
 public final class KeyVaultProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(KeyVaultProperties.class);
-
     /*
-     * Full path to the versioned secret. Example
-     * https://mykeyvault.vault.azure.net/keys/testkey/6e34a81fef704045975661e297a4c053.
-     * To be usable the following prerequisites must be met:
-     *
+     * Full path to the secret with or without version. Example
+     * https://mykeyvault.vault.azure.net/keys/testkey/6e34a81fef704045975661e297a4c053. or
+     * https://mykeyvault.vault.azure.net/keys/testkey. To be usable the following prerequisites must be met:
+     * 
      * The Batch Account has a System Assigned identity
-     * The account identity has been granted Key/Get, Key/Unwrap and Key/Wrap
-     * permissions
+     * The account identity has been granted Key/Get, Key/Unwrap and Key/Wrap permissions
      * The KeyVault has soft-delete and purge protection enabled
      */
     @JsonProperty(value = "keyIdentifier")
     private String keyIdentifier;
 
     /**
-     * Get the keyIdentifier property: Full path to the versioned secret. Example
-     * https://mykeyvault.vault.azure.net/keys/testkey/6e34a81fef704045975661e297a4c053. To be usable the following
-     * prerequisites must be met:
-     *
-     * <p>The Batch Account has a System Assigned identity The account identity has been granted Key/Get, Key/Unwrap and
-     * Key/Wrap permissions The KeyVault has soft-delete and purge protection enabled.
-     *
+     * Creates an instance of KeyVaultProperties class.
+     */
+    public KeyVaultProperties() {
+    }
+
+    /**
+     * Get the keyIdentifier property: Full path to the secret with or without version. Example
+     * https://mykeyvault.vault.azure.net/keys/testkey/6e34a81fef704045975661e297a4c053. or
+     * https://mykeyvault.vault.azure.net/keys/testkey. To be usable the following prerequisites must be met:
+     * 
+     * The Batch Account has a System Assigned identity
+     * The account identity has been granted Key/Get, Key/Unwrap and Key/Wrap permissions
+     * The KeyVault has soft-delete and purge protection enabled.
+     * 
      * @return the keyIdentifier value.
      */
     public String keyIdentifier() {
@@ -42,13 +46,14 @@ public final class KeyVaultProperties {
     }
 
     /**
-     * Set the keyIdentifier property: Full path to the versioned secret. Example
-     * https://mykeyvault.vault.azure.net/keys/testkey/6e34a81fef704045975661e297a4c053. To be usable the following
-     * prerequisites must be met:
-     *
-     * <p>The Batch Account has a System Assigned identity The account identity has been granted Key/Get, Key/Unwrap and
-     * Key/Wrap permissions The KeyVault has soft-delete and purge protection enabled.
-     *
+     * Set the keyIdentifier property: Full path to the secret with or without version. Example
+     * https://mykeyvault.vault.azure.net/keys/testkey/6e34a81fef704045975661e297a4c053. or
+     * https://mykeyvault.vault.azure.net/keys/testkey. To be usable the following prerequisites must be met:
+     * 
+     * The Batch Account has a System Assigned identity
+     * The account identity has been granted Key/Get, Key/Unwrap and Key/Wrap permissions
+     * The KeyVault has soft-delete and purge protection enabled.
+     * 
      * @param keyIdentifier the keyIdentifier value to set.
      * @return the KeyVaultProperties object itself.
      */
@@ -59,7 +64,7 @@ public final class KeyVaultProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

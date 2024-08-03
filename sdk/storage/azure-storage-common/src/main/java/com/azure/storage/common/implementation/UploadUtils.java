@@ -8,10 +8,13 @@ import com.azure.core.util.CoreUtils;
 import com.azure.core.util.FluxUtil;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.storage.common.ParallelTransferOptions;
+import com.azure.storage.common.Utility;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousFileChannel;
@@ -153,7 +156,7 @@ public class UploadUtils {
      * Computes the md5 of the data and wraps it with the data.
      *
      * @param data The data.
-     * @param computeMd5 Whether or not to compute the md5.
+     * @param computeMd5 Whether to compute the md5.
      * @param logger Logger to log errors.
      * @return The data wrapped with its md5.
      */
@@ -161,10 +164,10 @@ public class UploadUtils {
         if (computeMd5) {
             try {
                 return data.reduce(MessageDigest.getInstance("MD5"), (digest, buffer) -> {
-                    int position = buffer.position();
-                    byte[] bytes = FluxUtil.byteBufferToArray(buffer);
-                    digest.update(bytes, 0, bytes.length);
-                    buffer.position(position);
+                    // Use MessageDigest.update(ByteBuffer) as this is able to optimize based on the type of ByteBuffer
+                    // that was passed. Also, pass it a ByteBuffer.duplicate view so that the actual ByteBuffer won't
+                    // be mutated.
+                    digest.update(buffer.duplicate().asReadOnlyBuffer());
                     return digest;
                 }).map(messageDigest -> new FluxMd5Wrapper(data, messageDigest.digest()));
             } catch (NoSuchAlgorithmException e) {
@@ -191,5 +194,30 @@ public class UploadUtils {
         public byte[] getMd5() {
             return CoreUtils.clone(md5);
         }
+    }
+
+    /**
+     * Extracts the byte buffer for upload operations.
+     *
+     * @param data the {@link Flux} of {@link ByteBuffer}, if specified.
+     * @param optionalLength length of data.
+     * @param blockSize the block size (chunk size) to transfer at a time.
+     * @param dataStream the {@link InputStream}, if specified.
+     * @return the updated {@link Flux} of {@link ByteBuffer}.
+     */
+    public static Flux<ByteBuffer> extractByteBuffer(Flux<ByteBuffer> data, Long optionalLength, Long blockSize,
+        InputStream dataStream) {
+        // no specified length: use azure.core's converter
+        if (data == null && optionalLength == null) {
+            // We can only buffer up to max int due to restrictions in ByteBuffer.
+            int chunkSize = (int) Math.min(Constants.MAX_INPUT_STREAM_CONVERTER_BUFFER_LENGTH, blockSize);
+            data = FluxUtil.toFluxByteBuffer(dataStream, chunkSize).subscribeOn(Schedulers.boundedElastic());
+            // specified length (legacy requirement): use custom converter. no marking because we buffer anyway.
+        } else if (data == null) {
+            // We can only buffer up to max int due to restrictions in ByteBuffer.
+            int chunkSize = (int) Math.min(Constants.MAX_INPUT_STREAM_CONVERTER_BUFFER_LENGTH, blockSize);
+            data = Utility.convertStreamToByteBuffer(dataStream, optionalLength, chunkSize, false);
+        }
+        return data;
     }
 }

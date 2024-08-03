@@ -5,22 +5,22 @@
 package com.azure.resourcemanager.mediaservices.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.mediaservices.models.Operation;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** A collection of Operation items. */
 @Fluent
 public final class OperationCollectionInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationCollectionInner.class);
-
     /*
      * A collection of Operation items.
      */
     @JsonProperty(value = "value")
     private List<Operation> value;
+
+    /** Creates an instance of OperationCollectionInner class. */
+    public OperationCollectionInner() {
+    }
 
     /**
      * Get the value property: A collection of Operation items.

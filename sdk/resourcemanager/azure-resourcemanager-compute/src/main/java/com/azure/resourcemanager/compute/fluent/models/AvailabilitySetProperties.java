@@ -6,17 +6,15 @@ package com.azure.resourcemanager.compute.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.SubResource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.compute.models.InstanceViewStatus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The instance view of a resource. */
+/**
+ * The instance view of a resource.
+ */
 @Fluent
 public final class AvailabilitySetProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AvailabilitySetProperties.class);
-
     /*
      * Update Domain count.
      */
@@ -36,9 +34,8 @@ public final class AvailabilitySetProperties {
     private List<SubResource> virtualMachines;
 
     /*
-     * Specifies information about the proximity placement group that the
-     * availability set should be assigned to. <br><br>Minimum api-version:
-     * 2018-04-01.
+     * Specifies information about the proximity placement group that the availability set should be assigned to.
+     * Minimum api-version: 2018-04-01.
      */
     @JsonProperty(value = "proximityPlacementGroup")
     private SubResource proximityPlacementGroup;
@@ -50,8 +47,14 @@ public final class AvailabilitySetProperties {
     private List<InstanceViewStatus> statuses;
 
     /**
+     * Creates an instance of AvailabilitySetProperties class.
+     */
+    public AvailabilitySetProperties() {
+    }
+
+    /**
      * Get the platformUpdateDomainCount property: Update Domain count.
-     *
+     * 
      * @return the platformUpdateDomainCount value.
      */
     public Integer platformUpdateDomainCount() {
@@ -60,7 +63,7 @@ public final class AvailabilitySetProperties {
 
     /**
      * Set the platformUpdateDomainCount property: Update Domain count.
-     *
+     * 
      * @param platformUpdateDomainCount the platformUpdateDomainCount value to set.
      * @return the AvailabilitySetProperties object itself.
      */
@@ -71,7 +74,7 @@ public final class AvailabilitySetProperties {
 
     /**
      * Get the platformFaultDomainCount property: Fault Domain count.
-     *
+     * 
      * @return the platformFaultDomainCount value.
      */
     public Integer platformFaultDomainCount() {
@@ -80,7 +83,7 @@ public final class AvailabilitySetProperties {
 
     /**
      * Set the platformFaultDomainCount property: Fault Domain count.
-     *
+     * 
      * @param platformFaultDomainCount the platformFaultDomainCount value to set.
      * @return the AvailabilitySetProperties object itself.
      */
@@ -91,7 +94,7 @@ public final class AvailabilitySetProperties {
 
     /**
      * Get the virtualMachines property: A list of references to all virtual machines in the availability set.
-     *
+     * 
      * @return the virtualMachines value.
      */
     public List<SubResource> virtualMachines() {
@@ -100,7 +103,7 @@ public final class AvailabilitySetProperties {
 
     /**
      * Set the virtualMachines property: A list of references to all virtual machines in the availability set.
-     *
+     * 
      * @param virtualMachines the virtualMachines value to set.
      * @return the AvailabilitySetProperties object itself.
      */
@@ -111,8 +114,8 @@ public final class AvailabilitySetProperties {
 
     /**
      * Get the proximityPlacementGroup property: Specifies information about the proximity placement group that the
-     * availability set should be assigned to. &lt;br&gt;&lt;br&gt;Minimum api-version: 2018-04-01.
-     *
+     * availability set should be assigned to. Minimum api-version: 2018-04-01.
+     * 
      * @return the proximityPlacementGroup value.
      */
     public SubResource proximityPlacementGroup() {
@@ -121,8 +124,8 @@ public final class AvailabilitySetProperties {
 
     /**
      * Set the proximityPlacementGroup property: Specifies information about the proximity placement group that the
-     * availability set should be assigned to. &lt;br&gt;&lt;br&gt;Minimum api-version: 2018-04-01.
-     *
+     * availability set should be assigned to. Minimum api-version: 2018-04-01.
+     * 
      * @param proximityPlacementGroup the proximityPlacementGroup value to set.
      * @return the AvailabilitySetProperties object itself.
      */
@@ -133,7 +136,7 @@ public final class AvailabilitySetProperties {
 
     /**
      * Get the statuses property: The resource status information.
-     *
+     * 
      * @return the statuses value.
      */
     public List<InstanceViewStatus> statuses() {
@@ -142,7 +145,7 @@ public final class AvailabilitySetProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -31,7 +31,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.IdentityProvidersClient;
 import com.azure.resourcemanager.apimanagement.fluent.models.ClientSecretContractInner;
 import com.azure.resourcemanager.apimanagement.fluent.models.IdentityProviderContractInner;
@@ -48,8 +47,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in IdentityProvidersClient. */
 public final class IdentityProvidersClientImpl implements IdentityProvidersClient {
-    private final ClientLogger logger = new ClientLogger(IdentityProvidersClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final IdentityProvidersService service;
 
@@ -73,11 +70,10 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApiManagementClientI")
-    private interface IdentityProvidersService {
+    public interface IdentityProvidersService {
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/identityProviders")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/identityProviders")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<IdentityProviderList>> listByService(
@@ -91,8 +87,7 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
 
         @Headers({"Content-Type: application/json"})
         @Head(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/identityProviders/{identityProviderName}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/identityProviders/{identityProviderName}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<IdentityProvidersGetEntityTagResponse> getEntityTag(
@@ -107,8 +102,7 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
 
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/identityProviders/{identityProviderName}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/identityProviders/{identityProviderName}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<IdentityProvidersGetResponse> get(
@@ -123,8 +117,7 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
 
         @Headers({"Content-Type: application/json"})
         @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/identityProviders/{identityProviderName}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/identityProviders/{identityProviderName}")
         @ExpectedResponses({200, 201})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<IdentityProvidersCreateOrUpdateResponse> createOrUpdate(
@@ -141,8 +134,7 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
 
         @Headers({"Content-Type: application/json"})
         @Patch(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/identityProviders/{identityProviderName}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/identityProviders/{identityProviderName}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<IdentityProvidersUpdateResponse> update(
@@ -159,8 +151,7 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
 
         @Headers({"Content-Type: application/json"})
         @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/identityProviders/{identityProviderName}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/identityProviders/{identityProviderName}")
         @ExpectedResponses({200, 204})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Void>> delete(
@@ -176,8 +167,7 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
 
         @Headers({"Content-Type: application/json"})
         @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/identityProviders/{identityProviderName}/listSecrets")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/identityProviders/{identityProviderName}/listSecrets")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<IdentityProvidersListSecretsResponse> listSecrets(
@@ -204,12 +194,13 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
     /**
      * Lists a collection of Identity Provider configured in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of all the Identity Providers configured on the service instance.
+     * @return list of all the Identity Providers configured on the service instance along with {@link PagedResponse} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<IdentityProviderContractInner>> listByServiceSinglePageAsync(
@@ -261,13 +252,14 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
     /**
      * Lists a collection of Identity Provider configured in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of all the Identity Providers configured on the service instance.
+     * @return list of all the Identity Providers configured on the service instance along with {@link PagedResponse} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<IdentityProviderContractInner>> listByServiceSinglePageAsync(
@@ -316,12 +308,13 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
     /**
      * Lists a collection of Identity Provider configured in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of all the Identity Providers configured on the service instance.
+     * @return list of all the Identity Providers configured on the service instance as paginated response with {@link
+     *     PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<IdentityProviderContractInner> listByServiceAsync(String resourceGroupName, String serviceName) {
@@ -333,13 +326,14 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
     /**
      * Lists a collection of Identity Provider configured in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of all the Identity Providers configured on the service instance.
+     * @return list of all the Identity Providers configured on the service instance as paginated response with {@link
+     *     PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<IdentityProviderContractInner> listByServiceAsync(
@@ -352,12 +346,13 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
     /**
      * Lists a collection of Identity Provider configured in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of all the Identity Providers configured on the service instance.
+     * @return list of all the Identity Providers configured on the service instance as paginated response with {@link
+     *     PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<IdentityProviderContractInner> listByService(String resourceGroupName, String serviceName) {
@@ -367,13 +362,14 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
     /**
      * Lists a collection of Identity Provider configured in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of all the Identity Providers configured on the service instance.
+     * @return list of all the Identity Providers configured on the service instance as paginated response with {@link
+     *     PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<IdentityProviderContractInner> listByService(
@@ -384,13 +380,14 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
     /**
      * Gets the entity state (Etag) version of the identityProvider specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the identityProvider specified by its identifier.
+     * @return the entity state (Etag) version of the identityProvider specified by its identifier on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<IdentityProvidersGetEntityTagResponse> getEntityTagWithResponseAsync(
@@ -438,14 +435,15 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
     /**
      * Gets the entity state (Etag) version of the identityProvider specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the identityProvider specified by its identifier.
+     * @return the entity state (Etag) version of the identityProvider specified by its identifier on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<IdentityProvidersGetEntityTagResponse> getEntityTagWithResponseAsync(
@@ -490,40 +488,26 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
     /**
      * Gets the entity state (Etag) version of the identityProvider specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the identityProvider specified by its identifier.
+     * @return the entity state (Etag) version of the identityProvider specified by its identifier on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> getEntityTagAsync(
         String resourceGroupName, String serviceName, IdentityProviderType identityProviderName) {
         return getEntityTagWithResponseAsync(resourceGroupName, serviceName, identityProviderName)
-            .flatMap((IdentityProvidersGetEntityTagResponse res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Gets the entity state (Etag) version of the identityProvider specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param identityProviderName Identity Provider Type identifier.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public void getEntityTag(String resourceGroupName, String serviceName, IdentityProviderType identityProviderName) {
-        getEntityTagAsync(resourceGroupName, serviceName, identityProviderName).block();
-    }
-
-    /**
-     * Gets the entity state (Etag) version of the identityProvider specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @param context The context to associate with this operation.
@@ -539,15 +523,31 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
     }
 
     /**
-     * Gets the configuration details of the identity Provider configured in specified service instance.
+     * Gets the entity state (Etag) version of the identityProvider specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the configuration details of the identity Provider configured in specified service instance.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public void getEntityTag(String resourceGroupName, String serviceName, IdentityProviderType identityProviderName) {
+        getEntityTagWithResponse(resourceGroupName, serviceName, identityProviderName, Context.NONE);
+    }
+
+    /**
+     * Gets the configuration details of the identity Provider configured in specified service instance.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param identityProviderName Identity Provider Type identifier.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the configuration details of the identity Provider configured in specified service instance on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<IdentityProvidersGetResponse> getWithResponseAsync(
@@ -595,14 +595,15 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
     /**
      * Gets the configuration details of the identity Provider configured in specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the configuration details of the identity Provider configured in specified service instance.
+     * @return the configuration details of the identity Provider configured in specified service instance on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<IdentityProvidersGetResponse> getWithResponseAsync(
@@ -647,49 +648,26 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
     /**
      * Gets the configuration details of the identity Provider configured in specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the configuration details of the identity Provider configured in specified service instance.
+     * @return the configuration details of the identity Provider configured in specified service instance on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<IdentityProviderContractInner> getAsync(
         String resourceGroupName, String serviceName, IdentityProviderType identityProviderName) {
         return getWithResponseAsync(resourceGroupName, serviceName, identityProviderName)
-            .flatMap(
-                (IdentityProvidersGetResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Gets the configuration details of the identity Provider configured in specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param identityProviderName Identity Provider Type identifier.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the configuration details of the identity Provider configured in specified service instance.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public IdentityProviderContractInner get(
-        String resourceGroupName, String serviceName, IdentityProviderType identityProviderName) {
-        return getAsync(resourceGroupName, serviceName, identityProviderName).block();
-    }
-
-    /**
-     * Gets the configuration details of the identity Provider configured in specified service instance.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @param context The context to associate with this operation.
@@ -705,9 +683,26 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
     }
 
     /**
+     * Gets the configuration details of the identity Provider configured in specified service instance.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param identityProviderName Identity Provider Type identifier.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the configuration details of the identity Provider configured in specified service instance.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public IdentityProviderContractInner get(
+        String resourceGroupName, String serviceName, IdentityProviderType identityProviderName) {
+        return getWithResponse(resourceGroupName, serviceName, identityProviderName, Context.NONE).getValue();
+    }
+
+    /**
      * Creates or Updates the IdentityProvider configuration.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @param parameters Create parameters.
@@ -715,7 +710,7 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return identity Provider details.
+     * @return identity Provider details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<IdentityProvidersCreateOrUpdateResponse> createOrUpdateWithResponseAsync(
@@ -774,7 +769,7 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
     /**
      * Creates or Updates the IdentityProvider configuration.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @param parameters Create parameters.
@@ -783,7 +778,7 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return identity Provider details.
+     * @return identity Provider details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<IdentityProvidersCreateOrUpdateResponse> createOrUpdateWithResponseAsync(
@@ -840,46 +835,14 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
     /**
      * Creates or Updates the IdentityProvider configuration.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param identityProviderName Identity Provider Type identifier.
-     * @param parameters Create parameters.
-     * @param ifMatch ETag of the Entity. Not required when creating an entity, but required when updating an entity.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return identity Provider details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<IdentityProviderContractInner> createOrUpdateAsync(
-        String resourceGroupName,
-        String serviceName,
-        IdentityProviderType identityProviderName,
-        IdentityProviderCreateContract parameters,
-        String ifMatch) {
-        return createOrUpdateWithResponseAsync(
-                resourceGroupName, serviceName, identityProviderName, parameters, ifMatch)
-            .flatMap(
-                (IdentityProvidersCreateOrUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
-    }
-
-    /**
-     * Creates or Updates the IdentityProvider configuration.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @param parameters Create parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return identity Provider details.
+     * @return identity Provider details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<IdentityProviderContractInner> createOrUpdateAsync(
@@ -890,42 +853,13 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
         final String ifMatch = null;
         return createOrUpdateWithResponseAsync(
                 resourceGroupName, serviceName, identityProviderName, parameters, ifMatch)
-            .flatMap(
-                (IdentityProvidersCreateOrUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Creates or Updates the IdentityProvider configuration.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param identityProviderName Identity Provider Type identifier.
-     * @param parameters Create parameters.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return identity Provider details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public IdentityProviderContractInner createOrUpdate(
-        String resourceGroupName,
-        String serviceName,
-        IdentityProviderType identityProviderName,
-        IdentityProviderCreateContract parameters) {
-        final String ifMatch = null;
-        return createOrUpdateAsync(resourceGroupName, serviceName, identityProviderName, parameters, ifMatch).block();
-    }
-
-    /**
-     * Creates or Updates the IdentityProvider configuration.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @param parameters Create parameters.
@@ -950,9 +884,33 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
     }
 
     /**
+     * Creates or Updates the IdentityProvider configuration.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param identityProviderName Identity Provider Type identifier.
+     * @param parameters Create parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return identity Provider details.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public IdentityProviderContractInner createOrUpdate(
+        String resourceGroupName,
+        String serviceName,
+        IdentityProviderType identityProviderName,
+        IdentityProviderCreateContract parameters) {
+        final String ifMatch = null;
+        return createOrUpdateWithResponse(
+                resourceGroupName, serviceName, identityProviderName, parameters, ifMatch, Context.NONE)
+            .getValue();
+    }
+
+    /**
      * Updates an existing IdentityProvider configuration.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -961,7 +919,7 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return identity Provider details.
+     * @return identity Provider details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<IdentityProvidersUpdateResponse> updateWithResponseAsync(
@@ -1023,7 +981,7 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
     /**
      * Updates an existing IdentityProvider configuration.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1033,7 +991,7 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return identity Provider details.
+     * @return identity Provider details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<IdentityProvidersUpdateResponse> updateWithResponseAsync(
@@ -1093,7 +1051,7 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
     /**
      * Updates an existing IdentityProvider configuration.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1102,7 +1060,7 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return identity Provider details.
+     * @return identity Provider details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<IdentityProviderContractInner> updateAsync(
@@ -1112,44 +1070,13 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
         String ifMatch,
         IdentityProviderUpdateParameters parameters) {
         return updateWithResponseAsync(resourceGroupName, serviceName, identityProviderName, ifMatch, parameters)
-            .flatMap(
-                (IdentityProvidersUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Updates an existing IdentityProvider configuration.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param identityProviderName Identity Provider Type identifier.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param parameters Update parameters.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return identity Provider details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public IdentityProviderContractInner update(
-        String resourceGroupName,
-        String serviceName,
-        IdentityProviderType identityProviderName,
-        String ifMatch,
-        IdentityProviderUpdateParameters parameters) {
-        return updateAsync(resourceGroupName, serviceName, identityProviderName, ifMatch, parameters).block();
-    }
-
-    /**
-     * Updates an existing IdentityProvider configuration.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1175,9 +1102,35 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
     }
 
     /**
+     * Updates an existing IdentityProvider configuration.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param identityProviderName Identity Provider Type identifier.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param parameters Update parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return identity Provider details.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public IdentityProviderContractInner update(
+        String resourceGroupName,
+        String serviceName,
+        IdentityProviderType identityProviderName,
+        String ifMatch,
+        IdentityProviderUpdateParameters parameters) {
+        return updateWithResponse(
+                resourceGroupName, serviceName, identityProviderName, ifMatch, parameters, Context.NONE)
+            .getValue();
+    }
+
+    /**
      * Deletes the specified identity provider configuration.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1185,7 +1138,7 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -1237,7 +1190,7 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
     /**
      * Deletes the specified identity provider configuration.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1246,7 +1199,7 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -1299,7 +1252,7 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
     /**
      * Deletes the specified identity provider configuration.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1307,37 +1260,19 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(
         String resourceGroupName, String serviceName, IdentityProviderType identityProviderName, String ifMatch) {
         return deleteWithResponseAsync(resourceGroupName, serviceName, identityProviderName, ifMatch)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Deletes the specified identity provider configuration.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param identityProviderName Identity Provider Type identifier.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public void delete(
-        String resourceGroupName, String serviceName, IdentityProviderType identityProviderName, String ifMatch) {
-        deleteAsync(resourceGroupName, serviceName, identityProviderName, ifMatch).block();
-    }
-
-    /**
-     * Deletes the specified identity provider configuration.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1346,7 +1281,7 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<Void> deleteWithResponse(
@@ -1359,15 +1294,33 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
     }
 
     /**
+     * Deletes the specified identity provider configuration.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param identityProviderName Identity Provider Type identifier.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public void delete(
+        String resourceGroupName, String serviceName, IdentityProviderType identityProviderName, String ifMatch) {
+        deleteWithResponse(resourceGroupName, serviceName, identityProviderName, ifMatch, Context.NONE);
+    }
+
+    /**
      * Gets the client secret details of the Identity Provider.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the client secret details of the Identity Provider.
+     * @return the client secret details of the Identity Provider on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<IdentityProvidersListSecretsResponse> listSecretsWithResponseAsync(
@@ -1415,14 +1368,14 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
     /**
      * Gets the client secret details of the Identity Provider.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the client secret details of the Identity Provider.
+     * @return the client secret details of the Identity Provider on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<IdentityProvidersListSecretsResponse> listSecretsWithResponseAsync(
@@ -1467,49 +1420,25 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
     /**
      * Gets the client secret details of the Identity Provider.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the client secret details of the Identity Provider.
+     * @return the client secret details of the Identity Provider on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ClientSecretContractInner> listSecretsAsync(
         String resourceGroupName, String serviceName, IdentityProviderType identityProviderName) {
         return listSecretsWithResponseAsync(resourceGroupName, serviceName, identityProviderName)
-            .flatMap(
-                (IdentityProvidersListSecretsResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Gets the client secret details of the Identity Provider.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param identityProviderName Identity Provider Type identifier.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the client secret details of the Identity Provider.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public ClientSecretContractInner listSecrets(
-        String resourceGroupName, String serviceName, IdentityProviderType identityProviderName) {
-        return listSecretsAsync(resourceGroupName, serviceName, identityProviderName).block();
-    }
-
-    /**
-     * Gets the client secret details of the Identity Provider.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @param context The context to associate with this operation.
@@ -1525,13 +1454,32 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
     }
 
     /**
-     * Get the next page of items.
+     * Gets the client secret details of the Identity Provider.
      *
-     * @param nextLink The nextLink parameter.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param identityProviderName Identity Provider Type identifier.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of all the Identity Providers configured on the service instance.
+     * @return the client secret details of the Identity Provider.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public ClientSecretContractInner listSecrets(
+        String resourceGroupName, String serviceName, IdentityProviderType identityProviderName) {
+        return listSecretsWithResponse(resourceGroupName, serviceName, identityProviderName, Context.NONE).getValue();
+    }
+
+    /**
+     * Get the next page of items.
+     *
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return list of all the Identity Providers configured on the service instance along with {@link PagedResponse} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<IdentityProviderContractInner>> listByServiceNextSinglePageAsync(String nextLink) {
@@ -1562,12 +1510,14 @@ public final class IdentityProvidersClientImpl implements IdentityProvidersClien
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of all the Identity Providers configured on the service instance.
+     * @return list of all the Identity Providers configured on the service instance along with {@link PagedResponse} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<IdentityProviderContractInner>> listByServiceNextSinglePageAsync(

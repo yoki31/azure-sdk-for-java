@@ -1,6 +1,6 @@
 # Release History
 
-## 2.4.0-beta.1 (Unreleased)
+## 2.9.0-beta.3 (Unreleased)
 
 ### Features Added
 
@@ -9,6 +9,70 @@
 ### Bugs Fixed
 
 ### Other Changes
+
+## 2.9.0-beta.2 (2024-07-09)
+
+### Features Added
+- Added the new system property `azure.keyvault.disable-challenge-resource-verification`, which can be set to `true` to disable challenge resource verification when authenticating against the Azure Key Vault service. For more information, please refer to [this link](https://devblogs.microsoft.com/azure-sdk/guidance-for-applications-using-the-key-vault-libraries/).
+
+### Breaking Changes
+- Removed support for providing a custom login URI to get access tokens from via the system property `azure.login.uri`.
+
+### Bugs Fixed
+- Fix bug: AccessTokenUtil does not urlencode its parameters when getting an access token. ([#40616](https://github.com/Azure/azure-sdk-for-java/issues/40616))
+- Changed the authentication mechanism to allow for discovering the login URI for a given Azure Key Vault instance by requesting an authentication challenge from the service, as opposed to using a hard-coded list of URIs to choose from depending on a vault's URI. This should add support for customers using Azure Stack instances, for example.
+
+## 2.9.0-beta.1 (2024-05-15)
+
+### Features Added
+- Added support for providing a custom login URI to get access tokens from via the system property `azure.login.uri`.
+
+### Other Changes
+
+#### Dependency Updates
+- Upgraded `conscrypt-openjdk-uber` from `2.2.1` to version `2.5.2`.
+
+## 2.8.1 (2023-12-04)
+
+### Other Changes
+
+#### Dependency Updates
+
+Regular updates for dependency versions.
+
+## 2.8.0 (2023-09-28)
+
+### Features Added
+- Support key type of `RSA-HSM` and `EC-HSM` in JCA [#36648](https://github.com/Azure/azure-sdk-for-java/pull/36648).
+
+## 2.7.1 (2023-03-01)
+
+### Other Changes
+
+#### Dependency Updates
+
+- Upgraded `httpclient` from `4.5.13` to version `4.5.14`.
+- Upgraded `jackson-databind` from `2.13.2.2` to version `2.13.5`.
+
+## 2.7.0 (2022-05-24)
+
+### Dependency Upgrades
+Regular updates for dependency versions.
+
+## 2.6.0 (2022-02-25)
+
+### Dependency Upgrades
+Regular updates for dependency versions.
+
+## 2.5.0 (2022-01-25)
+
+### Dependency Upgrades
+Regular updates for dependency versions.
+
+## 2.4.0 (2021-12-24)
+
+### Dependency Upgrades
+Regular updates for dependency versions.
 
 ## 2.3.0 (2021-11-25)
 ### Dependency Upgrades

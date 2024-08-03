@@ -8,21 +8,21 @@ import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.Contact;
 import com.azure.resourcemanager.appservice.models.DnsType;
-import com.azure.resourcemanager.appservice.models.DomainPatchResourcePropertiesDomainNotRenewableReasonsItem;
 import com.azure.resourcemanager.appservice.models.DomainPurchaseConsent;
 import com.azure.resourcemanager.appservice.models.DomainStatus;
 import com.azure.resourcemanager.appservice.models.Hostname;
 import com.azure.resourcemanager.appservice.models.ProvisioningState;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.azure.resourcemanager.appservice.models.ResourceNotRenewableReason;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.OffsetDateTime;
 import java.util.List;
 
-/** DomainPatchResource resource specific properties. */
+/**
+ * DomainPatchResource resource specific properties.
+ */
 @Fluent
 public final class DomainPatchResourceProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DomainPatchResourceProperties.class);
-
     /*
      * Administrative contact.
      */
@@ -66,8 +66,7 @@ public final class DomainPatchResourceProperties {
     private List<String> nameServers;
 
     /*
-     * <code>true</code> if domain privacy is enabled for this domain;
-     * otherwise, <code>false</code>.
+     * <code>true</code> if domain privacy is enabled for this domain; otherwise, <code>false</code>.
      */
     @JsonProperty(value = "privacy")
     private Boolean privacy;
@@ -91,17 +90,14 @@ public final class DomainPatchResourceProperties {
     private OffsetDateTime lastRenewedTime;
 
     /*
-     * <code>true</code> if the domain should be automatically renewed;
-     * otherwise, <code>false</code>.
+     * <code>true</code> if the domain should be automatically renewed; otherwise, <code>false</code>.
      */
     @JsonProperty(value = "autoRenew")
     private Boolean autoRenew;
 
     /*
-     * <code>true</code> if Azure can assign this domain to App Service apps;
-     * otherwise, <code>false</code>. This value will be <code>true</code> if
-     * domain registration status is active and
-     * it is hosted on name servers Azure has programmatic access to.
+     * <code>true</code> if Azure can assign this domain to App Service apps; otherwise, <code>false</code>. This value will be <code>true</code> if domain registration status is active and
+     *  it is hosted on name servers Azure has programmatic access to.
      */
     @JsonProperty(value = "readyForDnsRecordManagement", access = JsonProperty.Access.WRITE_ONLY)
     private Boolean readyForDnsRecordManagement;
@@ -122,7 +118,7 @@ public final class DomainPatchResourceProperties {
      * Reasons why domain is not renewable.
      */
     @JsonProperty(value = "domainNotRenewableReasons", access = JsonProperty.Access.WRITE_ONLY)
-    private List<DomainPatchResourcePropertiesDomainNotRenewableReasonsItem> domainNotRenewableReasons;
+    private List<ResourceNotRenewableReason> domainNotRenewableReasons;
 
     /*
      * Current DNS type
@@ -147,6 +143,12 @@ public final class DomainPatchResourceProperties {
      */
     @JsonProperty(value = "authCode")
     private String authCode;
+
+    /**
+     * Creates an instance of DomainPatchResourceProperties class.
+     */
+    public DomainPatchResourceProperties() {
+    }
 
     /**
      * Get the contactAdmin property: Administrative contact.
@@ -329,7 +331,8 @@ public final class DomainPatchResourceProperties {
     /**
      * Get the readyForDnsRecordManagement property: &lt;code&gt;true&lt;/code&gt; if Azure can assign this domain to
      * App Service apps; otherwise, &lt;code&gt;false&lt;/code&gt;. This value will be &lt;code&gt;true&lt;/code&gt; if
-     * domain registration status is active and it is hosted on name servers Azure has programmatic access to.
+     * domain registration status is active and
+     * it is hosted on name servers Azure has programmatic access to.
      *
      * @return the readyForDnsRecordManagement value.
      */
@@ -371,7 +374,7 @@ public final class DomainPatchResourceProperties {
      *
      * @return the domainNotRenewableReasons value.
      */
-    public List<DomainPatchResourcePropertiesDomainNotRenewableReasonsItem> domainNotRenewableReasons() {
+    public List<ResourceNotRenewableReason> domainNotRenewableReasons() {
         return this.domainNotRenewableReasons;
     }
 
@@ -462,34 +465,30 @@ public final class DomainPatchResourceProperties {
      */
     public void validate() {
         if (contactAdmin() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property contactAdmin in model DomainPatchResourceProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property contactAdmin in model DomainPatchResourceProperties"));
         } else {
             contactAdmin().validate();
         }
         if (contactBilling() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property contactBilling in model DomainPatchResourceProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property contactBilling in model DomainPatchResourceProperties"));
         } else {
             contactBilling().validate();
         }
         if (contactRegistrant() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property contactRegistrant in model DomainPatchResourceProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property contactRegistrant in model DomainPatchResourceProperties"));
         } else {
             contactRegistrant().validate();
         }
         if (contactTech() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property contactTech in model DomainPatchResourceProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property contactTech in model DomainPatchResourceProperties"));
         } else {
             contactTech().validate();
         }
@@ -497,12 +496,13 @@ public final class DomainPatchResourceProperties {
             managedHostNames().forEach(e -> e.validate());
         }
         if (consent() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property consent in model DomainPatchResourceProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property consent in model DomainPatchResourceProperties"));
         } else {
             consent().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(DomainPatchResourceProperties.class);
 }

@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
-/** Performance monitor sample in a set. */
+/**
+ * Performance monitor sample in a set.
+ */
 @Fluent
 public final class PerfMonSample {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PerfMonSample.class);
-
     /*
      * Point in time for which counter was measured.
      */
@@ -34,8 +32,14 @@ public final class PerfMonSample {
     private Double value;
 
     /**
+     * Creates an instance of PerfMonSample class.
+     */
+    public PerfMonSample() {
+    }
+
+    /**
      * Get the time property: Point in time for which counter was measured.
-     *
+     * 
      * @return the time value.
      */
     public OffsetDateTime time() {
@@ -44,7 +48,7 @@ public final class PerfMonSample {
 
     /**
      * Set the time property: Point in time for which counter was measured.
-     *
+     * 
      * @param time the time value to set.
      * @return the PerfMonSample object itself.
      */
@@ -55,7 +59,7 @@ public final class PerfMonSample {
 
     /**
      * Get the instanceName property: Name of the server on which the measurement is made.
-     *
+     * 
      * @return the instanceName value.
      */
     public String instanceName() {
@@ -64,7 +68,7 @@ public final class PerfMonSample {
 
     /**
      * Set the instanceName property: Name of the server on which the measurement is made.
-     *
+     * 
      * @param instanceName the instanceName value to set.
      * @return the PerfMonSample object itself.
      */
@@ -75,7 +79,7 @@ public final class PerfMonSample {
 
     /**
      * Get the value property: Value of counter at a certain time.
-     *
+     * 
      * @return the value value.
      */
     public Double value() {
@@ -84,7 +88,7 @@ public final class PerfMonSample {
 
     /**
      * Set the value property: Value of counter at a certain time.
-     *
+     * 
      * @param value the value value to set.
      * @return the PerfMonSample object itself.
      */
@@ -95,7 +99,7 @@ public final class PerfMonSample {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

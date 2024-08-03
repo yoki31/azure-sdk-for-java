@@ -6,33 +6,36 @@ package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Azure ML WebService Input/Output file. */
+/**
+ * Azure ML WebService Input/Output file.
+ */
 @Fluent
 public final class AzureMLWebServiceFile {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureMLWebServiceFile.class);
-
     /*
-     * The relative file path, including container name, in the Azure Blob
-     * Storage specified by the LinkedService. Type: string (or Expression with
-     * resultType string).
+     * The relative file path, including container name, in the Azure Blob Storage specified by the LinkedService. Type:
+     * string (or Expression with resultType string).
      */
     @JsonProperty(value = "filePath", required = true)
     private Object filePath;
 
     /*
-     * Reference to an Azure Storage LinkedService, where Azure ML WebService
-     * Input/Output file located.
+     * Reference to an Azure Storage LinkedService, where Azure ML WebService Input/Output file located.
      */
     @JsonProperty(value = "linkedServiceName", required = true)
     private LinkedServiceReference linkedServiceName;
 
     /**
+     * Creates an instance of AzureMLWebServiceFile class.
+     */
+    public AzureMLWebServiceFile() {
+    }
+
+    /**
      * Get the filePath property: The relative file path, including container name, in the Azure Blob Storage specified
      * by the LinkedService. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the filePath value.
      */
     public Object filePath() {
@@ -42,7 +45,7 @@ public final class AzureMLWebServiceFile {
     /**
      * Set the filePath property: The relative file path, including container name, in the Azure Blob Storage specified
      * by the LinkedService. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param filePath the filePath value to set.
      * @return the AzureMLWebServiceFile object itself.
      */
@@ -54,7 +57,7 @@ public final class AzureMLWebServiceFile {
     /**
      * Get the linkedServiceName property: Reference to an Azure Storage LinkedService, where Azure ML WebService
      * Input/Output file located.
-     *
+     * 
      * @return the linkedServiceName value.
      */
     public LinkedServiceReference linkedServiceName() {
@@ -64,7 +67,7 @@ public final class AzureMLWebServiceFile {
     /**
      * Set the linkedServiceName property: Reference to an Azure Storage LinkedService, where Azure ML WebService
      * Input/Output file located.
-     *
+     * 
      * @param linkedServiceName the linkedServiceName value to set.
      * @return the AzureMLWebServiceFile object itself.
      */
@@ -75,22 +78,22 @@ public final class AzureMLWebServiceFile {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (filePath() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property filePath in model AzureMLWebServiceFile"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property filePath in model AzureMLWebServiceFile"));
         }
         if (linkedServiceName() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property linkedServiceName in model AzureMLWebServiceFile"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property linkedServiceName in model AzureMLWebServiceFile"));
         } else {
             linkedServiceName().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(AzureMLWebServiceFile.class);
 }

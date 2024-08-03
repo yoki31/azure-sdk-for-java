@@ -6,18 +6,17 @@ package com.azure.resourcemanager.servicefabric.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Describes the notification target properties. */
+/**
+ * Describes the notification target properties.
+ */
 @Fluent
 public final class NotificationTarget {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(NotificationTarget.class);
-
     /*
-     * The notification channel indicates the type of receivers subscribed to
-     * the notification, either user or subscription.
+     * The notification channel indicates the type of receivers subscribed to the notification, either user or
+     * subscription.
      */
     @JsonProperty(value = "notificationChannel", required = true)
     private NotificationChannel notificationChannel;
@@ -29,9 +28,15 @@ public final class NotificationTarget {
     private List<String> receivers;
 
     /**
+     * Creates an instance of NotificationTarget class.
+     */
+    public NotificationTarget() {
+    }
+
+    /**
      * Get the notificationChannel property: The notification channel indicates the type of receivers subscribed to the
      * notification, either user or subscription.
-     *
+     * 
      * @return the notificationChannel value.
      */
     public NotificationChannel notificationChannel() {
@@ -41,7 +46,7 @@ public final class NotificationTarget {
     /**
      * Set the notificationChannel property: The notification channel indicates the type of receivers subscribed to the
      * notification, either user or subscription.
-     *
+     * 
      * @param notificationChannel the notificationChannel value to set.
      * @return the NotificationTarget object itself.
      */
@@ -52,7 +57,7 @@ public final class NotificationTarget {
 
     /**
      * Get the receivers property: List of targets that subscribe to the notification.
-     *
+     * 
      * @return the receivers value.
      */
     public List<String> receivers() {
@@ -61,7 +66,7 @@ public final class NotificationTarget {
 
     /**
      * Set the receivers property: List of targets that subscribe to the notification.
-     *
+     * 
      * @param receivers the receivers value to set.
      * @return the NotificationTarget object itself.
      */
@@ -72,20 +77,19 @@ public final class NotificationTarget {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (notificationChannel() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property notificationChannel in model NotificationTarget"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property notificationChannel in model NotificationTarget"));
         }
         if (receivers() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property receivers in model NotificationTarget"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property receivers in model NotificationTarget"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(NotificationTarget.class);
 }

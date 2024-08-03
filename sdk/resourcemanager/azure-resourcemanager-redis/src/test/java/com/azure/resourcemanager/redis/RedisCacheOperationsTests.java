@@ -7,10 +7,12 @@ import com.azure.core.management.AzureEnvironment;
 import com.azure.core.management.Region;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.resourcemanager.redis.models.DayOfWeek;
+import com.azure.resourcemanager.redis.models.PublicNetworkAccess;
 import com.azure.resourcemanager.redis.models.RebootType;
 import com.azure.resourcemanager.redis.models.RedisAccessKeys;
 import com.azure.resourcemanager.redis.models.RedisCache;
 import com.azure.resourcemanager.redis.models.RedisCachePremium;
+import com.azure.resourcemanager.redis.models.RedisConfiguration;
 import com.azure.resourcemanager.redis.models.RedisKeyType;
 import com.azure.resourcemanager.redis.models.ReplicationRole;
 import com.azure.resourcemanager.redis.models.ScheduleEntry;
@@ -24,11 +26,14 @@ import com.azure.resourcemanager.resources.fluentcore.utils.ResourceManagerUtils
 import com.azure.resourcemanager.resources.models.ResourceGroup;
 import com.azure.resourcemanager.storage.models.StorageAccount;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class RedisCacheOperationsTests extends RedisManagementTest {
@@ -63,7 +68,6 @@ public class RedisCacheOperationsTests extends RedisManagementTest {
                 .withRegion(Region.US_CENTRAL)
                 .withNewResourceGroup(resourceGroups)
                 .withPremiumSku(2)
-                .withRedisConfiguration("maxclients", "2")
                 .withNonSslPort()
                 .withFirewallRule("rule1", "192.168.0.1", "192.168.0.4")
                 .withFirewallRule("rule2", "192.168.0.10", "192.168.0.40");
@@ -82,13 +86,15 @@ public class RedisCacheOperationsTests extends RedisManagementTest {
 //                .create();
 
         RedisCache redisCache = batchRedisCaches.get(redisCacheDefinition1.key());
-        RedisCache redisCachePremium = batchRedisCaches.get(redisCacheDefinition3.key());
         Assertions.assertEquals(rgName, redisCache.resourceGroupName());
         Assertions.assertEquals(SkuName.BASIC, redisCache.sku().name());
+        assertSameVersion(RedisCache.RedisVersion.V6, redisCache.redisVersion());
 
         // Premium SKU Functionality
+        RedisCache redisCachePremium = batchRedisCaches.get(redisCacheDefinition3.key());
         RedisCachePremium premiumCache = redisCachePremium.asPremium();
         Assertions.assertEquals(SkuFamily.P, premiumCache.sku().family());
+        assertSameVersion(RedisCache.RedisVersion.V6, premiumCache.redisVersion());
         Assertions.assertEquals(2, premiumCache.firewallRules().size());
         Assertions.assertTrue(premiumCache.firewallRules().containsKey("rule1"));
         Assertions.assertTrue(premiumCache.firewallRules().containsKey("rule2"));
@@ -96,7 +102,6 @@ public class RedisCacheOperationsTests extends RedisManagementTest {
         // Redis configuration update
         premiumCache
             .update()
-            .withRedisConfiguration("maxclients", "3")
             .withoutFirewallRule("rule1")
             .withFirewallRule("rule3", "192.168.0.10", "192.168.0.104")
             .withoutMinimumTlsVersion()
@@ -212,6 +217,7 @@ public class RedisCacheOperationsTests extends RedisManagementTest {
         premiumCache.importData(Arrays.asList("snapshot1"));*/
     }
 
+    @Disabled("Cannot create cache. Redis version 4.0 is retiring.")
     @Test
     public void canRedisVersionUpdate() {
         RedisCache.RedisVersion redisVersion = RedisCache.RedisVersion.V4;
@@ -226,7 +232,7 @@ public class RedisCacheOperationsTests extends RedisManagementTest {
                 .withRedisVersion(redisVersion)
                 .create();
 
-        Assertions.assertTrue(redisCache.redisVersion().startsWith(redisVersion.getValue()));
+        assertSameVersion(RedisCache.RedisVersion.V4, redisCache.redisVersion());
 
         redisVersion = RedisCache.RedisVersion.V6;
         redisCache = redisCache.update()
@@ -236,8 +242,16 @@ public class RedisCacheOperationsTests extends RedisManagementTest {
         ResourceManagerUtils.sleep(Duration.ofSeconds(300)); // let redis cache take its time
 
         redisCache = redisCache.refresh();
-        Assertions.assertTrue(redisCache.redisVersion().startsWith(redisVersion.getValue()));
+        assertSameVersion(RedisCache.RedisVersion.V6, redisCache.redisVersion());
 
+        RedisCache redisCacheLocal = redisCache;
+
+        // Cannot downgrade redisCache version.
+        Assertions.assertThrows(
+            ManagementException.class,
+            () -> redisCacheLocal.update()
+                .withRedisVersion(RedisCache.RedisVersion.V4)
+                .apply());
     }
 
     @Test
@@ -270,27 +284,35 @@ public class RedisCacheOperationsTests extends RedisManagementTest {
         Assertions.assertNotNull(rggLinked);
 
         RedisCachePremium premiumRgg = rgg.asPremium();
+        assertSameVersion(RedisCache.RedisVersion.V6, premiumRgg.redisVersion());
 
         String llName = premiumRgg.addLinkedServer(rggLinked.id(), rggLinked.regionName(), ReplicationRole.PRIMARY);
 
-        Assertions.assertEquals(ResourceUtils.nameFromResourceId(rggLinked.id()), llName);
+        try {
+            Assertions.assertEquals(ResourceUtils.nameFromResourceId(rggLinked.id()), llName);
 
-        Map<String, ReplicationRole> linkedServers = premiumRgg.listLinkedServers();
-        Assertions.assertEquals(1, linkedServers.size());
-        Assertions.assertTrue(linkedServers.keySet().contains(llName));
-        Assertions.assertEquals(ReplicationRole.PRIMARY, linkedServers.get(llName));
+            Map<String, ReplicationRole> linkedServers = premiumRgg.listLinkedServers();
+            Assertions.assertEquals(1, linkedServers.size());
+            Assertions.assertTrue(linkedServers.keySet().contains(llName));
+            Assertions.assertEquals(ReplicationRole.PRIMARY, linkedServers.get(llName));
 
-        ReplicationRole repRole = premiumRgg.getLinkedServerRole(llName);
-        Assertions.assertEquals(ReplicationRole.PRIMARY, repRole);
+            ReplicationRole repRole = premiumRgg.getLinkedServerRole(llName);
+            Assertions.assertEquals(ReplicationRole.PRIMARY, repRole);
 
-        premiumRgg.removeLinkedServer(llName);
+            premiumRgg.removeLinkedServer(llName);
 
-        rgg.update().withoutPatchSchedule().apply();
+            rgg.update().withoutPatchSchedule().apply();
 
-        rggLinked.update().withFirewallRule("rulesmhule", "192.168.1.10", "192.168.1.20").apply();
+            rggLinked.update().withFirewallRule("rulesmhule", "192.168.1.10", "192.168.1.20").apply();
 
-        linkedServers = premiumRgg.listLinkedServers();
-        Assertions.assertEquals(0, linkedServers.size());
+            linkedServers = premiumRgg.listLinkedServers();
+            Assertions.assertEquals(0, linkedServers.size());
+        } finally {
+            // linked servers need to be removed before redis cache can be deleted
+            if (premiumRgg.listLinkedServers().size() > 0) {
+                premiumRgg.removeLinkedServer(llName);
+            }
+        }
     }
 
     @Test
@@ -314,11 +336,17 @@ public class RedisCacheOperationsTests extends RedisManagementTest {
                 .withExistingResourceGroup(rgName)
                 .withPremiumSku()
                 .withMinimumTlsVersion(TlsVersion.ONE_TWO)
-                .withRedisConfiguration("rdb-backup-enabled", "true")
-                .withRedisConfiguration("rdb-backup-frequency", "15")
-                .withRedisConfiguration("rdb-backup-max-snapshot-count", "1")
-                .withRedisConfiguration("rdb-storage-connection-string", connectionString)
+                .withRedisConfiguration(new RedisConfiguration()
+                    .withRdbBackupEnabled("true")
+                    .withRdbBackupFrequency("15")
+                    .withRdbBackupMaxSnapshotCount("1")
+                    .withRdbStorageConnectionString(connectionString))
                 .create();
+        Assertions.assertEquals("true", redisCache.innerModel().redisConfiguration().rdbBackupEnabled());
+        Assertions.assertEquals("15", redisCache.innerModel().redisConfiguration().rdbBackupFrequency());
+        Assertions.assertEquals("1", redisCache.innerModel().redisConfiguration().rdbBackupMaxSnapshotCount());
+        Assertions.assertNotNull(redisCache.innerModel().redisConfiguration().rdbStorageConnectionString());
+        assertSameVersion(RedisCache.RedisVersion.V6, redisCache.redisVersion());
 
         redisManager.redisCaches().deleteById(redisCache.id());
 
@@ -335,5 +363,59 @@ public class RedisCacheOperationsTests extends RedisManagementTest {
                 .withRedisConfiguration("aof-storage-connection-string-0", connectionString)
                 .withRedisConfiguration("aof-storage-connection-string-1", connectionString)
                 .create();
+        Assertions.assertEquals("true", redisCache.innerModel().redisConfiguration().aofBackupEnabled());
+        if (!isPlaybackMode()) {
+            Assertions.assertNotNull(redisCache.innerModel().redisConfiguration().aofStorageConnectionString0());
+            Assertions.assertNotNull(redisCache.innerModel().redisConfiguration().aofStorageConnectionString1());
+        }
+
+        assertSameVersion(RedisCache.RedisVersion.V6, redisCache.redisVersion());
+    }
+
+    @Test
+    public void canCreateRedisCacheWithDisablePublicNetworkAccess() {
+        resourceManager.resourceGroups().define(rgNameSecond).withRegion(Region.US_CENTRAL);
+
+        RedisCache redisCache =
+            redisManager
+                .redisCaches()
+                .define(rrName)
+                .withRegion(Region.ASIA_EAST)
+                .withNewResourceGroup(rgName)
+                .withBasicSku()
+                .disablePublicNetworkAccess()
+                .create();
+        Assertions.assertEquals(PublicNetworkAccess.DISABLED, redisCache.publicNetworkAccess());
+    }
+
+    @Test
+    public void canUpdatePublicNetworkAccess() {
+        resourceManager.resourceGroups().define(rgNameSecond).withRegion(Region.US_CENTRAL);
+
+        RedisCache redisCache =
+            redisManager
+                .redisCaches()
+                .define(rrName)
+                .withRegion(Region.ASIA_EAST)
+                .withNewResourceGroup(rgName)
+                .withBasicSku()
+                .create();
+
+        redisCache.update().disablePublicNetworkAccess().apply();
+        Assertions.assertEquals(PublicNetworkAccess.DISABLED, redisCache.publicNetworkAccess());
+
+        redisCache.update().enablePublicNetworkAccess().apply();
+        Assertions.assertEquals(PublicNetworkAccess.ENABLED, redisCache.publicNetworkAccess());
+    }
+
+    // e.g 6.xxxx
+    private static final Pattern MINOR_VERSION_REGEX = Pattern.compile("([1-9]+)\\..*");
+
+    private static void assertSameVersion(RedisCache.RedisVersion majorVersion, String minorVersion) {
+        Matcher matcher = MINOR_VERSION_REGEX.matcher(minorVersion);
+        if (!matcher.matches()) {
+            throw new IllegalArgumentException(String.format("Invalid redis minor version: %s", minorVersion));
+        }
+        Assertions.assertEquals(matcher.group(1), majorVersion.getValue());
     }
 }

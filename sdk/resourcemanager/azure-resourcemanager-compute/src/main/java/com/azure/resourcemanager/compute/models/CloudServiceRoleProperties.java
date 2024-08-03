@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The CloudServiceRoleProperties model. */
+/**
+ * The cloud service role properties.
+ */
 @Immutable
 public final class CloudServiceRoleProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CloudServiceRoleProperties.class);
-
     /*
      * Specifies the ID which uniquely identifies a cloud service role.
      */
@@ -21,8 +19,14 @@ public final class CloudServiceRoleProperties {
     private String uniqueId;
 
     /**
+     * Creates an instance of CloudServiceRoleProperties class.
+     */
+    public CloudServiceRoleProperties() {
+    }
+
+    /**
      * Get the uniqueId property: Specifies the ID which uniquely identifies a cloud service role.
-     *
+     * 
      * @return the uniqueId value.
      */
     public String uniqueId() {
@@ -31,7 +35,7 @@ public final class CloudServiceRoleProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

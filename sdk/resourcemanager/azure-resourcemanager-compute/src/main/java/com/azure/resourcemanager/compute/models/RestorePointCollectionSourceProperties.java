@@ -5,32 +5,34 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The properties of the source resource that this restore point collection is created from. */
+/**
+ * The properties of the source resource that this restore point collection is created from.
+ */
 @Fluent
 public final class RestorePointCollectionSourceProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RestorePointCollectionSourceProperties.class);
-
     /*
-     * Location of the source resource used to create this restore point
-     * collection.
+     * Location of the source resource used to create this restore point collection.
      */
     @JsonProperty(value = "location", access = JsonProperty.Access.WRITE_ONLY)
     private String location;
 
     /*
-     * Resource Id of the source resource used to create this restore point
-     * collection
+     * Resource Id of the source resource used to create this restore point collection
      */
     @JsonProperty(value = "id")
     private String id;
 
     /**
+     * Creates an instance of RestorePointCollectionSourceProperties class.
+     */
+    public RestorePointCollectionSourceProperties() {
+    }
+
+    /**
      * Get the location property: Location of the source resource used to create this restore point collection.
-     *
+     * 
      * @return the location value.
      */
     public String location() {
@@ -39,7 +41,7 @@ public final class RestorePointCollectionSourceProperties {
 
     /**
      * Get the id property: Resource Id of the source resource used to create this restore point collection.
-     *
+     * 
      * @return the id value.
      */
     public String id() {
@@ -48,7 +50,7 @@ public final class RestorePointCollectionSourceProperties {
 
     /**
      * Set the id property: Resource Id of the source resource used to create this restore point collection.
-     *
+     * 
      * @param id the id value to set.
      * @return the RestorePointCollectionSourceProperties object itself.
      */
@@ -59,7 +61,7 @@ public final class RestorePointCollectionSourceProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

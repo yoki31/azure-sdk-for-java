@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Factory's git repo information. */
+/**
+ * Factory's git repo information.
+ */
 @Fluent
 public final class FactoryRepoUpdate {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(FactoryRepoUpdate.class);
-
     /*
      * The factory resource id.
      */
@@ -27,8 +25,14 @@ public final class FactoryRepoUpdate {
     private FactoryRepoConfiguration repoConfiguration;
 
     /**
+     * Creates an instance of FactoryRepoUpdate class.
+     */
+    public FactoryRepoUpdate() {
+    }
+
+    /**
      * Get the factoryResourceId property: The factory resource id.
-     *
+     * 
      * @return the factoryResourceId value.
      */
     public String factoryResourceId() {
@@ -37,7 +41,7 @@ public final class FactoryRepoUpdate {
 
     /**
      * Set the factoryResourceId property: The factory resource id.
-     *
+     * 
      * @param factoryResourceId the factoryResourceId value to set.
      * @return the FactoryRepoUpdate object itself.
      */
@@ -48,7 +52,7 @@ public final class FactoryRepoUpdate {
 
     /**
      * Get the repoConfiguration property: Git repo information of the factory.
-     *
+     * 
      * @return the repoConfiguration value.
      */
     public FactoryRepoConfiguration repoConfiguration() {
@@ -57,7 +61,7 @@ public final class FactoryRepoUpdate {
 
     /**
      * Set the repoConfiguration property: Git repo information of the factory.
-     *
+     * 
      * @param repoConfiguration the repoConfiguration value to set.
      * @return the FactoryRepoUpdate object itself.
      */
@@ -68,7 +72,7 @@ public final class FactoryRepoUpdate {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

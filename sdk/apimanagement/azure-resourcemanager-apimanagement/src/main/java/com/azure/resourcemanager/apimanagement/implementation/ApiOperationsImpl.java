@@ -15,10 +15,9 @@ import com.azure.resourcemanager.apimanagement.models.ApiOperations;
 import com.azure.resourcemanager.apimanagement.models.ApiOperationsGetEntityTagResponse;
 import com.azure.resourcemanager.apimanagement.models.ApiOperationsGetResponse;
 import com.azure.resourcemanager.apimanagement.models.OperationContract;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class ApiOperationsImpl implements ApiOperations {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiOperationsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(ApiOperationsImpl.class);
 
     private final ApiOperationsClient innerClient;
 
@@ -50,10 +49,6 @@ public final class ApiOperationsImpl implements ApiOperations {
         return Utils.mapPage(inner, inner1 -> new OperationContractImpl(inner1, this.manager()));
     }
 
-    public void getEntityTag(String resourceGroupName, String serviceName, String apiId, String operationId) {
-        this.serviceClient().getEntityTag(resourceGroupName, serviceName, apiId, operationId);
-    }
-
     public ApiOperationsGetEntityTagResponse getEntityTagWithResponse(
         String resourceGroupName, String serviceName, String apiId, String operationId, Context context) {
         return this
@@ -61,13 +56,8 @@ public final class ApiOperationsImpl implements ApiOperations {
             .getEntityTagWithResponse(resourceGroupName, serviceName, apiId, operationId, context);
     }
 
-    public OperationContract get(String resourceGroupName, String serviceName, String apiId, String operationId) {
-        OperationContractInner inner = this.serviceClient().get(resourceGroupName, serviceName, apiId, operationId);
-        if (inner != null) {
-            return new OperationContractImpl(inner, this.manager());
-        } else {
-            return null;
-        }
+    public void getEntityTag(String resourceGroupName, String serviceName, String apiId, String operationId) {
+        this.serviceClient().getEntityTag(resourceGroupName, serviceName, apiId, operationId);
     }
 
     public Response<OperationContract> getWithResponse(
@@ -85,8 +75,13 @@ public final class ApiOperationsImpl implements ApiOperations {
         }
     }
 
-    public void delete(String resourceGroupName, String serviceName, String apiId, String operationId, String ifMatch) {
-        this.serviceClient().delete(resourceGroupName, serviceName, apiId, operationId, ifMatch);
+    public OperationContract get(String resourceGroupName, String serviceName, String apiId, String operationId) {
+        OperationContractInner inner = this.serviceClient().get(resourceGroupName, serviceName, apiId, operationId);
+        if (inner != null) {
+            return new OperationContractImpl(inner, this.manager());
+        } else {
+            return null;
+        }
     }
 
     public Response<Void> deleteWithResponse(
@@ -101,10 +96,14 @@ public final class ApiOperationsImpl implements ApiOperations {
             .deleteWithResponse(resourceGroupName, serviceName, apiId, operationId, ifMatch, context);
     }
 
+    public void delete(String resourceGroupName, String serviceName, String apiId, String operationId, String ifMatch) {
+        this.serviceClient().delete(resourceGroupName, serviceName, apiId, operationId, ifMatch);
+    }
+
     public OperationContract getById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -112,21 +111,21 @@ public final class ApiOperationsImpl implements ApiOperations {
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String apiId = Utils.getValueFromIdByName(id, "apis");
         if (apiId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'apis'.", id)));
         }
         String operationId = Utils.getValueFromIdByName(id, "operations");
         if (operationId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'operations'.", id)));
@@ -137,7 +136,7 @@ public final class ApiOperationsImpl implements ApiOperations {
     public Response<OperationContract> getByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -145,21 +144,21 @@ public final class ApiOperationsImpl implements ApiOperations {
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String apiId = Utils.getValueFromIdByName(id, "apis");
         if (apiId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'apis'.", id)));
         }
         String operationId = Utils.getValueFromIdByName(id, "operations");
         if (operationId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'operations'.", id)));
@@ -170,7 +169,7 @@ public final class ApiOperationsImpl implements ApiOperations {
     public void deleteById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -178,35 +177,33 @@ public final class ApiOperationsImpl implements ApiOperations {
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String apiId = Utils.getValueFromIdByName(id, "apis");
         if (apiId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'apis'.", id)));
         }
         String operationId = Utils.getValueFromIdByName(id, "operations");
         if (operationId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'operations'.", id)));
         }
         String localIfMatch = null;
-        this
-            .deleteWithResponse(resourceGroupName, serviceName, apiId, operationId, localIfMatch, Context.NONE)
-            .getValue();
+        this.deleteWithResponse(resourceGroupName, serviceName, apiId, operationId, localIfMatch, Context.NONE);
     }
 
     public Response<Void> deleteByIdWithResponse(String id, String ifMatch, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -214,21 +211,21 @@ public final class ApiOperationsImpl implements ApiOperations {
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String apiId = Utils.getValueFromIdByName(id, "apis");
         if (apiId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'apis'.", id)));
         }
         String operationId = Utils.getValueFromIdByName(id, "operations");
         if (operationId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'operations'.", id)));

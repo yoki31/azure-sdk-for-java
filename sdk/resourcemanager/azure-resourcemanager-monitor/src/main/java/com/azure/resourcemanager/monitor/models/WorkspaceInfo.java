@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.monitor.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.azure.resourcemanager.monitor.fluent.models.WorkspaceInfoProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Information about a Log Analytics Workspace. */
-@JsonFlatten
+/**
+ * Information about a Log Analytics Workspace.
+ */
 @Fluent
-public class WorkspaceInfo {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(WorkspaceInfo.class);
-
+public final class WorkspaceInfo {
     /*
      * Azure Resource Manager identifier of the Log Analytics Workspace.
      */
@@ -29,14 +27,20 @@ public class WorkspaceInfo {
     private String location;
 
     /*
-     * Log Analytics workspace identifier.
+     * Resource properties.
      */
-    @JsonProperty(value = "properties.customerId", required = true)
-    private String customerId;
+    @JsonProperty(value = "properties", required = true)
+    private WorkspaceInfoProperties innerProperties = new WorkspaceInfoProperties();
+
+    /**
+     * Creates an instance of WorkspaceInfo class.
+     */
+    public WorkspaceInfo() {
+    }
 
     /**
      * Get the id property: Azure Resource Manager identifier of the Log Analytics Workspace.
-     *
+     * 
      * @return the id value.
      */
     public String id() {
@@ -45,7 +49,7 @@ public class WorkspaceInfo {
 
     /**
      * Set the id property: Azure Resource Manager identifier of the Log Analytics Workspace.
-     *
+     * 
      * @param id the id value to set.
      * @return the WorkspaceInfo object itself.
      */
@@ -56,7 +60,7 @@ public class WorkspaceInfo {
 
     /**
      * Get the location property: Location of the Log Analytics workspace.
-     *
+     * 
      * @return the location value.
      */
     public String location() {
@@ -65,7 +69,7 @@ public class WorkspaceInfo {
 
     /**
      * Set the location property: Location of the Log Analytics workspace.
-     *
+     * 
      * @param location the location value to set.
      * @return the WorkspaceInfo object itself.
      */
@@ -75,45 +79,58 @@ public class WorkspaceInfo {
     }
 
     /**
+     * Get the innerProperties property: Resource properties.
+     * 
+     * @return the innerProperties value.
+     */
+    private WorkspaceInfoProperties innerProperties() {
+        return this.innerProperties;
+    }
+
+    /**
      * Get the customerId property: Log Analytics workspace identifier.
-     *
+     * 
      * @return the customerId value.
      */
     public String customerId() {
-        return this.customerId;
+        return this.innerProperties() == null ? null : this.innerProperties().customerId();
     }
 
     /**
      * Set the customerId property: Log Analytics workspace identifier.
-     *
+     * 
      * @param customerId the customerId value to set.
      * @return the WorkspaceInfo object itself.
      */
     public WorkspaceInfo withCustomerId(String customerId) {
-        this.customerId = customerId;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new WorkspaceInfoProperties();
+        }
+        this.innerProperties().withCustomerId(customerId);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (id() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property id in model WorkspaceInfo"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property id in model WorkspaceInfo"));
         }
         if (location() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property location in model WorkspaceInfo"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property location in model WorkspaceInfo"));
         }
-        if (customerId() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property customerId in model WorkspaceInfo"));
+        if (innerProperties() == null) {
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property innerProperties in model WorkspaceInfo"));
+        } else {
+            innerProperties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(WorkspaceInfo.class);
 }

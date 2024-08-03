@@ -12,10 +12,9 @@ import com.azure.resourcemanager.applicationinsights.fluent.ComponentFeatureCapa
 import com.azure.resourcemanager.applicationinsights.fluent.models.ApplicationInsightsComponentFeatureCapabilitiesInner;
 import com.azure.resourcemanager.applicationinsights.models.ApplicationInsightsComponentFeatureCapabilities;
 import com.azure.resourcemanager.applicationinsights.models.ComponentFeatureCapabilities;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class ComponentFeatureCapabilitiesImpl implements ComponentFeatureCapabilities {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ComponentFeatureCapabilitiesImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(ComponentFeatureCapabilitiesImpl.class);
 
     private final ComponentFeatureCapabilitiesClient innerClient;
 
@@ -28,16 +27,6 @@ public final class ComponentFeatureCapabilitiesImpl implements ComponentFeatureC
         this.serviceManager = serviceManager;
     }
 
-    public ApplicationInsightsComponentFeatureCapabilities get(String resourceGroupName, String resourceName) {
-        ApplicationInsightsComponentFeatureCapabilitiesInner inner =
-            this.serviceClient().get(resourceGroupName, resourceName);
-        if (inner != null) {
-            return new ApplicationInsightsComponentFeatureCapabilitiesImpl(inner, this.manager());
-        } else {
-            return null;
-        }
-    }
-
     public Response<ApplicationInsightsComponentFeatureCapabilities> getWithResponse(
         String resourceGroupName, String resourceName, Context context) {
         Response<ApplicationInsightsComponentFeatureCapabilitiesInner> inner =
@@ -48,6 +37,16 @@ public final class ComponentFeatureCapabilitiesImpl implements ComponentFeatureC
                 inner.getStatusCode(),
                 inner.getHeaders(),
                 new ApplicationInsightsComponentFeatureCapabilitiesImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
+    }
+
+    public ApplicationInsightsComponentFeatureCapabilities get(String resourceGroupName, String resourceName) {
+        ApplicationInsightsComponentFeatureCapabilitiesInner inner =
+            this.serviceClient().get(resourceGroupName, resourceName);
+        if (inner != null) {
+            return new ApplicationInsightsComponentFeatureCapabilitiesImpl(inner, this.manager());
         } else {
             return null;
         }

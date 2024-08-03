@@ -5,18 +5,16 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.StackPreferredOs;
 import com.azure.resourcemanager.appservice.models.WebAppMajorVersion;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** WebAppStack resource specific properties. */
+/**
+ * WebAppStack resource specific properties.
+ */
 @Immutable
 public final class WebAppStackProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(WebAppStackProperties.class);
-
     /*
      * Web App stack (display only).
      */
@@ -42,8 +40,14 @@ public final class WebAppStackProperties {
     private StackPreferredOs preferredOs;
 
     /**
+     * Creates an instance of WebAppStackProperties class.
+     */
+    public WebAppStackProperties() {
+    }
+
+    /**
      * Get the displayText property: Web App stack (display only).
-     *
+     * 
      * @return the displayText value.
      */
     public String displayText() {
@@ -52,7 +56,7 @@ public final class WebAppStackProperties {
 
     /**
      * Get the value property: Web App stack name.
-     *
+     * 
      * @return the value value.
      */
     public String value() {
@@ -61,7 +65,7 @@ public final class WebAppStackProperties {
 
     /**
      * Get the majorVersions property: List of major versions available.
-     *
+     * 
      * @return the majorVersions value.
      */
     public List<WebAppMajorVersion> majorVersions() {
@@ -70,7 +74,7 @@ public final class WebAppStackProperties {
 
     /**
      * Get the preferredOs property: Web App stack preferred OS.
-     *
+     * 
      * @return the preferredOs value.
      */
     public StackPreferredOs preferredOs() {
@@ -79,7 +83,7 @@ public final class WebAppStackProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

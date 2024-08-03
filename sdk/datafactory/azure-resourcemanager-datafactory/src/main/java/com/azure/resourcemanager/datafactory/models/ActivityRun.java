@@ -5,20 +5,19 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-/** Information about an activity run in a pipeline. */
+/**
+ * Information about an activity run in a pipeline.
+ */
 @Fluent
 public final class ActivityRun {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ActivityRun.class);
-
     /*
      * The name of the pipeline.
      */
@@ -100,11 +99,18 @@ public final class ActivityRun {
     /*
      * Information about an activity run in a pipeline.
      */
-    @JsonIgnore private Map<String, Object> additionalProperties;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties;
+
+    /**
+     * Creates an instance of ActivityRun class.
+     */
+    public ActivityRun() {
+    }
 
     /**
      * Get the pipelineName property: The name of the pipeline.
-     *
+     * 
      * @return the pipelineName value.
      */
     public String pipelineName() {
@@ -113,7 +119,7 @@ public final class ActivityRun {
 
     /**
      * Get the pipelineRunId property: The id of the pipeline run.
-     *
+     * 
      * @return the pipelineRunId value.
      */
     public String pipelineRunId() {
@@ -122,7 +128,7 @@ public final class ActivityRun {
 
     /**
      * Get the activityName property: The name of the activity.
-     *
+     * 
      * @return the activityName value.
      */
     public String activityName() {
@@ -131,7 +137,7 @@ public final class ActivityRun {
 
     /**
      * Get the activityType property: The type of the activity.
-     *
+     * 
      * @return the activityType value.
      */
     public String activityType() {
@@ -140,7 +146,7 @@ public final class ActivityRun {
 
     /**
      * Get the activityRunId property: The id of the activity run.
-     *
+     * 
      * @return the activityRunId value.
      */
     public String activityRunId() {
@@ -149,7 +155,7 @@ public final class ActivityRun {
 
     /**
      * Get the linkedServiceName property: The name of the compute linked service.
-     *
+     * 
      * @return the linkedServiceName value.
      */
     public String linkedServiceName() {
@@ -158,7 +164,7 @@ public final class ActivityRun {
 
     /**
      * Get the status property: The status of the activity run.
-     *
+     * 
      * @return the status value.
      */
     public String status() {
@@ -167,7 +173,7 @@ public final class ActivityRun {
 
     /**
      * Get the activityRunStart property: The start time of the activity run in 'ISO 8601' format.
-     *
+     * 
      * @return the activityRunStart value.
      */
     public OffsetDateTime activityRunStart() {
@@ -176,7 +182,7 @@ public final class ActivityRun {
 
     /**
      * Get the activityRunEnd property: The end time of the activity run in 'ISO 8601' format.
-     *
+     * 
      * @return the activityRunEnd value.
      */
     public OffsetDateTime activityRunEnd() {
@@ -185,7 +191,7 @@ public final class ActivityRun {
 
     /**
      * Get the durationInMs property: The duration of the activity run.
-     *
+     * 
      * @return the durationInMs value.
      */
     public Integer durationInMs() {
@@ -194,7 +200,7 @@ public final class ActivityRun {
 
     /**
      * Get the input property: The input for the activity.
-     *
+     * 
      * @return the input value.
      */
     public Object input() {
@@ -203,7 +209,7 @@ public final class ActivityRun {
 
     /**
      * Get the output property: The output for the activity.
-     *
+     * 
      * @return the output value.
      */
     public Object output() {
@@ -212,7 +218,7 @@ public final class ActivityRun {
 
     /**
      * Get the error property: The error if any from the activity run.
-     *
+     * 
      * @return the error value.
      */
     public Object error() {
@@ -221,7 +227,7 @@ public final class ActivityRun {
 
     /**
      * Get the additionalProperties property: Information about an activity run in a pipeline.
-     *
+     * 
      * @return the additionalProperties value.
      */
     @JsonAnyGetter
@@ -231,7 +237,7 @@ public final class ActivityRun {
 
     /**
      * Set the additionalProperties property: Information about an activity run in a pipeline.
-     *
+     * 
      * @param additionalProperties the additionalProperties value to set.
      * @return the ActivityRun object itself.
      */
@@ -243,14 +249,14 @@ public final class ActivityRun {
     @JsonAnySetter
     void withAdditionalProperties(String key, Object value) {
         if (additionalProperties == null) {
-            additionalProperties = new HashMap<>();
+            additionalProperties = new LinkedHashMap<>();
         }
         additionalProperties.put(key, value);
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -15,21 +15,23 @@ import com.azure.resourcemanager.cosmos.models.ConnectorOffer;
 import com.azure.resourcemanager.cosmos.models.ConsistencyPolicy;
 import com.azure.resourcemanager.cosmos.models.CorsPolicy;
 import com.azure.resourcemanager.cosmos.models.CreateMode;
+import com.azure.resourcemanager.cosmos.models.DatabaseAccountKeysMetadata;
 import com.azure.resourcemanager.cosmos.models.IpAddressOrRange;
 import com.azure.resourcemanager.cosmos.models.Location;
+import com.azure.resourcemanager.cosmos.models.MinimalTlsVersion;
 import com.azure.resourcemanager.cosmos.models.NetworkAclBypass;
 import com.azure.resourcemanager.cosmos.models.PublicNetworkAccess;
 import com.azure.resourcemanager.cosmos.models.RestoreParameters;
 import com.azure.resourcemanager.cosmos.models.VirtualNetworkRule;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
-/** Properties to create and update Azure Cosmos DB database accounts. */
+/**
+ * Properties to create and update Azure Cosmos DB database accounts.
+ */
 @Fluent
 public final class DatabaseAccountCreateUpdateProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DatabaseAccountCreateUpdateProperties.class);
-
     /*
      * The consistency policy for the Cosmos DB account.
      */
@@ -37,8 +39,7 @@ public final class DatabaseAccountCreateUpdateProperties {
     private ConsistencyPolicy consistencyPolicy;
 
     /*
-     * An array that contains the georeplication locations enabled for the
-     * Cosmos DB account.
+     * An array that contains the georeplication locations enabled for the Cosmos DB account.
      */
     @JsonProperty(value = "locations", required = true)
     private List<Location> locations;
@@ -62,10 +63,7 @@ public final class DatabaseAccountCreateUpdateProperties {
     private Boolean isVirtualNetworkFilterEnabled;
 
     /*
-     * Enables automatic failover of the write region in the rare event that
-     * the region is unavailable due to an outage. Automatic failover will
-     * result in a new write region for the account and is chosen based on the
-     * failover priorities configured for the account.
+     * Enables automatic failover of the write region in the rare event that the region is unavailable due to an outage. Automatic failover will result in a new write region for the account and is chosen based on the failover priorities configured for the account.
      */
     @JsonProperty(value = "enableAutomaticFailover")
     private Boolean enableAutomaticFailover;
@@ -95,15 +93,13 @@ public final class DatabaseAccountCreateUpdateProperties {
     private Boolean enableCassandraConnector;
 
     /*
-     * The cassandra connector offer type for the Cosmos DB database C*
-     * account.
+     * The cassandra connector offer type for the Cosmos DB database C* account.
      */
     @JsonProperty(value = "connectorOffer")
     private ConnectorOffer connectorOffer;
 
     /*
-     * Disable write operations on metadata resources (databases, containers,
-     * throughput) via account keys
+     * Disable write operations on metadata resources (databases, containers, throughput) via account keys
      */
     @JsonProperty(value = "disableKeyBasedMetadataWriteAccess")
     private Boolean disableKeyBasedMetadataWriteAccess;
@@ -115,10 +111,7 @@ public final class DatabaseAccountCreateUpdateProperties {
     private String keyVaultKeyUri;
 
     /*
-     * The default identity for accessing key vault used in features like
-     * customer managed keys. The default identity needs to be explicitly set
-     * by the users. It can be "FirstPartyIdentity", "SystemAssignedIdentity"
-     * and more.
+     * The default identity for accessing key vault used in features like customer managed keys. The default identity needs to be explicitly set by the users. It can be "FirstPartyIdentity", "SystemAssignedIdentity" and more.
      */
     @JsonProperty(value = "defaultIdentity")
     private String defaultIdentity;
@@ -178,15 +171,13 @@ public final class DatabaseAccountCreateUpdateProperties {
     private NetworkAclBypass networkAclBypass;
 
     /*
-     * An array that contains the Resource Ids for Network Acl Bypass for the
-     * Cosmos DB account.
+     * An array that contains the Resource Ids for Network Acl Bypass for the Cosmos DB account.
      */
     @JsonProperty(value = "networkAclBypassResourceIds")
     private List<String> networkAclBypassResourceIds;
 
     /*
-     * Opt-out of local authentication and ensure only MSI and AAD can be used
-     * exclusively for authentication.
+     * Opt-out of local authentication and ensure only MSI and AAD can be used exclusively for authentication.
      */
     @JsonProperty(value = "disableLocalAuth")
     private Boolean disableLocalAuth;
@@ -198,15 +189,45 @@ public final class DatabaseAccountCreateUpdateProperties {
     private RestoreParameters restoreParameters;
 
     /*
-     * The object that represents all properties related to capacity
-     * enforcement on an account.
+     * The object that represents all properties related to capacity enforcement on an account.
      */
     @JsonProperty(value = "capacity")
     private Capacity capacity;
 
-    /** Creates an instance of DatabaseAccountCreateUpdateProperties class. */
+    /*
+     * This property is ignored during the update/create operation, as the metadata is read-only. The object represents the metadata for the Account Keys of the Cosmos DB account.
+     */
+    @JsonProperty(value = "keysMetadata", access = JsonProperty.Access.WRITE_ONLY)
+    private DatabaseAccountKeysMetadata keysMetadata;
+
+    /*
+     * Flag to indicate enabling/disabling of Partition Merge feature on the account
+     */
+    @JsonProperty(value = "enablePartitionMerge")
+    private Boolean enablePartitionMerge;
+
+    /*
+     * Indicates the minimum allowed Tls version. The default value is Tls 1.2. Cassandra and Mongo APIs only work with Tls 1.2.
+     */
+    @JsonProperty(value = "minimalTlsVersion")
+    private MinimalTlsVersion minimalTlsVersion;
+
+    /*
+     * Flag to indicate enabling/disabling of Burst Capacity Preview feature on the account
+     */
+    @JsonProperty(value = "enableBurstCapacity")
+    private Boolean enableBurstCapacity;
+
+    /*
+     * Indicates the status of the Customer Managed Key feature on the account. In case there are errors, the property provides troubleshooting guidance.
+     */
+    @JsonProperty(value = "customerManagedKeyStatus")
+    private String customerManagedKeyStatus;
+
+    /**
+     * Creates an instance of DatabaseAccountCreateUpdateProperties class.
+     */
     public DatabaseAccountCreateUpdateProperties() {
-        databaseAccountOfferType = "Standard";
     }
 
     /**
@@ -308,8 +329,8 @@ public final class DatabaseAccountCreateUpdateProperties {
      * @param isVirtualNetworkFilterEnabled the isVirtualNetworkFilterEnabled value to set.
      * @return the DatabaseAccountCreateUpdateProperties object itself.
      */
-    public DatabaseAccountCreateUpdateProperties withIsVirtualNetworkFilterEnabled(
-        Boolean isVirtualNetworkFilterEnabled) {
+    public DatabaseAccountCreateUpdateProperties
+        withIsVirtualNetworkFilterEnabled(Boolean isVirtualNetworkFilterEnabled) {
         this.isVirtualNetworkFilterEnabled = isVirtualNetworkFilterEnabled;
         return this;
     }
@@ -393,8 +414,8 @@ public final class DatabaseAccountCreateUpdateProperties {
      * @param enableMultipleWriteLocations the enableMultipleWriteLocations value to set.
      * @return the DatabaseAccountCreateUpdateProperties object itself.
      */
-    public DatabaseAccountCreateUpdateProperties withEnableMultipleWriteLocations(
-        Boolean enableMultipleWriteLocations) {
+    public DatabaseAccountCreateUpdateProperties
+        withEnableMultipleWriteLocations(Boolean enableMultipleWriteLocations) {
         this.enableMultipleWriteLocations = enableMultipleWriteLocations;
         return this;
     }
@@ -456,8 +477,8 @@ public final class DatabaseAccountCreateUpdateProperties {
      * @param disableKeyBasedMetadataWriteAccess the disableKeyBasedMetadataWriteAccess value to set.
      * @return the DatabaseAccountCreateUpdateProperties object itself.
      */
-    public DatabaseAccountCreateUpdateProperties withDisableKeyBasedMetadataWriteAccess(
-        Boolean disableKeyBasedMetadataWriteAccess) {
+    public DatabaseAccountCreateUpdateProperties
+        withDisableKeyBasedMetadataWriteAccess(Boolean disableKeyBasedMetadataWriteAccess) {
         this.disableKeyBasedMetadataWriteAccess = disableKeyBasedMetadataWriteAccess;
         return this;
     }
@@ -601,8 +622,8 @@ public final class DatabaseAccountCreateUpdateProperties {
      * @param analyticalStorageConfiguration the analyticalStorageConfiguration value to set.
      * @return the DatabaseAccountCreateUpdateProperties object itself.
      */
-    public DatabaseAccountCreateUpdateProperties withAnalyticalStorageConfiguration(
-        AnalyticalStorageConfiguration analyticalStorageConfiguration) {
+    public DatabaseAccountCreateUpdateProperties
+        withAnalyticalStorageConfiguration(AnalyticalStorageConfiguration analyticalStorageConfiguration) {
         this.analyticalStorageConfiguration = analyticalStorageConfiguration;
         return this;
     }
@@ -704,8 +725,8 @@ public final class DatabaseAccountCreateUpdateProperties {
      * @param networkAclBypassResourceIds the networkAclBypassResourceIds value to set.
      * @return the DatabaseAccountCreateUpdateProperties object itself.
      */
-    public DatabaseAccountCreateUpdateProperties withNetworkAclBypassResourceIds(
-        List<String> networkAclBypassResourceIds) {
+    public DatabaseAccountCreateUpdateProperties
+        withNetworkAclBypassResourceIds(List<String> networkAclBypassResourceIds) {
         this.networkAclBypassResourceIds = networkAclBypassResourceIds;
         return this;
     }
@@ -775,6 +796,104 @@ public final class DatabaseAccountCreateUpdateProperties {
     }
 
     /**
+     * Get the keysMetadata property: This property is ignored during the update/create operation, as the metadata is
+     * read-only. The object represents the metadata for the Account Keys of the Cosmos DB account.
+     *
+     * @return the keysMetadata value.
+     */
+    public DatabaseAccountKeysMetadata keysMetadata() {
+        return this.keysMetadata;
+    }
+
+    /**
+     * Get the enablePartitionMerge property: Flag to indicate enabling/disabling of Partition Merge feature on the
+     * account.
+     *
+     * @return the enablePartitionMerge value.
+     */
+    public Boolean enablePartitionMerge() {
+        return this.enablePartitionMerge;
+    }
+
+    /**
+     * Set the enablePartitionMerge property: Flag to indicate enabling/disabling of Partition Merge feature on the
+     * account.
+     *
+     * @param enablePartitionMerge the enablePartitionMerge value to set.
+     * @return the DatabaseAccountCreateUpdateProperties object itself.
+     */
+    public DatabaseAccountCreateUpdateProperties withEnablePartitionMerge(Boolean enablePartitionMerge) {
+        this.enablePartitionMerge = enablePartitionMerge;
+        return this;
+    }
+
+    /**
+     * Get the minimalTlsVersion property: Indicates the minimum allowed Tls version. The default value is Tls 1.2.
+     * Cassandra and Mongo APIs only work with Tls 1.2.
+     *
+     * @return the minimalTlsVersion value.
+     */
+    public MinimalTlsVersion minimalTlsVersion() {
+        return this.minimalTlsVersion;
+    }
+
+    /**
+     * Set the minimalTlsVersion property: Indicates the minimum allowed Tls version. The default value is Tls 1.2.
+     * Cassandra and Mongo APIs only work with Tls 1.2.
+     *
+     * @param minimalTlsVersion the minimalTlsVersion value to set.
+     * @return the DatabaseAccountCreateUpdateProperties object itself.
+     */
+    public DatabaseAccountCreateUpdateProperties withMinimalTlsVersion(MinimalTlsVersion minimalTlsVersion) {
+        this.minimalTlsVersion = minimalTlsVersion;
+        return this;
+    }
+
+    /**
+     * Get the enableBurstCapacity property: Flag to indicate enabling/disabling of Burst Capacity Preview feature on
+     * the account.
+     *
+     * @return the enableBurstCapacity value.
+     */
+    public Boolean enableBurstCapacity() {
+        return this.enableBurstCapacity;
+    }
+
+    /**
+     * Set the enableBurstCapacity property: Flag to indicate enabling/disabling of Burst Capacity Preview feature on
+     * the account.
+     *
+     * @param enableBurstCapacity the enableBurstCapacity value to set.
+     * @return the DatabaseAccountCreateUpdateProperties object itself.
+     */
+    public DatabaseAccountCreateUpdateProperties withEnableBurstCapacity(Boolean enableBurstCapacity) {
+        this.enableBurstCapacity = enableBurstCapacity;
+        return this;
+    }
+
+    /**
+     * Get the customerManagedKeyStatus property: Indicates the status of the Customer Managed Key feature on the
+     * account. In case there are errors, the property provides troubleshooting guidance.
+     *
+     * @return the customerManagedKeyStatus value.
+     */
+    public String customerManagedKeyStatus() {
+        return this.customerManagedKeyStatus;
+    }
+
+    /**
+     * Set the customerManagedKeyStatus property: Indicates the status of the Customer Managed Key feature on the
+     * account. In case there are errors, the property provides troubleshooting guidance.
+     *
+     * @param customerManagedKeyStatus the customerManagedKeyStatus value to set.
+     * @return the DatabaseAccountCreateUpdateProperties object itself.
+     */
+    public DatabaseAccountCreateUpdateProperties withCustomerManagedKeyStatus(String customerManagedKeyStatus) {
+        this.customerManagedKeyStatus = customerManagedKeyStatus;
+        return this;
+    }
+
+    /**
      * Validates the instance.
      *
      * @throws IllegalArgumentException thrown if the instance is not valid.
@@ -784,10 +903,9 @@ public final class DatabaseAccountCreateUpdateProperties {
             consistencyPolicy().validate();
         }
         if (locations() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property locations in model DatabaseAccountCreateUpdateProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property locations in model DatabaseAccountCreateUpdateProperties"));
         } else {
             locations().forEach(e -> e.validate());
         }
@@ -818,5 +936,10 @@ public final class DatabaseAccountCreateUpdateProperties {
         if (capacity() != null) {
             capacity().validate();
         }
+        if (keysMetadata() != null) {
+            keysMetadata().validate();
+        }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(DatabaseAccountCreateUpdateProperties.class);
 }

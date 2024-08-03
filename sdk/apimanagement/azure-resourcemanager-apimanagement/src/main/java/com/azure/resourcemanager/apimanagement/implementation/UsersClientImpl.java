@@ -31,7 +31,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.UsersClient;
 import com.azure.resourcemanager.apimanagement.fluent.models.GenerateSsoUrlResultInner;
 import com.azure.resourcemanager.apimanagement.fluent.models.UserContractInner;
@@ -49,8 +48,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in UsersClient. */
 public final class UsersClientImpl implements UsersClient {
-    private final ClientLogger logger = new ClientLogger(UsersClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final UsersService service;
 
@@ -73,11 +70,10 @@ public final class UsersClientImpl implements UsersClient {
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApiManagementClientU")
-    private interface UsersService {
+    public interface UsersService {
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/users")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/users")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<UserCollection>> listByService(
@@ -95,8 +91,7 @@ public final class UsersClientImpl implements UsersClient {
 
         @Headers({"Content-Type: application/json"})
         @Head(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/users/{userId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/users/{userId}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<UsersGetEntityTagResponse> getEntityTag(
@@ -111,8 +106,7 @@ public final class UsersClientImpl implements UsersClient {
 
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/users/{userId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/users/{userId}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<UsersGetResponse> get(
@@ -127,8 +121,7 @@ public final class UsersClientImpl implements UsersClient {
 
         @Headers({"Content-Type: application/json"})
         @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/users/{userId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/users/{userId}")
         @ExpectedResponses({200, 201})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<UsersCreateOrUpdateResponse> createOrUpdate(
@@ -146,8 +139,7 @@ public final class UsersClientImpl implements UsersClient {
 
         @Headers({"Content-Type: application/json"})
         @Patch(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/users/{userId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/users/{userId}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<UsersUpdateResponse> update(
@@ -164,8 +156,7 @@ public final class UsersClientImpl implements UsersClient {
 
         @Headers({"Content-Type: application/json"})
         @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/users/{userId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/users/{userId}")
         @ExpectedResponses({200, 204})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Void>> delete(
@@ -184,8 +175,7 @@ public final class UsersClientImpl implements UsersClient {
 
         @Headers({"Content-Type: application/json"})
         @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/users/{userId}/generateSsoUrl")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/users/{userId}/generateSsoUrl")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<GenerateSsoUrlResultInner>> generateSsoUrl(
@@ -200,8 +190,7 @@ public final class UsersClientImpl implements UsersClient {
 
         @Headers({"Content-Type: application/json"})
         @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/users/{userId}/token")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/users/{userId}/token")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<UserTokenResultInner>> getSharedAccessToken(
@@ -229,7 +218,7 @@ public final class UsersClientImpl implements UsersClient {
     /**
      * Lists a collection of registered users in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -245,7 +234,8 @@ public final class UsersClientImpl implements UsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Users list representation.
+     * @return paged Users list representation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<UserContractInner>> listByServiceSinglePageAsync(
@@ -301,7 +291,7 @@ public final class UsersClientImpl implements UsersClient {
     /**
      * Lists a collection of registered users in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -318,7 +308,8 @@ public final class UsersClientImpl implements UsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Users list representation.
+     * @return paged Users list representation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<UserContractInner>> listByServiceSinglePageAsync(
@@ -377,7 +368,7 @@ public final class UsersClientImpl implements UsersClient {
     /**
      * Lists a collection of registered users in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -393,7 +384,7 @@ public final class UsersClientImpl implements UsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Users list representation.
+     * @return paged Users list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<UserContractInner> listByServiceAsync(
@@ -406,12 +397,12 @@ public final class UsersClientImpl implements UsersClient {
     /**
      * Lists a collection of registered users in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Users list representation.
+     * @return paged Users list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<UserContractInner> listByServiceAsync(String resourceGroupName, String serviceName) {
@@ -427,7 +418,7 @@ public final class UsersClientImpl implements UsersClient {
     /**
      * Lists a collection of registered users in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -444,7 +435,7 @@ public final class UsersClientImpl implements UsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Users list representation.
+     * @return paged Users list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<UserContractInner> listByServiceAsync(
@@ -464,12 +455,12 @@ public final class UsersClientImpl implements UsersClient {
     /**
      * Lists a collection of registered users in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Users list representation.
+     * @return paged Users list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<UserContractInner> listByService(String resourceGroupName, String serviceName) {
@@ -483,7 +474,7 @@ public final class UsersClientImpl implements UsersClient {
     /**
      * Lists a collection of registered users in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -500,7 +491,7 @@ public final class UsersClientImpl implements UsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Users list representation.
+     * @return paged Users list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<UserContractInner> listByService(
@@ -518,13 +509,14 @@ public final class UsersClientImpl implements UsersClient {
     /**
      * Gets the entity state (Etag) version of the user specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the user specified by its identifier.
+     * @return the entity state (Etag) version of the user specified by its identifier on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<UsersGetEntityTagResponse> getEntityTagWithResponseAsync(
@@ -571,14 +563,15 @@ public final class UsersClientImpl implements UsersClient {
     /**
      * Gets the entity state (Etag) version of the user specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the user specified by its identifier.
+     * @return the entity state (Etag) version of the user specified by its identifier on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<UsersGetEntityTagResponse> getEntityTagWithResponseAsync(
@@ -622,39 +615,24 @@ public final class UsersClientImpl implements UsersClient {
     /**
      * Gets the entity state (Etag) version of the user specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the user specified by its identifier.
+     * @return the entity state (Etag) version of the user specified by its identifier on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> getEntityTagAsync(String resourceGroupName, String serviceName, String userId) {
-        return getEntityTagWithResponseAsync(resourceGroupName, serviceName, userId)
-            .flatMap((UsersGetEntityTagResponse res) -> Mono.empty());
+        return getEntityTagWithResponseAsync(resourceGroupName, serviceName, userId).flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Gets the entity state (Etag) version of the user specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param userId User identifier. Must be unique in the current API Management service instance.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public void getEntityTag(String resourceGroupName, String serviceName, String userId) {
-        getEntityTagAsync(resourceGroupName, serviceName, userId).block();
-    }
-
-    /**
-     * Gets the entity state (Etag) version of the user specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param context The context to associate with this operation.
@@ -670,15 +648,30 @@ public final class UsersClientImpl implements UsersClient {
     }
 
     /**
-     * Gets the details of the user specified by its identifier.
+     * Gets the entity state (Etag) version of the user specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the user specified by its identifier.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public void getEntityTag(String resourceGroupName, String serviceName, String userId) {
+        getEntityTagWithResponse(resourceGroupName, serviceName, userId, Context.NONE);
+    }
+
+    /**
+     * Gets the details of the user specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param userId User identifier. Must be unique in the current API Management service instance.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the details of the user specified by its identifier on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<UsersGetResponse> getWithResponseAsync(String resourceGroupName, String serviceName, String userId) {
@@ -724,14 +717,14 @@ public final class UsersClientImpl implements UsersClient {
     /**
      * Gets the details of the user specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the user specified by its identifier.
+     * @return the details of the user specified by its identifier on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<UsersGetResponse> getWithResponseAsync(
@@ -775,47 +768,24 @@ public final class UsersClientImpl implements UsersClient {
     /**
      * Gets the details of the user specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the user specified by its identifier.
+     * @return the details of the user specified by its identifier on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<UserContractInner> getAsync(String resourceGroupName, String serviceName, String userId) {
         return getWithResponseAsync(resourceGroupName, serviceName, userId)
-            .flatMap(
-                (UsersGetResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Gets the details of the user specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param userId User identifier. Must be unique in the current API Management service instance.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the user specified by its identifier.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public UserContractInner get(String resourceGroupName, String serviceName, String userId) {
-        return getAsync(resourceGroupName, serviceName, userId).block();
-    }
-
-    /**
-     * Gets the details of the user specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param context The context to associate with this operation.
@@ -831,9 +801,25 @@ public final class UsersClientImpl implements UsersClient {
     }
 
     /**
+     * Gets the details of the user specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param userId User identifier. Must be unique in the current API Management service instance.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the details of the user specified by its identifier.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public UserContractInner get(String resourceGroupName, String serviceName, String userId) {
+        return getWithResponse(resourceGroupName, serviceName, userId, Context.NONE).getValue();
+    }
+
+    /**
      * Creates or Updates a user.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param parameters Create or update parameters.
@@ -842,7 +828,7 @@ public final class UsersClientImpl implements UsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return user details.
+     * @return user details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<UsersCreateOrUpdateResponse> createOrUpdateWithResponseAsync(
@@ -902,7 +888,7 @@ public final class UsersClientImpl implements UsersClient {
     /**
      * Creates or Updates a user.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param parameters Create or update parameters.
@@ -912,7 +898,7 @@ public final class UsersClientImpl implements UsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return user details.
+     * @return user details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<UsersCreateOrUpdateResponse> createOrUpdateWithResponseAsync(
@@ -970,47 +956,14 @@ public final class UsersClientImpl implements UsersClient {
     /**
      * Creates or Updates a user.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param userId User identifier. Must be unique in the current API Management service instance.
-     * @param parameters Create or update parameters.
-     * @param notify Send an Email notification to the User.
-     * @param ifMatch ETag of the Entity. Not required when creating an entity, but required when updating an entity.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return user details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<UserContractInner> createOrUpdateAsync(
-        String resourceGroupName,
-        String serviceName,
-        String userId,
-        UserCreateParameters parameters,
-        Boolean notify,
-        String ifMatch) {
-        return createOrUpdateWithResponseAsync(resourceGroupName, serviceName, userId, parameters, notify, ifMatch)
-            .flatMap(
-                (UsersCreateOrUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
-    }
-
-    /**
-     * Creates or Updates a user.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param parameters Create or update parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return user details.
+     * @return user details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<UserContractInner> createOrUpdateAsync(
@@ -1018,40 +971,13 @@ public final class UsersClientImpl implements UsersClient {
         final Boolean notify = null;
         final String ifMatch = null;
         return createOrUpdateWithResponseAsync(resourceGroupName, serviceName, userId, parameters, notify, ifMatch)
-            .flatMap(
-                (UsersCreateOrUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Creates or Updates a user.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param userId User identifier. Must be unique in the current API Management service instance.
-     * @param parameters Create or update parameters.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return user details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public UserContractInner createOrUpdate(
-        String resourceGroupName, String serviceName, String userId, UserCreateParameters parameters) {
-        final Boolean notify = null;
-        final String ifMatch = null;
-        return createOrUpdateAsync(resourceGroupName, serviceName, userId, parameters, notify, ifMatch).block();
-    }
-
-    /**
-     * Creates or Updates a user.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param parameters Create or update parameters.
@@ -1078,9 +1004,31 @@ public final class UsersClientImpl implements UsersClient {
     }
 
     /**
+     * Creates or Updates a user.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param userId User identifier. Must be unique in the current API Management service instance.
+     * @param parameters Create or update parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return user details.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public UserContractInner createOrUpdate(
+        String resourceGroupName, String serviceName, String userId, UserCreateParameters parameters) {
+        final Boolean notify = null;
+        final String ifMatch = null;
+        return createOrUpdateWithResponse(
+                resourceGroupName, serviceName, userId, parameters, notify, ifMatch, Context.NONE)
+            .getValue();
+    }
+
+    /**
      * Updates the details of the user specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1089,7 +1037,7 @@ public final class UsersClientImpl implements UsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return user details.
+     * @return user details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<UsersUpdateResponse> updateWithResponseAsync(
@@ -1146,7 +1094,7 @@ public final class UsersClientImpl implements UsersClient {
     /**
      * Updates the details of the user specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1156,7 +1104,7 @@ public final class UsersClientImpl implements UsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return user details.
+     * @return user details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<UsersUpdateResponse> updateWithResponseAsync(
@@ -1215,7 +1163,7 @@ public final class UsersClientImpl implements UsersClient {
     /**
      * Updates the details of the user specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1224,46 +1172,19 @@ public final class UsersClientImpl implements UsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return user details.
+     * @return user details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<UserContractInner> updateAsync(
         String resourceGroupName, String serviceName, String userId, String ifMatch, UserUpdateParameters parameters) {
         return updateWithResponseAsync(resourceGroupName, serviceName, userId, ifMatch, parameters)
-            .flatMap(
-                (UsersUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Updates the details of the user specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param userId User identifier. Must be unique in the current API Management service instance.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param parameters Update parameters.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return user details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public UserContractInner update(
-        String resourceGroupName, String serviceName, String userId, String ifMatch, UserUpdateParameters parameters) {
-        return updateAsync(resourceGroupName, serviceName, userId, ifMatch, parameters).block();
-    }
-
-    /**
-     * Updates the details of the user specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1287,9 +1208,29 @@ public final class UsersClientImpl implements UsersClient {
     }
 
     /**
+     * Updates the details of the user specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param userId User identifier. Must be unique in the current API Management service instance.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param parameters Update parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return user details.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public UserContractInner update(
+        String resourceGroupName, String serviceName, String userId, String ifMatch, UserUpdateParameters parameters) {
+        return updateWithResponse(resourceGroupName, serviceName, userId, ifMatch, parameters, Context.NONE).getValue();
+    }
+
+    /**
      * Deletes specific user.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1301,7 +1242,7 @@ public final class UsersClientImpl implements UsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -1361,7 +1302,7 @@ public final class UsersClientImpl implements UsersClient {
     /**
      * Deletes specific user.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1374,7 +1315,7 @@ public final class UsersClientImpl implements UsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -1432,38 +1373,7 @@ public final class UsersClientImpl implements UsersClient {
     /**
      * Deletes specific user.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param userId User identifier. Must be unique in the current API Management service instance.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param deleteSubscriptions Whether to delete user's subscription or not.
-     * @param notify Send an Account Closed Email notification to the User.
-     * @param appType Determines the type of application which send the create user request. Default is legacy publisher
-     *     portal.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> deleteAsync(
-        String resourceGroupName,
-        String serviceName,
-        String userId,
-        String ifMatch,
-        Boolean deleteSubscriptions,
-        Boolean notify,
-        AppType appType) {
-        return deleteWithResponseAsync(
-                resourceGroupName, serviceName, userId, ifMatch, deleteSubscriptions, notify, appType)
-            .flatMap((Response<Void> res) -> Mono.empty());
-    }
-
-    /**
-     * Deletes specific user.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1471,7 +1381,7 @@ public final class UsersClientImpl implements UsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(String resourceGroupName, String serviceName, String userId, String ifMatch) {
@@ -1480,33 +1390,13 @@ public final class UsersClientImpl implements UsersClient {
         final AppType appType = null;
         return deleteWithResponseAsync(
                 resourceGroupName, serviceName, userId, ifMatch, deleteSubscriptions, notify, appType)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Deletes specific user.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param userId User identifier. Must be unique in the current API Management service instance.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public void delete(String resourceGroupName, String serviceName, String userId, String ifMatch) {
-        final Boolean deleteSubscriptions = null;
-        final Boolean notify = null;
-        final AppType appType = null;
-        deleteAsync(resourceGroupName, serviceName, userId, ifMatch, deleteSubscriptions, notify, appType).block();
-    }
-
-    /**
-     * Deletes specific user.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1519,7 +1409,7 @@ public final class UsersClientImpl implements UsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<Void> deleteWithResponse(
@@ -1537,16 +1427,38 @@ public final class UsersClientImpl implements UsersClient {
     }
 
     /**
+     * Deletes specific user.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param userId User identifier. Must be unique in the current API Management service instance.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public void delete(String resourceGroupName, String serviceName, String userId, String ifMatch) {
+        final Boolean deleteSubscriptions = null;
+        final Boolean notify = null;
+        final AppType appType = null;
+        deleteWithResponse(
+            resourceGroupName, serviceName, userId, ifMatch, deleteSubscriptions, notify, appType, Context.NONE);
+    }
+
+    /**
      * Retrieves a redirection URL containing an authentication token for signing a given user into the developer
      * portal.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return generate SSO Url operations response details.
+     * @return generate SSO Url operations response details along with {@link Response} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<GenerateSsoUrlResultInner>> generateSsoUrlWithResponseAsync(
@@ -1594,14 +1506,15 @@ public final class UsersClientImpl implements UsersClient {
      * Retrieves a redirection URL containing an authentication token for signing a given user into the developer
      * portal.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return generate SSO Url operations response details.
+     * @return generate SSO Url operations response details along with {@link Response} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<GenerateSsoUrlResultInner>> generateSsoUrlWithResponseAsync(
@@ -1646,33 +1559,45 @@ public final class UsersClientImpl implements UsersClient {
      * Retrieves a redirection URL containing an authentication token for signing a given user into the developer
      * portal.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return generate SSO Url operations response details.
+     * @return generate SSO Url operations response details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<GenerateSsoUrlResultInner> generateSsoUrlAsync(
         String resourceGroupName, String serviceName, String userId) {
         return generateSsoUrlWithResponseAsync(resourceGroupName, serviceName, userId)
-            .flatMap(
-                (Response<GenerateSsoUrlResultInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Retrieves a redirection URL containing an authentication token for signing a given user into the developer
      * portal.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param userId User identifier. Must be unique in the current API Management service instance.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return generate SSO Url operations response details along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<GenerateSsoUrlResultInner> generateSsoUrlWithResponse(
+        String resourceGroupName, String serviceName, String userId, Context context) {
+        return generateSsoUrlWithResponseAsync(resourceGroupName, serviceName, userId, context).block();
+    }
+
+    /**
+     * Retrieves a redirection URL containing an authentication token for signing a given user into the developer
+     * portal.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -1682,39 +1607,21 @@ public final class UsersClientImpl implements UsersClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public GenerateSsoUrlResultInner generateSsoUrl(String resourceGroupName, String serviceName, String userId) {
-        return generateSsoUrlAsync(resourceGroupName, serviceName, userId).block();
-    }
-
-    /**
-     * Retrieves a redirection URL containing an authentication token for signing a given user into the developer
-     * portal.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param userId User identifier. Must be unique in the current API Management service instance.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return generate SSO Url operations response details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<GenerateSsoUrlResultInner> generateSsoUrlWithResponse(
-        String resourceGroupName, String serviceName, String userId, Context context) {
-        return generateSsoUrlWithResponseAsync(resourceGroupName, serviceName, userId, context).block();
+        return generateSsoUrlWithResponse(resourceGroupName, serviceName, userId, Context.NONE).getValue();
     }
 
     /**
      * Gets the Shared Access Authorization Token for the User.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param parameters Create Authorization Token parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the Shared Access Authorization Token for the User.
+     * @return the Shared Access Authorization Token for the User along with {@link Response} on successful completion
+     *     of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<UserTokenResultInner>> getSharedAccessTokenWithResponseAsync(
@@ -1767,7 +1674,7 @@ public final class UsersClientImpl implements UsersClient {
     /**
      * Gets the Shared Access Authorization Token for the User.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param parameters Create Authorization Token parameters.
@@ -1775,7 +1682,8 @@ public final class UsersClientImpl implements UsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the Shared Access Authorization Token for the User.
+     * @return the Shared Access Authorization Token for the User along with {@link Response} on successful completion
+     *     of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<UserTokenResultInner>> getSharedAccessTokenWithResponseAsync(
@@ -1825,33 +1733,46 @@ public final class UsersClientImpl implements UsersClient {
     /**
      * Gets the Shared Access Authorization Token for the User.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param parameters Create Authorization Token parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the Shared Access Authorization Token for the User.
+     * @return the Shared Access Authorization Token for the User on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<UserTokenResultInner> getSharedAccessTokenAsync(
         String resourceGroupName, String serviceName, String userId, UserTokenParameters parameters) {
         return getSharedAccessTokenWithResponseAsync(resourceGroupName, serviceName, userId, parameters)
-            .flatMap(
-                (Response<UserTokenResultInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Gets the Shared Access Authorization Token for the User.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param userId User identifier. Must be unique in the current API Management service instance.
+     * @param parameters Create Authorization Token parameters.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the Shared Access Authorization Token for the User along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<UserTokenResultInner> getSharedAccessTokenWithResponse(
+        String resourceGroupName, String serviceName, String userId, UserTokenParameters parameters, Context context) {
+        return getSharedAccessTokenWithResponseAsync(resourceGroupName, serviceName, userId, parameters, context)
+            .block();
+    }
+
+    /**
+     * Gets the Shared Access Authorization Token for the User.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param parameters Create Authorization Token parameters.
@@ -1863,37 +1784,20 @@ public final class UsersClientImpl implements UsersClient {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public UserTokenResultInner getSharedAccessToken(
         String resourceGroupName, String serviceName, String userId, UserTokenParameters parameters) {
-        return getSharedAccessTokenAsync(resourceGroupName, serviceName, userId, parameters).block();
-    }
-
-    /**
-     * Gets the Shared Access Authorization Token for the User.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param userId User identifier. Must be unique in the current API Management service instance.
-     * @param parameters Create Authorization Token parameters.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the Shared Access Authorization Token for the User.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<UserTokenResultInner> getSharedAccessTokenWithResponse(
-        String resourceGroupName, String serviceName, String userId, UserTokenParameters parameters, Context context) {
-        return getSharedAccessTokenWithResponseAsync(resourceGroupName, serviceName, userId, parameters, context)
-            .block();
+        return getSharedAccessTokenWithResponse(resourceGroupName, serviceName, userId, parameters, Context.NONE)
+            .getValue();
     }
 
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Users list representation.
+     * @return paged Users list representation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<UserContractInner>> listByServiceNextSinglePageAsync(String nextLink) {
@@ -1924,12 +1828,14 @@ public final class UsersClientImpl implements UsersClient {
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Users list representation.
+     * @return paged Users list representation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<UserContractInner>> listByServiceNextSinglePageAsync(String nextLink, Context context) {

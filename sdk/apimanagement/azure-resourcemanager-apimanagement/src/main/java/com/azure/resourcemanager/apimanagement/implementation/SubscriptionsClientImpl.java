@@ -31,7 +31,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.SubscriptionsClient;
 import com.azure.resourcemanager.apimanagement.fluent.models.SubscriptionContractInner;
 import com.azure.resourcemanager.apimanagement.fluent.models.SubscriptionKeysContractInner;
@@ -48,8 +47,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in SubscriptionsClient. */
 public final class SubscriptionsClientImpl implements SubscriptionsClient {
-    private final ClientLogger logger = new ClientLogger(SubscriptionsClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final SubscriptionsService service;
 
@@ -73,11 +70,10 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApiManagementClientS")
-    private interface SubscriptionsService {
+    public interface SubscriptionsService {
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/subscriptions")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/subscriptions")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<SubscriptionCollection>> list(
@@ -94,8 +90,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
 
         @Headers({"Content-Type: application/json"})
         @Head(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/subscriptions/{sid}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/subscriptions/{sid}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<SubscriptionsGetEntityTagResponse> getEntityTag(
@@ -110,8 +105,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
 
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/subscriptions/{sid}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/subscriptions/{sid}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<SubscriptionsGetResponse> get(
@@ -126,8 +120,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
 
         @Headers({"Content-Type: application/json"})
         @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/subscriptions/{sid}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/subscriptions/{sid}")
         @ExpectedResponses({200, 201})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<SubscriptionsCreateOrUpdateResponse> createOrUpdate(
@@ -146,8 +139,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
 
         @Headers({"Content-Type: application/json"})
         @Patch(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/subscriptions/{sid}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/subscriptions/{sid}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<SubscriptionsUpdateResponse> update(
@@ -166,8 +158,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
 
         @Headers({"Content-Type: application/json"})
         @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/subscriptions/{sid}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/subscriptions/{sid}")
         @ExpectedResponses({200, 204})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Void>> delete(
@@ -183,8 +174,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
 
         @Headers({"Content-Type: application/json"})
         @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/subscriptions/{sid}/regeneratePrimaryKey")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/subscriptions/{sid}/regeneratePrimaryKey")
         @ExpectedResponses({204})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Void>> regeneratePrimaryKey(
@@ -199,8 +189,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
 
         @Headers({"Content-Type: application/json"})
         @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/subscriptions/{sid}/regenerateSecondaryKey")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/subscriptions/{sid}/regenerateSecondaryKey")
         @ExpectedResponses({204})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Void>> regenerateSecondaryKey(
@@ -215,8 +204,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
 
         @Headers({"Content-Type: application/json"})
         @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/subscriptions/{sid}/listSecrets")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/subscriptions/{sid}/listSecrets")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<SubscriptionsListSecretsResponse> listSecrets(
@@ -243,7 +231,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     /**
      * Lists all subscriptions of the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -260,7 +248,8 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Subscriptions list representation.
+     * @return paged Subscriptions list representation along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SubscriptionContractInner>> listSinglePageAsync(
@@ -315,7 +304,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     /**
      * Lists all subscriptions of the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -333,7 +322,8 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Subscriptions list representation.
+     * @return paged Subscriptions list representation along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SubscriptionContractInner>> listSinglePageAsync(
@@ -385,7 +375,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     /**
      * Lists all subscriptions of the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -402,7 +392,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Subscriptions list representation.
+     * @return paged Subscriptions list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<SubscriptionContractInner> listAsync(
@@ -415,12 +405,12 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     /**
      * Lists all subscriptions of the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Subscriptions list representation.
+     * @return paged Subscriptions list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<SubscriptionContractInner> listAsync(String resourceGroupName, String serviceName) {
@@ -435,7 +425,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     /**
      * Lists all subscriptions of the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -453,7 +443,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Subscriptions list representation.
+     * @return paged Subscriptions list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<SubscriptionContractInner> listAsync(
@@ -466,12 +456,12 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     /**
      * Lists all subscriptions of the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Subscriptions list representation.
+     * @return paged Subscriptions list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<SubscriptionContractInner> list(String resourceGroupName, String serviceName) {
@@ -484,7 +474,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     /**
      * Lists all subscriptions of the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -502,7 +492,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Subscriptions list representation.
+     * @return paged Subscriptions list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<SubscriptionContractInner> list(
@@ -513,14 +503,15 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     /**
      * Gets the entity state (Etag) version of the apimanagement subscription specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the apimanagement subscription specified by its identifier.
+     * @return the entity state (Etag) version of the apimanagement subscription specified by its identifier on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<SubscriptionsGetEntityTagResponse> getEntityTagWithResponseAsync(
@@ -567,7 +558,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     /**
      * Gets the entity state (Etag) version of the apimanagement subscription specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -575,7 +566,8 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the apimanagement subscription specified by its identifier.
+     * @return the entity state (Etag) version of the apimanagement subscription specified by its identifier on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<SubscriptionsGetEntityTagResponse> getEntityTagWithResponseAsync(
@@ -619,41 +611,25 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     /**
      * Gets the entity state (Etag) version of the apimanagement subscription specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the apimanagement subscription specified by its identifier.
+     * @return the entity state (Etag) version of the apimanagement subscription specified by its identifier on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> getEntityTagAsync(String resourceGroupName, String serviceName, String sid) {
-        return getEntityTagWithResponseAsync(resourceGroupName, serviceName, sid)
-            .flatMap((SubscriptionsGetEntityTagResponse res) -> Mono.empty());
+        return getEntityTagWithResponseAsync(resourceGroupName, serviceName, sid).flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Gets the entity state (Etag) version of the apimanagement subscription specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
-     *     API Management.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public void getEntityTag(String resourceGroupName, String serviceName, String sid) {
-        getEntityTagAsync(resourceGroupName, serviceName, sid).block();
-    }
-
-    /**
-     * Gets the entity state (Etag) version of the apimanagement subscription specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -670,16 +646,32 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     }
 
     /**
-     * Gets the specified Subscription entity.
+     * Gets the entity state (Etag) version of the apimanagement subscription specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the specified Subscription entity.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public void getEntityTag(String resourceGroupName, String serviceName, String sid) {
+        getEntityTagWithResponse(resourceGroupName, serviceName, sid, Context.NONE);
+    }
+
+    /**
+     * Gets the specified Subscription entity.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
+     *     API Management.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the specified Subscription entity on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<SubscriptionsGetResponse> getWithResponseAsync(
@@ -726,7 +718,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     /**
      * Gets the specified Subscription entity.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -734,7 +726,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the specified Subscription entity.
+     * @return the specified Subscription entity on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<SubscriptionsGetResponse> getWithResponseAsync(
@@ -778,49 +770,25 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     /**
      * Gets the specified Subscription entity.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the specified Subscription entity.
+     * @return the specified Subscription entity on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<SubscriptionContractInner> getAsync(String resourceGroupName, String serviceName, String sid) {
         return getWithResponseAsync(resourceGroupName, serviceName, sid)
-            .flatMap(
-                (SubscriptionsGetResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Gets the specified Subscription entity.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
-     *     API Management.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the specified Subscription entity.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SubscriptionContractInner get(String resourceGroupName, String serviceName, String sid) {
-        return getAsync(resourceGroupName, serviceName, sid).block();
-    }
-
-    /**
-     * Gets the specified Subscription entity.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -837,9 +805,26 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     }
 
     /**
+     * Gets the specified Subscription entity.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
+     *     API Management.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the specified Subscription entity.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public SubscriptionContractInner get(String resourceGroupName, String serviceName, String sid) {
+        return getWithResponse(resourceGroupName, serviceName, sid, Context.NONE).getValue();
+    }
+
+    /**
      * Creates or updates the subscription of specified user to the specified product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -852,7 +837,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return subscription details.
+     * @return subscription details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<SubscriptionsCreateOrUpdateResponse> createOrUpdateWithResponseAsync(
@@ -914,7 +899,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     /**
      * Creates or updates the subscription of specified user to the specified product.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -928,7 +913,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return subscription details.
+     * @return subscription details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<SubscriptionsCreateOrUpdateResponse> createOrUpdateWithResponseAsync(
@@ -988,46 +973,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     /**
      * Creates or updates the subscription of specified user to the specified product.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
-     *     API Management.
-     * @param parameters Create parameters.
-     * @param notify Notify change in Subscription State. - If false, do not send any email notification for change of
-     *     state of subscription - If true, send email notification of change of state of subscription.
-     * @param ifMatch ETag of the Entity. Not required when creating an entity, but required when updating an entity.
-     * @param appType Determines the type of application which send the create user request. Default is legacy publisher
-     *     portal.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return subscription details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<SubscriptionContractInner> createOrUpdateAsync(
-        String resourceGroupName,
-        String serviceName,
-        String sid,
-        SubscriptionCreateParameters parameters,
-        Boolean notify,
-        String ifMatch,
-        AppType appType) {
-        return createOrUpdateWithResponseAsync(
-                resourceGroupName, serviceName, sid, parameters, notify, ifMatch, appType)
-            .flatMap(
-                (SubscriptionsCreateOrUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
-    }
-
-    /**
-     * Creates or updates the subscription of specified user to the specified product.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -1035,7 +981,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return subscription details.
+     * @return subscription details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<SubscriptionContractInner> createOrUpdateAsync(
@@ -1045,42 +991,13 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
         final AppType appType = null;
         return createOrUpdateWithResponseAsync(
                 resourceGroupName, serviceName, sid, parameters, notify, ifMatch, appType)
-            .flatMap(
-                (SubscriptionsCreateOrUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Creates or updates the subscription of specified user to the specified product.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
-     *     API Management.
-     * @param parameters Create parameters.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return subscription details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SubscriptionContractInner createOrUpdate(
-        String resourceGroupName, String serviceName, String sid, SubscriptionCreateParameters parameters) {
-        final Boolean notify = null;
-        final String ifMatch = null;
-        final AppType appType = null;
-        return createOrUpdateAsync(resourceGroupName, serviceName, sid, parameters, notify, ifMatch, appType).block();
-    }
-
-    /**
-     * Creates or updates the subscription of specified user to the specified product.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -1112,9 +1029,33 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     }
 
     /**
+     * Creates or updates the subscription of specified user to the specified product.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
+     *     API Management.
+     * @param parameters Create parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return subscription details.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public SubscriptionContractInner createOrUpdate(
+        String resourceGroupName, String serviceName, String sid, SubscriptionCreateParameters parameters) {
+        final Boolean notify = null;
+        final String ifMatch = null;
+        final AppType appType = null;
+        return createOrUpdateWithResponse(
+                resourceGroupName, serviceName, sid, parameters, notify, ifMatch, appType, Context.NONE)
+            .getValue();
+    }
+
+    /**
      * Updates the details of a subscription specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -1128,7 +1069,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return subscription details.
+     * @return subscription details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<SubscriptionsUpdateResponse> updateWithResponseAsync(
@@ -1193,7 +1134,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     /**
      * Updates the details of a subscription specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -1208,7 +1149,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return subscription details.
+     * @return subscription details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<SubscriptionsUpdateResponse> updateWithResponseAsync(
@@ -1271,46 +1212,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     /**
      * Updates the details of a subscription specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
-     *     API Management.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param parameters Update parameters.
-     * @param notify Notify change in Subscription State. - If false, do not send any email notification for change of
-     *     state of subscription - If true, send email notification of change of state of subscription.
-     * @param appType Determines the type of application which send the create user request. Default is legacy publisher
-     *     portal.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return subscription details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<SubscriptionContractInner> updateAsync(
-        String resourceGroupName,
-        String serviceName,
-        String sid,
-        String ifMatch,
-        SubscriptionUpdateParameters parameters,
-        Boolean notify,
-        AppType appType) {
-        return updateWithResponseAsync(resourceGroupName, serviceName, sid, ifMatch, parameters, notify, appType)
-            .flatMap(
-                (SubscriptionsUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
-    }
-
-    /**
-     * Updates the details of a subscription specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -1320,7 +1222,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return subscription details.
+     * @return subscription details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<SubscriptionContractInner> updateAsync(
@@ -1332,47 +1234,13 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
         final Boolean notify = null;
         final AppType appType = null;
         return updateWithResponseAsync(resourceGroupName, serviceName, sid, ifMatch, parameters, notify, appType)
-            .flatMap(
-                (SubscriptionsUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Updates the details of a subscription specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
-     *     API Management.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param parameters Update parameters.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return subscription details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SubscriptionContractInner update(
-        String resourceGroupName,
-        String serviceName,
-        String sid,
-        String ifMatch,
-        SubscriptionUpdateParameters parameters) {
-        final Boolean notify = null;
-        final AppType appType = null;
-        return updateAsync(resourceGroupName, serviceName, sid, ifMatch, parameters, notify, appType).block();
-    }
-
-    /**
-     * Updates the details of a subscription specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -1405,9 +1273,38 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     }
 
     /**
+     * Updates the details of a subscription specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
+     *     API Management.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param parameters Update parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return subscription details.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public SubscriptionContractInner update(
+        String resourceGroupName,
+        String serviceName,
+        String sid,
+        String ifMatch,
+        SubscriptionUpdateParameters parameters) {
+        final Boolean notify = null;
+        final AppType appType = null;
+        return updateWithResponse(
+                resourceGroupName, serviceName, sid, ifMatch, parameters, notify, appType, Context.NONE)
+            .getValue();
+    }
+
+    /**
      * Deletes the specified subscription.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -1416,7 +1313,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -1467,7 +1364,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     /**
      * Deletes the specified subscription.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -1477,7 +1374,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -1525,7 +1422,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     /**
      * Deletes the specified subscription.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -1534,18 +1431,38 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(String resourceGroupName, String serviceName, String sid, String ifMatch) {
-        return deleteWithResponseAsync(resourceGroupName, serviceName, sid, ifMatch)
-            .flatMap((Response<Void> res) -> Mono.empty());
+        return deleteWithResponseAsync(resourceGroupName, serviceName, sid, ifMatch).flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Deletes the specified subscription.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
+     *     API Management.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> deleteWithResponse(
+        String resourceGroupName, String serviceName, String sid, String ifMatch, Context context) {
+        return deleteWithResponseAsync(resourceGroupName, serviceName, sid, ifMatch, context).block();
+    }
+
+    /**
+     * Deletes the specified subscription.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -1557,41 +1474,20 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public void delete(String resourceGroupName, String serviceName, String sid, String ifMatch) {
-        deleteAsync(resourceGroupName, serviceName, sid, ifMatch).block();
-    }
-
-    /**
-     * Deletes the specified subscription.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
-     *     API Management.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> deleteWithResponse(
-        String resourceGroupName, String serviceName, String sid, String ifMatch, Context context) {
-        return deleteWithResponseAsync(resourceGroupName, serviceName, sid, ifMatch, context).block();
+        deleteWithResponse(resourceGroupName, serviceName, sid, ifMatch, Context.NONE);
     }
 
     /**
      * Regenerates primary key of existing subscription of the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> regeneratePrimaryKeyWithResponseAsync(
@@ -1638,7 +1534,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     /**
      * Regenerates primary key of existing subscription of the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -1646,7 +1542,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> regeneratePrimaryKeyWithResponseAsync(
@@ -1690,25 +1586,44 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     /**
      * Regenerates primary key of existing subscription of the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> regeneratePrimaryKeyAsync(String resourceGroupName, String serviceName, String sid) {
         return regeneratePrimaryKeyWithResponseAsync(resourceGroupName, serviceName, sid)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Regenerates primary key of existing subscription of the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
+     *     API Management.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> regeneratePrimaryKeyWithResponse(
+        String resourceGroupName, String serviceName, String sid, Context context) {
+        return regeneratePrimaryKeyWithResponseAsync(resourceGroupName, serviceName, sid, context).block();
+    }
+
+    /**
+     * Regenerates primary key of existing subscription of the API Management service instance.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -1718,39 +1633,20 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public void regeneratePrimaryKey(String resourceGroupName, String serviceName, String sid) {
-        regeneratePrimaryKeyAsync(resourceGroupName, serviceName, sid).block();
-    }
-
-    /**
-     * Regenerates primary key of existing subscription of the API Management service instance.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
-     *     API Management.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> regeneratePrimaryKeyWithResponse(
-        String resourceGroupName, String serviceName, String sid, Context context) {
-        return regeneratePrimaryKeyWithResponseAsync(resourceGroupName, serviceName, sid, context).block();
+        regeneratePrimaryKeyWithResponse(resourceGroupName, serviceName, sid, Context.NONE);
     }
 
     /**
      * Regenerates secondary key of existing subscription of the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> regenerateSecondaryKeyWithResponseAsync(
@@ -1797,7 +1693,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     /**
      * Regenerates secondary key of existing subscription of the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -1805,7 +1701,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> regenerateSecondaryKeyWithResponseAsync(
@@ -1849,25 +1745,44 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     /**
      * Regenerates secondary key of existing subscription of the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> regenerateSecondaryKeyAsync(String resourceGroupName, String serviceName, String sid) {
         return regenerateSecondaryKeyWithResponseAsync(resourceGroupName, serviceName, sid)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Regenerates secondary key of existing subscription of the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
+     *     API Management.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> regenerateSecondaryKeyWithResponse(
+        String resourceGroupName, String serviceName, String sid, Context context) {
+        return regenerateSecondaryKeyWithResponseAsync(resourceGroupName, serviceName, sid, context).block();
+    }
+
+    /**
+     * Regenerates secondary key of existing subscription of the API Management service instance.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -1877,39 +1792,20 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public void regenerateSecondaryKey(String resourceGroupName, String serviceName, String sid) {
-        regenerateSecondaryKeyAsync(resourceGroupName, serviceName, sid).block();
-    }
-
-    /**
-     * Regenerates secondary key of existing subscription of the API Management service instance.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
-     *     API Management.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> regenerateSecondaryKeyWithResponse(
-        String resourceGroupName, String serviceName, String sid, Context context) {
-        return regenerateSecondaryKeyWithResponseAsync(resourceGroupName, serviceName, sid, context).block();
+        regenerateSecondaryKeyWithResponse(resourceGroupName, serviceName, sid, Context.NONE);
     }
 
     /**
      * Gets the specified Subscription keys.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the specified Subscription keys.
+     * @return the specified Subscription keys on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<SubscriptionsListSecretsResponse> listSecretsWithResponseAsync(
@@ -1956,7 +1852,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     /**
      * Gets the specified Subscription keys.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -1964,7 +1860,7 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the specified Subscription keys.
+     * @return the specified Subscription keys on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<SubscriptionsListSecretsResponse> listSecretsWithResponseAsync(
@@ -2008,50 +1904,26 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     /**
      * Gets the specified Subscription keys.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the specified Subscription keys.
+     * @return the specified Subscription keys on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<SubscriptionKeysContractInner> listSecretsAsync(
         String resourceGroupName, String serviceName, String sid) {
         return listSecretsWithResponseAsync(resourceGroupName, serviceName, sid)
-            .flatMap(
-                (SubscriptionsListSecretsResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Gets the specified Subscription keys.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
-     *     API Management.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the specified Subscription keys.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SubscriptionKeysContractInner listSecrets(String resourceGroupName, String serviceName, String sid) {
-        return listSecretsAsync(resourceGroupName, serviceName, sid).block();
-    }
-
-    /**
-     * Gets the specified Subscription keys.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
      *     API Management.
@@ -2068,13 +1940,32 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     }
 
     /**
-     * Get the next page of items.
+     * Gets the specified Subscription keys.
      *
-     * @param nextLink The nextLink parameter.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param sid Subscription entity Identifier. The entity represents the association between a user and a product in
+     *     API Management.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Subscriptions list representation.
+     * @return the specified Subscription keys.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public SubscriptionKeysContractInner listSecrets(String resourceGroupName, String serviceName, String sid) {
+        return listSecretsWithResponse(resourceGroupName, serviceName, sid, Context.NONE).getValue();
+    }
+
+    /**
+     * Get the next page of items.
+     *
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return paged Subscriptions list representation along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SubscriptionContractInner>> listNextSinglePageAsync(String nextLink) {
@@ -2105,12 +1996,14 @@ public final class SubscriptionsClientImpl implements SubscriptionsClient {
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Subscriptions list representation.
+     * @return paged Subscriptions list representation along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SubscriptionContractInner>> listNextSinglePageAsync(String nextLink, Context context) {

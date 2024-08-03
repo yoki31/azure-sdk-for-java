@@ -13,25 +13,27 @@ public interface IdentityProviders {
     /**
      * Lists a collection of Identity Provider configured in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of all the Identity Providers configured on the service instance.
+     * @return list of all the Identity Providers configured on the service instance as paginated response with {@link
+     *     PagedIterable}.
      */
     PagedIterable<IdentityProviderContract> listByService(String resourceGroupName, String serviceName);
 
     /**
      * Lists a collection of Identity Provider configured in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of all the Identity Providers configured on the service instance.
+     * @return list of all the Identity Providers configured on the service instance as paginated response with {@link
+     *     PagedIterable}.
      */
     PagedIterable<IdentityProviderContract> listByService(
         String resourceGroupName, String serviceName, Context context);
@@ -39,19 +41,7 @@ public interface IdentityProviders {
     /**
      * Gets the entity state (Etag) version of the identityProvider specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param identityProviderName Identity Provider Type identifier.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    void getEntityTag(String resourceGroupName, String serviceName, IdentityProviderType identityProviderName);
-
-    /**
-     * Gets the entity state (Etag) version of the identityProvider specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @param context The context to associate with this operation.
@@ -64,23 +54,21 @@ public interface IdentityProviders {
         String resourceGroupName, String serviceName, IdentityProviderType identityProviderName, Context context);
 
     /**
-     * Gets the configuration details of the identity Provider configured in specified service instance.
+     * Gets the entity state (Etag) version of the identityProvider specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the configuration details of the identity Provider configured in specified service instance.
      */
-    IdentityProviderContract get(
-        String resourceGroupName, String serviceName, IdentityProviderType identityProviderName);
+    void getEntityTag(String resourceGroupName, String serviceName, IdentityProviderType identityProviderName);
 
     /**
      * Gets the configuration details of the identity Provider configured in specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @param context The context to associate with this operation.
@@ -93,9 +81,44 @@ public interface IdentityProviders {
         String resourceGroupName, String serviceName, IdentityProviderType identityProviderName, Context context);
 
     /**
+     * Gets the configuration details of the identity Provider configured in specified service instance.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param identityProviderName Identity Provider Type identifier.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the configuration details of the identity Provider configured in specified service instance.
+     */
+    IdentityProviderContract get(
+        String resourceGroupName, String serviceName, IdentityProviderType identityProviderName);
+
+    /**
      * Deletes the specified identity provider configuration.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param identityProviderName Identity Provider Type identifier.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    Response<Void> deleteWithResponse(
+        String resourceGroupName,
+        String serviceName,
+        IdentityProviderType identityProviderName,
+        String ifMatch,
+        Context context);
+
+    /**
+     * Deletes the specified identity provider configuration.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -108,44 +131,9 @@ public interface IdentityProviders {
         String resourceGroupName, String serviceName, IdentityProviderType identityProviderName, String ifMatch);
 
     /**
-     * Deletes the specified identity provider configuration.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param identityProviderName Identity Provider Type identifier.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    Response<Void> deleteWithResponse(
-        String resourceGroupName,
-        String serviceName,
-        IdentityProviderType identityProviderName,
-        String ifMatch,
-        Context context);
-
-    /**
      * Gets the client secret details of the Identity Provider.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param identityProviderName Identity Provider Type identifier.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the client secret details of the Identity Provider.
-     */
-    ClientSecretContract listSecrets(
-        String resourceGroupName, String serviceName, IdentityProviderType identityProviderName);
-
-    /**
-     * Gets the client secret details of the Identity Provider.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param identityProviderName Identity Provider Type identifier.
      * @param context The context to associate with this operation.
@@ -156,6 +144,20 @@ public interface IdentityProviders {
      */
     Response<ClientSecretContract> listSecretsWithResponse(
         String resourceGroupName, String serviceName, IdentityProviderType identityProviderName, Context context);
+
+    /**
+     * Gets the client secret details of the Identity Provider.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param identityProviderName Identity Provider Type identifier.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the client secret details of the Identity Provider.
+     */
+    ClientSecretContract listSecrets(
+        String resourceGroupName, String serviceName, IdentityProviderType identityProviderName);
 
     /**
      * Gets the configuration details of the identity Provider configured in specified service instance.
@@ -200,7 +202,7 @@ public interface IdentityProviders {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     Response<Void> deleteByIdWithResponse(String id, String ifMatch, Context context);
 

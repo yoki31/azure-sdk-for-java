@@ -9,15 +9,14 @@ import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.monitor.models.Recurrence;
 import com.azure.resourcemanager.monitor.models.ScaleCapacity;
 import com.azure.resourcemanager.monitor.models.TimeWindow;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Autoscale profile. */
+/**
+ * Autoscale profile.
+ */
 @Fluent
 public final class AutoscaleProfileInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AutoscaleProfileInner.class);
-
     /*
      * the name of the profile.
      */
@@ -31,29 +30,33 @@ public final class AutoscaleProfileInner {
     private ScaleCapacity capacity;
 
     /*
-     * the collection of rules that provide the triggers and parameters for the
-     * scaling action. A maximum of 10 rules can be specified.
+     * the collection of rules that provide the triggers and parameters for the scaling action. A maximum of 10 rules
+     * can be specified.
      */
     @JsonProperty(value = "rules", required = true)
     private List<ScaleRuleInner> rules;
 
     /*
-     * the specific date-time for the profile. This element is not used if the
-     * Recurrence element is used.
+     * the specific date-time for the profile. This element is not used if the Recurrence element is used.
      */
     @JsonProperty(value = "fixedDate")
     private TimeWindow fixedDate;
 
     /*
-     * the repeating times at which this profile begins. This element is not
-     * used if the FixedDate element is used.
+     * the repeating times at which this profile begins. This element is not used if the FixedDate element is used.
      */
     @JsonProperty(value = "recurrence")
     private Recurrence recurrence;
 
     /**
+     * Creates an instance of AutoscaleProfileInner class.
+     */
+    public AutoscaleProfileInner() {
+    }
+
+    /**
      * Get the name property: the name of the profile.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -62,7 +65,7 @@ public final class AutoscaleProfileInner {
 
     /**
      * Set the name property: the name of the profile.
-     *
+     * 
      * @param name the name value to set.
      * @return the AutoscaleProfileInner object itself.
      */
@@ -73,7 +76,7 @@ public final class AutoscaleProfileInner {
 
     /**
      * Get the capacity property: the number of instances that can be used during this profile.
-     *
+     * 
      * @return the capacity value.
      */
     public ScaleCapacity capacity() {
@@ -82,7 +85,7 @@ public final class AutoscaleProfileInner {
 
     /**
      * Set the capacity property: the number of instances that can be used during this profile.
-     *
+     * 
      * @param capacity the capacity value to set.
      * @return the AutoscaleProfileInner object itself.
      */
@@ -94,7 +97,7 @@ public final class AutoscaleProfileInner {
     /**
      * Get the rules property: the collection of rules that provide the triggers and parameters for the scaling action.
      * A maximum of 10 rules can be specified.
-     *
+     * 
      * @return the rules value.
      */
     public List<ScaleRuleInner> rules() {
@@ -104,7 +107,7 @@ public final class AutoscaleProfileInner {
     /**
      * Set the rules property: the collection of rules that provide the triggers and parameters for the scaling action.
      * A maximum of 10 rules can be specified.
-     *
+     * 
      * @param rules the rules value to set.
      * @return the AutoscaleProfileInner object itself.
      */
@@ -116,7 +119,7 @@ public final class AutoscaleProfileInner {
     /**
      * Get the fixedDate property: the specific date-time for the profile. This element is not used if the Recurrence
      * element is used.
-     *
+     * 
      * @return the fixedDate value.
      */
     public TimeWindow fixedDate() {
@@ -126,7 +129,7 @@ public final class AutoscaleProfileInner {
     /**
      * Set the fixedDate property: the specific date-time for the profile. This element is not used if the Recurrence
      * element is used.
-     *
+     * 
      * @param fixedDate the fixedDate value to set.
      * @return the AutoscaleProfileInner object itself.
      */
@@ -138,7 +141,7 @@ public final class AutoscaleProfileInner {
     /**
      * Get the recurrence property: the repeating times at which this profile begins. This element is not used if the
      * FixedDate element is used.
-     *
+     * 
      * @return the recurrence value.
      */
     public Recurrence recurrence() {
@@ -148,7 +151,7 @@ public final class AutoscaleProfileInner {
     /**
      * Set the recurrence property: the repeating times at which this profile begins. This element is not used if the
      * FixedDate element is used.
-     *
+     * 
      * @param recurrence the recurrence value to set.
      * @return the AutoscaleProfileInner object itself.
      */
@@ -159,26 +162,23 @@ public final class AutoscaleProfileInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (name() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property name in model AutoscaleProfileInner"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property name in model AutoscaleProfileInner"));
         }
         if (capacity() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property capacity in model AutoscaleProfileInner"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property capacity in model AutoscaleProfileInner"));
         } else {
             capacity().validate();
         }
         if (rules() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property rules in model AutoscaleProfileInner"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property rules in model AutoscaleProfileInner"));
         } else {
             rules().forEach(e -> e.validate());
         }
@@ -189,4 +189,6 @@ public final class AutoscaleProfileInner {
             recurrence().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(AutoscaleProfileInner.class);
 }

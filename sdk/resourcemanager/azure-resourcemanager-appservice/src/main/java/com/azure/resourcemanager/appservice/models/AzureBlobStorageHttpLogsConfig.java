@@ -5,18 +5,15 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Http logs to azure blob storage configuration. */
+/**
+ * Http logs to azure blob storage configuration.
+ */
 @Fluent
 public final class AzureBlobStorageHttpLogsConfig {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureBlobStorageHttpLogsConfig.class);
-
     /*
-     * SAS url to a azure blob container with read/write/list/delete
-     * permissions.
+     * SAS url to a azure blob container with read/write/list/delete permissions.
      */
     @JsonProperty(value = "sasUrl")
     private String sasUrl;
@@ -30,15 +27,20 @@ public final class AzureBlobStorageHttpLogsConfig {
     private Integer retentionInDays;
 
     /*
-     * True if configuration is enabled, false if it is disabled and null if
-     * configuration is not set.
+     * True if configuration is enabled, false if it is disabled and null if configuration is not set.
      */
     @JsonProperty(value = "enabled")
     private Boolean enabled;
 
     /**
+     * Creates an instance of AzureBlobStorageHttpLogsConfig class.
+     */
+    public AzureBlobStorageHttpLogsConfig() {
+    }
+
+    /**
      * Get the sasUrl property: SAS url to a azure blob container with read/write/list/delete permissions.
-     *
+     * 
      * @return the sasUrl value.
      */
     public String sasUrl() {
@@ -47,7 +49,7 @@ public final class AzureBlobStorageHttpLogsConfig {
 
     /**
      * Set the sasUrl property: SAS url to a azure blob container with read/write/list/delete permissions.
-     *
+     * 
      * @param sasUrl the sasUrl value to set.
      * @return the AzureBlobStorageHttpLogsConfig object itself.
      */
@@ -57,9 +59,10 @@ public final class AzureBlobStorageHttpLogsConfig {
     }
 
     /**
-     * Get the retentionInDays property: Retention in days. Remove blobs older than X days. 0 or lower means no
-     * retention.
-     *
+     * Get the retentionInDays property: Retention in days.
+     * Remove blobs older than X days.
+     * 0 or lower means no retention.
+     * 
      * @return the retentionInDays value.
      */
     public Integer retentionInDays() {
@@ -67,9 +70,10 @@ public final class AzureBlobStorageHttpLogsConfig {
     }
 
     /**
-     * Set the retentionInDays property: Retention in days. Remove blobs older than X days. 0 or lower means no
-     * retention.
-     *
+     * Set the retentionInDays property: Retention in days.
+     * Remove blobs older than X days.
+     * 0 or lower means no retention.
+     * 
      * @param retentionInDays the retentionInDays value to set.
      * @return the AzureBlobStorageHttpLogsConfig object itself.
      */
@@ -81,7 +85,7 @@ public final class AzureBlobStorageHttpLogsConfig {
     /**
      * Get the enabled property: True if configuration is enabled, false if it is disabled and null if configuration is
      * not set.
-     *
+     * 
      * @return the enabled value.
      */
     public Boolean enabled() {
@@ -91,7 +95,7 @@ public final class AzureBlobStorageHttpLogsConfig {
     /**
      * Set the enabled property: True if configuration is enabled, false if it is disabled and null if configuration is
      * not set.
-     *
+     * 
      * @param enabled the enabled value to set.
      * @return the AzureBlobStorageHttpLogsConfig object itself.
      */
@@ -102,7 +106,7 @@ public final class AzureBlobStorageHttpLogsConfig {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

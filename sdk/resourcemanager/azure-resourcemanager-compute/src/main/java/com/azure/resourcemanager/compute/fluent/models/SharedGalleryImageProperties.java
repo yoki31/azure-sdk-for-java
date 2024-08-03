@@ -6,6 +6,7 @@ package com.azure.resourcemanager.compute.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
+import com.azure.resourcemanager.compute.models.Architecture;
 import com.azure.resourcemanager.compute.models.Disallowed;
 import com.azure.resourcemanager.compute.models.GalleryImageFeature;
 import com.azure.resourcemanager.compute.models.GalleryImageIdentifier;
@@ -14,34 +15,34 @@ import com.azure.resourcemanager.compute.models.ImagePurchasePlan;
 import com.azure.resourcemanager.compute.models.OperatingSystemStateTypes;
 import com.azure.resourcemanager.compute.models.OperatingSystemTypes;
 import com.azure.resourcemanager.compute.models.RecommendedMachineConfiguration;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Map;
 
-/** Describes the properties of a gallery image definition. */
+/**
+ * Describes the properties of a gallery image definition.
+ */
 @Fluent
 public final class SharedGalleryImageProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SharedGalleryImageProperties.class);
-
     /*
-     * This property allows you to specify the type of the OS that is included
-     * in the disk when creating a VM from a managed image. <br><br> Possible
-     * values are: <br><br> **Windows** <br><br> **Linux**
+     * This property allows you to specify the type of the OS that is included in the disk when creating a VM from a
+     * managed image. Possible values are: **Windows,** **Linux.**
      */
     @JsonProperty(value = "osType", required = true)
     private OperatingSystemTypes osType;
 
     /*
-     * This property allows the user to specify whether the virtual machines
-     * created under this image are 'Generalized' or 'Specialized'.
+     * This property allows the user to specify whether the virtual machines created under this image are 'Generalized'
+     * or 'Specialized'.
      */
     @JsonProperty(value = "osState", required = true)
     private OperatingSystemStateTypes osState;
 
     /*
-     * The end of life date of the gallery image definition. This property can
-     * be used for decommissioning purposes. This property is updatable.
+     * The end of life date of the gallery image definition. This property can be used for decommissioning purposes.
+     * This property is updatable.
      */
     @JsonProperty(value = "endOfLifeDate")
     private OffsetDateTime endOfLifeDate;
@@ -53,8 +54,8 @@ public final class SharedGalleryImageProperties {
     private GalleryImageIdentifier identifier;
 
     /*
-     * The properties describe the recommended machine configuration for this
-     * Image Definition. These properties are updatable.
+     * The properties describe the recommended machine configuration for this Image Definition. These properties are
+     * updatable.
      */
     @JsonProperty(value = "recommended")
     private RecommendedMachineConfiguration recommended;
@@ -66,8 +67,7 @@ public final class SharedGalleryImageProperties {
     private Disallowed disallowed;
 
     /*
-     * The hypervisor generation of the Virtual Machine. Applicable to OS disks
-     * only.
+     * The hypervisor generation of the Virtual Machine. Applicable to OS disks only.
      */
     @JsonProperty(value = "hyperVGeneration")
     private HyperVGeneration hyperVGeneration;
@@ -79,17 +79,46 @@ public final class SharedGalleryImageProperties {
     private List<GalleryImageFeature> features;
 
     /*
-     * Describes the gallery image definition purchase plan. This is used by
-     * marketplace images.
+     * Describes the gallery image definition purchase plan. This is used by marketplace images.
      */
     @JsonProperty(value = "purchasePlan")
     private ImagePurchasePlan purchasePlan;
 
+    /*
+     * The architecture of the image. Applicable to OS disks only.
+     */
+    @JsonProperty(value = "architecture")
+    private Architecture architecture;
+
+    /*
+     * Privacy statement uri for the current community gallery image.
+     */
+    @JsonProperty(value = "privacyStatementUri")
+    private String privacyStatementUri;
+
+    /*
+     * End-user license agreement for the current community gallery image.
+     */
+    @JsonProperty(value = "eula")
+    private String eula;
+
+    /*
+     * The artifact tags of a shared gallery resource.
+     */
+    @JsonProperty(value = "artifactTags")
+    @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
+    private Map<String, String> artifactTags;
+
+    /**
+     * Creates an instance of SharedGalleryImageProperties class.
+     */
+    public SharedGalleryImageProperties() {
+    }
+
     /**
      * Get the osType property: This property allows you to specify the type of the OS that is included in the disk when
-     * creating a VM from a managed image. &lt;br&gt;&lt;br&gt; Possible values are: &lt;br&gt;&lt;br&gt; **Windows**
-     * &lt;br&gt;&lt;br&gt; **Linux**.
-     *
+     * creating a VM from a managed image. Possible values are: **Windows,** **Linux.**.
+     * 
      * @return the osType value.
      */
     public OperatingSystemTypes osType() {
@@ -98,9 +127,8 @@ public final class SharedGalleryImageProperties {
 
     /**
      * Set the osType property: This property allows you to specify the type of the OS that is included in the disk when
-     * creating a VM from a managed image. &lt;br&gt;&lt;br&gt; Possible values are: &lt;br&gt;&lt;br&gt; **Windows**
-     * &lt;br&gt;&lt;br&gt; **Linux**.
-     *
+     * creating a VM from a managed image. Possible values are: **Windows,** **Linux.**.
+     * 
      * @param osType the osType value to set.
      * @return the SharedGalleryImageProperties object itself.
      */
@@ -112,7 +140,7 @@ public final class SharedGalleryImageProperties {
     /**
      * Get the osState property: This property allows the user to specify whether the virtual machines created under
      * this image are 'Generalized' or 'Specialized'.
-     *
+     * 
      * @return the osState value.
      */
     public OperatingSystemStateTypes osState() {
@@ -122,7 +150,7 @@ public final class SharedGalleryImageProperties {
     /**
      * Set the osState property: This property allows the user to specify whether the virtual machines created under
      * this image are 'Generalized' or 'Specialized'.
-     *
+     * 
      * @param osState the osState value to set.
      * @return the SharedGalleryImageProperties object itself.
      */
@@ -134,7 +162,7 @@ public final class SharedGalleryImageProperties {
     /**
      * Get the endOfLifeDate property: The end of life date of the gallery image definition. This property can be used
      * for decommissioning purposes. This property is updatable.
-     *
+     * 
      * @return the endOfLifeDate value.
      */
     public OffsetDateTime endOfLifeDate() {
@@ -144,7 +172,7 @@ public final class SharedGalleryImageProperties {
     /**
      * Set the endOfLifeDate property: The end of life date of the gallery image definition. This property can be used
      * for decommissioning purposes. This property is updatable.
-     *
+     * 
      * @param endOfLifeDate the endOfLifeDate value to set.
      * @return the SharedGalleryImageProperties object itself.
      */
@@ -155,7 +183,7 @@ public final class SharedGalleryImageProperties {
 
     /**
      * Get the identifier property: This is the gallery image definition identifier.
-     *
+     * 
      * @return the identifier value.
      */
     public GalleryImageIdentifier identifier() {
@@ -164,7 +192,7 @@ public final class SharedGalleryImageProperties {
 
     /**
      * Set the identifier property: This is the gallery image definition identifier.
-     *
+     * 
      * @param identifier the identifier value to set.
      * @return the SharedGalleryImageProperties object itself.
      */
@@ -176,7 +204,7 @@ public final class SharedGalleryImageProperties {
     /**
      * Get the recommended property: The properties describe the recommended machine configuration for this Image
      * Definition. These properties are updatable.
-     *
+     * 
      * @return the recommended value.
      */
     public RecommendedMachineConfiguration recommended() {
@@ -186,7 +214,7 @@ public final class SharedGalleryImageProperties {
     /**
      * Set the recommended property: The properties describe the recommended machine configuration for this Image
      * Definition. These properties are updatable.
-     *
+     * 
      * @param recommended the recommended value to set.
      * @return the SharedGalleryImageProperties object itself.
      */
@@ -197,7 +225,7 @@ public final class SharedGalleryImageProperties {
 
     /**
      * Get the disallowed property: Describes the disallowed disk types.
-     *
+     * 
      * @return the disallowed value.
      */
     public Disallowed disallowed() {
@@ -206,7 +234,7 @@ public final class SharedGalleryImageProperties {
 
     /**
      * Set the disallowed property: Describes the disallowed disk types.
-     *
+     * 
      * @param disallowed the disallowed value to set.
      * @return the SharedGalleryImageProperties object itself.
      */
@@ -217,7 +245,7 @@ public final class SharedGalleryImageProperties {
 
     /**
      * Get the hyperVGeneration property: The hypervisor generation of the Virtual Machine. Applicable to OS disks only.
-     *
+     * 
      * @return the hyperVGeneration value.
      */
     public HyperVGeneration hyperVGeneration() {
@@ -226,7 +254,7 @@ public final class SharedGalleryImageProperties {
 
     /**
      * Set the hyperVGeneration property: The hypervisor generation of the Virtual Machine. Applicable to OS disks only.
-     *
+     * 
      * @param hyperVGeneration the hyperVGeneration value to set.
      * @return the SharedGalleryImageProperties object itself.
      */
@@ -237,7 +265,7 @@ public final class SharedGalleryImageProperties {
 
     /**
      * Get the features property: A list of gallery image features.
-     *
+     * 
      * @return the features value.
      */
     public List<GalleryImageFeature> features() {
@@ -246,7 +274,7 @@ public final class SharedGalleryImageProperties {
 
     /**
      * Set the features property: A list of gallery image features.
-     *
+     * 
      * @param features the features value to set.
      * @return the SharedGalleryImageProperties object itself.
      */
@@ -258,7 +286,7 @@ public final class SharedGalleryImageProperties {
     /**
      * Get the purchasePlan property: Describes the gallery image definition purchase plan. This is used by marketplace
      * images.
-     *
+     * 
      * @return the purchasePlan value.
      */
     public ImagePurchasePlan purchasePlan() {
@@ -268,7 +296,7 @@ public final class SharedGalleryImageProperties {
     /**
      * Set the purchasePlan property: Describes the gallery image definition purchase plan. This is used by marketplace
      * images.
-     *
+     * 
      * @param purchasePlan the purchasePlan value to set.
      * @return the SharedGalleryImageProperties object itself.
      */
@@ -278,28 +306,105 @@ public final class SharedGalleryImageProperties {
     }
 
     /**
+     * Get the architecture property: The architecture of the image. Applicable to OS disks only.
+     * 
+     * @return the architecture value.
+     */
+    public Architecture architecture() {
+        return this.architecture;
+    }
+
+    /**
+     * Set the architecture property: The architecture of the image. Applicable to OS disks only.
+     * 
+     * @param architecture the architecture value to set.
+     * @return the SharedGalleryImageProperties object itself.
+     */
+    public SharedGalleryImageProperties withArchitecture(Architecture architecture) {
+        this.architecture = architecture;
+        return this;
+    }
+
+    /**
+     * Get the privacyStatementUri property: Privacy statement uri for the current community gallery image.
+     * 
+     * @return the privacyStatementUri value.
+     */
+    public String privacyStatementUri() {
+        return this.privacyStatementUri;
+    }
+
+    /**
+     * Set the privacyStatementUri property: Privacy statement uri for the current community gallery image.
+     * 
+     * @param privacyStatementUri the privacyStatementUri value to set.
+     * @return the SharedGalleryImageProperties object itself.
+     */
+    public SharedGalleryImageProperties withPrivacyStatementUri(String privacyStatementUri) {
+        this.privacyStatementUri = privacyStatementUri;
+        return this;
+    }
+
+    /**
+     * Get the eula property: End-user license agreement for the current community gallery image.
+     * 
+     * @return the eula value.
+     */
+    public String eula() {
+        return this.eula;
+    }
+
+    /**
+     * Set the eula property: End-user license agreement for the current community gallery image.
+     * 
+     * @param eula the eula value to set.
+     * @return the SharedGalleryImageProperties object itself.
+     */
+    public SharedGalleryImageProperties withEula(String eula) {
+        this.eula = eula;
+        return this;
+    }
+
+    /**
+     * Get the artifactTags property: The artifact tags of a shared gallery resource.
+     * 
+     * @return the artifactTags value.
+     */
+    public Map<String, String> artifactTags() {
+        return this.artifactTags;
+    }
+
+    /**
+     * Set the artifactTags property: The artifact tags of a shared gallery resource.
+     * 
+     * @param artifactTags the artifactTags value to set.
+     * @return the SharedGalleryImageProperties object itself.
+     */
+    public SharedGalleryImageProperties withArtifactTags(Map<String, String> artifactTags) {
+        this.artifactTags = artifactTags;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (osType() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property osType in model SharedGalleryImageProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property osType in model SharedGalleryImageProperties"));
         }
         if (osState() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property osState in model SharedGalleryImageProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property osState in model SharedGalleryImageProperties"));
         }
         if (identifier() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property identifier in model SharedGalleryImageProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property identifier in model SharedGalleryImageProperties"));
         } else {
             identifier().validate();
         }
@@ -316,4 +421,6 @@ public final class SharedGalleryImageProperties {
             purchasePlan().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(SharedGalleryImageProperties.class);
 }

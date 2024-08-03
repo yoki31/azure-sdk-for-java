@@ -5,24 +5,34 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** A request to approve or reject a private endpoint connection. */
+/**
+ * A request to approve or reject a private endpoint connection.
+ */
 @Fluent
 public final class PrivateLinkConnectionApprovalRequest {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PrivateLinkConnectionApprovalRequest.class);
-
     /*
      * The state of a private link connection
      */
     @JsonProperty(value = "privateLinkServiceConnectionState")
     private PrivateLinkConnectionState privateLinkServiceConnectionState;
 
+    /*
+     * The resource of private endpoint.
+     */
+    @JsonProperty(value = "privateEndpoint")
+    private PrivateEndpoint privateEndpoint;
+
+    /**
+     * Creates an instance of PrivateLinkConnectionApprovalRequest class.
+     */
+    public PrivateLinkConnectionApprovalRequest() {
+    }
+
     /**
      * Get the privateLinkServiceConnectionState property: The state of a private link connection.
-     *
+     * 
      * @return the privateLinkServiceConnectionState value.
      */
     public PrivateLinkConnectionState privateLinkServiceConnectionState() {
@@ -31,24 +41,47 @@ public final class PrivateLinkConnectionApprovalRequest {
 
     /**
      * Set the privateLinkServiceConnectionState property: The state of a private link connection.
-     *
+     * 
      * @param privateLinkServiceConnectionState the privateLinkServiceConnectionState value to set.
      * @return the PrivateLinkConnectionApprovalRequest object itself.
      */
-    public PrivateLinkConnectionApprovalRequest withPrivateLinkServiceConnectionState(
-        PrivateLinkConnectionState privateLinkServiceConnectionState) {
+    public PrivateLinkConnectionApprovalRequest
+        withPrivateLinkServiceConnectionState(PrivateLinkConnectionState privateLinkServiceConnectionState) {
         this.privateLinkServiceConnectionState = privateLinkServiceConnectionState;
         return this;
     }
 
     /**
+     * Get the privateEndpoint property: The resource of private endpoint.
+     * 
+     * @return the privateEndpoint value.
+     */
+    public PrivateEndpoint privateEndpoint() {
+        return this.privateEndpoint;
+    }
+
+    /**
+     * Set the privateEndpoint property: The resource of private endpoint.
+     * 
+     * @param privateEndpoint the privateEndpoint value to set.
+     * @return the PrivateLinkConnectionApprovalRequest object itself.
+     */
+    public PrivateLinkConnectionApprovalRequest withPrivateEndpoint(PrivateEndpoint privateEndpoint) {
+        this.privateEndpoint = privateEndpoint;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (privateLinkServiceConnectionState() != null) {
             privateLinkServiceConnectionState().validate();
+        }
+        if (privateEndpoint() != null) {
+            privateEndpoint().validate();
         }
     }
 }

@@ -5,22 +5,22 @@
 package com.azure.resourcemanager.kubernetesconfiguration.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.kubernetesconfiguration.fluent.models.PatchExtensionProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
 /** The Extension Patch Request object. */
 @Fluent
 public final class PatchExtension {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PatchExtension.class);
-
     /*
      * Updatable properties of an Extension Patch Request
      */
     @JsonProperty(value = "properties")
     private PatchExtensionProperties innerProperties;
+
+    /** Creates an instance of PatchExtension class. */
+    public PatchExtension() {
+    }
 
     /**
      * Get the innerProperties property: Updatable properties of an Extension Patch Request.

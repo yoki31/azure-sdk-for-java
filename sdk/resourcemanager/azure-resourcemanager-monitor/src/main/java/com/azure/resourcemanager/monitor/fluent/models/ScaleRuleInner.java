@@ -8,14 +8,13 @@ import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.monitor.models.MetricTrigger;
 import com.azure.resourcemanager.monitor.models.ScaleAction;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** A rule that provide the triggers and parameters for the scaling action. */
+/**
+ * A rule that provide the triggers and parameters for the scaling action.
+ */
 @Fluent
 public final class ScaleRuleInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ScaleRuleInner.class);
-
     /*
      * the trigger that results in a scaling action.
      */
@@ -29,8 +28,14 @@ public final class ScaleRuleInner {
     private ScaleAction scaleAction;
 
     /**
+     * Creates an instance of ScaleRuleInner class.
+     */
+    public ScaleRuleInner() {
+    }
+
+    /**
      * Get the metricTrigger property: the trigger that results in a scaling action.
-     *
+     * 
      * @return the metricTrigger value.
      */
     public MetricTrigger metricTrigger() {
@@ -39,7 +44,7 @@ public final class ScaleRuleInner {
 
     /**
      * Set the metricTrigger property: the trigger that results in a scaling action.
-     *
+     * 
      * @param metricTrigger the metricTrigger value to set.
      * @return the ScaleRuleInner object itself.
      */
@@ -50,7 +55,7 @@ public final class ScaleRuleInner {
 
     /**
      * Get the scaleAction property: the parameters for the scaling action.
-     *
+     * 
      * @return the scaleAction value.
      */
     public ScaleAction scaleAction() {
@@ -59,7 +64,7 @@ public final class ScaleRuleInner {
 
     /**
      * Set the scaleAction property: the parameters for the scaling action.
-     *
+     * 
      * @param scaleAction the scaleAction value to set.
      * @return the ScaleRuleInner object itself.
      */
@@ -70,23 +75,23 @@ public final class ScaleRuleInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (metricTrigger() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property metricTrigger in model ScaleRuleInner"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property metricTrigger in model ScaleRuleInner"));
         } else {
             metricTrigger().validate();
         }
         if (scaleAction() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property scaleAction in model ScaleRuleInner"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property scaleAction in model ScaleRuleInner"));
         } else {
             scaleAction().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ScaleRuleInner.class);
 }

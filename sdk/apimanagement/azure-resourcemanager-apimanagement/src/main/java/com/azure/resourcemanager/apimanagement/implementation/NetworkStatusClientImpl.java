@@ -21,7 +21,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.NetworkStatusClient;
 import com.azure.resourcemanager.apimanagement.fluent.models.NetworkStatusContractByLocationInner;
 import com.azure.resourcemanager.apimanagement.fluent.models.NetworkStatusContractInner;
@@ -30,8 +29,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in NetworkStatusClient. */
 public final class NetworkStatusClientImpl implements NetworkStatusClient {
-    private final ClientLogger logger = new ClientLogger(NetworkStatusClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final NetworkStatusService service;
 
@@ -55,11 +52,10 @@ public final class NetworkStatusClientImpl implements NetworkStatusClient {
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApiManagementClientN")
-    private interface NetworkStatusService {
+    public interface NetworkStatusService {
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/networkstatus")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/networkstatus")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<List<NetworkStatusContractByLocationInner>>> listByService(
@@ -73,8 +69,7 @@ public final class NetworkStatusClientImpl implements NetworkStatusClient {
 
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/locations/{locationName}/networkstatus")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/locations/{locationName}/networkstatus")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<NetworkStatusContractInner>> listByLocation(
@@ -92,13 +87,13 @@ public final class NetworkStatusClientImpl implements NetworkStatusClient {
      * Gets the Connectivity Status to the external resources on which the Api Management service depends from inside
      * the Cloud Service. This also returns the DNS Servers as visible to the CloudService.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the Connectivity Status to the external resources on which the Api Management service depends from inside
-     *     the Cloud Service.
+     *     the Cloud Service along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<List<NetworkStatusContractByLocationInner>>> listByServiceWithResponseAsync(
@@ -142,14 +137,14 @@ public final class NetworkStatusClientImpl implements NetworkStatusClient {
      * Gets the Connectivity Status to the external resources on which the Api Management service depends from inside
      * the Cloud Service. This also returns the DNS Servers as visible to the CloudService.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the Connectivity Status to the external resources on which the Api Management service depends from inside
-     *     the Cloud Service.
+     *     the Cloud Service along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<List<NetworkStatusContractByLocationInner>>> listByServiceWithResponseAsync(
@@ -190,57 +185,33 @@ public final class NetworkStatusClientImpl implements NetworkStatusClient {
      * Gets the Connectivity Status to the external resources on which the Api Management service depends from inside
      * the Cloud Service. This also returns the DNS Servers as visible to the CloudService.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the Connectivity Status to the external resources on which the Api Management service depends from inside
-     *     the Cloud Service.
+     *     the Cloud Service on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<List<NetworkStatusContractByLocationInner>> listByServiceAsync(
         String resourceGroupName, String serviceName) {
         return listByServiceWithResponseAsync(resourceGroupName, serviceName)
-            .flatMap(
-                (Response<List<NetworkStatusContractByLocationInner>> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Gets the Connectivity Status to the external resources on which the Api Management service depends from inside
      * the Cloud Service. This also returns the DNS Servers as visible to the CloudService.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the Connectivity Status to the external resources on which the Api Management service depends from inside
-     *     the Cloud Service.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public List<NetworkStatusContractByLocationInner> listByService(String resourceGroupName, String serviceName) {
-        return listByServiceAsync(resourceGroupName, serviceName).block();
-    }
-
-    /**
-     * Gets the Connectivity Status to the external resources on which the Api Management service depends from inside
-     * the Cloud Service. This also returns the DNS Servers as visible to the CloudService.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the Connectivity Status to the external resources on which the Api Management service depends from inside
-     *     the Cloud Service.
+     *     the Cloud Service along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<List<NetworkStatusContractByLocationInner>> listByServiceWithResponse(
@@ -252,7 +223,24 @@ public final class NetworkStatusClientImpl implements NetworkStatusClient {
      * Gets the Connectivity Status to the external resources on which the Api Management service depends from inside
      * the Cloud Service. This also returns the DNS Servers as visible to the CloudService.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the Connectivity Status to the external resources on which the Api Management service depends from inside
+     *     the Cloud Service.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public List<NetworkStatusContractByLocationInner> listByService(String resourceGroupName, String serviceName) {
+        return listByServiceWithResponse(resourceGroupName, serviceName, Context.NONE).getValue();
+    }
+
+    /**
+     * Gets the Connectivity Status to the external resources on which the Api Management service depends from inside
+     * the Cloud Service. This also returns the DNS Servers as visible to the CloudService.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param locationName Location in which the API Management service is deployed. This is one of the Azure Regions
      *     like West US, East US, South Central US.
@@ -260,7 +248,7 @@ public final class NetworkStatusClientImpl implements NetworkStatusClient {
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the Connectivity Status to the external resources on which the Api Management service depends from inside
-     *     the Cloud Service.
+     *     the Cloud Service along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<NetworkStatusContractInner>> listByLocationWithResponseAsync(
@@ -308,7 +296,7 @@ public final class NetworkStatusClientImpl implements NetworkStatusClient {
      * Gets the Connectivity Status to the external resources on which the Api Management service depends from inside
      * the Cloud Service. This also returns the DNS Servers as visible to the CloudService.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param locationName Location in which the API Management service is deployed. This is one of the Azure Regions
      *     like West US, East US, South Central US.
@@ -317,7 +305,7 @@ public final class NetworkStatusClientImpl implements NetworkStatusClient {
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the Connectivity Status to the external resources on which the Api Management service depends from inside
-     *     the Cloud Service.
+     *     the Cloud Service along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<NetworkStatusContractInner>> listByLocationWithResponseAsync(
@@ -362,7 +350,7 @@ public final class NetworkStatusClientImpl implements NetworkStatusClient {
      * Gets the Connectivity Status to the external resources on which the Api Management service depends from inside
      * the Cloud Service. This also returns the DNS Servers as visible to the CloudService.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param locationName Location in which the API Management service is deployed. This is one of the Azure Regions
      *     like West US, East US, South Central US.
@@ -370,27 +358,41 @@ public final class NetworkStatusClientImpl implements NetworkStatusClient {
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the Connectivity Status to the external resources on which the Api Management service depends from inside
-     *     the Cloud Service.
+     *     the Cloud Service on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<NetworkStatusContractInner> listByLocationAsync(
         String resourceGroupName, String serviceName, String locationName) {
         return listByLocationWithResponseAsync(resourceGroupName, serviceName, locationName)
-            .flatMap(
-                (Response<NetworkStatusContractInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Gets the Connectivity Status to the external resources on which the Api Management service depends from inside
      * the Cloud Service. This also returns the DNS Servers as visible to the CloudService.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param locationName Location in which the API Management service is deployed. This is one of the Azure Regions
+     *     like West US, East US, South Central US.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the Connectivity Status to the external resources on which the Api Management service depends from inside
+     *     the Cloud Service along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<NetworkStatusContractInner> listByLocationWithResponse(
+        String resourceGroupName, String serviceName, String locationName, Context context) {
+        return listByLocationWithResponseAsync(resourceGroupName, serviceName, locationName, context).block();
+    }
+
+    /**
+     * Gets the Connectivity Status to the external resources on which the Api Management service depends from inside
+     * the Cloud Service. This also returns the DNS Servers as visible to the CloudService.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param locationName Location in which the API Management service is deployed. This is one of the Azure Regions
      *     like West US, East US, South Central US.
@@ -403,27 +405,6 @@ public final class NetworkStatusClientImpl implements NetworkStatusClient {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public NetworkStatusContractInner listByLocation(
         String resourceGroupName, String serviceName, String locationName) {
-        return listByLocationAsync(resourceGroupName, serviceName, locationName).block();
-    }
-
-    /**
-     * Gets the Connectivity Status to the external resources on which the Api Management service depends from inside
-     * the Cloud Service. This also returns the DNS Servers as visible to the CloudService.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param locationName Location in which the API Management service is deployed. This is one of the Azure Regions
-     *     like West US, East US, South Central US.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the Connectivity Status to the external resources on which the Api Management service depends from inside
-     *     the Cloud Service.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<NetworkStatusContractInner> listByLocationWithResponse(
-        String resourceGroupName, String serviceName, String locationName, Context context) {
-        return listByLocationWithResponseAsync(resourceGroupName, serviceName, locationName, context).block();
+        return listByLocationWithResponse(resourceGroupName, serviceName, locationName, Context.NONE).getValue();
     }
 }

@@ -6,14 +6,15 @@ package com.azure.resourcemanager.batch.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The Batch service does not assign any meaning to this metadata; it is solely for the use of user code. */
+/**
+ * A name-value pair associated with a Batch service resource.
+ * 
+ * The Batch service does not assign any meaning to this metadata; it is solely for the use of user code.
+ */
 @Fluent
 public final class MetadataItem {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MetadataItem.class);
-
     /*
      * The name of the metadata item.
      */
@@ -27,8 +28,14 @@ public final class MetadataItem {
     private String value;
 
     /**
+     * Creates an instance of MetadataItem class.
+     */
+    public MetadataItem() {
+    }
+
+    /**
      * Get the name property: The name of the metadata item.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -37,7 +44,7 @@ public final class MetadataItem {
 
     /**
      * Set the name property: The name of the metadata item.
-     *
+     * 
      * @param name the name value to set.
      * @return the MetadataItem object itself.
      */
@@ -48,7 +55,7 @@ public final class MetadataItem {
 
     /**
      * Get the value property: The value of the metadata item.
-     *
+     * 
      * @return the value value.
      */
     public String value() {
@@ -57,7 +64,7 @@ public final class MetadataItem {
 
     /**
      * Set the value property: The value of the metadata item.
-     *
+     * 
      * @param value the value value to set.
      * @return the MetadataItem object itself.
      */
@@ -68,19 +75,19 @@ public final class MetadataItem {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (name() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property name in model MetadataItem"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property name in model MetadataItem"));
         }
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property value in model MetadataItem"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property value in model MetadataItem"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(MetadataItem.class);
 }

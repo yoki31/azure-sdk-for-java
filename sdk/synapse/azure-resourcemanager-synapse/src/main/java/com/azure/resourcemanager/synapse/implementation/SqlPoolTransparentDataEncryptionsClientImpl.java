@@ -27,7 +27,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.synapse.fluent.SqlPoolTransparentDataEncryptionsClient;
 import com.azure.resourcemanager.synapse.fluent.models.TransparentDataEncryptionInner;
 import com.azure.resourcemanager.synapse.models.TransparentDataEncryptionListResult;
@@ -38,8 +37,6 @@ import reactor.core.publisher.Mono;
  * An instance of this class provides access to all the operations defined in SqlPoolTransparentDataEncryptionsClient.
  */
 public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoolTransparentDataEncryptionsClient {
-    private final ClientLogger logger = new ClientLogger(SqlPoolTransparentDataEncryptionsClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final SqlPoolTransparentDataEncryptionsService service;
 
@@ -67,7 +64,7 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
      */
     @Host("{$host}")
     @ServiceInterface(name = "SynapseManagementCli")
-    private interface SqlPoolTransparentDataEncryptionsService {
+    public interface SqlPoolTransparentDataEncryptionsService {
         @Headers({"Content-Type: application/json"})
         @Get(
             "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
@@ -131,7 +128,9 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
     }
 
     /**
-     * Get a SQL pool's transparent data encryption configuration.
+     * Get a SQL pool's transparent data encryption configuration
+     *
+     * <p>Get a SQL pool's transparent data encryption configuration.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -140,7 +139,8 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a SQL pool's transparent data encryption configuration.
+     * @return a SQL pool's transparent data encryption configuration along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<TransparentDataEncryptionInner>> getWithResponseAsync(
@@ -196,7 +196,9 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
     }
 
     /**
-     * Get a SQL pool's transparent data encryption configuration.
+     * Get a SQL pool's transparent data encryption configuration
+     *
+     * <p>Get a SQL pool's transparent data encryption configuration.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -206,7 +208,8 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a SQL pool's transparent data encryption configuration.
+     * @return a SQL pool's transparent data encryption configuration along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<TransparentDataEncryptionInner>> getWithResponseAsync(
@@ -260,7 +263,9 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
     }
 
     /**
-     * Get a SQL pool's transparent data encryption configuration.
+     * Get a SQL pool's transparent data encryption configuration
+     *
+     * <p>Get a SQL pool's transparent data encryption configuration.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -269,7 +274,7 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a SQL pool's transparent data encryption configuration.
+     * @return a SQL pool's transparent data encryption configuration on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<TransparentDataEncryptionInner> getAsync(
@@ -278,18 +283,40 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
         String sqlPoolName,
         TransparentDataEncryptionName transparentDataEncryptionName) {
         return getWithResponseAsync(resourceGroupName, workspaceName, sqlPoolName, transparentDataEncryptionName)
-            .flatMap(
-                (Response<TransparentDataEncryptionInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
-     * Get a SQL pool's transparent data encryption configuration.
+     * Get a SQL pool's transparent data encryption configuration
+     *
+     * <p>Get a SQL pool's transparent data encryption configuration.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param sqlPoolName SQL pool name.
+     * @param transparentDataEncryptionName The name of the transparent data encryption configuration.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a SQL pool's transparent data encryption configuration along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<TransparentDataEncryptionInner> getWithResponse(
+        String resourceGroupName,
+        String workspaceName,
+        String sqlPoolName,
+        TransparentDataEncryptionName transparentDataEncryptionName,
+        Context context) {
+        return getWithResponseAsync(
+                resourceGroupName, workspaceName, sqlPoolName, transparentDataEncryptionName, context)
+            .block();
+    }
+
+    /**
+     * Get a SQL pool's transparent data encryption configuration
+     *
+     * <p>Get a SQL pool's transparent data encryption configuration.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -306,36 +333,15 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
         String workspaceName,
         String sqlPoolName,
         TransparentDataEncryptionName transparentDataEncryptionName) {
-        return getAsync(resourceGroupName, workspaceName, sqlPoolName, transparentDataEncryptionName).block();
+        return getWithResponse(
+                resourceGroupName, workspaceName, sqlPoolName, transparentDataEncryptionName, Context.NONE)
+            .getValue();
     }
 
     /**
-     * Get a SQL pool's transparent data encryption configuration.
+     * Creates or updates a Sql pool's transparent data encryption configuration
      *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param sqlPoolName SQL pool name.
-     * @param transparentDataEncryptionName The name of the transparent data encryption configuration.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a SQL pool's transparent data encryption configuration.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<TransparentDataEncryptionInner> getWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        TransparentDataEncryptionName transparentDataEncryptionName,
-        Context context) {
-        return getWithResponseAsync(
-                resourceGroupName, workspaceName, sqlPoolName, transparentDataEncryptionName, context)
-            .block();
-    }
-
-    /**
-     * Creates or updates a Sql pool's transparent data encryption configuration.
+     * <p>Creates or updates a Sql pool's transparent data encryption configuration.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -345,7 +351,8 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return represents a Sql pool transparent data encryption configuration.
+     * @return represents a Sql pool transparent data encryption configuration along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<TransparentDataEncryptionInner>> createOrUpdateWithResponseAsync(
@@ -408,7 +415,9 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
     }
 
     /**
-     * Creates or updates a Sql pool's transparent data encryption configuration.
+     * Creates or updates a Sql pool's transparent data encryption configuration
+     *
+     * <p>Creates or updates a Sql pool's transparent data encryption configuration.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -419,7 +428,8 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return represents a Sql pool transparent data encryption configuration.
+     * @return represents a Sql pool transparent data encryption configuration along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<TransparentDataEncryptionInner>> createOrUpdateWithResponseAsync(
@@ -480,7 +490,9 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
     }
 
     /**
-     * Creates or updates a Sql pool's transparent data encryption configuration.
+     * Creates or updates a Sql pool's transparent data encryption configuration
+     *
+     * <p>Creates or updates a Sql pool's transparent data encryption configuration.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -490,7 +502,7 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return represents a Sql pool transparent data encryption configuration.
+     * @return represents a Sql pool transparent data encryption configuration on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<TransparentDataEncryptionInner> createOrUpdateAsync(
@@ -501,18 +513,42 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
         TransparentDataEncryptionInner parameters) {
         return createOrUpdateWithResponseAsync(
                 resourceGroupName, workspaceName, sqlPoolName, transparentDataEncryptionName, parameters)
-            .flatMap(
-                (Response<TransparentDataEncryptionInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
-     * Creates or updates a Sql pool's transparent data encryption configuration.
+     * Creates or updates a Sql pool's transparent data encryption configuration
+     *
+     * <p>Creates or updates a Sql pool's transparent data encryption configuration.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param sqlPoolName SQL pool name.
+     * @param transparentDataEncryptionName The name of the transparent data encryption configuration.
+     * @param parameters The required parameters for creating or updating transparent data encryption.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return represents a Sql pool transparent data encryption configuration along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<TransparentDataEncryptionInner> createOrUpdateWithResponse(
+        String resourceGroupName,
+        String workspaceName,
+        String sqlPoolName,
+        TransparentDataEncryptionName transparentDataEncryptionName,
+        TransparentDataEncryptionInner parameters,
+        Context context) {
+        return createOrUpdateWithResponseAsync(
+                resourceGroupName, workspaceName, sqlPoolName, transparentDataEncryptionName, parameters, context)
+            .block();
+    }
+
+    /**
+     * Creates or updates a Sql pool's transparent data encryption configuration
+     *
+     * <p>Creates or updates a Sql pool's transparent data encryption configuration.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -531,40 +567,15 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
         String sqlPoolName,
         TransparentDataEncryptionName transparentDataEncryptionName,
         TransparentDataEncryptionInner parameters) {
-        return createOrUpdateAsync(
-                resourceGroupName, workspaceName, sqlPoolName, transparentDataEncryptionName, parameters)
-            .block();
+        return createOrUpdateWithResponse(
+                resourceGroupName, workspaceName, sqlPoolName, transparentDataEncryptionName, parameters, Context.NONE)
+            .getValue();
     }
 
     /**
-     * Creates or updates a Sql pool's transparent data encryption configuration.
+     * SQL pool's transparent data encryption configurations
      *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param sqlPoolName SQL pool name.
-     * @param transparentDataEncryptionName The name of the transparent data encryption configuration.
-     * @param parameters The required parameters for creating or updating transparent data encryption.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return represents a Sql pool transparent data encryption configuration.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<TransparentDataEncryptionInner> createOrUpdateWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        TransparentDataEncryptionName transparentDataEncryptionName,
-        TransparentDataEncryptionInner parameters,
-        Context context) {
-        return createOrUpdateWithResponseAsync(
-                resourceGroupName, workspaceName, sqlPoolName, transparentDataEncryptionName, parameters, context)
-            .block();
-    }
-
-    /**
-     * Get list of SQL pool's transparent data encryption configurations.
+     * <p>Get list of SQL pool's transparent data encryption configurations.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -572,7 +583,8 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of SQL pool's transparent data encryption configurations.
+     * @return list of SQL pool's transparent data encryption configurations along with {@link PagedResponse} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<TransparentDataEncryptionInner>> listSinglePageAsync(
@@ -627,7 +639,9 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
     }
 
     /**
-     * Get list of SQL pool's transparent data encryption configurations.
+     * SQL pool's transparent data encryption configurations
+     *
+     * <p>Get list of SQL pool's transparent data encryption configurations.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -636,7 +650,8 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of SQL pool's transparent data encryption configurations.
+     * @return list of SQL pool's transparent data encryption configurations along with {@link PagedResponse} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<TransparentDataEncryptionInner>> listSinglePageAsync(
@@ -688,7 +703,9 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
     }
 
     /**
-     * Get list of SQL pool's transparent data encryption configurations.
+     * SQL pool's transparent data encryption configurations
+     *
+     * <p>Get list of SQL pool's transparent data encryption configurations.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -696,7 +713,8 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of SQL pool's transparent data encryption configurations.
+     * @return list of SQL pool's transparent data encryption configurations as paginated response with {@link
+     *     PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<TransparentDataEncryptionInner> listAsync(
@@ -707,7 +725,9 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
     }
 
     /**
-     * Get list of SQL pool's transparent data encryption configurations.
+     * SQL pool's transparent data encryption configurations
+     *
+     * <p>Get list of SQL pool's transparent data encryption configurations.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -716,7 +736,8 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of SQL pool's transparent data encryption configurations.
+     * @return list of SQL pool's transparent data encryption configurations as paginated response with {@link
+     *     PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<TransparentDataEncryptionInner> listAsync(
@@ -727,7 +748,9 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
     }
 
     /**
-     * Get list of SQL pool's transparent data encryption configurations.
+     * SQL pool's transparent data encryption configurations
+     *
+     * <p>Get list of SQL pool's transparent data encryption configurations.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -735,7 +758,8 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of SQL pool's transparent data encryption configurations.
+     * @return list of SQL pool's transparent data encryption configurations as paginated response with {@link
+     *     PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<TransparentDataEncryptionInner> list(
@@ -744,7 +768,9 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
     }
 
     /**
-     * Get list of SQL pool's transparent data encryption configurations.
+     * SQL pool's transparent data encryption configurations
+     *
+     * <p>Get list of SQL pool's transparent data encryption configurations.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -753,7 +779,8 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of SQL pool's transparent data encryption configurations.
+     * @return list of SQL pool's transparent data encryption configurations as paginated response with {@link
+     *     PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<TransparentDataEncryptionInner> list(
@@ -764,11 +791,13 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of transparent data encryption configurations.
+     * @return a list of transparent data encryption configurations along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<TransparentDataEncryptionInner>> listNextSinglePageAsync(String nextLink) {
@@ -799,12 +828,14 @@ public final class SqlPoolTransparentDataEncryptionsClientImpl implements SqlPoo
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of transparent data encryption configurations.
+     * @return a list of transparent data encryption configurations along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<TransparentDataEncryptionInner>> listNextSinglePageAsync(

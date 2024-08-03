@@ -5,27 +5,25 @@
 package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Defines the parameters for RequestScheme match conditions. */
+/**
+ * Defines the parameters for RequestScheme match conditions.
+ */
 @Fluent
 public final class RequestSchemeMatchConditionParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RequestSchemeMatchConditionParameters.class);
-
     /*
-     * The @odata.type property.
+     * The typeName property.
      */
-    @JsonProperty(value = "@odata.type", required = true)
-    private String odataType;
+    @JsonProperty(value = "typeName", required = true)
+    private String typeName = "DeliveryRuleRequestSchemeConditionParameters";
 
     /*
      * Describes operator to be matched
      */
     @JsonProperty(value = "operator", required = true)
-    private String operator;
+    private String operator = "Equal";
 
     /*
      * Describes if this is negate condition or not
@@ -34,40 +32,46 @@ public final class RequestSchemeMatchConditionParameters {
     private Boolean negateCondition;
 
     /*
+     * List of transforms
+     */
+    @JsonProperty(value = "transforms")
+    private List<Transform> transforms;
+
+    /*
      * The match value for the condition of the delivery rule
      */
     @JsonProperty(value = "matchValues")
     private List<RequestSchemeMatchConditionParametersMatchValuesItem> matchValues;
 
-    /** Creates an instance of RequestSchemeMatchConditionParameters class. */
-    public RequestSchemeMatchConditionParameters() {
-        odataType = "#Microsoft.Azure.Cdn.Models.DeliveryRuleRequestSchemeConditionParameters";
-        operator = "Equal";
-    }
-
     /**
-     * Get the odataType property: The @odata.type property.
-     *
-     * @return the odataType value.
+     * Creates an instance of RequestSchemeMatchConditionParameters class.
      */
-    public String odataType() {
-        return this.odataType;
+    public RequestSchemeMatchConditionParameters() {
     }
 
     /**
-     * Set the odataType property: The @odata.type property.
-     *
-     * @param odataType the odataType value to set.
+     * Get the typeName property: The typeName property.
+     * 
+     * @return the typeName value.
+     */
+    public String typeName() {
+        return this.typeName;
+    }
+
+    /**
+     * Set the typeName property: The typeName property.
+     * 
+     * @param typeName the typeName value to set.
      * @return the RequestSchemeMatchConditionParameters object itself.
      */
-    public RequestSchemeMatchConditionParameters withOdataType(String odataType) {
-        this.odataType = odataType;
+    public RequestSchemeMatchConditionParameters withTypeName(String typeName) {
+        this.typeName = typeName;
         return this;
     }
 
     /**
      * Get the operator property: Describes operator to be matched.
-     *
+     * 
      * @return the operator value.
      */
     public String operator() {
@@ -76,7 +80,7 @@ public final class RequestSchemeMatchConditionParameters {
 
     /**
      * Set the operator property: Describes operator to be matched.
-     *
+     * 
      * @param operator the operator value to set.
      * @return the RequestSchemeMatchConditionParameters object itself.
      */
@@ -87,7 +91,7 @@ public final class RequestSchemeMatchConditionParameters {
 
     /**
      * Get the negateCondition property: Describes if this is negate condition or not.
-     *
+     * 
      * @return the negateCondition value.
      */
     public Boolean negateCondition() {
@@ -96,7 +100,7 @@ public final class RequestSchemeMatchConditionParameters {
 
     /**
      * Set the negateCondition property: Describes if this is negate condition or not.
-     *
+     * 
      * @param negateCondition the negateCondition value to set.
      * @return the RequestSchemeMatchConditionParameters object itself.
      */
@@ -106,8 +110,28 @@ public final class RequestSchemeMatchConditionParameters {
     }
 
     /**
+     * Get the transforms property: List of transforms.
+     * 
+     * @return the transforms value.
+     */
+    public List<Transform> transforms() {
+        return this.transforms;
+    }
+
+    /**
+     * Set the transforms property: List of transforms.
+     * 
+     * @param transforms the transforms value to set.
+     * @return the RequestSchemeMatchConditionParameters object itself.
+     */
+    public RequestSchemeMatchConditionParameters withTransforms(List<Transform> transforms) {
+        this.transforms = transforms;
+        return this;
+    }
+
+    /**
      * Get the matchValues property: The match value for the condition of the delivery rule.
-     *
+     * 
      * @return the matchValues value.
      */
     public List<RequestSchemeMatchConditionParametersMatchValuesItem> matchValues() {
@@ -116,19 +140,19 @@ public final class RequestSchemeMatchConditionParameters {
 
     /**
      * Set the matchValues property: The match value for the condition of the delivery rule.
-     *
+     * 
      * @param matchValues the matchValues value to set.
      * @return the RequestSchemeMatchConditionParameters object itself.
      */
-    public RequestSchemeMatchConditionParameters withMatchValues(
-        List<RequestSchemeMatchConditionParametersMatchValuesItem> matchValues) {
+    public RequestSchemeMatchConditionParameters
+        withMatchValues(List<RequestSchemeMatchConditionParametersMatchValuesItem> matchValues) {
         this.matchValues = matchValues;
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -7,17 +7,24 @@ package com.azure.resourcemanager.datafactory.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.fluent.models.AzPowerShellSetupTypeProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** The express custom setup of installing Azure PowerShell. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * The express custom setup of installing Azure PowerShell.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = AzPowerShellSetup.class, visible = true)
 @JsonTypeName("AzPowerShellSetup")
 @Fluent
 public final class AzPowerShellSetup extends CustomSetupBase {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzPowerShellSetup.class);
+    /*
+     * The type of custom setup.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "AzPowerShellSetup";
 
     /*
      * Install Azure PowerShell type properties.
@@ -26,8 +33,24 @@ public final class AzPowerShellSetup extends CustomSetupBase {
     private AzPowerShellSetupTypeProperties innerTypeProperties = new AzPowerShellSetupTypeProperties();
 
     /**
+     * Creates an instance of AzPowerShellSetup class.
+     */
+    public AzPowerShellSetup() {
+    }
+
+    /**
+     * Get the type property: The type of custom setup.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the innerTypeProperties property: Install Azure PowerShell type properties.
-     *
+     * 
      * @return the innerTypeProperties value.
      */
     private AzPowerShellSetupTypeProperties innerTypeProperties() {
@@ -36,7 +59,7 @@ public final class AzPowerShellSetup extends CustomSetupBase {
 
     /**
      * Get the version property: The required version of Azure PowerShell to install.
-     *
+     * 
      * @return the version value.
      */
     public String version() {
@@ -45,7 +68,7 @@ public final class AzPowerShellSetup extends CustomSetupBase {
 
     /**
      * Set the version property: The required version of Azure PowerShell to install.
-     *
+     * 
      * @param version the version value to set.
      * @return the AzPowerShellSetup object itself.
      */
@@ -59,19 +82,20 @@ public final class AzPowerShellSetup extends CustomSetupBase {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
         if (innerTypeProperties() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property innerTypeProperties in model AzPowerShellSetup"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property innerTypeProperties in model AzPowerShellSetup"));
         } else {
             innerTypeProperties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(AzPowerShellSetup.class);
 }

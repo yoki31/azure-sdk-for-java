@@ -23,7 +23,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.applicationinsights.fluent.ProactiveDetectionConfigurationsClient;
 import com.azure.resourcemanager.applicationinsights.fluent.models.ApplicationInsightsComponentProactiveDetectionConfigurationInner;
 import java.util.List;
@@ -33,8 +32,6 @@ import reactor.core.publisher.Mono;
  * An instance of this class provides access to all the operations defined in ProactiveDetectionConfigurationsClient.
  */
 public final class ProactiveDetectionConfigurationsClientImpl implements ProactiveDetectionConfigurationsClient {
-    private final ClientLogger logger = new ClientLogger(ProactiveDetectionConfigurationsClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final ProactiveDetectionConfigurationsService service;
 
@@ -62,11 +59,10 @@ public final class ProactiveDetectionConfigurationsClientImpl implements Proacti
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApplicationInsightsM")
-    private interface ProactiveDetectionConfigurationsService {
+    public interface ProactiveDetectionConfigurationsService {
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Insights/components"
-                + "/{resourceName}/ProactiveDetectionConfigs")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Insights/components/{resourceName}/ProactiveDetectionConfigs")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<List<ApplicationInsightsComponentProactiveDetectionConfigurationInner>>> list(
@@ -80,8 +76,7 @@ public final class ProactiveDetectionConfigurationsClientImpl implements Proacti
 
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Insights/components"
-                + "/{resourceName}/ProactiveDetectionConfigs/{ConfigurationId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Insights/components/{resourceName}/ProactiveDetectionConfigs/{ConfigurationId}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<ApplicationInsightsComponentProactiveDetectionConfigurationInner>> get(
@@ -96,8 +91,7 @@ public final class ProactiveDetectionConfigurationsClientImpl implements Proacti
 
         @Headers({"Content-Type: application/json"})
         @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Insights/components"
-                + "/{resourceName}/ProactiveDetectionConfigs/{ConfigurationId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Insights/components/{resourceName}/ProactiveDetectionConfigs/{ConfigurationId}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<ApplicationInsightsComponentProactiveDetectionConfigurationInner>> update(
@@ -121,7 +115,8 @@ public final class ProactiveDetectionConfigurationsClientImpl implements Proacti
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of ProactiveDetection configurations of an Application Insights component.
+     * @return a list of ProactiveDetection configurations of an Application Insights component along with {@link
+     *     Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<List<ApplicationInsightsComponentProactiveDetectionConfigurationInner>>>
@@ -171,7 +166,8 @@ public final class ProactiveDetectionConfigurationsClientImpl implements Proacti
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of ProactiveDetection configurations of an Application Insights component.
+     * @return a list of ProactiveDetection configurations of an Application Insights component along with {@link
+     *     Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<List<ApplicationInsightsComponentProactiveDetectionConfigurationInner>>>
@@ -217,20 +213,31 @@ public final class ProactiveDetectionConfigurationsClientImpl implements Proacti
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of ProactiveDetection configurations of an Application Insights component.
+     * @return a list of ProactiveDetection configurations of an Application Insights component on successful completion
+     *     of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<List<ApplicationInsightsComponentProactiveDetectionConfigurationInner>> listAsync(
         String resourceGroupName, String resourceName) {
-        return listWithResponseAsync(resourceGroupName, resourceName)
-            .flatMap(
-                (Response<List<ApplicationInsightsComponentProactiveDetectionConfigurationInner>> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+        return listWithResponseAsync(resourceGroupName, resourceName).flatMap(res -> Mono.justOrEmpty(res.getValue()));
+    }
+
+    /**
+     * Gets a list of ProactiveDetection configurations of an Application Insights component.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param resourceName The name of the Application Insights component resource.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a list of ProactiveDetection configurations of an Application Insights component along with {@link
+     *     Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<List<ApplicationInsightsComponentProactiveDetectionConfigurationInner>> listWithResponse(
+        String resourceGroupName, String resourceName, Context context) {
+        return listWithResponseAsync(resourceGroupName, resourceName, context).block();
     }
 
     /**
@@ -246,24 +253,7 @@ public final class ProactiveDetectionConfigurationsClientImpl implements Proacti
     @ServiceMethod(returns = ReturnType.SINGLE)
     public List<ApplicationInsightsComponentProactiveDetectionConfigurationInner> list(
         String resourceGroupName, String resourceName) {
-        return listAsync(resourceGroupName, resourceName).block();
-    }
-
-    /**
-     * Gets a list of ProactiveDetection configurations of an Application Insights component.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param resourceName The name of the Application Insights component resource.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of ProactiveDetection configurations of an Application Insights component.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<List<ApplicationInsightsComponentProactiveDetectionConfigurationInner>> listWithResponse(
-        String resourceGroupName, String resourceName, Context context) {
-        return listWithResponseAsync(resourceGroupName, resourceName, context).block();
+        return listWithResponse(resourceGroupName, resourceName, Context.NONE).getValue();
     }
 
     /**
@@ -276,7 +266,8 @@ public final class ProactiveDetectionConfigurationsClientImpl implements Proacti
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the ProactiveDetection configuration for this configuration id.
+     * @return the ProactiveDetection configuration for this configuration id along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<ApplicationInsightsComponentProactiveDetectionConfigurationInner>> getWithResponseAsync(
@@ -333,7 +324,8 @@ public final class ProactiveDetectionConfigurationsClientImpl implements Proacti
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the ProactiveDetection configuration for this configuration id.
+     * @return the ProactiveDetection configuration for this configuration id along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<ApplicationInsightsComponentProactiveDetectionConfigurationInner>> getWithResponseAsync(
@@ -386,20 +378,32 @@ public final class ProactiveDetectionConfigurationsClientImpl implements Proacti
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the ProactiveDetection configuration for this configuration id.
+     * @return the ProactiveDetection configuration for this configuration id on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApplicationInsightsComponentProactiveDetectionConfigurationInner> getAsync(
         String resourceGroupName, String resourceName, String configurationId) {
         return getWithResponseAsync(resourceGroupName, resourceName, configurationId)
-            .flatMap(
-                (Response<ApplicationInsightsComponentProactiveDetectionConfigurationInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
+    }
+
+    /**
+     * Get the ProactiveDetection configuration for this configuration id.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param resourceName The name of the Application Insights component resource.
+     * @param configurationId The ProactiveDetection configuration ID. This is unique within a Application Insights
+     *     component.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the ProactiveDetection configuration for this configuration id along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<ApplicationInsightsComponentProactiveDetectionConfigurationInner> getWithResponse(
+        String resourceGroupName, String resourceName, String configurationId, Context context) {
+        return getWithResponseAsync(resourceGroupName, resourceName, configurationId, context).block();
     }
 
     /**
@@ -417,26 +421,7 @@ public final class ProactiveDetectionConfigurationsClientImpl implements Proacti
     @ServiceMethod(returns = ReturnType.SINGLE)
     public ApplicationInsightsComponentProactiveDetectionConfigurationInner get(
         String resourceGroupName, String resourceName, String configurationId) {
-        return getAsync(resourceGroupName, resourceName, configurationId).block();
-    }
-
-    /**
-     * Get the ProactiveDetection configuration for this configuration id.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param resourceName The name of the Application Insights component resource.
-     * @param configurationId The ProactiveDetection configuration ID. This is unique within a Application Insights
-     *     component.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the ProactiveDetection configuration for this configuration id.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<ApplicationInsightsComponentProactiveDetectionConfigurationInner> getWithResponse(
-        String resourceGroupName, String resourceName, String configurationId, Context context) {
-        return getWithResponseAsync(resourceGroupName, resourceName, configurationId, context).block();
+        return getWithResponse(resourceGroupName, resourceName, configurationId, Context.NONE).getValue();
     }
 
     /**
@@ -451,7 +436,8 @@ public final class ProactiveDetectionConfigurationsClientImpl implements Proacti
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return properties that define a ProactiveDetection configuration.
+     * @return properties that define a ProactiveDetection configuration along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<ApplicationInsightsComponentProactiveDetectionConfigurationInner>> updateWithResponseAsync(
@@ -522,7 +508,8 @@ public final class ProactiveDetectionConfigurationsClientImpl implements Proacti
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return properties that define a ProactiveDetection configuration.
+     * @return properties that define a ProactiveDetection configuration along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<ApplicationInsightsComponentProactiveDetectionConfigurationInner>> updateWithResponseAsync(
@@ -590,7 +577,7 @@ public final class ProactiveDetectionConfigurationsClientImpl implements Proacti
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return properties that define a ProactiveDetection configuration.
+     * @return properties that define a ProactiveDetection configuration on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApplicationInsightsComponentProactiveDetectionConfigurationInner> updateAsync(
@@ -599,14 +586,34 @@ public final class ProactiveDetectionConfigurationsClientImpl implements Proacti
         String configurationId,
         ApplicationInsightsComponentProactiveDetectionConfigurationInner proactiveDetectionProperties) {
         return updateWithResponseAsync(resourceGroupName, resourceName, configurationId, proactiveDetectionProperties)
-            .flatMap(
-                (Response<ApplicationInsightsComponentProactiveDetectionConfigurationInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
+    }
+
+    /**
+     * Update the ProactiveDetection configuration for this configuration id.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param resourceName The name of the Application Insights component resource.
+     * @param configurationId The ProactiveDetection configuration ID. This is unique within a Application Insights
+     *     component.
+     * @param proactiveDetectionProperties Properties that need to be specified to update the ProactiveDetection
+     *     configuration.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return properties that define a ProactiveDetection configuration along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<ApplicationInsightsComponentProactiveDetectionConfigurationInner> updateWithResponse(
+        String resourceGroupName,
+        String resourceName,
+        String configurationId,
+        ApplicationInsightsComponentProactiveDetectionConfigurationInner proactiveDetectionProperties,
+        Context context) {
+        return updateWithResponseAsync(
+                resourceGroupName, resourceName, configurationId, proactiveDetectionProperties, context)
+            .block();
     }
 
     /**
@@ -629,33 +636,8 @@ public final class ProactiveDetectionConfigurationsClientImpl implements Proacti
         String resourceName,
         String configurationId,
         ApplicationInsightsComponentProactiveDetectionConfigurationInner proactiveDetectionProperties) {
-        return updateAsync(resourceGroupName, resourceName, configurationId, proactiveDetectionProperties).block();
-    }
-
-    /**
-     * Update the ProactiveDetection configuration for this configuration id.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param resourceName The name of the Application Insights component resource.
-     * @param configurationId The ProactiveDetection configuration ID. This is unique within a Application Insights
-     *     component.
-     * @param proactiveDetectionProperties Properties that need to be specified to update the ProactiveDetection
-     *     configuration.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return properties that define a ProactiveDetection configuration.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<ApplicationInsightsComponentProactiveDetectionConfigurationInner> updateWithResponse(
-        String resourceGroupName,
-        String resourceName,
-        String configurationId,
-        ApplicationInsightsComponentProactiveDetectionConfigurationInner proactiveDetectionProperties,
-        Context context) {
-        return updateWithResponseAsync(
-                resourceGroupName, resourceName, configurationId, proactiveDetectionProperties, context)
-            .block();
+        return updateWithResponse(
+                resourceGroupName, resourceName, configurationId, proactiveDetectionProperties, Context.NONE)
+            .getValue();
     }
 }

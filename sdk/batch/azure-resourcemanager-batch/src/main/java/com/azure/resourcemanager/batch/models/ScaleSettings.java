@@ -5,37 +5,44 @@
 package com.azure.resourcemanager.batch.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
+ * Scale settings for the pool
+ * 
  * Defines the desired size of the pool. This can either be 'fixedScale' where the requested targetDedicatedNodes is
  * specified, or 'autoScale' which defines a formula which is periodically reevaluated. If this property is not
  * specified, the pool will have a fixed scale with 0 targetDedicatedNodes.
  */
 @Fluent
 public final class ScaleSettings {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ScaleSettings.class);
-
     /*
-     * Fixed scale settings for the pool. This property and autoScale are
-     * mutually exclusive and one of the properties must be specified.
+     * Fixed scale settings for the pool.
+     * 
+     * This property and autoScale are mutually exclusive and one of the properties must be specified.
      */
     @JsonProperty(value = "fixedScale")
     private FixedScaleSettings fixedScale;
 
     /*
-     * AutoScale settings for the pool. This property and fixedScale are
-     * mutually exclusive and one of the properties must be specified.
+     * AutoScale settings for the pool.
+     * 
+     * This property and fixedScale are mutually exclusive and one of the properties must be specified.
      */
     @JsonProperty(value = "autoScale")
     private AutoScaleSettings autoScale;
 
     /**
-     * Get the fixedScale property: Fixed scale settings for the pool. This property and autoScale are mutually
-     * exclusive and one of the properties must be specified.
-     *
+     * Creates an instance of ScaleSettings class.
+     */
+    public ScaleSettings() {
+    }
+
+    /**
+     * Get the fixedScale property: Fixed scale settings for the pool.
+     * 
+     * This property and autoScale are mutually exclusive and one of the properties must be specified.
+     * 
      * @return the fixedScale value.
      */
     public FixedScaleSettings fixedScale() {
@@ -43,9 +50,10 @@ public final class ScaleSettings {
     }
 
     /**
-     * Set the fixedScale property: Fixed scale settings for the pool. This property and autoScale are mutually
-     * exclusive and one of the properties must be specified.
-     *
+     * Set the fixedScale property: Fixed scale settings for the pool.
+     * 
+     * This property and autoScale are mutually exclusive and one of the properties must be specified.
+     * 
      * @param fixedScale the fixedScale value to set.
      * @return the ScaleSettings object itself.
      */
@@ -55,9 +63,10 @@ public final class ScaleSettings {
     }
 
     /**
-     * Get the autoScale property: AutoScale settings for the pool. This property and fixedScale are mutually exclusive
-     * and one of the properties must be specified.
-     *
+     * Get the autoScale property: AutoScale settings for the pool.
+     * 
+     * This property and fixedScale are mutually exclusive and one of the properties must be specified.
+     * 
      * @return the autoScale value.
      */
     public AutoScaleSettings autoScale() {
@@ -65,9 +74,10 @@ public final class ScaleSettings {
     }
 
     /**
-     * Set the autoScale property: AutoScale settings for the pool. This property and fixedScale are mutually exclusive
-     * and one of the properties must be specified.
-     *
+     * Set the autoScale property: AutoScale settings for the pool.
+     * 
+     * This property and fixedScale are mutually exclusive and one of the properties must be specified.
+     * 
      * @param autoScale the autoScale value to set.
      * @return the ScaleSettings object itself.
      */
@@ -78,7 +88,7 @@ public final class ScaleSettings {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

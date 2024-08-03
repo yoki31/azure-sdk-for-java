@@ -23,6 +23,11 @@ public final class FileConstants {
     public static final String FILE_TIME_NOW = "Now";
 
     /**
+     * Default value for copying SMB Properties from source file.
+     */
+    public static final String COPY_SOURCE = "Source";
+
+    /**
      * Default value for several SMB file headers.
      */
     public static final String PRESERVE = "Preserve";
@@ -69,14 +74,6 @@ public final class FileConstants {
         public static final String FILE_PARENT_ID = "x-ms-file-parent-id";
 
         private HeaderConstants() {
-        }
-    }
-
-    static final class MessageConstants {
-        public static final String FILE_PERMISSION_FILE_PERMISSION_KEY_INVALID =
-            "File permission and file permission key cannot both be set";
-
-        private MessageConstants() {
         }
     }
 }

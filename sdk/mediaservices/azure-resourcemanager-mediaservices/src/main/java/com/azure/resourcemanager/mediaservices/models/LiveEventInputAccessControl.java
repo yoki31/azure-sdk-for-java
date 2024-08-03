@@ -5,20 +5,20 @@
 package com.azure.resourcemanager.mediaservices.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** The IP access control for live event input. */
 @Fluent
 public final class LiveEventInputAccessControl {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(LiveEventInputAccessControl.class);
-
     /*
      * The IP access control properties.
      */
     @JsonProperty(value = "ip")
     private IpAccessControl ip;
+
+    /** Creates an instance of LiveEventInputAccessControl class. */
+    public LiveEventInputAccessControl() {
+    }
 
     /**
      * Get the ip property: The IP access control properties.

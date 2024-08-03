@@ -25,7 +25,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.ApiManagementSkusClient;
 import com.azure.resourcemanager.apimanagement.fluent.models.ApiManagementSkuInner;
 import com.azure.resourcemanager.apimanagement.models.ApiManagementSkusResult;
@@ -33,8 +32,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in ApiManagementSkusClient. */
 public final class ApiManagementSkusClientImpl implements ApiManagementSkusClient {
-    private final ClientLogger logger = new ClientLogger(ApiManagementSkusClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final ApiManagementSkusService service;
 
@@ -58,7 +55,7 @@ public final class ApiManagementSkusClientImpl implements ApiManagementSkusClien
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApiManagementClientA")
-    private interface ApiManagementSkusService {
+    public interface ApiManagementSkusService {
         @Headers({"Content-Type: application/json"})
         @Get("/subscriptions/{subscriptionId}/providers/Microsoft.ApiManagement/skus")
         @ExpectedResponses({200})
@@ -86,7 +83,8 @@ public final class ApiManagementSkusClientImpl implements ApiManagementSkusClien
      *
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of Microsoft.ApiManagement SKUs available for your Subscription.
+     * @return the list of Microsoft.ApiManagement SKUs available for your Subscription along with {@link PagedResponse}
+     *     on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ApiManagementSkuInner>> listSinglePageAsync() {
@@ -132,7 +130,8 @@ public final class ApiManagementSkusClientImpl implements ApiManagementSkusClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of Microsoft.ApiManagement SKUs available for your Subscription.
+     * @return the list of Microsoft.ApiManagement SKUs available for your Subscription along with {@link PagedResponse}
+     *     on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ApiManagementSkuInner>> listSinglePageAsync(Context context) {
@@ -173,7 +172,8 @@ public final class ApiManagementSkusClientImpl implements ApiManagementSkusClien
      *
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of Microsoft.ApiManagement SKUs available for your Subscription.
+     * @return the list of Microsoft.ApiManagement SKUs available for your Subscription as paginated response with
+     *     {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<ApiManagementSkuInner> listAsync() {
@@ -187,7 +187,8 @@ public final class ApiManagementSkusClientImpl implements ApiManagementSkusClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of Microsoft.ApiManagement SKUs available for your Subscription.
+     * @return the list of Microsoft.ApiManagement SKUs available for your Subscription as paginated response with
+     *     {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<ApiManagementSkuInner> listAsync(Context context) {
@@ -200,7 +201,8 @@ public final class ApiManagementSkusClientImpl implements ApiManagementSkusClien
      *
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of Microsoft.ApiManagement SKUs available for your Subscription.
+     * @return the list of Microsoft.ApiManagement SKUs available for your Subscription as paginated response with
+     *     {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<ApiManagementSkuInner> list() {
@@ -214,7 +216,8 @@ public final class ApiManagementSkusClientImpl implements ApiManagementSkusClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of Microsoft.ApiManagement SKUs available for your Subscription.
+     * @return the list of Microsoft.ApiManagement SKUs available for your Subscription as paginated response with
+     *     {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<ApiManagementSkuInner> list(Context context) {
@@ -224,11 +227,13 @@ public final class ApiManagementSkusClientImpl implements ApiManagementSkusClien
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the List Resource Skus operation response.
+     * @return the List Resource Skus operation response along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ApiManagementSkuInner>> listNextSinglePageAsync(String nextLink) {
@@ -259,12 +264,14 @@ public final class ApiManagementSkusClientImpl implements ApiManagementSkusClien
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the List Resource Skus operation response.
+     * @return the List Resource Skus operation response along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ApiManagementSkuInner>> listNextSinglePageAsync(String nextLink, Context context) {

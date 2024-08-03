@@ -27,6 +27,29 @@ public interface KustoPoolDataConnectionsClient {
      * @param kustoPoolName The name of the Kusto pool.
      * @param databaseName The name of the database in the Kusto pool.
      * @param dataConnectionName The name of the data connection.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the result returned from a check name availability request along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<CheckNameResultInner> checkNameAvailabilityWithResponse(
+        String resourceGroupName,
+        String workspaceName,
+        String kustoPoolName,
+        String databaseName,
+        DataConnectionCheckNameRequest dataConnectionName,
+        Context context);
+
+    /**
+     * Checks that the data connection name is valid and is not already in use.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param databaseName The name of the database in the Kusto pool.
+     * @param dataConnectionName The name of the data connection.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
@@ -41,29 +64,6 @@ public interface KustoPoolDataConnectionsClient {
         DataConnectionCheckNameRequest dataConnectionName);
 
     /**
-     * Checks that the data connection name is valid and is not already in use.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param databaseName The name of the database in the Kusto pool.
-     * @param dataConnectionName The name of the data connection.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<CheckNameResultInner> checkNameAvailabilityWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        DataConnectionCheckNameRequest dataConnectionName,
-        Context context);
-
-    /**
      * Checks that the data connection parameters are valid.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -74,7 +74,7 @@ public interface KustoPoolDataConnectionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto data connection validation result.
+     * @return the {@link SyncPoller} for polling of the list Kusto data connection validation result.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<DataConnectionValidationListResultInner>, DataConnectionValidationListResultInner>
@@ -97,7 +97,7 @@ public interface KustoPoolDataConnectionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto data connection validation result.
+     * @return the {@link SyncPoller} for polling of the list Kusto data connection validation result.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<DataConnectionValidationListResultInner>, DataConnectionValidationListResultInner>
@@ -163,7 +163,7 @@ public interface KustoPoolDataConnectionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto data connections operation response.
+     * @return the list Kusto data connections operation response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<DataConnectionInner> listByDatabase(
@@ -180,11 +180,34 @@ public interface KustoPoolDataConnectionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto data connections operation response.
+     * @return the list Kusto data connections operation response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<DataConnectionInner> listByDatabase(
         String resourceGroupName, String workspaceName, String kustoPoolName, String databaseName, Context context);
+
+    /**
+     * Returns a data connection.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param databaseName The name of the database in the Kusto pool.
+     * @param dataConnectionName The name of the data connection.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return class representing a data connection along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<DataConnectionInner> getWithResponse(
+        String resourceGroupName,
+        String workspaceName,
+        String kustoPoolName,
+        String databaseName,
+        String dataConnectionName,
+        Context context);
 
     /**
      * Returns a data connection.
@@ -208,29 +231,6 @@ public interface KustoPoolDataConnectionsClient {
         String dataConnectionName);
 
     /**
-     * Returns a data connection.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param databaseName The name of the database in the Kusto pool.
-     * @param dataConnectionName The name of the data connection.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a data connection.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<DataConnectionInner> getWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String dataConnectionName,
-        Context context);
-
-    /**
      * Creates or updates a data connection.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -242,7 +242,7 @@ public interface KustoPoolDataConnectionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a data connection.
+     * @return the {@link SyncPoller} for polling of class representing a data connection.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<DataConnectionInner>, DataConnectionInner> beginCreateOrUpdate(
@@ -266,7 +266,7 @@ public interface KustoPoolDataConnectionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a data connection.
+     * @return the {@link SyncPoller} for polling of class representing a data connection.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<DataConnectionInner>, DataConnectionInner> beginCreateOrUpdate(
@@ -338,7 +338,7 @@ public interface KustoPoolDataConnectionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a data connection.
+     * @return the {@link SyncPoller} for polling of class representing a data connection.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<DataConnectionInner>, DataConnectionInner> beginUpdate(
@@ -362,7 +362,7 @@ public interface KustoPoolDataConnectionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a data connection.
+     * @return the {@link SyncPoller} for polling of class representing a data connection.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<DataConnectionInner>, DataConnectionInner> beginUpdate(
@@ -433,7 +433,7 @@ public interface KustoPoolDataConnectionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginDelete(
@@ -455,7 +455,7 @@ public interface KustoPoolDataConnectionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginDelete(

@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.applicationinsights.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Customer Managed Identity. */
 @Fluent
-public class MyWorkbookManagedIdentity {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MyWorkbookManagedIdentity.class);
-
+public final class MyWorkbookManagedIdentity {
     /*
      * Customer Managed Identity
      */
@@ -25,6 +21,10 @@ public class MyWorkbookManagedIdentity {
      */
     @JsonProperty(value = "type")
     private MyWorkbookManagedIdentityType type;
+
+    /** Creates an instance of MyWorkbookManagedIdentity class. */
+    public MyWorkbookManagedIdentity() {
+    }
 
     /**
      * Get the userAssignedIdentities property: Customer Managed Identity.

@@ -5,9 +5,7 @@
 package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cdn.fluent.models.CdnWebApplicationFirewallPolicyInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
@@ -17,25 +15,27 @@ import java.util.List;
  */
 @Fluent
 public final class CdnWebApplicationFirewallPolicyList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CdnWebApplicationFirewallPolicyList.class);
-
     /*
-     * List of Azure CDN WebApplicationFirewallPolicies within a resource
-     * group.
+     * List of Azure CDN WebApplicationFirewallPolicies within a resource group.
      */
     @JsonProperty(value = "value", access = JsonProperty.Access.WRITE_ONLY)
     private List<CdnWebApplicationFirewallPolicyInner> value;
 
     /*
-     * URL to get the next set of WebApplicationFirewallPolicy objects if there
-     * are any.
+     * URL to get the next set of WebApplicationFirewallPolicy objects if there are any.
      */
     @JsonProperty(value = "nextLink")
     private String nextLink;
 
     /**
+     * Creates an instance of CdnWebApplicationFirewallPolicyList class.
+     */
+    public CdnWebApplicationFirewallPolicyList() {
+    }
+
+    /**
      * Get the value property: List of Azure CDN WebApplicationFirewallPolicies within a resource group.
-     *
+     * 
      * @return the value value.
      */
     public List<CdnWebApplicationFirewallPolicyInner> value() {
@@ -44,7 +44,7 @@ public final class CdnWebApplicationFirewallPolicyList {
 
     /**
      * Get the nextLink property: URL to get the next set of WebApplicationFirewallPolicy objects if there are any.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -53,7 +53,7 @@ public final class CdnWebApplicationFirewallPolicyList {
 
     /**
      * Set the nextLink property: URL to get the next set of WebApplicationFirewallPolicy objects if there are any.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the CdnWebApplicationFirewallPolicyList object itself.
      */
@@ -64,7 +64,7 @@ public final class CdnWebApplicationFirewallPolicyList {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

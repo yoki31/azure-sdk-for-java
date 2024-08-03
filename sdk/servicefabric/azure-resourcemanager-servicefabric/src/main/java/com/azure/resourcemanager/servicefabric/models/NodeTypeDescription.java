@@ -6,16 +6,15 @@ package com.azure.resourcemanager.servicefabric.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** Describes a node type in the cluster, each node type represents sub set of nodes in the cluster. */
+/**
+ * Describes a node type in the cluster, each node type represents sub set of nodes in the cluster.
+ */
 @Fluent
 public final class NodeTypeDescription {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(NodeTypeDescription.class);
-
     /*
      * The name of the node type.
      */
@@ -23,17 +22,16 @@ public final class NodeTypeDescription {
     private String name;
 
     /*
-     * The placement tags applied to nodes in the node type, which can be used
-     * to indicate where certain services (workload) should run.
+     * The placement tags applied to nodes in the node type, which can be used to indicate where certain services
+     * (workload) should run.
      */
     @JsonProperty(value = "placementProperties")
     @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
     private Map<String, String> placementProperties;
 
     /*
-     * The capacity tags applied to the nodes in the node type, the cluster
-     * resource manager uses these tags to understand how much resource a node
-     * has.
+     * The capacity tags applied to the nodes in the node type, the cluster resource manager uses these tags to
+     * understand how much resource a node has.
      */
     @JsonProperty(value = "capacities")
     @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
@@ -54,48 +52,40 @@ public final class NodeTypeDescription {
     /*
      * The durability level of the node type. Learn about
      * [DurabilityLevel](https://docs.microsoft.com/azure/service-fabric/service-fabric-cluster-capacity).
-     *
+     * 
      * - Bronze - No privileges. This is the default.
-     * - Silver - The infrastructure jobs can be paused for a duration of 10
-     * minutes per UD.
-     * - Gold - The infrastructure jobs can be paused for a duration of 2 hours
-     * per UD. Gold durability can be enabled only on full node VM skus like
-     * D15_V2, G5 etc.
-     *
+     * - Silver - The infrastructure jobs can be paused for a duration of 10 minutes per UD.
+     * - Gold - The infrastructure jobs can be paused for a duration of 2 hours per UD. Gold durability can be enabled
+     * only on full node VM skus like D15_V2, G5 etc.
+     * 
      */
     @JsonProperty(value = "durabilityLevel")
     private DurabilityLevel durabilityLevel;
 
     /*
-     * The range of ports from which cluster assigned port to Service Fabric
-     * applications.
+     * The range of ports from which cluster assigned port to Service Fabric applications.
      */
     @JsonProperty(value = "applicationPorts")
     private EndpointRangeDescription applicationPorts;
 
     /*
-     * The range of ephemeral ports that nodes in this node type should be
-     * configured with.
+     * The range of ephemeral ports that nodes in this node type should be configured with.
      */
     @JsonProperty(value = "ephemeralPorts")
     private EndpointRangeDescription ephemeralPorts;
 
     /*
-     * The node type on which system services will run. Only one node type
-     * should be marked as primary. Primary node type cannot be deleted or
-     * changed for existing clusters.
+     * The node type on which system services will run. Only one node type should be marked as primary. Primary node
+     * type cannot be deleted or changed for existing clusters.
      */
     @JsonProperty(value = "isPrimary", required = true)
     private boolean isPrimary;
 
     /*
-     * VMInstanceCount should be 1 to n, where n indicates the number of VM
-     * instances corresponding to this nodeType. VMInstanceCount = 0 can be
-     * done only in these scenarios: NodeType is a secondary nodeType.
-     * Durability = Bronze or Durability >= Bronze and
-     * InfrastructureServiceManager = true. If VMInstanceCount = 0, implies the
-     * VMs for this nodeType will not be used for the initial cluster size
-     * computation.
+     * VMInstanceCount should be 1 to n, where n indicates the number of VM instances corresponding to this nodeType.
+     * VMInstanceCount = 0 can be done only in these scenarios: NodeType is a secondary nodeType. Durability = Bronze
+     * or Durability >= Bronze and InfrastructureServiceManager = true. If VMInstanceCount = 0, implies the VMs for
+     * this nodeType will not be used for the initial cluster size computation.
      */
     @JsonProperty(value = "vmInstanceCount", required = true)
     private int vmInstanceCount;
@@ -119,8 +109,14 @@ public final class NodeTypeDescription {
     private Boolean multipleAvailabilityZones;
 
     /**
+     * Creates an instance of NodeTypeDescription class.
+     */
+    public NodeTypeDescription() {
+    }
+
+    /**
      * Get the name property: The name of the node type.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -129,7 +125,7 @@ public final class NodeTypeDescription {
 
     /**
      * Set the name property: The name of the node type.
-     *
+     * 
      * @param name the name value to set.
      * @return the NodeTypeDescription object itself.
      */
@@ -141,7 +137,7 @@ public final class NodeTypeDescription {
     /**
      * Get the placementProperties property: The placement tags applied to nodes in the node type, which can be used to
      * indicate where certain services (workload) should run.
-     *
+     * 
      * @return the placementProperties value.
      */
     public Map<String, String> placementProperties() {
@@ -151,7 +147,7 @@ public final class NodeTypeDescription {
     /**
      * Set the placementProperties property: The placement tags applied to nodes in the node type, which can be used to
      * indicate where certain services (workload) should run.
-     *
+     * 
      * @param placementProperties the placementProperties value to set.
      * @return the NodeTypeDescription object itself.
      */
@@ -163,7 +159,7 @@ public final class NodeTypeDescription {
     /**
      * Get the capacities property: The capacity tags applied to the nodes in the node type, the cluster resource
      * manager uses these tags to understand how much resource a node has.
-     *
+     * 
      * @return the capacities value.
      */
     public Map<String, String> capacities() {
@@ -173,7 +169,7 @@ public final class NodeTypeDescription {
     /**
      * Set the capacities property: The capacity tags applied to the nodes in the node type, the cluster resource
      * manager uses these tags to understand how much resource a node has.
-     *
+     * 
      * @param capacities the capacities value to set.
      * @return the NodeTypeDescription object itself.
      */
@@ -184,7 +180,7 @@ public final class NodeTypeDescription {
 
     /**
      * Get the clientConnectionEndpointPort property: The TCP cluster management endpoint port.
-     *
+     * 
      * @return the clientConnectionEndpointPort value.
      */
     public int clientConnectionEndpointPort() {
@@ -193,7 +189,7 @@ public final class NodeTypeDescription {
 
     /**
      * Set the clientConnectionEndpointPort property: The TCP cluster management endpoint port.
-     *
+     * 
      * @param clientConnectionEndpointPort the clientConnectionEndpointPort value to set.
      * @return the NodeTypeDescription object itself.
      */
@@ -204,7 +200,7 @@ public final class NodeTypeDescription {
 
     /**
      * Get the httpGatewayEndpointPort property: The HTTP cluster management endpoint port.
-     *
+     * 
      * @return the httpGatewayEndpointPort value.
      */
     public int httpGatewayEndpointPort() {
@@ -213,7 +209,7 @@ public final class NodeTypeDescription {
 
     /**
      * Set the httpGatewayEndpointPort property: The HTTP cluster management endpoint port.
-     *
+     * 
      * @param httpGatewayEndpointPort the httpGatewayEndpointPort value to set.
      * @return the NodeTypeDescription object itself.
      */
@@ -225,11 +221,12 @@ public final class NodeTypeDescription {
     /**
      * Get the durabilityLevel property: The durability level of the node type. Learn about
      * [DurabilityLevel](https://docs.microsoft.com/azure/service-fabric/service-fabric-cluster-capacity).
-     *
-     * <p>- Bronze - No privileges. This is the default. - Silver - The infrastructure jobs can be paused for a duration
-     * of 10 minutes per UD. - Gold - The infrastructure jobs can be paused for a duration of 2 hours per UD. Gold
-     * durability can be enabled only on full node VM skus like D15_V2, G5 etc.
-     *
+     * 
+     * - Bronze - No privileges. This is the default.
+     * - Silver - The infrastructure jobs can be paused for a duration of 10 minutes per UD.
+     * - Gold - The infrastructure jobs can be paused for a duration of 2 hours per UD. Gold durability can be enabled
+     * only on full node VM skus like D15_V2, G5 etc.
+     * 
      * @return the durabilityLevel value.
      */
     public DurabilityLevel durabilityLevel() {
@@ -239,11 +236,12 @@ public final class NodeTypeDescription {
     /**
      * Set the durabilityLevel property: The durability level of the node type. Learn about
      * [DurabilityLevel](https://docs.microsoft.com/azure/service-fabric/service-fabric-cluster-capacity).
-     *
-     * <p>- Bronze - No privileges. This is the default. - Silver - The infrastructure jobs can be paused for a duration
-     * of 10 minutes per UD. - Gold - The infrastructure jobs can be paused for a duration of 2 hours per UD. Gold
-     * durability can be enabled only on full node VM skus like D15_V2, G5 etc.
-     *
+     * 
+     * - Bronze - No privileges. This is the default.
+     * - Silver - The infrastructure jobs can be paused for a duration of 10 minutes per UD.
+     * - Gold - The infrastructure jobs can be paused for a duration of 2 hours per UD. Gold durability can be enabled
+     * only on full node VM skus like D15_V2, G5 etc.
+     * 
      * @param durabilityLevel the durabilityLevel value to set.
      * @return the NodeTypeDescription object itself.
      */
@@ -255,7 +253,7 @@ public final class NodeTypeDescription {
     /**
      * Get the applicationPorts property: The range of ports from which cluster assigned port to Service Fabric
      * applications.
-     *
+     * 
      * @return the applicationPorts value.
      */
     public EndpointRangeDescription applicationPorts() {
@@ -265,7 +263,7 @@ public final class NodeTypeDescription {
     /**
      * Set the applicationPorts property: The range of ports from which cluster assigned port to Service Fabric
      * applications.
-     *
+     * 
      * @param applicationPorts the applicationPorts value to set.
      * @return the NodeTypeDescription object itself.
      */
@@ -277,7 +275,7 @@ public final class NodeTypeDescription {
     /**
      * Get the ephemeralPorts property: The range of ephemeral ports that nodes in this node type should be configured
      * with.
-     *
+     * 
      * @return the ephemeralPorts value.
      */
     public EndpointRangeDescription ephemeralPorts() {
@@ -287,7 +285,7 @@ public final class NodeTypeDescription {
     /**
      * Set the ephemeralPorts property: The range of ephemeral ports that nodes in this node type should be configured
      * with.
-     *
+     * 
      * @param ephemeralPorts the ephemeralPorts value to set.
      * @return the NodeTypeDescription object itself.
      */
@@ -299,7 +297,7 @@ public final class NodeTypeDescription {
     /**
      * Get the isPrimary property: The node type on which system services will run. Only one node type should be marked
      * as primary. Primary node type cannot be deleted or changed for existing clusters.
-     *
+     * 
      * @return the isPrimary value.
      */
     public boolean isPrimary() {
@@ -309,7 +307,7 @@ public final class NodeTypeDescription {
     /**
      * Set the isPrimary property: The node type on which system services will run. Only one node type should be marked
      * as primary. Primary node type cannot be deleted or changed for existing clusters.
-     *
+     * 
      * @param isPrimary the isPrimary value to set.
      * @return the NodeTypeDescription object itself.
      */
@@ -322,8 +320,9 @@ public final class NodeTypeDescription {
      * Get the vmInstanceCount property: VMInstanceCount should be 1 to n, where n indicates the number of VM instances
      * corresponding to this nodeType. VMInstanceCount = 0 can be done only in these scenarios: NodeType is a secondary
      * nodeType. Durability = Bronze or Durability &gt;= Bronze and InfrastructureServiceManager = true. If
-     * VMInstanceCount = 0, implies the VMs for this nodeType will not be used for the initial cluster size computation.
-     *
+     * VMInstanceCount = 0, implies the VMs for this nodeType will not be used for the initial cluster size
+     * computation.
+     * 
      * @return the vmInstanceCount value.
      */
     public int vmInstanceCount() {
@@ -334,8 +333,9 @@ public final class NodeTypeDescription {
      * Set the vmInstanceCount property: VMInstanceCount should be 1 to n, where n indicates the number of VM instances
      * corresponding to this nodeType. VMInstanceCount = 0 can be done only in these scenarios: NodeType is a secondary
      * nodeType. Durability = Bronze or Durability &gt;= Bronze and InfrastructureServiceManager = true. If
-     * VMInstanceCount = 0, implies the VMs for this nodeType will not be used for the initial cluster size computation.
-     *
+     * VMInstanceCount = 0, implies the VMs for this nodeType will not be used for the initial cluster size
+     * computation.
+     * 
      * @param vmInstanceCount the vmInstanceCount value to set.
      * @return the NodeTypeDescription object itself.
      */
@@ -346,7 +346,7 @@ public final class NodeTypeDescription {
 
     /**
      * Get the reverseProxyEndpointPort property: The endpoint used by reverse proxy.
-     *
+     * 
      * @return the reverseProxyEndpointPort value.
      */
     public Integer reverseProxyEndpointPort() {
@@ -355,7 +355,7 @@ public final class NodeTypeDescription {
 
     /**
      * Set the reverseProxyEndpointPort property: The endpoint used by reverse proxy.
-     *
+     * 
      * @param reverseProxyEndpointPort the reverseProxyEndpointPort value to set.
      * @return the NodeTypeDescription object itself.
      */
@@ -366,7 +366,7 @@ public final class NodeTypeDescription {
 
     /**
      * Get the isStateless property: Indicates if the node type can only host Stateless workloads.
-     *
+     * 
      * @return the isStateless value.
      */
     public Boolean isStateless() {
@@ -375,7 +375,7 @@ public final class NodeTypeDescription {
 
     /**
      * Set the isStateless property: Indicates if the node type can only host Stateless workloads.
-     *
+     * 
      * @param isStateless the isStateless value to set.
      * @return the NodeTypeDescription object itself.
      */
@@ -386,7 +386,7 @@ public final class NodeTypeDescription {
 
     /**
      * Get the multipleAvailabilityZones property: Indicates if the node type is enabled to support multiple zones.
-     *
+     * 
      * @return the multipleAvailabilityZones value.
      */
     public Boolean multipleAvailabilityZones() {
@@ -395,7 +395,7 @@ public final class NodeTypeDescription {
 
     /**
      * Set the multipleAvailabilityZones property: Indicates if the node type is enabled to support multiple zones.
-     *
+     * 
      * @param multipleAvailabilityZones the multipleAvailabilityZones value to set.
      * @return the NodeTypeDescription object itself.
      */
@@ -406,14 +406,13 @@ public final class NodeTypeDescription {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (name() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property name in model NodeTypeDescription"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property name in model NodeTypeDescription"));
         }
         if (applicationPorts() != null) {
             applicationPorts().validate();
@@ -422,4 +421,6 @@ public final class NodeTypeDescription {
             ephemeralPorts().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(NodeTypeDescription.class);
 }

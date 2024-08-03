@@ -7,6 +7,7 @@ package com.azure.storage.file.datalake.models;
 import com.azure.core.util.CoreUtils;
 import com.azure.core.util.DateTimeRfc1123;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,6 +45,9 @@ public final class FileReadHeaders {
     private byte[] fileContentMD5;
     private byte[] contentCrc64;
     private String errorCode;
+    private OffsetDateTime creationTime;
+    private String encryptionContext;
+    private List<PathAccessControlEntry> accessControlList;
 
     /**
      * Get the lastModified property: Returns the date and time the container
@@ -809,6 +813,67 @@ public final class FileReadHeaders {
      */
     public FileReadHeaders setErrorCode(String errorCode) {
         this.errorCode = errorCode;
+        return this;
+    }
+
+    /**
+     * Get the creationTime property: The x-ms-creation-time property.
+     *
+     * @return the creationTime value.
+     */
+    public OffsetDateTime getCreationTime() {
+        return this.creationTime;
+    }
+
+    /**
+     * Set the creationTime property: The x-ms-creation-time property.
+     *
+     * @param creationTime the creation time value to set.
+     * @return the FileReadHeaders object itself.
+     */
+    public FileReadHeaders setCreationTime(OffsetDateTime creationTime) {
+        this.creationTime = creationTime;
+        return this;
+    }
+
+    /**
+     * Get the encryptionContext property: Encryption context for this path.
+     *
+     * @return the encryptionContext value.
+     */
+    public String getEncryptionContext() {
+        return encryptionContext;
+    }
+
+    /**
+     * Encryption context that can be set on the file. Encryption context is intended to store metadata that
+     * can be used to decrypt the blob.
+     *
+     * @param encryptionContext the encryption context to be set on the file.
+     * @return the FileReadHeaders object itself.
+     */
+    public FileReadHeaders setEncryptionContext(String encryptionContext) {
+        this.encryptionContext = encryptionContext;
+        return this;
+    }
+
+    /**
+     * Optional. The POSIX access control list for the file or directory.
+     *
+     * @return the access control list.
+     */
+    public List<PathAccessControlEntry> getAccessControlList() {
+        return accessControlList;
+    }
+
+    /**
+     * Optional. The POSIX access control list for the file or directory.
+     *
+     * @param accessControlList the access control list to be set on the file or directory.
+     * @return the FileReadHeaders object itself.
+     */
+    public FileReadHeaders setAccessControlList(List<PathAccessControlEntry> accessControlList) {
+        this.accessControlList = accessControlList;
         return this;
     }
 }

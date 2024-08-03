@@ -5,19 +5,17 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Cosmos DB SQL container resource object. */
+import java.util.List;
+
+/**
+ * Cosmos DB SQL container resource object.
+ */
 @Fluent
 public final class RestorableSqlContainerPropertiesResourceContainer extends SqlContainerResource {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(RestorableSqlContainerPropertiesResourceContainer.class);
-
     /*
-     * A system generated property that specifies the addressable path of the
-     * container resource.
+     * A system generated property that specifies the addressable path of the container resource.
      */
     @JsonProperty(value = "_self", access = JsonProperty.Access.WRITE_ONLY)
     private String self;
@@ -29,18 +27,22 @@ public final class RestorableSqlContainerPropertiesResourceContainer extends Sql
     private String rid;
 
     /*
-     * A system generated property that denotes the last updated timestamp of
-     * the resource.
+     * A system generated property that denotes the last updated timestamp of the resource.
      */
     @JsonProperty(value = "_ts", access = JsonProperty.Access.WRITE_ONLY)
     private Float ts;
 
     /*
-     * A system generated property representing the resource etag required for
-     * optimistic concurrency control.
+     * A system generated property representing the resource etag required for optimistic concurrency control.
      */
     @JsonProperty(value = "_etag", access = JsonProperty.Access.WRITE_ONLY)
     private String etag;
+
+    /**
+     * Creates an instance of RestorableSqlContainerPropertiesResourceContainer class.
+     */
+    public RestorableSqlContainerPropertiesResourceContainer() {
+    }
 
     /**
      * Get the self property: A system generated property that specifies the addressable path of the container resource.
@@ -79,53 +81,106 @@ public final class RestorableSqlContainerPropertiesResourceContainer extends Sql
         return this.etag;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RestorableSqlContainerPropertiesResourceContainer withId(String id) {
         super.withId(id);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RestorableSqlContainerPropertiesResourceContainer withIndexingPolicy(IndexingPolicy indexingPolicy) {
         super.withIndexingPolicy(indexingPolicy);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RestorableSqlContainerPropertiesResourceContainer withPartitionKey(ContainerPartitionKey partitionKey) {
         super.withPartitionKey(partitionKey);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RestorableSqlContainerPropertiesResourceContainer withDefaultTtl(Integer defaultTtl) {
         super.withDefaultTtl(defaultTtl);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RestorableSqlContainerPropertiesResourceContainer withUniqueKeyPolicy(UniqueKeyPolicy uniqueKeyPolicy) {
         super.withUniqueKeyPolicy(uniqueKeyPolicy);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public RestorableSqlContainerPropertiesResourceContainer withConflictResolutionPolicy(
-        ConflictResolutionPolicy conflictResolutionPolicy) {
+    public RestorableSqlContainerPropertiesResourceContainer
+        withConflictResolutionPolicy(ConflictResolutionPolicy conflictResolutionPolicy) {
         super.withConflictResolutionPolicy(conflictResolutionPolicy);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public RestorableSqlContainerPropertiesResourceContainer
+        withClientEncryptionPolicy(ClientEncryptionPolicy clientEncryptionPolicy) {
+        super.withClientEncryptionPolicy(clientEncryptionPolicy);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RestorableSqlContainerPropertiesResourceContainer withAnalyticalStorageTtl(Long analyticalStorageTtl) {
         super.withAnalyticalStorageTtl(analyticalStorageTtl);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public RestorableSqlContainerPropertiesResourceContainer
+        withRestoreParameters(ResourceRestoreParameters restoreParameters) {
+        super.withRestoreParameters(restoreParameters);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public RestorableSqlContainerPropertiesResourceContainer withCreateMode(CreateMode createMode) {
+        super.withCreateMode(createMode);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public RestorableSqlContainerPropertiesResourceContainer
+        withComputedProperties(List<ComputedProperty> computedProperties) {
+        super.withComputedProperties(computedProperties);
         return this;
     }
 

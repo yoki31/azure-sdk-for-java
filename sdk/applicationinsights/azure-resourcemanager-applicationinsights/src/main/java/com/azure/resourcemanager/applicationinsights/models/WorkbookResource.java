@@ -6,16 +6,12 @@ package com.azure.resourcemanager.applicationinsights.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.Resource;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
 /** An azure resource object. */
 @Fluent
 public class WorkbookResource extends Resource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(WorkbookResource.class);
-
     /*
      * Identity used for BYOS
      */
@@ -23,16 +19,20 @@ public class WorkbookResource extends Resource {
     private WorkbookResourceIdentity identity;
 
     /*
-     * The kind of workbook. Choices are user and shared.
+     * The kind of workbook. Only valid value is shared.
      */
     @JsonProperty(value = "kind")
-    private Kind kind;
+    private WorkbookSharedTypeKind kind;
 
     /*
      * Resource etag
      */
     @JsonProperty(value = "etag")
     private String etag;
+
+    /** Creates an instance of WorkbookResource class. */
+    public WorkbookResource() {
+    }
 
     /**
      * Get the identity property: Identity used for BYOS.
@@ -55,21 +55,21 @@ public class WorkbookResource extends Resource {
     }
 
     /**
-     * Get the kind property: The kind of workbook. Choices are user and shared.
+     * Get the kind property: The kind of workbook. Only valid value is shared.
      *
      * @return the kind value.
      */
-    public Kind kind() {
+    public WorkbookSharedTypeKind kind() {
         return this.kind;
     }
 
     /**
-     * Set the kind property: The kind of workbook. Choices are user and shared.
+     * Set the kind property: The kind of workbook. Only valid value is shared.
      *
      * @param kind the kind value to set.
      * @return the WorkbookResource object itself.
      */
-    public WorkbookResource withKind(Kind kind) {
+    public WorkbookResource withKind(WorkbookSharedTypeKind kind) {
         this.kind = kind;
         return this;
     }

@@ -25,7 +25,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.TenantSettingsClient;
 import com.azure.resourcemanager.apimanagement.fluent.models.TenantSettingsContractInner;
 import com.azure.resourcemanager.apimanagement.models.SettingsTypeName;
@@ -35,8 +34,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in TenantSettingsClient. */
 public final class TenantSettingsClientImpl implements TenantSettingsClient {
-    private final ClientLogger logger = new ClientLogger(TenantSettingsClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final TenantSettingsService service;
 
@@ -60,11 +57,10 @@ public final class TenantSettingsClientImpl implements TenantSettingsClient {
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApiManagementClientT")
-    private interface TenantSettingsService {
+    public interface TenantSettingsService {
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/settings")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/settings")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<TenantSettingsCollection>> listByService(
@@ -79,8 +75,7 @@ public final class TenantSettingsClientImpl implements TenantSettingsClient {
 
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/settings/{settingsType}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/settings/{settingsType}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<TenantSettingsGetResponse> get(
@@ -107,13 +102,14 @@ public final class TenantSettingsClientImpl implements TenantSettingsClient {
     /**
      * Public settings.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter Not used.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged AccessInformation list representation.
+     * @return paged AccessInformation list representation along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<TenantSettingsContractInner>> listByServiceSinglePageAsync(
@@ -166,14 +162,15 @@ public final class TenantSettingsClientImpl implements TenantSettingsClient {
     /**
      * Public settings.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter Not used.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged AccessInformation list representation.
+     * @return paged AccessInformation list representation along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<TenantSettingsContractInner>> listByServiceSinglePageAsync(
@@ -223,13 +220,13 @@ public final class TenantSettingsClientImpl implements TenantSettingsClient {
     /**
      * Public settings.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter Not used.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged AccessInformation list representation.
+     * @return paged AccessInformation list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<TenantSettingsContractInner> listByServiceAsync(
@@ -242,12 +239,12 @@ public final class TenantSettingsClientImpl implements TenantSettingsClient {
     /**
      * Public settings.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged AccessInformation list representation.
+     * @return paged AccessInformation list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<TenantSettingsContractInner> listByServiceAsync(String resourceGroupName, String serviceName) {
@@ -260,14 +257,14 @@ public final class TenantSettingsClientImpl implements TenantSettingsClient {
     /**
      * Public settings.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter Not used.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged AccessInformation list representation.
+     * @return paged AccessInformation list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<TenantSettingsContractInner> listByServiceAsync(
@@ -280,12 +277,12 @@ public final class TenantSettingsClientImpl implements TenantSettingsClient {
     /**
      * Public settings.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged AccessInformation list representation.
+     * @return paged AccessInformation list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<TenantSettingsContractInner> listByService(String resourceGroupName, String serviceName) {
@@ -296,14 +293,14 @@ public final class TenantSettingsClientImpl implements TenantSettingsClient {
     /**
      * Public settings.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter Not used.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged AccessInformation list representation.
+     * @return paged AccessInformation list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<TenantSettingsContractInner> listByService(
@@ -314,13 +311,13 @@ public final class TenantSettingsClientImpl implements TenantSettingsClient {
     /**
      * Get tenant settings.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param settingsType The identifier of the settings.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return tenant settings.
+     * @return tenant settings on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<TenantSettingsGetResponse> getWithResponseAsync(
@@ -367,14 +364,14 @@ public final class TenantSettingsClientImpl implements TenantSettingsClient {
     /**
      * Get tenant settings.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param settingsType The identifier of the settings.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return tenant settings.
+     * @return tenant settings on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<TenantSettingsGetResponse> getWithResponseAsync(
@@ -418,49 +415,25 @@ public final class TenantSettingsClientImpl implements TenantSettingsClient {
     /**
      * Get tenant settings.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param settingsType The identifier of the settings.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return tenant settings.
+     * @return tenant settings on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<TenantSettingsContractInner> getAsync(
         String resourceGroupName, String serviceName, SettingsTypeName settingsType) {
         return getWithResponseAsync(resourceGroupName, serviceName, settingsType)
-            .flatMap(
-                (TenantSettingsGetResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Get tenant settings.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param settingsType The identifier of the settings.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return tenant settings.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public TenantSettingsContractInner get(
-        String resourceGroupName, String serviceName, SettingsTypeName settingsType) {
-        return getAsync(resourceGroupName, serviceName, settingsType).block();
-    }
-
-    /**
-     * Get tenant settings.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param settingsType The identifier of the settings.
      * @param context The context to associate with this operation.
@@ -476,13 +449,32 @@ public final class TenantSettingsClientImpl implements TenantSettingsClient {
     }
 
     /**
-     * Get the next page of items.
+     * Get tenant settings.
      *
-     * @param nextLink The nextLink parameter.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param settingsType The identifier of the settings.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged AccessInformation list representation.
+     * @return tenant settings.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public TenantSettingsContractInner get(
+        String resourceGroupName, String serviceName, SettingsTypeName settingsType) {
+        return getWithResponse(resourceGroupName, serviceName, settingsType, Context.NONE).getValue();
+    }
+
+    /**
+     * Get the next page of items.
+     *
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return paged AccessInformation list representation along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<TenantSettingsContractInner>> listByServiceNextSinglePageAsync(String nextLink) {
@@ -513,12 +505,14 @@ public final class TenantSettingsClientImpl implements TenantSettingsClient {
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged AccessInformation list representation.
+     * @return paged AccessInformation list representation along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<TenantSettingsContractInner>> listByServiceNextSinglePageAsync(

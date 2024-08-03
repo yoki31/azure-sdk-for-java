@@ -6,14 +6,13 @@ package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Cosmos DB SQL trigger resource object. */
+/**
+ * Cosmos DB SQL trigger resource object.
+ */
 @Fluent
 public class SqlTriggerResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SqlTriggerResource.class);
-
     /*
      * Name of the Cosmos DB SQL trigger
      */
@@ -39,8 +38,14 @@ public class SqlTriggerResource {
     private TriggerOperation triggerOperation;
 
     /**
+     * Creates an instance of SqlTriggerResource class.
+     */
+    public SqlTriggerResource() {
+    }
+
+    /**
      * Get the id property: Name of the Cosmos DB SQL trigger.
-     *
+     * 
      * @return the id value.
      */
     public String id() {
@@ -49,7 +54,7 @@ public class SqlTriggerResource {
 
     /**
      * Set the id property: Name of the Cosmos DB SQL trigger.
-     *
+     * 
      * @param id the id value to set.
      * @return the SqlTriggerResource object itself.
      */
@@ -60,7 +65,7 @@ public class SqlTriggerResource {
 
     /**
      * Get the body property: Body of the Trigger.
-     *
+     * 
      * @return the body value.
      */
     public String body() {
@@ -69,7 +74,7 @@ public class SqlTriggerResource {
 
     /**
      * Set the body property: Body of the Trigger.
-     *
+     * 
      * @param body the body value to set.
      * @return the SqlTriggerResource object itself.
      */
@@ -80,7 +85,7 @@ public class SqlTriggerResource {
 
     /**
      * Get the triggerType property: Type of the Trigger.
-     *
+     * 
      * @return the triggerType value.
      */
     public TriggerType triggerType() {
@@ -89,7 +94,7 @@ public class SqlTriggerResource {
 
     /**
      * Set the triggerType property: Type of the Trigger.
-     *
+     * 
      * @param triggerType the triggerType value to set.
      * @return the SqlTriggerResource object itself.
      */
@@ -100,7 +105,7 @@ public class SqlTriggerResource {
 
     /**
      * Get the triggerOperation property: The operation the trigger is associated with.
-     *
+     * 
      * @return the triggerOperation value.
      */
     public TriggerOperation triggerOperation() {
@@ -109,7 +114,7 @@ public class SqlTriggerResource {
 
     /**
      * Set the triggerOperation property: The operation the trigger is associated with.
-     *
+     * 
      * @param triggerOperation the triggerOperation value to set.
      * @return the SqlTriggerResource object itself.
      */
@@ -120,14 +125,15 @@ public class SqlTriggerResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (id() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property id in model SqlTriggerResource"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property id in model SqlTriggerResource"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(SqlTriggerResource.class);
 }

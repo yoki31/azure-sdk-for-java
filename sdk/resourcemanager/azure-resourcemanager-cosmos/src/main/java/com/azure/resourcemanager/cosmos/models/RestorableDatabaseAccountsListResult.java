@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cosmos.fluent.models.RestorableDatabaseAccountGetResultInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The List operation response, that contains the restorable database accounts and their properties. */
+/**
+ * The List operation response, that contains the restorable database accounts and their properties.
+ */
 @Immutable
 public final class RestorableDatabaseAccountsListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RestorableDatabaseAccountsListResult.class);
-
     /*
      * List of restorable database accounts and their properties.
      */
@@ -23,8 +21,14 @@ public final class RestorableDatabaseAccountsListResult {
     private List<RestorableDatabaseAccountGetResultInner> value;
 
     /**
+     * Creates an instance of RestorableDatabaseAccountsListResult class.
+     */
+    public RestorableDatabaseAccountsListResult() {
+    }
+
+    /**
      * Get the value property: List of restorable database accounts and their properties.
-     *
+     * 
      * @return the value value.
      */
     public List<RestorableDatabaseAccountGetResultInner> value() {
@@ -33,7 +37,7 @@ public final class RestorableDatabaseAccountsListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

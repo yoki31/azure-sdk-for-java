@@ -5,20 +5,20 @@
 package com.azure.resourcemanager.mediaservices.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** The ListEdgePoliciesInput model. */
 @Fluent
 public final class ListEdgePoliciesInput {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ListEdgePoliciesInput.class);
-
     /*
      * Unique identifier of the edge device.
      */
     @JsonProperty(value = "deviceId")
     private String deviceId;
+
+    /** Creates an instance of ListEdgePoliciesInput class. */
+    public ListEdgePoliciesInput() {
+    }
 
     /**
      * Get the deviceId property: Unique identifier of the edge device.

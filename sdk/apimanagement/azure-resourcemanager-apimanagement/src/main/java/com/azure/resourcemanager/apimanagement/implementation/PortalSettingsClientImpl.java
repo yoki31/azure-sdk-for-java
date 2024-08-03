@@ -21,15 +21,12 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.PortalSettingsClient;
 import com.azure.resourcemanager.apimanagement.fluent.models.PortalSettingsCollectionInner;
 import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in PortalSettingsClient. */
 public final class PortalSettingsClientImpl implements PortalSettingsClient {
-    private final ClientLogger logger = new ClientLogger(PortalSettingsClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final PortalSettingsService service;
 
@@ -53,11 +50,10 @@ public final class PortalSettingsClientImpl implements PortalSettingsClient {
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApiManagementClientP")
-    private interface PortalSettingsService {
+    public interface PortalSettingsService {
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/portalsettings")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/portalsettings")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<PortalSettingsCollectionInner>> listByService(
@@ -73,12 +69,13 @@ public final class PortalSettingsClientImpl implements PortalSettingsClient {
     /**
      * Lists a collection of portalsettings defined within a service instance..
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return descriptions of APIM policies.
+     * @return descriptions of API Management policies along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<PortalSettingsCollectionInner>> listByServiceWithResponseAsync(
@@ -121,13 +118,14 @@ public final class PortalSettingsClientImpl implements PortalSettingsClient {
     /**
      * Lists a collection of portalsettings defined within a service instance..
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return descriptions of APIM policies.
+     * @return descriptions of API Management policies along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<PortalSettingsCollectionInner>> listByServiceWithResponseAsync(
@@ -167,55 +165,48 @@ public final class PortalSettingsClientImpl implements PortalSettingsClient {
     /**
      * Lists a collection of portalsettings defined within a service instance..
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return descriptions of APIM policies.
+     * @return descriptions of API Management policies on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PortalSettingsCollectionInner> listByServiceAsync(String resourceGroupName, String serviceName) {
         return listByServiceWithResponseAsync(resourceGroupName, serviceName)
-            .flatMap(
-                (Response<PortalSettingsCollectionInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Lists a collection of portalsettings defined within a service instance..
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return descriptions of APIM policies.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public PortalSettingsCollectionInner listByService(String resourceGroupName, String serviceName) {
-        return listByServiceAsync(resourceGroupName, serviceName).block();
-    }
-
-    /**
-     * Lists a collection of portalsettings defined within a service instance..
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return descriptions of APIM policies.
+     * @return descriptions of API Management policies along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<PortalSettingsCollectionInner> listByServiceWithResponse(
         String resourceGroupName, String serviceName, Context context) {
         return listByServiceWithResponseAsync(resourceGroupName, serviceName, context).block();
+    }
+
+    /**
+     * Lists a collection of portalsettings defined within a service instance..
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return descriptions of API Management policies.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public PortalSettingsCollectionInner listByService(String resourceGroupName, String serviceName) {
+        return listByServiceWithResponse(resourceGroupName, serviceName, Context.NONE).getValue();
     }
 }

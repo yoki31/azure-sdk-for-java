@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cosmos.fluent.models.MongoDBDatabaseGetResultsInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The List operation response, that contains the MongoDB databases and their properties. */
+/**
+ * The List operation response, that contains the MongoDB databases and their properties.
+ */
 @Immutable
 public final class MongoDBDatabaseListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MongoDBDatabaseListResult.class);
-
     /*
      * List of MongoDB databases and their properties.
      */
@@ -23,8 +21,14 @@ public final class MongoDBDatabaseListResult {
     private List<MongoDBDatabaseGetResultsInner> value;
 
     /**
+     * Creates an instance of MongoDBDatabaseListResult class.
+     */
+    public MongoDBDatabaseListResult() {
+    }
+
+    /**
      * Get the value property: List of MongoDB databases and their properties.
-     *
+     * 
      * @return the value value.
      */
     public List<MongoDBDatabaseGetResultsInner> value() {
@@ -33,7 +37,7 @@ public final class MongoDBDatabaseListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

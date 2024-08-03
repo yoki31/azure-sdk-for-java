@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Information about rollback on failed VM instances after a OS Upgrade operation. */
+/**
+ * Information about rollback on failed VM instances after a OS Upgrade operation.
+ */
 @Immutable
 public final class RollbackStatusInfo {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RollbackStatusInfo.class);
-
     /*
      * The number of instances which have been successfully rolled back.
      */
@@ -33,9 +31,15 @@ public final class RollbackStatusInfo {
     private ApiError rollbackError;
 
     /**
+     * Creates an instance of RollbackStatusInfo class.
+     */
+    public RollbackStatusInfo() {
+    }
+
+    /**
      * Get the successfullyRolledbackInstanceCount property: The number of instances which have been successfully rolled
      * back.
-     *
+     * 
      * @return the successfullyRolledbackInstanceCount value.
      */
     public Integer successfullyRolledbackInstanceCount() {
@@ -44,7 +48,7 @@ public final class RollbackStatusInfo {
 
     /**
      * Get the failedRolledbackInstanceCount property: The number of instances which failed to rollback.
-     *
+     * 
      * @return the failedRolledbackInstanceCount value.
      */
     public Integer failedRolledbackInstanceCount() {
@@ -53,7 +57,7 @@ public final class RollbackStatusInfo {
 
     /**
      * Get the rollbackError property: Error details if OS rollback failed.
-     *
+     * 
      * @return the rollbackError value.
      */
     public ApiError rollbackError() {
@@ -62,7 +66,7 @@ public final class RollbackStatusInfo {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Suggested utterances where the detector can be applicable. */
+/**
+ * Suggested utterances where the detector can be applicable.
+ */
 @Fluent
 public final class QueryUtterancesResults {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(QueryUtterancesResults.class);
-
     /*
      * Search Query.
      */
@@ -28,8 +26,14 @@ public final class QueryUtterancesResults {
     private List<QueryUtterancesResult> results;
 
     /**
+     * Creates an instance of QueryUtterancesResults class.
+     */
+    public QueryUtterancesResults() {
+    }
+
+    /**
      * Get the query property: Search Query.
-     *
+     * 
      * @return the query value.
      */
     public String query() {
@@ -38,7 +42,7 @@ public final class QueryUtterancesResults {
 
     /**
      * Set the query property: Search Query.
-     *
+     * 
      * @param query the query value to set.
      * @return the QueryUtterancesResults object itself.
      */
@@ -49,7 +53,7 @@ public final class QueryUtterancesResults {
 
     /**
      * Get the results property: Array of utterance results for search query.
-     *
+     * 
      * @return the results value.
      */
     public List<QueryUtterancesResult> results() {
@@ -58,7 +62,7 @@ public final class QueryUtterancesResults {
 
     /**
      * Set the results property: Array of utterance results for search query.
-     *
+     * 
      * @param results the results value to set.
      * @return the QueryUtterancesResults object itself.
      */
@@ -69,7 +73,7 @@ public final class QueryUtterancesResults {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

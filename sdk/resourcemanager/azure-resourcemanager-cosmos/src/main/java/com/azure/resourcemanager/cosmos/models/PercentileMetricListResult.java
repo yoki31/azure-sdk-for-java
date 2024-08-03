@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cosmos.fluent.models.PercentileMetricInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The response to a list percentile metrics request. */
+/**
+ * The response to a list percentile metrics request.
+ */
 @Immutable
 public final class PercentileMetricListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PercentileMetricListResult.class);
-
     /*
      * The list of percentile metrics for the account.
      */
@@ -23,8 +21,14 @@ public final class PercentileMetricListResult {
     private List<PercentileMetricInner> value;
 
     /**
+     * Creates an instance of PercentileMetricListResult class.
+     */
+    public PercentileMetricListResult() {
+    }
+
+    /**
      * Get the value property: The list of percentile metrics for the account.
-     *
+     * 
      * @return the value value.
      */
     public List<PercentileMetricInner> value() {
@@ -33,7 +37,7 @@ public final class PercentileMetricListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

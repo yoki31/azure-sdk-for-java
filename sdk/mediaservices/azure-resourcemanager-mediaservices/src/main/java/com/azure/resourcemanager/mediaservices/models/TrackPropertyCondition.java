@@ -6,14 +6,11 @@ package com.azure.resourcemanager.mediaservices.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Class to specify one track property condition. */
 @Fluent
 public final class TrackPropertyCondition {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TrackPropertyCondition.class);
-
     /*
      * Track property type
      */
@@ -31,6 +28,10 @@ public final class TrackPropertyCondition {
      */
     @JsonProperty(value = "value")
     private String value;
+
+    /** Creates an instance of TrackPropertyCondition class. */
+    public TrackPropertyCondition() {
+    }
 
     /**
      * Get the property property: Track property type.
@@ -99,15 +100,17 @@ public final class TrackPropertyCondition {
      */
     public void validate() {
         if (property() == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException("Missing required property property in model TrackPropertyCondition"));
         }
         if (operation() == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         "Missing required property operation in model TrackPropertyCondition"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(TrackPropertyCondition.class);
 }

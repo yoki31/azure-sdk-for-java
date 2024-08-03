@@ -31,7 +31,6 @@ import com.azure.core.management.exception.ManagementException;
 import com.azure.core.management.polling.PollResult;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.core.util.polling.PollerFlux;
 import com.azure.core.util.polling.SyncPoller;
 import com.azure.resourcemanager.synapse.fluent.KustoPoolsClient;
@@ -54,8 +53,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in KustoPoolsClient. */
 public final class KustoPoolsClientImpl implements KustoPoolsClient {
-    private final ClientLogger logger = new ClientLogger(KustoPoolsClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final KustoPoolsService service;
 
@@ -79,7 +76,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      */
     @Host("{$host}")
     @ServiceInterface(name = "SynapseManagementCli")
-    private interface KustoPoolsService {
+    public interface KustoPoolsService {
         @Headers({"Content-Type: application/json"})
         @Get("/subscriptions/{subscriptionId}/providers/Microsoft.Synapse/skus")
         @ExpectedResponses({200})
@@ -327,7 +324,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      *
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of the SKU descriptions.
+     * @return the list of the SKU descriptions along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SkuDescriptionInner>> listSinglePageAsync() {
@@ -364,7 +362,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of the SKU descriptions.
+     * @return the list of the SKU descriptions along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SkuDescriptionInner>> listSinglePageAsync(Context context) {
@@ -396,7 +395,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      *
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of the SKU descriptions.
+     * @return the list of the SKU descriptions as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<SkuDescriptionInner> listAsync() {
@@ -410,7 +409,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of the SKU descriptions.
+     * @return the list of the SKU descriptions as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<SkuDescriptionInner> listAsync(Context context) {
@@ -422,7 +421,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      *
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of the SKU descriptions.
+     * @return the list of the SKU descriptions as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<SkuDescriptionInner> list() {
@@ -436,7 +435,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of the SKU descriptions.
+     * @return the list of the SKU descriptions as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<SkuDescriptionInner> list(Context context) {
@@ -451,7 +450,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
+     * @return the result returned from a check name availability request along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<CheckNameResultInner>> checkNameAvailabilityWithResponseAsync(
@@ -502,7 +502,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
+     * @return the result returned from a check name availability request along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<CheckNameResultInner>> checkNameAvailabilityWithResponseAsync(
@@ -549,20 +550,30 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
+     * @return the result returned from a check name availability request on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<CheckNameResultInner> checkNameAvailabilityAsync(
         String location, KustoPoolCheckNameRequest kustoPoolName) {
         return checkNameAvailabilityWithResponseAsync(location, kustoPoolName)
-            .flatMap(
-                (Response<CheckNameResultInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
+    }
+
+    /**
+     * Checks that the kusto pool name is valid and is not already in use.
+     *
+     * @param location The name of Azure region.
+     * @param kustoPoolName The name of the cluster.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the result returned from a check name availability request along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<CheckNameResultInner> checkNameAvailabilityWithResponse(
+        String location, KustoPoolCheckNameRequest kustoPoolName, Context context) {
+        return checkNameAvailabilityWithResponseAsync(location, kustoPoolName, context).block();
     }
 
     /**
@@ -577,35 +588,21 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public CheckNameResultInner checkNameAvailability(String location, KustoPoolCheckNameRequest kustoPoolName) {
-        return checkNameAvailabilityAsync(location, kustoPoolName).block();
+        return checkNameAvailabilityWithResponse(location, kustoPoolName, Context.NONE).getValue();
     }
 
     /**
-     * Checks that the kusto pool name is valid and is not already in use.
+     * List Kusto pools
      *
-     * @param location The name of Azure region.
-     * @param kustoPoolName The name of the cluster.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<CheckNameResultInner> checkNameAvailabilityWithResponse(
-        String location, KustoPoolCheckNameRequest kustoPoolName, Context context) {
-        return checkNameAvailabilityWithResponseAsync(location, kustoPoolName, context).block();
-    }
-
-    /**
-     * List all Kusto pools.
+     * <p>List all Kusto pools.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto pools operation response.
+     * @return the list Kusto pools operation response along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<KustoPoolListResultInner>> listByWorkspaceWithResponseAsync(
@@ -647,7 +644,9 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
     }
 
     /**
-     * List all Kusto pools.
+     * List Kusto pools
+     *
+     * <p>List all Kusto pools.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -655,7 +654,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto pools operation response.
+     * @return the list Kusto pools operation response along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<KustoPoolListResultInner>> listByWorkspaceWithResponseAsync(
@@ -694,30 +694,46 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
     }
 
     /**
-     * List all Kusto pools.
+     * List Kusto pools
+     *
+     * <p>List all Kusto pools.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto pools operation response.
+     * @return the list Kusto pools operation response on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<KustoPoolListResultInner> listByWorkspaceAsync(String resourceGroupName, String workspaceName) {
         return listByWorkspaceWithResponseAsync(resourceGroupName, workspaceName)
-            .flatMap(
-                (Response<KustoPoolListResultInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
-     * List all Kusto pools.
+     * List Kusto pools
+     *
+     * <p>List all Kusto pools.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the list Kusto pools operation response along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<KustoPoolListResultInner> listByWorkspaceWithResponse(
+        String resourceGroupName, String workspaceName, Context context) {
+        return listByWorkspaceWithResponseAsync(resourceGroupName, workspaceName, context).block();
+    }
+
+    /**
+     * List Kusto pools
+     *
+     * <p>List all Kusto pools.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -728,24 +744,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public KustoPoolListResultInner listByWorkspace(String resourceGroupName, String workspaceName) {
-        return listByWorkspaceAsync(resourceGroupName, workspaceName).block();
-    }
-
-    /**
-     * List all Kusto pools.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto pools operation response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<KustoPoolListResultInner> listByWorkspaceWithResponse(
-        String resourceGroupName, String workspaceName, Context context) {
-        return listByWorkspaceWithResponseAsync(resourceGroupName, workspaceName, context).block();
+        return listByWorkspaceWithResponse(resourceGroupName, workspaceName, Context.NONE).getValue();
     }
 
     /**
@@ -757,7 +756,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Kusto pool.
+     * @return a Kusto pool along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<KustoPoolInner>> getWithResponseAsync(
@@ -812,7 +811,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Kusto pool.
+     * @return a Kusto pool along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<KustoPoolInner>> getWithResponseAsync(
@@ -863,19 +862,30 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Kusto pool.
+     * @return a Kusto pool on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<KustoPoolInner> getAsync(String workspaceName, String kustoPoolName, String resourceGroupName) {
         return getWithResponseAsync(workspaceName, kustoPoolName, resourceGroupName)
-            .flatMap(
-                (Response<KustoPoolInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
+    }
+
+    /**
+     * Gets a Kusto pool.
+     *
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a Kusto pool along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<KustoPoolInner> getWithResponse(
+        String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
+        return getWithResponseAsync(workspaceName, kustoPoolName, resourceGroupName, context).block();
     }
 
     /**
@@ -891,25 +901,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public KustoPoolInner get(String workspaceName, String kustoPoolName, String resourceGroupName) {
-        return getAsync(workspaceName, kustoPoolName, resourceGroupName).block();
-    }
-
-    /**
-     * Gets a Kusto pool.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Kusto pool.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<KustoPoolInner> getWithResponse(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
-        return getWithResponseAsync(workspaceName, kustoPoolName, resourceGroupName, context).block();
+        return getWithResponse(workspaceName, kustoPoolName, resourceGroupName, Context.NONE).getValue();
     }
 
     /**
@@ -926,7 +918,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return class representing a Kusto kusto pool along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(
@@ -999,7 +992,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return class representing a Kusto kusto pool along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(
@@ -1069,7 +1063,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return the {@link PollerFlux} for polling of class representing a Kusto kusto pool.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<KustoPoolInner>, KustoPoolInner> beginCreateOrUpdateAsync(
@@ -1085,7 +1079,41 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         return this
             .client
             .<KustoPoolInner, KustoPoolInner>getLroResult(
-                mono, this.client.getHttpPipeline(), KustoPoolInner.class, KustoPoolInner.class, Context.NONE);
+                mono,
+                this.client.getHttpPipeline(),
+                KustoPoolInner.class,
+                KustoPoolInner.class,
+                this.client.getContext());
+    }
+
+    /**
+     * Create or update a Kusto pool.
+     *
+     * @param workspaceName The name of the workspace.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param parameters The Kusto pool parameters supplied to the CreateOrUpdate operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link PollerFlux} for polling of class representing a Kusto kusto pool.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<KustoPoolInner>, KustoPoolInner> beginCreateOrUpdateAsync(
+        String workspaceName, String resourceGroupName, String kustoPoolName, KustoPoolInner parameters) {
+        final String ifMatch = null;
+        final String ifNoneMatch = null;
+        Mono<Response<Flux<ByteBuffer>>> mono =
+            createOrUpdateWithResponseAsync(
+                workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, ifNoneMatch);
+        return this
+            .client
+            .<KustoPoolInner, KustoPoolInner>getLroResult(
+                mono,
+                this.client.getHttpPipeline(),
+                KustoPoolInner.class,
+                KustoPoolInner.class,
+                this.client.getContext());
     }
 
     /**
@@ -1103,7 +1131,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return the {@link PollerFlux} for polling of class representing a Kusto kusto pool.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<KustoPoolInner>, KustoPoolInner> beginCreateOrUpdateAsync(
@@ -1131,25 +1159,18 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
      * @param parameters The Kusto pool parameters supplied to the CreateOrUpdate operation.
-     * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
-     * @param ifNoneMatch Set to '*' to allow a new Kusto Pool to be created, but to prevent updating an existing Kusto
-     *     Pool. Other values will result in a 412 Pre-condition Failed response.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return the {@link SyncPoller} for polling of class representing a Kusto kusto pool.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<KustoPoolInner>, KustoPoolInner> beginCreateOrUpdate(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolInner parameters,
-        String ifMatch,
-        String ifNoneMatch) {
-        return beginCreateOrUpdateAsync(
-                workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, ifNoneMatch)
+        String workspaceName, String resourceGroupName, String kustoPoolName, KustoPoolInner parameters) {
+        final String ifMatch = null;
+        final String ifNoneMatch = null;
+        return this
+            .beginCreateOrUpdateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, ifNoneMatch)
             .getSyncPoller();
     }
 
@@ -1168,7 +1189,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return the {@link SyncPoller} for polling of class representing a Kusto kusto pool.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<KustoPoolInner>, KustoPoolInner> beginCreateOrUpdate(
@@ -1179,7 +1200,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         String ifMatch,
         String ifNoneMatch,
         Context context) {
-        return beginCreateOrUpdateAsync(
+        return this
+            .beginCreateOrUpdateAsync(
                 workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, ifNoneMatch, context)
             .getSyncPoller();
     }
@@ -1198,7 +1220,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return class representing a Kusto kusto pool on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<KustoPoolInner> createOrUpdateAsync(
@@ -1224,7 +1246,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return class representing a Kusto kusto pool on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<KustoPoolInner> createOrUpdateAsync(
@@ -1252,7 +1274,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return class representing a Kusto kusto pool on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<KustoPoolInner> createOrUpdateAsync(
@@ -1267,34 +1289,6 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
                 workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, ifNoneMatch, context)
             .last()
             .flatMap(this.client::getLroFinalResultOrError);
-    }
-
-    /**
-     * Create or update a Kusto pool.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param parameters The Kusto pool parameters supplied to the CreateOrUpdate operation.
-     * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
-     * @param ifNoneMatch Set to '*' to allow a new Kusto Pool to be created, but to prevent updating an existing Kusto
-     *     Pool. Other values will result in a 412 Pre-condition Failed response.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public KustoPoolInner createOrUpdate(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolInner parameters,
-        String ifMatch,
-        String ifNoneMatch) {
-        return createOrUpdateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, ifNoneMatch)
-            .block();
     }
 
     /**
@@ -1361,7 +1355,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return class representing a Kusto kusto pool along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(
@@ -1430,7 +1425,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return class representing a Kusto kusto pool along with {@link Response} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(
@@ -1496,7 +1492,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return the {@link PollerFlux} for polling of class representing a Kusto kusto pool.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<KustoPoolInner>, KustoPoolInner> beginUpdateAsync(
@@ -1510,7 +1506,39 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         return this
             .client
             .<KustoPoolInner, KustoPoolInner>getLroResult(
-                mono, this.client.getHttpPipeline(), KustoPoolInner.class, KustoPoolInner.class, Context.NONE);
+                mono,
+                this.client.getHttpPipeline(),
+                KustoPoolInner.class,
+                KustoPoolInner.class,
+                this.client.getContext());
+    }
+
+    /**
+     * Update a Kusto Kusto Pool.
+     *
+     * @param workspaceName The name of the workspace.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param parameters The Kusto pool parameters supplied to the Update operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link PollerFlux} for polling of class representing a Kusto kusto pool.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<KustoPoolInner>, KustoPoolInner> beginUpdateAsync(
+        String workspaceName, String resourceGroupName, String kustoPoolName, KustoPoolUpdate parameters) {
+        final String ifMatch = null;
+        Mono<Response<Flux<ByteBuffer>>> mono =
+            updateWithResponseAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch);
+        return this
+            .client
+            .<KustoPoolInner, KustoPoolInner>getLroResult(
+                mono,
+                this.client.getHttpPipeline(),
+                KustoPoolInner.class,
+                KustoPoolInner.class,
+                this.client.getContext());
     }
 
     /**
@@ -1526,7 +1554,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return the {@link PollerFlux} for polling of class representing a Kusto kusto pool.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<KustoPoolInner>, KustoPoolInner> beginUpdateAsync(
@@ -1552,21 +1580,18 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param kustoPoolName The name of the Kusto pool.
      * @param parameters The Kusto pool parameters supplied to the Update operation.
-     * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return the {@link SyncPoller} for polling of class representing a Kusto kusto pool.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<KustoPoolInner>, KustoPoolInner> beginUpdate(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolUpdate parameters,
-        String ifMatch) {
-        return beginUpdateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch).getSyncPoller();
+        String workspaceName, String resourceGroupName, String kustoPoolName, KustoPoolUpdate parameters) {
+        final String ifMatch = null;
+        return this
+            .beginUpdateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch)
+            .getSyncPoller();
     }
 
     /**
@@ -1582,7 +1607,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return the {@link SyncPoller} for polling of class representing a Kusto kusto pool.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<KustoPoolInner>, KustoPoolInner> beginUpdate(
@@ -1592,7 +1617,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         KustoPoolUpdate parameters,
         String ifMatch,
         Context context) {
-        return beginUpdateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, context)
+        return this
+            .beginUpdateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, context)
             .getSyncPoller();
     }
 
@@ -1608,7 +1634,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return class representing a Kusto kusto pool on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<KustoPoolInner> updateAsync(
@@ -1632,7 +1658,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return class representing a Kusto kusto pool on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<KustoPoolInner> updateAsync(
@@ -1656,7 +1682,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
+     * @return class representing a Kusto kusto pool on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<KustoPoolInner> updateAsync(
@@ -1669,30 +1695,6 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         return beginUpdateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch, context)
             .last()
             .flatMap(this.client::getLroFinalResultOrError);
-    }
-
-    /**
-     * Update a Kusto Kusto Pool.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param parameters The Kusto pool parameters supplied to the Update operation.
-     * @param ifMatch The ETag of the Kusto Pool. Omit this value to always overwrite the current Kusto Pool. Specify
-     *     the last-seen ETag value to prevent accidentally overwriting concurrent changes.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a Kusto kusto pool.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public KustoPoolInner update(
-        String workspaceName,
-        String resourceGroupName,
-        String kustoPoolName,
-        KustoPoolUpdate parameters,
-        String ifMatch) {
-        return updateAsync(workspaceName, resourceGroupName, kustoPoolName, parameters, ifMatch).block();
     }
 
     /**
@@ -1749,7 +1751,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(
@@ -1804,7 +1806,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(
@@ -1855,7 +1857,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(
@@ -1864,7 +1866,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
             deleteWithResponseAsync(workspaceName, resourceGroupName, kustoPoolName);
         return this
             .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, Context.NONE);
+            .<Void, Void>getLroResult(
+                mono, this.client.getHttpPipeline(), Void.class, Void.class, this.client.getContext());
     }
 
     /**
@@ -1877,7 +1880,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<Void>, Void> beginDeleteAsync(
@@ -1899,12 +1902,12 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<Void>, Void> beginDelete(
         String workspaceName, String resourceGroupName, String kustoPoolName) {
-        return beginDeleteAsync(workspaceName, resourceGroupName, kustoPoolName).getSyncPoller();
+        return this.beginDeleteAsync(workspaceName, resourceGroupName, kustoPoolName).getSyncPoller();
     }
 
     /**
@@ -1917,12 +1920,12 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<Void>, Void> beginDelete(
         String workspaceName, String resourceGroupName, String kustoPoolName, Context context) {
-        return beginDeleteAsync(workspaceName, resourceGroupName, kustoPoolName, context).getSyncPoller();
+        return this.beginDeleteAsync(workspaceName, resourceGroupName, kustoPoolName, context).getSyncPoller();
     }
 
     /**
@@ -1934,7 +1937,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(String workspaceName, String resourceGroupName, String kustoPoolName) {
@@ -1953,7 +1956,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(
@@ -2003,7 +2006,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> stopWithResponseAsync(
@@ -2058,7 +2061,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> stopWithResponseAsync(
@@ -2109,7 +2112,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<Void>, Void> beginStopAsync(
@@ -2117,7 +2120,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         Mono<Response<Flux<ByteBuffer>>> mono = stopWithResponseAsync(workspaceName, kustoPoolName, resourceGroupName);
         return this
             .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, Context.NONE);
+            .<Void, Void>getLroResult(
+                mono, this.client.getHttpPipeline(), Void.class, Void.class, this.client.getContext());
     }
 
     /**
@@ -2130,7 +2134,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<Void>, Void> beginStopAsync(
@@ -2152,12 +2156,12 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<Void>, Void> beginStop(
         String workspaceName, String kustoPoolName, String resourceGroupName) {
-        return beginStopAsync(workspaceName, kustoPoolName, resourceGroupName).getSyncPoller();
+        return this.beginStopAsync(workspaceName, kustoPoolName, resourceGroupName).getSyncPoller();
     }
 
     /**
@@ -2170,12 +2174,12 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<Void>, Void> beginStop(
         String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
-        return beginStopAsync(workspaceName, kustoPoolName, resourceGroupName, context).getSyncPoller();
+        return this.beginStopAsync(workspaceName, kustoPoolName, resourceGroupName, context).getSyncPoller();
     }
 
     /**
@@ -2187,7 +2191,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> stopAsync(String workspaceName, String kustoPoolName, String resourceGroupName) {
@@ -2206,7 +2210,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> stopAsync(
@@ -2256,7 +2260,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> startWithResponseAsync(
@@ -2311,7 +2315,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> startWithResponseAsync(
@@ -2362,7 +2366,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<Void>, Void> beginStartAsync(
@@ -2370,7 +2374,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         Mono<Response<Flux<ByteBuffer>>> mono = startWithResponseAsync(workspaceName, kustoPoolName, resourceGroupName);
         return this
             .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, Context.NONE);
+            .<Void, Void>getLroResult(
+                mono, this.client.getHttpPipeline(), Void.class, Void.class, this.client.getContext());
     }
 
     /**
@@ -2383,7 +2388,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<Void>, Void> beginStartAsync(
@@ -2405,12 +2410,12 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<Void>, Void> beginStart(
         String workspaceName, String kustoPoolName, String resourceGroupName) {
-        return beginStartAsync(workspaceName, kustoPoolName, resourceGroupName).getSyncPoller();
+        return this.beginStartAsync(workspaceName, kustoPoolName, resourceGroupName).getSyncPoller();
     }
 
     /**
@@ -2423,12 +2428,12 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<Void>, Void> beginStart(
         String workspaceName, String kustoPoolName, String resourceGroupName, Context context) {
-        return beginStartAsync(workspaceName, kustoPoolName, resourceGroupName, context).getSyncPoller();
+        return this.beginStartAsync(workspaceName, kustoPoolName, resourceGroupName, context).getSyncPoller();
     }
 
     /**
@@ -2440,7 +2445,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> startAsync(String workspaceName, String kustoPoolName, String resourceGroupName) {
@@ -2459,7 +2464,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> startAsync(
@@ -2509,7 +2514,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of available SKUs for a Kusto Pool.
+     * @return list of available SKUs for a Kusto Pool along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<AzureResourceSkuInner>> listSkusByResourceSinglePageAsync(
@@ -2568,7 +2574,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of available SKUs for a Kusto Pool.
+     * @return list of available SKUs for a Kusto Pool along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<AzureResourceSkuInner>> listSkusByResourceSinglePageAsync(
@@ -2623,7 +2630,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of available SKUs for a Kusto Pool.
+     * @return list of available SKUs for a Kusto Pool as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<AzureResourceSkuInner> listSkusByResourceAsync(
@@ -2642,7 +2649,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of available SKUs for a Kusto Pool.
+     * @return list of available SKUs for a Kusto Pool as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<AzureResourceSkuInner> listSkusByResourceAsync(
@@ -2660,7 +2667,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of available SKUs for a Kusto Pool.
+     * @return list of available SKUs for a Kusto Pool as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<AzureResourceSkuInner> listSkusByResource(
@@ -2678,7 +2685,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of available SKUs for a Kusto Pool.
+     * @return list of available SKUs for a Kusto Pool as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<AzureResourceSkuInner> listSkusByResource(
@@ -2695,7 +2702,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of language extension objects.
+     * @return the list of language extension objects along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<LanguageExtensionInner>> listLanguageExtensionsSinglePageAsync(
@@ -2754,7 +2762,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of language extension objects.
+     * @return the list of language extension objects along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<LanguageExtensionInner>> listLanguageExtensionsSinglePageAsync(
@@ -2809,7 +2818,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of language extension objects.
+     * @return the list of language extension objects as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<LanguageExtensionInner> listLanguageExtensionsAsync(
@@ -2828,7 +2837,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of language extension objects.
+     * @return the list of language extension objects as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<LanguageExtensionInner> listLanguageExtensionsAsync(
@@ -2846,7 +2855,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of language extension objects.
+     * @return the list of language extension objects as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<LanguageExtensionInner> listLanguageExtensions(
@@ -2864,7 +2873,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of language extension objects.
+     * @return the list of language extension objects as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<LanguageExtensionInner> listLanguageExtensions(
@@ -2883,7 +2892,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> addLanguageExtensionsWithResponseAsync(
@@ -2950,7 +2959,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> addLanguageExtensionsWithResponseAsync(
@@ -3014,7 +3023,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<Void>, Void> beginAddLanguageExtensionsAsync(
@@ -3027,7 +3036,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
                 workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToAdd);
         return this
             .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, Context.NONE);
+            .<Void, Void>getLroResult(
+                mono, this.client.getHttpPipeline(), Void.class, Void.class, this.client.getContext());
     }
 
     /**
@@ -3041,7 +3051,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<Void>, Void> beginAddLanguageExtensionsAsync(
@@ -3069,7 +3079,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<Void>, Void> beginAddLanguageExtensions(
@@ -3077,7 +3087,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         String kustoPoolName,
         String resourceGroupName,
         LanguageExtensionsList languageExtensionsToAdd) {
-        return beginAddLanguageExtensionsAsync(workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToAdd)
+        return this
+            .beginAddLanguageExtensionsAsync(workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToAdd)
             .getSyncPoller();
     }
 
@@ -3092,7 +3103,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<Void>, Void> beginAddLanguageExtensions(
@@ -3101,7 +3112,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         String resourceGroupName,
         LanguageExtensionsList languageExtensionsToAdd,
         Context context) {
-        return beginAddLanguageExtensionsAsync(
+        return this
+            .beginAddLanguageExtensionsAsync(
                 workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToAdd, context)
             .getSyncPoller();
     }
@@ -3116,7 +3128,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> addLanguageExtensionsAsync(
@@ -3140,7 +3152,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> addLanguageExtensionsAsync(
@@ -3208,7 +3220,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> removeLanguageExtensionsWithResponseAsync(
@@ -3276,7 +3288,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> removeLanguageExtensionsWithResponseAsync(
@@ -3341,7 +3353,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<Void>, Void> beginRemoveLanguageExtensionsAsync(
@@ -3354,7 +3366,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
                 workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToRemove);
         return this
             .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, Context.NONE);
+            .<Void, Void>getLroResult(
+                mono, this.client.getHttpPipeline(), Void.class, Void.class, this.client.getContext());
     }
 
     /**
@@ -3368,7 +3381,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<Void>, Void> beginRemoveLanguageExtensionsAsync(
@@ -3396,7 +3409,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<Void>, Void> beginRemoveLanguageExtensions(
@@ -3404,7 +3417,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         String kustoPoolName,
         String resourceGroupName,
         LanguageExtensionsList languageExtensionsToRemove) {
-        return beginRemoveLanguageExtensionsAsync(
+        return this
+            .beginRemoveLanguageExtensionsAsync(
                 workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToRemove)
             .getSyncPoller();
     }
@@ -3420,7 +3434,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<Void>, Void> beginRemoveLanguageExtensions(
@@ -3429,7 +3443,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         String resourceGroupName,
         LanguageExtensionsList languageExtensionsToRemove,
         Context context) {
-        return beginRemoveLanguageExtensionsAsync(
+        return this
+            .beginRemoveLanguageExtensionsAsync(
                 workspaceName, kustoPoolName, resourceGroupName, languageExtensionsToRemove, context)
             .getSyncPoller();
     }
@@ -3444,7 +3459,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> removeLanguageExtensionsAsync(
@@ -3469,7 +3484,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> removeLanguageExtensionsAsync(
@@ -3538,7 +3553,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database principals operation response.
+     * @return the list Kusto database principals operation response along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<FollowerDatabaseDefinitionInner>> listFollowerDatabasesSinglePageAsync(
@@ -3597,7 +3613,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database principals operation response.
+     * @return the list Kusto database principals operation response along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<FollowerDatabaseDefinitionInner>> listFollowerDatabasesSinglePageAsync(
@@ -3652,7 +3669,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database principals operation response.
+     * @return the list Kusto database principals operation response as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<FollowerDatabaseDefinitionInner> listFollowerDatabasesAsync(
@@ -3671,7 +3688,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database principals operation response.
+     * @return the list Kusto database principals operation response as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<FollowerDatabaseDefinitionInner> listFollowerDatabasesAsync(
@@ -3689,7 +3706,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database principals operation response.
+     * @return the list Kusto database principals operation response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<FollowerDatabaseDefinitionInner> listFollowerDatabases(
@@ -3707,7 +3724,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database principals operation response.
+     * @return the list Kusto database principals operation response as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<FollowerDatabaseDefinitionInner> listFollowerDatabases(
@@ -3726,7 +3743,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> detachFollowerDatabasesWithResponseAsync(
@@ -3793,7 +3810,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> detachFollowerDatabasesWithResponseAsync(
@@ -3857,7 +3874,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<Void>, Void> beginDetachFollowerDatabasesAsync(
@@ -3870,7 +3887,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
                 workspaceName, kustoPoolName, resourceGroupName, followerDatabaseToRemove);
         return this
             .client
-            .<Void, Void>getLroResult(mono, this.client.getHttpPipeline(), Void.class, Void.class, Context.NONE);
+            .<Void, Void>getLroResult(
+                mono, this.client.getHttpPipeline(), Void.class, Void.class, this.client.getContext());
     }
 
     /**
@@ -3884,7 +3902,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<Void>, Void> beginDetachFollowerDatabasesAsync(
@@ -3912,7 +3930,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<Void>, Void> beginDetachFollowerDatabases(
@@ -3920,7 +3938,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         String kustoPoolName,
         String resourceGroupName,
         FollowerDatabaseDefinitionInner followerDatabaseToRemove) {
-        return beginDetachFollowerDatabasesAsync(
+        return this
+            .beginDetachFollowerDatabasesAsync(
                 workspaceName, kustoPoolName, resourceGroupName, followerDatabaseToRemove)
             .getSyncPoller();
     }
@@ -3936,7 +3955,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<Void>, Void> beginDetachFollowerDatabases(
@@ -3945,7 +3964,8 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
         String resourceGroupName,
         FollowerDatabaseDefinitionInner followerDatabaseToRemove,
         Context context) {
-        return beginDetachFollowerDatabasesAsync(
+        return this
+            .beginDetachFollowerDatabasesAsync(
                 workspaceName, kustoPoolName, resourceGroupName, followerDatabaseToRemove, context)
             .getSyncPoller();
     }
@@ -3960,7 +3980,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> detachFollowerDatabasesAsync(
@@ -3985,7 +4005,7 @@ public final class KustoPoolsClientImpl implements KustoPoolsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> detachFollowerDatabasesAsync(

@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.batch.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.batch.fluent.models.ApplicationPackageInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The result of performing list application packages. */
+/**
+ * The result of performing list application packages.
+ */
 @Fluent
 public final class ListApplicationPackagesResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ListApplicationPackagesResult.class);
-
     /*
      * The list of application packages.
      */
@@ -29,8 +27,14 @@ public final class ListApplicationPackagesResult {
     private String nextLink;
 
     /**
+     * Creates an instance of ListApplicationPackagesResult class.
+     */
+    public ListApplicationPackagesResult() {
+    }
+
+    /**
      * Get the value property: The list of application packages.
-     *
+     * 
      * @return the value value.
      */
     public List<ApplicationPackageInner> value() {
@@ -39,7 +43,7 @@ public final class ListApplicationPackagesResult {
 
     /**
      * Set the value property: The list of application packages.
-     *
+     * 
      * @param value the value value to set.
      * @return the ListApplicationPackagesResult object itself.
      */
@@ -50,7 +54,7 @@ public final class ListApplicationPackagesResult {
 
     /**
      * Get the nextLink property: The URL to get the next set of results.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,7 +63,7 @@ public final class ListApplicationPackagesResult {
 
     /**
      * Set the nextLink property: The URL to get the next set of results.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the ListApplicationPackagesResult object itself.
      */
@@ -70,7 +74,7 @@ public final class ListApplicationPackagesResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

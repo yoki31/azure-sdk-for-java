@@ -5,43 +5,36 @@
 package com.azure.resourcemanager.servicefabric.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The common service resource properties. */
+/**
+ * The common service resource properties.
+ */
 @Fluent
 public class ServiceResourcePropertiesBase {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ServiceResourcePropertiesBase.class);
-
     /*
-     * The placement constraints as a string. Placement constraints are boolean
-     * expressions on node properties and allow for restricting a service to
-     * particular nodes based on the service requirements. For example, to
-     * place a service on nodes where NodeType is blue specify the following:
-     * "NodeColor == blue)".
+     * The placement constraints as a string. Placement constraints are boolean expressions on node properties and
+     * allow for restricting a service to particular nodes based on the service requirements. For example, to place a
+     * service on nodes where NodeType is blue specify the following: "NodeColor == blue)".
      */
     @JsonProperty(value = "placementConstraints")
     private String placementConstraints;
 
     /*
-     * A list that describes the correlation of the service with other
-     * services.
+     * A list that describes the correlation of the service with other services.
      */
     @JsonProperty(value = "correlationScheme")
     private List<ServiceCorrelationDescription> correlationScheme;
 
     /*
-     * The service load metrics is given as an array of
-     * ServiceLoadMetricDescription objects.
+     * The service load metrics is given as an array of ServiceLoadMetricDescription objects.
      */
     @JsonProperty(value = "serviceLoadMetrics")
     private List<ServiceLoadMetricDescription> serviceLoadMetrics;
 
     /*
-     * A list that describes the correlation of the service with other
-     * services.
+     * A list that describes the correlation of the service with other services.
      */
     @JsonProperty(value = "servicePlacementPolicies")
     private List<ServicePlacementPolicyDescription> servicePlacementPolicies;
@@ -53,11 +46,17 @@ public class ServiceResourcePropertiesBase {
     private MoveCost defaultMoveCost;
 
     /**
+     * Creates an instance of ServiceResourcePropertiesBase class.
+     */
+    public ServiceResourcePropertiesBase() {
+    }
+
+    /**
      * Get the placementConstraints property: The placement constraints as a string. Placement constraints are boolean
      * expressions on node properties and allow for restricting a service to particular nodes based on the service
      * requirements. For example, to place a service on nodes where NodeType is blue specify the following: "NodeColor
      * == blue)".
-     *
+     * 
      * @return the placementConstraints value.
      */
     public String placementConstraints() {
@@ -69,7 +68,7 @@ public class ServiceResourcePropertiesBase {
      * expressions on node properties and allow for restricting a service to particular nodes based on the service
      * requirements. For example, to place a service on nodes where NodeType is blue specify the following: "NodeColor
      * == blue)".
-     *
+     * 
      * @param placementConstraints the placementConstraints value to set.
      * @return the ServiceResourcePropertiesBase object itself.
      */
@@ -80,7 +79,7 @@ public class ServiceResourcePropertiesBase {
 
     /**
      * Get the correlationScheme property: A list that describes the correlation of the service with other services.
-     *
+     * 
      * @return the correlationScheme value.
      */
     public List<ServiceCorrelationDescription> correlationScheme() {
@@ -89,7 +88,7 @@ public class ServiceResourcePropertiesBase {
 
     /**
      * Set the correlationScheme property: A list that describes the correlation of the service with other services.
-     *
+     * 
      * @param correlationScheme the correlationScheme value to set.
      * @return the ServiceResourcePropertiesBase object itself.
      */
@@ -101,7 +100,7 @@ public class ServiceResourcePropertiesBase {
     /**
      * Get the serviceLoadMetrics property: The service load metrics is given as an array of
      * ServiceLoadMetricDescription objects.
-     *
+     * 
      * @return the serviceLoadMetrics value.
      */
     public List<ServiceLoadMetricDescription> serviceLoadMetrics() {
@@ -111,7 +110,7 @@ public class ServiceResourcePropertiesBase {
     /**
      * Set the serviceLoadMetrics property: The service load metrics is given as an array of
      * ServiceLoadMetricDescription objects.
-     *
+     * 
      * @param serviceLoadMetrics the serviceLoadMetrics value to set.
      * @return the ServiceResourcePropertiesBase object itself.
      */
@@ -123,7 +122,7 @@ public class ServiceResourcePropertiesBase {
     /**
      * Get the servicePlacementPolicies property: A list that describes the correlation of the service with other
      * services.
-     *
+     * 
      * @return the servicePlacementPolicies value.
      */
     public List<ServicePlacementPolicyDescription> servicePlacementPolicies() {
@@ -133,19 +132,19 @@ public class ServiceResourcePropertiesBase {
     /**
      * Set the servicePlacementPolicies property: A list that describes the correlation of the service with other
      * services.
-     *
+     * 
      * @param servicePlacementPolicies the servicePlacementPolicies value to set.
      * @return the ServiceResourcePropertiesBase object itself.
      */
-    public ServiceResourcePropertiesBase withServicePlacementPolicies(
-        List<ServicePlacementPolicyDescription> servicePlacementPolicies) {
+    public ServiceResourcePropertiesBase
+        withServicePlacementPolicies(List<ServicePlacementPolicyDescription> servicePlacementPolicies) {
         this.servicePlacementPolicies = servicePlacementPolicies;
         return this;
     }
 
     /**
      * Get the defaultMoveCost property: Specifies the move cost for the service.
-     *
+     * 
      * @return the defaultMoveCost value.
      */
     public MoveCost defaultMoveCost() {
@@ -154,7 +153,7 @@ public class ServiceResourcePropertiesBase {
 
     /**
      * Set the defaultMoveCost property: Specifies the move cost for the service.
-     *
+     * 
      * @param defaultMoveCost the defaultMoveCost value to set.
      * @return the ServiceResourcePropertiesBase object itself.
      */
@@ -165,7 +164,7 @@ public class ServiceResourcePropertiesBase {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

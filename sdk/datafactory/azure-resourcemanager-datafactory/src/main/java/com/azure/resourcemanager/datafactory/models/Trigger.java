@@ -5,34 +5,36 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/** Azure data factory nested object which contains information about creating pipeline run. */
-@JsonTypeInfo(
-    use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.PROPERTY,
-    property = "type",
-    defaultImpl = Trigger.class)
+/**
+ * Azure data factory nested object which contains information about creating pipeline run.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = Trigger.class, visible = true)
 @JsonTypeName("Trigger")
 @JsonSubTypes({
     @JsonSubTypes.Type(name = "MultiplePipelineTrigger", value = MultiplePipelineTrigger.class),
     @JsonSubTypes.Type(name = "TumblingWindowTrigger", value = TumblingWindowTrigger.class),
     @JsonSubTypes.Type(name = "RerunTumblingWindowTrigger", value = RerunTumblingWindowTrigger.class),
-    @JsonSubTypes.Type(name = "ChainingTrigger", value = ChainingTrigger.class)
-})
+    @JsonSubTypes.Type(name = "ChainingTrigger", value = ChainingTrigger.class) })
 @Fluent
 public class Trigger {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Trigger.class);
+    /*
+     * Trigger type.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "Trigger";
 
     /*
      * Trigger description.
@@ -41,8 +43,7 @@ public class Trigger {
     private String description;
 
     /*
-     * Indicates if trigger is running or not. Updated when Start/Stop APIs are
-     * called on the Trigger.
+     * Indicates if trigger is running or not. Updated when Start/Stop APIs are called on the Trigger.
      */
     @JsonProperty(value = "runtimeState", access = JsonProperty.Access.WRITE_ONLY)
     private TriggerRuntimeState runtimeState;
@@ -54,14 +55,29 @@ public class Trigger {
     private List<Object> annotations;
 
     /*
-     * Azure data factory nested object which contains information about
-     * creating pipeline run
+     * Azure data factory nested object which contains information about creating pipeline run
      */
-    @JsonIgnore private Map<String, Object> additionalProperties;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties;
+
+    /**
+     * Creates an instance of Trigger class.
+     */
+    public Trigger() {
+    }
+
+    /**
+     * Get the type property: Trigger type.
+     * 
+     * @return the type value.
+     */
+    public String type() {
+        return this.type;
+    }
 
     /**
      * Get the description property: Trigger description.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
@@ -70,7 +86,7 @@ public class Trigger {
 
     /**
      * Set the description property: Trigger description.
-     *
+     * 
      * @param description the description value to set.
      * @return the Trigger object itself.
      */
@@ -82,7 +98,7 @@ public class Trigger {
     /**
      * Get the runtimeState property: Indicates if trigger is running or not. Updated when Start/Stop APIs are called on
      * the Trigger.
-     *
+     * 
      * @return the runtimeState value.
      */
     public TriggerRuntimeState runtimeState() {
@@ -91,7 +107,7 @@ public class Trigger {
 
     /**
      * Get the annotations property: List of tags that can be used for describing the trigger.
-     *
+     * 
      * @return the annotations value.
      */
     public List<Object> annotations() {
@@ -100,7 +116,7 @@ public class Trigger {
 
     /**
      * Set the annotations property: List of tags that can be used for describing the trigger.
-     *
+     * 
      * @param annotations the annotations value to set.
      * @return the Trigger object itself.
      */
@@ -112,7 +128,7 @@ public class Trigger {
     /**
      * Get the additionalProperties property: Azure data factory nested object which contains information about creating
      * pipeline run.
-     *
+     * 
      * @return the additionalProperties value.
      */
     @JsonAnyGetter
@@ -123,7 +139,7 @@ public class Trigger {
     /**
      * Set the additionalProperties property: Azure data factory nested object which contains information about creating
      * pipeline run.
-     *
+     * 
      * @param additionalProperties the additionalProperties value to set.
      * @return the Trigger object itself.
      */
@@ -135,14 +151,14 @@ public class Trigger {
     @JsonAnySetter
     void withAdditionalProperties(String key, Object value) {
         if (additionalProperties == null) {
-            additionalProperties = new HashMap<>();
+            additionalProperties = new LinkedHashMap<>();
         }
         additionalProperties.put(key, value);
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

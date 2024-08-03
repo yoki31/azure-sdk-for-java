@@ -5,19 +5,17 @@
 package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.models.DataFlowSink;
 import com.azure.resourcemanager.datafactory.models.DataFlowSource;
 import com.azure.resourcemanager.datafactory.models.Transformation;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Mapping data flow type properties. */
+/**
+ * Mapping data flow type properties.
+ */
 @Fluent
 public final class MappingDataFlowTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MappingDataFlowTypeProperties.class);
-
     /*
      * List of sources in data flow.
      */
@@ -49,8 +47,14 @@ public final class MappingDataFlowTypeProperties {
     private List<String> scriptLines;
 
     /**
+     * Creates an instance of MappingDataFlowTypeProperties class.
+     */
+    public MappingDataFlowTypeProperties() {
+    }
+
+    /**
      * Get the sources property: List of sources in data flow.
-     *
+     * 
      * @return the sources value.
      */
     public List<DataFlowSource> sources() {
@@ -59,7 +63,7 @@ public final class MappingDataFlowTypeProperties {
 
     /**
      * Set the sources property: List of sources in data flow.
-     *
+     * 
      * @param sources the sources value to set.
      * @return the MappingDataFlowTypeProperties object itself.
      */
@@ -70,7 +74,7 @@ public final class MappingDataFlowTypeProperties {
 
     /**
      * Get the sinks property: List of sinks in data flow.
-     *
+     * 
      * @return the sinks value.
      */
     public List<DataFlowSink> sinks() {
@@ -79,7 +83,7 @@ public final class MappingDataFlowTypeProperties {
 
     /**
      * Set the sinks property: List of sinks in data flow.
-     *
+     * 
      * @param sinks the sinks value to set.
      * @return the MappingDataFlowTypeProperties object itself.
      */
@@ -90,7 +94,7 @@ public final class MappingDataFlowTypeProperties {
 
     /**
      * Get the transformations property: List of transformations in data flow.
-     *
+     * 
      * @return the transformations value.
      */
     public List<Transformation> transformations() {
@@ -99,7 +103,7 @@ public final class MappingDataFlowTypeProperties {
 
     /**
      * Set the transformations property: List of transformations in data flow.
-     *
+     * 
      * @param transformations the transformations value to set.
      * @return the MappingDataFlowTypeProperties object itself.
      */
@@ -110,7 +114,7 @@ public final class MappingDataFlowTypeProperties {
 
     /**
      * Get the script property: DataFlow script.
-     *
+     * 
      * @return the script value.
      */
     public String script() {
@@ -119,7 +123,7 @@ public final class MappingDataFlowTypeProperties {
 
     /**
      * Set the script property: DataFlow script.
-     *
+     * 
      * @param script the script value to set.
      * @return the MappingDataFlowTypeProperties object itself.
      */
@@ -130,7 +134,7 @@ public final class MappingDataFlowTypeProperties {
 
     /**
      * Get the scriptLines property: Data flow script lines.
-     *
+     * 
      * @return the scriptLines value.
      */
     public List<String> scriptLines() {
@@ -139,7 +143,7 @@ public final class MappingDataFlowTypeProperties {
 
     /**
      * Set the scriptLines property: Data flow script lines.
-     *
+     * 
      * @param scriptLines the scriptLines value to set.
      * @return the MappingDataFlowTypeProperties object itself.
      */
@@ -150,7 +154,7 @@ public final class MappingDataFlowTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

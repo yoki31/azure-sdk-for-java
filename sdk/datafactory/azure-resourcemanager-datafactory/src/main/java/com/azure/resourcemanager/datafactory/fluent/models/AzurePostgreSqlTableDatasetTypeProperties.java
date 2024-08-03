@@ -5,40 +5,42 @@
 package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Azure PostgreSQL dataset properties. */
+/**
+ * Azure PostgreSQL dataset properties.
+ */
 @Fluent
 public final class AzurePostgreSqlTableDatasetTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzurePostgreSqlTableDatasetTypeProperties.class);
-
     /*
-     * The table name of the Azure PostgreSQL database which includes both
-     * schema and table. Type: string (or Expression with resultType string).
+     * The table name of the Azure PostgreSQL database which includes both schema and table. Type: string (or Expression
+     * with resultType string).
      */
     @JsonProperty(value = "tableName")
     private Object tableName;
 
     /*
-     * The table name of the Azure PostgreSQL database. Type: string (or
-     * Expression with resultType string).
+     * The table name of the Azure PostgreSQL database. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "table")
     private Object table;
 
     /*
-     * The schema name of the Azure PostgreSQL database. Type: string (or
-     * Expression with resultType string).
+     * The schema name of the Azure PostgreSQL database. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "schema")
     private Object schema;
 
     /**
+     * Creates an instance of AzurePostgreSqlTableDatasetTypeProperties class.
+     */
+    public AzurePostgreSqlTableDatasetTypeProperties() {
+    }
+
+    /**
      * Get the tableName property: The table name of the Azure PostgreSQL database which includes both schema and table.
      * Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the tableName value.
      */
     public Object tableName() {
@@ -48,7 +50,7 @@ public final class AzurePostgreSqlTableDatasetTypeProperties {
     /**
      * Set the tableName property: The table name of the Azure PostgreSQL database which includes both schema and table.
      * Type: string (or Expression with resultType string).
-     *
+     * 
      * @param tableName the tableName value to set.
      * @return the AzurePostgreSqlTableDatasetTypeProperties object itself.
      */
@@ -60,7 +62,7 @@ public final class AzurePostgreSqlTableDatasetTypeProperties {
     /**
      * Get the table property: The table name of the Azure PostgreSQL database. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the table value.
      */
     public Object table() {
@@ -70,7 +72,7 @@ public final class AzurePostgreSqlTableDatasetTypeProperties {
     /**
      * Set the table property: The table name of the Azure PostgreSQL database. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param table the table value to set.
      * @return the AzurePostgreSqlTableDatasetTypeProperties object itself.
      */
@@ -82,7 +84,7 @@ public final class AzurePostgreSqlTableDatasetTypeProperties {
     /**
      * Get the schema property: The schema name of the Azure PostgreSQL database. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the schema value.
      */
     public Object schema() {
@@ -92,7 +94,7 @@ public final class AzurePostgreSqlTableDatasetTypeProperties {
     /**
      * Set the schema property: The schema name of the Azure PostgreSQL database. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param schema the schema value to set.
      * @return the AzurePostgreSqlTableDatasetTypeProperties object itself.
      */
@@ -103,7 +105,7 @@ public final class AzurePostgreSqlTableDatasetTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

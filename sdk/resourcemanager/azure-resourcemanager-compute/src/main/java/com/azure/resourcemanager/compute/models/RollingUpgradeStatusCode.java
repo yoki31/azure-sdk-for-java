@@ -7,21 +7,33 @@ package com.azure.resourcemanager.compute.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** Defines values for RollingUpgradeStatusCode. */
+/**
+ * Code indicating the current status of the upgrade.
+ */
 public enum RollingUpgradeStatusCode {
-    /** Enum value RollingForward. */
+    /**
+     * Enum value RollingForward.
+     */
     ROLLING_FORWARD("RollingForward"),
 
-    /** Enum value Cancelled. */
+    /**
+     * Enum value Cancelled.
+     */
     CANCELLED("Cancelled"),
 
-    /** Enum value Completed. */
+    /**
+     * Enum value Completed.
+     */
     COMPLETED("Completed"),
 
-    /** Enum value Faulted. */
+    /**
+     * Enum value Faulted.
+     */
     FAULTED("Faulted");
 
-    /** The actual serialized value for a RollingUpgradeStatusCode instance. */
+    /**
+     * The actual serialized value for a RollingUpgradeStatusCode instance.
+     */
     private final String value;
 
     RollingUpgradeStatusCode(String value) {
@@ -30,12 +42,15 @@ public enum RollingUpgradeStatusCode {
 
     /**
      * Parses a serialized value to a RollingUpgradeStatusCode instance.
-     *
+     * 
      * @param value the serialized value to parse.
      * @return the parsed RollingUpgradeStatusCode object, or null if unable to parse.
      */
     @JsonCreator
     public static RollingUpgradeStatusCode fromString(String value) {
+        if (value == null) {
+            return null;
+        }
         RollingUpgradeStatusCode[] items = RollingUpgradeStatusCode.values();
         for (RollingUpgradeStatusCode item : items) {
             if (item.toString().equalsIgnoreCase(value)) {
@@ -45,6 +60,9 @@ public enum RollingUpgradeStatusCode {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @JsonValue
     @Override
     public String toString() {

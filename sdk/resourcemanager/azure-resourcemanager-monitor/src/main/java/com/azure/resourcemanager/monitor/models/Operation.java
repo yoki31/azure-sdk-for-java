@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.monitor.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Microsoft Insights API operation definition. */
+/**
+ * Microsoft Insights API operation definition.
+ */
 @Fluent
 public final class Operation {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Operation.class);
-
     /*
      * Operation name: {provider}/{resource}/{operation}
      */
@@ -27,8 +25,14 @@ public final class Operation {
     private OperationDisplay display;
 
     /**
+     * Creates an instance of Operation class.
+     */
+    public Operation() {
+    }
+
+    /**
      * Get the name property: Operation name: {provider}/{resource}/{operation}.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -37,7 +41,7 @@ public final class Operation {
 
     /**
      * Set the name property: Operation name: {provider}/{resource}/{operation}.
-     *
+     * 
      * @param name the name value to set.
      * @return the Operation object itself.
      */
@@ -48,7 +52,7 @@ public final class Operation {
 
     /**
      * Get the display property: Display metadata associated with the operation.
-     *
+     * 
      * @return the display value.
      */
     public OperationDisplay display() {
@@ -57,7 +61,7 @@ public final class Operation {
 
     /**
      * Set the display property: Display metadata associated with the operation.
-     *
+     * 
      * @param display the display value to set.
      * @return the Operation object itself.
      */
@@ -68,7 +72,7 @@ public final class Operation {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

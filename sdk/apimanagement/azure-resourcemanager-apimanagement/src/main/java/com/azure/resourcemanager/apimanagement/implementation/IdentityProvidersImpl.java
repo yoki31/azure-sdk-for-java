@@ -19,10 +19,9 @@ import com.azure.resourcemanager.apimanagement.models.IdentityProviders;
 import com.azure.resourcemanager.apimanagement.models.IdentityProvidersGetEntityTagResponse;
 import com.azure.resourcemanager.apimanagement.models.IdentityProvidersGetResponse;
 import com.azure.resourcemanager.apimanagement.models.IdentityProvidersListSecretsResponse;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class IdentityProvidersImpl implements IdentityProviders {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(IdentityProvidersImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(IdentityProvidersImpl.class);
 
     private final IdentityProvidersClient innerClient;
 
@@ -48,10 +47,6 @@ public final class IdentityProvidersImpl implements IdentityProviders {
         return Utils.mapPage(inner, inner1 -> new IdentityProviderContractImpl(inner1, this.manager()));
     }
 
-    public void getEntityTag(String resourceGroupName, String serviceName, IdentityProviderType identityProviderName) {
-        this.serviceClient().getEntityTag(resourceGroupName, serviceName, identityProviderName);
-    }
-
     public IdentityProvidersGetEntityTagResponse getEntityTagWithResponse(
         String resourceGroupName, String serviceName, IdentityProviderType identityProviderName, Context context) {
         return this
@@ -59,15 +54,8 @@ public final class IdentityProvidersImpl implements IdentityProviders {
             .getEntityTagWithResponse(resourceGroupName, serviceName, identityProviderName, context);
     }
 
-    public IdentityProviderContract get(
-        String resourceGroupName, String serviceName, IdentityProviderType identityProviderName) {
-        IdentityProviderContractInner inner =
-            this.serviceClient().get(resourceGroupName, serviceName, identityProviderName);
-        if (inner != null) {
-            return new IdentityProviderContractImpl(inner, this.manager());
-        } else {
-            return null;
-        }
+    public void getEntityTag(String resourceGroupName, String serviceName, IdentityProviderType identityProviderName) {
+        this.serviceClient().getEntityTag(resourceGroupName, serviceName, identityProviderName);
     }
 
     public Response<IdentityProviderContract> getWithResponse(
@@ -85,9 +73,15 @@ public final class IdentityProvidersImpl implements IdentityProviders {
         }
     }
 
-    public void delete(
-        String resourceGroupName, String serviceName, IdentityProviderType identityProviderName, String ifMatch) {
-        this.serviceClient().delete(resourceGroupName, serviceName, identityProviderName, ifMatch);
+    public IdentityProviderContract get(
+        String resourceGroupName, String serviceName, IdentityProviderType identityProviderName) {
+        IdentityProviderContractInner inner =
+            this.serviceClient().get(resourceGroupName, serviceName, identityProviderName);
+        if (inner != null) {
+            return new IdentityProviderContractImpl(inner, this.manager());
+        } else {
+            return null;
+        }
     }
 
     public Response<Void> deleteWithResponse(
@@ -101,15 +95,9 @@ public final class IdentityProvidersImpl implements IdentityProviders {
             .deleteWithResponse(resourceGroupName, serviceName, identityProviderName, ifMatch, context);
     }
 
-    public ClientSecretContract listSecrets(
-        String resourceGroupName, String serviceName, IdentityProviderType identityProviderName) {
-        ClientSecretContractInner inner =
-            this.serviceClient().listSecrets(resourceGroupName, serviceName, identityProviderName);
-        if (inner != null) {
-            return new ClientSecretContractImpl(inner, this.manager());
-        } else {
-            return null;
-        }
+    public void delete(
+        String resourceGroupName, String serviceName, IdentityProviderType identityProviderName, String ifMatch) {
+        this.serviceClient().delete(resourceGroupName, serviceName, identityProviderName, ifMatch);
     }
 
     public Response<ClientSecretContract> listSecretsWithResponse(
@@ -127,10 +115,21 @@ public final class IdentityProvidersImpl implements IdentityProviders {
         }
     }
 
+    public ClientSecretContract listSecrets(
+        String resourceGroupName, String serviceName, IdentityProviderType identityProviderName) {
+        ClientSecretContractInner inner =
+            this.serviceClient().listSecrets(resourceGroupName, serviceName, identityProviderName);
+        if (inner != null) {
+            return new ClientSecretContractImpl(inner, this.manager());
+        } else {
+            return null;
+        }
+    }
+
     public IdentityProviderContract getById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -138,28 +137,28 @@ public final class IdentityProvidersImpl implements IdentityProviders {
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
-        IdentityProviderType identityProviderName =
-            IdentityProviderType.fromString(Utils.getValueFromIdByName(id, "identityProviders"));
-        if (identityProviderName == null) {
-            throw logger
+        String identityProviderNameLocal = Utils.getValueFromIdByName(id, "identityProviders");
+        if (identityProviderNameLocal == null) {
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
                             .format(
                                 "The resource ID '%s' is not valid. Missing path segment 'identityProviders'.", id)));
         }
+        IdentityProviderType identityProviderName = IdentityProviderType.fromString(identityProviderNameLocal);
         return this.getWithResponse(resourceGroupName, serviceName, identityProviderName, Context.NONE).getValue();
     }
 
     public Response<IdentityProviderContract> getByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -167,28 +166,28 @@ public final class IdentityProvidersImpl implements IdentityProviders {
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
-        IdentityProviderType identityProviderName =
-            IdentityProviderType.fromString(Utils.getValueFromIdByName(id, "identityProviders"));
-        if (identityProviderName == null) {
-            throw logger
+        String identityProviderNameLocal = Utils.getValueFromIdByName(id, "identityProviders");
+        if (identityProviderNameLocal == null) {
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
                             .format(
                                 "The resource ID '%s' is not valid. Missing path segment 'identityProviders'.", id)));
         }
+        IdentityProviderType identityProviderName = IdentityProviderType.fromString(identityProviderNameLocal);
         return this.getWithResponse(resourceGroupName, serviceName, identityProviderName, context);
     }
 
     public void deleteById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -196,31 +195,29 @@ public final class IdentityProvidersImpl implements IdentityProviders {
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
-        IdentityProviderType identityProviderName =
-            IdentityProviderType.fromString(Utils.getValueFromIdByName(id, "identityProviders"));
-        if (identityProviderName == null) {
-            throw logger
+        String identityProviderNameLocal = Utils.getValueFromIdByName(id, "identityProviders");
+        if (identityProviderNameLocal == null) {
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
                             .format(
                                 "The resource ID '%s' is not valid. Missing path segment 'identityProviders'.", id)));
         }
+        IdentityProviderType identityProviderName = IdentityProviderType.fromString(identityProviderNameLocal);
         String localIfMatch = null;
-        this
-            .deleteWithResponse(resourceGroupName, serviceName, identityProviderName, localIfMatch, Context.NONE)
-            .getValue();
+        this.deleteWithResponse(resourceGroupName, serviceName, identityProviderName, localIfMatch, Context.NONE);
     }
 
     public Response<Void> deleteByIdWithResponse(String id, String ifMatch, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -228,21 +225,21 @@ public final class IdentityProvidersImpl implements IdentityProviders {
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
-        IdentityProviderType identityProviderName =
-            IdentityProviderType.fromString(Utils.getValueFromIdByName(id, "identityProviders"));
-        if (identityProviderName == null) {
-            throw logger
+        String identityProviderNameLocal = Utils.getValueFromIdByName(id, "identityProviders");
+        if (identityProviderNameLocal == null) {
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
                             .format(
                                 "The resource ID '%s' is not valid. Missing path segment 'identityProviders'.", id)));
         }
+        IdentityProviderType identityProviderName = IdentityProviderType.fromString(identityProviderNameLocal);
         return this.deleteWithResponse(resourceGroupName, serviceName, identityProviderName, ifMatch, context);
     }
 

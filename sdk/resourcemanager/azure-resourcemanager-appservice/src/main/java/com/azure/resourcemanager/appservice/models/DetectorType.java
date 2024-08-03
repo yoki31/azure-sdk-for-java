@@ -7,18 +7,28 @@ package com.azure.resourcemanager.appservice.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** Defines values for DetectorType. */
+/**
+ * Whether this detector is an Analysis Detector or not.
+ */
 public enum DetectorType {
-    /** Enum value Detector. */
+    /**
+     * Enum value Detector.
+     */
     DETECTOR("Detector"),
 
-    /** Enum value Analysis. */
+    /**
+     * Enum value Analysis.
+     */
     ANALYSIS("Analysis"),
 
-    /** Enum value CategoryOverview. */
+    /**
+     * Enum value CategoryOverview.
+     */
     CATEGORY_OVERVIEW("CategoryOverview");
 
-    /** The actual serialized value for a DetectorType instance. */
+    /**
+     * The actual serialized value for a DetectorType instance.
+     */
     private final String value;
 
     DetectorType(String value) {
@@ -27,12 +37,15 @@ public enum DetectorType {
 
     /**
      * Parses a serialized value to a DetectorType instance.
-     *
+     * 
      * @param value the serialized value to parse.
      * @return the parsed DetectorType object, or null if unable to parse.
      */
     @JsonCreator
     public static DetectorType fromString(String value) {
+        if (value == null) {
+            return null;
+        }
         DetectorType[] items = DetectorType.values();
         for (DetectorType item : items) {
             if (item.toString().equalsIgnoreCase(value)) {
@@ -42,6 +55,9 @@ public enum DetectorType {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @JsonValue
     @Override
     public String toString() {

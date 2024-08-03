@@ -60,7 +60,7 @@ import java.time.Duration;
 @ServiceClient(builder =  DataLakeLeaseClientBuilder.class)
 public final class DataLakeLeaseClient {
 
-    private final ClientLogger logger = new ClientLogger(DataLakeLeaseClient.class);
+    private static final ClientLogger LOGGER = new ClientLogger(DataLakeLeaseClient.class);
     private final BlobLeaseClient blobLeaseClient;
 
     DataLakeLeaseClient(BlobLeaseClient blobLeaseClient) {
@@ -99,24 +99,27 @@ public final class DataLakeLeaseClient {
      * </pre>
      * <!-- end com.azure.storage.file.datalake.specialized.DataLakeLeaseClient.acquireLease#int -->
      *
-     * @param duration The duration of the lease between 15 to 60 seconds or -1 for an infinite duration.
+     * @param durationInSeconds The duration of the lease between 15 and 60 seconds or -1 for an infinite duration.
      * @return The lease ID.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public String acquireLease(int duration) {
-        return acquireLeaseWithResponse(duration, null, null, Context.NONE).getValue();
+    public String acquireLease(int durationInSeconds) {
+        return acquireLeaseWithResponse(durationInSeconds, null, null, Context.NONE).getValue();
     }
 
     /**
-     * Acquires a lease for write and delete operations. The lease duration must be between 15 to 60 seconds or
+     * Acquires a lease for write and delete operations. The lease duration must be between 15 and 60 seconds or
      * -1 for an infinite duration.
      *
      * <p><strong>Code Samples</strong></p>
      *
      * <!-- src_embed com.azure.storage.file.datalake.specialized.DataLakeLeaseClient.acquireLeaseWithResponse#int-RequestConditions-Duration-Context -->
      * <pre>
-     * RequestConditions modifiedRequestConditions = new RequestConditions&#40;&#41;
-     *     .setIfModifiedSince&#40;OffsetDateTime.now&#40;&#41;.minusDays&#40;3&#41;&#41;;
+     * &#47;&#47; Optional HTTP request conditions that can be used to narrow the scope of the request.
+     * &#47;&#47; The request conditions can be used to have the leasing request only succeed if the resource has been
+     * &#47;&#47; modified and&#47;or unmodified within a certain time frame and&#47;or matches and&#47;or doesn't match a specific ETag,
+     * &#47;&#47; or any ETag.
+     * RequestConditions modifiedRequestConditions = yourOptionalRequestConditions;
      *
      * System.out.printf&#40;&quot;Lease ID is %s%n&quot;, client
      *     .acquireLeaseWithResponse&#40;60, modifiedRequestConditions, timeout, new Context&#40;key, value&#41;&#41;
@@ -124,7 +127,7 @@ public final class DataLakeLeaseClient {
      * </pre>
      * <!-- end com.azure.storage.file.datalake.specialized.DataLakeLeaseClient.acquireLeaseWithResponse#int-RequestConditions-Duration-Context -->
      *
-     * @param duration The duration of the lease between 15 to 60 seconds or -1 for an infinite duration.
+     * @param durationInSeconds The duration of the lease between 15 and 60 seconds or -1 for an infinite duration.
      * @param modifiedRequestConditions Standard HTTP Access conditions related to the modification of data. ETag and
      * LastModifiedTime are used to construct conditions related to when the resource was changed relative to the given
      * request. The request will fail if the specified condition is not satisfied.
@@ -133,10 +136,10 @@ public final class DataLakeLeaseClient {
      * @return The lease ID.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<String> acquireLeaseWithResponse(int duration, RequestConditions modifiedRequestConditions,
+    public Response<String> acquireLeaseWithResponse(int durationInSeconds, RequestConditions modifiedRequestConditions,
         Duration timeout, Context context) {
         return DataLakeImplUtils.returnOrConvertException(() ->
-            blobLeaseClient.acquireLeaseWithResponse(duration, modifiedRequestConditions, timeout, context), logger);
+            blobLeaseClient.acquireLeaseWithResponse(durationInSeconds, modifiedRequestConditions, timeout, context), LOGGER);
     }
 
     /**
@@ -164,8 +167,11 @@ public final class DataLakeLeaseClient {
      *
      * <!-- src_embed com.azure.storage.file.datalake.specialized.DataLakeLeaseClient.renewLeaseWithResponse#RequestConditions-Duration-Context -->
      * <pre>
-     * RequestConditions modifiedRequestConditions = new RequestConditions&#40;&#41;
-     *     .setIfUnmodifiedSince&#40;OffsetDateTime.now&#40;&#41;.minusDays&#40;3&#41;&#41;;
+     * &#47;&#47; Optional HTTP request conditions that can be used to narrow the scope of the request.
+     * &#47;&#47; The request conditions can be used to have the leasing request only succeed if the resource has been
+     * &#47;&#47; modified and&#47;or unmodified within a certain time frame and&#47;or matches and&#47;or doesn't match a specific ETag,
+     * &#47;&#47; or any ETag.
+     * RequestConditions modifiedRequestConditions = yourOptionalRequestConditions;
      *
      * System.out.printf&#40;&quot;Renewed lease ID is %s%n&quot;,
      *     client.renewLeaseWithResponse&#40;modifiedRequestConditions, timeout, new Context&#40;key, value&#41;&#41;
@@ -184,7 +190,7 @@ public final class DataLakeLeaseClient {
     public Response<String> renewLeaseWithResponse(RequestConditions modifiedRequestConditions, Duration timeout,
         Context context) {
         return DataLakeImplUtils.returnOrConvertException(() ->
-            blobLeaseClient.renewLeaseWithResponse(modifiedRequestConditions, timeout, context), logger);
+            blobLeaseClient.renewLeaseWithResponse(modifiedRequestConditions, timeout, context), LOGGER);
     }
 
     /**
@@ -211,8 +217,11 @@ public final class DataLakeLeaseClient {
      *
      * <!-- src_embed com.azure.storage.file.datalake.specialized.DataLakeLeaseClient.releaseLeaseWithResponse#RequestConditions-Duration-Context -->
      * <pre>
-     * RequestConditions modifiedRequestConditions = new RequestConditions&#40;&#41;
-     *     .setIfUnmodifiedSince&#40;OffsetDateTime.now&#40;&#41;.minusDays&#40;3&#41;&#41;;
+     * &#47;&#47; Optional HTTP request conditions that can be used to narrow the scope of the request.
+     * &#47;&#47; The request conditions can be used to have the leasing request only succeed if the resource has been
+     * &#47;&#47; modified and&#47;or unmodified within a certain time frame and&#47;or matches and&#47;or doesn't match a specific ETag,
+     * &#47;&#47; or any ETag.
+     * RequestConditions modifiedRequestConditions = yourOptionalRequestConditions;
      *
      * System.out.printf&#40;&quot;Release lease completed with status %d%n&quot;,
      *     client.releaseLeaseWithResponse&#40;modifiedRequestConditions, timeout, new Context&#40;key, value&#41;&#41;
@@ -231,7 +240,7 @@ public final class DataLakeLeaseClient {
     public Response<Void> releaseLeaseWithResponse(RequestConditions modifiedRequestConditions, Duration timeout,
         Context context) {
         return DataLakeImplUtils.returnOrConvertException(() ->
-            blobLeaseClient.releaseLeaseWithResponse(modifiedRequestConditions, timeout, context), logger);
+            blobLeaseClient.releaseLeaseWithResponse(modifiedRequestConditions, timeout, context), LOGGER);
     }
 
     /**
@@ -263,8 +272,11 @@ public final class DataLakeLeaseClient {
      * <!-- src_embed com.azure.storage.file.datalake.specialized.DataLakeLeaseClient.breakLeaseWithResponse#Integer-RequestConditions-Duration-Context -->
      * <pre>
      * Integer retainLeaseInSeconds = 5;
-     * RequestConditions modifiedRequestConditions = new RequestConditions&#40;&#41;
-     *     .setIfUnmodifiedSince&#40;OffsetDateTime.now&#40;&#41;.minusDays&#40;3&#41;&#41;;
+     * &#47;&#47; Optional HTTP request conditions that can be used to narrow the scope of the request.
+     * &#47;&#47; The request conditions can be used to have the leasing request only succeed if the resource has been
+     * &#47;&#47; modified and&#47;or unmodified within a certain time frame and&#47;or matches and&#47;or doesn't match a specific ETag,
+     * &#47;&#47; or any ETag.
+     * RequestConditions modifiedRequestConditions = yourOptionalRequestConditions;
      *
      * System.out.printf&#40;&quot;The broken lease has %d seconds remaining on the lease&quot;, client
      *     .breakLeaseWithResponse&#40;retainLeaseInSeconds, modifiedRequestConditions, timeout, new Context&#40;key, value&#41;&#41;
@@ -288,7 +300,7 @@ public final class DataLakeLeaseClient {
         RequestConditions modifiedRequestConditions, Duration timeout, Context context) {
         return DataLakeImplUtils.returnOrConvertException(() ->
             blobLeaseClient.breakLeaseWithResponse(breakPeriodInSeconds, modifiedRequestConditions, timeout,
-                context), logger);
+                context), LOGGER);
     }
 
     /**
@@ -317,8 +329,11 @@ public final class DataLakeLeaseClient {
      *
      * <!-- src_embed com.azure.storage.file.datalake.specialized.DataLakeLeaseClient.changeLeaseWithResponse#String-RequestConditions-Duration-Context -->
      * <pre>
-     * RequestConditions modifiedRequestConditions = new RequestConditions&#40;&#41;
-     *     .setIfUnmodifiedSince&#40;OffsetDateTime.now&#40;&#41;.minusDays&#40;3&#41;&#41;;
+     * &#47;&#47; Optional HTTP request conditions that can be used to narrow the scope of the request.
+     * &#47;&#47; The request conditions can be used to have the leasing request only succeed if the resource has been
+     * &#47;&#47; modified and&#47;or unmodified within a certain time frame and&#47;or matches and&#47;or doesn't match a specific ETag,
+     * &#47;&#47; or any ETag.
+     * RequestConditions modifiedRequestConditions = yourOptionalRequestConditions;
      *
      * System.out.printf&#40;&quot;Changed lease ID is %s%n&quot;,
      *     client.changeLeaseWithResponse&#40;&quot;proposedId&quot;, modifiedRequestConditions, timeout, new Context&#40;key, value&#41;&#41;
@@ -338,7 +353,7 @@ public final class DataLakeLeaseClient {
     public Response<String> changeLeaseWithResponse(String proposedId,
         RequestConditions modifiedRequestConditions, Duration timeout, Context context) {
         return DataLakeImplUtils.returnOrConvertException(() ->
-            blobLeaseClient.changeLeaseWithResponse(proposedId, modifiedRequestConditions, timeout, context), logger);
+            blobLeaseClient.changeLeaseWithResponse(proposedId, modifiedRequestConditions, timeout, context), LOGGER);
     }
 
     /**

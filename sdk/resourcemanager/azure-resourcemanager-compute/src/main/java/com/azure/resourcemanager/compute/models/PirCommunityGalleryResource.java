@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.compute.fluent.models.CommunityGalleryIdentifier;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Base information about the community gallery resource in pir. */
+/**
+ * Base information about the community gallery resource in azure compute gallery.
+ */
 @Fluent
 public class PirCommunityGalleryResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PirCommunityGalleryResource.class);
-
     /*
      * Resource name
      */
@@ -40,8 +38,14 @@ public class PirCommunityGalleryResource {
     private CommunityGalleryIdentifier innerIdentifier;
 
     /**
+     * Creates an instance of PirCommunityGalleryResource class.
+     */
+    public PirCommunityGalleryResource() {
+    }
+
+    /**
      * Get the name property: Resource name.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -50,7 +54,7 @@ public class PirCommunityGalleryResource {
 
     /**
      * Get the location property: Resource location.
-     *
+     * 
      * @return the location value.
      */
     public String location() {
@@ -59,7 +63,7 @@ public class PirCommunityGalleryResource {
 
     /**
      * Get the type property: Resource type.
-     *
+     * 
      * @return the type value.
      */
     public String type() {
@@ -68,7 +72,7 @@ public class PirCommunityGalleryResource {
 
     /**
      * Get the innerIdentifier property: The identifier information of community gallery.
-     *
+     * 
      * @return the innerIdentifier value.
      */
     private CommunityGalleryIdentifier innerIdentifier() {
@@ -77,7 +81,7 @@ public class PirCommunityGalleryResource {
 
     /**
      * Get the uniqueId property: The unique id of this community gallery.
-     *
+     * 
      * @return the uniqueId value.
      */
     public String uniqueId() {
@@ -86,7 +90,7 @@ public class PirCommunityGalleryResource {
 
     /**
      * Set the uniqueId property: The unique id of this community gallery.
-     *
+     * 
      * @param uniqueId the uniqueId value to set.
      * @return the PirCommunityGalleryResource object itself.
      */
@@ -100,7 +104,7 @@ public class PirCommunityGalleryResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

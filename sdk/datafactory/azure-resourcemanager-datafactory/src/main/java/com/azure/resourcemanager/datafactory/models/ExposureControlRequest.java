@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The exposure control request. */
+/**
+ * The exposure control request.
+ */
 @Fluent
 public final class ExposureControlRequest {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ExposureControlRequest.class);
-
     /*
      * The feature name.
      */
@@ -27,8 +25,14 @@ public final class ExposureControlRequest {
     private String featureType;
 
     /**
+     * Creates an instance of ExposureControlRequest class.
+     */
+    public ExposureControlRequest() {
+    }
+
+    /**
      * Get the featureName property: The feature name.
-     *
+     * 
      * @return the featureName value.
      */
     public String featureName() {
@@ -37,7 +41,7 @@ public final class ExposureControlRequest {
 
     /**
      * Set the featureName property: The feature name.
-     *
+     * 
      * @param featureName the featureName value to set.
      * @return the ExposureControlRequest object itself.
      */
@@ -48,7 +52,7 @@ public final class ExposureControlRequest {
 
     /**
      * Get the featureType property: The feature type.
-     *
+     * 
      * @return the featureType value.
      */
     public String featureType() {
@@ -57,7 +61,7 @@ public final class ExposureControlRequest {
 
     /**
      * Set the featureType property: The feature type.
-     *
+     * 
      * @param featureType the featureType value to set.
      * @return the ExposureControlRequest object itself.
      */
@@ -68,7 +72,7 @@ public final class ExposureControlRequest {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -6,14 +6,13 @@ package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Cosmos DB Cassandra table resource object. */
+/**
+ * Cosmos DB Cassandra table resource object.
+ */
 @Fluent
 public class CassandraTableResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CassandraTableResource.class);
-
     /*
      * Name of the Cosmos DB Cassandra table
      */
@@ -39,8 +38,14 @@ public class CassandraTableResource {
     private Integer analyticalStorageTtl;
 
     /**
+     * Creates an instance of CassandraTableResource class.
+     */
+    public CassandraTableResource() {
+    }
+
+    /**
      * Get the id property: Name of the Cosmos DB Cassandra table.
-     *
+     * 
      * @return the id value.
      */
     public String id() {
@@ -49,7 +54,7 @@ public class CassandraTableResource {
 
     /**
      * Set the id property: Name of the Cosmos DB Cassandra table.
-     *
+     * 
      * @param id the id value to set.
      * @return the CassandraTableResource object itself.
      */
@@ -60,7 +65,7 @@ public class CassandraTableResource {
 
     /**
      * Get the defaultTtl property: Time to live of the Cosmos DB Cassandra table.
-     *
+     * 
      * @return the defaultTtl value.
      */
     public Integer defaultTtl() {
@@ -69,7 +74,7 @@ public class CassandraTableResource {
 
     /**
      * Set the defaultTtl property: Time to live of the Cosmos DB Cassandra table.
-     *
+     * 
      * @param defaultTtl the defaultTtl value to set.
      * @return the CassandraTableResource object itself.
      */
@@ -80,7 +85,7 @@ public class CassandraTableResource {
 
     /**
      * Get the schema property: Schema of the Cosmos DB Cassandra table.
-     *
+     * 
      * @return the schema value.
      */
     public CassandraSchema schema() {
@@ -89,7 +94,7 @@ public class CassandraTableResource {
 
     /**
      * Set the schema property: Schema of the Cosmos DB Cassandra table.
-     *
+     * 
      * @param schema the schema value to set.
      * @return the CassandraTableResource object itself.
      */
@@ -100,7 +105,7 @@ public class CassandraTableResource {
 
     /**
      * Get the analyticalStorageTtl property: Analytical TTL.
-     *
+     * 
      * @return the analyticalStorageTtl value.
      */
     public Integer analyticalStorageTtl() {
@@ -109,7 +114,7 @@ public class CassandraTableResource {
 
     /**
      * Set the analyticalStorageTtl property: Analytical TTL.
-     *
+     * 
      * @param analyticalStorageTtl the analyticalStorageTtl value to set.
      * @return the CassandraTableResource object itself.
      */
@@ -120,17 +125,18 @@ public class CassandraTableResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (id() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property id in model CassandraTableResource"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property id in model CassandraTableResource"));
         }
         if (schema() != null) {
             schema().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(CassandraTableResource.class);
 }

@@ -6,26 +6,29 @@ package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Sap Cloud For Customer OData resource dataset properties. */
+/**
+ * Sap Cloud For Customer OData resource dataset properties.
+ */
 @Fluent
 public final class SapCloudForCustomerResourceDatasetTypeProperties {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(SapCloudForCustomerResourceDatasetTypeProperties.class);
-
     /*
-     * The path of the SAP Cloud for Customer OData entity. Type: string (or
-     * Expression with resultType string).
+     * The path of the SAP Cloud for Customer OData entity. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "path", required = true)
     private Object path;
 
     /**
+     * Creates an instance of SapCloudForCustomerResourceDatasetTypeProperties class.
+     */
+    public SapCloudForCustomerResourceDatasetTypeProperties() {
+    }
+
+    /**
      * Get the path property: The path of the SAP Cloud for Customer OData entity. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the path value.
      */
     public Object path() {
@@ -35,7 +38,7 @@ public final class SapCloudForCustomerResourceDatasetTypeProperties {
     /**
      * Set the path property: The path of the SAP Cloud for Customer OData entity. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param path the path value to set.
      * @return the SapCloudForCustomerResourceDatasetTypeProperties object itself.
      */
@@ -46,15 +49,16 @@ public final class SapCloudForCustomerResourceDatasetTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (path() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property path in model SapCloudForCustomerResourceDatasetTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property path in model SapCloudForCustomerResourceDatasetTypeProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(SapCloudForCustomerResourceDatasetTypeProperties.class);
 }

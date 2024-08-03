@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Parameters to regenerate the authentication key. */
+/**
+ * Parameters to regenerate the authentication key.
+ */
 @Fluent
 public final class IntegrationRuntimeRegenerateKeyParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(IntegrationRuntimeRegenerateKeyParameters.class);
-
     /*
      * The name of the authentication key to regenerate.
      */
@@ -21,8 +19,14 @@ public final class IntegrationRuntimeRegenerateKeyParameters {
     private IntegrationRuntimeAuthKeyName keyName;
 
     /**
+     * Creates an instance of IntegrationRuntimeRegenerateKeyParameters class.
+     */
+    public IntegrationRuntimeRegenerateKeyParameters() {
+    }
+
+    /**
      * Get the keyName property: The name of the authentication key to regenerate.
-     *
+     * 
      * @return the keyName value.
      */
     public IntegrationRuntimeAuthKeyName keyName() {
@@ -31,7 +35,7 @@ public final class IntegrationRuntimeRegenerateKeyParameters {
 
     /**
      * Set the keyName property: The name of the authentication key to regenerate.
-     *
+     * 
      * @param keyName the keyName value to set.
      * @return the IntegrationRuntimeRegenerateKeyParameters object itself.
      */
@@ -42,7 +46,7 @@ public final class IntegrationRuntimeRegenerateKeyParameters {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

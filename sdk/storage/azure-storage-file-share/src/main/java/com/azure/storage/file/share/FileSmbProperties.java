@@ -4,6 +4,7 @@
 package com.azure.storage.file.share;
 
 import com.azure.core.http.HttpHeaders;
+import com.azure.storage.file.share.implementation.accesshelpers.FileSmbPropertiesHelper;
 import com.azure.storage.file.share.models.NtfsFileAttributes;
 
 import java.time.OffsetDateTime;
@@ -19,7 +20,7 @@ public class FileSmbProperties {
     private EnumSet<NtfsFileAttributes> ntfsFileAttributes;
     private OffsetDateTime fileCreationTime;
     private OffsetDateTime fileLastWriteTime;
-    private final OffsetDateTime fileChangeTime;
+    private OffsetDateTime fileChangeTime;
     private final String fileId;
     private final String parentId;
 
@@ -28,7 +29,6 @@ public class FileSmbProperties {
      */
     public FileSmbProperties() {
         // Non user-settable properties
-        fileChangeTime = null;
         fileId = null;
         parentId = null;
     }
@@ -126,6 +126,17 @@ public class FileSmbProperties {
         return this;
     }
 
+    /**
+     * Sets the file change time.
+     *
+     * @param fileChangeTime The file change time.
+     * @return the updated FileSmbProperties object.
+     */
+    public FileSmbProperties setFileChangeTime(OffsetDateTime fileChangeTime) {
+        this.fileChangeTime = fileChangeTime;
+        return this;
+    }
+
     // HELPER METHODS
 
     /**
@@ -178,6 +189,17 @@ public class FileSmbProperties {
     }
 
     /**
+     * Gets the string representation of the file change time or null if no value is set
+     *
+     * @return The value of the file change time header
+     */
+    String getFileChangeTimeString() {
+        return fileChangeTime == null
+            ? null
+            : parseFileSMBDate(fileChangeTime);
+    }
+
+    /**
      * Given an <code>OffsetDateTime</code>, generates a {@code String} representing a date in the format needed for
      * file SMB properties
      *
@@ -206,5 +228,14 @@ public class FileSmbProperties {
         this.fileChangeTime = fileChange == null ? null : OffsetDateTime.parse(fileChange);
         this.fileId = httpHeaders.getValue(FileConstants.HeaderConstants.FILE_ID);
         this.parentId = httpHeaders.getValue(FileConstants.HeaderConstants.FILE_PARENT_ID);
+    }
+
+    static {
+        FileSmbPropertiesHelper.setAccessor(new FileSmbPropertiesHelper.FileSmbPropertiesAccessor() {
+            @Override
+            public FileSmbProperties create(HttpHeaders httpHeaders) {
+                return new FileSmbProperties(httpHeaders);
+            }
+        });
     }
 }

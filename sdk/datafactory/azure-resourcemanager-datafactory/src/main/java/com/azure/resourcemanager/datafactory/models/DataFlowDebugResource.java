@@ -6,14 +6,13 @@ package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Data flow debug resource. */
+/**
+ * Data flow debug resource.
+ */
 @Fluent
 public final class DataFlowDebugResource extends SubResourceDebugResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DataFlowDebugResource.class);
-
     /*
      * Data flow properties.
      */
@@ -21,8 +20,14 @@ public final class DataFlowDebugResource extends SubResourceDebugResource {
     private DataFlow properties;
 
     /**
+     * Creates an instance of DataFlowDebugResource class.
+     */
+    public DataFlowDebugResource() {
+    }
+
+    /**
      * Get the properties property: Data flow properties.
-     *
+     * 
      * @return the properties value.
      */
     public DataFlow properties() {
@@ -31,7 +36,7 @@ public final class DataFlowDebugResource extends SubResourceDebugResource {
 
     /**
      * Set the properties property: Data flow properties.
-     *
+     * 
      * @param properties the properties value to set.
      * @return the DataFlowDebugResource object itself.
      */
@@ -40,7 +45,9 @@ public final class DataFlowDebugResource extends SubResourceDebugResource {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DataFlowDebugResource withName(String name) {
         super.withName(name);
@@ -49,19 +56,20 @@ public final class DataFlowDebugResource extends SubResourceDebugResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
         if (properties() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property properties in model DataFlowDebugResource"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property properties in model DataFlowDebugResource"));
         } else {
             properties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(DataFlowDebugResource.class);
 }

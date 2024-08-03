@@ -6,7 +6,6 @@ package com.azure.resourcemanager.batch.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
@@ -16,9 +15,7 @@ import java.util.Map;
  * the new vms which are created after the pool shrinks to 0 will have the updated identities.
  */
 @Fluent
-public class BatchPoolIdentity {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(BatchPoolIdentity.class);
-
+public final class BatchPoolIdentity {
     /*
      * The type of identity used for the Batch Pool.
      */
@@ -33,8 +30,14 @@ public class BatchPoolIdentity {
     private Map<String, UserAssignedIdentities> userAssignedIdentities;
 
     /**
+     * Creates an instance of BatchPoolIdentity class.
+     */
+    public BatchPoolIdentity() {
+    }
+
+    /**
      * Get the type property: The type of identity used for the Batch Pool.
-     *
+     * 
      * @return the type value.
      */
     public PoolIdentityType type() {
@@ -43,7 +46,7 @@ public class BatchPoolIdentity {
 
     /**
      * Set the type property: The type of identity used for the Batch Pool.
-     *
+     * 
      * @param type the type value to set.
      * @return the BatchPoolIdentity object itself.
      */
@@ -54,7 +57,7 @@ public class BatchPoolIdentity {
 
     /**
      * Get the userAssignedIdentities property: The list of user identities associated with the Batch pool.
-     *
+     * 
      * @return the userAssignedIdentities value.
      */
     public Map<String, UserAssignedIdentities> userAssignedIdentities() {
@@ -63,7 +66,7 @@ public class BatchPoolIdentity {
 
     /**
      * Set the userAssignedIdentities property: The list of user identities associated with the Batch pool.
-     *
+     * 
      * @param userAssignedIdentities the userAssignedIdentities value to set.
      * @return the BatchPoolIdentity object itself.
      */
@@ -74,24 +77,22 @@ public class BatchPoolIdentity {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (type() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property type in model BatchPoolIdentity"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property type in model BatchPoolIdentity"));
         }
         if (userAssignedIdentities() != null) {
-            userAssignedIdentities()
-                .values()
-                .forEach(
-                    e -> {
-                        if (e != null) {
-                            e.validate();
-                        }
-                    });
+            userAssignedIdentities().values().forEach(e -> {
+                if (e != null) {
+                    e.validate();
+                }
+            });
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(BatchPoolIdentity.class);
 }

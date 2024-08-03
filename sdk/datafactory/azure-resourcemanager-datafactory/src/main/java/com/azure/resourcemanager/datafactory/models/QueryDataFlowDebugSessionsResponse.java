@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.fluent.models.DataFlowDebugSessionInfoInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** A list of active debug sessions. */
+/**
+ * A list of active debug sessions.
+ */
 @Fluent
 public final class QueryDataFlowDebugSessionsResponse {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(QueryDataFlowDebugSessionsResponse.class);
-
     /*
      * Array with all active debug sessions.
      */
@@ -29,8 +27,14 @@ public final class QueryDataFlowDebugSessionsResponse {
     private String nextLink;
 
     /**
+     * Creates an instance of QueryDataFlowDebugSessionsResponse class.
+     */
+    public QueryDataFlowDebugSessionsResponse() {
+    }
+
+    /**
      * Get the value property: Array with all active debug sessions.
-     *
+     * 
      * @return the value value.
      */
     public List<DataFlowDebugSessionInfoInner> value() {
@@ -39,7 +43,7 @@ public final class QueryDataFlowDebugSessionsResponse {
 
     /**
      * Set the value property: Array with all active debug sessions.
-     *
+     * 
      * @param value the value value to set.
      * @return the QueryDataFlowDebugSessionsResponse object itself.
      */
@@ -50,7 +54,7 @@ public final class QueryDataFlowDebugSessionsResponse {
 
     /**
      * Get the nextLink property: The link to the next page of results, if any remaining results exist.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,7 +63,7 @@ public final class QueryDataFlowDebugSessionsResponse {
 
     /**
      * Set the nextLink property: The link to the next page of results, if any remaining results exist.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the QueryDataFlowDebugSessionsResponse object itself.
      */
@@ -70,7 +74,7 @@ public final class QueryDataFlowDebugSessionsResponse {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

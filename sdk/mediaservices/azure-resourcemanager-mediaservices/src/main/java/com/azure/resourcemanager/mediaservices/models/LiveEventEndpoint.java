@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.mediaservices.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** The live event endpoint. */
 @Fluent
 public final class LiveEventEndpoint {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(LiveEventEndpoint.class);
-
     /*
      * The endpoint protocol.
      */
@@ -25,6 +21,10 @@ public final class LiveEventEndpoint {
      */
     @JsonProperty(value = "url")
     private String url;
+
+    /** Creates an instance of LiveEventEndpoint class. */
+    public LiveEventEndpoint() {
+    }
 
     /**
      * Get the protocol property: The endpoint protocol.

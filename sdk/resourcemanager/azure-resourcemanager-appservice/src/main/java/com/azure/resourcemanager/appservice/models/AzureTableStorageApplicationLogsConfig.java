@@ -6,14 +6,13 @@ package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Application logs to Azure table storage configuration. */
+/**
+ * Application logs to Azure table storage configuration.
+ */
 @Fluent
 public final class AzureTableStorageApplicationLogsConfig {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureTableStorageApplicationLogsConfig.class);
-
     /*
      * Log level.
      */
@@ -27,8 +26,14 @@ public final class AzureTableStorageApplicationLogsConfig {
     private String sasUrl;
 
     /**
+     * Creates an instance of AzureTableStorageApplicationLogsConfig class.
+     */
+    public AzureTableStorageApplicationLogsConfig() {
+    }
+
+    /**
      * Get the level property: Log level.
-     *
+     * 
      * @return the level value.
      */
     public LogLevel level() {
@@ -37,7 +42,7 @@ public final class AzureTableStorageApplicationLogsConfig {
 
     /**
      * Set the level property: Log level.
-     *
+     * 
      * @param level the level value to set.
      * @return the AzureTableStorageApplicationLogsConfig object itself.
      */
@@ -48,7 +53,7 @@ public final class AzureTableStorageApplicationLogsConfig {
 
     /**
      * Get the sasUrl property: SAS URL to an Azure table with add/query/delete permissions.
-     *
+     * 
      * @return the sasUrl value.
      */
     public String sasUrl() {
@@ -57,7 +62,7 @@ public final class AzureTableStorageApplicationLogsConfig {
 
     /**
      * Set the sasUrl property: SAS URL to an Azure table with add/query/delete permissions.
-     *
+     * 
      * @param sasUrl the sasUrl value to set.
      * @return the AzureTableStorageApplicationLogsConfig object itself.
      */
@@ -68,15 +73,16 @@ public final class AzureTableStorageApplicationLogsConfig {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (sasUrl() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property sasUrl in model AzureTableStorageApplicationLogsConfig"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property sasUrl in model AzureTableStorageApplicationLogsConfig"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(AzureTableStorageApplicationLogsConfig.class);
 }

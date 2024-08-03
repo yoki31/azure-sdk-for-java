@@ -4,12 +4,10 @@
 
 package com.azure.resourcemanager.applicationinsights.generated;
 
-import com.azure.core.util.Context;
-
 /** Samples for Components GetPurgeStatus. */
 public final class ComponentsGetPurgeStatusSamples {
     /*
-     * x-ms-original-file: specification/applicationinsights/resource-manager/Microsoft.Insights/preview/2018-05-01-preview/examples/ComponentsPurgeStatus.json
+     * x-ms-original-file: specification/applicationinsights/resource-manager/Microsoft.Insights/stable/2020-02-02/examples/ComponentsPurgeStatus.json
      */
     /**
      * Sample code: ComponentPurge.
@@ -21,6 +19,9 @@ public final class ComponentsGetPurgeStatusSamples {
         manager
             .components()
             .getPurgeStatusWithResponse(
-                "OIAutoRest5123", "aztest5048", "purge-970318e7-b859-4edb-8903-83b1b54d0b74", Context.NONE);
+                "OIAutoRest5123",
+                "aztest5048",
+                "purge-970318e7-b859-4edb-8903-83b1b54d0b74",
+                com.azure.core.util.Context.NONE);
     }
 }

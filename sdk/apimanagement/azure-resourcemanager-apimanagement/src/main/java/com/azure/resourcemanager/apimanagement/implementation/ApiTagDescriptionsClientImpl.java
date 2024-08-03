@@ -29,7 +29,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.ApiTagDescriptionsClient;
 import com.azure.resourcemanager.apimanagement.fluent.models.TagDescriptionContractInner;
 import com.azure.resourcemanager.apimanagement.models.ApiTagDescriptionsCreateOrUpdateResponse;
@@ -41,8 +40,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in ApiTagDescriptionsClient. */
 public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsClient {
-    private final ClientLogger logger = new ClientLogger(ApiTagDescriptionsClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final ApiTagDescriptionsService service;
 
@@ -66,11 +63,10 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApiManagementClientA")
-    private interface ApiTagDescriptionsService {
+    public interface ApiTagDescriptionsService {
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/apis/{apiId}/tagDescriptions")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/apis/{apiId}/tagDescriptions")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<TagDescriptionCollection>> listByService(
@@ -88,8 +84,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
 
         @Headers({"Content-Type: application/json"})
         @Head(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/apis/{apiId}/tagDescriptions/{tagDescriptionId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/apis/{apiId}/tagDescriptions/{tagDescriptionId}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<ApiTagDescriptionsGetEntityTagResponse> getEntityTag(
@@ -105,8 +100,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
 
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/apis/{apiId}/tagDescriptions/{tagDescriptionId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/apis/{apiId}/tagDescriptions/{tagDescriptionId}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<ApiTagDescriptionsGetResponse> get(
@@ -122,8 +116,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
 
         @Headers({"Content-Type: application/json"})
         @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/apis/{apiId}/tagDescriptions/{tagDescriptionId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/apis/{apiId}/tagDescriptions/{tagDescriptionId}")
         @ExpectedResponses({200, 201})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<ApiTagDescriptionsCreateOrUpdateResponse> createOrUpdate(
@@ -141,8 +134,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
 
         @Headers({"Content-Type: application/json"})
         @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/apis/{apiId}/tagDescriptions/{tagDescriptionId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/apis/{apiId}/tagDescriptions/{tagDescriptionId}")
         @ExpectedResponses({200, 204})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Void>> delete(
@@ -172,7 +164,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
      * Lists all Tags descriptions in scope of API. Model similar to swagger - tagDescription is defined on API level
      * but tag may be assigned to the Operations.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -185,7 +177,8 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged TagDescription list representation.
+     * @return paged TagDescription list representation along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<TagDescriptionContractInner>> listByServiceSinglePageAsync(
@@ -245,7 +238,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
      * Lists all Tags descriptions in scope of API. Model similar to swagger - tagDescription is defined on API level
      * but tag may be assigned to the Operations.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -259,7 +252,8 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged TagDescription list representation.
+     * @return paged TagDescription list representation along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<TagDescriptionContractInner>> listByServiceSinglePageAsync(
@@ -322,7 +316,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
      * Lists all Tags descriptions in scope of API. Model similar to swagger - tagDescription is defined on API level
      * but tag may be assigned to the Operations.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -335,7 +329,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged TagDescription list representation.
+     * @return paged TagDescription list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<TagDescriptionContractInner> listByServiceAsync(
@@ -349,14 +343,14 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
      * Lists all Tags descriptions in scope of API. Model similar to swagger - tagDescription is defined on API level
      * but tag may be assigned to the Operations.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged TagDescription list representation.
+     * @return paged TagDescription list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<TagDescriptionContractInner> listByServiceAsync(
@@ -373,7 +367,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
      * Lists all Tags descriptions in scope of API. Model similar to swagger - tagDescription is defined on API level
      * but tag may be assigned to the Operations.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -387,7 +381,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged TagDescription list representation.
+     * @return paged TagDescription list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<TagDescriptionContractInner> listByServiceAsync(
@@ -407,14 +401,14 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
      * Lists all Tags descriptions in scope of API. Model similar to swagger - tagDescription is defined on API level
      * but tag may be assigned to the Operations.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged TagDescription list representation.
+     * @return paged TagDescription list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<TagDescriptionContractInner> listByService(
@@ -429,7 +423,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
      * Lists all Tags descriptions in scope of API. Model similar to swagger - tagDescription is defined on API level
      * but tag may be assigned to the Operations.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -443,7 +437,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged TagDescription list representation.
+     * @return paged TagDescription list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<TagDescriptionContractInner> listByService(
@@ -461,7 +455,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
     /**
      * Gets the entity state version of the tag specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -470,7 +464,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state version of the tag specified by its identifier.
+     * @return the entity state version of the tag specified by its identifier on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiTagDescriptionsGetEntityTagResponse> getEntityTagWithResponseAsync(
@@ -522,7 +516,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
     /**
      * Gets the entity state version of the tag specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -532,7 +526,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state version of the tag specified by its identifier.
+     * @return the entity state version of the tag specified by its identifier on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiTagDescriptionsGetEntityTagResponse> getEntityTagWithResponseAsync(
@@ -581,7 +575,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
     /**
      * Gets the entity state version of the tag specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -590,37 +584,19 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state version of the tag specified by its identifier.
+     * @return the entity state version of the tag specified by its identifier on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> getEntityTagAsync(
         String resourceGroupName, String serviceName, String apiId, String tagDescriptionId) {
         return getEntityTagWithResponseAsync(resourceGroupName, serviceName, apiId, tagDescriptionId)
-            .flatMap((ApiTagDescriptionsGetEntityTagResponse res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Gets the entity state version of the tag specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
-     *     revision has ;rev=n as a suffix where n is the revision number.
-     * @param tagDescriptionId Tag description identifier. Used when creating tagDescription for API/Tag association.
-     *     Based on API and Tag names.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public void getEntityTag(String resourceGroupName, String serviceName, String apiId, String tagDescriptionId) {
-        getEntityTagAsync(resourceGroupName, serviceName, apiId, tagDescriptionId).block();
-    }
-
-    /**
-     * Gets the entity state version of the tag specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -639,9 +615,9 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
     }
 
     /**
-     * Get Tag description in scope of API.
+     * Gets the entity state version of the tag specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -650,7 +626,25 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return tag description in scope of API.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public void getEntityTag(String resourceGroupName, String serviceName, String apiId, String tagDescriptionId) {
+        getEntityTagWithResponse(resourceGroupName, serviceName, apiId, tagDescriptionId, Context.NONE);
+    }
+
+    /**
+     * Get Tag description in scope of API.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
+     *     revision has ;rev=n as a suffix where n is the revision number.
+     * @param tagDescriptionId Tag description identifier. Used when creating tagDescription for API/Tag association.
+     *     Based on API and Tag names.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return tag description in scope of API on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiTagDescriptionsGetResponse> getWithResponseAsync(
@@ -702,7 +696,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
     /**
      * Get Tag description in scope of API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -712,7 +706,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return tag description in scope of API.
+     * @return tag description in scope of API on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiTagDescriptionsGetResponse> getWithResponseAsync(
@@ -761,7 +755,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
     /**
      * Get Tag description in scope of API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -770,46 +764,19 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return tag description in scope of API.
+     * @return tag description in scope of API on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<TagDescriptionContractInner> getAsync(
         String resourceGroupName, String serviceName, String apiId, String tagDescriptionId) {
         return getWithResponseAsync(resourceGroupName, serviceName, apiId, tagDescriptionId)
-            .flatMap(
-                (ApiTagDescriptionsGetResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Get Tag description in scope of API.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
-     *     revision has ;rev=n as a suffix where n is the revision number.
-     * @param tagDescriptionId Tag description identifier. Used when creating tagDescription for API/Tag association.
-     *     Based on API and Tag names.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return tag description in scope of API.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public TagDescriptionContractInner get(
-        String resourceGroupName, String serviceName, String apiId, String tagDescriptionId) {
-        return getAsync(resourceGroupName, serviceName, apiId, tagDescriptionId).block();
-    }
-
-    /**
-     * Get Tag description in scope of API.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -828,9 +795,29 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
     }
 
     /**
+     * Get Tag description in scope of API.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
+     *     revision has ;rev=n as a suffix where n is the revision number.
+     * @param tagDescriptionId Tag description identifier. Used when creating tagDescription for API/Tag association.
+     *     Based on API and Tag names.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return tag description in scope of API.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public TagDescriptionContractInner get(
+        String resourceGroupName, String serviceName, String apiId, String tagDescriptionId) {
+        return getWithResponse(resourceGroupName, serviceName, apiId, tagDescriptionId, Context.NONE).getValue();
+    }
+
+    /**
      * Create/Update tag description in scope of the Api.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -841,7 +828,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return contract details.
+     * @return contract details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiTagDescriptionsCreateOrUpdateResponse> createOrUpdateWithResponseAsync(
@@ -905,7 +892,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
     /**
      * Create/Update tag description in scope of the Api.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -917,7 +904,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return contract details.
+     * @return contract details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiTagDescriptionsCreateOrUpdateResponse> createOrUpdateWithResponseAsync(
@@ -979,43 +966,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
     /**
      * Create/Update tag description in scope of the Api.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
-     *     revision has ;rev=n as a suffix where n is the revision number.
-     * @param tagDescriptionId Tag description identifier. Used when creating tagDescription for API/Tag association.
-     *     Based on API and Tag names.
-     * @param parameters Create parameters.
-     * @param ifMatch ETag of the Entity. Not required when creating an entity, but required when updating an entity.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return contract details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<TagDescriptionContractInner> createOrUpdateAsync(
-        String resourceGroupName,
-        String serviceName,
-        String apiId,
-        String tagDescriptionId,
-        TagDescriptionCreateParameters parameters,
-        String ifMatch) {
-        return createOrUpdateWithResponseAsync(
-                resourceGroupName, serviceName, apiId, tagDescriptionId, parameters, ifMatch)
-            .flatMap(
-                (ApiTagDescriptionsCreateOrUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
-    }
-
-    /**
-     * Create/Update tag description in scope of the Api.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -1025,7 +976,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return contract details.
+     * @return contract details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<TagDescriptionContractInner> createOrUpdateAsync(
@@ -1037,47 +988,13 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
         final String ifMatch = null;
         return createOrUpdateWithResponseAsync(
                 resourceGroupName, serviceName, apiId, tagDescriptionId, parameters, ifMatch)
-            .flatMap(
-                (ApiTagDescriptionsCreateOrUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Create/Update tag description in scope of the Api.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
-     *     revision has ;rev=n as a suffix where n is the revision number.
-     * @param tagDescriptionId Tag description identifier. Used when creating tagDescription for API/Tag association.
-     *     Based on API and Tag names.
-     * @param parameters Create parameters.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return contract details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public TagDescriptionContractInner createOrUpdate(
-        String resourceGroupName,
-        String serviceName,
-        String apiId,
-        String tagDescriptionId,
-        TagDescriptionCreateParameters parameters) {
-        final String ifMatch = null;
-        return createOrUpdateAsync(resourceGroupName, serviceName, apiId, tagDescriptionId, parameters, ifMatch)
-            .block();
-    }
-
-    /**
-     * Create/Update tag description in scope of the Api.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -1106,9 +1023,37 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
     }
 
     /**
+     * Create/Update tag description in scope of the Api.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
+     *     revision has ;rev=n as a suffix where n is the revision number.
+     * @param tagDescriptionId Tag description identifier. Used when creating tagDescription for API/Tag association.
+     *     Based on API and Tag names.
+     * @param parameters Create parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return contract details.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public TagDescriptionContractInner createOrUpdate(
+        String resourceGroupName,
+        String serviceName,
+        String apiId,
+        String tagDescriptionId,
+        TagDescriptionCreateParameters parameters) {
+        final String ifMatch = null;
+        return createOrUpdateWithResponse(
+                resourceGroupName, serviceName, apiId, tagDescriptionId, parameters, ifMatch, Context.NONE)
+            .getValue();
+    }
+
+    /**
      * Delete tag description for the Api.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -1119,7 +1064,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -1175,7 +1120,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
     /**
      * Delete tag description for the Api.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -1187,7 +1132,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -1245,7 +1190,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
     /**
      * Delete tag description for the Api.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -1256,40 +1201,19 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(
         String resourceGroupName, String serviceName, String apiId, String tagDescriptionId, String ifMatch) {
         return deleteWithResponseAsync(resourceGroupName, serviceName, apiId, tagDescriptionId, ifMatch)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Delete tag description for the Api.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
-     *     revision has ;rev=n as a suffix where n is the revision number.
-     * @param tagDescriptionId Tag description identifier. Used when creating tagDescription for API/Tag association.
-     *     Based on API and Tag names.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public void delete(
-        String resourceGroupName, String serviceName, String apiId, String tagDescriptionId, String ifMatch) {
-        deleteAsync(resourceGroupName, serviceName, apiId, tagDescriptionId, ifMatch).block();
-    }
-
-    /**
-     * Delete tag description for the Api.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
      *     revision has ;rev=n as a suffix where n is the revision number.
@@ -1301,7 +1225,7 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<Void> deleteWithResponse(
@@ -1316,13 +1240,36 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
     }
 
     /**
-     * Get the next page of items.
+     * Delete tag description for the Api.
      *
-     * @param nextLink The nextLink parameter.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param apiId API revision identifier. Must be unique in the current API Management service instance. Non-current
+     *     revision has ;rev=n as a suffix where n is the revision number.
+     * @param tagDescriptionId Tag description identifier. Used when creating tagDescription for API/Tag association.
+     *     Based on API and Tag names.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged TagDescription list representation.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public void delete(
+        String resourceGroupName, String serviceName, String apiId, String tagDescriptionId, String ifMatch) {
+        deleteWithResponse(resourceGroupName, serviceName, apiId, tagDescriptionId, ifMatch, Context.NONE);
+    }
+
+    /**
+     * Get the next page of items.
+     *
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return paged TagDescription list representation along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<TagDescriptionContractInner>> listByServiceNextSinglePageAsync(String nextLink) {
@@ -1353,12 +1300,14 @@ public final class ApiTagDescriptionsClientImpl implements ApiTagDescriptionsCli
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged TagDescription list representation.
+     * @return paged TagDescription list representation along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<TagDescriptionContractInner>> listByServiceNextSinglePageAsync(

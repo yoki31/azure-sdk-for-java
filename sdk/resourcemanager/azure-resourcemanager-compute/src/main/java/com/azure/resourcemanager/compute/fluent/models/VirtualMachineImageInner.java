@@ -5,25 +5,25 @@
 package com.azure.resourcemanager.compute.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.resourcemanager.compute.models.ArchitectureTypes;
 import com.azure.resourcemanager.compute.models.AutomaticOSUpgradeProperties;
 import com.azure.resourcemanager.compute.models.DataDiskImage;
 import com.azure.resourcemanager.compute.models.DisallowedConfiguration;
 import com.azure.resourcemanager.compute.models.ExtendedLocation;
 import com.azure.resourcemanager.compute.models.HyperVGenerationTypes;
+import com.azure.resourcemanager.compute.models.ImageDeprecationStatus;
 import com.azure.resourcemanager.compute.models.OSDiskImage;
 import com.azure.resourcemanager.compute.models.PurchasePlan;
 import com.azure.resourcemanager.compute.models.VirtualMachineImageFeature;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;
 
-/** Describes a Virtual Machine Image. */
+/**
+ * Describes a Virtual Machine Image.
+ */
 @Fluent
 public final class VirtualMachineImageInner extends VirtualMachineImageResourceInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VirtualMachineImageInner.class);
-
     /*
      * Describes the properties of a Virtual Machine Image.
      */
@@ -31,43 +31,59 @@ public final class VirtualMachineImageInner extends VirtualMachineImageResourceI
     private VirtualMachineImageProperties innerProperties;
 
     /**
+     * Creates an instance of VirtualMachineImageInner class.
+     */
+    public VirtualMachineImageInner() {
+    }
+
+    /**
      * Get the innerProperties property: Describes the properties of a Virtual Machine Image.
-     *
+     * 
      * @return the innerProperties value.
      */
     private VirtualMachineImageProperties innerProperties() {
         return this.innerProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public VirtualMachineImageInner withName(String name) {
         super.withName(name);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public VirtualMachineImageInner withLocation(String location) {
         super.withLocation(location);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public VirtualMachineImageInner withTags(Map<String, String> tags) {
         super.withTags(tags);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public VirtualMachineImageInner withExtendedLocation(ExtendedLocation extendedLocation) {
         super.withExtendedLocation(extendedLocation);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public VirtualMachineImageInner withId(String id) {
         super.withId(id);
@@ -76,7 +92,7 @@ public final class VirtualMachineImageInner extends VirtualMachineImageResourceI
 
     /**
      * Get the plan property: Used for establishing the purchase context of any 3rd Party artifact through MarketPlace.
-     *
+     * 
      * @return the plan value.
      */
     public PurchasePlan plan() {
@@ -85,7 +101,7 @@ public final class VirtualMachineImageInner extends VirtualMachineImageResourceI
 
     /**
      * Set the plan property: Used for establishing the purchase context of any 3rd Party artifact through MarketPlace.
-     *
+     * 
      * @param plan the plan value to set.
      * @return the VirtualMachineImageInner object itself.
      */
@@ -99,7 +115,7 @@ public final class VirtualMachineImageInner extends VirtualMachineImageResourceI
 
     /**
      * Get the osDiskImage property: Contains the os disk image information.
-     *
+     * 
      * @return the osDiskImage value.
      */
     public OSDiskImage osDiskImage() {
@@ -108,7 +124,7 @@ public final class VirtualMachineImageInner extends VirtualMachineImageResourceI
 
     /**
      * Set the osDiskImage property: Contains the os disk image information.
-     *
+     * 
      * @param osDiskImage the osDiskImage value to set.
      * @return the VirtualMachineImageInner object itself.
      */
@@ -122,7 +138,7 @@ public final class VirtualMachineImageInner extends VirtualMachineImageResourceI
 
     /**
      * Get the dataDiskImages property: The dataDiskImages property.
-     *
+     * 
      * @return the dataDiskImages value.
      */
     public List<DataDiskImage> dataDiskImages() {
@@ -131,7 +147,7 @@ public final class VirtualMachineImageInner extends VirtualMachineImageResourceI
 
     /**
      * Set the dataDiskImages property: The dataDiskImages property.
-     *
+     * 
      * @param dataDiskImages the dataDiskImages value to set.
      * @return the VirtualMachineImageInner object itself.
      */
@@ -145,7 +161,7 @@ public final class VirtualMachineImageInner extends VirtualMachineImageResourceI
 
     /**
      * Get the automaticOSUpgradeProperties property: Describes automatic OS upgrade properties on the image.
-     *
+     * 
      * @return the automaticOSUpgradeProperties value.
      */
     public AutomaticOSUpgradeProperties automaticOSUpgradeProperties() {
@@ -154,12 +170,12 @@ public final class VirtualMachineImageInner extends VirtualMachineImageResourceI
 
     /**
      * Set the automaticOSUpgradeProperties property: Describes automatic OS upgrade properties on the image.
-     *
+     * 
      * @param automaticOSUpgradeProperties the automaticOSUpgradeProperties value to set.
      * @return the VirtualMachineImageInner object itself.
      */
-    public VirtualMachineImageInner withAutomaticOSUpgradeProperties(
-        AutomaticOSUpgradeProperties automaticOSUpgradeProperties) {
+    public VirtualMachineImageInner
+        withAutomaticOSUpgradeProperties(AutomaticOSUpgradeProperties automaticOSUpgradeProperties) {
         if (this.innerProperties() == null) {
             this.innerProperties = new VirtualMachineImageProperties();
         }
@@ -169,7 +185,7 @@ public final class VirtualMachineImageInner extends VirtualMachineImageResourceI
 
     /**
      * Get the hyperVGeneration property: Specifies the HyperVGeneration Type.
-     *
+     * 
      * @return the hyperVGeneration value.
      */
     public HyperVGenerationTypes hyperVGeneration() {
@@ -178,7 +194,7 @@ public final class VirtualMachineImageInner extends VirtualMachineImageResourceI
 
     /**
      * Set the hyperVGeneration property: Specifies the HyperVGeneration Type.
-     *
+     * 
      * @param hyperVGeneration the hyperVGeneration value to set.
      * @return the VirtualMachineImageInner object itself.
      */
@@ -192,7 +208,7 @@ public final class VirtualMachineImageInner extends VirtualMachineImageResourceI
 
     /**
      * Get the disallowed property: Specifies disallowed configuration for the VirtualMachine created from the image.
-     *
+     * 
      * @return the disallowed value.
      */
     public DisallowedConfiguration disallowed() {
@@ -201,7 +217,7 @@ public final class VirtualMachineImageInner extends VirtualMachineImageResourceI
 
     /**
      * Set the disallowed property: Specifies disallowed configuration for the VirtualMachine created from the image.
-     *
+     * 
      * @param disallowed the disallowed value to set.
      * @return the VirtualMachineImageInner object itself.
      */
@@ -215,7 +231,7 @@ public final class VirtualMachineImageInner extends VirtualMachineImageResourceI
 
     /**
      * Get the features property: The features property.
-     *
+     * 
      * @return the features value.
      */
     public List<VirtualMachineImageFeature> features() {
@@ -224,7 +240,7 @@ public final class VirtualMachineImageInner extends VirtualMachineImageResourceI
 
     /**
      * Set the features property: The features property.
-     *
+     * 
      * @param features the features value to set.
      * @return the VirtualMachineImageInner object itself.
      */
@@ -237,8 +253,54 @@ public final class VirtualMachineImageInner extends VirtualMachineImageResourceI
     }
 
     /**
+     * Get the architecture property: Specifies the Architecture Type.
+     * 
+     * @return the architecture value.
+     */
+    public ArchitectureTypes architecture() {
+        return this.innerProperties() == null ? null : this.innerProperties().architecture();
+    }
+
+    /**
+     * Set the architecture property: Specifies the Architecture Type.
+     * 
+     * @param architecture the architecture value to set.
+     * @return the VirtualMachineImageInner object itself.
+     */
+    public VirtualMachineImageInner withArchitecture(ArchitectureTypes architecture) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new VirtualMachineImageProperties();
+        }
+        this.innerProperties().withArchitecture(architecture);
+        return this;
+    }
+
+    /**
+     * Get the imageDeprecationStatus property: Describes image deprecation status properties on the image.
+     * 
+     * @return the imageDeprecationStatus value.
+     */
+    public ImageDeprecationStatus imageDeprecationStatus() {
+        return this.innerProperties() == null ? null : this.innerProperties().imageDeprecationStatus();
+    }
+
+    /**
+     * Set the imageDeprecationStatus property: Describes image deprecation status properties on the image.
+     * 
+     * @param imageDeprecationStatus the imageDeprecationStatus value to set.
+     * @return the VirtualMachineImageInner object itself.
+     */
+    public VirtualMachineImageInner withImageDeprecationStatus(ImageDeprecationStatus imageDeprecationStatus) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new VirtualMachineImageProperties();
+        }
+        this.innerProperties().withImageDeprecationStatus(imageDeprecationStatus);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

@@ -30,7 +30,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.EmailTemplatesClient;
 import com.azure.resourcemanager.apimanagement.fluent.models.EmailTemplateContractInner;
 import com.azure.resourcemanager.apimanagement.models.EmailTemplateCollection;
@@ -43,8 +42,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in EmailTemplatesClient. */
 public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
-    private final ClientLogger logger = new ClientLogger(EmailTemplatesClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final EmailTemplatesService service;
 
@@ -68,11 +65,10 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApiManagementClientE")
-    private interface EmailTemplatesService {
+    public interface EmailTemplatesService {
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/templates")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/templates")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<EmailTemplateCollection>> listByService(
@@ -89,8 +85,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
 
         @Headers({"Content-Type: application/json"})
         @Head(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/templates/{templateName}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/templates/{templateName}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<EmailTemplatesGetEntityTagResponse> getEntityTag(
@@ -105,8 +100,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
 
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/templates/{templateName}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/templates/{templateName}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<EmailTemplatesGetResponse> get(
@@ -121,8 +115,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
 
         @Headers({"Content-Type: application/json"})
         @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/templates/{templateName}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/templates/{templateName}")
         @ExpectedResponses({200, 201})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<EmailTemplateContractInner>> createOrUpdate(
@@ -139,8 +132,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
 
         @Headers({"Content-Type: application/json"})
         @Patch(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/templates/{templateName}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/templates/{templateName}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<EmailTemplatesUpdateResponse> update(
@@ -157,8 +149,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
 
         @Headers({"Content-Type: application/json"})
         @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/templates/{templateName}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/templates/{templateName}")
         @ExpectedResponses({200, 204})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Void>> delete(
@@ -186,7 +177,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
     /**
      * Gets all email templates.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -196,7 +187,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all email templates.
+     * @return all email templates along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<EmailTemplateContractInner>> listByServiceSinglePageAsync(
@@ -251,7 +242,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
     /**
      * Gets all email templates.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -262,7 +253,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all email templates.
+     * @return all email templates along with {@link PagedResponse} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<EmailTemplateContractInner>> listByServiceSinglePageAsync(
@@ -314,7 +305,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
     /**
      * Gets all email templates.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -324,7 +315,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all email templates.
+     * @return all email templates as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<EmailTemplateContractInner> listByServiceAsync(
@@ -337,12 +328,12 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
     /**
      * Gets all email templates.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all email templates.
+     * @return all email templates as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<EmailTemplateContractInner> listByServiceAsync(String resourceGroupName, String serviceName) {
@@ -357,7 +348,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
     /**
      * Gets all email templates.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -368,7 +359,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all email templates.
+     * @return all email templates as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<EmailTemplateContractInner> listByServiceAsync(
@@ -381,12 +372,12 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
     /**
      * Gets all email templates.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all email templates.
+     * @return all email templates as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<EmailTemplateContractInner> listByService(String resourceGroupName, String serviceName) {
@@ -399,7 +390,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
     /**
      * Gets all email templates.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| name | filter | ge, le, eq,
@@ -410,7 +401,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all email templates.
+     * @return all email templates as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<EmailTemplateContractInner> listByService(
@@ -421,13 +412,14 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
     /**
      * Gets the entity state (Etag) version of the email template specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param templateName Email Template Name Identifier.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the email template specified by its identifier.
+     * @return the entity state (Etag) version of the email template specified by its identifier on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<EmailTemplatesGetEntityTagResponse> getEntityTagWithResponseAsync(
@@ -474,14 +466,15 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
     /**
      * Gets the entity state (Etag) version of the email template specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param templateName Email Template Name Identifier.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the email template specified by its identifier.
+     * @return the entity state (Etag) version of the email template specified by its identifier on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<EmailTemplatesGetEntityTagResponse> getEntityTagWithResponseAsync(
@@ -525,39 +518,25 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
     /**
      * Gets the entity state (Etag) version of the email template specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param templateName Email Template Name Identifier.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the email template specified by its identifier.
+     * @return the entity state (Etag) version of the email template specified by its identifier on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> getEntityTagAsync(String resourceGroupName, String serviceName, TemplateName templateName) {
         return getEntityTagWithResponseAsync(resourceGroupName, serviceName, templateName)
-            .flatMap((EmailTemplatesGetEntityTagResponse res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Gets the entity state (Etag) version of the email template specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param templateName Email Template Name Identifier.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public void getEntityTag(String resourceGroupName, String serviceName, TemplateName templateName) {
-        getEntityTagAsync(resourceGroupName, serviceName, templateName).block();
-    }
-
-    /**
-     * Gets the entity state (Etag) version of the email template specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param templateName Email Template Name Identifier.
      * @param context The context to associate with this operation.
@@ -573,15 +552,30 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
     }
 
     /**
-     * Gets the details of the email template specified by its identifier.
+     * Gets the entity state (Etag) version of the email template specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param templateName Email Template Name Identifier.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the email template specified by its identifier.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public void getEntityTag(String resourceGroupName, String serviceName, TemplateName templateName) {
+        getEntityTagWithResponse(resourceGroupName, serviceName, templateName, Context.NONE);
+    }
+
+    /**
+     * Gets the details of the email template specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param templateName Email Template Name Identifier.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the details of the email template specified by its identifier on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<EmailTemplatesGetResponse> getWithResponseAsync(
@@ -628,14 +622,14 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
     /**
      * Gets the details of the email template specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param templateName Email Template Name Identifier.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the email template specified by its identifier.
+     * @return the details of the email template specified by its identifier on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<EmailTemplatesGetResponse> getWithResponseAsync(
@@ -679,48 +673,25 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
     /**
      * Gets the details of the email template specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param templateName Email Template Name Identifier.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the email template specified by its identifier.
+     * @return the details of the email template specified by its identifier on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<EmailTemplateContractInner> getAsync(
         String resourceGroupName, String serviceName, TemplateName templateName) {
         return getWithResponseAsync(resourceGroupName, serviceName, templateName)
-            .flatMap(
-                (EmailTemplatesGetResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Gets the details of the email template specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param templateName Email Template Name Identifier.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the email template specified by its identifier.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public EmailTemplateContractInner get(String resourceGroupName, String serviceName, TemplateName templateName) {
-        return getAsync(resourceGroupName, serviceName, templateName).block();
-    }
-
-    /**
-     * Gets the details of the email template specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param templateName Email Template Name Identifier.
      * @param context The context to associate with this operation.
@@ -736,9 +707,25 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
     }
 
     /**
+     * Gets the details of the email template specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param templateName Email Template Name Identifier.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the details of the email template specified by its identifier.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public EmailTemplateContractInner get(String resourceGroupName, String serviceName, TemplateName templateName) {
+        return getWithResponse(resourceGroupName, serviceName, templateName, Context.NONE).getValue();
+    }
+
+    /**
      * Updates an Email Template.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param templateName Email Template Name Identifier.
      * @param parameters Email Template update parameters.
@@ -746,7 +733,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return email Template details.
+     * @return email Template details along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<EmailTemplateContractInner>> createOrUpdateWithResponseAsync(
@@ -804,7 +791,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
     /**
      * Updates an Email Template.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param templateName Email Template Name Identifier.
      * @param parameters Email Template update parameters.
@@ -813,7 +800,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return email Template details.
+     * @return email Template details along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<EmailTemplateContractInner>> createOrUpdateWithResponseAsync(
@@ -869,45 +856,14 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
     /**
      * Updates an Email Template.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param templateName Email Template Name Identifier.
-     * @param parameters Email Template update parameters.
-     * @param ifMatch ETag of the Entity. Not required when creating an entity, but required when updating an entity.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return email Template details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<EmailTemplateContractInner> createOrUpdateAsync(
-        String resourceGroupName,
-        String serviceName,
-        TemplateName templateName,
-        EmailTemplateUpdateParameters parameters,
-        String ifMatch) {
-        return createOrUpdateWithResponseAsync(resourceGroupName, serviceName, templateName, parameters, ifMatch)
-            .flatMap(
-                (Response<EmailTemplateContractInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
-    }
-
-    /**
-     * Updates an Email Template.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param templateName Email Template Name Identifier.
      * @param parameters Email Template update parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return email Template details.
+     * @return email Template details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<EmailTemplateContractInner> createOrUpdateAsync(
@@ -917,42 +873,13 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
         EmailTemplateUpdateParameters parameters) {
         final String ifMatch = null;
         return createOrUpdateWithResponseAsync(resourceGroupName, serviceName, templateName, parameters, ifMatch)
-            .flatMap(
-                (Response<EmailTemplateContractInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Updates an Email Template.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param templateName Email Template Name Identifier.
-     * @param parameters Email Template update parameters.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return email Template details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public EmailTemplateContractInner createOrUpdate(
-        String resourceGroupName,
-        String serviceName,
-        TemplateName templateName,
-        EmailTemplateUpdateParameters parameters) {
-        final String ifMatch = null;
-        return createOrUpdateAsync(resourceGroupName, serviceName, templateName, parameters, ifMatch).block();
-    }
-
-    /**
-     * Updates an Email Template.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param templateName Email Template Name Identifier.
      * @param parameters Email Template update parameters.
@@ -961,7 +888,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return email Template details.
+     * @return email Template details along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<EmailTemplateContractInner> createOrUpdateWithResponse(
@@ -977,9 +904,33 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
     }
 
     /**
+     * Updates an Email Template.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param templateName Email Template Name Identifier.
+     * @param parameters Email Template update parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return email Template details.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public EmailTemplateContractInner createOrUpdate(
+        String resourceGroupName,
+        String serviceName,
+        TemplateName templateName,
+        EmailTemplateUpdateParameters parameters) {
+        final String ifMatch = null;
+        return createOrUpdateWithResponse(
+                resourceGroupName, serviceName, templateName, parameters, ifMatch, Context.NONE)
+            .getValue();
+    }
+
+    /**
      * Updates API Management email template.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param templateName Email Template Name Identifier.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -988,7 +939,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return email Template details.
+     * @return email Template details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<EmailTemplatesUpdateResponse> updateWithResponseAsync(
@@ -1049,7 +1000,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
     /**
      * Updates API Management email template.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param templateName Email Template Name Identifier.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1059,7 +1010,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return email Template details.
+     * @return email Template details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<EmailTemplatesUpdateResponse> updateWithResponseAsync(
@@ -1118,7 +1069,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
     /**
      * Updates API Management email template.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param templateName Email Template Name Identifier.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1127,7 +1078,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return email Template details.
+     * @return email Template details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<EmailTemplateContractInner> updateAsync(
@@ -1137,44 +1088,13 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
         String ifMatch,
         EmailTemplateUpdateParameters parameters) {
         return updateWithResponseAsync(resourceGroupName, serviceName, templateName, ifMatch, parameters)
-            .flatMap(
-                (EmailTemplatesUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Updates API Management email template.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param templateName Email Template Name Identifier.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param parameters Update parameters.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return email Template details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public EmailTemplateContractInner update(
-        String resourceGroupName,
-        String serviceName,
-        TemplateName templateName,
-        String ifMatch,
-        EmailTemplateUpdateParameters parameters) {
-        return updateAsync(resourceGroupName, serviceName, templateName, ifMatch, parameters).block();
-    }
-
-    /**
-     * Updates API Management email template.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param templateName Email Template Name Identifier.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1199,9 +1119,34 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
     }
 
     /**
+     * Updates API Management email template.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param templateName Email Template Name Identifier.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param parameters Update parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return email Template details.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public EmailTemplateContractInner update(
+        String resourceGroupName,
+        String serviceName,
+        TemplateName templateName,
+        String ifMatch,
+        EmailTemplateUpdateParameters parameters) {
+        return updateWithResponse(resourceGroupName, serviceName, templateName, ifMatch, parameters, Context.NONE)
+            .getValue();
+    }
+
+    /**
      * Reset the Email Template to default template provided by the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param templateName Email Template Name Identifier.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1209,7 +1154,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -1260,7 +1205,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
     /**
      * Reset the Email Template to default template provided by the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param templateName Email Template Name Identifier.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1269,7 +1214,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -1317,7 +1262,7 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
     /**
      * Reset the Email Template to default template provided by the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param templateName Email Template Name Identifier.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1325,19 +1270,39 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(
         String resourceGroupName, String serviceName, TemplateName templateName, String ifMatch) {
         return deleteWithResponseAsync(resourceGroupName, serviceName, templateName, ifMatch)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Reset the Email Template to default template provided by the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param templateName Email Template Name Identifier.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> deleteWithResponse(
+        String resourceGroupName, String serviceName, TemplateName templateName, String ifMatch, Context context) {
+        return deleteWithResponseAsync(resourceGroupName, serviceName, templateName, ifMatch, context).block();
+    }
+
+    /**
+     * Reset the Email Template to default template provided by the API Management service instance.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param templateName Email Template Name Identifier.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1348,37 +1313,19 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public void delete(String resourceGroupName, String serviceName, TemplateName templateName, String ifMatch) {
-        deleteAsync(resourceGroupName, serviceName, templateName, ifMatch).block();
-    }
-
-    /**
-     * Reset the Email Template to default template provided by the API Management service instance.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param templateName Email Template Name Identifier.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> deleteWithResponse(
-        String resourceGroupName, String serviceName, TemplateName templateName, String ifMatch, Context context) {
-        return deleteWithResponseAsync(resourceGroupName, serviceName, templateName, ifMatch, context).block();
+        deleteWithResponse(resourceGroupName, serviceName, templateName, ifMatch, Context.NONE);
     }
 
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged email template list representation.
+     * @return paged email template list representation along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<EmailTemplateContractInner>> listByServiceNextSinglePageAsync(String nextLink) {
@@ -1409,12 +1356,14 @@ public final class EmailTemplatesClientImpl implements EmailTemplatesClient {
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged email template list representation.
+     * @return paged email template list representation along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<EmailTemplateContractInner>> listByServiceNextSinglePageAsync(

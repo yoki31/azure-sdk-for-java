@@ -5,16 +5,39 @@
 package com.azure.resourcemanager.compute.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.compute.models.PirSharedGalleryResource;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Map;
 
-/** Specifies information about the Shared Gallery that you want to create or update. */
+/**
+ * Specifies information about the Shared Gallery that you want to create or update.
+ */
 @Fluent
 public final class SharedGalleryInner extends PirSharedGalleryResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SharedGalleryInner.class);
+    /*
+     * Specifies the properties of a shared gallery
+     */
+    @JsonProperty(value = "properties")
+    private SharedGalleryProperties innerProperties;
 
-    /** {@inheritDoc} */
+    /**
+     * Creates an instance of SharedGalleryInner class.
+     */
+    public SharedGalleryInner() {
+    }
+
+    /**
+     * Get the innerProperties property: Specifies the properties of a shared gallery.
+     * 
+     * @return the innerProperties value.
+     */
+    private SharedGalleryProperties innerProperties() {
+        return this.innerProperties;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SharedGalleryInner withUniqueId(String uniqueId) {
         super.withUniqueId(uniqueId);
@@ -22,12 +45,24 @@ public final class SharedGalleryInner extends PirSharedGalleryResource {
     }
 
     /**
+     * Get the artifactTags property: The artifact tags of a shared gallery resource.
+     * 
+     * @return the artifactTags value.
+     */
+    public Map<String, String> artifactTags() {
+        return this.innerProperties() == null ? null : this.innerProperties().artifactTags();
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
+        if (innerProperties() != null) {
+            innerProperties().validate();
+        }
     }
 }

@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Describes the role properties. */
+/**
+ * Describes the role properties.
+ */
 @Fluent
 public final class CloudServiceRoleProfileProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CloudServiceRoleProfileProperties.class);
-
     /*
      * Resource name.
      */
@@ -27,8 +25,14 @@ public final class CloudServiceRoleProfileProperties {
     private CloudServiceRoleSku sku;
 
     /**
+     * Creates an instance of CloudServiceRoleProfileProperties class.
+     */
+    public CloudServiceRoleProfileProperties() {
+    }
+
+    /**
      * Get the name property: Resource name.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -37,7 +41,7 @@ public final class CloudServiceRoleProfileProperties {
 
     /**
      * Set the name property: Resource name.
-     *
+     * 
      * @param name the name value to set.
      * @return the CloudServiceRoleProfileProperties object itself.
      */
@@ -48,7 +52,7 @@ public final class CloudServiceRoleProfileProperties {
 
     /**
      * Get the sku property: Describes the cloud service role sku.
-     *
+     * 
      * @return the sku value.
      */
     public CloudServiceRoleSku sku() {
@@ -57,7 +61,7 @@ public final class CloudServiceRoleProfileProperties {
 
     /**
      * Set the sku property: Describes the cloud service role sku.
-     *
+     * 
      * @param sku the sku value to set.
      * @return the CloudServiceRoleProfileProperties object itself.
      */
@@ -68,7 +72,7 @@ public final class CloudServiceRoleProfileProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

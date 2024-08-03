@@ -6,18 +6,17 @@ package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** Defines the cache expiration action for the delivery rule. */
+/**
+ * Defines the cache expiration action for the delivery rule.
+ */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "name")
 @JsonTypeName("CacheExpiration")
 @Fluent
 public final class DeliveryRuleCacheExpirationAction extends DeliveryRuleAction {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DeliveryRuleCacheExpirationAction.class);
-
     /*
      * Defines the parameters for the action.
      */
@@ -25,8 +24,14 @@ public final class DeliveryRuleCacheExpirationAction extends DeliveryRuleAction 
     private CacheExpirationActionParameters parameters;
 
     /**
+     * Creates an instance of DeliveryRuleCacheExpirationAction class.
+     */
+    public DeliveryRuleCacheExpirationAction() {
+    }
+
+    /**
      * Get the parameters property: Defines the parameters for the action.
-     *
+     * 
      * @return the parameters value.
      */
     public CacheExpirationActionParameters parameters() {
@@ -35,7 +40,7 @@ public final class DeliveryRuleCacheExpirationAction extends DeliveryRuleAction 
 
     /**
      * Set the parameters property: Defines the parameters for the action.
-     *
+     * 
      * @param parameters the parameters value to set.
      * @return the DeliveryRuleCacheExpirationAction object itself.
      */
@@ -46,19 +51,19 @@ public final class DeliveryRuleCacheExpirationAction extends DeliveryRuleAction 
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
         if (parameters() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property parameters in model DeliveryRuleCacheExpirationAction"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property parameters in model DeliveryRuleCacheExpirationAction"));
         } else {
             parameters().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(DeliveryRuleCacheExpirationAction.class);
 }

@@ -5,25 +5,21 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The configuration settings of the Azure Active directory provider. */
+/**
+ * The configuration settings of the Azure Active directory provider.
+ */
 @Fluent
 public final class AzureActiveDirectory {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureActiveDirectory.class);
-
     /*
-     * <code>false</code> if the Azure Active Directory provider should not be
-     * enabled despite the set registration; otherwise, <code>true</code>.
+     * <code>false</code> if the Azure Active Directory provider should not be enabled despite the set registration; otherwise, <code>true</code>.
      */
     @JsonProperty(value = "enabled")
     private Boolean enabled;
 
     /*
-     * The configuration settings of the Azure Active Directory app
-     * registration.
+     * The configuration settings of the Azure Active Directory app registration.
      */
     @JsonProperty(value = "registration")
     private AzureActiveDirectoryRegistration registration;
@@ -35,26 +31,29 @@ public final class AzureActiveDirectory {
     private AzureActiveDirectoryLogin login;
 
     /*
-     * The configuration settings of the Azure Active Directory token
-     * validation flow.
+     * The configuration settings of the Azure Active Directory token validation flow.
      */
     @JsonProperty(value = "validation")
     private AzureActiveDirectoryValidation validation;
 
     /*
-     * Gets a value indicating whether the Azure AD configuration was
-     * auto-provisioned using 1st party tooling.
-     * This is an internal flag primarily intended to support the Azure
-     * Management Portal. Users should not
+     * Gets a value indicating whether the Azure AD configuration was auto-provisioned using 1st party tooling.
+     * This is an internal flag primarily intended to support the Azure Management Portal. Users should not
      * read or write to this property.
      */
     @JsonProperty(value = "isAutoProvisioned")
     private Boolean isAutoProvisioned;
 
     /**
+     * Creates an instance of AzureActiveDirectory class.
+     */
+    public AzureActiveDirectory() {
+    }
+
+    /**
      * Get the enabled property: &lt;code&gt;false&lt;/code&gt; if the Azure Active Directory provider should not be
      * enabled despite the set registration; otherwise, &lt;code&gt;true&lt;/code&gt;.
-     *
+     * 
      * @return the enabled value.
      */
     public Boolean enabled() {
@@ -64,7 +63,7 @@ public final class AzureActiveDirectory {
     /**
      * Set the enabled property: &lt;code&gt;false&lt;/code&gt; if the Azure Active Directory provider should not be
      * enabled despite the set registration; otherwise, &lt;code&gt;true&lt;/code&gt;.
-     *
+     * 
      * @param enabled the enabled value to set.
      * @return the AzureActiveDirectory object itself.
      */
@@ -75,7 +74,7 @@ public final class AzureActiveDirectory {
 
     /**
      * Get the registration property: The configuration settings of the Azure Active Directory app registration.
-     *
+     * 
      * @return the registration value.
      */
     public AzureActiveDirectoryRegistration registration() {
@@ -84,7 +83,7 @@ public final class AzureActiveDirectory {
 
     /**
      * Set the registration property: The configuration settings of the Azure Active Directory app registration.
-     *
+     * 
      * @param registration the registration value to set.
      * @return the AzureActiveDirectory object itself.
      */
@@ -95,7 +94,7 @@ public final class AzureActiveDirectory {
 
     /**
      * Get the login property: The configuration settings of the Azure Active Directory login flow.
-     *
+     * 
      * @return the login value.
      */
     public AzureActiveDirectoryLogin login() {
@@ -104,7 +103,7 @@ public final class AzureActiveDirectory {
 
     /**
      * Set the login property: The configuration settings of the Azure Active Directory login flow.
-     *
+     * 
      * @param login the login value to set.
      * @return the AzureActiveDirectory object itself.
      */
@@ -115,7 +114,7 @@ public final class AzureActiveDirectory {
 
     /**
      * Get the validation property: The configuration settings of the Azure Active Directory token validation flow.
-     *
+     * 
      * @return the validation value.
      */
     public AzureActiveDirectoryValidation validation() {
@@ -124,7 +123,7 @@ public final class AzureActiveDirectory {
 
     /**
      * Set the validation property: The configuration settings of the Azure Active Directory token validation flow.
-     *
+     * 
      * @param validation the validation value to set.
      * @return the AzureActiveDirectory object itself.
      */
@@ -135,9 +134,10 @@ public final class AzureActiveDirectory {
 
     /**
      * Get the isAutoProvisioned property: Gets a value indicating whether the Azure AD configuration was
-     * auto-provisioned using 1st party tooling. This is an internal flag primarily intended to support the Azure
-     * Management Portal. Users should not read or write to this property.
-     *
+     * auto-provisioned using 1st party tooling.
+     * This is an internal flag primarily intended to support the Azure Management Portal. Users should not
+     * read or write to this property.
+     * 
      * @return the isAutoProvisioned value.
      */
     public Boolean isAutoProvisioned() {
@@ -146,9 +146,10 @@ public final class AzureActiveDirectory {
 
     /**
      * Set the isAutoProvisioned property: Gets a value indicating whether the Azure AD configuration was
-     * auto-provisioned using 1st party tooling. This is an internal flag primarily intended to support the Azure
-     * Management Portal. Users should not read or write to this property.
-     *
+     * auto-provisioned using 1st party tooling.
+     * This is an internal flag primarily intended to support the Azure Management Portal. Users should not
+     * read or write to this property.
+     * 
      * @param isAutoProvisioned the isAutoProvisioned value to set.
      * @return the AzureActiveDirectory object itself.
      */
@@ -159,7 +160,7 @@ public final class AzureActiveDirectory {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

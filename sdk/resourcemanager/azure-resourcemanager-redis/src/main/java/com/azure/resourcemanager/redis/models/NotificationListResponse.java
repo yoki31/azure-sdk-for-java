@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.redis.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.redis.fluent.models.UpgradeNotificationInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The response of listUpgradeNotifications. */
+/**
+ * The response of listUpgradeNotifications.
+ */
 @Fluent
 public final class NotificationListResponse {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(NotificationListResponse.class);
-
     /*
      * List of all notifications.
      */
@@ -29,8 +27,14 @@ public final class NotificationListResponse {
     private String nextLink;
 
     /**
+     * Creates an instance of NotificationListResponse class.
+     */
+    public NotificationListResponse() {
+    }
+
+    /**
      * Get the value property: List of all notifications.
-     *
+     * 
      * @return the value value.
      */
     public List<UpgradeNotificationInner> value() {
@@ -39,7 +43,7 @@ public final class NotificationListResponse {
 
     /**
      * Set the value property: List of all notifications.
-     *
+     * 
      * @param value the value value to set.
      * @return the NotificationListResponse object itself.
      */
@@ -50,7 +54,7 @@ public final class NotificationListResponse {
 
     /**
      * Get the nextLink property: Link for next set of notifications.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,7 +63,7 @@ public final class NotificationListResponse {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

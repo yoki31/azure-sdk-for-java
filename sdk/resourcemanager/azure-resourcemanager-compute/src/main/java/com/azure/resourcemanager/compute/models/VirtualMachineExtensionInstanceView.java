@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The instance view of a virtual machine extension. */
+/**
+ * The instance view of a virtual machine extension.
+ */
 @Fluent
 public final class VirtualMachineExtensionInstanceView {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VirtualMachineExtensionInstanceView.class);
-
     /*
      * The virtual machine extension name.
      */
@@ -22,8 +20,7 @@ public final class VirtualMachineExtensionInstanceView {
     private String name;
 
     /*
-     * Specifies the type of the extension; an example is
-     * "CustomScriptExtension".
+     * Specifies the type of the extension; an example is "CustomScriptExtension".
      */
     @JsonProperty(value = "type")
     private String type;
@@ -47,8 +44,14 @@ public final class VirtualMachineExtensionInstanceView {
     private List<InstanceViewStatus> statuses;
 
     /**
+     * Creates an instance of VirtualMachineExtensionInstanceView class.
+     */
+    public VirtualMachineExtensionInstanceView() {
+    }
+
+    /**
      * Get the name property: The virtual machine extension name.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -57,7 +60,7 @@ public final class VirtualMachineExtensionInstanceView {
 
     /**
      * Set the name property: The virtual machine extension name.
-     *
+     * 
      * @param name the name value to set.
      * @return the VirtualMachineExtensionInstanceView object itself.
      */
@@ -68,7 +71,7 @@ public final class VirtualMachineExtensionInstanceView {
 
     /**
      * Get the type property: Specifies the type of the extension; an example is "CustomScriptExtension".
-     *
+     * 
      * @return the type value.
      */
     public String type() {
@@ -77,7 +80,7 @@ public final class VirtualMachineExtensionInstanceView {
 
     /**
      * Set the type property: Specifies the type of the extension; an example is "CustomScriptExtension".
-     *
+     * 
      * @param type the type value to set.
      * @return the VirtualMachineExtensionInstanceView object itself.
      */
@@ -88,7 +91,7 @@ public final class VirtualMachineExtensionInstanceView {
 
     /**
      * Get the typeHandlerVersion property: Specifies the version of the script handler.
-     *
+     * 
      * @return the typeHandlerVersion value.
      */
     public String typeHandlerVersion() {
@@ -97,7 +100,7 @@ public final class VirtualMachineExtensionInstanceView {
 
     /**
      * Set the typeHandlerVersion property: Specifies the version of the script handler.
-     *
+     * 
      * @param typeHandlerVersion the typeHandlerVersion value to set.
      * @return the VirtualMachineExtensionInstanceView object itself.
      */
@@ -108,7 +111,7 @@ public final class VirtualMachineExtensionInstanceView {
 
     /**
      * Get the substatuses property: The resource status information.
-     *
+     * 
      * @return the substatuses value.
      */
     public List<InstanceViewStatus> substatuses() {
@@ -117,7 +120,7 @@ public final class VirtualMachineExtensionInstanceView {
 
     /**
      * Set the substatuses property: The resource status information.
-     *
+     * 
      * @param substatuses the substatuses value to set.
      * @return the VirtualMachineExtensionInstanceView object itself.
      */
@@ -128,7 +131,7 @@ public final class VirtualMachineExtensionInstanceView {
 
     /**
      * Get the statuses property: The resource status information.
-     *
+     * 
      * @return the statuses value.
      */
     public List<InstanceViewStatus> statuses() {
@@ -137,7 +140,7 @@ public final class VirtualMachineExtensionInstanceView {
 
     /**
      * Set the statuses property: The resource status information.
-     *
+     * 
      * @param statuses the statuses value to set.
      * @return the VirtualMachineExtensionInstanceView object itself.
      */
@@ -148,7 +151,7 @@ public final class VirtualMachineExtensionInstanceView {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

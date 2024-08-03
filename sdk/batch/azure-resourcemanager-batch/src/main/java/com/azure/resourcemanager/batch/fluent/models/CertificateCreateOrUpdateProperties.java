@@ -8,31 +8,40 @@ import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.batch.models.CertificateBaseProperties;
 import com.azure.resourcemanager.batch.models.CertificateFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Certificate properties for create operations. */
+/**
+ * Certificate properties for create operations.
+ */
 @Fluent
 public final class CertificateCreateOrUpdateProperties extends CertificateBaseProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CertificateCreateOrUpdateProperties.class);
-
     /*
-     * The base64-encoded contents of the certificate. The maximum size is
-     * 10KB.
+     * The base64-encoded contents of the certificate.
+     * 
+     * The maximum size is 10KB.
      */
     @JsonProperty(value = "data", required = true)
     private String data;
 
     /*
-     * The password to access the certificate's private key. This must not be
-     * specified if the certificate format is Cer.
+     * The password to access the certificate's private key.
+     * 
+     * This must not be specified if the certificate format is Cer.
      */
     @JsonProperty(value = "password")
     private String password;
 
     /**
-     * Get the data property: The base64-encoded contents of the certificate. The maximum size is 10KB.
-     *
+     * Creates an instance of CertificateCreateOrUpdateProperties class.
+     */
+    public CertificateCreateOrUpdateProperties() {
+    }
+
+    /**
+     * Get the data property: The base64-encoded contents of the certificate.
+     * 
+     * The maximum size is 10KB.
+     * 
      * @return the data value.
      */
     public String data() {
@@ -40,8 +49,10 @@ public final class CertificateCreateOrUpdateProperties extends CertificateBasePr
     }
 
     /**
-     * Set the data property: The base64-encoded contents of the certificate. The maximum size is 10KB.
-     *
+     * Set the data property: The base64-encoded contents of the certificate.
+     * 
+     * The maximum size is 10KB.
+     * 
      * @param data the data value to set.
      * @return the CertificateCreateOrUpdateProperties object itself.
      */
@@ -51,9 +62,10 @@ public final class CertificateCreateOrUpdateProperties extends CertificateBasePr
     }
 
     /**
-     * Get the password property: The password to access the certificate's private key. This must not be specified if
-     * the certificate format is Cer.
-     *
+     * Get the password property: The password to access the certificate's private key.
+     * 
+     * This must not be specified if the certificate format is Cer.
+     * 
      * @return the password value.
      */
     public String password() {
@@ -61,9 +73,10 @@ public final class CertificateCreateOrUpdateProperties extends CertificateBasePr
     }
 
     /**
-     * Set the password property: The password to access the certificate's private key. This must not be specified if
-     * the certificate format is Cer.
-     *
+     * Set the password property: The password to access the certificate's private key.
+     * 
+     * This must not be specified if the certificate format is Cer.
+     * 
      * @param password the password value to set.
      * @return the CertificateCreateOrUpdateProperties object itself.
      */
@@ -72,21 +85,27 @@ public final class CertificateCreateOrUpdateProperties extends CertificateBasePr
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CertificateCreateOrUpdateProperties withThumbprintAlgorithm(String thumbprintAlgorithm) {
         super.withThumbprintAlgorithm(thumbprintAlgorithm);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CertificateCreateOrUpdateProperties withThumbprint(String thumbprint) {
         super.withThumbprint(thumbprint);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CertificateCreateOrUpdateProperties withFormat(CertificateFormat format) {
         super.withFormat(format);
@@ -95,17 +114,17 @@ public final class CertificateCreateOrUpdateProperties extends CertificateBasePr
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
         if (data() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property data in model CertificateCreateOrUpdateProperties"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property data in model CertificateCreateOrUpdateProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(CertificateCreateOrUpdateProperties.class);
 }

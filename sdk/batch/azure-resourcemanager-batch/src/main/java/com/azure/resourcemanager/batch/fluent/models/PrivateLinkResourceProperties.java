@@ -5,26 +5,24 @@
 package com.azure.resourcemanager.batch.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Private link resource properties. */
+/**
+ * Private link resource properties.
+ */
 @Immutable
 public final class PrivateLinkResourceProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PrivateLinkResourceProperties.class);
-
     /*
-     * The group id of the private link resource. The group id is used to
-     * establish the private link connection.
+     * The group id of the private link resource.
+     * 
+     * The group id is used to establish the private link connection.
      */
     @JsonProperty(value = "groupId", access = JsonProperty.Access.WRITE_ONLY)
     private String groupId;
 
     /*
-     * The list of required members that are used to establish the private link
-     * connection.
+     * The list of required members that are used to establish the private link connection.
      */
     @JsonProperty(value = "requiredMembers", access = JsonProperty.Access.WRITE_ONLY)
     private List<String> requiredMembers;
@@ -36,9 +34,16 @@ public final class PrivateLinkResourceProperties {
     private List<String> requiredZoneNames;
 
     /**
-     * Get the groupId property: The group id of the private link resource. The group id is used to establish the
-     * private link connection.
-     *
+     * Creates an instance of PrivateLinkResourceProperties class.
+     */
+    public PrivateLinkResourceProperties() {
+    }
+
+    /**
+     * Get the groupId property: The group id of the private link resource.
+     * 
+     * The group id is used to establish the private link connection.
+     * 
      * @return the groupId value.
      */
     public String groupId() {
@@ -48,7 +53,7 @@ public final class PrivateLinkResourceProperties {
     /**
      * Get the requiredMembers property: The list of required members that are used to establish the private link
      * connection.
-     *
+     * 
      * @return the requiredMembers value.
      */
     public List<String> requiredMembers() {
@@ -57,7 +62,7 @@ public final class PrivateLinkResourceProperties {
 
     /**
      * Get the requiredZoneNames property: The list of required zone names for the private DNS resource name.
-     *
+     * 
      * @return the requiredZoneNames value.
      */
     public List<String> requiredZoneNames() {
@@ -66,7 +71,7 @@ public final class PrivateLinkResourceProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

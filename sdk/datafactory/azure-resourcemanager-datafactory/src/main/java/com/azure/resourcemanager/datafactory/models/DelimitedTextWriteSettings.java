@@ -6,52 +6,76 @@ package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** Delimited text write settings. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * Delimited text write settings.
+ */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "type",
+    defaultImpl = DelimitedTextWriteSettings.class,
+    visible = true)
 @JsonTypeName("DelimitedTextWriteSettings")
 @Fluent
 public final class DelimitedTextWriteSettings extends FormatWriteSettings {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DelimitedTextWriteSettings.class);
+    /*
+     * The write setting type.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "DelimitedTextWriteSettings";
 
     /*
-     * Indicates whether string values should always be enclosed with quotes.
-     * Type: boolean (or Expression with resultType boolean).
+     * Indicates whether string values should always be enclosed with quotes. Type: boolean (or Expression with
+     * resultType boolean).
      */
     @JsonProperty(value = "quoteAllText")
     private Object quoteAllText;
 
     /*
-     * The file extension used to create the files. Type: string (or Expression
-     * with resultType string).
+     * The file extension used to create the files. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "fileExtension", required = true)
     private Object fileExtension;
 
     /*
-     * Limit the written file's row count to be smaller than or equal to the
-     * specified count. Type: integer (or Expression with resultType integer).
+     * Limit the written file's row count to be smaller than or equal to the specified count. Type: integer (or
+     * Expression with resultType integer).
      */
     @JsonProperty(value = "maxRowsPerFile")
     private Object maxRowsPerFile;
 
     /*
-     * Specifies the file name pattern
-     * <fileNamePrefix>_<fileIndex>.<fileExtension> when copy from non-file
-     * based store without partitionOptions. Type: string (or Expression with
-     * resultType string).
+     * Specifies the file name pattern <fileNamePrefix>_<fileIndex>.<fileExtension> when copy from non-file based store
+     * without partitionOptions. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "fileNamePrefix")
     private Object fileNamePrefix;
 
     /**
+     * Creates an instance of DelimitedTextWriteSettings class.
+     */
+    public DelimitedTextWriteSettings() {
+    }
+
+    /**
+     * Get the type property: The write setting type.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the quoteAllText property: Indicates whether string values should always be enclosed with quotes. Type:
      * boolean (or Expression with resultType boolean).
-     *
+     * 
      * @return the quoteAllText value.
      */
     public Object quoteAllText() {
@@ -61,7 +85,7 @@ public final class DelimitedTextWriteSettings extends FormatWriteSettings {
     /**
      * Set the quoteAllText property: Indicates whether string values should always be enclosed with quotes. Type:
      * boolean (or Expression with resultType boolean).
-     *
+     * 
      * @param quoteAllText the quoteAllText value to set.
      * @return the DelimitedTextWriteSettings object itself.
      */
@@ -73,7 +97,7 @@ public final class DelimitedTextWriteSettings extends FormatWriteSettings {
     /**
      * Get the fileExtension property: The file extension used to create the files. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the fileExtension value.
      */
     public Object fileExtension() {
@@ -83,7 +107,7 @@ public final class DelimitedTextWriteSettings extends FormatWriteSettings {
     /**
      * Set the fileExtension property: The file extension used to create the files. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param fileExtension the fileExtension value to set.
      * @return the DelimitedTextWriteSettings object itself.
      */
@@ -95,7 +119,7 @@ public final class DelimitedTextWriteSettings extends FormatWriteSettings {
     /**
      * Get the maxRowsPerFile property: Limit the written file's row count to be smaller than or equal to the specified
      * count. Type: integer (or Expression with resultType integer).
-     *
+     * 
      * @return the maxRowsPerFile value.
      */
     public Object maxRowsPerFile() {
@@ -105,7 +129,7 @@ public final class DelimitedTextWriteSettings extends FormatWriteSettings {
     /**
      * Set the maxRowsPerFile property: Limit the written file's row count to be smaller than or equal to the specified
      * count. Type: integer (or Expression with resultType integer).
-     *
+     * 
      * @param maxRowsPerFile the maxRowsPerFile value to set.
      * @return the DelimitedTextWriteSettings object itself.
      */
@@ -118,7 +142,7 @@ public final class DelimitedTextWriteSettings extends FormatWriteSettings {
      * Get the fileNamePrefix property: Specifies the file name pattern
      * &lt;fileNamePrefix&gt;_&lt;fileIndex&gt;.&lt;fileExtension&gt; when copy from non-file based store without
      * partitionOptions. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the fileNamePrefix value.
      */
     public Object fileNamePrefix() {
@@ -129,7 +153,7 @@ public final class DelimitedTextWriteSettings extends FormatWriteSettings {
      * Set the fileNamePrefix property: Specifies the file name pattern
      * &lt;fileNamePrefix&gt;_&lt;fileIndex&gt;.&lt;fileExtension&gt; when copy from non-file based store without
      * partitionOptions. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param fileNamePrefix the fileNamePrefix value to set.
      * @return the DelimitedTextWriteSettings object itself.
      */
@@ -140,17 +164,18 @@ public final class DelimitedTextWriteSettings extends FormatWriteSettings {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
         if (fileExtension() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property fileExtension in model DelimitedTextWriteSettings"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property fileExtension in model DelimitedTextWriteSettings"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(DelimitedTextWriteSettings.class);
 }

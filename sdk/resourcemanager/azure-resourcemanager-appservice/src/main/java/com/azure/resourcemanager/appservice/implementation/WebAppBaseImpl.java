@@ -43,6 +43,7 @@ import com.azure.resourcemanager.appservice.models.NetFrameworkVersion;
 import com.azure.resourcemanager.appservice.models.OperatingSystem;
 import com.azure.resourcemanager.appservice.models.PhpVersion;
 import com.azure.resourcemanager.appservice.models.PlatformArchitecture;
+import com.azure.resourcemanager.appservice.models.PublicNetworkAccess;
 import com.azure.resourcemanager.appservice.models.PythonVersion;
 import com.azure.resourcemanager.appservice.models.RedundancyMode;
 import com.azure.resourcemanager.appservice.models.RemoteVisualStudioVersion;
@@ -1146,7 +1147,7 @@ abstract class WebAppBaseImpl<FluentT extends WebAppBase, FluentImplT extends We
     @SuppressWarnings("unchecked")
     public FluentImplT withManagedHostnameBindings(AppServiceDomain domain, String... hostnames) {
         for (String hostname : hostnames) {
-            if (hostname.equals("@") || hostname.equalsIgnoreCase(domain.name())) {
+            if ("@".equals(hostname) || hostname.equalsIgnoreCase(domain.name())) {
                 defineHostnameBinding()
                     .withAzureManagedDomain(domain)
                     .withSubDomain(hostname)
@@ -1832,6 +1833,38 @@ abstract class WebAppBaseImpl<FluentT extends WebAppBase, FluentImplT extends We
                 .collect(Collectors.toList())
             );
         }
+        return (FluentImplT) this;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public FluentImplT enablePublicNetworkAccess() {
+        if (Objects.isNull(this.siteConfig)) {
+            this.siteConfig = new SiteConfigResourceInner();
+        }
+        this.siteConfig.withPublicNetworkAccess("Enabled");
+        return (FluentImplT) this;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public FluentImplT disablePublicNetworkAccess() {
+        if (Objects.isNull(this.siteConfig)) {
+            this.siteConfig = new SiteConfigResourceInner();
+        }
+        this.siteConfig.withPublicNetworkAccess("Disabled");
+        return (FluentImplT) this;
+    }
+
+    @Override
+    public PublicNetworkAccess publicNetworkAccess() {
+        return Objects.isNull(innerModel().publicNetworkAccess()) ? null : PublicNetworkAccess.fromString(innerModel().publicNetworkAccess());
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public FluentImplT withContainerSize(int containerSize) {
+        this.innerModel().withContainerSize(containerSize);
         return (FluentImplT) this;
     }
 

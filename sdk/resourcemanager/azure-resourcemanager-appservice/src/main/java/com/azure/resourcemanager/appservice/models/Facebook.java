@@ -5,25 +5,21 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The configuration settings of the Facebook provider. */
+/**
+ * The configuration settings of the Facebook provider.
+ */
 @Fluent
 public final class Facebook {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Facebook.class);
-
     /*
-     * <code>false</code> if the Facebook provider should not be enabled
-     * despite the set registration; otherwise, <code>true</code>.
+     * <code>false</code> if the Facebook provider should not be enabled despite the set registration; otherwise, <code>true</code>.
      */
     @JsonProperty(value = "enabled")
     private Boolean enabled;
 
     /*
-     * The configuration settings of the app registration for the Facebook
-     * provider.
+     * The configuration settings of the app registration for the Facebook provider.
      */
     @JsonProperty(value = "registration")
     private AppRegistration registration;
@@ -41,9 +37,15 @@ public final class Facebook {
     private LoginScopes login;
 
     /**
+     * Creates an instance of Facebook class.
+     */
+    public Facebook() {
+    }
+
+    /**
      * Get the enabled property: &lt;code&gt;false&lt;/code&gt; if the Facebook provider should not be enabled despite
      * the set registration; otherwise, &lt;code&gt;true&lt;/code&gt;.
-     *
+     * 
      * @return the enabled value.
      */
     public Boolean enabled() {
@@ -53,7 +55,7 @@ public final class Facebook {
     /**
      * Set the enabled property: &lt;code&gt;false&lt;/code&gt; if the Facebook provider should not be enabled despite
      * the set registration; otherwise, &lt;code&gt;true&lt;/code&gt;.
-     *
+     * 
      * @param enabled the enabled value to set.
      * @return the Facebook object itself.
      */
@@ -64,7 +66,7 @@ public final class Facebook {
 
     /**
      * Get the registration property: The configuration settings of the app registration for the Facebook provider.
-     *
+     * 
      * @return the registration value.
      */
     public AppRegistration registration() {
@@ -73,7 +75,7 @@ public final class Facebook {
 
     /**
      * Set the registration property: The configuration settings of the app registration for the Facebook provider.
-     *
+     * 
      * @param registration the registration value to set.
      * @return the Facebook object itself.
      */
@@ -84,7 +86,7 @@ public final class Facebook {
 
     /**
      * Get the graphApiVersion property: The version of the Facebook api to be used while logging in.
-     *
+     * 
      * @return the graphApiVersion value.
      */
     public String graphApiVersion() {
@@ -93,7 +95,7 @@ public final class Facebook {
 
     /**
      * Set the graphApiVersion property: The version of the Facebook api to be used while logging in.
-     *
+     * 
      * @param graphApiVersion the graphApiVersion value to set.
      * @return the Facebook object itself.
      */
@@ -104,7 +106,7 @@ public final class Facebook {
 
     /**
      * Get the login property: The configuration settings of the login flow.
-     *
+     * 
      * @return the login value.
      */
     public LoginScopes login() {
@@ -113,7 +115,7 @@ public final class Facebook {
 
     /**
      * Set the login property: The configuration settings of the login flow.
-     *
+     * 
      * @param login the login value to set.
      * @return the Facebook object itself.
      */
@@ -124,7 +126,7 @@ public final class Facebook {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

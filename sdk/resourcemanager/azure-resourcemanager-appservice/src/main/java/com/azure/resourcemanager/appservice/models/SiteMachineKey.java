@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** MachineKey of an app. */
+/**
+ * MachineKey of an app.
+ */
 @Fluent
 public final class SiteMachineKey {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SiteMachineKey.class);
-
     /*
      * MachineKey validation.
      */
@@ -39,8 +37,14 @@ public final class SiteMachineKey {
     private String decryptionKey;
 
     /**
+     * Creates an instance of SiteMachineKey class.
+     */
+    public SiteMachineKey() {
+    }
+
+    /**
      * Get the validation property: MachineKey validation.
-     *
+     * 
      * @return the validation value.
      */
     public String validation() {
@@ -49,7 +53,7 @@ public final class SiteMachineKey {
 
     /**
      * Set the validation property: MachineKey validation.
-     *
+     * 
      * @param validation the validation value to set.
      * @return the SiteMachineKey object itself.
      */
@@ -60,7 +64,7 @@ public final class SiteMachineKey {
 
     /**
      * Get the validationKey property: Validation key.
-     *
+     * 
      * @return the validationKey value.
      */
     public String validationKey() {
@@ -69,7 +73,7 @@ public final class SiteMachineKey {
 
     /**
      * Set the validationKey property: Validation key.
-     *
+     * 
      * @param validationKey the validationKey value to set.
      * @return the SiteMachineKey object itself.
      */
@@ -80,7 +84,7 @@ public final class SiteMachineKey {
 
     /**
      * Get the decryption property: Algorithm used for decryption.
-     *
+     * 
      * @return the decryption value.
      */
     public String decryption() {
@@ -89,7 +93,7 @@ public final class SiteMachineKey {
 
     /**
      * Set the decryption property: Algorithm used for decryption.
-     *
+     * 
      * @param decryption the decryption value to set.
      * @return the SiteMachineKey object itself.
      */
@@ -100,7 +104,7 @@ public final class SiteMachineKey {
 
     /**
      * Get the decryptionKey property: Decryption key.
-     *
+     * 
      * @return the decryptionKey value.
      */
     public String decryptionKey() {
@@ -109,7 +113,7 @@ public final class SiteMachineKey {
 
     /**
      * Set the decryptionKey property: Decryption key.
-     *
+     * 
      * @param decryptionKey the decryptionKey value to set.
      * @return the SiteMachineKey object itself.
      */
@@ -120,7 +124,7 @@ public final class SiteMachineKey {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

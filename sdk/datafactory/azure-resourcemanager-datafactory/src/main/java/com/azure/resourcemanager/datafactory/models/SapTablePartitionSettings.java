@@ -5,49 +5,51 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The settings that will be leveraged for SAP table source partitioning. */
+/**
+ * The settings that will be leveraged for SAP table source partitioning.
+ */
 @Fluent
 public final class SapTablePartitionSettings {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SapTablePartitionSettings.class);
-
     /*
-     * The name of the column that will be used for proceeding range
-     * partitioning. Type: string (or Expression with resultType string).
+     * The name of the column that will be used for proceeding range partitioning. Type: string (or Expression with
+     * resultType string).
      */
     @JsonProperty(value = "partitionColumnName")
     private Object partitionColumnName;
 
     /*
-     * The maximum value of column specified in partitionColumnName that will
-     * be used for proceeding range partitioning. Type: string (or Expression
-     * with resultType string).
+     * The maximum value of column specified in partitionColumnName that will be used for proceeding range partitioning.
+     * Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "partitionUpperBound")
     private Object partitionUpperBound;
 
     /*
-     * The minimum value of column specified in partitionColumnName that will
-     * be used for proceeding range partitioning. Type: string (or Expression
-     * with resultType string).
+     * The minimum value of column specified in partitionColumnName that will be used for proceeding range partitioning.
+     * Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "partitionLowerBound")
     private Object partitionLowerBound;
 
     /*
-     * The maximum value of partitions the table will be split into. Type:
-     * integer (or Expression with resultType string).
+     * The maximum value of partitions the table will be split into. Type: integer (or Expression with resultType
+     * string).
      */
     @JsonProperty(value = "maxPartitionsNumber")
     private Object maxPartitionsNumber;
 
     /**
+     * Creates an instance of SapTablePartitionSettings class.
+     */
+    public SapTablePartitionSettings() {
+    }
+
+    /**
      * Get the partitionColumnName property: The name of the column that will be used for proceeding range partitioning.
      * Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the partitionColumnName value.
      */
     public Object partitionColumnName() {
@@ -57,7 +59,7 @@ public final class SapTablePartitionSettings {
     /**
      * Set the partitionColumnName property: The name of the column that will be used for proceeding range partitioning.
      * Type: string (or Expression with resultType string).
-     *
+     * 
      * @param partitionColumnName the partitionColumnName value to set.
      * @return the SapTablePartitionSettings object itself.
      */
@@ -69,7 +71,7 @@ public final class SapTablePartitionSettings {
     /**
      * Get the partitionUpperBound property: The maximum value of column specified in partitionColumnName that will be
      * used for proceeding range partitioning. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the partitionUpperBound value.
      */
     public Object partitionUpperBound() {
@@ -79,7 +81,7 @@ public final class SapTablePartitionSettings {
     /**
      * Set the partitionUpperBound property: The maximum value of column specified in partitionColumnName that will be
      * used for proceeding range partitioning. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param partitionUpperBound the partitionUpperBound value to set.
      * @return the SapTablePartitionSettings object itself.
      */
@@ -91,7 +93,7 @@ public final class SapTablePartitionSettings {
     /**
      * Get the partitionLowerBound property: The minimum value of column specified in partitionColumnName that will be
      * used for proceeding range partitioning. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the partitionLowerBound value.
      */
     public Object partitionLowerBound() {
@@ -101,7 +103,7 @@ public final class SapTablePartitionSettings {
     /**
      * Set the partitionLowerBound property: The minimum value of column specified in partitionColumnName that will be
      * used for proceeding range partitioning. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param partitionLowerBound the partitionLowerBound value to set.
      * @return the SapTablePartitionSettings object itself.
      */
@@ -113,7 +115,7 @@ public final class SapTablePartitionSettings {
     /**
      * Get the maxPartitionsNumber property: The maximum value of partitions the table will be split into. Type: integer
      * (or Expression with resultType string).
-     *
+     * 
      * @return the maxPartitionsNumber value.
      */
     public Object maxPartitionsNumber() {
@@ -123,7 +125,7 @@ public final class SapTablePartitionSettings {
     /**
      * Set the maxPartitionsNumber property: The maximum value of partitions the table will be split into. Type: integer
      * (or Expression with resultType string).
-     *
+     * 
      * @param maxPartitionsNumber the maxPartitionsNumber value to set.
      * @return the SapTablePartitionSettings object itself.
      */
@@ -134,7 +136,7 @@ public final class SapTablePartitionSettings {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -5,18 +5,15 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** GitHub Actions Web App stack settings. */
+/**
+ * GitHub Actions Web App stack settings.
+ */
 @Immutable
 public final class GitHubActionWebAppStackSettings {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GitHubActionWebAppStackSettings.class);
-
     /*
-     * <code>true</code> if GitHub Actions is supported for the stack;
-     * otherwise, <code>false</code>.
+     * <code>true</code> if GitHub Actions is supported for the stack; otherwise, <code>false</code>.
      */
     @JsonProperty(value = "isSupported", access = JsonProperty.Access.WRITE_ONLY)
     private Boolean isSupported;
@@ -28,9 +25,15 @@ public final class GitHubActionWebAppStackSettings {
     private String supportedVersion;
 
     /**
+     * Creates an instance of GitHubActionWebAppStackSettings class.
+     */
+    public GitHubActionWebAppStackSettings() {
+    }
+
+    /**
      * Get the isSupported property: &lt;code&gt;true&lt;/code&gt; if GitHub Actions is supported for the stack;
      * otherwise, &lt;code&gt;false&lt;/code&gt;.
-     *
+     * 
      * @return the isSupported value.
      */
     public Boolean isSupported() {
@@ -39,7 +42,7 @@ public final class GitHubActionWebAppStackSettings {
 
     /**
      * Get the supportedVersion property: The minor version that is supported for GitHub Actions.
-     *
+     * 
      * @return the supportedVersion value.
      */
     public String supportedVersion() {
@@ -48,7 +51,7 @@ public final class GitHubActionWebAppStackSettings {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -5,17 +5,14 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The endpoint for Azure-SSIS integration runtime outbound network dependency. */
+/**
+ * The endpoint for Azure-SSIS integration runtime outbound network dependency.
+ */
 @Fluent
 public final class IntegrationRuntimeOutboundNetworkDependenciesEndpoint {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(IntegrationRuntimeOutboundNetworkDependenciesEndpoint.class);
-
     /*
      * The domain name of endpoint.
      */
@@ -29,8 +26,14 @@ public final class IntegrationRuntimeOutboundNetworkDependenciesEndpoint {
     private List<IntegrationRuntimeOutboundNetworkDependenciesEndpointDetails> endpointDetails;
 
     /**
+     * Creates an instance of IntegrationRuntimeOutboundNetworkDependenciesEndpoint class.
+     */
+    public IntegrationRuntimeOutboundNetworkDependenciesEndpoint() {
+    }
+
+    /**
      * Get the domainName property: The domain name of endpoint.
-     *
+     * 
      * @return the domainName value.
      */
     public String domainName() {
@@ -39,7 +42,7 @@ public final class IntegrationRuntimeOutboundNetworkDependenciesEndpoint {
 
     /**
      * Set the domainName property: The domain name of endpoint.
-     *
+     * 
      * @param domainName the domainName value to set.
      * @return the IntegrationRuntimeOutboundNetworkDependenciesEndpoint object itself.
      */
@@ -50,7 +53,7 @@ public final class IntegrationRuntimeOutboundNetworkDependenciesEndpoint {
 
     /**
      * Get the endpointDetails property: The details of endpoint.
-     *
+     * 
      * @return the endpointDetails value.
      */
     public List<IntegrationRuntimeOutboundNetworkDependenciesEndpointDetails> endpointDetails() {
@@ -59,19 +62,19 @@ public final class IntegrationRuntimeOutboundNetworkDependenciesEndpoint {
 
     /**
      * Set the endpointDetails property: The details of endpoint.
-     *
+     * 
      * @param endpointDetails the endpointDetails value to set.
      * @return the IntegrationRuntimeOutboundNetworkDependenciesEndpoint object itself.
      */
-    public IntegrationRuntimeOutboundNetworkDependenciesEndpoint withEndpointDetails(
-        List<IntegrationRuntimeOutboundNetworkDependenciesEndpointDetails> endpointDetails) {
+    public IntegrationRuntimeOutboundNetworkDependenciesEndpoint
+        withEndpointDetails(List<IntegrationRuntimeOutboundNetworkDependenciesEndpointDetails> endpointDetails) {
         this.endpointDetails = endpointDetails;
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

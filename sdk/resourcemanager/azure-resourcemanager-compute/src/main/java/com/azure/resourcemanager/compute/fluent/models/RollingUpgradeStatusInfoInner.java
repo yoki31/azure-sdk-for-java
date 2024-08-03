@@ -6,20 +6,18 @@ package com.azure.resourcemanager.compute.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.Resource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.compute.models.ApiError;
 import com.azure.resourcemanager.compute.models.RollingUpgradePolicy;
 import com.azure.resourcemanager.compute.models.RollingUpgradeProgressInfo;
 import com.azure.resourcemanager.compute.models.RollingUpgradeRunningStatus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** The status of the latest virtual machine scale set rolling upgrade. */
+/**
+ * The status of the latest virtual machine scale set rolling upgrade.
+ */
 @Fluent
 public final class RollingUpgradeStatusInfoInner extends Resource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RollingUpgradeStatusInfoInner.class);
-
     /*
      * The status of the latest virtual machine scale set rolling upgrade.
      */
@@ -27,22 +25,32 @@ public final class RollingUpgradeStatusInfoInner extends Resource {
     private RollingUpgradeStatusInfoProperties innerProperties;
 
     /**
+     * Creates an instance of RollingUpgradeStatusInfoInner class.
+     */
+    public RollingUpgradeStatusInfoInner() {
+    }
+
+    /**
      * Get the innerProperties property: The status of the latest virtual machine scale set rolling upgrade.
-     *
+     * 
      * @return the innerProperties value.
      */
     private RollingUpgradeStatusInfoProperties innerProperties() {
         return this.innerProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RollingUpgradeStatusInfoInner withLocation(String location) {
         super.withLocation(location);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public RollingUpgradeStatusInfoInner withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -51,7 +59,7 @@ public final class RollingUpgradeStatusInfoInner extends Resource {
 
     /**
      * Get the policy property: The rolling upgrade policies applied for this upgrade.
-     *
+     * 
      * @return the policy value.
      */
     public RollingUpgradePolicy policy() {
@@ -60,7 +68,7 @@ public final class RollingUpgradeStatusInfoInner extends Resource {
 
     /**
      * Get the runningStatus property: Information about the current running state of the overall upgrade.
-     *
+     * 
      * @return the runningStatus value.
      */
     public RollingUpgradeRunningStatus runningStatus() {
@@ -69,7 +77,7 @@ public final class RollingUpgradeStatusInfoInner extends Resource {
 
     /**
      * Get the progress property: Information about the number of virtual machine instances in each upgrade state.
-     *
+     * 
      * @return the progress value.
      */
     public RollingUpgradeProgressInfo progress() {
@@ -78,7 +86,7 @@ public final class RollingUpgradeStatusInfoInner extends Resource {
 
     /**
      * Get the error property: Error details for this upgrade, if there are any.
-     *
+     * 
      * @return the error value.
      */
     public ApiError error() {
@@ -87,7 +95,7 @@ public final class RollingUpgradeStatusInfoInner extends Resource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

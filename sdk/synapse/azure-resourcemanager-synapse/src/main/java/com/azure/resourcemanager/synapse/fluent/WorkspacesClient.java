@@ -23,7 +23,7 @@ public interface WorkspacesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of workspaces.
+     * @return list of workspaces as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<WorkspaceInner> listByResourceGroup(String resourceGroupName);
@@ -36,10 +36,25 @@ public interface WorkspacesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of workspaces.
+     * @return list of workspaces as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<WorkspaceInner> listByResourceGroup(String resourceGroupName, Context context);
+
+    /**
+     * Gets a workspace.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a workspace along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<WorkspaceInner> getByResourceGroupWithResponse(
+        String resourceGroupName, String workspaceName, Context context);
 
     /**
      * Gets a workspace.
@@ -55,21 +70,6 @@ public interface WorkspacesClient {
     WorkspaceInner getByResourceGroup(String resourceGroupName, String workspaceName);
 
     /**
-     * Gets a workspace.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a workspace.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<WorkspaceInner> getByResourceGroupWithResponse(
-        String resourceGroupName, String workspaceName, Context context);
-
-    /**
      * Updates a workspace.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -78,7 +78,7 @@ public interface WorkspacesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a workspace.
+     * @return the {@link SyncPoller} for polling of a workspace.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<WorkspaceInner>, WorkspaceInner> beginUpdate(
@@ -94,7 +94,7 @@ public interface WorkspacesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a workspace.
+     * @return the {@link SyncPoller} for polling of a workspace.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<WorkspaceInner>, WorkspaceInner> beginUpdate(
@@ -139,7 +139,7 @@ public interface WorkspacesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a workspace.
+     * @return the {@link SyncPoller} for polling of a workspace.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<WorkspaceInner>, WorkspaceInner> beginCreateOrUpdate(
@@ -155,7 +155,7 @@ public interface WorkspacesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a workspace.
+     * @return the {@link SyncPoller} for polling of a workspace.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<WorkspaceInner>, WorkspaceInner> beginCreateOrUpdate(
@@ -199,10 +199,10 @@ public interface WorkspacesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return any object.
+     * @return the {@link SyncPoller} for polling of a workspace.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<Object>, Object> beginDelete(String resourceGroupName, String workspaceName);
+    SyncPoller<PollResult<WorkspaceInner>, WorkspaceInner> beginDelete(String resourceGroupName, String workspaceName);
 
     /**
      * Deletes a workspace.
@@ -213,10 +213,11 @@ public interface WorkspacesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return any object.
+     * @return the {@link SyncPoller} for polling of a workspace.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
-    SyncPoller<PollResult<Object>, Object> beginDelete(String resourceGroupName, String workspaceName, Context context);
+    SyncPoller<PollResult<WorkspaceInner>, WorkspaceInner> beginDelete(
+        String resourceGroupName, String workspaceName, Context context);
 
     /**
      * Deletes a workspace.
@@ -226,10 +227,10 @@ public interface WorkspacesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return any object.
+     * @return a workspace.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Object delete(String resourceGroupName, String workspaceName);
+    WorkspaceInner delete(String resourceGroupName, String workspaceName);
 
     /**
      * Deletes a workspace.
@@ -240,17 +241,17 @@ public interface WorkspacesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return any object.
+     * @return a workspace.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Object delete(String resourceGroupName, String workspaceName, Context context);
+    WorkspaceInner delete(String resourceGroupName, String workspaceName, Context context);
 
     /**
      * Returns a list of workspaces in a subscription.
      *
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of workspaces.
+     * @return list of workspaces as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<WorkspaceInner> list();
@@ -262,7 +263,7 @@ public interface WorkspacesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of workspaces.
+     * @return list of workspaces as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<WorkspaceInner> list(Context context);

@@ -5,26 +5,29 @@
 package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Sharepoint online list dataset properties. */
+/**
+ * Sharepoint online list dataset properties.
+ */
 @Fluent
 public final class SharePointOnlineListDatasetTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SharePointOnlineListDatasetTypeProperties.class);
-
     /*
-     * The name of the SharePoint Online list. Type: string (or Expression with
-     * resultType string).
+     * The name of the SharePoint Online list. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "listName")
     private Object listName;
 
     /**
+     * Creates an instance of SharePointOnlineListDatasetTypeProperties class.
+     */
+    public SharePointOnlineListDatasetTypeProperties() {
+    }
+
+    /**
      * Get the listName property: The name of the SharePoint Online list. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @return the listName value.
      */
     public Object listName() {
@@ -34,7 +37,7 @@ public final class SharePointOnlineListDatasetTypeProperties {
     /**
      * Set the listName property: The name of the SharePoint Online list. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @param listName the listName value to set.
      * @return the SharePointOnlineListDatasetTypeProperties object itself.
      */
@@ -45,7 +48,7 @@ public final class SharePointOnlineListDatasetTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

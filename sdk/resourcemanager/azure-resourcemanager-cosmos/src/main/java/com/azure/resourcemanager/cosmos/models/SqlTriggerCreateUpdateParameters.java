@@ -7,20 +7,26 @@ package com.azure.resourcemanager.cosmos.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cosmos.fluent.models.SqlTriggerCreateUpdateProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Map;
 
-/** Parameters to create and update Cosmos DB trigger. */
+/**
+ * Parameters to create and update Cosmos DB trigger.
+ */
 @Fluent
 public final class SqlTriggerCreateUpdateParameters extends ArmResourceProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SqlTriggerCreateUpdateParameters.class);
-
     /*
      * Properties to create and update Azure Cosmos DB trigger.
      */
     @JsonProperty(value = "properties", required = true)
     private SqlTriggerCreateUpdateProperties innerProperties = new SqlTriggerCreateUpdateProperties();
+
+    /**
+     * Creates an instance of SqlTriggerCreateUpdateParameters class.
+     */
+    public SqlTriggerCreateUpdateParameters() {
+    }
 
     /**
      * Get the innerProperties property: Properties to create and update Azure Cosmos DB trigger.
@@ -31,14 +37,18 @@ public final class SqlTriggerCreateUpdateParameters extends ArmResourcePropertie
         return this.innerProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SqlTriggerCreateUpdateParameters withLocation(String location) {
         super.withLocation(location);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SqlTriggerCreateUpdateParameters withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -102,12 +112,13 @@ public final class SqlTriggerCreateUpdateParameters extends ArmResourcePropertie
     public void validate() {
         super.validate();
         if (innerProperties() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property innerProperties in model SqlTriggerCreateUpdateParameters"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property innerProperties in model SqlTriggerCreateUpdateParameters"));
         } else {
             innerProperties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(SqlTriggerCreateUpdateParameters.class);
 }

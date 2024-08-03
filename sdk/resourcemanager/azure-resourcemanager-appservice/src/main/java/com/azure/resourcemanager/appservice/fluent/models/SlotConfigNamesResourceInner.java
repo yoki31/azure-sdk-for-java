@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.ProxyOnlyResource;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Slot Config names azure resource. */
+/**
+ * Slot Config names azure resource.
+ */
 @Fluent
 public final class SlotConfigNamesResourceInner extends ProxyOnlyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SlotConfigNamesResourceInner.class);
-
     /*
      * Core resource properties
      */
@@ -23,15 +21,23 @@ public final class SlotConfigNamesResourceInner extends ProxyOnlyResource {
     private SlotConfigNames innerProperties;
 
     /**
+     * Creates an instance of SlotConfigNamesResourceInner class.
+     */
+    public SlotConfigNamesResourceInner() {
+    }
+
+    /**
      * Get the innerProperties property: Core resource properties.
-     *
+     * 
      * @return the innerProperties value.
      */
     private SlotConfigNames innerProperties() {
         return this.innerProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SlotConfigNamesResourceInner withKind(String kind) {
         super.withKind(kind);
@@ -40,7 +46,7 @@ public final class SlotConfigNamesResourceInner extends ProxyOnlyResource {
 
     /**
      * Get the connectionStringNames property: List of connection string names.
-     *
+     * 
      * @return the connectionStringNames value.
      */
     public List<String> connectionStringNames() {
@@ -49,7 +55,7 @@ public final class SlotConfigNamesResourceInner extends ProxyOnlyResource {
 
     /**
      * Set the connectionStringNames property: List of connection string names.
-     *
+     * 
      * @param connectionStringNames the connectionStringNames value to set.
      * @return the SlotConfigNamesResourceInner object itself.
      */
@@ -63,7 +69,7 @@ public final class SlotConfigNamesResourceInner extends ProxyOnlyResource {
 
     /**
      * Get the appSettingNames property: List of application settings names.
-     *
+     * 
      * @return the appSettingNames value.
      */
     public List<String> appSettingNames() {
@@ -72,7 +78,7 @@ public final class SlotConfigNamesResourceInner extends ProxyOnlyResource {
 
     /**
      * Set the appSettingNames property: List of application settings names.
-     *
+     * 
      * @param appSettingNames the appSettingNames value to set.
      * @return the SlotConfigNamesResourceInner object itself.
      */
@@ -86,7 +92,7 @@ public final class SlotConfigNamesResourceInner extends ProxyOnlyResource {
 
     /**
      * Get the azureStorageConfigNames property: List of external Azure storage account identifiers.
-     *
+     * 
      * @return the azureStorageConfigNames value.
      */
     public List<String> azureStorageConfigNames() {
@@ -95,7 +101,7 @@ public final class SlotConfigNamesResourceInner extends ProxyOnlyResource {
 
     /**
      * Set the azureStorageConfigNames property: List of external Azure storage account identifiers.
-     *
+     * 
      * @param azureStorageConfigNames the azureStorageConfigNames value to set.
      * @return the SlotConfigNamesResourceInner object itself.
      */
@@ -109,7 +115,7 @@ public final class SlotConfigNamesResourceInner extends ProxyOnlyResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

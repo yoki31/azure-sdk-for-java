@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** HybridConnection resource specific properties. */
+/**
+ * HybridConnection resource specific properties.
+ */
 @Fluent
 public final class HybridConnectionProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(HybridConnectionProperties.class);
-
     /*
      * The name of the Service Bus namespace.
      */
@@ -45,30 +43,33 @@ public final class HybridConnectionProperties {
     private Integer port;
 
     /*
-     * The name of the Service Bus key which has Send permissions. This is used
-     * to authenticate to Service Bus.
+     * The name of the Service Bus key which has Send permissions. This is used to authenticate to Service Bus.
      */
     @JsonProperty(value = "sendKeyName")
     private String sendKeyName;
 
     /*
-     * The value of the Service Bus key. This is used to authenticate to
-     * Service Bus. In ARM this key will not be returned
+     * The value of the Service Bus key. This is used to authenticate to Service Bus. In ARM this key will not be returned
      * normally, use the POST /listKeys API instead.
      */
     @JsonProperty(value = "sendKeyValue")
     private String sendKeyValue;
 
     /*
-     * The suffix for the service bus endpoint. By default this is
-     * .servicebus.windows.net
+     * The suffix for the service bus endpoint. By default this is .servicebus.windows.net
      */
     @JsonProperty(value = "serviceBusSuffix")
     private String serviceBusSuffix;
 
     /**
+     * Creates an instance of HybridConnectionProperties class.
+     */
+    public HybridConnectionProperties() {
+    }
+
+    /**
      * Get the serviceBusNamespace property: The name of the Service Bus namespace.
-     *
+     * 
      * @return the serviceBusNamespace value.
      */
     public String serviceBusNamespace() {
@@ -77,7 +78,7 @@ public final class HybridConnectionProperties {
 
     /**
      * Set the serviceBusNamespace property: The name of the Service Bus namespace.
-     *
+     * 
      * @param serviceBusNamespace the serviceBusNamespace value to set.
      * @return the HybridConnectionProperties object itself.
      */
@@ -88,7 +89,7 @@ public final class HybridConnectionProperties {
 
     /**
      * Get the relayName property: The name of the Service Bus relay.
-     *
+     * 
      * @return the relayName value.
      */
     public String relayName() {
@@ -97,7 +98,7 @@ public final class HybridConnectionProperties {
 
     /**
      * Set the relayName property: The name of the Service Bus relay.
-     *
+     * 
      * @param relayName the relayName value to set.
      * @return the HybridConnectionProperties object itself.
      */
@@ -108,7 +109,7 @@ public final class HybridConnectionProperties {
 
     /**
      * Get the relayArmUri property: The ARM URI to the Service Bus relay.
-     *
+     * 
      * @return the relayArmUri value.
      */
     public String relayArmUri() {
@@ -117,7 +118,7 @@ public final class HybridConnectionProperties {
 
     /**
      * Set the relayArmUri property: The ARM URI to the Service Bus relay.
-     *
+     * 
      * @param relayArmUri the relayArmUri value to set.
      * @return the HybridConnectionProperties object itself.
      */
@@ -128,7 +129,7 @@ public final class HybridConnectionProperties {
 
     /**
      * Get the hostname property: The hostname of the endpoint.
-     *
+     * 
      * @return the hostname value.
      */
     public String hostname() {
@@ -137,7 +138,7 @@ public final class HybridConnectionProperties {
 
     /**
      * Set the hostname property: The hostname of the endpoint.
-     *
+     * 
      * @param hostname the hostname value to set.
      * @return the HybridConnectionProperties object itself.
      */
@@ -148,7 +149,7 @@ public final class HybridConnectionProperties {
 
     /**
      * Get the port property: The port of the endpoint.
-     *
+     * 
      * @return the port value.
      */
     public Integer port() {
@@ -157,7 +158,7 @@ public final class HybridConnectionProperties {
 
     /**
      * Set the port property: The port of the endpoint.
-     *
+     * 
      * @param port the port value to set.
      * @return the HybridConnectionProperties object itself.
      */
@@ -169,7 +170,7 @@ public final class HybridConnectionProperties {
     /**
      * Get the sendKeyName property: The name of the Service Bus key which has Send permissions. This is used to
      * authenticate to Service Bus.
-     *
+     * 
      * @return the sendKeyName value.
      */
     public String sendKeyName() {
@@ -179,7 +180,7 @@ public final class HybridConnectionProperties {
     /**
      * Set the sendKeyName property: The name of the Service Bus key which has Send permissions. This is used to
      * authenticate to Service Bus.
-     *
+     * 
      * @param sendKeyName the sendKeyName value to set.
      * @return the HybridConnectionProperties object itself.
      */
@@ -190,8 +191,9 @@ public final class HybridConnectionProperties {
 
     /**
      * Get the sendKeyValue property: The value of the Service Bus key. This is used to authenticate to Service Bus. In
-     * ARM this key will not be returned normally, use the POST /listKeys API instead.
-     *
+     * ARM this key will not be returned
+     * normally, use the POST /listKeys API instead.
+     * 
      * @return the sendKeyValue value.
      */
     public String sendKeyValue() {
@@ -200,8 +202,9 @@ public final class HybridConnectionProperties {
 
     /**
      * Set the sendKeyValue property: The value of the Service Bus key. This is used to authenticate to Service Bus. In
-     * ARM this key will not be returned normally, use the POST /listKeys API instead.
-     *
+     * ARM this key will not be returned
+     * normally, use the POST /listKeys API instead.
+     * 
      * @param sendKeyValue the sendKeyValue value to set.
      * @return the HybridConnectionProperties object itself.
      */
@@ -213,7 +216,7 @@ public final class HybridConnectionProperties {
     /**
      * Get the serviceBusSuffix property: The suffix for the service bus endpoint. By default this is
      * .servicebus.windows.net.
-     *
+     * 
      * @return the serviceBusSuffix value.
      */
     public String serviceBusSuffix() {
@@ -223,7 +226,7 @@ public final class HybridConnectionProperties {
     /**
      * Set the serviceBusSuffix property: The suffix for the service bus endpoint. By default this is
      * .servicebus.windows.net.
-     *
+     * 
      * @param serviceBusSuffix the serviceBusSuffix value to set.
      * @return the HybridConnectionProperties object itself.
      */
@@ -234,7 +237,7 @@ public final class HybridConnectionProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

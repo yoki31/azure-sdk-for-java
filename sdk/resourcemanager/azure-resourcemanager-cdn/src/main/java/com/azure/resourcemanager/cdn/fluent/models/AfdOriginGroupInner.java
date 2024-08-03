@@ -5,74 +5,26 @@
 package com.azure.resourcemanager.cdn.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.core.management.SystemData;
 import com.azure.resourcemanager.cdn.models.AfdProvisioningState;
 import com.azure.resourcemanager.cdn.models.DeploymentStatus;
 import com.azure.resourcemanager.cdn.models.EnabledState;
 import com.azure.resourcemanager.cdn.models.HealthProbeParameters;
 import com.azure.resourcemanager.cdn.models.LoadBalancingSettingsParameters;
-import com.azure.resourcemanager.cdn.models.ResponseBasedOriginErrorDetectionParameters;
-import com.azure.resourcemanager.cdn.models.SystemData;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * AFDOrigin group comprising of origins is used for load balancing to origins when the content cannot be served from
- * CDN.
+ * Azure Front Door.
  */
-@JsonFlatten
 @Fluent
-public class AfdOriginGroupInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AfdOriginGroupInner.class);
-
+public final class AfdOriginGroupInner extends ProxyResource {
     /*
-     * Load balancing settings for a backend pool
+     * The JSON object that contains the properties of the origin group.
      */
-    @JsonProperty(value = "properties.loadBalancingSettings")
-    private LoadBalancingSettingsParameters loadBalancingSettings;
-
-    /*
-     * Health probe settings to the origin that is used to determine the health
-     * of the origin.
-     */
-    @JsonProperty(value = "properties.healthProbeSettings")
-    private HealthProbeParameters healthProbeSettings;
-
-    /*
-     * Time in minutes to shift the traffic to the endpoint gradually when an
-     * unhealthy endpoint comes healthy or a new endpoint is added. Default is
-     * 10 mins. This property is currently not supported.
-     */
-    @JsonProperty(value = "properties.trafficRestorationTimeToHealedOrNewEndpointsInMinutes")
-    private Integer trafficRestorationTimeToHealedOrNewEndpointsInMinutes;
-
-    /*
-     * The JSON object that contains the properties to determine origin health
-     * using real requests/responses. This property is currently not supported.
-     */
-    @JsonProperty(value = "properties.responseBasedAfdOriginErrorDetectionSettings")
-    private ResponseBasedOriginErrorDetectionParameters responseBasedAfdOriginErrorDetectionSettings;
-
-    /*
-     * Whether to allow session affinity on this host. Valid options are
-     * 'Enabled' or 'Disabled'
-     */
-    @JsonProperty(value = "properties.sessionAffinityState")
-    private EnabledState sessionAffinityState;
-
-    /*
-     * Provisioning status
-     */
-    @JsonProperty(value = "properties.provisioningState", access = JsonProperty.Access.WRITE_ONLY)
-    private AfdProvisioningState provisioningState;
-
-    /*
-     * The deploymentStatus property.
-     */
-    @JsonProperty(value = "properties.deploymentStatus", access = JsonProperty.Access.WRITE_ONLY)
-    private DeploymentStatus deploymentStatus;
+    @JsonProperty(value = "properties")
+    private AfdOriginGroupProperties innerProperties;
 
     /*
      * Read only system data
@@ -81,141 +33,23 @@ public class AfdOriginGroupInner extends ProxyResource {
     private SystemData systemData;
 
     /**
-     * Get the loadBalancingSettings property: Load balancing settings for a backend pool.
-     *
-     * @return the loadBalancingSettings value.
+     * Creates an instance of AfdOriginGroupInner class.
      */
-    public LoadBalancingSettingsParameters loadBalancingSettings() {
-        return this.loadBalancingSettings;
+    public AfdOriginGroupInner() {
     }
 
     /**
-     * Set the loadBalancingSettings property: Load balancing settings for a backend pool.
-     *
-     * @param loadBalancingSettings the loadBalancingSettings value to set.
-     * @return the AfdOriginGroupInner object itself.
+     * Get the innerProperties property: The JSON object that contains the properties of the origin group.
+     * 
+     * @return the innerProperties value.
      */
-    public AfdOriginGroupInner withLoadBalancingSettings(LoadBalancingSettingsParameters loadBalancingSettings) {
-        this.loadBalancingSettings = loadBalancingSettings;
-        return this;
-    }
-
-    /**
-     * Get the healthProbeSettings property: Health probe settings to the origin that is used to determine the health of
-     * the origin.
-     *
-     * @return the healthProbeSettings value.
-     */
-    public HealthProbeParameters healthProbeSettings() {
-        return this.healthProbeSettings;
-    }
-
-    /**
-     * Set the healthProbeSettings property: Health probe settings to the origin that is used to determine the health of
-     * the origin.
-     *
-     * @param healthProbeSettings the healthProbeSettings value to set.
-     * @return the AfdOriginGroupInner object itself.
-     */
-    public AfdOriginGroupInner withHealthProbeSettings(HealthProbeParameters healthProbeSettings) {
-        this.healthProbeSettings = healthProbeSettings;
-        return this;
-    }
-
-    /**
-     * Get the trafficRestorationTimeToHealedOrNewEndpointsInMinutes property: Time in minutes to shift the traffic to
-     * the endpoint gradually when an unhealthy endpoint comes healthy or a new endpoint is added. Default is 10 mins.
-     * This property is currently not supported.
-     *
-     * @return the trafficRestorationTimeToHealedOrNewEndpointsInMinutes value.
-     */
-    public Integer trafficRestorationTimeToHealedOrNewEndpointsInMinutes() {
-        return this.trafficRestorationTimeToHealedOrNewEndpointsInMinutes;
-    }
-
-    /**
-     * Set the trafficRestorationTimeToHealedOrNewEndpointsInMinutes property: Time in minutes to shift the traffic to
-     * the endpoint gradually when an unhealthy endpoint comes healthy or a new endpoint is added. Default is 10 mins.
-     * This property is currently not supported.
-     *
-     * @param trafficRestorationTimeToHealedOrNewEndpointsInMinutes the
-     *     trafficRestorationTimeToHealedOrNewEndpointsInMinutes value to set.
-     * @return the AfdOriginGroupInner object itself.
-     */
-    public AfdOriginGroupInner withTrafficRestorationTimeToHealedOrNewEndpointsInMinutes(
-        Integer trafficRestorationTimeToHealedOrNewEndpointsInMinutes) {
-        this.trafficRestorationTimeToHealedOrNewEndpointsInMinutes =
-            trafficRestorationTimeToHealedOrNewEndpointsInMinutes;
-        return this;
-    }
-
-    /**
-     * Get the responseBasedAfdOriginErrorDetectionSettings property: The JSON object that contains the properties to
-     * determine origin health using real requests/responses. This property is currently not supported.
-     *
-     * @return the responseBasedAfdOriginErrorDetectionSettings value.
-     */
-    public ResponseBasedOriginErrorDetectionParameters responseBasedAfdOriginErrorDetectionSettings() {
-        return this.responseBasedAfdOriginErrorDetectionSettings;
-    }
-
-    /**
-     * Set the responseBasedAfdOriginErrorDetectionSettings property: The JSON object that contains the properties to
-     * determine origin health using real requests/responses. This property is currently not supported.
-     *
-     * @param responseBasedAfdOriginErrorDetectionSettings the responseBasedAfdOriginErrorDetectionSettings value to
-     *     set.
-     * @return the AfdOriginGroupInner object itself.
-     */
-    public AfdOriginGroupInner withResponseBasedAfdOriginErrorDetectionSettings(
-        ResponseBasedOriginErrorDetectionParameters responseBasedAfdOriginErrorDetectionSettings) {
-        this.responseBasedAfdOriginErrorDetectionSettings = responseBasedAfdOriginErrorDetectionSettings;
-        return this;
-    }
-
-    /**
-     * Get the sessionAffinityState property: Whether to allow session affinity on this host. Valid options are
-     * 'Enabled' or 'Disabled'.
-     *
-     * @return the sessionAffinityState value.
-     */
-    public EnabledState sessionAffinityState() {
-        return this.sessionAffinityState;
-    }
-
-    /**
-     * Set the sessionAffinityState property: Whether to allow session affinity on this host. Valid options are
-     * 'Enabled' or 'Disabled'.
-     *
-     * @param sessionAffinityState the sessionAffinityState value to set.
-     * @return the AfdOriginGroupInner object itself.
-     */
-    public AfdOriginGroupInner withSessionAffinityState(EnabledState sessionAffinityState) {
-        this.sessionAffinityState = sessionAffinityState;
-        return this;
-    }
-
-    /**
-     * Get the provisioningState property: Provisioning status.
-     *
-     * @return the provisioningState value.
-     */
-    public AfdProvisioningState provisioningState() {
-        return this.provisioningState;
-    }
-
-    /**
-     * Get the deploymentStatus property: The deploymentStatus property.
-     *
-     * @return the deploymentStatus value.
-     */
-    public DeploymentStatus deploymentStatus() {
-        return this.deploymentStatus;
+    private AfdOriginGroupProperties innerProperties() {
+        return this.innerProperties;
     }
 
     /**
      * Get the systemData property: Read only system data.
-     *
+     * 
      * @return the systemData value.
      */
     public SystemData systemData() {
@@ -223,22 +57,144 @@ public class AfdOriginGroupInner extends ProxyResource {
     }
 
     /**
+     * Get the provisioningState property: Provisioning status.
+     * 
+     * @return the provisioningState value.
+     */
+    public AfdProvisioningState provisioningState() {
+        return this.innerProperties() == null ? null : this.innerProperties().provisioningState();
+    }
+
+    /**
+     * Get the deploymentStatus property: The deploymentStatus property.
+     * 
+     * @return the deploymentStatus value.
+     */
+    public DeploymentStatus deploymentStatus() {
+        return this.innerProperties() == null ? null : this.innerProperties().deploymentStatus();
+    }
+
+    /**
+     * Get the profileName property: The name of the profile which holds the origin group.
+     * 
+     * @return the profileName value.
+     */
+    public String profileName() {
+        return this.innerProperties() == null ? null : this.innerProperties().profileName();
+    }
+
+    /**
+     * Get the loadBalancingSettings property: Load balancing settings for a backend pool.
+     * 
+     * @return the loadBalancingSettings value.
+     */
+    public LoadBalancingSettingsParameters loadBalancingSettings() {
+        return this.innerProperties() == null ? null : this.innerProperties().loadBalancingSettings();
+    }
+
+    /**
+     * Set the loadBalancingSettings property: Load balancing settings for a backend pool.
+     * 
+     * @param loadBalancingSettings the loadBalancingSettings value to set.
+     * @return the AfdOriginGroupInner object itself.
+     */
+    public AfdOriginGroupInner withLoadBalancingSettings(LoadBalancingSettingsParameters loadBalancingSettings) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AfdOriginGroupProperties();
+        }
+        this.innerProperties().withLoadBalancingSettings(loadBalancingSettings);
+        return this;
+    }
+
+    /**
+     * Get the healthProbeSettings property: Health probe settings to the origin that is used to determine the health
+     * of the origin.
+     * 
+     * @return the healthProbeSettings value.
+     */
+    public HealthProbeParameters healthProbeSettings() {
+        return this.innerProperties() == null ? null : this.innerProperties().healthProbeSettings();
+    }
+
+    /**
+     * Set the healthProbeSettings property: Health probe settings to the origin that is used to determine the health
+     * of the origin.
+     * 
+     * @param healthProbeSettings the healthProbeSettings value to set.
+     * @return the AfdOriginGroupInner object itself.
+     */
+    public AfdOriginGroupInner withHealthProbeSettings(HealthProbeParameters healthProbeSettings) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AfdOriginGroupProperties();
+        }
+        this.innerProperties().withHealthProbeSettings(healthProbeSettings);
+        return this;
+    }
+
+    /**
+     * Get the trafficRestorationTimeToHealedOrNewEndpointsInMinutes property: Time in minutes to shift the traffic to
+     * the endpoint gradually when an unhealthy endpoint comes healthy or a new endpoint is added. Default is 10 mins.
+     * This property is currently not supported.
+     * 
+     * @return the trafficRestorationTimeToHealedOrNewEndpointsInMinutes value.
+     */
+    public Integer trafficRestorationTimeToHealedOrNewEndpointsInMinutes() {
+        return this.innerProperties() == null ? null
+            : this.innerProperties().trafficRestorationTimeToHealedOrNewEndpointsInMinutes();
+    }
+
+    /**
+     * Set the trafficRestorationTimeToHealedOrNewEndpointsInMinutes property: Time in minutes to shift the traffic to
+     * the endpoint gradually when an unhealthy endpoint comes healthy or a new endpoint is added. Default is 10 mins.
+     * This property is currently not supported.
+     * 
+     * @param trafficRestorationTimeToHealedOrNewEndpointsInMinutes the
+     * trafficRestorationTimeToHealedOrNewEndpointsInMinutes value to set.
+     * @return the AfdOriginGroupInner object itself.
+     */
+    public AfdOriginGroupInner withTrafficRestorationTimeToHealedOrNewEndpointsInMinutes(
+        Integer trafficRestorationTimeToHealedOrNewEndpointsInMinutes) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AfdOriginGroupProperties();
+        }
+        this.innerProperties().withTrafficRestorationTimeToHealedOrNewEndpointsInMinutes(
+            trafficRestorationTimeToHealedOrNewEndpointsInMinutes);
+        return this;
+    }
+
+    /**
+     * Get the sessionAffinityState property: Whether to allow session affinity on this host. Valid options are
+     * 'Enabled' or 'Disabled'.
+     * 
+     * @return the sessionAffinityState value.
+     */
+    public EnabledState sessionAffinityState() {
+        return this.innerProperties() == null ? null : this.innerProperties().sessionAffinityState();
+    }
+
+    /**
+     * Set the sessionAffinityState property: Whether to allow session affinity on this host. Valid options are
+     * 'Enabled' or 'Disabled'.
+     * 
+     * @param sessionAffinityState the sessionAffinityState value to set.
+     * @return the AfdOriginGroupInner object itself.
+     */
+    public AfdOriginGroupInner withSessionAffinityState(EnabledState sessionAffinityState) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AfdOriginGroupProperties();
+        }
+        this.innerProperties().withSessionAffinityState(sessionAffinityState);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
-        if (loadBalancingSettings() != null) {
-            loadBalancingSettings().validate();
-        }
-        if (healthProbeSettings() != null) {
-            healthProbeSettings().validate();
-        }
-        if (responseBasedAfdOriginErrorDetectionSettings() != null) {
-            responseBasedAfdOriginErrorDetectionSettings().validate();
-        }
-        if (systemData() != null) {
-            systemData().validate();
+        if (innerProperties() != null) {
+            innerProperties().validate();
         }
     }
 }

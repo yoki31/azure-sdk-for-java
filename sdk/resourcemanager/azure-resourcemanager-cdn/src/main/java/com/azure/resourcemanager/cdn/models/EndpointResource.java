@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Defines the ARM Resource ID for the linked endpoints. */
+/**
+ * Defines the ARM Resource ID for the linked endpoints.
+ */
 @Fluent
 public final class EndpointResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(EndpointResource.class);
-
     /*
      * ARM Resource ID string.
      */
@@ -21,8 +19,14 @@ public final class EndpointResource {
     private String id;
 
     /**
+     * Creates an instance of EndpointResource class.
+     */
+    public EndpointResource() {
+    }
+
+    /**
      * Get the id property: ARM Resource ID string.
-     *
+     * 
      * @return the id value.
      */
     public String id() {
@@ -31,7 +35,7 @@ public final class EndpointResource {
 
     /**
      * Set the id property: ARM Resource ID string.
-     *
+     * 
      * @param id the id value to set.
      * @return the EndpointResource object itself.
      */
@@ -42,7 +46,7 @@ public final class EndpointResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

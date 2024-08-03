@@ -32,7 +32,6 @@ import com.azure.core.management.exception.ManagementException;
 import com.azure.core.management.polling.PollResult;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.core.util.polling.PollerFlux;
 import com.azure.core.util.polling.SyncPoller;
 import com.azure.resourcemanager.apimanagement.fluent.NamedValuesClient;
@@ -50,8 +49,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in NamedValuesClient. */
 public final class NamedValuesClientImpl implements NamedValuesClient {
-    private final ClientLogger logger = new ClientLogger(NamedValuesClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final NamedValuesService service;
 
@@ -75,11 +72,10 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApiManagementClientN")
-    private interface NamedValuesService {
+    public interface NamedValuesService {
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/namedValues")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/namedValues")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<NamedValueCollection>> listByService(
@@ -97,8 +93,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
 
         @Headers({"Content-Type: application/json"})
         @Head(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/namedValues/{namedValueId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/namedValues/{namedValueId}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<NamedValuesGetEntityTagResponse> getEntityTag(
@@ -113,8 +108,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
 
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/namedValues/{namedValueId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/namedValues/{namedValueId}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<NamedValuesGetResponse> get(
@@ -129,8 +123,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
 
         @Headers({"Content-Type: application/json"})
         @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/namedValues/{namedValueId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/namedValues/{namedValueId}")
         @ExpectedResponses({200, 201, 202})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Flux<ByteBuffer>>> createOrUpdate(
@@ -147,8 +140,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
 
         @Headers({"Content-Type: application/json"})
         @Patch(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/namedValues/{namedValueId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/namedValues/{namedValueId}")
         @ExpectedResponses({200, 202})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Flux<ByteBuffer>>> update(
@@ -165,8 +157,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
 
         @Headers({"Content-Type: application/json"})
         @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/namedValues/{namedValueId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/namedValues/{namedValueId}")
         @ExpectedResponses({200, 204})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Void>> delete(
@@ -182,8 +173,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
 
         @Headers({"Content-Type: application/json"})
         @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/namedValues/{namedValueId}/listValue")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/namedValues/{namedValueId}/listValue")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<NamedValuesListValueResponse> listValue(
@@ -198,8 +188,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
 
         @Headers({"Content-Type: application/json"})
         @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/namedValues/{namedValueId}/refreshSecret")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/namedValues/{namedValueId}/refreshSecret")
         @ExpectedResponses({200, 202})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Flux<ByteBuffer>>> refreshSecret(
@@ -226,7 +215,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Lists a collection of named values defined within a service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| tags | filter | ge, le, eq,
@@ -239,7 +228,8 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged NamedValue list representation.
+     * @return paged NamedValue list representation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<NamedValueContractInner>> listByServiceSinglePageAsync(
@@ -300,7 +290,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Lists a collection of named values defined within a service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| tags | filter | ge, le, eq,
@@ -314,7 +304,8 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged NamedValue list representation.
+     * @return paged NamedValue list representation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<NamedValueContractInner>> listByServiceSinglePageAsync(
@@ -373,7 +364,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Lists a collection of named values defined within a service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| tags | filter | ge, le, eq,
@@ -386,7 +377,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged NamedValue list representation.
+     * @return paged NamedValue list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<NamedValueContractInner> listByServiceAsync(
@@ -406,12 +397,12 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Lists a collection of named values defined within a service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged NamedValue list representation.
+     * @return paged NamedValue list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<NamedValueContractInner> listByServiceAsync(String resourceGroupName, String serviceName) {
@@ -429,7 +420,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Lists a collection of named values defined within a service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| tags | filter | ge, le, eq,
@@ -443,7 +434,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged NamedValue list representation.
+     * @return paged NamedValue list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<NamedValueContractInner> listByServiceAsync(
@@ -464,12 +455,12 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Lists a collection of named values defined within a service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged NamedValue list representation.
+     * @return paged NamedValue list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<NamedValueContractInner> listByService(String resourceGroupName, String serviceName) {
@@ -484,7 +475,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Lists a collection of named values defined within a service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter | Field | Usage | Supported operators | Supported functions
      *     |&lt;/br&gt;|-------------|-------------|-------------|-------------|&lt;/br&gt;| tags | filter | ge, le, eq,
@@ -498,7 +489,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged NamedValue list representation.
+     * @return paged NamedValue list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<NamedValueContractInner> listByService(
@@ -516,13 +507,14 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Gets the entity state (Etag) version of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the named value specified by its identifier.
+     * @return the entity state (Etag) version of the named value specified by its identifier on successful completion
+     *     of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<NamedValuesGetEntityTagResponse> getEntityTagWithResponseAsync(
@@ -569,14 +561,15 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Gets the entity state (Etag) version of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the named value specified by its identifier.
+     * @return the entity state (Etag) version of the named value specified by its identifier on successful completion
+     *     of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<NamedValuesGetEntityTagResponse> getEntityTagWithResponseAsync(
@@ -620,39 +613,25 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Gets the entity state (Etag) version of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the entity state (Etag) version of the named value specified by its identifier.
+     * @return the entity state (Etag) version of the named value specified by its identifier on successful completion
+     *     of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> getEntityTagAsync(String resourceGroupName, String serviceName, String namedValueId) {
         return getEntityTagWithResponseAsync(resourceGroupName, serviceName, namedValueId)
-            .flatMap((NamedValuesGetEntityTagResponse res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Gets the entity state (Etag) version of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param namedValueId Identifier of the NamedValue.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public void getEntityTag(String resourceGroupName, String serviceName, String namedValueId) {
-        getEntityTagAsync(resourceGroupName, serviceName, namedValueId).block();
-    }
-
-    /**
-     * Gets the entity state (Etag) version of the named value specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param context The context to associate with this operation.
@@ -668,15 +647,30 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     }
 
     /**
-     * Gets the details of the named value specified by its identifier.
+     * Gets the entity state (Etag) version of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the named value specified by its identifier.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public void getEntityTag(String resourceGroupName, String serviceName, String namedValueId) {
+        getEntityTagWithResponse(resourceGroupName, serviceName, namedValueId, Context.NONE);
+    }
+
+    /**
+     * Gets the details of the named value specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param namedValueId Identifier of the NamedValue.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the details of the named value specified by its identifier on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<NamedValuesGetResponse> getWithResponseAsync(
@@ -723,14 +717,14 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Gets the details of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the named value specified by its identifier.
+     * @return the details of the named value specified by its identifier on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<NamedValuesGetResponse> getWithResponseAsync(
@@ -774,47 +768,24 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Gets the details of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the named value specified by its identifier.
+     * @return the details of the named value specified by its identifier on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<NamedValueContractInner> getAsync(String resourceGroupName, String serviceName, String namedValueId) {
         return getWithResponseAsync(resourceGroupName, serviceName, namedValueId)
-            .flatMap(
-                (NamedValuesGetResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Gets the details of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param namedValueId Identifier of the NamedValue.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of the named value specified by its identifier.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public NamedValueContractInner get(String resourceGroupName, String serviceName, String namedValueId) {
-        return getAsync(resourceGroupName, serviceName, namedValueId).block();
-    }
-
-    /**
-     * Gets the details of the named value specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param context The context to associate with this operation.
@@ -830,9 +801,25 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     }
 
     /**
+     * Gets the details of the named value specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param namedValueId Identifier of the NamedValue.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the details of the named value specified by its identifier.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public NamedValueContractInner get(String resourceGroupName, String serviceName, String namedValueId) {
+        return getWithResponse(resourceGroupName, serviceName, namedValueId, Context.NONE).getValue();
+    }
+
+    /**
      * Creates or updates named value.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param parameters Create parameters.
@@ -840,7 +827,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
+     * @return namedValue details along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(
@@ -898,7 +885,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Creates or updates named value.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param parameters Create parameters.
@@ -907,7 +894,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
+     * @return namedValue details along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(
@@ -963,7 +950,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Creates or updates named value.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param parameters Create parameters.
@@ -971,9 +958,9 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
+     * @return the {@link PollerFlux} for polling of namedValue details.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<NamedValueContractInner>, NamedValueContractInner> beginCreateOrUpdateAsync(
         String resourceGroupName,
         String serviceName,
@@ -989,13 +976,41 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
                 this.client.getHttpPipeline(),
                 NamedValueContractInner.class,
                 NamedValueContractInner.class,
-                Context.NONE);
+                this.client.getContext());
     }
 
     /**
      * Creates or updates named value.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param namedValueId Identifier of the NamedValue.
+     * @param parameters Create parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link PollerFlux} for polling of namedValue details.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<NamedValueContractInner>, NamedValueContractInner> beginCreateOrUpdateAsync(
+        String resourceGroupName, String serviceName, String namedValueId, NamedValueCreateContract parameters) {
+        final String ifMatch = null;
+        Mono<Response<Flux<ByteBuffer>>> mono =
+            createOrUpdateWithResponseAsync(resourceGroupName, serviceName, namedValueId, parameters, ifMatch);
+        return this
+            .client
+            .<NamedValueContractInner, NamedValueContractInner>getLroResult(
+                mono,
+                this.client.getHttpPipeline(),
+                NamedValueContractInner.class,
+                NamedValueContractInner.class,
+                this.client.getContext());
+    }
+
+    /**
+     * Creates or updates named value.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param parameters Create parameters.
@@ -1004,9 +1019,9 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
+     * @return the {@link PollerFlux} for polling of namedValue details.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<NamedValueContractInner>, NamedValueContractInner> beginCreateOrUpdateAsync(
         String resourceGroupName,
         String serviceName,
@@ -1030,31 +1045,28 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Creates or updates named value.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param parameters Create parameters.
-     * @param ifMatch ETag of the Entity. Not required when creating an entity, but required when updating an entity.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
+     * @return the {@link SyncPoller} for polling of namedValue details.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<NamedValueContractInner>, NamedValueContractInner> beginCreateOrUpdate(
-        String resourceGroupName,
-        String serviceName,
-        String namedValueId,
-        NamedValueCreateContract parameters,
-        String ifMatch) {
-        return beginCreateOrUpdateAsync(resourceGroupName, serviceName, namedValueId, parameters, ifMatch)
+        String resourceGroupName, String serviceName, String namedValueId, NamedValueCreateContract parameters) {
+        final String ifMatch = null;
+        return this
+            .beginCreateOrUpdateAsync(resourceGroupName, serviceName, namedValueId, parameters, ifMatch)
             .getSyncPoller();
     }
 
     /**
      * Creates or updates named value.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param parameters Create parameters.
@@ -1063,9 +1075,9 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
+     * @return the {@link SyncPoller} for polling of namedValue details.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<NamedValueContractInner>, NamedValueContractInner> beginCreateOrUpdate(
         String resourceGroupName,
         String serviceName,
@@ -1073,14 +1085,15 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
         NamedValueCreateContract parameters,
         String ifMatch,
         Context context) {
-        return beginCreateOrUpdateAsync(resourceGroupName, serviceName, namedValueId, parameters, ifMatch, context)
+        return this
+            .beginCreateOrUpdateAsync(resourceGroupName, serviceName, namedValueId, parameters, ifMatch, context)
             .getSyncPoller();
     }
 
     /**
      * Creates or updates named value.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param parameters Create parameters.
@@ -1088,7 +1101,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
+     * @return namedValue details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<NamedValueContractInner> createOrUpdateAsync(
@@ -1105,14 +1118,14 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Creates or updates named value.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param parameters Create parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
+     * @return namedValue details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<NamedValueContractInner> createOrUpdateAsync(
@@ -1126,7 +1139,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Creates or updates named value.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param parameters Create parameters.
@@ -1135,7 +1148,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
+     * @return namedValue details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<NamedValueContractInner> createOrUpdateAsync(
@@ -1153,30 +1166,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Creates or updates named value.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param namedValueId Identifier of the NamedValue.
-     * @param parameters Create parameters.
-     * @param ifMatch ETag of the Entity. Not required when creating an entity, but required when updating an entity.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public NamedValueContractInner createOrUpdate(
-        String resourceGroupName,
-        String serviceName,
-        String namedValueId,
-        NamedValueCreateContract parameters,
-        String ifMatch) {
-        return createOrUpdateAsync(resourceGroupName, serviceName, namedValueId, parameters, ifMatch).block();
-    }
-
-    /**
-     * Creates or updates named value.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param parameters Create parameters.
@@ -1195,7 +1185,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Creates or updates named value.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param parameters Create parameters.
@@ -1220,7 +1210,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Updates the specific named value.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1229,7 +1219,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
+     * @return namedValue details along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(
@@ -1290,7 +1280,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Updates the specific named value.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1300,7 +1290,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
+     * @return namedValue details along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(
@@ -1359,7 +1349,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Updates the specific named value.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1368,9 +1358,9 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
+     * @return the {@link PollerFlux} for polling of namedValue details.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<NamedValueContractInner>, NamedValueContractInner> beginUpdateAsync(
         String resourceGroupName,
         String serviceName,
@@ -1386,13 +1376,13 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
                 this.client.getHttpPipeline(),
                 NamedValueContractInner.class,
                 NamedValueContractInner.class,
-                Context.NONE);
+                this.client.getContext());
     }
 
     /**
      * Updates the specific named value.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1402,9 +1392,9 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
+     * @return the {@link PollerFlux} for polling of namedValue details.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<NamedValueContractInner>, NamedValueContractInner> beginUpdateAsync(
         String resourceGroupName,
         String serviceName,
@@ -1428,7 +1418,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Updates the specific named value.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1437,22 +1427,22 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
+     * @return the {@link SyncPoller} for polling of namedValue details.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<NamedValueContractInner>, NamedValueContractInner> beginUpdate(
         String resourceGroupName,
         String serviceName,
         String namedValueId,
         String ifMatch,
         NamedValueUpdateParameters parameters) {
-        return beginUpdateAsync(resourceGroupName, serviceName, namedValueId, ifMatch, parameters).getSyncPoller();
+        return this.beginUpdateAsync(resourceGroupName, serviceName, namedValueId, ifMatch, parameters).getSyncPoller();
     }
 
     /**
      * Updates the specific named value.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1462,9 +1452,9 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
+     * @return the {@link SyncPoller} for polling of namedValue details.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<NamedValueContractInner>, NamedValueContractInner> beginUpdate(
         String resourceGroupName,
         String serviceName,
@@ -1472,14 +1462,15 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
         String ifMatch,
         NamedValueUpdateParameters parameters,
         Context context) {
-        return beginUpdateAsync(resourceGroupName, serviceName, namedValueId, ifMatch, parameters, context)
+        return this
+            .beginUpdateAsync(resourceGroupName, serviceName, namedValueId, ifMatch, parameters, context)
             .getSyncPoller();
     }
 
     /**
      * Updates the specific named value.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1488,7 +1479,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
+     * @return namedValue details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<NamedValueContractInner> updateAsync(
@@ -1505,7 +1496,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Updates the specific named value.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1515,7 +1506,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
+     * @return namedValue details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<NamedValueContractInner> updateAsync(
@@ -1533,7 +1524,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Updates the specific named value.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1557,7 +1548,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Updates the specific named value.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1583,7 +1574,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Deletes specific named value from the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1591,7 +1582,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -1642,7 +1633,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Deletes specific named value from the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1651,7 +1642,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -1699,7 +1690,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Deletes specific named value from the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1707,18 +1698,38 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(String resourceGroupName, String serviceName, String namedValueId, String ifMatch) {
         return deleteWithResponseAsync(resourceGroupName, serviceName, namedValueId, ifMatch)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Deletes specific named value from the API Management service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param namedValueId Identifier of the NamedValue.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> deleteWithResponse(
+        String resourceGroupName, String serviceName, String namedValueId, String ifMatch, Context context) {
+        return deleteWithResponseAsync(resourceGroupName, serviceName, namedValueId, ifMatch, context).block();
+    }
+
+    /**
+     * Deletes specific named value from the API Management service instance.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
@@ -1729,39 +1740,19 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public void delete(String resourceGroupName, String serviceName, String namedValueId, String ifMatch) {
-        deleteAsync(resourceGroupName, serviceName, namedValueId, ifMatch).block();
-    }
-
-    /**
-     * Deletes specific named value from the API Management service instance.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param namedValueId Identifier of the NamedValue.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> deleteWithResponse(
-        String resourceGroupName, String serviceName, String namedValueId, String ifMatch, Context context) {
-        return deleteWithResponseAsync(resourceGroupName, serviceName, namedValueId, ifMatch, context).block();
+        deleteWithResponse(resourceGroupName, serviceName, namedValueId, ifMatch, Context.NONE);
     }
 
     /**
      * Gets the secret of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the secret of the named value specified by its identifier.
+     * @return the secret of the named value specified by its identifier on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<NamedValuesListValueResponse> listValueWithResponseAsync(
@@ -1808,14 +1799,14 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Gets the secret of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the secret of the named value specified by its identifier.
+     * @return the secret of the named value specified by its identifier on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<NamedValuesListValueResponse> listValueWithResponseAsync(
@@ -1859,48 +1850,25 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Gets the secret of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the secret of the named value specified by its identifier.
+     * @return the secret of the named value specified by its identifier on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<NamedValueSecretContractInner> listValueAsync(
         String resourceGroupName, String serviceName, String namedValueId) {
         return listValueWithResponseAsync(resourceGroupName, serviceName, namedValueId)
-            .flatMap(
-                (NamedValuesListValueResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Gets the secret of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param namedValueId Identifier of the NamedValue.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the secret of the named value specified by its identifier.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public NamedValueSecretContractInner listValue(String resourceGroupName, String serviceName, String namedValueId) {
-        return listValueAsync(resourceGroupName, serviceName, namedValueId).block();
-    }
-
-    /**
-     * Gets the secret of the named value specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param context The context to associate with this operation.
@@ -1916,15 +1884,31 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     }
 
     /**
-     * Refresh the secret of the named value specified by its identifier.
+     * Gets the secret of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
+     * @return the secret of the named value specified by its identifier.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public NamedValueSecretContractInner listValue(String resourceGroupName, String serviceName, String namedValueId) {
+        return listValueWithResponse(resourceGroupName, serviceName, namedValueId, Context.NONE).getValue();
+    }
+
+    /**
+     * Refresh the secret of the named value specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param namedValueId Identifier of the NamedValue.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return namedValue details along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> refreshSecretWithResponseAsync(
@@ -1971,14 +1955,14 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Refresh the secret of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
+     * @return namedValue details along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> refreshSecretWithResponseAsync(
@@ -2022,15 +2006,15 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Refresh the secret of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
+     * @return the {@link PollerFlux} for polling of namedValue details.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<NamedValueContractInner>, NamedValueContractInner> beginRefreshSecretAsync(
         String resourceGroupName, String serviceName, String namedValueId) {
         Mono<Response<Flux<ByteBuffer>>> mono =
@@ -2042,22 +2026,22 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
                 this.client.getHttpPipeline(),
                 NamedValueContractInner.class,
                 NamedValueContractInner.class,
-                Context.NONE);
+                this.client.getContext());
     }
 
     /**
      * Refresh the secret of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
+     * @return the {@link PollerFlux} for polling of namedValue details.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<NamedValueContractInner>, NamedValueContractInner> beginRefreshSecretAsync(
         String resourceGroupName, String serviceName, String namedValueId, Context context) {
         context = this.client.mergeContext(context);
@@ -2076,48 +2060,48 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Refresh the secret of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
+     * @return the {@link SyncPoller} for polling of namedValue details.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<NamedValueContractInner>, NamedValueContractInner> beginRefreshSecret(
         String resourceGroupName, String serviceName, String namedValueId) {
-        return beginRefreshSecretAsync(resourceGroupName, serviceName, namedValueId).getSyncPoller();
+        return this.beginRefreshSecretAsync(resourceGroupName, serviceName, namedValueId).getSyncPoller();
     }
 
     /**
      * Refresh the secret of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
+     * @return the {@link SyncPoller} for polling of namedValue details.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<NamedValueContractInner>, NamedValueContractInner> beginRefreshSecret(
         String resourceGroupName, String serviceName, String namedValueId, Context context) {
-        return beginRefreshSecretAsync(resourceGroupName, serviceName, namedValueId, context).getSyncPoller();
+        return this.beginRefreshSecretAsync(resourceGroupName, serviceName, namedValueId, context).getSyncPoller();
     }
 
     /**
      * Refresh the secret of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
+     * @return namedValue details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<NamedValueContractInner> refreshSecretAsync(
@@ -2130,14 +2114,14 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Refresh the secret of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return namedValue details.
+     * @return namedValue details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<NamedValueContractInner> refreshSecretAsync(
@@ -2150,7 +2134,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Refresh the secret of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -2166,7 +2150,7 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Refresh the secret of the named value specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param namedValueId Identifier of the NamedValue.
      * @param context The context to associate with this operation.
@@ -2184,11 +2168,13 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged NamedValue list representation.
+     * @return paged NamedValue list representation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<NamedValueContractInner>> listByServiceNextSinglePageAsync(String nextLink) {
@@ -2219,12 +2205,14 @@ public final class NamedValuesClientImpl implements NamedValuesClient {
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged NamedValue list representation.
+     * @return paged NamedValue list representation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<NamedValueContractInner>> listByServiceNextSinglePageAsync(

@@ -6,27 +6,26 @@ package com.azure.resourcemanager.compute.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.Resource;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.resourcemanager.compute.models.Architecture;
 import com.azure.resourcemanager.compute.models.Disallowed;
 import com.azure.resourcemanager.compute.models.GalleryImageFeature;
 import com.azure.resourcemanager.compute.models.GalleryImageIdentifier;
-import com.azure.resourcemanager.compute.models.GalleryImagePropertiesProvisioningState;
+import com.azure.resourcemanager.compute.models.GalleryProvisioningState;
 import com.azure.resourcemanager.compute.models.HyperVGeneration;
 import com.azure.resourcemanager.compute.models.ImagePurchasePlan;
 import com.azure.resourcemanager.compute.models.OperatingSystemStateTypes;
 import com.azure.resourcemanager.compute.models.OperatingSystemTypes;
 import com.azure.resourcemanager.compute.models.RecommendedMachineConfiguration;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 
-/** Specifies information about the gallery image definition that you want to create or update. */
+/**
+ * Specifies information about the gallery image definition that you want to create or update.
+ */
 @Fluent
 public final class GalleryImageInner extends Resource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GalleryImageInner.class);
-
     /*
      * Describes the properties of a gallery image definition.
      */
@@ -34,22 +33,32 @@ public final class GalleryImageInner extends Resource {
     private GalleryImageProperties innerProperties;
 
     /**
+     * Creates an instance of GalleryImageInner class.
+     */
+    public GalleryImageInner() {
+    }
+
+    /**
      * Get the innerProperties property: Describes the properties of a gallery image definition.
-     *
+     * 
      * @return the innerProperties value.
      */
     private GalleryImageProperties innerProperties() {
         return this.innerProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GalleryImageInner withLocation(String location) {
         super.withLocation(location);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GalleryImageInner withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -59,7 +68,7 @@ public final class GalleryImageInner extends Resource {
     /**
      * Get the description property: The description of this gallery image definition resource. This property is
      * updatable.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
@@ -69,7 +78,7 @@ public final class GalleryImageInner extends Resource {
     /**
      * Set the description property: The description of this gallery image definition resource. This property is
      * updatable.
-     *
+     * 
      * @param description the description value to set.
      * @return the GalleryImageInner object itself.
      */
@@ -83,7 +92,7 @@ public final class GalleryImageInner extends Resource {
 
     /**
      * Get the eula property: The Eula agreement for the gallery image definition.
-     *
+     * 
      * @return the eula value.
      */
     public String eula() {
@@ -92,7 +101,7 @@ public final class GalleryImageInner extends Resource {
 
     /**
      * Set the eula property: The Eula agreement for the gallery image definition.
-     *
+     * 
      * @param eula the eula value to set.
      * @return the GalleryImageInner object itself.
      */
@@ -106,7 +115,7 @@ public final class GalleryImageInner extends Resource {
 
     /**
      * Get the privacyStatementUri property: The privacy statement uri.
-     *
+     * 
      * @return the privacyStatementUri value.
      */
     public String privacyStatementUri() {
@@ -115,7 +124,7 @@ public final class GalleryImageInner extends Resource {
 
     /**
      * Set the privacyStatementUri property: The privacy statement uri.
-     *
+     * 
      * @param privacyStatementUri the privacyStatementUri value to set.
      * @return the GalleryImageInner object itself.
      */
@@ -129,7 +138,7 @@ public final class GalleryImageInner extends Resource {
 
     /**
      * Get the releaseNoteUri property: The release note uri.
-     *
+     * 
      * @return the releaseNoteUri value.
      */
     public String releaseNoteUri() {
@@ -138,7 +147,7 @@ public final class GalleryImageInner extends Resource {
 
     /**
      * Set the releaseNoteUri property: The release note uri.
-     *
+     * 
      * @param releaseNoteUri the releaseNoteUri value to set.
      * @return the GalleryImageInner object itself.
      */
@@ -152,9 +161,8 @@ public final class GalleryImageInner extends Resource {
 
     /**
      * Get the osType property: This property allows you to specify the type of the OS that is included in the disk when
-     * creating a VM from a managed image. &lt;br&gt;&lt;br&gt; Possible values are: &lt;br&gt;&lt;br&gt; **Windows**
-     * &lt;br&gt;&lt;br&gt; **Linux**.
-     *
+     * creating a VM from a managed image. Possible values are: **Windows,** **Linux.**.
+     * 
      * @return the osType value.
      */
     public OperatingSystemTypes osType() {
@@ -163,9 +171,8 @@ public final class GalleryImageInner extends Resource {
 
     /**
      * Set the osType property: This property allows you to specify the type of the OS that is included in the disk when
-     * creating a VM from a managed image. &lt;br&gt;&lt;br&gt; Possible values are: &lt;br&gt;&lt;br&gt; **Windows**
-     * &lt;br&gt;&lt;br&gt; **Linux**.
-     *
+     * creating a VM from a managed image. Possible values are: **Windows,** **Linux.**.
+     * 
      * @param osType the osType value to set.
      * @return the GalleryImageInner object itself.
      */
@@ -180,7 +187,7 @@ public final class GalleryImageInner extends Resource {
     /**
      * Get the osState property: This property allows the user to specify whether the virtual machines created under
      * this image are 'Generalized' or 'Specialized'.
-     *
+     * 
      * @return the osState value.
      */
     public OperatingSystemStateTypes osState() {
@@ -190,7 +197,7 @@ public final class GalleryImageInner extends Resource {
     /**
      * Set the osState property: This property allows the user to specify whether the virtual machines created under
      * this image are 'Generalized' or 'Specialized'.
-     *
+     * 
      * @param osState the osState value to set.
      * @return the GalleryImageInner object itself.
      */
@@ -204,7 +211,7 @@ public final class GalleryImageInner extends Resource {
 
     /**
      * Get the hyperVGeneration property: The hypervisor generation of the Virtual Machine. Applicable to OS disks only.
-     *
+     * 
      * @return the hyperVGeneration value.
      */
     public HyperVGeneration hyperVGeneration() {
@@ -213,7 +220,7 @@ public final class GalleryImageInner extends Resource {
 
     /**
      * Set the hyperVGeneration property: The hypervisor generation of the Virtual Machine. Applicable to OS disks only.
-     *
+     * 
      * @param hyperVGeneration the hyperVGeneration value to set.
      * @return the GalleryImageInner object itself.
      */
@@ -228,7 +235,7 @@ public final class GalleryImageInner extends Resource {
     /**
      * Get the endOfLifeDate property: The end of life date of the gallery image definition. This property can be used
      * for decommissioning purposes. This property is updatable.
-     *
+     * 
      * @return the endOfLifeDate value.
      */
     public OffsetDateTime endOfLifeDate() {
@@ -238,7 +245,7 @@ public final class GalleryImageInner extends Resource {
     /**
      * Set the endOfLifeDate property: The end of life date of the gallery image definition. This property can be used
      * for decommissioning purposes. This property is updatable.
-     *
+     * 
      * @param endOfLifeDate the endOfLifeDate value to set.
      * @return the GalleryImageInner object itself.
      */
@@ -252,7 +259,7 @@ public final class GalleryImageInner extends Resource {
 
     /**
      * Get the identifier property: This is the gallery image definition identifier.
-     *
+     * 
      * @return the identifier value.
      */
     public GalleryImageIdentifier identifier() {
@@ -261,7 +268,7 @@ public final class GalleryImageInner extends Resource {
 
     /**
      * Set the identifier property: This is the gallery image definition identifier.
-     *
+     * 
      * @param identifier the identifier value to set.
      * @return the GalleryImageInner object itself.
      */
@@ -276,7 +283,7 @@ public final class GalleryImageInner extends Resource {
     /**
      * Get the recommended property: The properties describe the recommended machine configuration for this Image
      * Definition. These properties are updatable.
-     *
+     * 
      * @return the recommended value.
      */
     public RecommendedMachineConfiguration recommended() {
@@ -286,7 +293,7 @@ public final class GalleryImageInner extends Resource {
     /**
      * Set the recommended property: The properties describe the recommended machine configuration for this Image
      * Definition. These properties are updatable.
-     *
+     * 
      * @param recommended the recommended value to set.
      * @return the GalleryImageInner object itself.
      */
@@ -300,7 +307,7 @@ public final class GalleryImageInner extends Resource {
 
     /**
      * Get the disallowed property: Describes the disallowed disk types.
-     *
+     * 
      * @return the disallowed value.
      */
     public Disallowed disallowed() {
@@ -309,7 +316,7 @@ public final class GalleryImageInner extends Resource {
 
     /**
      * Set the disallowed property: Describes the disallowed disk types.
-     *
+     * 
      * @param disallowed the disallowed value to set.
      * @return the GalleryImageInner object itself.
      */
@@ -324,7 +331,7 @@ public final class GalleryImageInner extends Resource {
     /**
      * Get the purchasePlan property: Describes the gallery image definition purchase plan. This is used by marketplace
      * images.
-     *
+     * 
      * @return the purchasePlan value.
      */
     public ImagePurchasePlan purchasePlan() {
@@ -334,7 +341,7 @@ public final class GalleryImageInner extends Resource {
     /**
      * Set the purchasePlan property: Describes the gallery image definition purchase plan. This is used by marketplace
      * images.
-     *
+     * 
      * @param purchasePlan the purchasePlan value to set.
      * @return the GalleryImageInner object itself.
      */
@@ -347,18 +354,17 @@ public final class GalleryImageInner extends Resource {
     }
 
     /**
-     * Get the provisioningState property: The current state of the gallery image definition. The provisioning state,
-     * which only appears in the response.
-     *
+     * Get the provisioningState property: The provisioning state, which only appears in the response.
+     * 
      * @return the provisioningState value.
      */
-    public GalleryImagePropertiesProvisioningState provisioningState() {
+    public GalleryProvisioningState provisioningState() {
         return this.innerProperties() == null ? null : this.innerProperties().provisioningState();
     }
 
     /**
      * Get the features property: A list of gallery image features.
-     *
+     * 
      * @return the features value.
      */
     public List<GalleryImageFeature> features() {
@@ -367,7 +373,7 @@ public final class GalleryImageInner extends Resource {
 
     /**
      * Set the features property: A list of gallery image features.
-     *
+     * 
      * @param features the features value to set.
      * @return the GalleryImageInner object itself.
      */
@@ -380,8 +386,31 @@ public final class GalleryImageInner extends Resource {
     }
 
     /**
+     * Get the architecture property: The architecture of the image. Applicable to OS disks only.
+     * 
+     * @return the architecture value.
+     */
+    public Architecture architecture() {
+        return this.innerProperties() == null ? null : this.innerProperties().architecture();
+    }
+
+    /**
+     * Set the architecture property: The architecture of the image. Applicable to OS disks only.
+     * 
+     * @param architecture the architecture value to set.
+     * @return the GalleryImageInner object itself.
+     */
+    public GalleryImageInner withArchitecture(Architecture architecture) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new GalleryImageProperties();
+        }
+        this.innerProperties().withArchitecture(architecture);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

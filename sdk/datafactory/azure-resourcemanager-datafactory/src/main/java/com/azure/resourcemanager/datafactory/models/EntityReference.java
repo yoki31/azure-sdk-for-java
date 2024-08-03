@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The entity reference. */
+/**
+ * The entity reference.
+ */
 @Fluent
 public final class EntityReference {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(EntityReference.class);
-
     /*
      * The type of this referenced entity.
      */
@@ -27,8 +25,14 @@ public final class EntityReference {
     private String referenceName;
 
     /**
+     * Creates an instance of EntityReference class.
+     */
+    public EntityReference() {
+    }
+
+    /**
      * Get the type property: The type of this referenced entity.
-     *
+     * 
      * @return the type value.
      */
     public IntegrationRuntimeEntityReferenceType type() {
@@ -37,7 +41,7 @@ public final class EntityReference {
 
     /**
      * Set the type property: The type of this referenced entity.
-     *
+     * 
      * @param type the type value to set.
      * @return the EntityReference object itself.
      */
@@ -48,7 +52,7 @@ public final class EntityReference {
 
     /**
      * Get the referenceName property: The name of this referenced entity.
-     *
+     * 
      * @return the referenceName value.
      */
     public String referenceName() {
@@ -57,7 +61,7 @@ public final class EntityReference {
 
     /**
      * Set the referenceName property: The name of this referenced entity.
-     *
+     * 
      * @param referenceName the referenceName value to set.
      * @return the EntityReference object itself.
      */
@@ -68,7 +72,7 @@ public final class EntityReference {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

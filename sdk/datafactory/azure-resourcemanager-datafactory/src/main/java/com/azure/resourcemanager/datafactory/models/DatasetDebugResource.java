@@ -6,14 +6,13 @@ package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Dataset debug resource. */
+/**
+ * Dataset debug resource.
+ */
 @Fluent
 public final class DatasetDebugResource extends SubResourceDebugResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DatasetDebugResource.class);
-
     /*
      * Dataset properties.
      */
@@ -21,8 +20,14 @@ public final class DatasetDebugResource extends SubResourceDebugResource {
     private Dataset properties;
 
     /**
+     * Creates an instance of DatasetDebugResource class.
+     */
+    public DatasetDebugResource() {
+    }
+
+    /**
      * Get the properties property: Dataset properties.
-     *
+     * 
      * @return the properties value.
      */
     public Dataset properties() {
@@ -31,7 +36,7 @@ public final class DatasetDebugResource extends SubResourceDebugResource {
 
     /**
      * Set the properties property: Dataset properties.
-     *
+     * 
      * @param properties the properties value to set.
      * @return the DatasetDebugResource object itself.
      */
@@ -40,7 +45,9 @@ public final class DatasetDebugResource extends SubResourceDebugResource {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DatasetDebugResource withName(String name) {
         super.withName(name);
@@ -49,18 +56,20 @@ public final class DatasetDebugResource extends SubResourceDebugResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
         if (properties() == null) {
-            throw logger
-                .logExceptionAsError(
+            throw LOGGER.atError()
+                .log(
                     new IllegalArgumentException("Missing required property properties in model DatasetDebugResource"));
         } else {
             properties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(DatasetDebugResource.class);
 }

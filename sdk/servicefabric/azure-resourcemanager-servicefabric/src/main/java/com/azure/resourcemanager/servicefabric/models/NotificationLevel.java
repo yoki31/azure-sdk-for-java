@@ -8,17 +8,32 @@ import com.azure.core.util.ExpandableStringEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collection;
 
-/** Defines values for NotificationLevel. */
+/**
+ * The level of notification.
+ */
 public final class NotificationLevel extends ExpandableStringEnum<NotificationLevel> {
-    /** Static value Critical for NotificationLevel. */
+    /**
+     * Static value Critical for NotificationLevel.
+     */
     public static final NotificationLevel CRITICAL = fromString("Critical");
 
-    /** Static value All for NotificationLevel. */
+    /**
+     * Static value All for NotificationLevel.
+     */
     public static final NotificationLevel ALL = fromString("All");
 
     /**
+     * Creates a new instance of NotificationLevel value.
+     * 
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public NotificationLevel() {
+    }
+
+    /**
      * Creates or finds a NotificationLevel from its string representation.
-     *
+     * 
      * @param name a name to look for.
      * @return the corresponding NotificationLevel.
      */
@@ -27,7 +42,11 @@ public final class NotificationLevel extends ExpandableStringEnum<NotificationLe
         return fromString(name, NotificationLevel.class);
     }
 
-    /** @return known NotificationLevel values. */
+    /**
+     * Gets known NotificationLevel values.
+     * 
+     * @return known NotificationLevel values.
+     */
     public static Collection<NotificationLevel> values() {
         return values(NotificationLevel.class);
     }

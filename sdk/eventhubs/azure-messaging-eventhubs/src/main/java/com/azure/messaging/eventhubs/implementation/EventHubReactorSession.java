@@ -8,7 +8,10 @@ import com.azure.core.amqp.AmqpRetryOptions;
 import com.azure.core.amqp.AmqpRetryPolicy;
 import com.azure.core.amqp.ClaimsBasedSecurityNode;
 import com.azure.core.amqp.implementation.AmqpConstants;
+import com.azure.core.amqp.implementation.AmqpLinkProvider;
 import com.azure.core.amqp.implementation.AmqpReceiveLink;
+import com.azure.core.amqp.implementation.AmqpSendLink;
+import com.azure.core.amqp.implementation.ConsumerFactory;
 import com.azure.core.amqp.implementation.MessageSerializer;
 import com.azure.core.amqp.implementation.ReactorHandlerProvider;
 import com.azure.core.amqp.implementation.ReactorProvider;
@@ -35,6 +38,8 @@ import java.util.Objects;
 import static com.azure.core.amqp.AmqpMessageConstant.ENQUEUED_TIME_UTC_ANNOTATION_NAME;
 import static com.azure.core.amqp.AmqpMessageConstant.OFFSET_ANNOTATION_NAME;
 import static com.azure.core.amqp.AmqpMessageConstant.SEQUENCE_NUMBER_ANNOTATION_NAME;
+import static com.azure.core.amqp.implementation.AmqpConstants.CLIENT_IDENTIFIER;
+import static com.azure.core.amqp.implementation.AmqpConstants.CLIENT_RECEIVER_IDENTIFIER;
 import static com.azure.core.amqp.implementation.AmqpConstants.VENDOR;
 
 /**
@@ -45,7 +50,7 @@ class EventHubReactorSession extends ReactorSession implements EventHubSession {
     private static final Symbol ENABLE_RECEIVER_RUNTIME_METRIC_NAME =
         Symbol.valueOf(VENDOR + ":enable-receiver-runtime-metric");
 
-    private final ClientLogger logger = new ClientLogger(EventHubReactorSession.class);
+    private static final ClientLogger LOGGER = new ClientLogger(EventHubReactorSession.class);
 
     /**
      * Creates a new AMQP session using proton-j.
@@ -55,6 +60,7 @@ class EventHubReactorSession extends ReactorSession implements EventHubSession {
      * @param sessionName Name of the session.
      * @param provider Provides reactor instances for messages to sent with.
      * @param handlerProvider Providers reactor handlers for listening to proton-j reactor events.
+     * @param linkProvider Provides amqp links for send and receive.
      * @param cbsNodeSupplier Mono that returns a reference to the {@link ClaimsBasedSecurityNode}.
      * @param tokenManagerProvider Provides {@link TokenManager} that authorizes the client when performing
      *     operations on the message broker.
@@ -62,11 +68,23 @@ class EventHubReactorSession extends ReactorSession implements EventHubSession {
      * @param messageSerializer to be used.
      */
     EventHubReactorSession(AmqpConnection amqpConnection, Session session, SessionHandler sessionHandler,
-        String sessionName, ReactorProvider provider, ReactorHandlerProvider handlerProvider,
+        String sessionName, ReactorProvider provider, ReactorHandlerProvider handlerProvider, AmqpLinkProvider linkProvider,
         Mono<ClaimsBasedSecurityNode> cbsNodeSupplier, TokenManagerProvider tokenManagerProvider,
         AmqpRetryOptions retryOptions, MessageSerializer messageSerializer) {
-        super(amqpConnection, session, sessionHandler, sessionName, provider, handlerProvider, cbsNodeSupplier,
+        super(amqpConnection, session, sessionHandler, sessionName, provider, handlerProvider, linkProvider, cbsNodeSupplier,
             tokenManagerProvider, messageSerializer, retryOptions);
+    }
+
+    @Override
+    public Mono<AmqpSendLink> createProducer(String linkName, String entityPath, Duration timeout,
+        AmqpRetryPolicy retryPolicy, String clientIdentifier) {
+        Objects.requireNonNull(linkName, "'linkName' cannot be null.");
+        Objects.requireNonNull(entityPath, "'entityPath' cannot be null.");
+        Objects.requireNonNull(timeout, "'timeout' cannot be null.");
+        Objects.requireNonNull(clientIdentifier, "'clientIdentifier' cannot be null.");
+        final Map<Symbol, Object> properties = new HashMap<>();
+        properties.put(CLIENT_IDENTIFIER, clientIdentifier);
+        return createProducer(linkName, entityPath, timeout, retryPolicy, properties).cast(AmqpSendLink.class);
     }
 
     /**
@@ -74,13 +92,14 @@ class EventHubReactorSession extends ReactorSession implements EventHubSession {
      */
     @Override
     public Mono<AmqpReceiveLink> createConsumer(String linkName, String entityPath, Duration timeout,
-            AmqpRetryPolicy retry, EventPosition eventPosition, ReceiveOptions options) {
+        AmqpRetryPolicy retry, EventPosition eventPosition, ReceiveOptions options, String clientIdentifier) {
         Objects.requireNonNull(linkName, "'linkName' cannot be null.");
         Objects.requireNonNull(entityPath, "'entityPath' cannot be null.");
         Objects.requireNonNull(timeout, "'timeout' cannot be null.");
         Objects.requireNonNull(retry, "'retry' cannot be null.");
         Objects.requireNonNull(eventPosition, "'eventPosition' cannot be null.");
         Objects.requireNonNull(options, "'options' cannot be null.");
+        Objects.requireNonNull(clientIdentifier, "'clientIdentifier' cannot be null.");
 
         final String eventPositionExpression = getExpression(eventPosition);
         final Map<Symbol, Object> filter = new HashMap<>();
@@ -91,6 +110,7 @@ class EventHubReactorSession extends ReactorSession implements EventHubSession {
         if (options.getOwnerLevel() != null) {
             properties.put(EPOCH, options.getOwnerLevel());
         }
+        properties.put(CLIENT_RECEIVER_IDENTIFIER, clientIdentifier);
 
         final Symbol[] desiredCapabilities = options.getTrackLastEnqueuedEventProperties()
             ? new Symbol[]{ENABLE_RECEIVER_RUNTIME_METRIC_NAME}
@@ -98,7 +118,7 @@ class EventHubReactorSession extends ReactorSession implements EventHubSession {
 
         // Use explicit settlement via dispositions (not pre-settled)
         return createConsumer(linkName, entityPath, timeout, retry, filter, properties, desiredCapabilities,
-            SenderSettleMode.UNSETTLED, ReceiverSettleMode.SECOND);
+            SenderSettleMode.UNSETTLED, ReceiverSettleMode.SECOND, new ConsumerFactory());
     }
 
     private String getExpression(EventPosition eventPosition) {
@@ -125,7 +145,7 @@ class EventHubReactorSession extends ReactorSession implements EventHubSession {
             try {
                 ms = Long.toString(eventPosition.getEnqueuedDateTime().toEpochMilli());
             } catch (ArithmeticException ex) {
-                throw logger.logExceptionAsError(new IllegalArgumentException(String.format(Locale.ROOT,
+                throw LOGGER.logExceptionAsError(new IllegalArgumentException(String.format(Locale.ROOT,
                     "Event position for enqueued DateTime could not be parsed. Value: '%s'",
                     eventPosition.getEnqueuedDateTime()), ex));
             }
@@ -134,6 +154,6 @@ class EventHubReactorSession extends ReactorSession implements EventHubSession {
                 ENQUEUED_TIME_UTC_ANNOTATION_NAME.getValue(), isInclusiveFlag, ms);
         }
 
-        throw logger.logExceptionAsError(new IllegalArgumentException("No starting position was set."));
+        throw LOGGER.logExceptionAsError(new IllegalArgumentException("No starting position was set."));
     }
 }

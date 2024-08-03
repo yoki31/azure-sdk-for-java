@@ -5,19 +5,17 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.FunctionAppMajorVersion;
 import com.azure.resourcemanager.appservice.models.ProxyOnlyResource;
 import com.azure.resourcemanager.appservice.models.StackPreferredOs;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Function App Stack. */
+/**
+ * Function App Stack.
+ */
 @Fluent
 public final class FunctionAppStackInner extends ProxyOnlyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(FunctionAppStackInner.class);
-
     /*
      * Function App stack location.
      */
@@ -31,8 +29,14 @@ public final class FunctionAppStackInner extends ProxyOnlyResource {
     private FunctionAppStackProperties innerProperties;
 
     /**
+     * Creates an instance of FunctionAppStackInner class.
+     */
+    public FunctionAppStackInner() {
+    }
+
+    /**
      * Get the location property: Function App stack location.
-     *
+     * 
      * @return the location value.
      */
     public String location() {
@@ -41,14 +45,16 @@ public final class FunctionAppStackInner extends ProxyOnlyResource {
 
     /**
      * Get the innerProperties property: FunctionAppStack resource specific properties.
-     *
+     * 
      * @return the innerProperties value.
      */
     private FunctionAppStackProperties innerProperties() {
         return this.innerProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public FunctionAppStackInner withKind(String kind) {
         super.withKind(kind);
@@ -57,7 +63,7 @@ public final class FunctionAppStackInner extends ProxyOnlyResource {
 
     /**
      * Get the displayText property: Function App stack (display only).
-     *
+     * 
      * @return the displayText value.
      */
     public String displayText() {
@@ -66,7 +72,7 @@ public final class FunctionAppStackInner extends ProxyOnlyResource {
 
     /**
      * Get the value property: Function App stack name.
-     *
+     * 
      * @return the value value.
      */
     public String value() {
@@ -75,7 +81,7 @@ public final class FunctionAppStackInner extends ProxyOnlyResource {
 
     /**
      * Get the majorVersions property: List of major versions available.
-     *
+     * 
      * @return the majorVersions value.
      */
     public List<FunctionAppMajorVersion> majorVersions() {
@@ -84,7 +90,7 @@ public final class FunctionAppStackInner extends ProxyOnlyResource {
 
     /**
      * Get the preferredOs property: Function App stack preferred OS.
-     *
+     * 
      * @return the preferredOs value.
      */
     public StackPreferredOs preferredOs() {
@@ -93,7 +99,7 @@ public final class FunctionAppStackInner extends ProxyOnlyResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

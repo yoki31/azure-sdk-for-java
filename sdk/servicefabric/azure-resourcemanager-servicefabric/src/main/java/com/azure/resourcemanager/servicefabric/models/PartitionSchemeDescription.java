@@ -5,13 +5,13 @@
 package com.azure.resourcemanager.servicefabric.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** Describes how the service is partitioned. */
+/**
+ * Describes how the service is partitioned.
+ */
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
     include = JsonTypeInfo.As.PROPERTY,
@@ -21,15 +21,18 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonSubTypes({
     @JsonSubTypes.Type(name = "Named", value = NamedPartitionSchemeDescription.class),
     @JsonSubTypes.Type(name = "Singleton", value = SingletonPartitionSchemeDescription.class),
-    @JsonSubTypes.Type(name = "UniformInt64Range", value = UniformInt64RangePartitionSchemeDescription.class)
-})
+    @JsonSubTypes.Type(name = "UniformInt64Range", value = UniformInt64RangePartitionSchemeDescription.class) })
 @Immutable
 public class PartitionSchemeDescription {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PartitionSchemeDescription.class);
+    /**
+     * Creates an instance of PartitionSchemeDescription class.
+     */
+    public PartitionSchemeDescription() {
+    }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

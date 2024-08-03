@@ -9,18 +9,16 @@ import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.applicationinsights.models.WebTestGeolocation;
 import com.azure.resourcemanager.applicationinsights.models.WebTestKind;
 import com.azure.resourcemanager.applicationinsights.models.WebTestPropertiesConfiguration;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.azure.resourcemanager.applicationinsights.models.WebTestPropertiesRequest;
+import com.azure.resourcemanager.applicationinsights.models.WebTestPropertiesValidationRules;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Metadata describing a web test for an Azure resource. */
 @Fluent
 public final class WebTestProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(WebTestProperties.class);
-
     /*
-     * Unique ID of this WebTest. This is typically the same value as the Name
-     * field.
+     * Unique ID of this WebTest. This is typically the same value as the Name field.
      */
     @JsonProperty(value = "SyntheticMonitorId", required = true)
     private String syntheticMonitorId;
@@ -32,7 +30,7 @@ public final class WebTestProperties {
     private String webTestName;
 
     /*
-     * Purpose/user defined descriptive test for this WebTest.
+     * User defined description for this WebTest.
      */
     @JsonProperty(value = "Description")
     private String description;
@@ -44,8 +42,7 @@ public final class WebTestProperties {
     private Boolean enabled;
 
     /*
-     * Interval in seconds between test runs for this WebTest. Default value is
-     * 300.
+     * Interval in seconds between test runs for this WebTest. Default value is 300.
      */
     @JsonProperty(value = "Frequency")
     private Integer frequency;
@@ -57,7 +54,7 @@ public final class WebTestProperties {
     private Integer timeout;
 
     /*
-     * The kind of web test this is, valid choices are ping and multistep.
+     * The kind of web test this is, valid choices are ping, multistep and standard.
      */
     @JsonProperty(value = "Kind", required = true)
     private WebTestKind webTestKind;
@@ -69,8 +66,7 @@ public final class WebTestProperties {
     private Boolean retryEnabled;
 
     /*
-     * A list of where to physically run the tests from to give global coverage
-     * for accessibility of your application.
+     * A list of where to physically run the tests from to give global coverage for accessibility of your application.
      */
     @JsonProperty(value = "Locations", required = true)
     private List<WebTestGeolocation> locations;
@@ -82,13 +78,28 @@ public final class WebTestProperties {
     private WebTestPropertiesConfiguration configuration;
 
     /*
-     * Current state of this component, whether or not is has been provisioned
-     * within the resource group it is defined. Users cannot change this value
-     * but are able to read from it. Values will include Succeeded, Deploying,
-     * Canceled, and Failed.
+     * Current state of this component, whether or not is has been provisioned within the resource group it is defined.
+     * Users cannot change this value but are able to read from it. Values will include Succeeded, Deploying, Canceled,
+     * and Failed.
      */
     @JsonProperty(value = "provisioningState", access = JsonProperty.Access.WRITE_ONLY)
     private String provisioningState;
+
+    /*
+     * The collection of request properties
+     */
+    @JsonProperty(value = "Request")
+    private WebTestPropertiesRequest request;
+
+    /*
+     * The collection of validation rule properties
+     */
+    @JsonProperty(value = "ValidationRules")
+    private WebTestPropertiesValidationRules validationRules;
+
+    /** Creates an instance of WebTestProperties class. */
+    public WebTestProperties() {
+    }
 
     /**
      * Get the syntheticMonitorId property: Unique ID of this WebTest. This is typically the same value as the Name
@@ -133,7 +144,7 @@ public final class WebTestProperties {
     }
 
     /**
-     * Get the description property: Purpose/user defined descriptive test for this WebTest.
+     * Get the description property: User defined description for this WebTest.
      *
      * @return the description value.
      */
@@ -142,7 +153,7 @@ public final class WebTestProperties {
     }
 
     /**
-     * Set the description property: Purpose/user defined descriptive test for this WebTest.
+     * Set the description property: User defined description for this WebTest.
      *
      * @param description the description value to set.
      * @return the WebTestProperties object itself.
@@ -213,7 +224,7 @@ public final class WebTestProperties {
     }
 
     /**
-     * Get the webTestKind property: The kind of web test this is, valid choices are ping and multistep.
+     * Get the webTestKind property: The kind of web test this is, valid choices are ping, multistep and standard.
      *
      * @return the webTestKind value.
      */
@@ -222,7 +233,7 @@ public final class WebTestProperties {
     }
 
     /**
-     * Set the webTestKind property: The kind of web test this is, valid choices are ping and multistep.
+     * Set the webTestKind property: The kind of web test this is, valid choices are ping, multistep and standard.
      *
      * @param webTestKind the webTestKind value to set.
      * @return the WebTestProperties object itself.
@@ -306,29 +317,69 @@ public final class WebTestProperties {
     }
 
     /**
+     * Get the request property: The collection of request properties.
+     *
+     * @return the request value.
+     */
+    public WebTestPropertiesRequest request() {
+        return this.request;
+    }
+
+    /**
+     * Set the request property: The collection of request properties.
+     *
+     * @param request the request value to set.
+     * @return the WebTestProperties object itself.
+     */
+    public WebTestProperties withRequest(WebTestPropertiesRequest request) {
+        this.request = request;
+        return this;
+    }
+
+    /**
+     * Get the validationRules property: The collection of validation rule properties.
+     *
+     * @return the validationRules value.
+     */
+    public WebTestPropertiesValidationRules validationRules() {
+        return this.validationRules;
+    }
+
+    /**
+     * Set the validationRules property: The collection of validation rule properties.
+     *
+     * @param validationRules the validationRules value to set.
+     * @return the WebTestProperties object itself.
+     */
+    public WebTestProperties withValidationRules(WebTestPropertiesValidationRules validationRules) {
+        this.validationRules = validationRules;
+        return this;
+    }
+
+    /**
      * Validates the instance.
      *
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (syntheticMonitorId() == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         "Missing required property syntheticMonitorId in model WebTestProperties"));
         }
         if (webTestName() == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException("Missing required property webTestName in model WebTestProperties"));
         }
         if (webTestKind() == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException("Missing required property webTestKind in model WebTestProperties"));
         }
         if (locations() == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException("Missing required property locations in model WebTestProperties"));
         } else {
@@ -337,5 +388,13 @@ public final class WebTestProperties {
         if (configuration() != null) {
             configuration().validate();
         }
+        if (request() != null) {
+            request().validate();
+        }
+        if (validationRules() != null) {
+            validationRules().validate();
+        }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(WebTestProperties.class);
 }

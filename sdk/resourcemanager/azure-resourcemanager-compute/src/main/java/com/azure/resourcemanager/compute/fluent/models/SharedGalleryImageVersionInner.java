@@ -5,17 +5,17 @@
 package com.azure.resourcemanager.compute.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.compute.models.PirSharedGalleryResource;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.azure.resourcemanager.compute.models.SharedGalleryImageVersionStorageProfile;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
+import java.util.Map;
 
-/** Specifies information about the gallery image version that you want to create or update. */
+/**
+ * Specifies information about the gallery image version that you want to create or update.
+ */
 @Fluent
 public final class SharedGalleryImageVersionInner extends PirSharedGalleryResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SharedGalleryImageVersionInner.class);
-
     /*
      * Describes the properties of a gallery image version.
      */
@@ -23,15 +23,23 @@ public final class SharedGalleryImageVersionInner extends PirSharedGalleryResour
     private SharedGalleryImageVersionProperties innerProperties;
 
     /**
+     * Creates an instance of SharedGalleryImageVersionInner class.
+     */
+    public SharedGalleryImageVersionInner() {
+    }
+
+    /**
      * Get the innerProperties property: Describes the properties of a gallery image version.
-     *
+     * 
      * @return the innerProperties value.
      */
     private SharedGalleryImageVersionProperties innerProperties() {
         return this.innerProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SharedGalleryImageVersionInner withUniqueId(String uniqueId) {
         super.withUniqueId(uniqueId);
@@ -41,7 +49,7 @@ public final class SharedGalleryImageVersionInner extends PirSharedGalleryResour
     /**
      * Get the publishedDate property: The published date of the gallery image version Definition. This property can be
      * used for decommissioning purposes. This property is updatable.
-     *
+     * 
      * @return the publishedDate value.
      */
     public OffsetDateTime publishedDate() {
@@ -51,7 +59,7 @@ public final class SharedGalleryImageVersionInner extends PirSharedGalleryResour
     /**
      * Set the publishedDate property: The published date of the gallery image version Definition. This property can be
      * used for decommissioning purposes. This property is updatable.
-     *
+     * 
      * @param publishedDate the publishedDate value to set.
      * @return the SharedGalleryImageVersionInner object itself.
      */
@@ -66,7 +74,7 @@ public final class SharedGalleryImageVersionInner extends PirSharedGalleryResour
     /**
      * Get the endOfLifeDate property: The end of life date of the gallery image version Definition. This property can
      * be used for decommissioning purposes. This property is updatable.
-     *
+     * 
      * @return the endOfLifeDate value.
      */
     public OffsetDateTime endOfLifeDate() {
@@ -76,7 +84,7 @@ public final class SharedGalleryImageVersionInner extends PirSharedGalleryResour
     /**
      * Set the endOfLifeDate property: The end of life date of the gallery image version Definition. This property can
      * be used for decommissioning purposes. This property is updatable.
-     *
+     * 
      * @param endOfLifeDate the endOfLifeDate value to set.
      * @return the SharedGalleryImageVersionInner object itself.
      */
@@ -89,8 +97,79 @@ public final class SharedGalleryImageVersionInner extends PirSharedGalleryResour
     }
 
     /**
+     * Get the excludeFromLatest property: If set to true, Virtual Machines deployed from the latest version of the
+     * Image Definition won't use this Image Version.
+     * 
+     * @return the excludeFromLatest value.
+     */
+    public Boolean excludeFromLatest() {
+        return this.innerProperties() == null ? null : this.innerProperties().excludeFromLatest();
+    }
+
+    /**
+     * Set the excludeFromLatest property: If set to true, Virtual Machines deployed from the latest version of the
+     * Image Definition won't use this Image Version.
+     * 
+     * @param excludeFromLatest the excludeFromLatest value to set.
+     * @return the SharedGalleryImageVersionInner object itself.
+     */
+    public SharedGalleryImageVersionInner withExcludeFromLatest(Boolean excludeFromLatest) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new SharedGalleryImageVersionProperties();
+        }
+        this.innerProperties().withExcludeFromLatest(excludeFromLatest);
+        return this;
+    }
+
+    /**
+     * Get the storageProfile property: Describes the storage profile of the image version.
+     * 
+     * @return the storageProfile value.
+     */
+    public SharedGalleryImageVersionStorageProfile storageProfile() {
+        return this.innerProperties() == null ? null : this.innerProperties().storageProfile();
+    }
+
+    /**
+     * Set the storageProfile property: Describes the storage profile of the image version.
+     * 
+     * @param storageProfile the storageProfile value to set.
+     * @return the SharedGalleryImageVersionInner object itself.
+     */
+    public SharedGalleryImageVersionInner withStorageProfile(SharedGalleryImageVersionStorageProfile storageProfile) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new SharedGalleryImageVersionProperties();
+        }
+        this.innerProperties().withStorageProfile(storageProfile);
+        return this;
+    }
+
+    /**
+     * Get the artifactTags property: The artifact tags of a shared gallery resource.
+     * 
+     * @return the artifactTags value.
+     */
+    public Map<String, String> artifactTags() {
+        return this.innerProperties() == null ? null : this.innerProperties().artifactTags();
+    }
+
+    /**
+     * Set the artifactTags property: The artifact tags of a shared gallery resource.
+     * 
+     * @param artifactTags the artifactTags value to set.
+     * @return the SharedGalleryImageVersionInner object itself.
+     */
+    public SharedGalleryImageVersionInner withArtifactTags(Map<String, String> artifactTags) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new SharedGalleryImageVersionProperties();
+        }
+        this.innerProperties().withArtifactTags(artifactTags);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

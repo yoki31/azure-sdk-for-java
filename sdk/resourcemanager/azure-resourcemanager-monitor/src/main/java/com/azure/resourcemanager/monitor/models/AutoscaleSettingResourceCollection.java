@@ -7,15 +7,14 @@ package com.azure.resourcemanager.monitor.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.monitor.fluent.models.AutoscaleSettingResourceInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Represents a collection of autoscale setting resources. */
+/**
+ * Represents a collection of autoscale setting resources.
+ */
 @Fluent
 public final class AutoscaleSettingResourceCollection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AutoscaleSettingResourceCollection.class);
-
     /*
      * the values for the autoscale setting resources.
      */
@@ -29,8 +28,14 @@ public final class AutoscaleSettingResourceCollection {
     private String nextLink;
 
     /**
+     * Creates an instance of AutoscaleSettingResourceCollection class.
+     */
+    public AutoscaleSettingResourceCollection() {
+    }
+
+    /**
      * Get the value property: the values for the autoscale setting resources.
-     *
+     * 
      * @return the value value.
      */
     public List<AutoscaleSettingResourceInner> value() {
@@ -39,7 +44,7 @@ public final class AutoscaleSettingResourceCollection {
 
     /**
      * Set the value property: the values for the autoscale setting resources.
-     *
+     * 
      * @param value the value value to set.
      * @return the AutoscaleSettingResourceCollection object itself.
      */
@@ -50,7 +55,7 @@ public final class AutoscaleSettingResourceCollection {
 
     /**
      * Get the nextLink property: URL to get the next set of results.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,7 +64,7 @@ public final class AutoscaleSettingResourceCollection {
 
     /**
      * Set the nextLink property: URL to get the next set of results.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the AutoscaleSettingResourceCollection object itself.
      */
@@ -70,17 +75,17 @@ public final class AutoscaleSettingResourceCollection {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property value in model AutoscaleSettingResourceCollection"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property value in model AutoscaleSettingResourceCollection"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(AutoscaleSettingResourceCollection.class);
 }

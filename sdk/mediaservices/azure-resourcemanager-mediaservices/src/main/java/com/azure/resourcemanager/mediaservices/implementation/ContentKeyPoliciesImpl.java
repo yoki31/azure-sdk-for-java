@@ -15,10 +15,9 @@ import com.azure.resourcemanager.mediaservices.fluent.models.ContentKeyPolicyPro
 import com.azure.resourcemanager.mediaservices.models.ContentKeyPolicies;
 import com.azure.resourcemanager.mediaservices.models.ContentKeyPolicy;
 import com.azure.resourcemanager.mediaservices.models.ContentKeyPolicyProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class ContentKeyPoliciesImpl implements ContentKeyPolicies {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ContentKeyPoliciesImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(ContentKeyPoliciesImpl.class);
 
     private final ContentKeyPoliciesClient innerClient;
 
@@ -43,15 +42,6 @@ public final class ContentKeyPoliciesImpl implements ContentKeyPolicies {
         return Utils.mapPage(inner, inner1 -> new ContentKeyPolicyImpl(inner1, this.manager()));
     }
 
-    public ContentKeyPolicy get(String resourceGroupName, String accountName, String contentKeyPolicyName) {
-        ContentKeyPolicyInner inner = this.serviceClient().get(resourceGroupName, accountName, contentKeyPolicyName);
-        if (inner != null) {
-            return new ContentKeyPolicyImpl(inner, this.manager());
-        } else {
-            return null;
-        }
-    }
-
     public Response<ContentKeyPolicy> getWithResponse(
         String resourceGroupName, String accountName, String contentKeyPolicyName, Context context) {
         Response<ContentKeyPolicyInner> inner =
@@ -67,8 +57,13 @@ public final class ContentKeyPoliciesImpl implements ContentKeyPolicies {
         }
     }
 
-    public void delete(String resourceGroupName, String accountName, String contentKeyPolicyName) {
-        this.serviceClient().delete(resourceGroupName, accountName, contentKeyPolicyName);
+    public ContentKeyPolicy get(String resourceGroupName, String accountName, String contentKeyPolicyName) {
+        ContentKeyPolicyInner inner = this.serviceClient().get(resourceGroupName, accountName, contentKeyPolicyName);
+        if (inner != null) {
+            return new ContentKeyPolicyImpl(inner, this.manager());
+        } else {
+            return null;
+        }
     }
 
     public Response<Void> deleteWithResponse(
@@ -76,15 +71,8 @@ public final class ContentKeyPoliciesImpl implements ContentKeyPolicies {
         return this.serviceClient().deleteWithResponse(resourceGroupName, accountName, contentKeyPolicyName, context);
     }
 
-    public ContentKeyPolicyProperties getPolicyPropertiesWithSecrets(
-        String resourceGroupName, String accountName, String contentKeyPolicyName) {
-        ContentKeyPolicyPropertiesInner inner =
-            this.serviceClient().getPolicyPropertiesWithSecrets(resourceGroupName, accountName, contentKeyPolicyName);
-        if (inner != null) {
-            return new ContentKeyPolicyPropertiesImpl(inner, this.manager());
-        } else {
-            return null;
-        }
+    public void delete(String resourceGroupName, String accountName, String contentKeyPolicyName) {
+        this.serviceClient().delete(resourceGroupName, accountName, contentKeyPolicyName);
     }
 
     public Response<ContentKeyPolicyProperties> getPolicyPropertiesWithSecretsWithResponse(
@@ -105,10 +93,21 @@ public final class ContentKeyPoliciesImpl implements ContentKeyPolicies {
         }
     }
 
+    public ContentKeyPolicyProperties getPolicyPropertiesWithSecrets(
+        String resourceGroupName, String accountName, String contentKeyPolicyName) {
+        ContentKeyPolicyPropertiesInner inner =
+            this.serviceClient().getPolicyPropertiesWithSecrets(resourceGroupName, accountName, contentKeyPolicyName);
+        if (inner != null) {
+            return new ContentKeyPolicyPropertiesImpl(inner, this.manager());
+        } else {
+            return null;
+        }
+    }
+
     public ContentKeyPolicy getById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -116,14 +115,14 @@ public final class ContentKeyPoliciesImpl implements ContentKeyPolicies {
         }
         String accountName = Utils.getValueFromIdByName(id, "mediaServices");
         if (accountName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'mediaServices'.", id)));
         }
         String contentKeyPolicyName = Utils.getValueFromIdByName(id, "contentKeyPolicies");
         if (contentKeyPolicyName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -136,7 +135,7 @@ public final class ContentKeyPoliciesImpl implements ContentKeyPolicies {
     public Response<ContentKeyPolicy> getByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -144,14 +143,14 @@ public final class ContentKeyPoliciesImpl implements ContentKeyPolicies {
         }
         String accountName = Utils.getValueFromIdByName(id, "mediaServices");
         if (accountName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'mediaServices'.", id)));
         }
         String contentKeyPolicyName = Utils.getValueFromIdByName(id, "contentKeyPolicies");
         if (contentKeyPolicyName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -164,7 +163,7 @@ public final class ContentKeyPoliciesImpl implements ContentKeyPolicies {
     public void deleteById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -172,27 +171,27 @@ public final class ContentKeyPoliciesImpl implements ContentKeyPolicies {
         }
         String accountName = Utils.getValueFromIdByName(id, "mediaServices");
         if (accountName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'mediaServices'.", id)));
         }
         String contentKeyPolicyName = Utils.getValueFromIdByName(id, "contentKeyPolicies");
         if (contentKeyPolicyName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
                             .format(
                                 "The resource ID '%s' is not valid. Missing path segment 'contentKeyPolicies'.", id)));
         }
-        this.deleteWithResponse(resourceGroupName, accountName, contentKeyPolicyName, Context.NONE).getValue();
+        this.deleteWithResponse(resourceGroupName, accountName, contentKeyPolicyName, Context.NONE);
     }
 
     public Response<Void> deleteByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -200,14 +199,14 @@ public final class ContentKeyPoliciesImpl implements ContentKeyPolicies {
         }
         String accountName = Utils.getValueFromIdByName(id, "mediaServices");
         if (accountName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'mediaServices'.", id)));
         }
         String contentKeyPolicyName = Utils.getValueFromIdByName(id, "contentKeyPolicies");
         if (contentKeyPolicyName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String

@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.mediaservices.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** The IP address range in the CIDR scheme. */
 @Fluent
 public final class IpRange {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(IpRange.class);
-
     /*
      * The friendly name for the IP address range.
      */
@@ -31,6 +27,10 @@ public final class IpRange {
      */
     @JsonProperty(value = "subnetPrefixLength")
     private Integer subnetPrefixLength;
+
+    /** Creates an instance of IpRange class. */
+    public IpRange() {
+    }
 
     /**
      * Get the name property: The friendly name for the IP address range.

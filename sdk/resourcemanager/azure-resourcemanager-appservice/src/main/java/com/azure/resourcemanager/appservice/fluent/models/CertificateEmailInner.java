@@ -5,95 +5,77 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.azure.resourcemanager.appservice.models.ProxyOnlyResource;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
-/** SSL certificate email. */
+/**
+ * SSL certificate email.
+ */
 @Fluent
-public final class CertificateEmailInner extends ProxyOnlyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CertificateEmailInner.class);
+public final class CertificateEmailInner {
+    /*
+     * Email id.
+     */
+    @JsonProperty(value = "emailId")
+    private String emailId;
 
     /*
-     * CertificateEmail resource specific properties
+     * Time stamp.
      */
-    @JsonProperty(value = "properties")
-    private CertificateEmailProperties innerProperties;
+    @JsonProperty(value = "timeStamp")
+    private OffsetDateTime timestamp;
 
     /**
-     * Get the innerProperties property: CertificateEmail resource specific properties.
-     *
-     * @return the innerProperties value.
+     * Creates an instance of CertificateEmailInner class.
      */
-    private CertificateEmailProperties innerProperties() {
-        return this.innerProperties;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public CertificateEmailInner withKind(String kind) {
-        super.withKind(kind);
-        return this;
+    public CertificateEmailInner() {
     }
 
     /**
      * Get the emailId property: Email id.
-     *
+     * 
      * @return the emailId value.
      */
     public String emailId() {
-        return this.innerProperties() == null ? null : this.innerProperties().emailId();
+        return this.emailId;
     }
 
     /**
      * Set the emailId property: Email id.
-     *
+     * 
      * @param emailId the emailId value to set.
      * @return the CertificateEmailInner object itself.
      */
     public CertificateEmailInner withEmailId(String emailId) {
-        if (this.innerProperties() == null) {
-            this.innerProperties = new CertificateEmailProperties();
-        }
-        this.innerProperties().withEmailId(emailId);
+        this.emailId = emailId;
         return this;
     }
 
     /**
      * Get the timestamp property: Time stamp.
-     *
+     * 
      * @return the timestamp value.
      */
     public OffsetDateTime timestamp() {
-        return this.innerProperties() == null ? null : this.innerProperties().timestamp();
+        return this.timestamp;
     }
 
     /**
      * Set the timestamp property: Time stamp.
-     *
+     * 
      * @param timestamp the timestamp value to set.
      * @return the CertificateEmailInner object itself.
      */
     public CertificateEmailInner withTimestamp(OffsetDateTime timestamp) {
-        if (this.innerProperties() == null) {
-            this.innerProperties = new CertificateEmailProperties();
-        }
-        this.innerProperties().withTimestamp(timestamp);
+        this.timestamp = timestamp;
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
-    @Override
     public void validate() {
-        super.validate();
-        if (innerProperties() != null) {
-            innerProperties().validate();
-        }
     }
 }

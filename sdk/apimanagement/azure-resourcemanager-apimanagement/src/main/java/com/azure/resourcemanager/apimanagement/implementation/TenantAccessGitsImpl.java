@@ -10,10 +10,9 @@ import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.TenantAccessGitsClient;
 import com.azure.resourcemanager.apimanagement.models.AccessIdName;
 import com.azure.resourcemanager.apimanagement.models.TenantAccessGits;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class TenantAccessGitsImpl implements TenantAccessGits {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TenantAccessGitsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(TenantAccessGitsImpl.class);
 
     private final TenantAccessGitsClient innerClient;
 
@@ -26,10 +25,6 @@ public final class TenantAccessGitsImpl implements TenantAccessGits {
         this.serviceManager = serviceManager;
     }
 
-    public void regeneratePrimaryKey(String resourceGroupName, String serviceName, AccessIdName accessName) {
-        this.serviceClient().regeneratePrimaryKey(resourceGroupName, serviceName, accessName);
-    }
-
     public Response<Void> regeneratePrimaryKeyWithResponse(
         String resourceGroupName, String serviceName, AccessIdName accessName, Context context) {
         return this
@@ -37,8 +32,8 @@ public final class TenantAccessGitsImpl implements TenantAccessGits {
             .regeneratePrimaryKeyWithResponse(resourceGroupName, serviceName, accessName, context);
     }
 
-    public void regenerateSecondaryKey(String resourceGroupName, String serviceName, AccessIdName accessName) {
-        this.serviceClient().regenerateSecondaryKey(resourceGroupName, serviceName, accessName);
+    public void regeneratePrimaryKey(String resourceGroupName, String serviceName, AccessIdName accessName) {
+        this.serviceClient().regeneratePrimaryKey(resourceGroupName, serviceName, accessName);
     }
 
     public Response<Void> regenerateSecondaryKeyWithResponse(
@@ -46,6 +41,10 @@ public final class TenantAccessGitsImpl implements TenantAccessGits {
         return this
             .serviceClient()
             .regenerateSecondaryKeyWithResponse(resourceGroupName, serviceName, accessName, context);
+    }
+
+    public void regenerateSecondaryKey(String resourceGroupName, String serviceName, AccessIdName accessName) {
+        this.serviceClient().regenerateSecondaryKey(resourceGroupName, serviceName, accessName);
     }
 
     private TenantAccessGitsClient serviceClient() {

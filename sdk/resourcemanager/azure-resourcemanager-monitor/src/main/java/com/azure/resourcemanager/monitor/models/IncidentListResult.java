@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.monitor.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.monitor.fluent.models.IncidentInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The List incidents operation response. */
+/**
+ * The List incidents operation response.
+ */
 @Fluent
 public final class IncidentListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(IncidentListResult.class);
-
     /*
      * the incident collection.
      */
@@ -23,8 +21,14 @@ public final class IncidentListResult {
     private List<IncidentInner> value;
 
     /**
+     * Creates an instance of IncidentListResult class.
+     */
+    public IncidentListResult() {
+    }
+
+    /**
      * Get the value property: the incident collection.
-     *
+     * 
      * @return the value value.
      */
     public List<IncidentInner> value() {
@@ -33,7 +37,7 @@ public final class IncidentListResult {
 
     /**
      * Set the value property: the incident collection.
-     *
+     * 
      * @param value the value value to set.
      * @return the IncidentListResult object itself.
      */
@@ -44,7 +48,7 @@ public final class IncidentListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

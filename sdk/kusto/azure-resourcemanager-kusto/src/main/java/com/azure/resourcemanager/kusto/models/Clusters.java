@@ -14,7 +14,20 @@ public interface Clusters {
     /**
      * Gets a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param clusterName The name of the Kusto cluster.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a Kusto cluster along with {@link Response}.
+     */
+    Response<Cluster> getByResourceGroupWithResponse(String resourceGroupName, String clusterName, Context context);
+
+    /**
+     * Gets a Kusto cluster.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
@@ -24,22 +37,9 @@ public interface Clusters {
     Cluster getByResourceGroup(String resourceGroupName, String clusterName);
 
     /**
-     * Gets a Kusto cluster.
-     *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
-     * @param clusterName The name of the Kusto cluster.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Kusto cluster.
-     */
-    Response<Cluster> getByResourceGroupWithResponse(String resourceGroupName, String clusterName, Context context);
-
-    /**
      * Deletes a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
@@ -50,7 +50,7 @@ public interface Clusters {
     /**
      * Deletes a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -62,7 +62,7 @@ public interface Clusters {
     /**
      * Stops a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
@@ -73,7 +73,7 @@ public interface Clusters {
     /**
      * Stops a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -85,7 +85,7 @@ public interface Clusters {
     /**
      * Starts a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
@@ -96,7 +96,7 @@ public interface Clusters {
     /**
      * Starts a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -106,27 +106,53 @@ public interface Clusters {
     void start(String resourceGroupName, String clusterName, Context context);
 
     /**
+     * Migrate data from a Kusto cluster to another cluster.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param clusterName The name of the Kusto cluster.
+     * @param clusterMigrateRequest The cluster migrate request parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     */
+    void migrate(String resourceGroupName, String clusterName, ClusterMigrateRequest clusterMigrateRequest);
+
+    /**
+     * Migrate data from a Kusto cluster to another cluster.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param clusterName The name of the Kusto cluster.
+     * @param clusterMigrateRequest The cluster migrate request parameters.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     */
+    void migrate(
+        String resourceGroupName, String clusterName, ClusterMigrateRequest clusterMigrateRequest, Context context);
+
+    /**
      * Returns a list of databases that are owned by this cluster and were followed by another cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database principals operation response.
+     * @return the list Kusto database principals operation response as paginated response with {@link PagedIterable}.
      */
     PagedIterable<FollowerDatabaseDefinition> listFollowerDatabases(String resourceGroupName, String clusterName);
 
     /**
      * Returns a list of databases that are owned by this cluster and were followed by another cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database principals operation response.
+     * @return the list Kusto database principals operation response as paginated response with {@link PagedIterable}.
      */
     PagedIterable<FollowerDatabaseDefinition> listFollowerDatabases(
         String resourceGroupName, String clusterName, Context context);
@@ -134,7 +160,7 @@ public interface Clusters {
     /**
      * Detaches all followers of a database owned by this cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param followerDatabaseToRemove The follower databases properties to remove.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -147,7 +173,7 @@ public interface Clusters {
     /**
      * Detaches all followers of a database owned by this cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param followerDatabaseToRemove The follower databases properties to remove.
      * @param context The context to associate with this operation.
@@ -164,7 +190,7 @@ public interface Clusters {
     /**
      * Diagnoses network connectivity status for external resources on which the service is dependent on.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
@@ -176,7 +202,7 @@ public interface Clusters {
     /**
      * Diagnoses network connectivity status for external resources on which the service is dependent on.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -189,23 +215,23 @@ public interface Clusters {
     /**
      * Lists all Kusto clusters within a resource group.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto clusters operation response.
+     * @return the list Kusto clusters operation response as paginated response with {@link PagedIterable}.
      */
     PagedIterable<Cluster> listByResourceGroup(String resourceGroupName);
 
     /**
      * Lists all Kusto clusters within a resource group.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto clusters operation response.
+     * @return the list Kusto clusters operation response as paginated response with {@link PagedIterable}.
      */
     PagedIterable<Cluster> listByResourceGroup(String resourceGroupName, Context context);
 
@@ -214,7 +240,7 @@ public interface Clusters {
      *
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto clusters operation response.
+     * @return the list Kusto clusters operation response as paginated response with {@link PagedIterable}.
      */
     PagedIterable<Cluster> list();
 
@@ -225,7 +251,7 @@ public interface Clusters {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto clusters operation response.
+     * @return the list Kusto clusters operation response as paginated response with {@link PagedIterable}.
      */
     PagedIterable<Cluster> list(Context context);
 
@@ -234,7 +260,7 @@ public interface Clusters {
      *
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of the EngagementFabric SKU descriptions.
+     * @return the list of the EngagementFabric SKU descriptions as paginated response with {@link PagedIterable}.
      */
     PagedIterable<SkuDescription> listSkus();
 
@@ -245,14 +271,28 @@ public interface Clusters {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of the EngagementFabric SKU descriptions.
+     * @return the list of the EngagementFabric SKU descriptions as paginated response with {@link PagedIterable}.
      */
     PagedIterable<SkuDescription> listSkus(Context context);
 
     /**
      * Checks that the cluster name is valid and is not already in use.
      *
-     * @param location Azure location (region) name.
+     * @param location The name of Azure region.
+     * @param clusterName The name of the cluster.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the result returned from a check name availability request along with {@link Response}.
+     */
+    Response<CheckNameResult> checkNameAvailabilityWithResponse(
+        String location, ClusterCheckNameRequest clusterName, Context context);
+
+    /**
+     * Checks that the cluster name is valid and is not already in use.
+     *
+     * @param location The name of Azure region.
      * @param clusterName The name of the cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
@@ -262,53 +302,40 @@ public interface Clusters {
     CheckNameResult checkNameAvailability(String location, ClusterCheckNameRequest clusterName);
 
     /**
-     * Checks that the cluster name is valid and is not already in use.
-     *
-     * @param location Azure location (region) name.
-     * @param clusterName The name of the cluster.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
-     */
-    Response<CheckNameResult> checkNameAvailabilityWithResponse(
-        String location, ClusterCheckNameRequest clusterName, Context context);
-
-    /**
      * Returns the SKUs available for the provided resource.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of available SKUs for a Kusto Cluster.
+     * @return list of available SKUs for a Kusto Cluster as paginated response with {@link PagedIterable}.
      */
     PagedIterable<AzureResourceSku> listSkusByResource(String resourceGroupName, String clusterName);
 
     /**
      * Returns the SKUs available for the provided resource.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of available SKUs for a Kusto Cluster.
+     * @return list of available SKUs for a Kusto Cluster as paginated response with {@link PagedIterable}.
      */
     PagedIterable<AzureResourceSku> listSkusByResource(String resourceGroupName, String clusterName, Context context);
 
     /**
      * Gets the network endpoints of all outbound dependencies of a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the network endpoints of all outbound dependencies of a Kusto cluster.
+     * @return the network endpoints of all outbound dependencies of a Kusto cluster as paginated response with {@link
+     *     PagedIterable}.
      */
     PagedIterable<OutboundNetworkDependenciesEndpoint> listOutboundNetworkDependenciesEndpoints(
         String resourceGroupName, String clusterName);
@@ -316,13 +343,14 @@ public interface Clusters {
     /**
      * Gets the network endpoints of all outbound dependencies of a Kusto cluster.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the network endpoints of all outbound dependencies of a Kusto cluster.
+     * @return the network endpoints of all outbound dependencies of a Kusto cluster as paginated response with {@link
+     *     PagedIterable}.
      */
     PagedIterable<OutboundNetworkDependenciesEndpoint> listOutboundNetworkDependenciesEndpoints(
         String resourceGroupName, String clusterName, Context context);
@@ -330,25 +358,25 @@ public interface Clusters {
     /**
      * Returns a list of language extensions that can run within KQL queries.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of language extension objects.
+     * @return the list of language extension objects as paginated response with {@link PagedIterable}.
      */
     PagedIterable<LanguageExtension> listLanguageExtensions(String resourceGroupName, String clusterName);
 
     /**
      * Returns a list of language extensions that can run within KQL queries.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of language extension objects.
+     * @return the list of language extension objects as paginated response with {@link PagedIterable}.
      */
     PagedIterable<LanguageExtension> listLanguageExtensions(
         String resourceGroupName, String clusterName, Context context);
@@ -356,7 +384,7 @@ public interface Clusters {
     /**
      * Add a list of language extensions that can run within KQL queries.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param languageExtensionsToAdd The language extensions to add.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -369,7 +397,7 @@ public interface Clusters {
     /**
      * Add a list of language extensions that can run within KQL queries.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param languageExtensionsToAdd The language extensions to add.
      * @param context The context to associate with this operation.
@@ -383,7 +411,7 @@ public interface Clusters {
     /**
      * Remove a list of language extensions that can run within KQL queries.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param languageExtensionsToRemove The language extensions to remove.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -396,7 +424,7 @@ public interface Clusters {
     /**
      * Remove a list of language extensions that can run within KQL queries.
      *
-     * @param resourceGroupName The name of the resource group containing the Kusto cluster.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param clusterName The name of the Kusto cluster.
      * @param languageExtensionsToRemove The language extensions to remove.
      * @param context The context to associate with this operation.
@@ -417,7 +445,7 @@ public interface Clusters {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Kusto cluster.
+     * @return a Kusto cluster along with {@link Response}.
      */
     Cluster getById(String id);
 
@@ -429,7 +457,7 @@ public interface Clusters {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Kusto cluster.
+     * @return a Kusto cluster along with {@link Response}.
      */
     Response<Cluster> getByIdWithResponse(String id, Context context);
 

@@ -5,7 +5,11 @@
 package com.azure.monitor.opentelemetry.exporter.implementation.models;
 
 import com.azure.core.annotation.Fluent;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -15,72 +19,60 @@ import java.util.Map;
 @Fluent
 public final class RemoteDependencyData extends MonitorDomain {
     /*
-     * Identifier of a dependency call instance. Used for correlation with the
-     * request telemetry item corresponding to this dependency call.
+     * Identifier of a dependency call instance. Used for correlation with the request telemetry item corresponding to this dependency call.
      */
-    @JsonProperty(value = "id")
     private String id;
 
     /*
-     * Name of the command initiated with this dependency call. Low cardinality
-     * value. Examples are stored procedure name and URL path template.
+     * Name of the command initiated with this dependency call. Low cardinality value. Examples are stored procedure name and URL path template.
      */
-    @JsonProperty(value = "name", required = true)
     private String name;
 
     /*
-     * Result code of a dependency call. Examples are SQL error code and HTTP
-     * status code.
+     * Result code of a dependency call. Examples are SQL error code and HTTP status code.
      */
-    @JsonProperty(value = "resultCode")
     private String resultCode;
 
     /*
-     * Command initiated by this dependency call. Examples are SQL statement
-     * and HTTP URL with all query parameters.
+     * Command initiated by this dependency call. Examples are SQL statement and HTTP URL with all query parameters.
      */
-    @JsonProperty(value = "data")
     private String data;
 
     /*
-     * Dependency type name. Very low cardinality value for logical grouping of
-     * dependencies and interpretation of other fields like commandName and
-     * resultCode. Examples are SQL, Azure table, and HTTP.
+     * Dependency type name. Very low cardinality value for logical grouping of dependencies and interpretation of other fields like commandName and resultCode. Examples are SQL, Azure table, and HTTP.
      */
-    @JsonProperty(value = "type")
     private String type;
 
     /*
-     * Target site of a dependency call. Examples are server name, host
-     * address.
+     * Target site of a dependency call. Examples are server name, host address.
      */
-    @JsonProperty(value = "target")
     private String target;
 
     /*
-     * Request duration in format: DD.HH:MM:SS.MMMMMM. Must be less than 1000
-     * days.
+     * Request duration in format: DD.HH:MM:SS.MMMMMM. Must be less than 1000 days.
      */
-    @JsonProperty(value = "duration", required = true)
     private String duration;
 
     /*
      * Indication of successful or unsuccessful call.
      */
-    @JsonProperty(value = "success")
     private Boolean success;
 
     /*
      * Collection of custom properties.
      */
-    @JsonProperty(value = "properties")
     private Map<String, String> properties;
 
     /*
      * Collection of custom measurements.
      */
-    @JsonProperty(value = "measurements")
     private Map<String, Double> measurements;
+
+    /**
+     * Creates an instance of RemoteDependencyData class.
+     */
+    public RemoteDependencyData() {
+    }
 
     /**
      * Get the id property: Identifier of a dependency call instance. Used for correlation with the request telemetry
@@ -288,5 +280,92 @@ public final class RemoteDependencyData extends MonitorDomain {
     public RemoteDependencyData setMeasurements(Map<String, Double> measurements) {
         this.measurements = measurements;
         return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public RemoteDependencyData setVersion(int version) {
+        super.setVersion(version);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeIntField("ver", getVersion());
+        jsonWriter.writeStringField("name", this.name);
+        jsonWriter.writeStringField("duration", this.duration);
+        jsonWriter.writeStringField("id", this.id);
+        jsonWriter.writeStringField("resultCode", this.resultCode);
+        jsonWriter.writeStringField("data", this.data);
+        jsonWriter.writeStringField("type", this.type);
+        jsonWriter.writeStringField("target", this.target);
+        jsonWriter.writeBooleanField("success", this.success);
+        jsonWriter.writeMapField("properties", this.properties, JsonWriter::writeString);
+        jsonWriter.writeMapField("measurements", this.measurements, JsonWriter::writeDouble);
+        if (getAdditionalProperties() != null) {
+            for (Map.Entry<String, Object> additionalProperty : getAdditionalProperties().entrySet()) {
+                jsonWriter.writeUntypedField(additionalProperty.getKey(), additionalProperty.getValue());
+            }
+        }
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of RemoteDependencyData from the JsonReader.
+     *
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of RemoteDependencyData if the JsonReader was pointing to an instance of it, or null if it
+     * was pointing to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the RemoteDependencyData.
+     */
+    public static RemoteDependencyData fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            RemoteDependencyData deserializedRemoteDependencyData = new RemoteDependencyData();
+            Map<String, Object> additionalProperties = null;
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("ver".equals(fieldName)) {
+                    deserializedRemoteDependencyData.setVersion(reader.getInt());
+                } else if ("name".equals(fieldName)) {
+                    deserializedRemoteDependencyData.name = reader.getString();
+                } else if ("duration".equals(fieldName)) {
+                    deserializedRemoteDependencyData.duration = reader.getString();
+                } else if ("id".equals(fieldName)) {
+                    deserializedRemoteDependencyData.id = reader.getString();
+                } else if ("resultCode".equals(fieldName)) {
+                    deserializedRemoteDependencyData.resultCode = reader.getString();
+                } else if ("data".equals(fieldName)) {
+                    deserializedRemoteDependencyData.data = reader.getString();
+                } else if ("type".equals(fieldName)) {
+                    deserializedRemoteDependencyData.type = reader.getString();
+                } else if ("target".equals(fieldName)) {
+                    deserializedRemoteDependencyData.target = reader.getString();
+                } else if ("success".equals(fieldName)) {
+                    deserializedRemoteDependencyData.success = reader.getNullable(JsonReader::getBoolean);
+                } else if ("properties".equals(fieldName)) {
+                    deserializedRemoteDependencyData.properties = reader.readMap(JsonReader::getString);
+                } else if ("measurements".equals(fieldName)) {
+                    deserializedRemoteDependencyData.measurements = reader.readMap(JsonReader::getDouble);
+                } else {
+                    if (additionalProperties == null) {
+                        additionalProperties = new LinkedHashMap<>();
+                    }
+
+                    additionalProperties.put(fieldName, reader.readUntyped());
+                }
+            }
+            deserializedRemoteDependencyData.setAdditionalProperties(additionalProperties);
+
+            return deserializedRemoteDependencyData;
+        });
     }
 }

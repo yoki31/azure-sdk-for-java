@@ -6,16 +6,14 @@ package com.azure.resourcemanager.compute.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.SubResource;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Output of virtual machine capture operation. */
+/**
+ * Output of virtual machine capture operation.
+ */
 @Fluent
 public final class VirtualMachineCaptureResultInner extends SubResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VirtualMachineCaptureResultInner.class);
-
     /*
      * the schema of the captured virtual machine
      */
@@ -41,8 +39,14 @@ public final class VirtualMachineCaptureResultInner extends SubResource {
     private List<Object> resources;
 
     /**
+     * Creates an instance of VirtualMachineCaptureResultInner class.
+     */
+    public VirtualMachineCaptureResultInner() {
+    }
+
+    /**
      * Get the schema property: the schema of the captured virtual machine.
-     *
+     * 
      * @return the schema value.
      */
     public String schema() {
@@ -51,7 +55,7 @@ public final class VirtualMachineCaptureResultInner extends SubResource {
 
     /**
      * Get the contentVersion property: the version of the content.
-     *
+     * 
      * @return the contentVersion value.
      */
     public String contentVersion() {
@@ -60,7 +64,7 @@ public final class VirtualMachineCaptureResultInner extends SubResource {
 
     /**
      * Get the parameters property: parameters of the captured virtual machine.
-     *
+     * 
      * @return the parameters value.
      */
     public Object parameters() {
@@ -69,14 +73,16 @@ public final class VirtualMachineCaptureResultInner extends SubResource {
 
     /**
      * Get the resources property: a list of resource items of the captured virtual machine.
-     *
+     * 
      * @return the resources value.
      */
     public List<Object> resources() {
         return this.resources;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public VirtualMachineCaptureResultInner withId(String id) {
         super.withId(id);
@@ -85,7 +91,7 @@ public final class VirtualMachineCaptureResultInner extends SubResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

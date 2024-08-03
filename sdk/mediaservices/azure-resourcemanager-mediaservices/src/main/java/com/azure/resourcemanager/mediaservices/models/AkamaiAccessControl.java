@@ -5,21 +5,21 @@
 package com.azure.resourcemanager.mediaservices.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Akamai access control. */
 @Fluent
 public final class AkamaiAccessControl {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AkamaiAccessControl.class);
-
     /*
      * authentication key list
      */
     @JsonProperty(value = "akamaiSignatureHeaderAuthenticationKeyList")
     private List<AkamaiSignatureHeaderAuthenticationKey> akamaiSignatureHeaderAuthenticationKeyList;
+
+    /** Creates an instance of AkamaiAccessControl class. */
+    public AkamaiAccessControl() {
+    }
 
     /**
      * Get the akamaiSignatureHeaderAuthenticationKeyList property: authentication key list.

@@ -30,7 +30,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.ApiReleasesClient;
 import com.azure.resourcemanager.apimanagement.fluent.models.ApiReleaseContractInner;
 import com.azure.resourcemanager.apimanagement.models.ApiReleaseCollection;
@@ -42,8 +41,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in ApiReleasesClient. */
 public final class ApiReleasesClientImpl implements ApiReleasesClient {
-    private final ClientLogger logger = new ClientLogger(ApiReleasesClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final ApiReleasesService service;
 
@@ -67,11 +64,10 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApiManagementClientA")
-    private interface ApiReleasesService {
+    public interface ApiReleasesService {
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/apis/{apiId}/releases")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/apis/{apiId}/releases")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<ApiReleaseCollection>> listByService(
@@ -89,8 +85,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
 
         @Headers({"Content-Type: application/json"})
         @Head(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/apis/{apiId}/releases/{releaseId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/apis/{apiId}/releases/{releaseId}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<ApiReleasesGetEntityTagResponse> getEntityTag(
@@ -106,8 +101,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
 
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/apis/{apiId}/releases/{releaseId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/apis/{apiId}/releases/{releaseId}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<ApiReleasesGetResponse> get(
@@ -123,8 +117,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
 
         @Headers({"Content-Type: application/json"})
         @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/apis/{apiId}/releases/{releaseId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/apis/{apiId}/releases/{releaseId}")
         @ExpectedResponses({200, 201})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<ApiReleasesCreateOrUpdateResponse> createOrUpdate(
@@ -142,8 +135,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
 
         @Headers({"Content-Type: application/json"})
         @Patch(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/apis/{apiId}/releases/{releaseId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/apis/{apiId}/releases/{releaseId}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<ApiReleasesUpdateResponse> update(
@@ -161,8 +153,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
 
         @Headers({"Content-Type: application/json"})
         @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/apis/{apiId}/releases/{releaseId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/apis/{apiId}/releases/{releaseId}")
         @ExpectedResponses({200, 204})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Void>> delete(
@@ -193,7 +184,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
      * used to rollback to previous revisions. Results will be paged and can be constrained by the $top and $skip
      * parameters.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -204,7 +195,8 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged ApiRelease list representation.
+     * @return paged ApiRelease list representation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ApiReleaseContractInner>> listByServiceSinglePageAsync(
@@ -265,7 +257,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
      * used to rollback to previous revisions. Results will be paged and can be constrained by the $top and $skip
      * parameters.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -277,7 +269,8 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged ApiRelease list representation.
+     * @return paged ApiRelease list representation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ApiReleaseContractInner>> listByServiceSinglePageAsync(
@@ -341,7 +334,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
      * used to rollback to previous revisions. Results will be paged and can be constrained by the $top and $skip
      * parameters.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -352,7 +345,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged ApiRelease list representation.
+     * @return paged ApiRelease list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<ApiReleaseContractInner> listByServiceAsync(
@@ -367,13 +360,13 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
      * used to rollback to previous revisions. Results will be paged and can be constrained by the $top and $skip
      * parameters.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged ApiRelease list representation.
+     * @return paged ApiRelease list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<ApiReleaseContractInner> listByServiceAsync(
@@ -391,7 +384,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
      * used to rollback to previous revisions. Results will be paged and can be constrained by the $top and $skip
      * parameters.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -403,7 +396,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged ApiRelease list representation.
+     * @return paged ApiRelease list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<ApiReleaseContractInner> listByServiceAsync(
@@ -424,13 +417,13 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
      * used to rollback to previous revisions. Results will be paged and can be constrained by the $top and $skip
      * parameters.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged ApiRelease list representation.
+     * @return paged ApiRelease list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<ApiReleaseContractInner> listByService(
@@ -446,7 +439,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
      * used to rollback to previous revisions. Results will be paged and can be constrained by the $top and $skip
      * parameters.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -458,7 +451,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged ApiRelease list representation.
+     * @return paged ApiRelease list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<ApiReleaseContractInner> listByService(
@@ -476,14 +469,14 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
     /**
      * Returns the etag of an API release.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiReleasesGetEntityTagResponse> getEntityTagWithResponseAsync(
@@ -534,7 +527,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
     /**
      * Returns the etag of an API release.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
@@ -542,7 +535,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiReleasesGetEntityTagResponse> getEntityTagWithResponseAsync(
@@ -590,41 +583,25 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
     /**
      * Returns the etag of an API release.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> getEntityTagAsync(String resourceGroupName, String serviceName, String apiId, String releaseId) {
         return getEntityTagWithResponseAsync(resourceGroupName, serviceName, apiId, releaseId)
-            .flatMap((ApiReleasesGetEntityTagResponse res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Returns the etag of an API release.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param apiId API identifier. Must be unique in the current API Management service instance.
-     * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public void getEntityTag(String resourceGroupName, String serviceName, String apiId, String releaseId) {
-        getEntityTagAsync(resourceGroupName, serviceName, apiId, releaseId).block();
-    }
-
-    /**
-     * Returns the etag of an API release.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
@@ -641,16 +618,32 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
     }
 
     /**
-     * Returns the details of an API release.
+     * Returns the etag of an API release.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return apiRelease details.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public void getEntityTag(String resourceGroupName, String serviceName, String apiId, String releaseId) {
+        getEntityTagWithResponse(resourceGroupName, serviceName, apiId, releaseId, Context.NONE);
+    }
+
+    /**
+     * Returns the details of an API release.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param apiId API identifier. Must be unique in the current API Management service instance.
+     * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return apiRelease details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiReleasesGetResponse> getWithResponseAsync(
@@ -701,7 +694,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
     /**
      * Returns the details of an API release.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
@@ -709,7 +702,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return apiRelease details.
+     * @return apiRelease details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiReleasesGetResponse> getWithResponseAsync(
@@ -757,50 +750,26 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
     /**
      * Returns the details of an API release.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return apiRelease details.
+     * @return apiRelease details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiReleaseContractInner> getAsync(
         String resourceGroupName, String serviceName, String apiId, String releaseId) {
         return getWithResponseAsync(resourceGroupName, serviceName, apiId, releaseId)
-            .flatMap(
-                (ApiReleasesGetResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Returns the details of an API release.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param apiId API identifier. Must be unique in the current API Management service instance.
-     * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return apiRelease details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public ApiReleaseContractInner get(String resourceGroupName, String serviceName, String apiId, String releaseId) {
-        return getAsync(resourceGroupName, serviceName, apiId, releaseId).block();
-    }
-
-    /**
-     * Returns the details of an API release.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
@@ -817,9 +786,26 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
     }
 
     /**
+     * Returns the details of an API release.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param apiId API identifier. Must be unique in the current API Management service instance.
+     * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return apiRelease details.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public ApiReleaseContractInner get(String resourceGroupName, String serviceName, String apiId, String releaseId) {
+        return getWithResponse(resourceGroupName, serviceName, apiId, releaseId, Context.NONE).getValue();
+    }
+
+    /**
      * Creates a new Release for the API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
@@ -828,7 +814,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return apiRelease details.
+     * @return apiRelease details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiReleasesCreateOrUpdateResponse> createOrUpdateWithResponseAsync(
@@ -891,7 +877,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
     /**
      * Creates a new Release for the API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
@@ -901,7 +887,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return apiRelease details.
+     * @return apiRelease details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiReleasesCreateOrUpdateResponse> createOrUpdateWithResponseAsync(
@@ -962,40 +948,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
     /**
      * Creates a new Release for the API.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param apiId API identifier. Must be unique in the current API Management service instance.
-     * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
-     * @param parameters Create parameters.
-     * @param ifMatch ETag of the Entity. Not required when creating an entity, but required when updating an entity.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return apiRelease details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<ApiReleaseContractInner> createOrUpdateAsync(
-        String resourceGroupName,
-        String serviceName,
-        String apiId,
-        String releaseId,
-        ApiReleaseContractInner parameters,
-        String ifMatch) {
-        return createOrUpdateWithResponseAsync(resourceGroupName, serviceName, apiId, releaseId, parameters, ifMatch)
-            .flatMap(
-                (ApiReleasesCreateOrUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
-    }
-
-    /**
-     * Creates a new Release for the API.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
@@ -1003,7 +956,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return apiRelease details.
+     * @return apiRelease details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiReleaseContractInner> createOrUpdateAsync(
@@ -1014,44 +967,13 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
         ApiReleaseContractInner parameters) {
         final String ifMatch = null;
         return createOrUpdateWithResponseAsync(resourceGroupName, serviceName, apiId, releaseId, parameters, ifMatch)
-            .flatMap(
-                (ApiReleasesCreateOrUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Creates a new Release for the API.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param apiId API identifier. Must be unique in the current API Management service instance.
-     * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
-     * @param parameters Create parameters.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return apiRelease details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public ApiReleaseContractInner createOrUpdate(
-        String resourceGroupName,
-        String serviceName,
-        String apiId,
-        String releaseId,
-        ApiReleaseContractInner parameters) {
-        final String ifMatch = null;
-        return createOrUpdateAsync(resourceGroupName, serviceName, apiId, releaseId, parameters, ifMatch).block();
-    }
-
-    /**
-     * Creates a new Release for the API.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
@@ -1078,9 +1000,35 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
     }
 
     /**
+     * Creates a new Release for the API.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param apiId API identifier. Must be unique in the current API Management service instance.
+     * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
+     * @param parameters Create parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return apiRelease details.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public ApiReleaseContractInner createOrUpdate(
+        String resourceGroupName,
+        String serviceName,
+        String apiId,
+        String releaseId,
+        ApiReleaseContractInner parameters) {
+        final String ifMatch = null;
+        return createOrUpdateWithResponse(
+                resourceGroupName, serviceName, apiId, releaseId, parameters, ifMatch, Context.NONE)
+            .getValue();
+    }
+
+    /**
      * Updates the details of the release of the API specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
@@ -1090,7 +1038,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return apiRelease details.
+     * @return apiRelease details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiReleasesUpdateResponse> updateWithResponseAsync(
@@ -1156,7 +1104,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
     /**
      * Updates the details of the release of the API specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
@@ -1167,7 +1115,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return apiRelease details.
+     * @return apiRelease details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiReleasesUpdateResponse> updateWithResponseAsync(
@@ -1231,7 +1179,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
     /**
      * Updates the details of the release of the API specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
@@ -1241,7 +1189,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return apiRelease details.
+     * @return apiRelease details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiReleaseContractInner> updateAsync(
@@ -1252,46 +1200,13 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
         String ifMatch,
         ApiReleaseContractInner parameters) {
         return updateWithResponseAsync(resourceGroupName, serviceName, apiId, releaseId, ifMatch, parameters)
-            .flatMap(
-                (ApiReleasesUpdateResponse res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Updates the details of the release of the API specified by its identifier.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param apiId API identifier. Must be unique in the current API Management service instance.
-     * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param parameters API Release Update parameters.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return apiRelease details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public ApiReleaseContractInner update(
-        String resourceGroupName,
-        String serviceName,
-        String apiId,
-        String releaseId,
-        String ifMatch,
-        ApiReleaseContractInner parameters) {
-        return updateAsync(resourceGroupName, serviceName, apiId, releaseId, ifMatch, parameters).block();
-    }
-
-    /**
-     * Updates the details of the release of the API specified by its identifier.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
@@ -1318,9 +1233,36 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
     }
 
     /**
+     * Updates the details of the release of the API specified by its identifier.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param apiId API identifier. Must be unique in the current API Management service instance.
+     * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param parameters API Release Update parameters.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return apiRelease details.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public ApiReleaseContractInner update(
+        String resourceGroupName,
+        String serviceName,
+        String apiId,
+        String releaseId,
+        String ifMatch,
+        ApiReleaseContractInner parameters) {
+        return updateWithResponse(resourceGroupName, serviceName, apiId, releaseId, ifMatch, parameters, Context.NONE)
+            .getValue();
+    }
+
+    /**
      * Deletes the specified release in the API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
@@ -1329,7 +1271,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -1384,7 +1326,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
     /**
      * Deletes the specified release in the API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
@@ -1394,7 +1336,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -1446,7 +1388,7 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
     /**
      * Deletes the specified release in the API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
@@ -1455,19 +1397,40 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(
         String resourceGroupName, String serviceName, String apiId, String releaseId, String ifMatch) {
         return deleteWithResponseAsync(resourceGroupName, serviceName, apiId, releaseId, ifMatch)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Deletes the specified release in the API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param apiId API identifier. Must be unique in the current API Management service instance.
+     * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
+     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
+     *     request or it should be * for unconditional update.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> deleteWithResponse(
+        String resourceGroupName, String serviceName, String apiId, String releaseId, String ifMatch, Context context) {
+        return deleteWithResponseAsync(resourceGroupName, serviceName, apiId, releaseId, ifMatch, context).block();
+    }
+
+    /**
+     * Deletes the specified release in the API.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
@@ -1479,38 +1442,19 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public void delete(String resourceGroupName, String serviceName, String apiId, String releaseId, String ifMatch) {
-        deleteAsync(resourceGroupName, serviceName, apiId, releaseId, ifMatch).block();
-    }
-
-    /**
-     * Deletes the specified release in the API.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param apiId API identifier. Must be unique in the current API Management service instance.
-     * @param releaseId Release identifier within an API. Must be unique in the current API Management service instance.
-     * @param ifMatch ETag of the Entity. ETag should match the current entity state from the header response of the GET
-     *     request or it should be * for unconditional update.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> deleteWithResponse(
-        String resourceGroupName, String serviceName, String apiId, String releaseId, String ifMatch, Context context) {
-        return deleteWithResponseAsync(resourceGroupName, serviceName, apiId, releaseId, ifMatch, context).block();
+        deleteWithResponse(resourceGroupName, serviceName, apiId, releaseId, ifMatch, Context.NONE);
     }
 
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged ApiRelease list representation.
+     * @return paged ApiRelease list representation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ApiReleaseContractInner>> listByServiceNextSinglePageAsync(String nextLink) {
@@ -1541,12 +1485,14 @@ public final class ApiReleasesClientImpl implements ApiReleasesClient {
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged ApiRelease list representation.
+     * @return paged ApiRelease list representation along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ApiReleaseContractInner>> listByServiceNextSinglePageAsync(

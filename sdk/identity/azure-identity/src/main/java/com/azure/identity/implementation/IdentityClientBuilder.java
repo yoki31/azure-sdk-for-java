@@ -3,10 +3,12 @@
 
 package com.azure.identity.implementation;
 
+import com.azure.core.http.HttpPipeline;
 import com.azure.identity.SharedTokenCacheCredential;
 
-import java.io.InputStream;
 import java.time.Duration;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Fluent client builder for instantiating an {@link IdentityClient}.
@@ -14,16 +16,19 @@ import java.time.Duration;
  * @see IdentityClient
  */
 public final class IdentityClientBuilder {
-    private IdentityClientOptions identityClientOptions;
+    private IdentityClientOptions identityClientOptions = new IdentityClientOptions();
     private String tenantId;
     private String clientId;
+    private String resourceId;
     private String clientSecret;
     private String clientAssertionPath;
     private String certificatePath;
-    private InputStream certificate;
+    private byte[] certificate;
     private String certificatePassword;
     private boolean sharedTokenCacheCred;
     private Duration clientAssertionTimeout;
+    private Supplier<String> clientAssertionSupplier;
+    private Function<HttpPipeline, String> clientAssertionSupplierWithHttpPipeline;
 
     /**
      * Sets the tenant ID for the client.
@@ -45,9 +50,14 @@ public final class IdentityClientBuilder {
         return this;
     }
 
+    public IdentityClientBuilder resourceId(String resourceId) {
+        this.resourceId = resourceId;
+        return this;
+    }
+
     /**
      * Sets the client secret for the client.
-     * @param clientSecret the secret value of the AAD application.
+     * @param clientSecret the secret value of the Microsoft Entra application.
      * @return the IdentityClientBuilder itself
      */
     public IdentityClientBuilder clientSecret(String clientSecret) {
@@ -63,6 +73,22 @@ public final class IdentityClientBuilder {
      */
     public IdentityClientBuilder certificatePath(String certificatePath) {
         this.certificatePath = certificatePath;
+        return this;
+    }
+
+    /**
+     * Sets the supplier for client assertion.
+     *
+     * @param clientAssertionSupplier the supplier of client assertion.
+     * @return the IdentityClientBuilder itself
+     */
+    public IdentityClientBuilder clientAssertionSupplier(Supplier<String> clientAssertionSupplier) {
+        this.clientAssertionSupplier = clientAssertionSupplier;
+        return this;
+    }
+
+    public IdentityClientBuilder clientAssertionSupplierWithHttpPipeline(Function<HttpPipeline, String> clientAssertionSupplier) {
+        this.clientAssertionSupplierWithHttpPipeline = clientAssertionSupplier;
         return this;
     }
 
@@ -83,7 +109,7 @@ public final class IdentityClientBuilder {
      * @param certificate the PEM/PFX certificate
      * @return the IdentityClientBuilder itself
      */
-    public IdentityClientBuilder certificate(InputStream certificate) {
+    public IdentityClientBuilder certificate(byte[] certificate) {
         this.certificate = certificate;
         return this;
     }
@@ -136,7 +162,14 @@ public final class IdentityClientBuilder {
      * @return a {@link IdentityClient} with the current configurations.
      */
     public IdentityClient build() {
-        return new IdentityClient(tenantId, clientId, clientSecret, certificatePath, clientAssertionPath, certificate,
-            certificatePassword, sharedTokenCacheCred, clientAssertionTimeout, identityClientOptions);
+        return new IdentityClient(tenantId, clientId, clientSecret, certificatePath, clientAssertionPath, resourceId,
+            clientAssertionSupplier, clientAssertionSupplierWithHttpPipeline, certificate, certificatePassword, sharedTokenCacheCred, clientAssertionTimeout,
+            identityClientOptions);
+    }
+
+    public IdentitySyncClient buildSyncClient() {
+        return new IdentitySyncClient(tenantId, clientId, clientSecret, certificatePath, clientAssertionPath, resourceId,
+            clientAssertionSupplier, clientAssertionSupplierWithHttpPipeline, certificate, certificatePassword, sharedTokenCacheCred, clientAssertionTimeout,
+            identityClientOptions);
     }
 }

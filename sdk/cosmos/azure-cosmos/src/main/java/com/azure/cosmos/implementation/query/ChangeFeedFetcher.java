@@ -5,22 +5,24 @@ package com.azure.cosmos.implementation.query;
 
 import com.azure.cosmos.BridgeInternal;
 import com.azure.cosmos.implementation.DocumentClientRetryPolicy;
+import com.azure.cosmos.implementation.GlobalEndpointManager;
+import com.azure.cosmos.implementation.circuitBreaker.GlobalPartitionEndpointManagerForCircuitBreaker;
 import com.azure.cosmos.implementation.GoneException;
 import com.azure.cosmos.implementation.InvalidPartitionExceptionRetryPolicy;
 import com.azure.cosmos.implementation.MetadataDiagnosticsContext;
 import com.azure.cosmos.implementation.ObservableHelper;
 import com.azure.cosmos.implementation.PartitionKeyRangeGoneRetryPolicy;
 import com.azure.cosmos.implementation.PathsHelper;
-import com.azure.cosmos.implementation.Resource;
 import com.azure.cosmos.implementation.ResourceType;
 import com.azure.cosmos.implementation.RetryContext;
 import com.azure.cosmos.implementation.RxDocumentClientImpl;
 import com.azure.cosmos.implementation.RxDocumentServiceRequest;
 import com.azure.cosmos.implementation.ShouldRetryResult;
-import com.azure.cosmos.implementation.changefeed.implementation.ChangeFeedState;
+import com.azure.cosmos.implementation.changefeed.common.ChangeFeedState;
 import com.azure.cosmos.implementation.feedranges.FeedRangeContinuation;
 import com.azure.cosmos.implementation.feedranges.FeedRangeInternal;
 import com.azure.cosmos.implementation.routing.Range;
+import com.azure.cosmos.implementation.spark.OperationContextAndListenerTuple;
 import com.azure.cosmos.models.FeedResponse;
 import com.azure.cosmos.models.ModelBridgeInternal;
 import org.slf4j.Logger;
@@ -33,10 +35,10 @@ import java.util.function.Supplier;
 
 import static com.azure.cosmos.implementation.guava25.base.Preconditions.checkNotNull;
 
-class ChangeFeedFetcher<T extends Resource> extends Fetcher<T> {
+class ChangeFeedFetcher<T> extends Fetcher<T> {
     private final ChangeFeedState changeFeedState;
     private final Supplier<RxDocumentServiceRequest> createRequestFunc;
-    private final DocumentClientRetryPolicy feedRangeContinuationSplitRetryPolicy;
+    private final DocumentClientRetryPolicy feedRangeContinuationRetryPolicy;
 
     public ChangeFeedFetcher(
         RxDocumentClientImpl client,
@@ -46,29 +48,43 @@ class ChangeFeedFetcher<T extends Resource> extends Fetcher<T> {
         Map<String, Object> requestOptionProperties,
         int top,
         int maxItemCount,
-        boolean isSplitHandlingDisabled) {
-
-        super(executeFunc, true, top, maxItemCount);
+        boolean isSplitHandlingDisabled,
+        OperationContextAndListenerTuple operationContext,
+        GlobalEndpointManager globalEndpointManager,
+        GlobalPartitionEndpointManagerForCircuitBreaker globalPartitionEndpointManagerForCircuitBreaker) {
+        super(executeFunc, true, top, maxItemCount, operationContext, null, globalEndpointManager, globalPartitionEndpointManagerForCircuitBreaker);
 
         checkNotNull(client, "Argument 'client' must not be null.");
         checkNotNull(createRequestFunc, "Argument 'createRequestFunc' must not be null.");
         checkNotNull(changeFeedState, "Argument 'changeFeedState' must not be null.");
         this.changeFeedState = changeFeedState;
 
+        // constructing retry policies for changeFeed requests
+        DocumentClientRetryPolicy retryPolicyInstance =
+            client.getResetSessionTokenRetryPolicy().getRequestPolicy(null);
+
+        // For changeFeedProcessor with pkRange version, ChangeFeedState.containerRid will be name based rather than resouceId,
+        // due to the inconsistency of the ChangeFeedState.containerRid format, so in order to generate the correct path,
+        // we use a RxDocumentServiceRequest here
+        RxDocumentServiceRequest documentServiceRequest = createRequestFunc.get();
+        String collectionLink = PathsHelper.generatePath(
+            ResourceType.DocumentCollection, documentServiceRequest, false);
+        retryPolicyInstance = new InvalidPartitionExceptionRetryPolicy(
+            client.getCollectionCache(),
+            retryPolicyInstance,
+            collectionLink,
+            requestOptionProperties);
+
         if (isSplitHandlingDisabled) {
             // True for ChangeFeedProcessor - where all retry-logic is handled
-            this.feedRangeContinuationSplitRetryPolicy = null;
-            this.createRequestFunc = createRequestFunc;
+            this.feedRangeContinuationRetryPolicy = retryPolicyInstance;
         } else {
-            DocumentClientRetryPolicy retryPolicyInstance = client.getResetSessionTokenRetryPolicy().getRequestPolicy();
-            String collectionLink = PathsHelper.generatePath(
-                ResourceType.DocumentCollection, changeFeedState.getContainerRid(), false);
-            retryPolicyInstance = new InvalidPartitionExceptionRetryPolicy(
-                client.getCollectionCache(),
-                retryPolicyInstance,
-                collectionLink,
-                requestOptionProperties);
-
+            // TODO @fabianm wire up clientContext - for now no availability strategy is wired up for ChangeFeed
+            // requests - and this is expected/by design for now. But it is certainly worth discussing/checking whether
+            // we should include change feed requests as well - there are a few challenges especially for multi master
+            // accounts depending on the consistency level - and usually change feed is not processed in OLTP
+            // scenarios, so, keeping it out of scope for now is a reasonable decision. But probably worth
+            // double checking this decision in a few months.
             retryPolicyInstance = new PartitionKeyRangeGoneRetryPolicy(client,
                 client.getCollectionCache(),
                 client.getPartitionKeyRangeCache(),
@@ -76,27 +92,29 @@ class ChangeFeedFetcher<T extends Resource> extends Fetcher<T> {
                 retryPolicyInstance,
                 requestOptionProperties);
 
-            this.feedRangeContinuationSplitRetryPolicy = new FeedRangeContinuationSplitRetryPolicy(
+            this.feedRangeContinuationRetryPolicy = new FeedRangeContinuationFeedRangeGoneRetryPolicy(
                 client,
                 this.changeFeedState,
                 retryPolicyInstance,
                 requestOptionProperties,
-                retryPolicyInstance.getRetryContext());
-            this.createRequestFunc = () -> {
-                RxDocumentServiceRequest request = createRequestFunc.get();
-                this.feedRangeContinuationSplitRetryPolicy.onBeforeSendRequest(request);
-                return request;
-            };
+                retryPolicyInstance.getRetryContext(),
+                () -> this.getOperationContextText());
         }
+
+        this.createRequestFunc = () -> {
+            RxDocumentServiceRequest request = createRequestFunc.get();
+            request.requestContext.setClientRetryPolicySupplier(() -> this.feedRangeContinuationRetryPolicy);
+            this.feedRangeContinuationRetryPolicy.onBeforeSendRequest(request);
+            return request;
+        };
     }
 
     @Override
     public Mono<FeedResponse<T>> nextPage() {
 
-        if (this.feedRangeContinuationSplitRetryPolicy == null) {
+        if (this.feedRangeContinuationRetryPolicy == null) {
             return this.nextPageInternal();
         }
-
 
         // There are two conditions that require retries
         // in the change feed pipeline
@@ -114,7 +132,7 @@ class ChangeFeedFetcher<T extends Resource> extends Fetcher<T> {
         //               if not all continuations have been drained yet.
         return ObservableHelper.inlineIfPossible(
             this::nextPageInternal,
-            this.feedRangeContinuationSplitRetryPolicy);
+            this.feedRangeContinuationRetryPolicy);
     }
 
     private Mono<FeedResponse<T>> nextPageInternal() {
@@ -129,7 +147,7 @@ class ChangeFeedFetcher<T extends Resource> extends Fetcher<T> {
 
                            // not all continuations have been drained yet
                            // repeat with the next continuation
-                           this.reenableShouldFetchMoreForRetry();
+                           this.reEnableShouldFetchMoreForRetry();
                            return Mono.empty();
                        }
 
@@ -169,8 +187,8 @@ class ChangeFeedFetcher<T extends Resource> extends Fetcher<T> {
         return request;
     }
 
-    private static final class FeedRangeContinuationSplitRetryPolicy extends DocumentClientRetryPolicy {
-        private final static Logger LOGGER = LoggerFactory.getLogger(FeedRangeContinuationSplitRetryPolicy.class);
+    private static final class FeedRangeContinuationFeedRangeGoneRetryPolicy extends DocumentClientRetryPolicy {
+        private final static Logger LOGGER = LoggerFactory.getLogger(FeedRangeContinuationFeedRangeGoneRetryPolicy.class);
 
         private final ChangeFeedState state;
         private final RxDocumentClientImpl client;
@@ -178,20 +196,26 @@ class ChangeFeedFetcher<T extends Resource> extends Fetcher<T> {
         private final Map<String, Object> requestOptionProperties;
         private MetadataDiagnosticsContext diagnosticsContext;
         private final RetryContext retryContext;
+        private final Supplier<String> operationContextTextProvider;
 
-        public FeedRangeContinuationSplitRetryPolicy(
+        public FeedRangeContinuationFeedRangeGoneRetryPolicy(
             RxDocumentClientImpl client,
             ChangeFeedState state,
             DocumentClientRetryPolicy nextRetryPolicy,
             Map<String, Object> requestOptionProperties,
-            RetryContext retryContext) {
+            RetryContext retryContext,
+            Supplier<String> operationContextTextProvider) {
 
+            checkNotNull(
+                operationContextTextProvider,
+                "Argument 'operationContextTextProvider' must not be null.");
             this.client = client;
             this.state = state;
             this.nextRetryPolicy = nextRetryPolicy;
             this.requestOptionProperties = requestOptionProperties;
             this.diagnosticsContext = null;
             this.retryContext = retryContext;
+            this.operationContextTextProvider = operationContextTextProvider;
         }
 
         @Override
@@ -206,7 +230,10 @@ class ChangeFeedFetcher<T extends Resource> extends Fetcher<T> {
             return this.nextRetryPolicy.shouldRetry(e).flatMap(shouldRetryResult -> {
                 if (!shouldRetryResult.shouldRetry) {
                     if (!(e instanceof GoneException)) {
-                        LOGGER.warn("Exception not applicable - will fail the request.", e);
+                        LOGGER.warn(
+                            "Exception not applicable - will fail the request. Context: {}",
+                            this.operationContextTextProvider.get(),
+                            e);
                         return Mono.just(ShouldRetryResult.noRetry());
                     }
 
@@ -222,28 +249,32 @@ class ChangeFeedFetcher<T extends Resource> extends Fetcher<T> {
                         );
 
                         return effectiveRangeMono
-                            .map(effectiveRange -> {
-                                return this.state.setContinuation(
-                                    FeedRangeContinuation.create(
-                                        this.state.getContainerRid(),
-                                        this.state.getFeedRange(),
-                                        effectiveRange));
-                            })
-                            .flatMap(state -> state.getContinuation().handleSplit(client, (GoneException)e));
+                            .map(effectiveRange -> this.state.setContinuation(
+                                FeedRangeContinuation.create(
+                                    this.state.getContainerRid(),
+                                    this.state.getFeedRange(),
+                                    effectiveRange)))
+                            .flatMap(state -> state.getContinuation().handleFeedRangeGone(client, (GoneException)e));
                     }
 
                     return this
                         .state
                         .getContinuation()
-                        .handleSplit(client, (GoneException)e)
-                        .flatMap(splitShouldRetryResult -> {
-                            if (!splitShouldRetryResult.shouldRetry) {
-                                LOGGER.warn("No partition split error - will fail the request.", e);
+                        .handleFeedRangeGone(client, (GoneException)e)
+                        .flatMap(feedRangeGoneShouldRetryResult -> {
+                            if (!feedRangeGoneShouldRetryResult.shouldRetry) {
+                                LOGGER.warn(
+                                    "No partition split or merge error - will fail the request. Context: {}",
+                                    this.operationContextTextProvider.get(),
+                                    e);
                             } else {
-                                LOGGER.debug("HandleSplit will retry.", e);
+                                LOGGER.debug(
+                                    "HandleFeedRangeGone will retry. Context: {}",
+                                    this.operationContextTextProvider.get(),
+                                    e);
                             }
 
-                            return Mono.just(shouldRetryResult);
+                            return Mono.just(feedRangeGoneShouldRetryResult);
                         });
                 }
 

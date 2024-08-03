@@ -6,19 +6,17 @@ package com.azure.resourcemanager.compute.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.Resource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.compute.models.ExtendedLocation;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 
-/** disk access resource. */
+/**
+ * disk access resource.
+ */
 @Fluent
 public final class DiskAccessInner extends Resource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DiskAccessInner.class);
-
     /*
      * The properties property.
      */
@@ -26,15 +24,20 @@ public final class DiskAccessInner extends Resource {
     private DiskAccessProperties innerProperties;
 
     /*
-     * The extended location where the disk access will be created. Extended
-     * location cannot be changed.
+     * The extended location where the disk access will be created. Extended location cannot be changed.
      */
     @JsonProperty(value = "extendedLocation")
     private ExtendedLocation extendedLocation;
 
     /**
+     * Creates an instance of DiskAccessInner class.
+     */
+    public DiskAccessInner() {
+    }
+
+    /**
      * Get the innerProperties property: The properties property.
-     *
+     * 
      * @return the innerProperties value.
      */
     private DiskAccessProperties innerProperties() {
@@ -44,7 +47,7 @@ public final class DiskAccessInner extends Resource {
     /**
      * Get the extendedLocation property: The extended location where the disk access will be created. Extended location
      * cannot be changed.
-     *
+     * 
      * @return the extendedLocation value.
      */
     public ExtendedLocation extendedLocation() {
@@ -54,7 +57,7 @@ public final class DiskAccessInner extends Resource {
     /**
      * Set the extendedLocation property: The extended location where the disk access will be created. Extended location
      * cannot be changed.
-     *
+     * 
      * @param extendedLocation the extendedLocation value to set.
      * @return the DiskAccessInner object itself.
      */
@@ -63,14 +66,18 @@ public final class DiskAccessInner extends Resource {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DiskAccessInner withLocation(String location) {
         super.withLocation(location);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DiskAccessInner withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -80,7 +87,7 @@ public final class DiskAccessInner extends Resource {
     /**
      * Get the privateEndpointConnections property: A readonly collection of private endpoint connections created on the
      * disk. Currently only one endpoint connection is supported.
-     *
+     * 
      * @return the privateEndpointConnections value.
      */
     public List<PrivateEndpointConnectionInner> privateEndpointConnections() {
@@ -89,7 +96,7 @@ public final class DiskAccessInner extends Resource {
 
     /**
      * Get the provisioningState property: The disk access resource provisioning state.
-     *
+     * 
      * @return the provisioningState value.
      */
     public String provisioningState() {
@@ -98,7 +105,7 @@ public final class DiskAccessInner extends Resource {
 
     /**
      * Get the timeCreated property: The time when the disk access was created.
-     *
+     * 
      * @return the timeCreated value.
      */
     public OffsetDateTime timeCreated() {
@@ -107,7 +114,7 @@ public final class DiskAccessInner extends Resource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

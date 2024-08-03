@@ -5,41 +5,43 @@
 package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The JSON object that contains the properties to determine origin health using real requests/responses. */
+/**
+ * The JSON object that contains the properties to determine origin health using real requests/responses.
+ */
 @Fluent
 public final class ResponseBasedOriginErrorDetectionParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ResponseBasedOriginErrorDetectionParameters.class);
-
     /*
-     * Type of response errors for real user requests for which origin will be
-     * deemed unhealthy
+     * Type of response errors for real user requests for which origin will be deemed unhealthy
      */
     @JsonProperty(value = "responseBasedDetectedErrorTypes")
     private ResponseBasedDetectedErrorTypes responseBasedDetectedErrorTypes;
 
     /*
-     * The percentage of failed requests in the sample where failover should
-     * trigger.
+     * The percentage of failed requests in the sample where failover should trigger.
      */
     @JsonProperty(value = "responseBasedFailoverThresholdPercentage")
     private Integer responseBasedFailoverThresholdPercentage;
 
     /*
-     * The list of Http status code ranges that are considered as server errors
-     * for origin and it is marked as unhealthy.
+     * The list of Http status code ranges that are considered as server errors for origin and it is marked as
+     * unhealthy.
      */
     @JsonProperty(value = "httpErrorRanges")
     private List<HttpErrorRangeParameters> httpErrorRanges;
 
     /**
-     * Get the responseBasedDetectedErrorTypes property: Type of response errors for real user requests for which origin
-     * will be deemed unhealthy.
-     *
+     * Creates an instance of ResponseBasedOriginErrorDetectionParameters class.
+     */
+    public ResponseBasedOriginErrorDetectionParameters() {
+    }
+
+    /**
+     * Get the responseBasedDetectedErrorTypes property: Type of response errors for real user requests for which
+     * origin will be deemed unhealthy.
+     * 
      * @return the responseBasedDetectedErrorTypes value.
      */
     public ResponseBasedDetectedErrorTypes responseBasedDetectedErrorTypes() {
@@ -47,14 +49,14 @@ public final class ResponseBasedOriginErrorDetectionParameters {
     }
 
     /**
-     * Set the responseBasedDetectedErrorTypes property: Type of response errors for real user requests for which origin
-     * will be deemed unhealthy.
-     *
+     * Set the responseBasedDetectedErrorTypes property: Type of response errors for real user requests for which
+     * origin will be deemed unhealthy.
+     * 
      * @param responseBasedDetectedErrorTypes the responseBasedDetectedErrorTypes value to set.
      * @return the ResponseBasedOriginErrorDetectionParameters object itself.
      */
-    public ResponseBasedOriginErrorDetectionParameters withResponseBasedDetectedErrorTypes(
-        ResponseBasedDetectedErrorTypes responseBasedDetectedErrorTypes) {
+    public ResponseBasedOriginErrorDetectionParameters
+        withResponseBasedDetectedErrorTypes(ResponseBasedDetectedErrorTypes responseBasedDetectedErrorTypes) {
         this.responseBasedDetectedErrorTypes = responseBasedDetectedErrorTypes;
         return this;
     }
@@ -62,7 +64,7 @@ public final class ResponseBasedOriginErrorDetectionParameters {
     /**
      * Get the responseBasedFailoverThresholdPercentage property: The percentage of failed requests in the sample where
      * failover should trigger.
-     *
+     * 
      * @return the responseBasedFailoverThresholdPercentage value.
      */
     public Integer responseBasedFailoverThresholdPercentage() {
@@ -72,12 +74,12 @@ public final class ResponseBasedOriginErrorDetectionParameters {
     /**
      * Set the responseBasedFailoverThresholdPercentage property: The percentage of failed requests in the sample where
      * failover should trigger.
-     *
+     * 
      * @param responseBasedFailoverThresholdPercentage the responseBasedFailoverThresholdPercentage value to set.
      * @return the ResponseBasedOriginErrorDetectionParameters object itself.
      */
-    public ResponseBasedOriginErrorDetectionParameters withResponseBasedFailoverThresholdPercentage(
-        Integer responseBasedFailoverThresholdPercentage) {
+    public ResponseBasedOriginErrorDetectionParameters
+        withResponseBasedFailoverThresholdPercentage(Integer responseBasedFailoverThresholdPercentage) {
         this.responseBasedFailoverThresholdPercentage = responseBasedFailoverThresholdPercentage;
         return this;
     }
@@ -85,7 +87,7 @@ public final class ResponseBasedOriginErrorDetectionParameters {
     /**
      * Get the httpErrorRanges property: The list of Http status code ranges that are considered as server errors for
      * origin and it is marked as unhealthy.
-     *
+     * 
      * @return the httpErrorRanges value.
      */
     public List<HttpErrorRangeParameters> httpErrorRanges() {
@@ -95,19 +97,19 @@ public final class ResponseBasedOriginErrorDetectionParameters {
     /**
      * Set the httpErrorRanges property: The list of Http status code ranges that are considered as server errors for
      * origin and it is marked as unhealthy.
-     *
+     * 
      * @param httpErrorRanges the httpErrorRanges value to set.
      * @return the ResponseBasedOriginErrorDetectionParameters object itself.
      */
-    public ResponseBasedOriginErrorDetectionParameters withHttpErrorRanges(
-        List<HttpErrorRangeParameters> httpErrorRanges) {
+    public ResponseBasedOriginErrorDetectionParameters
+        withHttpErrorRanges(List<HttpErrorRangeParameters> httpErrorRanges) {
         this.httpErrorRanges = httpErrorRanges;
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

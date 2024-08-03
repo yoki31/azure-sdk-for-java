@@ -5,27 +5,23 @@
 package com.azure.resourcemanager.servicefabric.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** Describes the managed identities for an Azure resource. */
+/**
+ * Describes the managed identities for an Azure resource.
+ */
 @Fluent
-public class ManagedIdentity {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ManagedIdentity.class);
-
+public final class ManagedIdentity {
     /*
-     * The principal id of the managed identity. This property will only be
-     * provided for a system assigned identity.
+     * The principal id of the managed identity. This property will only be provided for a system assigned identity.
      */
     @JsonProperty(value = "principalId", access = JsonProperty.Access.WRITE_ONLY)
     private String principalId;
 
     /*
-     * The tenant id of the managed identity. This property will only be
-     * provided for a system assigned identity.
+     * The tenant id of the managed identity. This property will only be provided for a system assigned identity.
      */
     @JsonProperty(value = "tenantId", access = JsonProperty.Access.WRITE_ONLY)
     private String tenantId;
@@ -37,19 +33,26 @@ public class ManagedIdentity {
     private ManagedIdentityType type;
 
     /*
-     * The list of user identities associated with the resource. The user
-     * identity dictionary key references will be ARM resource ids in the form:
-     * '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/{identityName}'.
-     *
+     * The list of user identities associated with the resource. The user identity dictionary key references will be
+     * ARM resource ids in the form:
+     * '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ManagedIdentity/
+     * userAssignedIdentities/{identityName}'.
+     * 
      */
     @JsonProperty(value = "userAssignedIdentities")
     @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
     private Map<String, UserAssignedIdentity> userAssignedIdentities;
 
     /**
-     * Get the principalId property: The principal id of the managed identity. This property will only be provided for a
-     * system assigned identity.
-     *
+     * Creates an instance of ManagedIdentity class.
+     */
+    public ManagedIdentity() {
+    }
+
+    /**
+     * Get the principalId property: The principal id of the managed identity. This property will only be provided for
+     * a system assigned identity.
+     * 
      * @return the principalId value.
      */
     public String principalId() {
@@ -59,7 +62,7 @@ public class ManagedIdentity {
     /**
      * Get the tenantId property: The tenant id of the managed identity. This property will only be provided for a
      * system assigned identity.
-     *
+     * 
      * @return the tenantId value.
      */
     public String tenantId() {
@@ -68,7 +71,7 @@ public class ManagedIdentity {
 
     /**
      * Get the type property: The type of managed identity for the resource.
-     *
+     * 
      * @return the type value.
      */
     public ManagedIdentityType type() {
@@ -77,7 +80,7 @@ public class ManagedIdentity {
 
     /**
      * Set the type property: The type of managed identity for the resource.
-     *
+     * 
      * @param type the type value to set.
      * @return the ManagedIdentity object itself.
      */
@@ -90,7 +93,7 @@ public class ManagedIdentity {
      * Get the userAssignedIdentities property: The list of user identities associated with the resource. The user
      * identity dictionary key references will be ARM resource ids in the form:
      * '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/{identityName}'.
-     *
+     * 
      * @return the userAssignedIdentities value.
      */
     public Map<String, UserAssignedIdentity> userAssignedIdentities() {
@@ -101,7 +104,7 @@ public class ManagedIdentity {
      * Set the userAssignedIdentities property: The list of user identities associated with the resource. The user
      * identity dictionary key references will be ARM resource ids in the form:
      * '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/{identityName}'.
-     *
+     * 
      * @param userAssignedIdentities the userAssignedIdentities value to set.
      * @return the ManagedIdentity object itself.
      */
@@ -112,19 +115,16 @@ public class ManagedIdentity {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (userAssignedIdentities() != null) {
-            userAssignedIdentities()
-                .values()
-                .forEach(
-                    e -> {
-                        if (e != null) {
-                            e.validate();
-                        }
-                    });
+            userAssignedIdentities().values().forEach(e -> {
+                if (e != null) {
+                    e.validate();
+                }
+            });
         }
     }
 }

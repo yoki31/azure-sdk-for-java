@@ -6,21 +6,31 @@ package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** A WebLinkedService that uses basic authentication to communicate with an HTTP endpoint. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "authenticationType")
+/**
+ * A WebLinkedService that uses basic authentication to communicate with an HTTP endpoint.
+ */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "authenticationType",
+    defaultImpl = WebBasicAuthentication.class,
+    visible = true)
 @JsonTypeName("Basic")
 @Fluent
 public final class WebBasicAuthentication extends WebLinkedServiceTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(WebBasicAuthentication.class);
+    /*
+     * Type of authentication used to connect to the web table source.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "authenticationType", required = true)
+    private WebAuthenticationType authenticationType = WebAuthenticationType.BASIC;
 
     /*
-     * User name for Basic authentication. Type: string (or Expression with
-     * resultType string).
+     * User name for Basic authentication. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "username", required = true)
     private Object username;
@@ -32,9 +42,25 @@ public final class WebBasicAuthentication extends WebLinkedServiceTypeProperties
     private SecretBase password;
 
     /**
+     * Creates an instance of WebBasicAuthentication class.
+     */
+    public WebBasicAuthentication() {
+    }
+
+    /**
+     * Get the authenticationType property: Type of authentication used to connect to the web table source.
+     * 
+     * @return the authenticationType value.
+     */
+    @Override
+    public WebAuthenticationType authenticationType() {
+        return this.authenticationType;
+    }
+
+    /**
      * Get the username property: User name for Basic authentication. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @return the username value.
      */
     public Object username() {
@@ -44,7 +70,7 @@ public final class WebBasicAuthentication extends WebLinkedServiceTypeProperties
     /**
      * Set the username property: User name for Basic authentication. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @param username the username value to set.
      * @return the WebBasicAuthentication object itself.
      */
@@ -55,7 +81,7 @@ public final class WebBasicAuthentication extends WebLinkedServiceTypeProperties
 
     /**
      * Get the password property: The password for Basic authentication.
-     *
+     * 
      * @return the password value.
      */
     public SecretBase password() {
@@ -64,7 +90,7 @@ public final class WebBasicAuthentication extends WebLinkedServiceTypeProperties
 
     /**
      * Set the password property: The password for Basic authentication.
-     *
+     * 
      * @param password the password value to set.
      * @return the WebBasicAuthentication object itself.
      */
@@ -73,7 +99,9 @@ public final class WebBasicAuthentication extends WebLinkedServiceTypeProperties
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public WebBasicAuthentication withUrl(Object url) {
         super.withUrl(url);
@@ -82,23 +110,25 @@ public final class WebBasicAuthentication extends WebLinkedServiceTypeProperties
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
         if (username() == null) {
-            throw logger
-                .logExceptionAsError(
+            throw LOGGER.atError()
+                .log(
                     new IllegalArgumentException("Missing required property username in model WebBasicAuthentication"));
         }
         if (password() == null) {
-            throw logger
-                .logExceptionAsError(
+            throw LOGGER.atError()
+                .log(
                     new IllegalArgumentException("Missing required property password in model WebBasicAuthentication"));
         } else {
             password().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(WebBasicAuthentication.class);
 }

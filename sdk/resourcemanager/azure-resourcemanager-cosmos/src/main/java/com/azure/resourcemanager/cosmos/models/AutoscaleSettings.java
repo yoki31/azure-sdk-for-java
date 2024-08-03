@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The AutoscaleSettings model. */
+/**
+ * The AutoscaleSettings model.
+ */
 @Fluent
 public final class AutoscaleSettings {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AutoscaleSettings.class);
-
     /*
      * Represents maximum throughput, the resource can scale up to.
      */
@@ -21,8 +19,14 @@ public final class AutoscaleSettings {
     private Integer maxThroughput;
 
     /**
+     * Creates an instance of AutoscaleSettings class.
+     */
+    public AutoscaleSettings() {
+    }
+
+    /**
      * Get the maxThroughput property: Represents maximum throughput, the resource can scale up to.
-     *
+     * 
      * @return the maxThroughput value.
      */
     public Integer maxThroughput() {
@@ -31,7 +35,7 @@ public final class AutoscaleSettings {
 
     /**
      * Set the maxThroughput property: Represents maximum throughput, the resource can scale up to.
-     *
+     * 
      * @param maxThroughput the maxThroughput value to set.
      * @return the AutoscaleSettings object itself.
      */
@@ -42,7 +46,7 @@ public final class AutoscaleSettings {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

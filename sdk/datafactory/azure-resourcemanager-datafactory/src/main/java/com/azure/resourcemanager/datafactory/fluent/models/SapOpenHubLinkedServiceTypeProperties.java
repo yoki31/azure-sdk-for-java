@@ -5,101 +5,96 @@
 package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.models.SecretBase;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Properties specific to SAP Business Warehouse Open Hub Destination linked service type. */
+/**
+ * Properties specific to SAP Business Warehouse Open Hub Destination linked service type.
+ */
 @Fluent
 public final class SapOpenHubLinkedServiceTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SapOpenHubLinkedServiceTypeProperties.class);
-
     /*
-     * Host name of the SAP BW instance where the open hub destination is
-     * located. Type: string (or Expression with resultType string).
+     * Host name of the SAP BW instance where the open hub destination is located. Type: string (or Expression with
+     * resultType string).
      */
     @JsonProperty(value = "server")
     private Object server;
 
     /*
-     * System number of the BW system where the open hub destination is
-     * located. (Usually a two-digit decimal number represented as a string.)
-     * Type: string (or Expression with resultType string).
+     * System number of the BW system where the open hub destination is located. (Usually a two-digit decimal number
+     * represented as a string.) Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "systemNumber")
     private Object systemNumber;
 
     /*
-     * Client ID of the client on the BW system where the open hub destination
-     * is located. (Usually a three-digit decimal number represented as a
-     * string) Type: string (or Expression with resultType string).
+     * Client ID of the client on the BW system where the open hub destination is located. (Usually a three-digit
+     * decimal number represented as a string) Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "clientId")
     private Object clientId;
 
     /*
-     * Language of the BW system where the open hub destination is located. The
-     * default value is EN. Type: string (or Expression with resultType
-     * string).
+     * Language of the BW system where the open hub destination is located. The default value is EN. Type: string (or
+     * Expression with resultType string).
      */
     @JsonProperty(value = "language")
     private Object language;
 
     /*
-     * SystemID of the SAP system where the table is located. Type: string (or
-     * Expression with resultType string).
+     * SystemID of the SAP system where the table is located. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "systemId")
     private Object systemId;
 
     /*
-     * Username to access the SAP BW server where the open hub destination is
-     * located. Type: string (or Expression with resultType string).
+     * Username to access the SAP BW server where the open hub destination is located. Type: string (or Expression with
+     * resultType string).
      */
     @JsonProperty(value = "userName")
     private Object username;
 
     /*
-     * Password to access the SAP BW server where the open hub destination is
-     * located.
+     * Password to access the SAP BW server where the open hub destination is located.
      */
     @JsonProperty(value = "password")
     private SecretBase password;
 
     /*
-     * The hostname of the SAP Message Server. Type: string (or Expression with
-     * resultType string).
+     * The hostname of the SAP Message Server. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "messageServer")
     private Object messageServer;
 
     /*
-     * The service name or port number of the Message Server. Type: string (or
-     * Expression with resultType string).
+     * The service name or port number of the Message Server. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "messageServerService")
     private Object messageServerService;
 
     /*
-     * The Logon Group for the SAP System. Type: string (or Expression with
-     * resultType string).
+     * The Logon Group for the SAP System. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "logonGroup")
     private Object logonGroup;
 
     /*
-     * The encrypted credential used for authentication. Credentials are
-     * encrypted using the integration runtime credential manager. Type: string
-     * (or Expression with resultType string).
+     * The encrypted credential used for authentication. Credentials are encrypted using the integration runtime
+     * credential manager. Type: string.
      */
     @JsonProperty(value = "encryptedCredential")
-    private Object encryptedCredential;
+    private String encryptedCredential;
+
+    /**
+     * Creates an instance of SapOpenHubLinkedServiceTypeProperties class.
+     */
+    public SapOpenHubLinkedServiceTypeProperties() {
+    }
 
     /**
      * Get the server property: Host name of the SAP BW instance where the open hub destination is located. Type: string
      * (or Expression with resultType string).
-     *
+     * 
      * @return the server value.
      */
     public Object server() {
@@ -109,7 +104,7 @@ public final class SapOpenHubLinkedServiceTypeProperties {
     /**
      * Set the server property: Host name of the SAP BW instance where the open hub destination is located. Type: string
      * (or Expression with resultType string).
-     *
+     * 
      * @param server the server value to set.
      * @return the SapOpenHubLinkedServiceTypeProperties object itself.
      */
@@ -121,7 +116,7 @@ public final class SapOpenHubLinkedServiceTypeProperties {
     /**
      * Get the systemNumber property: System number of the BW system where the open hub destination is located. (Usually
      * a two-digit decimal number represented as a string.) Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the systemNumber value.
      */
     public Object systemNumber() {
@@ -131,7 +126,7 @@ public final class SapOpenHubLinkedServiceTypeProperties {
     /**
      * Set the systemNumber property: System number of the BW system where the open hub destination is located. (Usually
      * a two-digit decimal number represented as a string.) Type: string (or Expression with resultType string).
-     *
+     * 
      * @param systemNumber the systemNumber value to set.
      * @return the SapOpenHubLinkedServiceTypeProperties object itself.
      */
@@ -144,7 +139,7 @@ public final class SapOpenHubLinkedServiceTypeProperties {
      * Get the clientId property: Client ID of the client on the BW system where the open hub destination is located.
      * (Usually a three-digit decimal number represented as a string) Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @return the clientId value.
      */
     public Object clientId() {
@@ -155,7 +150,7 @@ public final class SapOpenHubLinkedServiceTypeProperties {
      * Set the clientId property: Client ID of the client on the BW system where the open hub destination is located.
      * (Usually a three-digit decimal number represented as a string) Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @param clientId the clientId value to set.
      * @return the SapOpenHubLinkedServiceTypeProperties object itself.
      */
@@ -167,7 +162,7 @@ public final class SapOpenHubLinkedServiceTypeProperties {
     /**
      * Get the language property: Language of the BW system where the open hub destination is located. The default value
      * is EN. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the language value.
      */
     public Object language() {
@@ -177,7 +172,7 @@ public final class SapOpenHubLinkedServiceTypeProperties {
     /**
      * Set the language property: Language of the BW system where the open hub destination is located. The default value
      * is EN. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param language the language value to set.
      * @return the SapOpenHubLinkedServiceTypeProperties object itself.
      */
@@ -189,7 +184,7 @@ public final class SapOpenHubLinkedServiceTypeProperties {
     /**
      * Get the systemId property: SystemID of the SAP system where the table is located. Type: string (or Expression
      * with resultType string).
-     *
+     * 
      * @return the systemId value.
      */
     public Object systemId() {
@@ -199,7 +194,7 @@ public final class SapOpenHubLinkedServiceTypeProperties {
     /**
      * Set the systemId property: SystemID of the SAP system where the table is located. Type: string (or Expression
      * with resultType string).
-     *
+     * 
      * @param systemId the systemId value to set.
      * @return the SapOpenHubLinkedServiceTypeProperties object itself.
      */
@@ -211,7 +206,7 @@ public final class SapOpenHubLinkedServiceTypeProperties {
     /**
      * Get the username property: Username to access the SAP BW server where the open hub destination is located. Type:
      * string (or Expression with resultType string).
-     *
+     * 
      * @return the username value.
      */
     public Object username() {
@@ -221,7 +216,7 @@ public final class SapOpenHubLinkedServiceTypeProperties {
     /**
      * Set the username property: Username to access the SAP BW server where the open hub destination is located. Type:
      * string (or Expression with resultType string).
-     *
+     * 
      * @param username the username value to set.
      * @return the SapOpenHubLinkedServiceTypeProperties object itself.
      */
@@ -232,7 +227,7 @@ public final class SapOpenHubLinkedServiceTypeProperties {
 
     /**
      * Get the password property: Password to access the SAP BW server where the open hub destination is located.
-     *
+     * 
      * @return the password value.
      */
     public SecretBase password() {
@@ -241,7 +236,7 @@ public final class SapOpenHubLinkedServiceTypeProperties {
 
     /**
      * Set the password property: Password to access the SAP BW server where the open hub destination is located.
-     *
+     * 
      * @param password the password value to set.
      * @return the SapOpenHubLinkedServiceTypeProperties object itself.
      */
@@ -253,7 +248,7 @@ public final class SapOpenHubLinkedServiceTypeProperties {
     /**
      * Get the messageServer property: The hostname of the SAP Message Server. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the messageServer value.
      */
     public Object messageServer() {
@@ -263,7 +258,7 @@ public final class SapOpenHubLinkedServiceTypeProperties {
     /**
      * Set the messageServer property: The hostname of the SAP Message Server. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param messageServer the messageServer value to set.
      * @return the SapOpenHubLinkedServiceTypeProperties object itself.
      */
@@ -275,7 +270,7 @@ public final class SapOpenHubLinkedServiceTypeProperties {
     /**
      * Get the messageServerService property: The service name or port number of the Message Server. Type: string (or
      * Expression with resultType string).
-     *
+     * 
      * @return the messageServerService value.
      */
     public Object messageServerService() {
@@ -285,7 +280,7 @@ public final class SapOpenHubLinkedServiceTypeProperties {
     /**
      * Set the messageServerService property: The service name or port number of the Message Server. Type: string (or
      * Expression with resultType string).
-     *
+     * 
      * @param messageServerService the messageServerService value to set.
      * @return the SapOpenHubLinkedServiceTypeProperties object itself.
      */
@@ -297,7 +292,7 @@ public final class SapOpenHubLinkedServiceTypeProperties {
     /**
      * Get the logonGroup property: The Logon Group for the SAP System. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @return the logonGroup value.
      */
     public Object logonGroup() {
@@ -307,7 +302,7 @@ public final class SapOpenHubLinkedServiceTypeProperties {
     /**
      * Set the logonGroup property: The Logon Group for the SAP System. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @param logonGroup the logonGroup value to set.
      * @return the SapOpenHubLinkedServiceTypeProperties object itself.
      */
@@ -318,29 +313,29 @@ public final class SapOpenHubLinkedServiceTypeProperties {
 
     /**
      * Get the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @return the encryptedCredential value.
      */
-    public Object encryptedCredential() {
+    public String encryptedCredential() {
         return this.encryptedCredential;
     }
 
     /**
      * Set the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @param encryptedCredential the encryptedCredential value to set.
      * @return the SapOpenHubLinkedServiceTypeProperties object itself.
      */
-    public SapOpenHubLinkedServiceTypeProperties withEncryptedCredential(Object encryptedCredential) {
+    public SapOpenHubLinkedServiceTypeProperties withEncryptedCredential(String encryptedCredential) {
         this.encryptedCredential = encryptedCredential;
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

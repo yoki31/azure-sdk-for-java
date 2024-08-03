@@ -5,47 +5,42 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-/** Cursor methods for Mongodb query. */
+/**
+ * Cursor methods for Mongodb query.
+ */
 @Fluent
 public final class MongoDbCursorMethodsProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MongoDbCursorMethodsProperties.class);
-
     /*
-     * Specifies the fields to return in the documents that match the query
-     * filter. To return all fields in the matching documents, omit this
-     * parameter. Type: string (or Expression with resultType string).
+     * Specifies the fields to return in the documents that match the query filter. To return all fields in the matching
+     * documents, omit this parameter. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "project")
     private Object project;
 
     /*
-     * Specifies the order in which the query returns matching documents. Type:
-     * string (or Expression with resultType string). Type: string (or
-     * Expression with resultType string).
+     * Specifies the order in which the query returns matching documents. Type: string (or Expression with resultType
+     * string). Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "sort")
     private Object sort;
 
     /*
-     * Specifies the how many documents skipped and where MongoDB begins
-     * returning results. This approach may be useful in implementing paginated
-     * results. Type: integer (or Expression with resultType integer).
+     * Specifies the how many documents skipped and where MongoDB begins returning results. This approach may be useful
+     * in implementing paginated results. Type: integer (or Expression with resultType integer).
      */
     @JsonProperty(value = "skip")
     private Object skip;
 
     /*
-     * Specifies the maximum number of documents the server returns. limit() is
-     * analogous to the LIMIT statement in a SQL database. Type: integer (or
-     * Expression with resultType integer).
+     * Specifies the maximum number of documents the server returns. limit() is analogous to the LIMIT statement in a
+     * SQL database. Type: integer (or Expression with resultType integer).
      */
     @JsonProperty(value = "limit")
     private Object limit;
@@ -53,12 +48,19 @@ public final class MongoDbCursorMethodsProperties {
     /*
      * Cursor methods for Mongodb query
      */
-    @JsonIgnore private Map<String, Object> additionalProperties;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties;
+
+    /**
+     * Creates an instance of MongoDbCursorMethodsProperties class.
+     */
+    public MongoDbCursorMethodsProperties() {
+    }
 
     /**
      * Get the project property: Specifies the fields to return in the documents that match the query filter. To return
      * all fields in the matching documents, omit this parameter. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the project value.
      */
     public Object project() {
@@ -68,7 +70,7 @@ public final class MongoDbCursorMethodsProperties {
     /**
      * Set the project property: Specifies the fields to return in the documents that match the query filter. To return
      * all fields in the matching documents, omit this parameter. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param project the project value to set.
      * @return the MongoDbCursorMethodsProperties object itself.
      */
@@ -80,7 +82,7 @@ public final class MongoDbCursorMethodsProperties {
     /**
      * Get the sort property: Specifies the order in which the query returns matching documents. Type: string (or
      * Expression with resultType string). Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the sort value.
      */
     public Object sort() {
@@ -90,7 +92,7 @@ public final class MongoDbCursorMethodsProperties {
     /**
      * Set the sort property: Specifies the order in which the query returns matching documents. Type: string (or
      * Expression with resultType string). Type: string (or Expression with resultType string).
-     *
+     * 
      * @param sort the sort value to set.
      * @return the MongoDbCursorMethodsProperties object itself.
      */
@@ -102,7 +104,7 @@ public final class MongoDbCursorMethodsProperties {
     /**
      * Get the skip property: Specifies the how many documents skipped and where MongoDB begins returning results. This
      * approach may be useful in implementing paginated results. Type: integer (or Expression with resultType integer).
-     *
+     * 
      * @return the skip value.
      */
     public Object skip() {
@@ -112,7 +114,7 @@ public final class MongoDbCursorMethodsProperties {
     /**
      * Set the skip property: Specifies the how many documents skipped and where MongoDB begins returning results. This
      * approach may be useful in implementing paginated results. Type: integer (or Expression with resultType integer).
-     *
+     * 
      * @param skip the skip value to set.
      * @return the MongoDbCursorMethodsProperties object itself.
      */
@@ -124,7 +126,7 @@ public final class MongoDbCursorMethodsProperties {
     /**
      * Get the limit property: Specifies the maximum number of documents the server returns. limit() is analogous to the
      * LIMIT statement in a SQL database. Type: integer (or Expression with resultType integer).
-     *
+     * 
      * @return the limit value.
      */
     public Object limit() {
@@ -134,7 +136,7 @@ public final class MongoDbCursorMethodsProperties {
     /**
      * Set the limit property: Specifies the maximum number of documents the server returns. limit() is analogous to the
      * LIMIT statement in a SQL database. Type: integer (or Expression with resultType integer).
-     *
+     * 
      * @param limit the limit value to set.
      * @return the MongoDbCursorMethodsProperties object itself.
      */
@@ -145,7 +147,7 @@ public final class MongoDbCursorMethodsProperties {
 
     /**
      * Get the additionalProperties property: Cursor methods for Mongodb query.
-     *
+     * 
      * @return the additionalProperties value.
      */
     @JsonAnyGetter
@@ -155,7 +157,7 @@ public final class MongoDbCursorMethodsProperties {
 
     /**
      * Set the additionalProperties property: Cursor methods for Mongodb query.
-     *
+     * 
      * @param additionalProperties the additionalProperties value to set.
      * @return the MongoDbCursorMethodsProperties object itself.
      */
@@ -167,14 +169,14 @@ public final class MongoDbCursorMethodsProperties {
     @JsonAnySetter
     void withAdditionalProperties(String key, Object value) {
         if (additionalProperties == null) {
-            additionalProperties = new HashMap<>();
+            additionalProperties = new LinkedHashMap<>();
         }
         additionalProperties.put(key, value);
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

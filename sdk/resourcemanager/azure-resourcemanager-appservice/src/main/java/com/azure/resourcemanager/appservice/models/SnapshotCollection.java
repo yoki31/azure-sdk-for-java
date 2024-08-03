@@ -7,15 +7,15 @@ package com.azure.resourcemanager.appservice.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.fluent.models.SnapshotInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
-/** Collection of snapshots which can be used to revert an app to a previous time. */
+/**
+ * Collection of snapshots which can be used to revert an app to a previous time.
+ */
 @Fluent
 public final class SnapshotCollection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SnapshotCollection.class);
-
     /*
      * Collection of resources.
      */
@@ -27,6 +27,12 @@ public final class SnapshotCollection {
      */
     @JsonProperty(value = "nextLink", access = JsonProperty.Access.WRITE_ONLY)
     private String nextLink;
+
+    /**
+     * Creates an instance of SnapshotCollection class.
+     */
+    public SnapshotCollection() {
+    }
 
     /**
      * Get the value property: Collection of resources.
@@ -64,11 +70,12 @@ public final class SnapshotCollection {
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property value in model SnapshotCollection"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property value in model SnapshotCollection"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(SnapshotCollection.class);
 }

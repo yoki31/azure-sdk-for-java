@@ -6,14 +6,13 @@ package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Cosmos DB Cassandra keyspace resource object. */
+/**
+ * Cosmos DB Cassandra keyspace resource object.
+ */
 @Fluent
 public class CassandraKeyspaceResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CassandraKeyspaceResource.class);
-
     /*
      * Name of the Cosmos DB Cassandra keyspace
      */
@@ -21,8 +20,14 @@ public class CassandraKeyspaceResource {
     private String id;
 
     /**
+     * Creates an instance of CassandraKeyspaceResource class.
+     */
+    public CassandraKeyspaceResource() {
+    }
+
+    /**
      * Get the id property: Name of the Cosmos DB Cassandra keyspace.
-     *
+     * 
      * @return the id value.
      */
     public String id() {
@@ -31,7 +36,7 @@ public class CassandraKeyspaceResource {
 
     /**
      * Set the id property: Name of the Cosmos DB Cassandra keyspace.
-     *
+     * 
      * @param id the id value to set.
      * @return the CassandraKeyspaceResource object itself.
      */
@@ -42,14 +47,15 @@ public class CassandraKeyspaceResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (id() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property id in model CassandraKeyspaceResource"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property id in model CassandraKeyspaceResource"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(CassandraKeyspaceResource.class);
 }

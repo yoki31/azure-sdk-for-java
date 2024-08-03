@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Encryption settings for one disk volume. */
+/**
+ * Encryption settings for one disk volume.
+ */
 @Fluent
 public final class EncryptionSettingsElement {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(EncryptionSettingsElement.class);
-
     /*
      * Key Vault Secret Url and vault id of the disk encryption key
      */
@@ -21,16 +19,21 @@ public final class EncryptionSettingsElement {
     private KeyVaultAndSecretReference diskEncryptionKey;
 
     /*
-     * Key Vault Key Url and vault id of the key encryption key.
-     * KeyEncryptionKey is optional and when provided is used to unwrap the
-     * disk encryption key.
+     * Key Vault Key Url and vault id of the key encryption key. KeyEncryptionKey is optional and when provided is used
+     * to unwrap the disk encryption key.
      */
     @JsonProperty(value = "keyEncryptionKey")
     private KeyVaultAndKeyReference keyEncryptionKey;
 
     /**
+     * Creates an instance of EncryptionSettingsElement class.
+     */
+    public EncryptionSettingsElement() {
+    }
+
+    /**
      * Get the diskEncryptionKey property: Key Vault Secret Url and vault id of the disk encryption key.
-     *
+     * 
      * @return the diskEncryptionKey value.
      */
     public KeyVaultAndSecretReference diskEncryptionKey() {
@@ -39,7 +42,7 @@ public final class EncryptionSettingsElement {
 
     /**
      * Set the diskEncryptionKey property: Key Vault Secret Url and vault id of the disk encryption key.
-     *
+     * 
      * @param diskEncryptionKey the diskEncryptionKey value to set.
      * @return the EncryptionSettingsElement object itself.
      */
@@ -51,7 +54,7 @@ public final class EncryptionSettingsElement {
     /**
      * Get the keyEncryptionKey property: Key Vault Key Url and vault id of the key encryption key. KeyEncryptionKey is
      * optional and when provided is used to unwrap the disk encryption key.
-     *
+     * 
      * @return the keyEncryptionKey value.
      */
     public KeyVaultAndKeyReference keyEncryptionKey() {
@@ -61,7 +64,7 @@ public final class EncryptionSettingsElement {
     /**
      * Set the keyEncryptionKey property: Key Vault Key Url and vault id of the key encryption key. KeyEncryptionKey is
      * optional and when provided is used to unwrap the disk encryption key.
-     *
+     * 
      * @param keyEncryptionKey the keyEncryptionKey value to set.
      * @return the EncryptionSettingsElement object itself.
      */
@@ -72,7 +75,7 @@ public final class EncryptionSettingsElement {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

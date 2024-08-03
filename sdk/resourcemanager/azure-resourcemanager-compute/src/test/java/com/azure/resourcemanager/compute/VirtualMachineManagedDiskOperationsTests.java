@@ -4,9 +4,12 @@
 package com.azure.resourcemanager.compute;
 
 import com.azure.core.http.HttpPipeline;
+import com.azure.core.util.logging.ClientLogger;
+import com.azure.core.util.logging.LogLevel;
 import com.azure.resourcemanager.compute.models.AvailabilitySet;
 import com.azure.resourcemanager.compute.models.AvailabilitySetSkuTypes;
 import com.azure.resourcemanager.compute.models.CachingTypes;
+import com.azure.resourcemanager.compute.models.DeleteOptions;
 import com.azure.resourcemanager.compute.models.Disk;
 import com.azure.resourcemanager.compute.models.ImageDataDisk;
 import com.azure.resourcemanager.compute.models.KnownLinuxVirtualMachineImage;
@@ -27,6 +30,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class VirtualMachineManagedDiskOperationsTests extends ComputeManagementTest {
+    private static final ClientLogger LOGGER = new ClientLogger(VirtualMachineManagedDiskOperationsTests.class);
+
     private String rgName = "";
     private Region region = Region.US_EAST;
     private KnownLinuxVirtualMachineImage linuxImage = KnownLinuxVirtualMachineImage.UBUNTU_SERVER_16_04_LTS;
@@ -313,7 +318,7 @@ public class VirtualMachineManagedDiskOperationsTests extends ComputeManagementT
                 .withSize(VirtualMachineSizeTypes.fromString("Standard_D4a_v4"))
                 .withOSDiskCaching(CachingTypes.READ_WRITE)
                 .create();
-        System.out.println("Waiting for some time before de-provision");
+        LOGGER.log(LogLevel.VERBOSE, () -> "Waiting for some time before de-provision");
         sleep(60 * 1000); // Wait for some time to ensure vm is publicly accessible
         deprovisionAgentInLinuxVM(virtualMachine1);
 
@@ -599,5 +604,69 @@ public class VirtualMachineManagedDiskOperationsTests extends ComputeManagementT
         AvailabilitySet availabilitySet = computeManager.availabilitySets().getById(managedVm.availabilitySetId());
         Assertions.assertTrue(availabilitySet.virtualMachineIds().size() > 0);
         Assertions.assertEquals(availabilitySet.sku(), AvailabilitySetSkuTypes.ALIGNED);
+    }
+
+    @Test
+    public void canCreateVirtualMachineWithHibernationEnabledUsingOsDisk() {
+        String diskWithOSImage = prepareLinuxDiskWithOSImage();
+
+        String osDiskName = generateRandomResourceName("osdisk", 15);
+        String vmName = generateRandomResourceName("vm", 15);
+
+        Disk osDisk = computeManager.disks()
+            .define(osDiskName)
+            .withRegion(region)
+            .withExistingResourceGroup(rgName)
+            .withLinuxFromDisk(diskWithOSImage)
+            .withHibernationSupport()
+            .create();
+        Assertions.assertTrue(osDisk.isHibernationSupported());
+
+        VirtualMachine vmWithHibernation = computeManager.virtualMachines()
+            .define(vmName)
+            .withRegion(region)
+            .withExistingResourceGroup(rgName)
+            .withNewPrimaryNetwork("10.0.0.0/28")
+            .withPrimaryPrivateIPAddressDynamic()
+            .withoutPrimaryPublicIPAddress()
+            .withSpecializedOSDisk(osDisk, OperatingSystemTypes.LINUX)
+            .withOSDiskDeleteOptions(DeleteOptions.DETACH)
+            .enableHibernation()
+            .create();
+
+        Assertions.assertTrue(vmWithHibernation.isHibernationEnabled());
+
+        vmWithHibernation.deallocate();
+        computeManager.virtualMachines().deleteById(vmWithHibernation.id());
+
+        osDisk.update()
+            .withoutHibernationSupport()
+            .apply();
+
+        Assertions.assertFalse(osDisk.isHibernationSupported());
+    }
+
+    private String prepareLinuxDiskWithOSImage() {
+        String vmName = generateRandomResourceName("vm", 15);
+        VirtualMachine vm = computeManager.virtualMachines()
+            .define(vmName)
+            .withRegion(region)
+            .withNewResourceGroup(rgName)
+            .withNewPrimaryNetwork("10.0.0.0/28")
+            .withPrimaryPrivateIPAddressDynamic()
+            .withoutPrimaryPublicIPAddress()
+            .withPopularLinuxImage(KnownLinuxVirtualMachineImage.UBUNTU_SERVER_20_04_LTS)
+            .withRootUsername("jvuser")
+            .withSsh(sshPublicKey())
+            .withOSDiskDeleteOptions(DeleteOptions.DETACH)
+            .create();
+
+        String osDiskId = vm.osDiskId();
+
+        vm.deallocate();
+        computeManager.virtualMachines()
+            .deleteById(vm.id());
+
+        return osDiskId;
     }
 }

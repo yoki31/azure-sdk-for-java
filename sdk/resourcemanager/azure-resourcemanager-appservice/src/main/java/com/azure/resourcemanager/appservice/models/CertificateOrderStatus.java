@@ -7,39 +7,63 @@ package com.azure.resourcemanager.appservice.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** Defines values for CertificateOrderStatus. */
+/**
+ * Current order status.
+ */
 public enum CertificateOrderStatus {
-    /** Enum value Pendingissuance. */
+    /**
+     * Enum value Pendingissuance.
+     */
     PENDINGISSUANCE("Pendingissuance"),
 
-    /** Enum value Issued. */
+    /**
+     * Enum value Issued.
+     */
     ISSUED("Issued"),
 
-    /** Enum value Revoked. */
+    /**
+     * Enum value Revoked.
+     */
     REVOKED("Revoked"),
 
-    /** Enum value Canceled. */
+    /**
+     * Enum value Canceled.
+     */
     CANCELED("Canceled"),
 
-    /** Enum value Denied. */
+    /**
+     * Enum value Denied.
+     */
     DENIED("Denied"),
 
-    /** Enum value Pendingrevocation. */
+    /**
+     * Enum value Pendingrevocation.
+     */
     PENDINGREVOCATION("Pendingrevocation"),
 
-    /** Enum value PendingRekey. */
+    /**
+     * Enum value PendingRekey.
+     */
     PENDING_REKEY("PendingRekey"),
 
-    /** Enum value Unused. */
+    /**
+     * Enum value Unused.
+     */
     UNUSED("Unused"),
 
-    /** Enum value Expired. */
+    /**
+     * Enum value Expired.
+     */
     EXPIRED("Expired"),
 
-    /** Enum value NotSubmitted. */
+    /**
+     * Enum value NotSubmitted.
+     */
     NOT_SUBMITTED("NotSubmitted");
 
-    /** The actual serialized value for a CertificateOrderStatus instance. */
+    /**
+     * The actual serialized value for a CertificateOrderStatus instance.
+     */
     private final String value;
 
     CertificateOrderStatus(String value) {
@@ -48,12 +72,15 @@ public enum CertificateOrderStatus {
 
     /**
      * Parses a serialized value to a CertificateOrderStatus instance.
-     *
+     * 
      * @param value the serialized value to parse.
      * @return the parsed CertificateOrderStatus object, or null if unable to parse.
      */
     @JsonCreator
     public static CertificateOrderStatus fromString(String value) {
+        if (value == null) {
+            return null;
+        }
         CertificateOrderStatus[] items = CertificateOrderStatus.values();
         for (CertificateOrderStatus item : items) {
             if (item.toString().equalsIgnoreCase(value)) {
@@ -63,6 +90,9 @@ public enum CertificateOrderStatus {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @JsonValue
     @Override
     public String toString() {

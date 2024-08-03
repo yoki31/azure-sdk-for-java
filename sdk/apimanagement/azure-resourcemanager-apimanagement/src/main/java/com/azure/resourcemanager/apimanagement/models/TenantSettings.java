@@ -13,26 +13,26 @@ public interface TenantSettings {
     /**
      * Public settings.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged AccessInformation list representation.
+     * @return paged AccessInformation list representation as paginated response with {@link PagedIterable}.
      */
     PagedIterable<TenantSettingsContract> listByService(String resourceGroupName, String serviceName);
 
     /**
      * Public settings.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter Not used.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged AccessInformation list representation.
+     * @return paged AccessInformation list representation as paginated response with {@link PagedIterable}.
      */
     PagedIterable<TenantSettingsContract> listByService(
         String resourceGroupName, String serviceName, String filter, Context context);
@@ -40,20 +40,7 @@ public interface TenantSettings {
     /**
      * Get tenant settings.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param settingsType The identifier of the settings.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return tenant settings.
-     */
-    TenantSettingsContract get(String resourceGroupName, String serviceName, SettingsTypeName settingsType);
-
-    /**
-     * Get tenant settings.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param settingsType The identifier of the settings.
      * @param context The context to associate with this operation.
@@ -64,4 +51,17 @@ public interface TenantSettings {
      */
     Response<TenantSettingsContract> getWithResponse(
         String resourceGroupName, String serviceName, SettingsTypeName settingsType, Context context);
+
+    /**
+     * Get tenant settings.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param settingsType The identifier of the settings.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return tenant settings.
+     */
+    TenantSettingsContract get(String resourceGroupName, String serviceName, SettingsTypeName settingsType);
 }

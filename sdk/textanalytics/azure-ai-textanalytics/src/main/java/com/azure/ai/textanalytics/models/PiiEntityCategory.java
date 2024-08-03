@@ -5,7 +5,8 @@ package com.azure.ai.textanalytics.models;
 
 import com.azure.core.annotation.Immutable;
 import com.azure.core.util.ExpandableStringEnum;
-import com.fasterxml.jackson.annotation.JsonCreator;
+
+import java.util.Collection;
 
 /**
  * Gets the PII entity category inferred by the text analytics service's PII entity recognition model.
@@ -551,13 +552,30 @@ public final class PiiEntityCategory extends ExpandableStringEnum<PiiEntityCateg
     public static final PiiEntityCategory DEFAULT = fromString("Default");
 
     /**
+     * Creates a new instance of {@code PiiEntityCategory} value.
+     *
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public PiiEntityCategory() {
+    }
+
+    /**
      * Creates or finds a PiiEntityCategory from its string representation.
      *
      * @param name a name to look for.
      * @return the corresponding PiiEntityCategory.
      */
-    @JsonCreator
     public static PiiEntityCategory fromString(String name) {
         return fromString(name, PiiEntityCategory.class);
+    }
+
+    /**
+     * All known PiiEntityCategory values.
+     *
+     * @return known PiiEntityCategory values.
+     */
+    public static Collection<PiiEntityCategory> values() {
+        return values(PiiEntityCategory.class);
     }
 }

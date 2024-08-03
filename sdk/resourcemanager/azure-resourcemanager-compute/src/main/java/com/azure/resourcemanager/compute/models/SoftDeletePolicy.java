@@ -5,26 +5,29 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Contains information about the soft deletion policy of the gallery. */
+/**
+ * Contains information about the soft deletion policy of the gallery.
+ */
 @Fluent
 public final class SoftDeletePolicy {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SoftDeletePolicy.class);
-
     /*
-     * Enables soft-deletion for resources in this gallery, allowing them to be
-     * recovered within retention time.
+     * Enables soft-deletion for resources in this gallery, allowing them to be recovered within retention time.
      */
     @JsonProperty(value = "isSoftDeleteEnabled")
     private Boolean isSoftDeleteEnabled;
 
     /**
+     * Creates an instance of SoftDeletePolicy class.
+     */
+    public SoftDeletePolicy() {
+    }
+
+    /**
      * Get the isSoftDeleteEnabled property: Enables soft-deletion for resources in this gallery, allowing them to be
      * recovered within retention time.
-     *
+     * 
      * @return the isSoftDeleteEnabled value.
      */
     public Boolean isSoftDeleteEnabled() {
@@ -34,7 +37,7 @@ public final class SoftDeletePolicy {
     /**
      * Set the isSoftDeleteEnabled property: Enables soft-deletion for resources in this gallery, allowing them to be
      * recovered within retention time.
-     *
+     * 
      * @param isSoftDeleteEnabled the isSoftDeleteEnabled value to set.
      * @return the SoftDeletePolicy object itself.
      */
@@ -45,7 +48,7 @@ public final class SoftDeletePolicy {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -7,18 +7,28 @@ package com.azure.resourcemanager.appservice.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** Defines values for TriggeredWebJobStatus. */
+/**
+ * Job status.
+ */
 public enum TriggeredWebJobStatus {
-    /** Enum value Success. */
+    /**
+     * Enum value Success.
+     */
     SUCCESS("Success"),
 
-    /** Enum value Failed. */
+    /**
+     * Enum value Failed.
+     */
     FAILED("Failed"),
 
-    /** Enum value Error. */
+    /**
+     * Enum value Error.
+     */
     ERROR("Error");
 
-    /** The actual serialized value for a TriggeredWebJobStatus instance. */
+    /**
+     * The actual serialized value for a TriggeredWebJobStatus instance.
+     */
     private final String value;
 
     TriggeredWebJobStatus(String value) {
@@ -27,12 +37,15 @@ public enum TriggeredWebJobStatus {
 
     /**
      * Parses a serialized value to a TriggeredWebJobStatus instance.
-     *
+     * 
      * @param value the serialized value to parse.
      * @return the parsed TriggeredWebJobStatus object, or null if unable to parse.
      */
     @JsonCreator
     public static TriggeredWebJobStatus fromString(String value) {
+        if (value == null) {
+            return null;
+        }
         TriggeredWebJobStatus[] items = TriggeredWebJobStatus.values();
         for (TriggeredWebJobStatus item : items) {
             if (item.toString().equalsIgnoreCase(value)) {
@@ -42,6 +55,9 @@ public enum TriggeredWebJobStatus {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @JsonValue
     @Override
     public String toString() {

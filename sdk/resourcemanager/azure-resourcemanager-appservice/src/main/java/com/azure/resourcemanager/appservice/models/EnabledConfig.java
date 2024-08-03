@@ -5,26 +5,29 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Enabled configuration. */
+/**
+ * Enabled configuration.
+ */
 @Fluent
 public final class EnabledConfig {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(EnabledConfig.class);
-
     /*
-     * True if configuration is enabled, false if it is disabled and null if
-     * configuration is not set.
+     * True if configuration is enabled, false if it is disabled and null if configuration is not set.
      */
     @JsonProperty(value = "enabled")
     private Boolean enabled;
 
     /**
+     * Creates an instance of EnabledConfig class.
+     */
+    public EnabledConfig() {
+    }
+
+    /**
      * Get the enabled property: True if configuration is enabled, false if it is disabled and null if configuration is
      * not set.
-     *
+     * 
      * @return the enabled value.
      */
     public Boolean enabled() {
@@ -34,7 +37,7 @@ public final class EnabledConfig {
     /**
      * Set the enabled property: True if configuration is enabled, false if it is disabled and null if configuration is
      * not set.
-     *
+     * 
      * @param enabled the enabled value to set.
      * @return the EnabledConfig object itself.
      */
@@ -45,7 +48,7 @@ public final class EnabledConfig {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

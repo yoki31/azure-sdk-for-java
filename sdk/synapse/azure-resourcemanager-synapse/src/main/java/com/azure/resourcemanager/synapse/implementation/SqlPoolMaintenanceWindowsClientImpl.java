@@ -23,15 +23,12 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.synapse.fluent.SqlPoolMaintenanceWindowsClient;
 import com.azure.resourcemanager.synapse.fluent.models.MaintenanceWindowsInner;
 import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in SqlPoolMaintenanceWindowsClient. */
 public final class SqlPoolMaintenanceWindowsClientImpl implements SqlPoolMaintenanceWindowsClient {
-    private final ClientLogger logger = new ClientLogger(SqlPoolMaintenanceWindowsClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final SqlPoolMaintenanceWindowsService service;
 
@@ -57,7 +54,7 @@ public final class SqlPoolMaintenanceWindowsClientImpl implements SqlPoolMainten
      */
     @Host("{$host}")
     @ServiceInterface(name = "SynapseManagementCli")
-    private interface SqlPoolMaintenanceWindowsService {
+    public interface SqlPoolMaintenanceWindowsService {
         @Headers({"Content-Type: application/json"})
         @Get(
             "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
@@ -103,7 +100,7 @@ public final class SqlPoolMaintenanceWindowsClientImpl implements SqlPoolMainten
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a SQL pool's Maintenance Windows.
+     * @return a SQL pool's Maintenance Windows along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<MaintenanceWindowsInner>> getWithResponseAsync(
@@ -164,7 +161,7 @@ public final class SqlPoolMaintenanceWindowsClientImpl implements SqlPoolMainten
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a SQL pool's Maintenance Windows.
+     * @return a SQL pool's Maintenance Windows along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<MaintenanceWindowsInner>> getWithResponseAsync(
@@ -225,20 +222,37 @@ public final class SqlPoolMaintenanceWindowsClientImpl implements SqlPoolMainten
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a SQL pool's Maintenance Windows.
+     * @return a SQL pool's Maintenance Windows on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<MaintenanceWindowsInner> getAsync(
         String resourceGroupName, String workspaceName, String sqlPoolName, String maintenanceWindowName) {
         return getWithResponseAsync(resourceGroupName, workspaceName, sqlPoolName, maintenanceWindowName)
-            .flatMap(
-                (Response<MaintenanceWindowsInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
+    }
+
+    /**
+     * Get a SQL pool's Maintenance Windows.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param sqlPoolName SQL pool name.
+     * @param maintenanceWindowName Maintenance window name.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a SQL pool's Maintenance Windows along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<MaintenanceWindowsInner> getWithResponse(
+        String resourceGroupName,
+        String workspaceName,
+        String sqlPoolName,
+        String maintenanceWindowName,
+        Context context) {
+        return getWithResponseAsync(resourceGroupName, workspaceName, sqlPoolName, maintenanceWindowName, context)
+            .block();
     }
 
     /**
@@ -256,31 +270,8 @@ public final class SqlPoolMaintenanceWindowsClientImpl implements SqlPoolMainten
     @ServiceMethod(returns = ReturnType.SINGLE)
     public MaintenanceWindowsInner get(
         String resourceGroupName, String workspaceName, String sqlPoolName, String maintenanceWindowName) {
-        return getAsync(resourceGroupName, workspaceName, sqlPoolName, maintenanceWindowName).block();
-    }
-
-    /**
-     * Get a SQL pool's Maintenance Windows.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param sqlPoolName SQL pool name.
-     * @param maintenanceWindowName Maintenance window name.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a SQL pool's Maintenance Windows.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<MaintenanceWindowsInner> getWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        String maintenanceWindowName,
-        Context context) {
-        return getWithResponseAsync(resourceGroupName, workspaceName, sqlPoolName, maintenanceWindowName, context)
-            .block();
+        return getWithResponse(resourceGroupName, workspaceName, sqlPoolName, maintenanceWindowName, Context.NONE)
+            .getValue();
     }
 
     /**
@@ -294,7 +285,7 @@ public final class SqlPoolMaintenanceWindowsClientImpl implements SqlPoolMainten
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> createOrUpdateWithResponseAsync(
@@ -364,7 +355,7 @@ public final class SqlPoolMaintenanceWindowsClientImpl implements SqlPoolMainten
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> createOrUpdateWithResponseAsync(
@@ -431,7 +422,7 @@ public final class SqlPoolMaintenanceWindowsClientImpl implements SqlPoolMainten
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> createOrUpdateAsync(
@@ -442,7 +433,34 @@ public final class SqlPoolMaintenanceWindowsClientImpl implements SqlPoolMainten
         MaintenanceWindowsInner parameters) {
         return createOrUpdateWithResponseAsync(
                 resourceGroupName, workspaceName, sqlPoolName, maintenanceWindowName, parameters)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
+    }
+
+    /**
+     * Creates or updates a Sql pool's maintenance windows settings.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param sqlPoolName SQL pool name.
+     * @param maintenanceWindowName Maintenance window name.
+     * @param parameters The required parameters for creating or updating Maintenance Windows settings.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> createOrUpdateWithResponse(
+        String resourceGroupName,
+        String workspaceName,
+        String sqlPoolName,
+        String maintenanceWindowName,
+        MaintenanceWindowsInner parameters,
+        Context context) {
+        return createOrUpdateWithResponseAsync(
+                resourceGroupName, workspaceName, sqlPoolName, maintenanceWindowName, parameters, context)
+            .block();
     }
 
     /**
@@ -464,33 +482,7 @@ public final class SqlPoolMaintenanceWindowsClientImpl implements SqlPoolMainten
         String sqlPoolName,
         String maintenanceWindowName,
         MaintenanceWindowsInner parameters) {
-        createOrUpdateAsync(resourceGroupName, workspaceName, sqlPoolName, maintenanceWindowName, parameters).block();
-    }
-
-    /**
-     * Creates or updates a Sql pool's maintenance windows settings.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param sqlPoolName SQL pool name.
-     * @param maintenanceWindowName Maintenance window name.
-     * @param parameters The required parameters for creating or updating Maintenance Windows settings.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> createOrUpdateWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        String maintenanceWindowName,
-        MaintenanceWindowsInner parameters,
-        Context context) {
-        return createOrUpdateWithResponseAsync(
-                resourceGroupName, workspaceName, sqlPoolName, maintenanceWindowName, parameters, context)
-            .block();
+        createOrUpdateWithResponse(
+            resourceGroupName, workspaceName, sqlPoolName, maintenanceWindowName, parameters, Context.NONE);
     }
 }

@@ -7,15 +7,15 @@ package com.azure.resourcemanager.appservice.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.fluent.models.HostnameBindingInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
-/** Collection of hostname bindings. */
+/**
+ * Collection of hostname bindings.
+ */
 @Fluent
 public final class HostnameBindingCollection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(HostnameBindingCollection.class);
-
     /*
      * Collection of resources.
      */
@@ -27,6 +27,12 @@ public final class HostnameBindingCollection {
      */
     @JsonProperty(value = "nextLink", access = JsonProperty.Access.WRITE_ONLY)
     private String nextLink;
+
+    /**
+     * Creates an instance of HostnameBindingCollection class.
+     */
+    public HostnameBindingCollection() {
+    }
 
     /**
      * Get the value property: Collection of resources.
@@ -64,11 +70,13 @@ public final class HostnameBindingCollection {
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
+            throw LOGGER.atError()
+                .log(
                     new IllegalArgumentException("Missing required property value in model HostnameBindingCollection"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(HostnameBindingCollection.class);
 }

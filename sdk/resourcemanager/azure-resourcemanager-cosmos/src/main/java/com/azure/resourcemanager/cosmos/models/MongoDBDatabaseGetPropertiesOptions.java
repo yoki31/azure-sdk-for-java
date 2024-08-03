@@ -5,22 +5,30 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
-/** The MongoDBDatabaseGetPropertiesOptions model. */
+/**
+ * The MongoDBDatabaseGetPropertiesOptions model.
+ */
 @Fluent
 public final class MongoDBDatabaseGetPropertiesOptions extends OptionsResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MongoDBDatabaseGetPropertiesOptions.class);
+    /**
+     * Creates an instance of MongoDBDatabaseGetPropertiesOptions class.
+     */
+    public MongoDBDatabaseGetPropertiesOptions() {
+    }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public MongoDBDatabaseGetPropertiesOptions withThroughput(Integer throughput) {
         super.withThroughput(throughput);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public MongoDBDatabaseGetPropertiesOptions withAutoscaleSettings(AutoscaleSettings autoscaleSettings) {
         super.withAutoscaleSettings(autoscaleSettings);
@@ -29,7 +37,7 @@ public final class MongoDBDatabaseGetPropertiesOptions extends OptionsResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

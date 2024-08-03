@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Describes scaling information of a SKU. */
+/**
+ * Describes scaling information of a SKU.
+ */
 @Immutable
 public final class ResourceSkuCapacity {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ResourceSkuCapacity.class);
-
     /*
      * The minimum capacity.
      */
@@ -39,8 +37,14 @@ public final class ResourceSkuCapacity {
     private ResourceSkuCapacityScaleType scaleType;
 
     /**
+     * Creates an instance of ResourceSkuCapacity class.
+     */
+    public ResourceSkuCapacity() {
+    }
+
+    /**
      * Get the minimum property: The minimum capacity.
-     *
+     * 
      * @return the minimum value.
      */
     public Long minimum() {
@@ -49,7 +53,7 @@ public final class ResourceSkuCapacity {
 
     /**
      * Get the maximum property: The maximum capacity that can be set.
-     *
+     * 
      * @return the maximum value.
      */
     public Long maximum() {
@@ -58,7 +62,7 @@ public final class ResourceSkuCapacity {
 
     /**
      * Get the defaultProperty property: The default capacity.
-     *
+     * 
      * @return the defaultProperty value.
      */
     public Long defaultProperty() {
@@ -67,7 +71,7 @@ public final class ResourceSkuCapacity {
 
     /**
      * Get the scaleType property: The scale type applicable to the sku.
-     *
+     * 
      * @return the scaleType value.
      */
     public ResourceSkuCapacityScaleType scaleType() {
@@ -76,7 +80,7 @@ public final class ResourceSkuCapacity {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

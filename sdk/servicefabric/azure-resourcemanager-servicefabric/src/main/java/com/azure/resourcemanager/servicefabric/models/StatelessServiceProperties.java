@@ -5,21 +5,18 @@
 package com.azure.resourcemanager.servicefabric.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.azure.resourcemanager.servicefabric.fluent.models.ServiceResourceProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.List;
 
-/** The properties of a stateless service resource. */
+/**
+ * The properties of a stateless service resource.
+ */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "serviceKind")
 @JsonTypeName("Stateless")
 @Fluent
 public final class StatelessServiceProperties extends ServiceResourceProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(StatelessServiceProperties.class);
-
     /*
      * The instance count.
      */
@@ -27,21 +24,25 @@ public final class StatelessServiceProperties extends ServiceResourceProperties 
     private Integer instanceCount;
 
     /*
-     * Delay duration for RequestDrain feature to ensures that the endpoint
-     * advertised by the stateless instance is removed before the delay starts
-     * prior to closing the instance. This delay enables existing requests to
-     * drain gracefully before the instance actually goes down
-     * (https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-application-upgrade-advanced#avoid-connection-drops-during-stateless-service-planned-downtime-preview).
-     * It is first interpreted as a string representing an ISO 8601 duration.
-     * If that fails, then it is interpreted as a number representing the total
-     * number of milliseconds.
+     * Delay duration for RequestDrain feature to ensures that the endpoint advertised by the stateless instance is
+     * removed before the delay starts prior to closing the instance. This delay enables existing requests to drain
+     * gracefully before the instance actually goes down
+     * (https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-application-upgrade-advanced#avoid-
+     * connection-drops-during-stateless-service-planned-downtime-preview).
+     * It is represented in ISO 8601 format (hh:mm:ss.s).
      */
     @JsonProperty(value = "instanceCloseDelayDuration")
     private String instanceCloseDelayDuration;
 
     /**
+     * Creates an instance of StatelessServiceProperties class.
+     */
+    public StatelessServiceProperties() {
+    }
+
+    /**
      * Get the instanceCount property: The instance count.
-     *
+     * 
      * @return the instanceCount value.
      */
     public Integer instanceCount() {
@@ -50,7 +51,7 @@ public final class StatelessServiceProperties extends ServiceResourceProperties 
 
     /**
      * Set the instanceCount property: The instance count.
-     *
+     * 
      * @param instanceCount the instanceCount value to set.
      * @return the StatelessServiceProperties object itself.
      */
@@ -60,13 +61,12 @@ public final class StatelessServiceProperties extends ServiceResourceProperties 
     }
 
     /**
-     * Get the instanceCloseDelayDuration property: Delay duration for RequestDrain feature to ensures that the endpoint
-     * advertised by the stateless instance is removed before the delay starts prior to closing the instance. This delay
-     * enables existing requests to drain gracefully before the instance actually goes down
+     * Get the instanceCloseDelayDuration property: Delay duration for RequestDrain feature to ensures that the
+     * endpoint advertised by the stateless instance is removed before the delay starts prior to closing the instance.
+     * This delay enables existing requests to drain gracefully before the instance actually goes down
      * (https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-application-upgrade-advanced#avoid-connection-drops-during-stateless-service-planned-downtime-preview).
-     * It is first interpreted as a string representing an ISO 8601 duration. If that fails, then it is interpreted as a
-     * number representing the total number of milliseconds.
-     *
+     * It is represented in ISO 8601 format (hh:mm:ss.s).
+     * 
      * @return the instanceCloseDelayDuration value.
      */
     public String instanceCloseDelayDuration() {
@@ -74,13 +74,12 @@ public final class StatelessServiceProperties extends ServiceResourceProperties 
     }
 
     /**
-     * Set the instanceCloseDelayDuration property: Delay duration for RequestDrain feature to ensures that the endpoint
-     * advertised by the stateless instance is removed before the delay starts prior to closing the instance. This delay
-     * enables existing requests to drain gracefully before the instance actually goes down
+     * Set the instanceCloseDelayDuration property: Delay duration for RequestDrain feature to ensures that the
+     * endpoint advertised by the stateless instance is removed before the delay starts prior to closing the instance.
+     * This delay enables existing requests to drain gracefully before the instance actually goes down
      * (https://docs.microsoft.com/en-us/azure/service-fabric/service-fabric-application-upgrade-advanced#avoid-connection-drops-during-stateless-service-planned-downtime-preview).
-     * It is first interpreted as a string representing an ISO 8601 duration. If that fails, then it is interpreted as a
-     * number representing the total number of milliseconds.
-     *
+     * It is represented in ISO 8601 format (hh:mm:ss.s).
+     * 
      * @param instanceCloseDelayDuration the instanceCloseDelayDuration value to set.
      * @return the StatelessServiceProperties object itself.
      */
@@ -89,65 +88,83 @@ public final class StatelessServiceProperties extends ServiceResourceProperties 
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public StatelessServiceProperties withServiceTypeName(String serviceTypeName) {
         super.withServiceTypeName(serviceTypeName);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public StatelessServiceProperties withPartitionDescription(PartitionSchemeDescription partitionDescription) {
         super.withPartitionDescription(partitionDescription);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public StatelessServiceProperties withServicePackageActivationMode(
-        ArmServicePackageActivationMode servicePackageActivationMode) {
+    public StatelessServiceProperties
+        withServicePackageActivationMode(ArmServicePackageActivationMode servicePackageActivationMode) {
         super.withServicePackageActivationMode(servicePackageActivationMode);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public StatelessServiceProperties withServiceDnsName(String serviceDnsName) {
         super.withServiceDnsName(serviceDnsName);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public StatelessServiceProperties withPlacementConstraints(String placementConstraints) {
         super.withPlacementConstraints(placementConstraints);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public StatelessServiceProperties withCorrelationScheme(List<ServiceCorrelationDescription> correlationScheme) {
         super.withCorrelationScheme(correlationScheme);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public StatelessServiceProperties withServiceLoadMetrics(List<ServiceLoadMetricDescription> serviceLoadMetrics) {
         super.withServiceLoadMetrics(serviceLoadMetrics);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public StatelessServiceProperties withServicePlacementPolicies(
-        List<ServicePlacementPolicyDescription> servicePlacementPolicies) {
+    public StatelessServiceProperties
+        withServicePlacementPolicies(List<ServicePlacementPolicyDescription> servicePlacementPolicies) {
         super.withServicePlacementPolicies(servicePlacementPolicies);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public StatelessServiceProperties withDefaultMoveCost(MoveCost defaultMoveCost) {
         super.withDefaultMoveCost(defaultMoveCost);
@@ -156,7 +173,7 @@ public final class StatelessServiceProperties extends ServiceResourceProperties 
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

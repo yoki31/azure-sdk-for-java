@@ -5,19 +5,17 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
-/** The configuration settings of the login flow of users using App Service Authentication/Authorization. */
+/**
+ * The configuration settings of the login flow of users using App Service Authentication/Authorization.
+ */
 @Fluent
 public final class Login {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Login.class);
-
     /*
-     * The routes that specify the endpoints used for login and logout
-     * requests.
+     * The routes that specify the endpoints used for login and logout requests.
      */
     @JsonProperty(value = "routes")
     private LoginRoutes routes;
@@ -29,17 +27,14 @@ public final class Login {
     private TokenStore tokenStore;
 
     /*
-     * <code>true</code> if the fragments from the request are preserved after
-     * the login request is made; otherwise, <code>false</code>.
+     * <code>true</code> if the fragments from the request are preserved after the login request is made; otherwise, <code>false</code>.
      */
     @JsonProperty(value = "preserveUrlFragmentsForLogins")
     private Boolean preserveUrlFragmentsForLogins;
 
     /*
-     * External URLs that can be redirected to as part of logging in or logging
-     * out of the app. Note that the query string part of the URL is ignored.
-     * This is an advanced setting typically only needed by Windows Store
-     * application backends.
+     * External URLs that can be redirected to as part of logging in or logging out of the app. Note that the query string part of the URL is ignored.
+     * This is an advanced setting typically only needed by Windows Store application backends.
      * Note that URLs within the current domain are always implicitly allowed.
      */
     @JsonProperty(value = "allowedExternalRedirectUrls")
@@ -56,6 +51,12 @@ public final class Login {
      */
     @JsonProperty(value = "nonce")
     private Nonce nonce;
+
+    /**
+     * Creates an instance of Login class.
+     */
+    public Login() {
+    }
 
     /**
      * Get the routes property: The routes that specify the endpoints used for login and logout requests.
@@ -121,9 +122,9 @@ public final class Login {
 
     /**
      * Get the allowedExternalRedirectUrls property: External URLs that can be redirected to as part of logging in or
-     * logging out of the app. Note that the query string part of the URL is ignored. This is an advanced setting
-     * typically only needed by Windows Store application backends. Note that URLs within the current domain are always
-     * implicitly allowed.
+     * logging out of the app. Note that the query string part of the URL is ignored.
+     * This is an advanced setting typically only needed by Windows Store application backends.
+     * Note that URLs within the current domain are always implicitly allowed.
      *
      * @return the allowedExternalRedirectUrls value.
      */
@@ -133,9 +134,9 @@ public final class Login {
 
     /**
      * Set the allowedExternalRedirectUrls property: External URLs that can be redirected to as part of logging in or
-     * logging out of the app. Note that the query string part of the URL is ignored. This is an advanced setting
-     * typically only needed by Windows Store application backends. Note that URLs within the current domain are always
-     * implicitly allowed.
+     * logging out of the app. Note that the query string part of the URL is ignored.
+     * This is an advanced setting typically only needed by Windows Store application backends.
+     * Note that URLs within the current domain are always implicitly allowed.
      *
      * @param allowedExternalRedirectUrls the allowedExternalRedirectUrls value to set.
      * @return the Login object itself.

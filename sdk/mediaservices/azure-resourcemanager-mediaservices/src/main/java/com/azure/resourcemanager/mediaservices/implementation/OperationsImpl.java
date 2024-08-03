@@ -12,10 +12,9 @@ import com.azure.resourcemanager.mediaservices.fluent.OperationsClient;
 import com.azure.resourcemanager.mediaservices.fluent.models.OperationCollectionInner;
 import com.azure.resourcemanager.mediaservices.models.OperationCollection;
 import com.azure.resourcemanager.mediaservices.models.Operations;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class OperationsImpl implements Operations {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(OperationsImpl.class);
 
     private final OperationsClient innerClient;
 
@@ -27,15 +26,6 @@ public final class OperationsImpl implements Operations {
         this.serviceManager = serviceManager;
     }
 
-    public OperationCollection list() {
-        OperationCollectionInner inner = this.serviceClient().list();
-        if (inner != null) {
-            return new OperationCollectionImpl(inner, this.manager());
-        } else {
-            return null;
-        }
-    }
-
     public Response<OperationCollection> listWithResponse(Context context) {
         Response<OperationCollectionInner> inner = this.serviceClient().listWithResponse(context);
         if (inner != null) {
@@ -44,6 +34,15 @@ public final class OperationsImpl implements Operations {
                 inner.getStatusCode(),
                 inner.getHeaders(),
                 new OperationCollectionImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
+    }
+
+    public OperationCollection list() {
+        OperationCollectionInner inner = this.serviceClient().list();
+        if (inner != null) {
+            return new OperationCollectionImpl(inner, this.manager());
         } else {
             return null;
         }

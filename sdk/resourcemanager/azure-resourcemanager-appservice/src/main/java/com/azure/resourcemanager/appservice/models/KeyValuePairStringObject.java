@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The KeyValuePairStringObject model. */
+/**
+ * The KeyValuePairStringObject model.
+ */
 @Immutable
 public final class KeyValuePairStringObject {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(KeyValuePairStringObject.class);
-
     /*
      * The key property.
      */
@@ -27,8 +25,14 @@ public final class KeyValuePairStringObject {
     private Object value;
 
     /**
+     * Creates an instance of KeyValuePairStringObject class.
+     */
+    public KeyValuePairStringObject() {
+    }
+
+    /**
      * Get the key property: The key property.
-     *
+     * 
      * @return the key value.
      */
     public String key() {
@@ -37,7 +41,7 @@ public final class KeyValuePairStringObject {
 
     /**
      * Get the value property: Any object.
-     *
+     * 
      * @return the value value.
      */
     public Object value() {
@@ -46,7 +50,7 @@ public final class KeyValuePairStringObject {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

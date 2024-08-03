@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Response body structure of data flow result for data preview, statistics or expression preview. */
+/**
+ * Response body structure of data flow result for data preview, statistics or expression preview.
+ */
 @Fluent
 public final class DataFlowDebugCommandResponseInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DataFlowDebugCommandResponseInner.class);
-
     /*
      * The run status of data preview, statistics or expression preview.
      */
@@ -27,8 +25,14 @@ public final class DataFlowDebugCommandResponseInner {
     private String data;
 
     /**
+     * Creates an instance of DataFlowDebugCommandResponseInner class.
+     */
+    public DataFlowDebugCommandResponseInner() {
+    }
+
+    /**
      * Get the status property: The run status of data preview, statistics or expression preview.
-     *
+     * 
      * @return the status value.
      */
     public String status() {
@@ -37,7 +41,7 @@ public final class DataFlowDebugCommandResponseInner {
 
     /**
      * Set the status property: The run status of data preview, statistics or expression preview.
-     *
+     * 
      * @param status the status value to set.
      * @return the DataFlowDebugCommandResponseInner object itself.
      */
@@ -48,7 +52,7 @@ public final class DataFlowDebugCommandResponseInner {
 
     /**
      * Get the data property: The result data of data preview, statistics or expression preview.
-     *
+     * 
      * @return the data value.
      */
     public String data() {
@@ -57,7 +61,7 @@ public final class DataFlowDebugCommandResponseInner {
 
     /**
      * Set the data property: The result data of data preview, statistics or expression preview.
-     *
+     * 
      * @param data the data value to set.
      * @return the DataFlowDebugCommandResponseInner object itself.
      */
@@ -68,7 +72,7 @@ public final class DataFlowDebugCommandResponseInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

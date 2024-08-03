@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.applicationinsights.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** An Application Insights component daily data volume cap. */
 @Fluent
 public final class ApplicationInsightsComponentDataVolumeCap {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApplicationInsightsComponentDataVolumeCap.class);
-
     /*
      * Daily data volume cap in GB.
      */
@@ -49,6 +45,10 @@ public final class ApplicationInsightsComponentDataVolumeCap {
      */
     @JsonProperty(value = "MaxHistoryCap", access = JsonProperty.Access.WRITE_ONLY)
     private Float maxHistoryCap;
+
+    /** Creates an instance of ApplicationInsightsComponentDataVolumeCap class. */
+    public ApplicationInsightsComponentDataVolumeCap() {
+    }
 
     /**
      * Get the cap property: Daily data volume cap in GB.

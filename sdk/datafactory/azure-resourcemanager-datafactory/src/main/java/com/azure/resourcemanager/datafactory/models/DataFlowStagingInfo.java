@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Staging info for execute data flow activity. */
+/**
+ * Staging info for execute data flow activity.
+ */
 @Fluent
 public final class DataFlowStagingInfo {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DataFlowStagingInfo.class);
-
     /*
      * Staging linked service reference.
      */
@@ -21,15 +19,20 @@ public final class DataFlowStagingInfo {
     private LinkedServiceReference linkedService;
 
     /*
-     * Folder path for staging blob. Type: string (or Expression with
-     * resultType string)
+     * Folder path for staging blob. Type: string (or Expression with resultType string)
      */
     @JsonProperty(value = "folderPath")
     private Object folderPath;
 
     /**
+     * Creates an instance of DataFlowStagingInfo class.
+     */
+    public DataFlowStagingInfo() {
+    }
+
+    /**
      * Get the linkedService property: Staging linked service reference.
-     *
+     * 
      * @return the linkedService value.
      */
     public LinkedServiceReference linkedService() {
@@ -38,7 +41,7 @@ public final class DataFlowStagingInfo {
 
     /**
      * Set the linkedService property: Staging linked service reference.
-     *
+     * 
      * @param linkedService the linkedService value to set.
      * @return the DataFlowStagingInfo object itself.
      */
@@ -49,7 +52,7 @@ public final class DataFlowStagingInfo {
 
     /**
      * Get the folderPath property: Folder path for staging blob. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the folderPath value.
      */
     public Object folderPath() {
@@ -58,7 +61,7 @@ public final class DataFlowStagingInfo {
 
     /**
      * Set the folderPath property: Folder path for staging blob. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param folderPath the folderPath value to set.
      * @return the DataFlowStagingInfo object itself.
      */
@@ -69,7 +72,7 @@ public final class DataFlowStagingInfo {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

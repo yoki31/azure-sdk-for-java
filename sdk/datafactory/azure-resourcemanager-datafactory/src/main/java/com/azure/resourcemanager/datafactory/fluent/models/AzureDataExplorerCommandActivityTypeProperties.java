@@ -6,34 +6,37 @@ package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Azure Data Explorer command activity properties. */
+/**
+ * Azure Data Explorer command activity properties.
+ */
 @Fluent
 public final class AzureDataExplorerCommandActivityTypeProperties {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(AzureDataExplorerCommandActivityTypeProperties.class);
-
     /*
-     * A control command, according to the Azure Data Explorer command syntax.
-     * Type: string (or Expression with resultType string).
+     * A control command, according to the Azure Data Explorer command syntax. Type: string (or Expression with
+     * resultType string).
      */
     @JsonProperty(value = "command", required = true)
     private Object command;
 
     /*
-     * Control command timeout. Type: string (or Expression with resultType
-     * string), pattern:
+     * Control command timeout. Type: string (or Expression with resultType string), pattern:
      * ((\d+)\.)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9]))..)
      */
     @JsonProperty(value = "commandTimeout")
     private Object commandTimeout;
 
     /**
+     * Creates an instance of AzureDataExplorerCommandActivityTypeProperties class.
+     */
+    public AzureDataExplorerCommandActivityTypeProperties() {
+    }
+
+    /**
      * Get the command property: A control command, according to the Azure Data Explorer command syntax. Type: string
      * (or Expression with resultType string).
-     *
+     * 
      * @return the command value.
      */
     public Object command() {
@@ -43,7 +46,7 @@ public final class AzureDataExplorerCommandActivityTypeProperties {
     /**
      * Set the command property: A control command, according to the Azure Data Explorer command syntax. Type: string
      * (or Expression with resultType string).
-     *
+     * 
      * @param command the command value to set.
      * @return the AzureDataExplorerCommandActivityTypeProperties object itself.
      */
@@ -55,7 +58,7 @@ public final class AzureDataExplorerCommandActivityTypeProperties {
     /**
      * Get the commandTimeout property: Control command timeout. Type: string (or Expression with resultType string),
      * pattern: ((\d+)\.)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9]))..).
-     *
+     * 
      * @return the commandTimeout value.
      */
     public Object commandTimeout() {
@@ -65,7 +68,7 @@ public final class AzureDataExplorerCommandActivityTypeProperties {
     /**
      * Set the commandTimeout property: Control command timeout. Type: string (or Expression with resultType string),
      * pattern: ((\d+)\.)?(\d\d):(60|([0-5][0-9])):(60|([0-5][0-9]))..).
-     *
+     * 
      * @param commandTimeout the commandTimeout value to set.
      * @return the AzureDataExplorerCommandActivityTypeProperties object itself.
      */
@@ -76,15 +79,16 @@ public final class AzureDataExplorerCommandActivityTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (command() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property command in model AzureDataExplorerCommandActivityTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property command in model AzureDataExplorerCommandActivityTypeProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(AzureDataExplorerCommandActivityTypeProperties.class);
 }

@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Default value. */
+/**
+ * Default value.
+ */
 @Fluent
 public final class DWCopyCommandDefaultValue {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DWCopyCommandDefaultValue.class);
-
     /*
      * Column name. Type: object (or Expression with resultType string).
      */
@@ -21,15 +19,20 @@ public final class DWCopyCommandDefaultValue {
     private Object columnName;
 
     /*
-     * The default value of the column. Type: object (or Expression with
-     * resultType string).
+     * The default value of the column. Type: object (or Expression with resultType string).
      */
     @JsonProperty(value = "defaultValue")
     private Object defaultValue;
 
     /**
+     * Creates an instance of DWCopyCommandDefaultValue class.
+     */
+    public DWCopyCommandDefaultValue() {
+    }
+
+    /**
      * Get the columnName property: Column name. Type: object (or Expression with resultType string).
-     *
+     * 
      * @return the columnName value.
      */
     public Object columnName() {
@@ -38,7 +41,7 @@ public final class DWCopyCommandDefaultValue {
 
     /**
      * Set the columnName property: Column name. Type: object (or Expression with resultType string).
-     *
+     * 
      * @param columnName the columnName value to set.
      * @return the DWCopyCommandDefaultValue object itself.
      */
@@ -50,7 +53,7 @@ public final class DWCopyCommandDefaultValue {
     /**
      * Get the defaultValue property: The default value of the column. Type: object (or Expression with resultType
      * string).
-     *
+     * 
      * @return the defaultValue value.
      */
     public Object defaultValue() {
@@ -60,7 +63,7 @@ public final class DWCopyCommandDefaultValue {
     /**
      * Set the defaultValue property: The default value of the column. Type: object (or Expression with resultType
      * string).
-     *
+     * 
      * @param defaultValue the defaultValue value to set.
      * @return the DWCopyCommandDefaultValue object itself.
      */
@@ -71,7 +74,7 @@ public final class DWCopyCommandDefaultValue {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

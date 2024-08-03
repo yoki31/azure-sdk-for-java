@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** Functions host level keys. */
+/**
+ * Functions host level keys.
+ */
 @Fluent
 public final class HostKeysInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(HostKeysInner.class);
-
     /*
      * Secret key.
      */
@@ -37,8 +35,14 @@ public final class HostKeysInner {
     private Map<String, String> systemKeys;
 
     /**
+     * Creates an instance of HostKeysInner class.
+     */
+    public HostKeysInner() {
+    }
+
+    /**
      * Get the masterKey property: Secret key.
-     *
+     * 
      * @return the masterKey value.
      */
     public String masterKey() {
@@ -47,7 +51,7 @@ public final class HostKeysInner {
 
     /**
      * Set the masterKey property: Secret key.
-     *
+     * 
      * @param masterKey the masterKey value to set.
      * @return the HostKeysInner object itself.
      */
@@ -58,7 +62,7 @@ public final class HostKeysInner {
 
     /**
      * Get the functionKeys property: Host level function keys.
-     *
+     * 
      * @return the functionKeys value.
      */
     public Map<String, String> functionKeys() {
@@ -67,7 +71,7 @@ public final class HostKeysInner {
 
     /**
      * Set the functionKeys property: Host level function keys.
-     *
+     * 
      * @param functionKeys the functionKeys value to set.
      * @return the HostKeysInner object itself.
      */
@@ -78,7 +82,7 @@ public final class HostKeysInner {
 
     /**
      * Get the systemKeys property: System keys.
-     *
+     * 
      * @return the systemKeys value.
      */
     public Map<String, String> systemKeys() {
@@ -87,7 +91,7 @@ public final class HostKeysInner {
 
     /**
      * Set the systemKeys property: System keys.
-     *
+     * 
      * @param systemKeys the systemKeys value to set.
      * @return the HostKeysInner object itself.
      */
@@ -98,7 +102,7 @@ public final class HostKeysInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

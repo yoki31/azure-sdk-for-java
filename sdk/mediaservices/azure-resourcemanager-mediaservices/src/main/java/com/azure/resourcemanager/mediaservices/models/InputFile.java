@@ -5,27 +5,25 @@
 package com.azure.resourcemanager.mediaservices.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.List;
 
 /** An InputDefinition for a single file. TrackSelections are scoped to the file specified. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@odata\\.type")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@odata.type")
 @JsonTypeName("#Microsoft.Media.InputFile")
-@JsonFlatten
 @Fluent
-public class InputFile extends InputDefinition {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(InputFile.class);
-
+public final class InputFile extends InputDefinition {
     /*
      * Name of the file that this input definition applies to.
      */
     @JsonProperty(value = "filename")
     private String filename;
+
+    /** Creates an instance of InputFile class. */
+    public InputFile() {
+    }
 
     /**
      * Get the filename property: Name of the file that this input definition applies to.

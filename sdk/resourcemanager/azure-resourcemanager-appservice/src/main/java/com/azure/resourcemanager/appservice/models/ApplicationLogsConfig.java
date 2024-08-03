@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Application logs configuration. */
+/**
+ * Application logs configuration.
+ */
 @Fluent
 public final class ApplicationLogsConfig {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApplicationLogsConfig.class);
-
     /*
      * Application logs to file system configuration.
      */
@@ -33,8 +31,14 @@ public final class ApplicationLogsConfig {
     private AzureBlobStorageApplicationLogsConfig azureBlobStorage;
 
     /**
+     * Creates an instance of ApplicationLogsConfig class.
+     */
+    public ApplicationLogsConfig() {
+    }
+
+    /**
      * Get the fileSystem property: Application logs to file system configuration.
-     *
+     * 
      * @return the fileSystem value.
      */
     public FileSystemApplicationLogsConfig fileSystem() {
@@ -43,7 +47,7 @@ public final class ApplicationLogsConfig {
 
     /**
      * Set the fileSystem property: Application logs to file system configuration.
-     *
+     * 
      * @param fileSystem the fileSystem value to set.
      * @return the ApplicationLogsConfig object itself.
      */
@@ -54,7 +58,7 @@ public final class ApplicationLogsConfig {
 
     /**
      * Get the azureTableStorage property: Application logs to azure table storage configuration.
-     *
+     * 
      * @return the azureTableStorage value.
      */
     public AzureTableStorageApplicationLogsConfig azureTableStorage() {
@@ -63,7 +67,7 @@ public final class ApplicationLogsConfig {
 
     /**
      * Set the azureTableStorage property: Application logs to azure table storage configuration.
-     *
+     * 
      * @param azureTableStorage the azureTableStorage value to set.
      * @return the ApplicationLogsConfig object itself.
      */
@@ -74,7 +78,7 @@ public final class ApplicationLogsConfig {
 
     /**
      * Get the azureBlobStorage property: Application logs to blob storage configuration.
-     *
+     * 
      * @return the azureBlobStorage value.
      */
     public AzureBlobStorageApplicationLogsConfig azureBlobStorage() {
@@ -83,7 +87,7 @@ public final class ApplicationLogsConfig {
 
     /**
      * Set the azureBlobStorage property: Application logs to blob storage configuration.
-     *
+     * 
      * @param azureBlobStorage the azureBlobStorage value to set.
      * @return the ApplicationLogsConfig object itself.
      */
@@ -94,7 +98,7 @@ public final class ApplicationLogsConfig {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

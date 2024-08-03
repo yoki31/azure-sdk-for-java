@@ -13,13 +13,12 @@ import com.azure.resourcemanager.applicationinsights.fluent.AnnotationsClient;
 import com.azure.resourcemanager.applicationinsights.fluent.models.AnnotationInner;
 import com.azure.resourcemanager.applicationinsights.models.Annotation;
 import com.azure.resourcemanager.applicationinsights.models.Annotations;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public final class AnnotationsImpl implements Annotations {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AnnotationsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(AnnotationsImpl.class);
 
     private final AnnotationsClient innerClient;
 
@@ -44,22 +43,6 @@ public final class AnnotationsImpl implements Annotations {
         return Utils.mapPage(inner, inner1 -> new AnnotationImpl(inner1, this.manager()));
     }
 
-    public List<Annotation> create(
-        String resourceGroupName, String resourceName, AnnotationInner annotationProperties) {
-        List<AnnotationInner> inner =
-            this.serviceClient().create(resourceGroupName, resourceName, annotationProperties);
-        if (inner != null) {
-            return Collections
-                .unmodifiableList(
-                    inner
-                        .stream()
-                        .map(inner1 -> new AnnotationImpl(inner1, this.manager()))
-                        .collect(Collectors.toList()));
-        } else {
-            return Collections.emptyList();
-        }
-    }
-
     public Response<List<Annotation>> createWithResponse(
         String resourceGroupName, String resourceName, AnnotationInner annotationProperties, Context context) {
         Response<List<AnnotationInner>> inner =
@@ -79,17 +62,10 @@ public final class AnnotationsImpl implements Annotations {
         }
     }
 
-    public void delete(String resourceGroupName, String resourceName, String annotationId) {
-        this.serviceClient().delete(resourceGroupName, resourceName, annotationId);
-    }
-
-    public Response<Void> deleteWithResponse(
-        String resourceGroupName, String resourceName, String annotationId, Context context) {
-        return this.serviceClient().deleteWithResponse(resourceGroupName, resourceName, annotationId, context);
-    }
-
-    public List<Annotation> get(String resourceGroupName, String resourceName, String annotationId) {
-        List<AnnotationInner> inner = this.serviceClient().get(resourceGroupName, resourceName, annotationId);
+    public List<Annotation> create(
+        String resourceGroupName, String resourceName, AnnotationInner annotationProperties) {
+        List<AnnotationInner> inner =
+            this.serviceClient().create(resourceGroupName, resourceName, annotationProperties);
         if (inner != null) {
             return Collections
                 .unmodifiableList(
@@ -100,6 +76,15 @@ public final class AnnotationsImpl implements Annotations {
         } else {
             return Collections.emptyList();
         }
+    }
+
+    public Response<Void> deleteWithResponse(
+        String resourceGroupName, String resourceName, String annotationId, Context context) {
+        return this.serviceClient().deleteWithResponse(resourceGroupName, resourceName, annotationId, context);
+    }
+
+    public void delete(String resourceGroupName, String resourceName, String annotationId) {
+        this.serviceClient().delete(resourceGroupName, resourceName, annotationId);
     }
 
     public Response<List<Annotation>> getWithResponse(
@@ -118,6 +103,20 @@ public final class AnnotationsImpl implements Annotations {
                     .collect(Collectors.toList()));
         } else {
             return null;
+        }
+    }
+
+    public List<Annotation> get(String resourceGroupName, String resourceName, String annotationId) {
+        List<AnnotationInner> inner = this.serviceClient().get(resourceGroupName, resourceName, annotationId);
+        if (inner != null) {
+            return Collections
+                .unmodifiableList(
+                    inner
+                        .stream()
+                        .map(inner1 -> new AnnotationImpl(inner1, this.manager()))
+                        .collect(Collectors.toList()));
+        } else {
+            return Collections.emptyList();
         }
     }
 

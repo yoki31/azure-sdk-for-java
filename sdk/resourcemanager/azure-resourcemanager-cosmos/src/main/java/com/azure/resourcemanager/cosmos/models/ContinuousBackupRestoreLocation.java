@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Properties of the regional restorable account. */
+/**
+ * Properties of the regional restorable account.
+ */
 @Fluent
 public final class ContinuousBackupRestoreLocation {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ContinuousBackupRestoreLocation.class);
-
     /*
      * The name of the continuous backup restore location.
      */
@@ -21,8 +19,14 @@ public final class ContinuousBackupRestoreLocation {
     private String location;
 
     /**
+     * Creates an instance of ContinuousBackupRestoreLocation class.
+     */
+    public ContinuousBackupRestoreLocation() {
+    }
+
+    /**
      * Get the location property: The name of the continuous backup restore location.
-     *
+     * 
      * @return the location value.
      */
     public String location() {
@@ -31,7 +35,7 @@ public final class ContinuousBackupRestoreLocation {
 
     /**
      * Set the location property: The name of the continuous backup restore location.
-     *
+     * 
      * @param location the location value to set.
      * @return the ContinuousBackupRestoreLocation object itself.
      */
@@ -42,7 +46,7 @@ public final class ContinuousBackupRestoreLocation {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

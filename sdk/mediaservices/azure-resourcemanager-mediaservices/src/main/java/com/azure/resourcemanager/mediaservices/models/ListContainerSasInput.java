@@ -5,16 +5,12 @@
 package com.azure.resourcemanager.mediaservices.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
 /** The parameters to the list SAS request. */
 @Fluent
 public final class ListContainerSasInput {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ListContainerSasInput.class);
-
     /*
      * The permissions to set on the SAS URL.
      */
@@ -22,11 +18,14 @@ public final class ListContainerSasInput {
     private AssetContainerPermission permissions;
 
     /*
-     * The SAS URL expiration time.  This must be less than 24 hours from the
-     * current time.
+     * The SAS URL expiration time.  This must be less than 24 hours from the current time.
      */
     @JsonProperty(value = "expiryTime")
     private OffsetDateTime expiryTime;
+
+    /** Creates an instance of ListContainerSasInput class. */
+    public ListContainerSasInput() {
+    }
 
     /**
      * Get the permissions property: The permissions to set on the SAS URL.

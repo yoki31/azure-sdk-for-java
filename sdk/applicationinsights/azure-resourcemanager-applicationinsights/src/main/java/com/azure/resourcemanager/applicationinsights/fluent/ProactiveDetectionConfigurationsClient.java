@@ -20,6 +20,22 @@ public interface ProactiveDetectionConfigurationsClient {
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param resourceName The name of the Application Insights component resource.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a list of ProactiveDetection configurations of an Application Insights component along with {@link
+     *     Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<List<ApplicationInsightsComponentProactiveDetectionConfigurationInner>> listWithResponse(
+        String resourceGroupName, String resourceName, Context context);
+
+    /**
+     * Gets a list of ProactiveDetection configurations of an Application Insights component.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param resourceName The name of the Application Insights component resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
@@ -30,19 +46,21 @@ public interface ProactiveDetectionConfigurationsClient {
         String resourceGroupName, String resourceName);
 
     /**
-     * Gets a list of ProactiveDetection configurations of an Application Insights component.
+     * Get the ProactiveDetection configuration for this configuration id.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param resourceName The name of the Application Insights component resource.
+     * @param configurationId The ProactiveDetection configuration ID. This is unique within a Application Insights
+     *     component.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of ProactiveDetection configurations of an Application Insights component.
+     * @return the ProactiveDetection configuration for this configuration id along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<List<ApplicationInsightsComponentProactiveDetectionConfigurationInner>> listWithResponse(
-        String resourceGroupName, String resourceName, Context context);
+    Response<ApplicationInsightsComponentProactiveDetectionConfigurationInner> getWithResponse(
+        String resourceGroupName, String resourceName, String configurationId, Context context);
 
     /**
      * Get the ProactiveDetection configuration for this configuration id.
@@ -61,21 +79,27 @@ public interface ProactiveDetectionConfigurationsClient {
         String resourceGroupName, String resourceName, String configurationId);
 
     /**
-     * Get the ProactiveDetection configuration for this configuration id.
+     * Update the ProactiveDetection configuration for this configuration id.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param resourceName The name of the Application Insights component resource.
      * @param configurationId The ProactiveDetection configuration ID. This is unique within a Application Insights
      *     component.
+     * @param proactiveDetectionProperties Properties that need to be specified to update the ProactiveDetection
+     *     configuration.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the ProactiveDetection configuration for this configuration id.
+     * @return properties that define a ProactiveDetection configuration along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<ApplicationInsightsComponentProactiveDetectionConfigurationInner> getWithResponse(
-        String resourceGroupName, String resourceName, String configurationId, Context context);
+    Response<ApplicationInsightsComponentProactiveDetectionConfigurationInner> updateWithResponse(
+        String resourceGroupName,
+        String resourceName,
+        String configurationId,
+        ApplicationInsightsComponentProactiveDetectionConfigurationInner proactiveDetectionProperties,
+        Context context);
 
     /**
      * Update the ProactiveDetection configuration for this configuration id.
@@ -97,27 +121,4 @@ public interface ProactiveDetectionConfigurationsClient {
         String resourceName,
         String configurationId,
         ApplicationInsightsComponentProactiveDetectionConfigurationInner proactiveDetectionProperties);
-
-    /**
-     * Update the ProactiveDetection configuration for this configuration id.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param resourceName The name of the Application Insights component resource.
-     * @param configurationId The ProactiveDetection configuration ID. This is unique within a Application Insights
-     *     component.
-     * @param proactiveDetectionProperties Properties that need to be specified to update the ProactiveDetection
-     *     configuration.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return properties that define a ProactiveDetection configuration.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<ApplicationInsightsComponentProactiveDetectionConfigurationInner> updateWithResponse(
-        String resourceGroupName,
-        String resourceName,
-        String configurationId,
-        ApplicationInsightsComponentProactiveDetectionConfigurationInner proactiveDetectionProperties,
-        Context context);
 }

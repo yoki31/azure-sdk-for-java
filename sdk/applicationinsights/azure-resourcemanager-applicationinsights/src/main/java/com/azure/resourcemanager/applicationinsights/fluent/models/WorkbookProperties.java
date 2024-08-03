@@ -6,7 +6,6 @@ package com.azure.resourcemanager.applicationinsights.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -14,8 +13,6 @@ import java.util.List;
 /** Properties that contain a workbook. */
 @Fluent
 public final class WorkbookProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(WorkbookProperties.class);
-
     /*
      * The user-defined name (display name) of the workbook.
      */
@@ -23,22 +20,19 @@ public final class WorkbookProperties {
     private String displayName;
 
     /*
-     * Configuration of this particular workbook. Configuration data is a
-     * string containing valid JSON
+     * Configuration of this particular workbook. Configuration data is a string containing valid JSON
      */
     @JsonProperty(value = "serializedData", required = true)
     private String serializedData;
 
     /*
-     * Workbook schema version format, like 'Notebook/1.0', which should match
-     * the workbook in serializedData
+     * Workbook schema version format, like 'Notebook/1.0', which should match the workbook in serializedData
      */
     @JsonProperty(value = "version")
     private String version;
 
     /*
-     * Date and time in UTC of the last modification that was made to this
-     * workbook definition.
+     * Date and time in UTC of the last modification that was made to this workbook definition.
      */
     @JsonProperty(value = "timeModified", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime timeModified;
@@ -68,8 +62,7 @@ public final class WorkbookProperties {
     private String sourceId;
 
     /*
-     * The resourceId to the storage account when bring your own storage is
-     * used
+     * The resourceId to the storage account when bring your own storage is used
      */
     @JsonProperty(value = "storageUri")
     private String storageUri;
@@ -85,6 +78,10 @@ public final class WorkbookProperties {
      */
     @JsonProperty(value = "revision", access = JsonProperty.Access.WRITE_ONLY)
     private String revision;
+
+    /** Creates an instance of WorkbookProperties class. */
+    public WorkbookProperties() {
+    }
 
     /**
      * Get the displayName property: The user-defined name (display name) of the workbook.
@@ -285,20 +282,22 @@ public final class WorkbookProperties {
      */
     public void validate() {
         if (displayName() == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException("Missing required property displayName in model WorkbookProperties"));
         }
         if (serializedData() == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         "Missing required property serializedData in model WorkbookProperties"));
         }
         if (category() == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException("Missing required property category in model WorkbookProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(WorkbookProperties.class);
 }

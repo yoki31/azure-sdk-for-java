@@ -6,23 +6,30 @@ package com.azure.resourcemanager.redisenterprise.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Parameters for a Redis Enterprise export operation. */
+/**
+ * Export an RDB file into a target database
+ * 
+ * Parameters for a Redis Enterprise export operation.
+ */
 @Fluent
 public final class ExportClusterParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ExportClusterParameters.class);
-
     /*
      * SAS URI for the target directory to export to
      */
-    @JsonProperty(value = "sasUri", required = true)
+    @JsonProperty(value = "sasUri")
     private String sasUri;
 
     /**
+     * Creates an instance of ExportClusterParameters class.
+     */
+    public ExportClusterParameters() {
+    }
+
+    /**
      * Get the sasUri property: SAS URI for the target directory to export to.
-     *
+     * 
      * @return the sasUri value.
      */
     public String sasUri() {
@@ -31,7 +38,7 @@ public final class ExportClusterParameters {
 
     /**
      * Set the sasUri property: SAS URI for the target directory to export to.
-     *
+     * 
      * @param sasUri the sasUri value to set.
      * @return the ExportClusterParameters object itself.
      */
@@ -42,14 +49,15 @@ public final class ExportClusterParameters {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (sasUri() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property sasUri in model ExportClusterParameters"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property sasUri in model ExportClusterParameters"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ExportClusterParameters.class);
 }

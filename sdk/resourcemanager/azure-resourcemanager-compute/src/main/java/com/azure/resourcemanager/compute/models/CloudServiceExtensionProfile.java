@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Describes a cloud service extension profile. */
+/**
+ * Describes a cloud service extension profile.
+ */
 @Fluent
 public final class CloudServiceExtensionProfile {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CloudServiceExtensionProfile.class);
-
     /*
      * List of extensions for the cloud service.
      */
@@ -22,8 +20,14 @@ public final class CloudServiceExtensionProfile {
     private List<Extension> extensions;
 
     /**
+     * Creates an instance of CloudServiceExtensionProfile class.
+     */
+    public CloudServiceExtensionProfile() {
+    }
+
+    /**
      * Get the extensions property: List of extensions for the cloud service.
-     *
+     * 
      * @return the extensions value.
      */
     public List<Extension> extensions() {
@@ -32,7 +36,7 @@ public final class CloudServiceExtensionProfile {
 
     /**
      * Set the extensions property: List of extensions for the cloud service.
-     *
+     * 
      * @param extensions the extensions value to set.
      * @return the CloudServiceExtensionProfile object itself.
      */
@@ -43,7 +47,7 @@ public final class CloudServiceExtensionProfile {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

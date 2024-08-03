@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** Used for updating a disk access resource. */
+/**
+ * Used for updating a disk access resource.
+ */
 @Fluent
 public final class DiskAccessUpdate {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DiskAccessUpdate.class);
-
     /*
      * Resource tags
      */
@@ -24,8 +22,14 @@ public final class DiskAccessUpdate {
     private Map<String, String> tags;
 
     /**
+     * Creates an instance of DiskAccessUpdate class.
+     */
+    public DiskAccessUpdate() {
+    }
+
+    /**
      * Get the tags property: Resource tags.
-     *
+     * 
      * @return the tags value.
      */
     public Map<String, String> tags() {
@@ -34,7 +38,7 @@ public final class DiskAccessUpdate {
 
     /**
      * Set the tags property: Resource tags.
-     *
+     * 
      * @param tags the tags value to set.
      * @return the DiskAccessUpdate object itself.
      */
@@ -45,7 +49,7 @@ public final class DiskAccessUpdate {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

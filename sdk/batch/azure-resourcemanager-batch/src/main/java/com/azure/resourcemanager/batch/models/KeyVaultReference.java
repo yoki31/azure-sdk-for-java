@@ -6,17 +6,15 @@ package com.azure.resourcemanager.batch.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Identifies the Azure key vault associated with a Batch account. */
+/**
+ * Identifies the Azure key vault associated with a Batch account.
+ */
 @Fluent
 public final class KeyVaultReference {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(KeyVaultReference.class);
-
     /*
-     * The resource ID of the Azure key vault associated with the Batch
-     * account.
+     * The resource ID of the Azure key vault associated with the Batch account.
      */
     @JsonProperty(value = "id", required = true)
     private String id;
@@ -28,8 +26,14 @@ public final class KeyVaultReference {
     private String url;
 
     /**
+     * Creates an instance of KeyVaultReference class.
+     */
+    public KeyVaultReference() {
+    }
+
+    /**
      * Get the id property: The resource ID of the Azure key vault associated with the Batch account.
-     *
+     * 
      * @return the id value.
      */
     public String id() {
@@ -38,7 +42,7 @@ public final class KeyVaultReference {
 
     /**
      * Set the id property: The resource ID of the Azure key vault associated with the Batch account.
-     *
+     * 
      * @param id the id value to set.
      * @return the KeyVaultReference object itself.
      */
@@ -49,7 +53,7 @@ public final class KeyVaultReference {
 
     /**
      * Get the url property: The URL of the Azure key vault associated with the Batch account.
-     *
+     * 
      * @return the url value.
      */
     public String url() {
@@ -58,7 +62,7 @@ public final class KeyVaultReference {
 
     /**
      * Set the url property: The URL of the Azure key vault associated with the Batch account.
-     *
+     * 
      * @param url the url value to set.
      * @return the KeyVaultReference object itself.
      */
@@ -69,19 +73,19 @@ public final class KeyVaultReference {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (id() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property id in model KeyVaultReference"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property id in model KeyVaultReference"));
         }
         if (url() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property url in model KeyVaultReference"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property url in model KeyVaultReference"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(KeyVaultReference.class);
 }

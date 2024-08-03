@@ -5,93 +5,86 @@
 package com.azure.resourcemanager.monitor.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.monitor.models.DataContainer;
 import com.azure.resourcemanager.monitor.models.DataStatus;
 import com.azure.resourcemanager.monitor.models.OnboardingStatus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** VM Insights onboarding status for a resource. */
-@JsonFlatten
+/**
+ * VM Insights onboarding status for a resource.
+ */
 @Fluent
-public class VMInsightsOnboardingStatusInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VMInsightsOnboardingStatusInner.class);
-
+public final class VMInsightsOnboardingStatusInner extends ProxyResource {
     /*
-     * Azure Resource Manager identifier of the resource whose onboarding
-     * status is being represented.
+     * Resource properties.
      */
-    @JsonProperty(value = "properties.resourceId")
-    private String resourceId;
+    @JsonProperty(value = "properties")
+    private VMInsightsOnboardingStatusProperties innerProperties;
 
-    /*
-     * The onboarding status for the resource. Note that, a higher level scope,
-     * e.g., resource group or subscription, is considered onboarded if at
-     * least one resource under it is onboarded.
+    /**
+     * Creates an instance of VMInsightsOnboardingStatusInner class.
      */
-    @JsonProperty(value = "properties.onboardingStatus")
-    private OnboardingStatus onboardingStatus;
+    public VMInsightsOnboardingStatusInner() {
+    }
 
-    /*
-     * The status of VM Insights data from the resource. When reported as
-     * `present` the data array will contain information about the data
-     * containers to which data for the specified resource is being routed.
+    /**
+     * Get the innerProperties property: Resource properties.
+     * 
+     * @return the innerProperties value.
      */
-    @JsonProperty(value = "properties.dataStatus")
-    private DataStatus dataStatus;
-
-    /*
-     * Containers that currently store VM Insights data for the specified
-     * resource.
-     */
-    @JsonProperty(value = "properties.data")
-    private List<DataContainer> data;
+    private VMInsightsOnboardingStatusProperties innerProperties() {
+        return this.innerProperties;
+    }
 
     /**
      * Get the resourceId property: Azure Resource Manager identifier of the resource whose onboarding status is being
      * represented.
-     *
+     * 
      * @return the resourceId value.
      */
     public String resourceId() {
-        return this.resourceId;
+        return this.innerProperties() == null ? null : this.innerProperties().resourceId();
     }
 
     /**
      * Set the resourceId property: Azure Resource Manager identifier of the resource whose onboarding status is being
      * represented.
-     *
+     * 
      * @param resourceId the resourceId value to set.
      * @return the VMInsightsOnboardingStatusInner object itself.
      */
     public VMInsightsOnboardingStatusInner withResourceId(String resourceId) {
-        this.resourceId = resourceId;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new VMInsightsOnboardingStatusProperties();
+        }
+        this.innerProperties().withResourceId(resourceId);
         return this;
     }
 
     /**
-     * Get the onboardingStatus property: The onboarding status for the resource. Note that, a higher level scope, e.g.,
-     * resource group or subscription, is considered onboarded if at least one resource under it is onboarded.
-     *
+     * Get the onboardingStatus property: The onboarding status for the resource. Note that, a higher level scope,
+     * e.g., resource group or subscription, is considered onboarded if at least one resource under it is onboarded.
+     * 
      * @return the onboardingStatus value.
      */
     public OnboardingStatus onboardingStatus() {
-        return this.onboardingStatus;
+        return this.innerProperties() == null ? null : this.innerProperties().onboardingStatus();
     }
 
     /**
-     * Set the onboardingStatus property: The onboarding status for the resource. Note that, a higher level scope, e.g.,
-     * resource group or subscription, is considered onboarded if at least one resource under it is onboarded.
-     *
+     * Set the onboardingStatus property: The onboarding status for the resource. Note that, a higher level scope,
+     * e.g., resource group or subscription, is considered onboarded if at least one resource under it is onboarded.
+     * 
      * @param onboardingStatus the onboardingStatus value to set.
      * @return the VMInsightsOnboardingStatusInner object itself.
      */
     public VMInsightsOnboardingStatusInner withOnboardingStatus(OnboardingStatus onboardingStatus) {
-        this.onboardingStatus = onboardingStatus;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new VMInsightsOnboardingStatusProperties();
+        }
+        this.innerProperties().withOnboardingStatus(onboardingStatus);
         return this;
     }
 
@@ -99,54 +92,60 @@ public class VMInsightsOnboardingStatusInner extends ProxyResource {
      * Get the dataStatus property: The status of VM Insights data from the resource. When reported as `present` the
      * data array will contain information about the data containers to which data for the specified resource is being
      * routed.
-     *
+     * 
      * @return the dataStatus value.
      */
     public DataStatus dataStatus() {
-        return this.dataStatus;
+        return this.innerProperties() == null ? null : this.innerProperties().dataStatus();
     }
 
     /**
      * Set the dataStatus property: The status of VM Insights data from the resource. When reported as `present` the
      * data array will contain information about the data containers to which data for the specified resource is being
      * routed.
-     *
+     * 
      * @param dataStatus the dataStatus value to set.
      * @return the VMInsightsOnboardingStatusInner object itself.
      */
     public VMInsightsOnboardingStatusInner withDataStatus(DataStatus dataStatus) {
-        this.dataStatus = dataStatus;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new VMInsightsOnboardingStatusProperties();
+        }
+        this.innerProperties().withDataStatus(dataStatus);
         return this;
     }
 
     /**
      * Get the data property: Containers that currently store VM Insights data for the specified resource.
-     *
+     * 
      * @return the data value.
      */
     public List<DataContainer> data() {
-        return this.data;
+        return this.innerProperties() == null ? null : this.innerProperties().data();
     }
 
     /**
      * Set the data property: Containers that currently store VM Insights data for the specified resource.
-     *
+     * 
      * @param data the data value to set.
      * @return the VMInsightsOnboardingStatusInner object itself.
      */
     public VMInsightsOnboardingStatusInner withData(List<DataContainer> data) {
-        this.data = data;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new VMInsightsOnboardingStatusProperties();
+        }
+        this.innerProperties().withData(data);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
-        if (data() != null) {
-            data().forEach(e -> e.validate());
+        if (innerProperties() != null) {
+            innerProperties().validate();
         }
     }
 }

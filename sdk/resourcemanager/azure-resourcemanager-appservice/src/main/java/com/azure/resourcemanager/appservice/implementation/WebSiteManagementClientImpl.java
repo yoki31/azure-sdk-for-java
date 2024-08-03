@@ -7,7 +7,6 @@ package com.azure.resourcemanager.appservice.implementation;
 import com.azure.core.annotation.ServiceClient;
 import com.azure.core.http.HttpPipeline;
 import com.azure.core.management.AzureEnvironment;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.core.util.serializer.SerializerAdapter;
 import com.azure.resourcemanager.appservice.fluent.AppServiceCertificateOrdersClient;
 import com.azure.resourcemanager.appservice.fluent.AppServiceEnvironmentsClient;
@@ -21,6 +20,7 @@ import com.azure.resourcemanager.appservice.fluent.DeletedWebAppsClient;
 import com.azure.resourcemanager.appservice.fluent.DiagnosticsClient;
 import com.azure.resourcemanager.appservice.fluent.DomainRegistrationProvidersClient;
 import com.azure.resourcemanager.appservice.fluent.DomainsClient;
+import com.azure.resourcemanager.appservice.fluent.GetUsagesInLocationsClient;
 import com.azure.resourcemanager.appservice.fluent.GlobalsClient;
 import com.azure.resourcemanager.appservice.fluent.KubeEnvironmentsClient;
 import com.azure.resourcemanager.appservice.fluent.ProvidersClient;
@@ -31,15 +31,27 @@ import com.azure.resourcemanager.appservice.fluent.StaticSitesClient;
 import com.azure.resourcemanager.appservice.fluent.TopLevelDomainsClient;
 import com.azure.resourcemanager.appservice.fluent.WebAppsClient;
 import com.azure.resourcemanager.appservice.fluent.WebSiteManagementClient;
+import com.azure.resourcemanager.appservice.fluent.WorkflowRunActionRepetitionsClient;
+import com.azure.resourcemanager.appservice.fluent.WorkflowRunActionRepetitionsRequestHistoriesClient;
+import com.azure.resourcemanager.appservice.fluent.WorkflowRunActionScopeRepetitionsClient;
+import com.azure.resourcemanager.appservice.fluent.WorkflowRunActionsClient;
+import com.azure.resourcemanager.appservice.fluent.WorkflowRunsClient;
+import com.azure.resourcemanager.appservice.fluent.WorkflowTriggerHistoriesClient;
+import com.azure.resourcemanager.appservice.fluent.WorkflowTriggersClient;
+import com.azure.resourcemanager.appservice.fluent.WorkflowVersionsClient;
+import com.azure.resourcemanager.appservice.fluent.WorkflowsClient;
 import com.azure.resourcemanager.resources.fluentcore.AzureServiceClient;
+
 import java.time.Duration;
 
-/** Initializes a new instance of the WebSiteManagementClientImpl type. */
+/**
+ * Initializes a new instance of the WebSiteManagementClientImpl type.
+ */
 @ServiceClient(builder = WebSiteManagementClientBuilder.class)
 public final class WebSiteManagementClientImpl extends AzureServiceClient implements WebSiteManagementClient {
-    private final ClientLogger logger = new ClientLogger(WebSiteManagementClientImpl.class);
-
-    /** Your Azure subscription ID. This is a GUID-formatted string (e.g. 00000000-0000-0000-0000-000000000000). */
+    /**
+     * Your Azure subscription ID. This is a GUID-formatted string (e.g. 00000000-0000-0000-0000-000000000000).
+     */
     private final String subscriptionId;
 
     /**
@@ -51,7 +63,9 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
         return this.subscriptionId;
     }
 
-    /** server parameter. */
+    /**
+     * server parameter.
+     */
     private final String endpoint;
 
     /**
@@ -63,7 +77,9 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
         return this.endpoint;
     }
 
-    /** Api Version. */
+    /**
+     * Api Version.
+     */
     private final String apiVersion;
 
     /**
@@ -75,7 +91,9 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
         return this.apiVersion;
     }
 
-    /** The HTTP pipeline to send requests through. */
+    /**
+     * The HTTP pipeline to send requests through.
+     */
     private final HttpPipeline httpPipeline;
 
     /**
@@ -87,7 +105,9 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
         return this.httpPipeline;
     }
 
-    /** The serializer to serialize an object into a string. */
+    /**
+     * The serializer to serialize an object into a string.
+     */
     private final SerializerAdapter serializerAdapter;
 
     /**
@@ -99,7 +119,9 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
         return this.serializerAdapter;
     }
 
-    /** The default poll interval for long-running operation. */
+    /**
+     * The default poll interval for long-running operation.
+     */
     private final Duration defaultPollInterval;
 
     /**
@@ -111,7 +133,9 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
         return this.defaultPollInterval;
     }
 
-    /** The AppServiceCertificateOrdersClient object to access its operations. */
+    /**
+     * The AppServiceCertificateOrdersClient object to access its operations.
+     */
     private final AppServiceCertificateOrdersClient appServiceCertificateOrders;
 
     /**
@@ -123,7 +147,9 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
         return this.appServiceCertificateOrders;
     }
 
-    /** The CertificateOrdersDiagnosticsClient object to access its operations. */
+    /**
+     * The CertificateOrdersDiagnosticsClient object to access its operations.
+     */
     private final CertificateOrdersDiagnosticsClient certificateOrdersDiagnostics;
 
     /**
@@ -135,7 +161,9 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
         return this.certificateOrdersDiagnostics;
     }
 
-    /** The CertificateRegistrationProvidersClient object to access its operations. */
+    /**
+     * The CertificateRegistrationProvidersClient object to access its operations.
+     */
     private final CertificateRegistrationProvidersClient certificateRegistrationProviders;
 
     /**
@@ -147,7 +175,9 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
         return this.certificateRegistrationProviders;
     }
 
-    /** The DomainsClient object to access its operations. */
+    /**
+     * The DomainsClient object to access its operations.
+     */
     private final DomainsClient domains;
 
     /**
@@ -159,7 +189,9 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
         return this.domains;
     }
 
-    /** The TopLevelDomainsClient object to access its operations. */
+    /**
+     * The TopLevelDomainsClient object to access its operations.
+     */
     private final TopLevelDomainsClient topLevelDomains;
 
     /**
@@ -171,7 +203,9 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
         return this.topLevelDomains;
     }
 
-    /** The DomainRegistrationProvidersClient object to access its operations. */
+    /**
+     * The DomainRegistrationProvidersClient object to access its operations.
+     */
     private final DomainRegistrationProvidersClient domainRegistrationProviders;
 
     /**
@@ -183,7 +217,9 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
         return this.domainRegistrationProviders;
     }
 
-    /** The AppServiceEnvironmentsClient object to access its operations. */
+    /**
+     * The AppServiceEnvironmentsClient object to access its operations.
+     */
     private final AppServiceEnvironmentsClient appServiceEnvironments;
 
     /**
@@ -195,7 +231,9 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
         return this.appServiceEnvironments;
     }
 
-    /** The AppServicePlansClient object to access its operations. */
+    /**
+     * The AppServicePlansClient object to access its operations.
+     */
     private final AppServicePlansClient appServicePlans;
 
     /**
@@ -207,7 +245,9 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
         return this.appServicePlans;
     }
 
-    /** The CertificatesClient object to access its operations. */
+    /**
+     * The CertificatesClient object to access its operations.
+     */
     private final CertificatesClient certificates;
 
     /**
@@ -219,7 +259,9 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
         return this.certificates;
     }
 
-    /** The ContainerAppsClient object to access its operations. */
+    /**
+     * The ContainerAppsClient object to access its operations.
+     */
     private final ContainerAppsClient containerApps;
 
     /**
@@ -231,7 +273,9 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
         return this.containerApps;
     }
 
-    /** The ContainerAppsRevisionsClient object to access its operations. */
+    /**
+     * The ContainerAppsRevisionsClient object to access its operations.
+     */
     private final ContainerAppsRevisionsClient containerAppsRevisions;
 
     /**
@@ -243,7 +287,9 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
         return this.containerAppsRevisions;
     }
 
-    /** The DeletedWebAppsClient object to access its operations. */
+    /**
+     * The DeletedWebAppsClient object to access its operations.
+     */
     private final DeletedWebAppsClient deletedWebApps;
 
     /**
@@ -255,7 +301,9 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
         return this.deletedWebApps;
     }
 
-    /** The DiagnosticsClient object to access its operations. */
+    /**
+     * The DiagnosticsClient object to access its operations.
+     */
     private final DiagnosticsClient diagnostics;
 
     /**
@@ -267,7 +315,9 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
         return this.diagnostics;
     }
 
-    /** The GlobalsClient object to access its operations. */
+    /**
+     * The GlobalsClient object to access its operations.
+     */
     private final GlobalsClient globals;
 
     /**
@@ -279,7 +329,9 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
         return this.globals;
     }
 
-    /** The KubeEnvironmentsClient object to access its operations. */
+    /**
+     * The KubeEnvironmentsClient object to access its operations.
+     */
     private final KubeEnvironmentsClient kubeEnvironments;
 
     /**
@@ -291,7 +343,9 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
         return this.kubeEnvironments;
     }
 
-    /** The ProvidersClient object to access its operations. */
+    /**
+     * The ProvidersClient object to access its operations.
+     */
     private final ProvidersClient providers;
 
     /**
@@ -303,7 +357,9 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
         return this.providers;
     }
 
-    /** The RecommendationsClient object to access its operations. */
+    /**
+     * The RecommendationsClient object to access its operations.
+     */
     private final RecommendationsClient recommendations;
 
     /**
@@ -315,7 +371,9 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
         return this.recommendations;
     }
 
-    /** The ResourceHealthMetadatasClient object to access its operations. */
+    /**
+     * The ResourceHealthMetadatasClient object to access its operations.
+     */
     private final ResourceHealthMetadatasClient resourceHealthMetadatas;
 
     /**
@@ -327,7 +385,9 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
         return this.resourceHealthMetadatas;
     }
 
-    /** The ResourceProvidersClient object to access its operations. */
+    /**
+     * The ResourceProvidersClient object to access its operations.
+     */
     private final ResourceProvidersClient resourceProviders;
 
     /**
@@ -339,7 +399,23 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
         return this.resourceProviders;
     }
 
-    /** The StaticSitesClient object to access its operations. */
+    /**
+     * The GetUsagesInLocationsClient object to access its operations.
+     */
+    private final GetUsagesInLocationsClient getUsagesInLocations;
+
+    /**
+     * Gets the GetUsagesInLocationsClient object to access its operations.
+     *
+     * @return the GetUsagesInLocationsClient object.
+     */
+    public GetUsagesInLocationsClient getGetUsagesInLocations() {
+        return this.getUsagesInLocations;
+    }
+
+    /**
+     * The StaticSitesClient object to access its operations.
+     */
     private final StaticSitesClient staticSites;
 
     /**
@@ -351,7 +427,9 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
         return this.staticSites;
     }
 
-    /** The WebAppsClient object to access its operations. */
+    /**
+     * The WebAppsClient object to access its operations.
+     */
     private final WebAppsClient webApps;
 
     /**
@@ -364,6 +442,132 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
     }
 
     /**
+     * The WorkflowsClient object to access its operations.
+     */
+    private final WorkflowsClient workflows;
+
+    /**
+     * Gets the WorkflowsClient object to access its operations.
+     *
+     * @return the WorkflowsClient object.
+     */
+    public WorkflowsClient getWorkflows() {
+        return this.workflows;
+    }
+
+    /**
+     * The WorkflowRunsClient object to access its operations.
+     */
+    private final WorkflowRunsClient workflowRuns;
+
+    /**
+     * Gets the WorkflowRunsClient object to access its operations.
+     *
+     * @return the WorkflowRunsClient object.
+     */
+    public WorkflowRunsClient getWorkflowRuns() {
+        return this.workflowRuns;
+    }
+
+    /**
+     * The WorkflowRunActionsClient object to access its operations.
+     */
+    private final WorkflowRunActionsClient workflowRunActions;
+
+    /**
+     * Gets the WorkflowRunActionsClient object to access its operations.
+     *
+     * @return the WorkflowRunActionsClient object.
+     */
+    public WorkflowRunActionsClient getWorkflowRunActions() {
+        return this.workflowRunActions;
+    }
+
+    /**
+     * The WorkflowRunActionRepetitionsClient object to access its operations.
+     */
+    private final WorkflowRunActionRepetitionsClient workflowRunActionRepetitions;
+
+    /**
+     * Gets the WorkflowRunActionRepetitionsClient object to access its operations.
+     *
+     * @return the WorkflowRunActionRepetitionsClient object.
+     */
+    public WorkflowRunActionRepetitionsClient getWorkflowRunActionRepetitions() {
+        return this.workflowRunActionRepetitions;
+    }
+
+    /**
+     * The WorkflowRunActionRepetitionsRequestHistoriesClient object to access its operations.
+     */
+    private final WorkflowRunActionRepetitionsRequestHistoriesClient workflowRunActionRepetitionsRequestHistories;
+
+    /**
+     * Gets the WorkflowRunActionRepetitionsRequestHistoriesClient object to access its operations.
+     *
+     * @return the WorkflowRunActionRepetitionsRequestHistoriesClient object.
+     */
+    public WorkflowRunActionRepetitionsRequestHistoriesClient getWorkflowRunActionRepetitionsRequestHistories() {
+        return this.workflowRunActionRepetitionsRequestHistories;
+    }
+
+    /**
+     * The WorkflowRunActionScopeRepetitionsClient object to access its operations.
+     */
+    private final WorkflowRunActionScopeRepetitionsClient workflowRunActionScopeRepetitions;
+
+    /**
+     * Gets the WorkflowRunActionScopeRepetitionsClient object to access its operations.
+     *
+     * @return the WorkflowRunActionScopeRepetitionsClient object.
+     */
+    public WorkflowRunActionScopeRepetitionsClient getWorkflowRunActionScopeRepetitions() {
+        return this.workflowRunActionScopeRepetitions;
+    }
+
+    /**
+     * The WorkflowTriggersClient object to access its operations.
+     */
+    private final WorkflowTriggersClient workflowTriggers;
+
+    /**
+     * Gets the WorkflowTriggersClient object to access its operations.
+     *
+     * @return the WorkflowTriggersClient object.
+     */
+    public WorkflowTriggersClient getWorkflowTriggers() {
+        return this.workflowTriggers;
+    }
+
+    /**
+     * The WorkflowTriggerHistoriesClient object to access its operations.
+     */
+    private final WorkflowTriggerHistoriesClient workflowTriggerHistories;
+
+    /**
+     * Gets the WorkflowTriggerHistoriesClient object to access its operations.
+     *
+     * @return the WorkflowTriggerHistoriesClient object.
+     */
+    public WorkflowTriggerHistoriesClient getWorkflowTriggerHistories() {
+        return this.workflowTriggerHistories;
+    }
+
+    /**
+     * The WorkflowVersionsClient object to access its operations.
+     */
+    private final WorkflowVersionsClient workflowVersions;
+
+    /**
+     * Gets the WorkflowVersionsClient object to access its operations.
+     *
+     * @return the WorkflowVersionsClient object.
+     */
+    public WorkflowVersionsClient getWorkflowVersions() {
+        return this.workflowVersions;
+    }
+
+    /**
      * Initializes an instance of WebSiteManagementClient client.
      *
      * @param httpPipeline The HTTP pipeline to send requests through.
@@ -371,23 +575,18 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
      * @param defaultPollInterval The default poll interval for long-running operation.
      * @param environment The Azure environment.
      * @param subscriptionId Your Azure subscription ID. This is a GUID-formatted string (e.g.
-     *     00000000-0000-0000-0000-000000000000).
+     * 00000000-0000-0000-0000-000000000000).
      * @param endpoint server parameter.
      */
-    WebSiteManagementClientImpl(
-        HttpPipeline httpPipeline,
-        SerializerAdapter serializerAdapter,
-        Duration defaultPollInterval,
-        AzureEnvironment environment,
-        String subscriptionId,
-        String endpoint) {
+    WebSiteManagementClientImpl(HttpPipeline httpPipeline, SerializerAdapter serializerAdapter,
+        Duration defaultPollInterval, AzureEnvironment environment, String subscriptionId, String endpoint) {
         super(httpPipeline, serializerAdapter, environment);
         this.httpPipeline = httpPipeline;
         this.serializerAdapter = serializerAdapter;
         this.defaultPollInterval = defaultPollInterval;
         this.subscriptionId = subscriptionId;
         this.endpoint = endpoint;
-        this.apiVersion = "2021-03-01";
+        this.apiVersion = "2023-12-01";
         this.appServiceCertificateOrders = new AppServiceCertificateOrdersClientImpl(this);
         this.certificateOrdersDiagnostics = new CertificateOrdersDiagnosticsClientImpl(this);
         this.certificateRegistrationProviders = new CertificateRegistrationProvidersClientImpl(this);
@@ -407,7 +606,18 @@ public final class WebSiteManagementClientImpl extends AzureServiceClient implem
         this.recommendations = new RecommendationsClientImpl(this);
         this.resourceHealthMetadatas = new ResourceHealthMetadatasClientImpl(this);
         this.resourceProviders = new ResourceProvidersClientImpl(this);
+        this.getUsagesInLocations = new GetUsagesInLocationsClientImpl(this);
         this.staticSites = new StaticSitesClientImpl(this);
         this.webApps = new WebAppsClientImpl(this);
+        this.workflows = new WorkflowsClientImpl(this);
+        this.workflowRuns = new WorkflowRunsClientImpl(this);
+        this.workflowRunActions = new WorkflowRunActionsClientImpl(this);
+        this.workflowRunActionRepetitions = new WorkflowRunActionRepetitionsClientImpl(this);
+        this.workflowRunActionRepetitionsRequestHistories
+            = new WorkflowRunActionRepetitionsRequestHistoriesClientImpl(this);
+        this.workflowRunActionScopeRepetitions = new WorkflowRunActionScopeRepetitionsClientImpl(this);
+        this.workflowTriggers = new WorkflowTriggersClientImpl(this);
+        this.workflowTriggerHistories = new WorkflowTriggerHistoriesClientImpl(this);
+        this.workflowVersions = new WorkflowVersionsClientImpl(this);
     }
 }

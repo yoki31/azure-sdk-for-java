@@ -6,33 +6,36 @@ package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Office365 dataset properties. */
+/**
+ * Office365 dataset properties.
+ */
 @Fluent
 public final class Office365DatasetTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Office365DatasetTypeProperties.class);
-
     /*
-     * Name of the dataset to extract from Office 365. Type: string (or
-     * Expression with resultType string).
+     * Name of the dataset to extract from Office 365. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "tableName", required = true)
     private Object tableName;
 
     /*
-     * A predicate expression that can be used to filter the specific rows to
-     * extract from Office 365. Type: string (or Expression with resultType
-     * string).
+     * A predicate expression that can be used to filter the specific rows to extract from Office 365. Type: string (or
+     * Expression with resultType string).
      */
     @JsonProperty(value = "predicate")
     private Object predicate;
 
     /**
+     * Creates an instance of Office365DatasetTypeProperties class.
+     */
+    public Office365DatasetTypeProperties() {
+    }
+
+    /**
      * Get the tableName property: Name of the dataset to extract from Office 365. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the tableName value.
      */
     public Object tableName() {
@@ -42,7 +45,7 @@ public final class Office365DatasetTypeProperties {
     /**
      * Set the tableName property: Name of the dataset to extract from Office 365. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param tableName the tableName value to set.
      * @return the Office365DatasetTypeProperties object itself.
      */
@@ -54,7 +57,7 @@ public final class Office365DatasetTypeProperties {
     /**
      * Get the predicate property: A predicate expression that can be used to filter the specific rows to extract from
      * Office 365. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the predicate value.
      */
     public Object predicate() {
@@ -64,7 +67,7 @@ public final class Office365DatasetTypeProperties {
     /**
      * Set the predicate property: A predicate expression that can be used to filter the specific rows to extract from
      * Office 365. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param predicate the predicate value to set.
      * @return the Office365DatasetTypeProperties object itself.
      */
@@ -75,15 +78,16 @@ public final class Office365DatasetTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (tableName() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property tableName in model Office365DatasetTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property tableName in model Office365DatasetTypeProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(Office365DatasetTypeProperties.class);
 }

@@ -13,26 +13,26 @@ public interface TenantAccess {
     /**
      * Returns list of access infos - for Git and Management endpoints.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged AccessInformation list representation.
+     * @return paged AccessInformation list representation as paginated response with {@link PagedIterable}.
      */
     PagedIterable<AccessInformationContract> listByService(String resourceGroupName, String serviceName);
 
     /**
      * Returns list of access infos - for Git and Management endpoints.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param filter Not used.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged AccessInformation list representation.
+     * @return paged AccessInformation list representation as paginated response with {@link PagedIterable}.
      */
     PagedIterable<AccessInformationContract> listByService(
         String resourceGroupName, String serviceName, String filter, Context context);
@@ -40,19 +40,7 @@ public interface TenantAccess {
     /**
      * Tenant access metadata.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param accessName The identifier of the Access configuration.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     */
-    void getEntityTag(String resourceGroupName, String serviceName, AccessIdName accessName);
-
-    /**
-     * Tenant access metadata.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param accessName The identifier of the Access configuration.
      * @param context The context to associate with this operation.
@@ -65,22 +53,21 @@ public interface TenantAccess {
         String resourceGroupName, String serviceName, AccessIdName accessName, Context context);
 
     /**
-     * Get tenant access information details without secrets.
+     * Tenant access metadata.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param accessName The identifier of the Access configuration.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return tenant access information details without secrets.
      */
-    AccessInformationContract get(String resourceGroupName, String serviceName, AccessIdName accessName);
+    void getEntityTag(String resourceGroupName, String serviceName, AccessIdName accessName);
 
     /**
      * Get tenant access information details without secrets.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param accessName The identifier of the Access configuration.
      * @param context The context to associate with this operation.
@@ -93,9 +80,37 @@ public interface TenantAccess {
         String resourceGroupName, String serviceName, AccessIdName accessName, Context context);
 
     /**
+     * Get tenant access information details without secrets.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param accessName The identifier of the Access configuration.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return tenant access information details without secrets.
+     */
+    AccessInformationContract get(String resourceGroupName, String serviceName, AccessIdName accessName);
+
+    /**
      * Regenerate primary access key.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param accessName The identifier of the Access configuration.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    Response<Void> regeneratePrimaryKeyWithResponse(
+        String resourceGroupName, String serviceName, AccessIdName accessName, Context context);
+
+    /**
+     * Regenerate primary access key.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param accessName The identifier of the Access configuration.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -105,24 +120,24 @@ public interface TenantAccess {
     void regeneratePrimaryKey(String resourceGroupName, String serviceName, AccessIdName accessName);
 
     /**
-     * Regenerate primary access key.
+     * Regenerate secondary access key.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param accessName The identifier of the Access configuration.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link Response}.
      */
-    Response<Void> regeneratePrimaryKeyWithResponse(
+    Response<Void> regenerateSecondaryKeyWithResponse(
         String resourceGroupName, String serviceName, AccessIdName accessName, Context context);
 
     /**
      * Regenerate secondary access key.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param accessName The identifier of the Access configuration.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -132,37 +147,9 @@ public interface TenantAccess {
     void regenerateSecondaryKey(String resourceGroupName, String serviceName, AccessIdName accessName);
 
     /**
-     * Regenerate secondary access key.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param accessName The identifier of the Access configuration.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    Response<Void> regenerateSecondaryKeyWithResponse(
-        String resourceGroupName, String serviceName, AccessIdName accessName, Context context);
-
-    /**
      * Get tenant access information details.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param accessName The identifier of the Access configuration.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return tenant access information details.
-     */
-    AccessInformationSecretsContract listSecrets(String resourceGroupName, String serviceName, AccessIdName accessName);
-
-    /**
-     * Get tenant access information details.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param accessName The identifier of the Access configuration.
      * @param context The context to associate with this operation.
@@ -173,6 +160,19 @@ public interface TenantAccess {
      */
     Response<AccessInformationSecretsContract> listSecretsWithResponse(
         String resourceGroupName, String serviceName, AccessIdName accessName, Context context);
+
+    /**
+     * Get tenant access information details.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param accessName The identifier of the Access configuration.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return tenant access information details.
+     */
+    AccessInformationSecretsContract listSecrets(String resourceGroupName, String serviceName, AccessIdName accessName);
 
     /**
      * Get tenant access information details without secrets.

@@ -6,110 +6,129 @@ package com.azure.resourcemanager.batch.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The configuration for compute nodes in a pool based on the Azure Virtual Machines infrastructure. */
+/**
+ * The configuration for compute nodes in a pool based on the Azure Virtual Machines infrastructure.
+ */
 @Fluent
 public final class VirtualMachineConfiguration {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VirtualMachineConfiguration.class);
-
     /*
-     * A reference to an Azure Virtual Machines Marketplace image or the Azure
-     * Image resource of a custom Virtual Machine. To get the list of all
-     * imageReferences verified by Azure Batch, see the 'List supported node
-     * agent SKUs' operation.
+     * A reference to an Azure Virtual Machines Marketplace image or the Azure Image resource of a custom Virtual
+     * Machine. To get the list of all imageReferences verified by Azure Batch, see the 'List supported node agent
+     * SKUs' operation.
      */
     @JsonProperty(value = "imageReference", required = true)
     private ImageReference imageReference;
 
     /*
-     * The SKU of the Batch node agent to be provisioned on compute nodes in
-     * the pool. The Batch node agent is a program that runs on each node in
-     * the pool, and provides the command-and-control interface between the
-     * node and the Batch service. There are different implementations of the
-     * node agent, known as SKUs, for different operating systems. You must
-     * specify a node agent SKU which matches the selected image reference. To
-     * get the list of supported node agent SKUs along with their list of
-     * verified image references, see the 'List supported node agent SKUs'
-     * operation.
+     * The SKU of the Batch node agent to be provisioned on compute nodes in the pool.
+     * 
+     * The Batch node agent is a program that runs on each node in the pool, and provides the command-and-control
+     * interface between the node and the Batch service. There are different implementations of the node agent, known
+     * as SKUs, for different operating systems. You must specify a node agent SKU which matches the selected image
+     * reference. To get the list of supported node agent SKUs along with their list of verified image references, see
+     * the 'List supported node agent SKUs' operation.
      */
     @JsonProperty(value = "nodeAgentSkuId", required = true)
     private String nodeAgentSkuId;
 
     /*
-     * Windows operating system settings to apply to the virtual machine. This
-     * property must not be specified if the imageReference specifies a Linux
-     * OS image.
+     * Windows operating system settings to apply to the virtual machine.
+     * 
+     * This property must not be specified if the imageReference specifies a Linux OS image.
      */
     @JsonProperty(value = "windowsConfiguration")
     private WindowsConfiguration windowsConfiguration;
 
     /*
-     * The configuration for data disks attached to the compute nodes in the
-     * pool. This property must be specified if the compute nodes in the pool
-     * need to have empty data disks attached to them.
+     * The configuration for data disks attached to the compute nodes in the pool.
+     * 
+     * This property must be specified if the compute nodes in the pool need to have empty data disks attached to them.
      */
     @JsonProperty(value = "dataDisks")
     private List<DataDisk> dataDisks;
 
     /*
-     * The type of on-premises license to be used when deploying the operating
-     * system. This only applies to images that contain the Windows operating
-     * system, and should only be used when you hold valid on-premises licenses
-     * for the nodes which will be deployed. If omitted, no on-premises
-     * licensing discount is applied. Values are:
-     *
+     * The type of on-premises license to be used when deploying the operating system.
+     * 
+     * This only applies to images that contain the Windows operating system, and should only be used when you hold
+     * valid on-premises licenses for the nodes which will be deployed. If omitted, no on-premises licensing discount
+     * is applied. Values are:
+     * 
      * Windows_Server - The on-premises license is for Windows Server.
      * Windows_Client - The on-premises license is for Windows Client.
-     *
+     * 
      */
     @JsonProperty(value = "licenseType")
     private String licenseType;
 
     /*
-     * The configuration for container-enabled pools. If specified, setup is
-     * performed on each node in the pool to allow tasks to run in containers.
-     * All regular tasks and job manager tasks run on this pool must specify
-     * the containerSettings property, and all other tasks may specify it.
+     * The configuration for container-enabled pools.
+     * 
+     * If specified, setup is performed on each node in the pool to allow tasks to run in containers. All regular tasks
+     * and job manager tasks run on this pool must specify the containerSettings property, and all other tasks may
+     * specify it.
      */
     @JsonProperty(value = "containerConfiguration")
     private ContainerConfiguration containerConfiguration;
 
     /*
-     * If specified, encryption is performed on each node in the pool during
-     * node provisioning.
+     * If specified, encryption is performed on each node in the pool during node provisioning.
      */
     @JsonProperty(value = "diskEncryptionConfiguration")
     private DiskEncryptionConfiguration diskEncryptionConfiguration;
 
     /*
-     * Node placement configuration for batch pools. This configuration will
-     * specify rules on how nodes in the pool will be physically allocated.
+     * Node placement configuration for batch pools.
+     * 
+     * This configuration will specify rules on how nodes in the pool will be physically allocated.
      */
     @JsonProperty(value = "nodePlacementConfiguration")
     private NodePlacementConfiguration nodePlacementConfiguration;
 
     /*
-     * The virtual machine extension for the pool. If specified, the extensions
-     * mentioned in this configuration will be installed on each node.
+     * The virtual machine extension for the pool.
+     * 
+     * If specified, the extensions mentioned in this configuration will be installed on each node.
      */
     @JsonProperty(value = "extensions")
     private List<VMExtension> extensions;
 
     /*
-     * Settings for the operating system disk of the virtual machine. Contains
-     * configuration for ephemeral OSDisk settings.
+     * Settings for the operating system disk of the virtual machine.
+     * 
+     * Contains configuration for ephemeral OSDisk settings.
      */
     @JsonProperty(value = "osDisk")
     private OSDisk osDisk;
+
+    /*
+     * Specifies the security profile settings for the virtual machine or virtual machine scale set.
+     */
+    @JsonProperty(value = "securityProfile")
+    private SecurityProfile securityProfile;
+
+    /*
+     * The service artifact reference id in the form of
+     * /subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/galleries/{galleryName
+     * }/serviceArtifacts/{serviceArtifactName}/vmArtifactsProfiles/{vmArtifactsProfilesName}
+     */
+    @JsonProperty(value = "serviceArtifactReference")
+    private ServiceArtifactReference serviceArtifactReference;
+
+    /**
+     * Creates an instance of VirtualMachineConfiguration class.
+     */
+    public VirtualMachineConfiguration() {
+    }
 
     /**
      * Get the imageReference property: A reference to an Azure Virtual Machines Marketplace image or the Azure Image
      * resource of a custom Virtual Machine. To get the list of all imageReferences verified by Azure Batch, see the
      * 'List supported node agent SKUs' operation.
-     *
+     * 
      * @return the imageReference value.
      */
     public ImageReference imageReference() {
@@ -120,7 +139,7 @@ public final class VirtualMachineConfiguration {
      * Set the imageReference property: A reference to an Azure Virtual Machines Marketplace image or the Azure Image
      * resource of a custom Virtual Machine. To get the list of all imageReferences verified by Azure Batch, see the
      * 'List supported node agent SKUs' operation.
-     *
+     * 
      * @param imageReference the imageReference value to set.
      * @return the VirtualMachineConfiguration object itself.
      */
@@ -131,12 +150,13 @@ public final class VirtualMachineConfiguration {
 
     /**
      * Get the nodeAgentSkuId property: The SKU of the Batch node agent to be provisioned on compute nodes in the pool.
+     * 
      * The Batch node agent is a program that runs on each node in the pool, and provides the command-and-control
-     * interface between the node and the Batch service. There are different implementations of the node agent, known as
-     * SKUs, for different operating systems. You must specify a node agent SKU which matches the selected image
+     * interface between the node and the Batch service. There are different implementations of the node agent, known
+     * as SKUs, for different operating systems. You must specify a node agent SKU which matches the selected image
      * reference. To get the list of supported node agent SKUs along with their list of verified image references, see
      * the 'List supported node agent SKUs' operation.
-     *
+     * 
      * @return the nodeAgentSkuId value.
      */
     public String nodeAgentSkuId() {
@@ -145,12 +165,13 @@ public final class VirtualMachineConfiguration {
 
     /**
      * Set the nodeAgentSkuId property: The SKU of the Batch node agent to be provisioned on compute nodes in the pool.
+     * 
      * The Batch node agent is a program that runs on each node in the pool, and provides the command-and-control
-     * interface between the node and the Batch service. There are different implementations of the node agent, known as
-     * SKUs, for different operating systems. You must specify a node agent SKU which matches the selected image
+     * interface between the node and the Batch service. There are different implementations of the node agent, known
+     * as SKUs, for different operating systems. You must specify a node agent SKU which matches the selected image
      * reference. To get the list of supported node agent SKUs along with their list of verified image references, see
      * the 'List supported node agent SKUs' operation.
-     *
+     * 
      * @param nodeAgentSkuId the nodeAgentSkuId value to set.
      * @return the VirtualMachineConfiguration object itself.
      */
@@ -160,9 +181,10 @@ public final class VirtualMachineConfiguration {
     }
 
     /**
-     * Get the windowsConfiguration property: Windows operating system settings to apply to the virtual machine. This
-     * property must not be specified if the imageReference specifies a Linux OS image.
-     *
+     * Get the windowsConfiguration property: Windows operating system settings to apply to the virtual machine.
+     * 
+     * This property must not be specified if the imageReference specifies a Linux OS image.
+     * 
      * @return the windowsConfiguration value.
      */
     public WindowsConfiguration windowsConfiguration() {
@@ -170,9 +192,10 @@ public final class VirtualMachineConfiguration {
     }
 
     /**
-     * Set the windowsConfiguration property: Windows operating system settings to apply to the virtual machine. This
-     * property must not be specified if the imageReference specifies a Linux OS image.
-     *
+     * Set the windowsConfiguration property: Windows operating system settings to apply to the virtual machine.
+     * 
+     * This property must not be specified if the imageReference specifies a Linux OS image.
+     * 
      * @param windowsConfiguration the windowsConfiguration value to set.
      * @return the VirtualMachineConfiguration object itself.
      */
@@ -182,9 +205,10 @@ public final class VirtualMachineConfiguration {
     }
 
     /**
-     * Get the dataDisks property: The configuration for data disks attached to the compute nodes in the pool. This
-     * property must be specified if the compute nodes in the pool need to have empty data disks attached to them.
-     *
+     * Get the dataDisks property: The configuration for data disks attached to the compute nodes in the pool.
+     * 
+     * This property must be specified if the compute nodes in the pool need to have empty data disks attached to them.
+     * 
      * @return the dataDisks value.
      */
     public List<DataDisk> dataDisks() {
@@ -192,9 +216,10 @@ public final class VirtualMachineConfiguration {
     }
 
     /**
-     * Set the dataDisks property: The configuration for data disks attached to the compute nodes in the pool. This
-     * property must be specified if the compute nodes in the pool need to have empty data disks attached to them.
-     *
+     * Set the dataDisks property: The configuration for data disks attached to the compute nodes in the pool.
+     * 
+     * This property must be specified if the compute nodes in the pool need to have empty data disks attached to them.
+     * 
      * @param dataDisks the dataDisks value to set.
      * @return the VirtualMachineConfiguration object itself.
      */
@@ -205,13 +230,14 @@ public final class VirtualMachineConfiguration {
 
     /**
      * Get the licenseType property: The type of on-premises license to be used when deploying the operating system.
+     * 
      * This only applies to images that contain the Windows operating system, and should only be used when you hold
-     * valid on-premises licenses for the nodes which will be deployed. If omitted, no on-premises licensing discount is
-     * applied. Values are:
-     *
-     * <p>Windows_Server - The on-premises license is for Windows Server. Windows_Client - The on-premises license is
-     * for Windows Client.
-     *
+     * valid on-premises licenses for the nodes which will be deployed. If omitted, no on-premises licensing discount
+     * is applied. Values are:
+     * 
+     * Windows_Server - The on-premises license is for Windows Server.
+     * Windows_Client - The on-premises license is for Windows Client.
+     * 
      * @return the licenseType value.
      */
     public String licenseType() {
@@ -220,13 +246,14 @@ public final class VirtualMachineConfiguration {
 
     /**
      * Set the licenseType property: The type of on-premises license to be used when deploying the operating system.
+     * 
      * This only applies to images that contain the Windows operating system, and should only be used when you hold
-     * valid on-premises licenses for the nodes which will be deployed. If omitted, no on-premises licensing discount is
-     * applied. Values are:
-     *
-     * <p>Windows_Server - The on-premises license is for Windows Server. Windows_Client - The on-premises license is
-     * for Windows Client.
-     *
+     * valid on-premises licenses for the nodes which will be deployed. If omitted, no on-premises licensing discount
+     * is applied. Values are:
+     * 
+     * Windows_Server - The on-premises license is for Windows Server.
+     * Windows_Client - The on-premises license is for Windows Client.
+     * 
      * @param licenseType the licenseType value to set.
      * @return the VirtualMachineConfiguration object itself.
      */
@@ -236,10 +263,12 @@ public final class VirtualMachineConfiguration {
     }
 
     /**
-     * Get the containerConfiguration property: The configuration for container-enabled pools. If specified, setup is
-     * performed on each node in the pool to allow tasks to run in containers. All regular tasks and job manager tasks
-     * run on this pool must specify the containerSettings property, and all other tasks may specify it.
-     *
+     * Get the containerConfiguration property: The configuration for container-enabled pools.
+     * 
+     * If specified, setup is performed on each node in the pool to allow tasks to run in containers. All regular tasks
+     * and job manager tasks run on this pool must specify the containerSettings property, and all other tasks may
+     * specify it.
+     * 
      * @return the containerConfiguration value.
      */
     public ContainerConfiguration containerConfiguration() {
@@ -247,10 +276,12 @@ public final class VirtualMachineConfiguration {
     }
 
     /**
-     * Set the containerConfiguration property: The configuration for container-enabled pools. If specified, setup is
-     * performed on each node in the pool to allow tasks to run in containers. All regular tasks and job manager tasks
-     * run on this pool must specify the containerSettings property, and all other tasks may specify it.
-     *
+     * Set the containerConfiguration property: The configuration for container-enabled pools.
+     * 
+     * If specified, setup is performed on each node in the pool to allow tasks to run in containers. All regular tasks
+     * and job manager tasks run on this pool must specify the containerSettings property, and all other tasks may
+     * specify it.
+     * 
      * @param containerConfiguration the containerConfiguration value to set.
      * @return the VirtualMachineConfiguration object itself.
      */
@@ -262,7 +293,7 @@ public final class VirtualMachineConfiguration {
     /**
      * Get the diskEncryptionConfiguration property: If specified, encryption is performed on each node in the pool
      * during node provisioning.
-     *
+     * 
      * @return the diskEncryptionConfiguration value.
      */
     public DiskEncryptionConfiguration diskEncryptionConfiguration() {
@@ -272,20 +303,21 @@ public final class VirtualMachineConfiguration {
     /**
      * Set the diskEncryptionConfiguration property: If specified, encryption is performed on each node in the pool
      * during node provisioning.
-     *
+     * 
      * @param diskEncryptionConfiguration the diskEncryptionConfiguration value to set.
      * @return the VirtualMachineConfiguration object itself.
      */
-    public VirtualMachineConfiguration withDiskEncryptionConfiguration(
-        DiskEncryptionConfiguration diskEncryptionConfiguration) {
+    public VirtualMachineConfiguration
+        withDiskEncryptionConfiguration(DiskEncryptionConfiguration diskEncryptionConfiguration) {
         this.diskEncryptionConfiguration = diskEncryptionConfiguration;
         return this;
     }
 
     /**
-     * Get the nodePlacementConfiguration property: Node placement configuration for batch pools. This configuration
-     * will specify rules on how nodes in the pool will be physically allocated.
-     *
+     * Get the nodePlacementConfiguration property: Node placement configuration for batch pools.
+     * 
+     * This configuration will specify rules on how nodes in the pool will be physically allocated.
+     * 
      * @return the nodePlacementConfiguration value.
      */
     public NodePlacementConfiguration nodePlacementConfiguration() {
@@ -293,22 +325,24 @@ public final class VirtualMachineConfiguration {
     }
 
     /**
-     * Set the nodePlacementConfiguration property: Node placement configuration for batch pools. This configuration
-     * will specify rules on how nodes in the pool will be physically allocated.
-     *
+     * Set the nodePlacementConfiguration property: Node placement configuration for batch pools.
+     * 
+     * This configuration will specify rules on how nodes in the pool will be physically allocated.
+     * 
      * @param nodePlacementConfiguration the nodePlacementConfiguration value to set.
      * @return the VirtualMachineConfiguration object itself.
      */
-    public VirtualMachineConfiguration withNodePlacementConfiguration(
-        NodePlacementConfiguration nodePlacementConfiguration) {
+    public VirtualMachineConfiguration
+        withNodePlacementConfiguration(NodePlacementConfiguration nodePlacementConfiguration) {
         this.nodePlacementConfiguration = nodePlacementConfiguration;
         return this;
     }
 
     /**
-     * Get the extensions property: The virtual machine extension for the pool. If specified, the extensions mentioned
-     * in this configuration will be installed on each node.
-     *
+     * Get the extensions property: The virtual machine extension for the pool.
+     * 
+     * If specified, the extensions mentioned in this configuration will be installed on each node.
+     * 
      * @return the extensions value.
      */
     public List<VMExtension> extensions() {
@@ -316,9 +350,10 @@ public final class VirtualMachineConfiguration {
     }
 
     /**
-     * Set the extensions property: The virtual machine extension for the pool. If specified, the extensions mentioned
-     * in this configuration will be installed on each node.
-     *
+     * Set the extensions property: The virtual machine extension for the pool.
+     * 
+     * If specified, the extensions mentioned in this configuration will be installed on each node.
+     * 
      * @param extensions the extensions value to set.
      * @return the VirtualMachineConfiguration object itself.
      */
@@ -328,9 +363,10 @@ public final class VirtualMachineConfiguration {
     }
 
     /**
-     * Get the osDisk property: Settings for the operating system disk of the virtual machine. Contains configuration
-     * for ephemeral OSDisk settings.
-     *
+     * Get the osDisk property: Settings for the operating system disk of the virtual machine.
+     * 
+     * Contains configuration for ephemeral OSDisk settings.
+     * 
      * @return the osDisk value.
      */
     public OSDisk osDisk() {
@@ -338,9 +374,10 @@ public final class VirtualMachineConfiguration {
     }
 
     /**
-     * Set the osDisk property: Settings for the operating system disk of the virtual machine. Contains configuration
-     * for ephemeral OSDisk settings.
-     *
+     * Set the osDisk property: Settings for the operating system disk of the virtual machine.
+     * 
+     * Contains configuration for ephemeral OSDisk settings.
+     * 
      * @param osDisk the osDisk value to set.
      * @return the VirtualMachineConfiguration object itself.
      */
@@ -350,24 +387,64 @@ public final class VirtualMachineConfiguration {
     }
 
     /**
+     * Get the securityProfile property: Specifies the security profile settings for the virtual machine or virtual
+     * machine scale set.
+     * 
+     * @return the securityProfile value.
+     */
+    public SecurityProfile securityProfile() {
+        return this.securityProfile;
+    }
+
+    /**
+     * Set the securityProfile property: Specifies the security profile settings for the virtual machine or virtual
+     * machine scale set.
+     * 
+     * @param securityProfile the securityProfile value to set.
+     * @return the VirtualMachineConfiguration object itself.
+     */
+    public VirtualMachineConfiguration withSecurityProfile(SecurityProfile securityProfile) {
+        this.securityProfile = securityProfile;
+        return this;
+    }
+
+    /**
+     * Get the serviceArtifactReference property: The service artifact reference id in the form of
+     * /subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/galleries/{galleryName}/serviceArtifacts/{serviceArtifactName}/vmArtifactsProfiles/{vmArtifactsProfilesName}.
+     * 
+     * @return the serviceArtifactReference value.
+     */
+    public ServiceArtifactReference serviceArtifactReference() {
+        return this.serviceArtifactReference;
+    }
+
+    /**
+     * Set the serviceArtifactReference property: The service artifact reference id in the form of
+     * /subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/galleries/{galleryName}/serviceArtifacts/{serviceArtifactName}/vmArtifactsProfiles/{vmArtifactsProfilesName}.
+     * 
+     * @param serviceArtifactReference the serviceArtifactReference value to set.
+     * @return the VirtualMachineConfiguration object itself.
+     */
+    public VirtualMachineConfiguration withServiceArtifactReference(ServiceArtifactReference serviceArtifactReference) {
+        this.serviceArtifactReference = serviceArtifactReference;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (imageReference() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property imageReference in model VirtualMachineConfiguration"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property imageReference in model VirtualMachineConfiguration"));
         } else {
             imageReference().validate();
         }
         if (nodeAgentSkuId() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property nodeAgentSkuId in model VirtualMachineConfiguration"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property nodeAgentSkuId in model VirtualMachineConfiguration"));
         }
         if (windowsConfiguration() != null) {
             windowsConfiguration().validate();
@@ -390,5 +467,13 @@ public final class VirtualMachineConfiguration {
         if (osDisk() != null) {
             osDisk().validate();
         }
+        if (securityProfile() != null) {
+            securityProfile().validate();
+        }
+        if (serviceArtifactReference() != null) {
+            serviceArtifactReference().validate();
+        }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(VirtualMachineConfiguration.class);
 }

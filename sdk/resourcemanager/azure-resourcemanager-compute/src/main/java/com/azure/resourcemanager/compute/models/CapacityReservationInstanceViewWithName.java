@@ -5,8 +5,6 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
@@ -16,8 +14,6 @@ import java.util.List;
  */
 @Fluent
 public final class CapacityReservationInstanceViewWithName extends CapacityReservationInstanceView {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CapacityReservationInstanceViewWithName.class);
-
     /*
      * The name of the capacity reservation.
      */
@@ -25,22 +21,32 @@ public final class CapacityReservationInstanceViewWithName extends CapacityReser
     private String name;
 
     /**
+     * Creates an instance of CapacityReservationInstanceViewWithName class.
+     */
+    public CapacityReservationInstanceViewWithName() {
+    }
+
+    /**
      * Get the name property: The name of the capacity reservation.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
         return this.name;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CapacityReservationInstanceViewWithName withUtilizationInfo(CapacityReservationUtilization utilizationInfo) {
         super.withUtilizationInfo(utilizationInfo);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CapacityReservationInstanceViewWithName withStatuses(List<InstanceViewStatus> statuses) {
         super.withStatuses(statuses);
@@ -49,7 +55,7 @@ public final class CapacityReservationInstanceViewWithName extends CapacityReser
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

@@ -25,7 +25,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.ApiManagementServiceSkusClient;
 import com.azure.resourcemanager.apimanagement.fluent.models.ResourceSkuResultInner;
 import com.azure.resourcemanager.apimanagement.models.ResourceSkuResults;
@@ -33,8 +32,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in ApiManagementServiceSkusClient. */
 public final class ApiManagementServiceSkusClientImpl implements ApiManagementServiceSkusClient {
-    private final ClientLogger logger = new ClientLogger(ApiManagementServiceSkusClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final ApiManagementServiceSkusService service;
 
@@ -59,11 +56,10 @@ public final class ApiManagementServiceSkusClientImpl implements ApiManagementSe
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApiManagementClientA")
-    private interface ApiManagementServiceSkusService {
+    public interface ApiManagementServiceSkusService {
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/skus")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/skus")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<ResourceSkuResults>> listAvailableServiceSkus(
@@ -87,14 +83,17 @@ public final class ApiManagementServiceSkusClientImpl implements ApiManagementSe
     }
 
     /**
-     * Gets all available SKU for a given API Management service.
+     * Gets available SKUs for API Management service
      *
-     * @param resourceGroupName The name of the resource group.
+     * <p>Gets all available SKU for a given API Management service.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all available SKU for a given API Management service.
+     * @return all available SKU for a given API Management service along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ResourceSkuResultInner>> listAvailableServiceSkusSinglePageAsync(
@@ -144,15 +143,18 @@ public final class ApiManagementServiceSkusClientImpl implements ApiManagementSe
     }
 
     /**
-     * Gets all available SKU for a given API Management service.
+     * Gets available SKUs for API Management service
      *
-     * @param resourceGroupName The name of the resource group.
+     * <p>Gets all available SKU for a given API Management service.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all available SKU for a given API Management service.
+     * @return all available SKU for a given API Management service along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ResourceSkuResultInner>> listAvailableServiceSkusSinglePageAsync(
@@ -199,14 +201,16 @@ public final class ApiManagementServiceSkusClientImpl implements ApiManagementSe
     }
 
     /**
-     * Gets all available SKU for a given API Management service.
+     * Gets available SKUs for API Management service
      *
-     * @param resourceGroupName The name of the resource group.
+     * <p>Gets all available SKU for a given API Management service.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all available SKU for a given API Management service.
+     * @return all available SKU for a given API Management service as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<ResourceSkuResultInner> listAvailableServiceSkusAsync(
@@ -217,15 +221,17 @@ public final class ApiManagementServiceSkusClientImpl implements ApiManagementSe
     }
 
     /**
-     * Gets all available SKU for a given API Management service.
+     * Gets available SKUs for API Management service
      *
-     * @param resourceGroupName The name of the resource group.
+     * <p>Gets all available SKU for a given API Management service.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all available SKU for a given API Management service.
+     * @return all available SKU for a given API Management service as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<ResourceSkuResultInner> listAvailableServiceSkusAsync(
@@ -236,14 +242,16 @@ public final class ApiManagementServiceSkusClientImpl implements ApiManagementSe
     }
 
     /**
-     * Gets all available SKU for a given API Management service.
+     * Gets available SKUs for API Management service
      *
-     * @param resourceGroupName The name of the resource group.
+     * <p>Gets all available SKU for a given API Management service.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all available SKU for a given API Management service.
+     * @return all available SKU for a given API Management service as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<ResourceSkuResultInner> listAvailableServiceSkus(
@@ -252,15 +260,17 @@ public final class ApiManagementServiceSkusClientImpl implements ApiManagementSe
     }
 
     /**
-     * Gets all available SKU for a given API Management service.
+     * Gets available SKUs for API Management service
      *
-     * @param resourceGroupName The name of the resource group.
+     * <p>Gets all available SKU for a given API Management service.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all available SKU for a given API Management service.
+     * @return all available SKU for a given API Management service as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<ResourceSkuResultInner> listAvailableServiceSkus(
@@ -271,11 +281,13 @@ public final class ApiManagementServiceSkusClientImpl implements ApiManagementSe
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the API Management service SKUs operation response.
+     * @return the API Management service SKUs operation response along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ResourceSkuResultInner>> listAvailableServiceSkusNextSinglePageAsync(String nextLink) {
@@ -307,12 +319,14 @@ public final class ApiManagementServiceSkusClientImpl implements ApiManagementSe
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the API Management service SKUs operation response.
+     * @return the API Management service SKUs operation response along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ResourceSkuResultInner>> listAvailableServiceSkusNextSinglePageAsync(

@@ -19,7 +19,8 @@ public interface SqlVirtualMachines {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of sql virtual machines in a SQL virtual machine group.
+     * @return the list of sql virtual machines in a SQL virtual machine group as paginated response with {@link
+     *     PagedIterable}.
      */
     PagedIterable<SqlVirtualMachine> listBySqlVmGroup(String resourceGroupName, String sqlVirtualMachineGroupName);
 
@@ -33,7 +34,8 @@ public interface SqlVirtualMachines {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of sql virtual machines in a SQL virtual machine group.
+     * @return the list of sql virtual machines in a SQL virtual machine group as paginated response with {@link
+     *     PagedIterable}.
      */
     PagedIterable<SqlVirtualMachine> listBySqlVmGroup(
         String resourceGroupName, String sqlVirtualMachineGroupName, Context context);
@@ -43,7 +45,7 @@ public interface SqlVirtualMachines {
      *
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all SQL virtual machines in a subscription.
+     * @return all SQL virtual machines in a subscription as paginated response with {@link PagedIterable}.
      */
     PagedIterable<SqlVirtualMachine> list();
 
@@ -54,9 +56,25 @@ public interface SqlVirtualMachines {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all SQL virtual machines in a subscription.
+     * @return all SQL virtual machines in a subscription as paginated response with {@link PagedIterable}.
      */
     PagedIterable<SqlVirtualMachine> list(Context context);
+
+    /**
+     * Gets a SQL virtual machine.
+     *
+     * @param resourceGroupName Name of the resource group that contains the resource. You can obtain this value from
+     *     the Azure Resource Manager API or the portal.
+     * @param sqlVirtualMachineName Name of the SQL virtual machine.
+     * @param expand The child resources to include in the response.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a SQL virtual machine along with {@link Response}.
+     */
+    Response<SqlVirtualMachine> getByResourceGroupWithResponse(
+        String resourceGroupName, String sqlVirtualMachineName, String expand, Context context);
 
     /**
      * Gets a SQL virtual machine.
@@ -70,22 +88,6 @@ public interface SqlVirtualMachines {
      * @return a SQL virtual machine.
      */
     SqlVirtualMachine getByResourceGroup(String resourceGroupName, String sqlVirtualMachineName);
-
-    /**
-     * Gets a SQL virtual machine.
-     *
-     * @param resourceGroupName Name of the resource group that contains the resource. You can obtain this value from
-     *     the Azure Resource Manager API or the portal.
-     * @param sqlVirtualMachineName Name of the SQL virtual machine.
-     * @param expand The child resources to include in the response.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a SQL virtual machine.
-     */
-    Response<SqlVirtualMachine> getByResourceGroupWithResponse(
-        String resourceGroupName, String sqlVirtualMachineName, String expand, Context context);
 
     /**
      * Deletes a SQL virtual machine.
@@ -120,7 +122,7 @@ public interface SqlVirtualMachines {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all SQL virtual machines in a resource group.
+     * @return all SQL virtual machines in a resource group as paginated response with {@link PagedIterable}.
      */
     PagedIterable<SqlVirtualMachine> listByResourceGroup(String resourceGroupName);
 
@@ -133,9 +135,59 @@ public interface SqlVirtualMachines {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all SQL virtual machines in a resource group.
+     * @return all SQL virtual machines in a resource group as paginated response with {@link PagedIterable}.
      */
     PagedIterable<SqlVirtualMachine> listByResourceGroup(String resourceGroupName, Context context);
+
+    /**
+     * Starts SQL best practices Assessment on SQL virtual machine.
+     *
+     * @param resourceGroupName Name of the resource group that contains the resource. You can obtain this value from
+     *     the Azure Resource Manager API or the portal.
+     * @param sqlVirtualMachineName Name of the SQL virtual machine.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     */
+    void startAssessment(String resourceGroupName, String sqlVirtualMachineName);
+
+    /**
+     * Starts SQL best practices Assessment on SQL virtual machine.
+     *
+     * @param resourceGroupName Name of the resource group that contains the resource. You can obtain this value from
+     *     the Azure Resource Manager API or the portal.
+     * @param sqlVirtualMachineName Name of the SQL virtual machine.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     */
+    void startAssessment(String resourceGroupName, String sqlVirtualMachineName, Context context);
+
+    /**
+     * Uninstalls and reinstalls the SQL IaaS Extension.
+     *
+     * @param resourceGroupName Name of the resource group that contains the resource. You can obtain this value from
+     *     the Azure Resource Manager API or the portal.
+     * @param sqlVirtualMachineName Name of the SQL virtual machine.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     */
+    void redeploy(String resourceGroupName, String sqlVirtualMachineName);
+
+    /**
+     * Uninstalls and reinstalls the SQL IaaS Extension.
+     *
+     * @param resourceGroupName Name of the resource group that contains the resource. You can obtain this value from
+     *     the Azure Resource Manager API or the portal.
+     * @param sqlVirtualMachineName Name of the SQL virtual machine.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     */
+    void redeploy(String resourceGroupName, String sqlVirtualMachineName, Context context);
 
     /**
      * Gets a SQL virtual machine.
@@ -144,7 +196,7 @@ public interface SqlVirtualMachines {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a SQL virtual machine.
+     * @return a SQL virtual machine along with {@link Response}.
      */
     SqlVirtualMachine getById(String id);
 
@@ -157,7 +209,7 @@ public interface SqlVirtualMachines {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a SQL virtual machine.
+     * @return a SQL virtual machine along with {@link Response}.
      */
     Response<SqlVirtualMachine> getByIdWithResponse(String id, String expand, Context context);
 

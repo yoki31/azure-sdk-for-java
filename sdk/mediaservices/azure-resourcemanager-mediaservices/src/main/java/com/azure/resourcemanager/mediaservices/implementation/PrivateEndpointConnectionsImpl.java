@@ -14,10 +14,9 @@ import com.azure.resourcemanager.mediaservices.fluent.models.PrivateEndpointConn
 import com.azure.resourcemanager.mediaservices.models.PrivateEndpointConnection;
 import com.azure.resourcemanager.mediaservices.models.PrivateEndpointConnectionListResult;
 import com.azure.resourcemanager.mediaservices.models.PrivateEndpointConnections;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class PrivateEndpointConnectionsImpl implements PrivateEndpointConnections {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PrivateEndpointConnectionsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(PrivateEndpointConnectionsImpl.class);
 
     private final PrivateEndpointConnectionsClient innerClient;
 
@@ -28,15 +27,6 @@ public final class PrivateEndpointConnectionsImpl implements PrivateEndpointConn
         com.azure.resourcemanager.mediaservices.MediaServicesManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
-    }
-
-    public PrivateEndpointConnectionListResult list(String resourceGroupName, String accountName) {
-        PrivateEndpointConnectionListResultInner inner = this.serviceClient().list(resourceGroupName, accountName);
-        if (inner != null) {
-            return new PrivateEndpointConnectionListResultImpl(inner, this.manager());
-        } else {
-            return null;
-        }
     }
 
     public Response<PrivateEndpointConnectionListResult> listWithResponse(
@@ -54,10 +44,10 @@ public final class PrivateEndpointConnectionsImpl implements PrivateEndpointConn
         }
     }
 
-    public PrivateEndpointConnection get(String resourceGroupName, String accountName, String name) {
-        PrivateEndpointConnectionInner inner = this.serviceClient().get(resourceGroupName, accountName, name);
+    public PrivateEndpointConnectionListResult list(String resourceGroupName, String accountName) {
+        PrivateEndpointConnectionListResultInner inner = this.serviceClient().list(resourceGroupName, accountName);
         if (inner != null) {
-            return new PrivateEndpointConnectionImpl(inner, this.manager());
+            return new PrivateEndpointConnectionListResultImpl(inner, this.manager());
         } else {
             return null;
         }
@@ -78,8 +68,13 @@ public final class PrivateEndpointConnectionsImpl implements PrivateEndpointConn
         }
     }
 
-    public void delete(String resourceGroupName, String accountName, String name) {
-        this.serviceClient().delete(resourceGroupName, accountName, name);
+    public PrivateEndpointConnection get(String resourceGroupName, String accountName, String name) {
+        PrivateEndpointConnectionInner inner = this.serviceClient().get(resourceGroupName, accountName, name);
+        if (inner != null) {
+            return new PrivateEndpointConnectionImpl(inner, this.manager());
+        } else {
+            return null;
+        }
     }
 
     public Response<Void> deleteWithResponse(
@@ -87,10 +82,14 @@ public final class PrivateEndpointConnectionsImpl implements PrivateEndpointConn
         return this.serviceClient().deleteWithResponse(resourceGroupName, accountName, name, context);
     }
 
+    public void delete(String resourceGroupName, String accountName, String name) {
+        this.serviceClient().delete(resourceGroupName, accountName, name);
+    }
+
     public PrivateEndpointConnection getById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -98,14 +97,14 @@ public final class PrivateEndpointConnectionsImpl implements PrivateEndpointConn
         }
         String accountName = Utils.getValueFromIdByName(id, "mediaservices");
         if (accountName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'mediaservices'.", id)));
         }
         String name = Utils.getValueFromIdByName(id, "privateEndpointConnections");
         if (name == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -119,7 +118,7 @@ public final class PrivateEndpointConnectionsImpl implements PrivateEndpointConn
     public Response<PrivateEndpointConnection> getByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -127,14 +126,14 @@ public final class PrivateEndpointConnectionsImpl implements PrivateEndpointConn
         }
         String accountName = Utils.getValueFromIdByName(id, "mediaservices");
         if (accountName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'mediaservices'.", id)));
         }
         String name = Utils.getValueFromIdByName(id, "privateEndpointConnections");
         if (name == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -148,7 +147,7 @@ public final class PrivateEndpointConnectionsImpl implements PrivateEndpointConn
     public void deleteById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -156,14 +155,14 @@ public final class PrivateEndpointConnectionsImpl implements PrivateEndpointConn
         }
         String accountName = Utils.getValueFromIdByName(id, "mediaservices");
         if (accountName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'mediaservices'.", id)));
         }
         String name = Utils.getValueFromIdByName(id, "privateEndpointConnections");
         if (name == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -171,13 +170,13 @@ public final class PrivateEndpointConnectionsImpl implements PrivateEndpointConn
                                 "The resource ID '%s' is not valid. Missing path segment 'privateEndpointConnections'.",
                                 id)));
         }
-        this.deleteWithResponse(resourceGroupName, accountName, name, Context.NONE).getValue();
+        this.deleteWithResponse(resourceGroupName, accountName, name, Context.NONE);
     }
 
     public Response<Void> deleteByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -185,14 +184,14 @@ public final class PrivateEndpointConnectionsImpl implements PrivateEndpointConn
         }
         String accountName = Utils.getValueFromIdByName(id, "mediaservices");
         if (accountName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'mediaservices'.", id)));
         }
         String name = Utils.getValueFromIdByName(id, "privateEndpointConnections");
         if (name == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String

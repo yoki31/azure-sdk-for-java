@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cdn.fluent.models.ResourceUsageInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Output of check resource usage API. */
+/**
+ * Output of check resource usage API.
+ */
 @Fluent
 public final class ResourceUsageListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ResourceUsageListResult.class);
-
     /*
      * List of resource usages.
      */
@@ -29,8 +27,14 @@ public final class ResourceUsageListResult {
     private String nextLink;
 
     /**
+     * Creates an instance of ResourceUsageListResult class.
+     */
+    public ResourceUsageListResult() {
+    }
+
+    /**
      * Get the value property: List of resource usages.
-     *
+     * 
      * @return the value value.
      */
     public List<ResourceUsageInner> value() {
@@ -39,7 +43,7 @@ public final class ResourceUsageListResult {
 
     /**
      * Get the nextLink property: URL to get the next set of custom domain objects if there are any.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -48,7 +52,7 @@ public final class ResourceUsageListResult {
 
     /**
      * Set the nextLink property: URL to get the next set of custom domain objects if there are any.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the ResourceUsageListResult object itself.
      */
@@ -59,7 +63,7 @@ public final class ResourceUsageListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

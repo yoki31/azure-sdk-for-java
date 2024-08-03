@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.models.OperationServiceSpecification;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Additional details about an operation. */
+/**
+ * Additional details about an operation.
+ */
 @Fluent
 public final class OperationProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationProperties.class);
-
     /*
      * Details about a service operation.
      */
@@ -22,8 +20,14 @@ public final class OperationProperties {
     private OperationServiceSpecification serviceSpecification;
 
     /**
+     * Creates an instance of OperationProperties class.
+     */
+    public OperationProperties() {
+    }
+
+    /**
      * Get the serviceSpecification property: Details about a service operation.
-     *
+     * 
      * @return the serviceSpecification value.
      */
     public OperationServiceSpecification serviceSpecification() {
@@ -32,7 +36,7 @@ public final class OperationProperties {
 
     /**
      * Set the serviceSpecification property: Details about a service operation.
-     *
+     * 
      * @param serviceSpecification the serviceSpecification value to set.
      * @return the OperationProperties object itself.
      */
@@ -43,7 +47,7 @@ public final class OperationProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

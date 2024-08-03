@@ -5,39 +5,59 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** Orc write settings. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * Orc write settings.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = OrcWriteSettings.class, visible = true)
 @JsonTypeName("OrcWriteSettings")
 @Fluent
 public final class OrcWriteSettings extends FormatWriteSettings {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OrcWriteSettings.class);
+    /*
+     * The write setting type.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "OrcWriteSettings";
 
     /*
-     * Limit the written file's row count to be smaller than or equal to the
-     * specified count. Type: integer (or Expression with resultType integer).
+     * Limit the written file's row count to be smaller than or equal to the specified count. Type: integer (or
+     * Expression with resultType integer).
      */
     @JsonProperty(value = "maxRowsPerFile")
     private Object maxRowsPerFile;
 
     /*
-     * Specifies the file name pattern
-     * <fileNamePrefix>_<fileIndex>.<fileExtension> when copy from non-file
-     * based store without partitionOptions. Type: string (or Expression with
-     * resultType string).
+     * Specifies the file name pattern <fileNamePrefix>_<fileIndex>.<fileExtension> when copy from non-file based store
+     * without partitionOptions. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "fileNamePrefix")
     private Object fileNamePrefix;
 
     /**
+     * Creates an instance of OrcWriteSettings class.
+     */
+    public OrcWriteSettings() {
+    }
+
+    /**
+     * Get the type property: The write setting type.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the maxRowsPerFile property: Limit the written file's row count to be smaller than or equal to the specified
      * count. Type: integer (or Expression with resultType integer).
-     *
+     * 
      * @return the maxRowsPerFile value.
      */
     public Object maxRowsPerFile() {
@@ -47,7 +67,7 @@ public final class OrcWriteSettings extends FormatWriteSettings {
     /**
      * Set the maxRowsPerFile property: Limit the written file's row count to be smaller than or equal to the specified
      * count. Type: integer (or Expression with resultType integer).
-     *
+     * 
      * @param maxRowsPerFile the maxRowsPerFile value to set.
      * @return the OrcWriteSettings object itself.
      */
@@ -60,7 +80,7 @@ public final class OrcWriteSettings extends FormatWriteSettings {
      * Get the fileNamePrefix property: Specifies the file name pattern
      * &lt;fileNamePrefix&gt;_&lt;fileIndex&gt;.&lt;fileExtension&gt; when copy from non-file based store without
      * partitionOptions. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the fileNamePrefix value.
      */
     public Object fileNamePrefix() {
@@ -71,7 +91,7 @@ public final class OrcWriteSettings extends FormatWriteSettings {
      * Set the fileNamePrefix property: Specifies the file name pattern
      * &lt;fileNamePrefix&gt;_&lt;fileIndex&gt;.&lt;fileExtension&gt; when copy from non-file based store without
      * partitionOptions. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param fileNamePrefix the fileNamePrefix value to set.
      * @return the OrcWriteSettings object itself.
      */
@@ -82,7 +102,7 @@ public final class OrcWriteSettings extends FormatWriteSettings {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

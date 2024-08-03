@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Application logs azure blob storage configuration. */
+/**
+ * Application logs azure blob storage configuration.
+ */
 @Fluent
 public final class AzureBlobStorageApplicationLogsConfig {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureBlobStorageApplicationLogsConfig.class);
-
     /*
      * Log level.
      */
@@ -21,8 +19,7 @@ public final class AzureBlobStorageApplicationLogsConfig {
     private LogLevel level;
 
     /*
-     * SAS url to a azure blob container with read/write/list/delete
-     * permissions.
+     * SAS url to a azure blob container with read/write/list/delete permissions.
      */
     @JsonProperty(value = "sasUrl")
     private String sasUrl;
@@ -36,8 +33,14 @@ public final class AzureBlobStorageApplicationLogsConfig {
     private Integer retentionInDays;
 
     /**
+     * Creates an instance of AzureBlobStorageApplicationLogsConfig class.
+     */
+    public AzureBlobStorageApplicationLogsConfig() {
+    }
+
+    /**
      * Get the level property: Log level.
-     *
+     * 
      * @return the level value.
      */
     public LogLevel level() {
@@ -46,7 +49,7 @@ public final class AzureBlobStorageApplicationLogsConfig {
 
     /**
      * Set the level property: Log level.
-     *
+     * 
      * @param level the level value to set.
      * @return the AzureBlobStorageApplicationLogsConfig object itself.
      */
@@ -57,7 +60,7 @@ public final class AzureBlobStorageApplicationLogsConfig {
 
     /**
      * Get the sasUrl property: SAS url to a azure blob container with read/write/list/delete permissions.
-     *
+     * 
      * @return the sasUrl value.
      */
     public String sasUrl() {
@@ -66,7 +69,7 @@ public final class AzureBlobStorageApplicationLogsConfig {
 
     /**
      * Set the sasUrl property: SAS url to a azure blob container with read/write/list/delete permissions.
-     *
+     * 
      * @param sasUrl the sasUrl value to set.
      * @return the AzureBlobStorageApplicationLogsConfig object itself.
      */
@@ -76,9 +79,10 @@ public final class AzureBlobStorageApplicationLogsConfig {
     }
 
     /**
-     * Get the retentionInDays property: Retention in days. Remove blobs older than X days. 0 or lower means no
-     * retention.
-     *
+     * Get the retentionInDays property: Retention in days.
+     * Remove blobs older than X days.
+     * 0 or lower means no retention.
+     * 
      * @return the retentionInDays value.
      */
     public Integer retentionInDays() {
@@ -86,9 +90,10 @@ public final class AzureBlobStorageApplicationLogsConfig {
     }
 
     /**
-     * Set the retentionInDays property: Retention in days. Remove blobs older than X days. 0 or lower means no
-     * retention.
-     *
+     * Set the retentionInDays property: Retention in days.
+     * Remove blobs older than X days.
+     * 0 or lower means no retention.
+     * 
      * @param retentionInDays the retentionInDays value to set.
      * @return the AzureBlobStorageApplicationLogsConfig object itself.
      */
@@ -99,7 +104,7 @@ public final class AzureBlobStorageApplicationLogsConfig {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -4,14 +4,15 @@
 package com.azure.resourcemanager.resources.implementation;
 
 import com.azure.core.util.logging.ClientLogger;
+import com.azure.json.JsonProviders;
+import com.azure.json.JsonReader;
+import com.azure.resourcemanager.resources.fluent.PolicyDefinitionsClient;
+import com.azure.resourcemanager.resources.fluent.models.PolicyDefinitionInner;
+import com.azure.resourcemanager.resources.fluentcore.model.implementation.CreatableUpdatableImpl;
 import com.azure.resourcemanager.resources.models.ParameterDefinitionsValue;
 import com.azure.resourcemanager.resources.models.ParameterType;
 import com.azure.resourcemanager.resources.models.PolicyDefinition;
 import com.azure.resourcemanager.resources.models.PolicyType;
-import com.azure.resourcemanager.resources.fluent.models.PolicyDefinitionInner;
-import com.azure.resourcemanager.resources.fluent.PolicyDefinitionsClient;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.azure.resourcemanager.resources.fluentcore.model.implementation.CreatableUpdatableImpl;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
@@ -30,6 +31,7 @@ final class PolicyDefinitionImpl extends
         PolicyDefinition.Update {
     private final PolicyDefinitionsClient innerCollection;
     private final ClientLogger logger = new ClientLogger(getClass());
+
 
     PolicyDefinitionImpl(String name, PolicyDefinitionInner innerModel, PolicyDefinitionsClient innerCollection) {
         super(name, innerModel);
@@ -64,6 +66,16 @@ final class PolicyDefinitionImpl extends
     }
 
     @Override
+    public String mode() {
+        return innerModel().mode();
+    }
+
+    @Override
+    public Object metadata() {
+        return innerModel().metadata();
+    }
+
+    @Override
     public String id() {
         return innerModel().id();
     }
@@ -93,8 +105,9 @@ final class PolicyDefinitionImpl extends
 
     @Override
     public PolicyDefinitionImpl withPolicyRuleJson(String policyRuleJson) {
-        try {
-            innerModel().withPolicyRule(new ObjectMapper().readTree(policyRuleJson));
+        try (JsonReader jsonReader = JsonProviders.createReader(policyRuleJson)) {
+            Object policyRule = jsonReader.readUntyped();
+            innerModel().withPolicyRule(policyRule);
         } catch (IOException e) {
             throw logger.logExceptionAsError(new RuntimeException(e));
         }
@@ -136,6 +149,18 @@ final class PolicyDefinitionImpl extends
             new ParameterDefinitionsValue()
                 .withType(parameterType)
                 .withDefaultValue(defaultValue));
+        return this;
+    }
+
+    @Override
+    public PolicyDefinitionImpl withMode(String mode) {
+        innerModel().withMode(mode);
+        return this;
+    }
+
+    @Override
+    public PolicyDefinitionImpl withMetadata(Object metadata) {
+        innerModel().withMetadata(metadata);
         return this;
     }
 }

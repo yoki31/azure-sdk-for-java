@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Azure Files or Blob Storage access information value for dictionary storage. */
+/**
+ * Azure Files or Blob Storage access information value for dictionary storage.
+ */
 @Fluent
 public final class AzureStorageInfoValue {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureStorageInfoValue.class);
-
     /*
      * Type of storage.
      */
@@ -50,9 +48,21 @@ public final class AzureStorageInfoValue {
     @JsonProperty(value = "state", access = JsonProperty.Access.WRITE_ONLY)
     private AzureStorageState state;
 
+    /*
+     * Mounting protocol to use for the storage account.
+     */
+    @JsonProperty(value = "protocol")
+    private AzureStorageProtocol protocol;
+
+    /**
+     * Creates an instance of AzureStorageInfoValue class.
+     */
+    public AzureStorageInfoValue() {
+    }
+
     /**
      * Get the type property: Type of storage.
-     *
+     * 
      * @return the type value.
      */
     public AzureStorageType type() {
@@ -61,7 +71,7 @@ public final class AzureStorageInfoValue {
 
     /**
      * Set the type property: Type of storage.
-     *
+     * 
      * @param type the type value to set.
      * @return the AzureStorageInfoValue object itself.
      */
@@ -72,7 +82,7 @@ public final class AzureStorageInfoValue {
 
     /**
      * Get the accountName property: Name of the storage account.
-     *
+     * 
      * @return the accountName value.
      */
     public String accountName() {
@@ -81,7 +91,7 @@ public final class AzureStorageInfoValue {
 
     /**
      * Set the accountName property: Name of the storage account.
-     *
+     * 
      * @param accountName the accountName value to set.
      * @return the AzureStorageInfoValue object itself.
      */
@@ -92,7 +102,7 @@ public final class AzureStorageInfoValue {
 
     /**
      * Get the shareName property: Name of the file share (container name, for Blob storage).
-     *
+     * 
      * @return the shareName value.
      */
     public String shareName() {
@@ -101,7 +111,7 @@ public final class AzureStorageInfoValue {
 
     /**
      * Set the shareName property: Name of the file share (container name, for Blob storage).
-     *
+     * 
      * @param shareName the shareName value to set.
      * @return the AzureStorageInfoValue object itself.
      */
@@ -112,7 +122,7 @@ public final class AzureStorageInfoValue {
 
     /**
      * Get the accessKey property: Access key for the storage account.
-     *
+     * 
      * @return the accessKey value.
      */
     public String accessKey() {
@@ -121,7 +131,7 @@ public final class AzureStorageInfoValue {
 
     /**
      * Set the accessKey property: Access key for the storage account.
-     *
+     * 
      * @param accessKey the accessKey value to set.
      * @return the AzureStorageInfoValue object itself.
      */
@@ -132,7 +142,7 @@ public final class AzureStorageInfoValue {
 
     /**
      * Get the mountPath property: Path to mount the storage within the site's runtime environment.
-     *
+     * 
      * @return the mountPath value.
      */
     public String mountPath() {
@@ -141,7 +151,7 @@ public final class AzureStorageInfoValue {
 
     /**
      * Set the mountPath property: Path to mount the storage within the site's runtime environment.
-     *
+     * 
      * @param mountPath the mountPath value to set.
      * @return the AzureStorageInfoValue object itself.
      */
@@ -152,7 +162,7 @@ public final class AzureStorageInfoValue {
 
     /**
      * Get the state property: State of the storage account.
-     *
+     * 
      * @return the state value.
      */
     public AzureStorageState state() {
@@ -160,8 +170,28 @@ public final class AzureStorageInfoValue {
     }
 
     /**
+     * Get the protocol property: Mounting protocol to use for the storage account.
+     * 
+     * @return the protocol value.
+     */
+    public AzureStorageProtocol protocol() {
+        return this.protocol;
+    }
+
+    /**
+     * Set the protocol property: Mounting protocol to use for the storage account.
+     * 
+     * @param protocol the protocol value to set.
+     * @return the AzureStorageInfoValue object itself.
+     */
+    public AzureStorageInfoValue withProtocol(AzureStorageProtocol protocol) {
+        this.protocol = protocol;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -27,7 +27,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.synapse.fluent.SqlPoolBlobAuditingPoliciesClient;
 import com.azure.resourcemanager.synapse.fluent.models.SqlPoolBlobAuditingPolicyInner;
 import com.azure.resourcemanager.synapse.models.SqlPoolBlobAuditingPolicyListResult;
@@ -35,8 +34,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in SqlPoolBlobAuditingPoliciesClient. */
 public final class SqlPoolBlobAuditingPoliciesClientImpl implements SqlPoolBlobAuditingPoliciesClient {
-    private final ClientLogger logger = new ClientLogger(SqlPoolBlobAuditingPoliciesClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final SqlPoolBlobAuditingPoliciesService service;
 
@@ -62,7 +59,7 @@ public final class SqlPoolBlobAuditingPoliciesClientImpl implements SqlPoolBlobA
      */
     @Host("{$host}")
     @ServiceInterface(name = "SynapseManagementCli")
-    private interface SqlPoolBlobAuditingPoliciesService {
+    public interface SqlPoolBlobAuditingPoliciesService {
         @Headers({"Content-Type: application/json"})
         @Get(
             "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
@@ -126,7 +123,9 @@ public final class SqlPoolBlobAuditingPoliciesClientImpl implements SqlPoolBlobA
     }
 
     /**
-     * Get a SQL pool's blob auditing policy.
+     * Get a SQL pool's blob auditing policy
+     *
+     * <p>Get a SQL pool's blob auditing policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -134,7 +133,7 @@ public final class SqlPoolBlobAuditingPoliciesClientImpl implements SqlPoolBlobA
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a SQL pool's blob auditing policy.
+     * @return a SQL pool's blob auditing policy along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<SqlPoolBlobAuditingPolicyInner>> getWithResponseAsync(
@@ -182,7 +181,9 @@ public final class SqlPoolBlobAuditingPoliciesClientImpl implements SqlPoolBlobA
     }
 
     /**
-     * Get a SQL pool's blob auditing policy.
+     * Get a SQL pool's blob auditing policy
+     *
+     * <p>Get a SQL pool's blob auditing policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -191,7 +192,7 @@ public final class SqlPoolBlobAuditingPoliciesClientImpl implements SqlPoolBlobA
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a SQL pool's blob auditing policy.
+     * @return a SQL pool's blob auditing policy along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<SqlPoolBlobAuditingPolicyInner>> getWithResponseAsync(
@@ -236,7 +237,9 @@ public final class SqlPoolBlobAuditingPoliciesClientImpl implements SqlPoolBlobA
     }
 
     /**
-     * Get a SQL pool's blob auditing policy.
+     * Get a SQL pool's blob auditing policy
+     *
+     * <p>Get a SQL pool's blob auditing policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -244,24 +247,39 @@ public final class SqlPoolBlobAuditingPoliciesClientImpl implements SqlPoolBlobA
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a SQL pool's blob auditing policy.
+     * @return a SQL pool's blob auditing policy on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<SqlPoolBlobAuditingPolicyInner> getAsync(
         String resourceGroupName, String workspaceName, String sqlPoolName) {
         return getWithResponseAsync(resourceGroupName, workspaceName, sqlPoolName)
-            .flatMap(
-                (Response<SqlPoolBlobAuditingPolicyInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
-     * Get a SQL pool's blob auditing policy.
+     * Get a SQL pool's blob auditing policy
+     *
+     * <p>Get a SQL pool's blob auditing policy.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param sqlPoolName SQL pool name.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a SQL pool's blob auditing policy along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<SqlPoolBlobAuditingPolicyInner> getWithResponse(
+        String resourceGroupName, String workspaceName, String sqlPoolName, Context context) {
+        return getWithResponseAsync(resourceGroupName, workspaceName, sqlPoolName, context).block();
+    }
+
+    /**
+     * Get a SQL pool's blob auditing policy
+     *
+     * <p>Get a SQL pool's blob auditing policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -273,29 +291,13 @@ public final class SqlPoolBlobAuditingPoliciesClientImpl implements SqlPoolBlobA
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public SqlPoolBlobAuditingPolicyInner get(String resourceGroupName, String workspaceName, String sqlPoolName) {
-        return getAsync(resourceGroupName, workspaceName, sqlPoolName).block();
+        return getWithResponse(resourceGroupName, workspaceName, sqlPoolName, Context.NONE).getValue();
     }
 
     /**
-     * Get a SQL pool's blob auditing policy.
+     * Creates or updates a SQL pool's blob auditing policy
      *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param sqlPoolName SQL pool name.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a SQL pool's blob auditing policy.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<SqlPoolBlobAuditingPolicyInner> getWithResponse(
-        String resourceGroupName, String workspaceName, String sqlPoolName, Context context) {
-        return getWithResponseAsync(resourceGroupName, workspaceName, sqlPoolName, context).block();
-    }
-
-    /**
-     * Creates or updates a SQL pool's blob auditing policy.
+     * <p>Creates or updates a SQL pool's blob auditing policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -304,7 +306,7 @@ public final class SqlPoolBlobAuditingPoliciesClientImpl implements SqlPoolBlobA
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Sql pool blob auditing policy.
+     * @return a Sql pool blob auditing policy along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<SqlPoolBlobAuditingPolicyInner>> createOrUpdateWithResponseAsync(
@@ -358,7 +360,9 @@ public final class SqlPoolBlobAuditingPoliciesClientImpl implements SqlPoolBlobA
     }
 
     /**
-     * Creates or updates a SQL pool's blob auditing policy.
+     * Creates or updates a SQL pool's blob auditing policy
+     *
+     * <p>Creates or updates a SQL pool's blob auditing policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -368,7 +372,7 @@ public final class SqlPoolBlobAuditingPoliciesClientImpl implements SqlPoolBlobA
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Sql pool blob auditing policy.
+     * @return a Sql pool blob auditing policy along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<SqlPoolBlobAuditingPolicyInner>> createOrUpdateWithResponseAsync(
@@ -423,7 +427,9 @@ public final class SqlPoolBlobAuditingPoliciesClientImpl implements SqlPoolBlobA
     }
 
     /**
-     * Creates or updates a SQL pool's blob auditing policy.
+     * Creates or updates a SQL pool's blob auditing policy
+     *
+     * <p>Creates or updates a SQL pool's blob auditing policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -432,42 +438,19 @@ public final class SqlPoolBlobAuditingPoliciesClientImpl implements SqlPoolBlobA
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Sql pool blob auditing policy.
+     * @return a Sql pool blob auditing policy on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<SqlPoolBlobAuditingPolicyInner> createOrUpdateAsync(
         String resourceGroupName, String workspaceName, String sqlPoolName, SqlPoolBlobAuditingPolicyInner parameters) {
         return createOrUpdateWithResponseAsync(resourceGroupName, workspaceName, sqlPoolName, parameters)
-            .flatMap(
-                (Response<SqlPoolBlobAuditingPolicyInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
-     * Creates or updates a SQL pool's blob auditing policy.
+     * Creates or updates a SQL pool's blob auditing policy
      *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param sqlPoolName SQL pool name.
-     * @param parameters The database blob auditing policy.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Sql pool blob auditing policy.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public SqlPoolBlobAuditingPolicyInner createOrUpdate(
-        String resourceGroupName, String workspaceName, String sqlPoolName, SqlPoolBlobAuditingPolicyInner parameters) {
-        return createOrUpdateAsync(resourceGroupName, workspaceName, sqlPoolName, parameters).block();
-    }
-
-    /**
-     * Creates or updates a SQL pool's blob auditing policy.
+     * <p>Creates or updates a SQL pool's blob auditing policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -477,7 +460,7 @@ public final class SqlPoolBlobAuditingPoliciesClientImpl implements SqlPoolBlobA
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Sql pool blob auditing policy.
+     * @return a Sql pool blob auditing policy along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<SqlPoolBlobAuditingPolicyInner> createOrUpdateWithResponse(
@@ -491,6 +474,27 @@ public final class SqlPoolBlobAuditingPoliciesClientImpl implements SqlPoolBlobA
     }
 
     /**
+     * Creates or updates a SQL pool's blob auditing policy
+     *
+     * <p>Creates or updates a SQL pool's blob auditing policy.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param sqlPoolName SQL pool name.
+     * @param parameters The database blob auditing policy.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a Sql pool blob auditing policy.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public SqlPoolBlobAuditingPolicyInner createOrUpdate(
+        String resourceGroupName, String workspaceName, String sqlPoolName, SqlPoolBlobAuditingPolicyInner parameters) {
+        return createOrUpdateWithResponse(resourceGroupName, workspaceName, sqlPoolName, parameters, Context.NONE)
+            .getValue();
+    }
+
+    /**
      * Lists auditing settings of a Sql pool.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
@@ -499,7 +503,8 @@ public final class SqlPoolBlobAuditingPoliciesClientImpl implements SqlPoolBlobA
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Sql pool auditing settings.
+     * @return a list of Sql pool auditing settings along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SqlPoolBlobAuditingPolicyInner>> listBySqlPoolSinglePageAsync(
@@ -563,7 +568,8 @@ public final class SqlPoolBlobAuditingPoliciesClientImpl implements SqlPoolBlobA
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Sql pool auditing settings.
+     * @return a list of Sql pool auditing settings along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SqlPoolBlobAuditingPolicyInner>> listBySqlPoolSinglePageAsync(
@@ -623,7 +629,7 @@ public final class SqlPoolBlobAuditingPoliciesClientImpl implements SqlPoolBlobA
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Sql pool auditing settings.
+     * @return a list of Sql pool auditing settings as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<SqlPoolBlobAuditingPolicyInner> listBySqlPoolAsync(
@@ -643,7 +649,7 @@ public final class SqlPoolBlobAuditingPoliciesClientImpl implements SqlPoolBlobA
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Sql pool auditing settings.
+     * @return a list of Sql pool auditing settings as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<SqlPoolBlobAuditingPolicyInner> listBySqlPoolAsync(
@@ -662,7 +668,7 @@ public final class SqlPoolBlobAuditingPoliciesClientImpl implements SqlPoolBlobA
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Sql pool auditing settings.
+     * @return a list of Sql pool auditing settings as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<SqlPoolBlobAuditingPolicyInner> listBySqlPool(
@@ -680,7 +686,7 @@ public final class SqlPoolBlobAuditingPoliciesClientImpl implements SqlPoolBlobA
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Sql pool auditing settings.
+     * @return a list of Sql pool auditing settings as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<SqlPoolBlobAuditingPolicyInner> listBySqlPool(
@@ -691,11 +697,13 @@ public final class SqlPoolBlobAuditingPoliciesClientImpl implements SqlPoolBlobA
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Sql pool auditing settings.
+     * @return a list of Sql pool auditing settings along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SqlPoolBlobAuditingPolicyInner>> listBySqlPoolNextSinglePageAsync(String nextLink) {
@@ -726,12 +734,14 @@ public final class SqlPoolBlobAuditingPoliciesClientImpl implements SqlPoolBlobA
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of Sql pool auditing settings.
+     * @return a list of Sql pool auditing settings along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<SqlPoolBlobAuditingPolicyInner>> listBySqlPoolNextSinglePageAsync(

@@ -6,14 +6,13 @@ package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Capture Virtual Machine parameters. */
+/**
+ * Capture Virtual Machine parameters.
+ */
 @Fluent
 public final class VirtualMachineCaptureParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VirtualMachineCaptureParameters.class);
-
     /*
      * The captured virtual hard disk's name prefix.
      */
@@ -27,15 +26,20 @@ public final class VirtualMachineCaptureParameters {
     private String destinationContainerName;
 
     /*
-     * Specifies whether to overwrite the destination virtual hard disk, in
-     * case of conflict.
+     * Specifies whether to overwrite the destination virtual hard disk, in case of conflict.
      */
     @JsonProperty(value = "overwriteVhds", required = true)
     private boolean overwriteVhds;
 
     /**
+     * Creates an instance of VirtualMachineCaptureParameters class.
+     */
+    public VirtualMachineCaptureParameters() {
+    }
+
+    /**
      * Get the vhdPrefix property: The captured virtual hard disk's name prefix.
-     *
+     * 
      * @return the vhdPrefix value.
      */
     public String vhdPrefix() {
@@ -44,7 +48,7 @@ public final class VirtualMachineCaptureParameters {
 
     /**
      * Set the vhdPrefix property: The captured virtual hard disk's name prefix.
-     *
+     * 
      * @param vhdPrefix the vhdPrefix value to set.
      * @return the VirtualMachineCaptureParameters object itself.
      */
@@ -55,7 +59,7 @@ public final class VirtualMachineCaptureParameters {
 
     /**
      * Get the destinationContainerName property: The destination container name.
-     *
+     * 
      * @return the destinationContainerName value.
      */
     public String destinationContainerName() {
@@ -64,7 +68,7 @@ public final class VirtualMachineCaptureParameters {
 
     /**
      * Set the destinationContainerName property: The destination container name.
-     *
+     * 
      * @param destinationContainerName the destinationContainerName value to set.
      * @return the VirtualMachineCaptureParameters object itself.
      */
@@ -76,7 +80,7 @@ public final class VirtualMachineCaptureParameters {
     /**
      * Get the overwriteVhds property: Specifies whether to overwrite the destination virtual hard disk, in case of
      * conflict.
-     *
+     * 
      * @return the overwriteVhds value.
      */
     public boolean overwriteVhds() {
@@ -86,7 +90,7 @@ public final class VirtualMachineCaptureParameters {
     /**
      * Set the overwriteVhds property: Specifies whether to overwrite the destination virtual hard disk, in case of
      * conflict.
-     *
+     * 
      * @param overwriteVhds the overwriteVhds value to set.
      * @return the VirtualMachineCaptureParameters object itself.
      */
@@ -97,21 +101,21 @@ public final class VirtualMachineCaptureParameters {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (vhdPrefix() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property vhdPrefix in model VirtualMachineCaptureParameters"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property vhdPrefix in model VirtualMachineCaptureParameters"));
         }
         if (destinationContainerName() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property destinationContainerName in model VirtualMachineCaptureParameters"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property destinationContainerName in model VirtualMachineCaptureParameters"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(VirtualMachineCaptureParameters.class);
 }

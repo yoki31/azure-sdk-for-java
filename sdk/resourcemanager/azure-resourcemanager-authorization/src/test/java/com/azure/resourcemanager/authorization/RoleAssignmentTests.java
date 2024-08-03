@@ -19,7 +19,8 @@ public class RoleAssignmentTests extends GraphRbacManagementTest {
     public void canCRUDRoleAssignment() throws Exception {
         String roleAssignmentName = generateRandomUuid();
         String spName = generateRandomResourceName("sp", 20);
-
+        // Disable `$.appId` sanitizer for this test
+        interceptorManager.removeSanitizers("AZSDK3432");
         ServicePrincipal sp =
             authorizationManager.servicePrincipals().define(spName).withNewApplication().create();
 
@@ -33,6 +34,7 @@ public class RoleAssignmentTests extends GraphRbacManagementTest {
                     .forServicePrincipal(sp)
                     .withBuiltInRole(BuiltInRole.CONTRIBUTOR)
                     .withSubscriptionScope(resourceManager.subscriptionId())
+                    .withDescription("contributor role")
                     .create();
 
             Assertions.assertNotNull(roleAssignment);
@@ -43,9 +45,13 @@ public class RoleAssignmentTests extends GraphRbacManagementTest {
             Assertions.assertEquals(1, roleAssignments.size());
             RoleAssignment roleAssignment1 = roleAssignments.iterator().next();
             Assertions.assertEquals(roleAssignment.id(), roleAssignment1.id());
-            Assertions.assertEquals(roleAssignment.scope(), roleAssignment1.scope());
+            if (!isPlaybackMode()) {
+                // subscriptionId redacted
+                Assertions.assertEquals(roleAssignment.scope(), roleAssignment1.scope());
+            }
             Assertions.assertEquals(roleAssignment.roleDefinitionId(), roleAssignment1.roleDefinitionId());
             Assertions.assertEquals(roleAssignment.principalId(), roleAssignment1.principalId());
+            Assertions.assertEquals("contributor role", roleAssignment1.description());
         } finally {
             authorizationManager.servicePrincipals().deleteById(sp.id());
             authorizationManager

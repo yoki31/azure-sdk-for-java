@@ -6,14 +6,13 @@ package com.azure.resourcemanager.batch.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Parameters supplied to the RegenerateKey operation. */
+/**
+ * Parameters supplied to the RegenerateKey operation.
+ */
 @Fluent
 public final class BatchAccountRegenerateKeyParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(BatchAccountRegenerateKeyParameters.class);
-
     /*
      * The type of account key to regenerate.
      */
@@ -21,8 +20,14 @@ public final class BatchAccountRegenerateKeyParameters {
     private AccountKeyType keyName;
 
     /**
+     * Creates an instance of BatchAccountRegenerateKeyParameters class.
+     */
+    public BatchAccountRegenerateKeyParameters() {
+    }
+
+    /**
      * Get the keyName property: The type of account key to regenerate.
-     *
+     * 
      * @return the keyName value.
      */
     public AccountKeyType keyName() {
@@ -31,7 +36,7 @@ public final class BatchAccountRegenerateKeyParameters {
 
     /**
      * Set the keyName property: The type of account key to regenerate.
-     *
+     * 
      * @param keyName the keyName value to set.
      * @return the BatchAccountRegenerateKeyParameters object itself.
      */
@@ -42,15 +47,15 @@ public final class BatchAccountRegenerateKeyParameters {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (keyName() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property keyName in model BatchAccountRegenerateKeyParameters"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property keyName in model BatchAccountRegenerateKeyParameters"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(BatchAccountRegenerateKeyParameters.class);
 }

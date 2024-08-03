@@ -31,7 +31,6 @@ import com.azure.core.management.exception.ManagementException;
 import com.azure.core.management.polling.PollResult;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.core.util.polling.PollerFlux;
 import com.azure.core.util.polling.SyncPoller;
 import com.azure.resourcemanager.apimanagement.fluent.ApiManagementServicesClient;
@@ -50,8 +49,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in ApiManagementServicesClient. */
 public final class ApiManagementServicesClientImpl implements ApiManagementServicesClient {
-    private final ClientLogger logger = new ClientLogger(ApiManagementServicesClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final ApiManagementServicesService service;
 
@@ -76,11 +73,10 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApiManagementClientA")
-    private interface ApiManagementServicesService {
+    public interface ApiManagementServicesService {
         @Headers({"Content-Type: application/json"})
         @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/restore")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/restore")
         @ExpectedResponses({200, 202})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Flux<ByteBuffer>>> restore(
@@ -95,8 +91,7 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
 
         @Headers({"Content-Type: application/json"})
         @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/backup")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/backup")
         @ExpectedResponses({200, 202})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Flux<ByteBuffer>>> backup(
@@ -111,9 +106,8 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
 
         @Headers({"Content-Type: application/json"})
         @Put(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}")
-        @ExpectedResponses({200, 201, 202})
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}")
+        @ExpectedResponses({200, 201})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Flux<ByteBuffer>>> createOrUpdate(
             @HostParam("$host") String endpoint,
@@ -127,8 +121,7 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
 
         @Headers({"Content-Type: application/json"})
         @Patch(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}")
         @ExpectedResponses({200, 202})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Flux<ByteBuffer>>> update(
@@ -143,8 +136,7 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
 
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<ApiManagementServiceResourceInner>> getByResourceGroup(
@@ -158,8 +150,7 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
 
         @Headers({"Content-Type: application/json"})
         @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}")
         @ExpectedResponses({200, 202, 204})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Flux<ByteBuffer>>> delete(
@@ -172,9 +163,22 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
             Context context);
 
         @Headers({"Content-Type: application/json"})
+        @Post(
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/migrateToStv2")
+        @ExpectedResponses({200, 202})
+        @UnexpectedResponseExceptionType(ManagementException.class)
+        Mono<Response<Flux<ByteBuffer>>> migrateToStv2(
+            @HostParam("$host") String endpoint,
+            @PathParam("resourceGroupName") String resourceGroupName,
+            @PathParam("serviceName") String serviceName,
+            @QueryParam("api-version") String apiVersion,
+            @PathParam("subscriptionId") String subscriptionId,
+            @HeaderParam("Accept") String accept,
+            Context context);
+
+        @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<ApiManagementServiceListResult>> listByResourceGroup(
@@ -198,8 +202,7 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
 
         @Headers({"Content-Type: application/json"})
         @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/getssotoken")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/getssotoken")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<ApiManagementServiceGetSsoTokenResultInner>> getSsoToken(
@@ -236,8 +239,7 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
 
         @Headers({"Content-Type: application/json"})
         @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/applynetworkconfigurationupdates")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/applynetworkconfigurationupdates")
         @ExpectedResponses({200, 202})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Flux<ByteBuffer>>> applyNetworkConfigurationUpdates(
@@ -275,13 +277,14 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * Restores a backup of an API Management service created using the ApiManagementService_Backup operation on the
      * current service. This is a long running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the Restore API Management service from backup operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return a single API Management service resource in List or Get response along with {@link Response} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> restoreWithResponseAsync(
@@ -331,14 +334,15 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * Restores a backup of an API Management service created using the ApiManagementService_Backup operation on the
      * current service. This is a long running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the Restore API Management service from backup operation.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return a single API Management service resource in List or Get response along with {@link Response} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> restoreWithResponseAsync(
@@ -388,15 +392,15 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * Restores a backup of an API Management service created using the ApiManagementService_Backup operation on the
      * current service. This is a long running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the Restore API Management service from backup operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return the {@link PollerFlux} for polling of a single API Management service resource in List or Get response.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner>
         beginRestoreAsync(
             String resourceGroupName, String serviceName, ApiManagementServiceBackupRestoreParameters parameters) {
@@ -408,23 +412,23 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
                 this.client.getHttpPipeline(),
                 ApiManagementServiceResourceInner.class,
                 ApiManagementServiceResourceInner.class,
-                Context.NONE);
+                this.client.getContext());
     }
 
     /**
      * Restores a backup of an API Management service created using the ApiManagementService_Backup operation on the
      * current service. This is a long running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the Restore API Management service from backup operation.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return the {@link PollerFlux} for polling of a single API Management service resource in List or Get response.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner>
         beginRestoreAsync(
             String resourceGroupName,
@@ -448,53 +452,54 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * Restores a backup of an API Management service created using the ApiManagementService_Backup operation on the
      * current service. This is a long running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the Restore API Management service from backup operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return the {@link SyncPoller} for polling of a single API Management service resource in List or Get response.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner> beginRestore(
         String resourceGroupName, String serviceName, ApiManagementServiceBackupRestoreParameters parameters) {
-        return beginRestoreAsync(resourceGroupName, serviceName, parameters).getSyncPoller();
+        return this.beginRestoreAsync(resourceGroupName, serviceName, parameters).getSyncPoller();
     }
 
     /**
      * Restores a backup of an API Management service created using the ApiManagementService_Backup operation on the
      * current service. This is a long running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the Restore API Management service from backup operation.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return the {@link SyncPoller} for polling of a single API Management service resource in List or Get response.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner> beginRestore(
         String resourceGroupName,
         String serviceName,
         ApiManagementServiceBackupRestoreParameters parameters,
         Context context) {
-        return beginRestoreAsync(resourceGroupName, serviceName, parameters, context).getSyncPoller();
+        return this.beginRestoreAsync(resourceGroupName, serviceName, parameters, context).getSyncPoller();
     }
 
     /**
      * Restores a backup of an API Management service created using the ApiManagementService_Backup operation on the
      * current service. This is a long running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the Restore API Management service from backup operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return a single API Management service resource in List or Get response on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiManagementServiceResourceInner> restoreAsync(
@@ -508,14 +513,15 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * Restores a backup of an API Management service created using the ApiManagementService_Backup operation on the
      * current service. This is a long running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the Restore API Management service from backup operation.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return a single API Management service resource in List or Get response on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiManagementServiceResourceInner> restoreAsync(
@@ -532,7 +538,7 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * Restores a backup of an API Management service created using the ApiManagementService_Backup operation on the
      * current service. This is a long running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the Restore API Management service from backup operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -550,7 +556,7 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * Restores a backup of an API Management service created using the ApiManagementService_Backup operation on the
      * current service. This is a long running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the Restore API Management service from backup operation.
      * @param context The context to associate with this operation.
@@ -572,13 +578,14 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * Creates a backup of the API Management service to the given Azure Storage Account. This is long running operation
      * and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the ApiManagementService_Backup operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return a single API Management service resource in List or Get response along with {@link Response} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> backupWithResponseAsync(
@@ -628,14 +635,15 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * Creates a backup of the API Management service to the given Azure Storage Account. This is long running operation
      * and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the ApiManagementService_Backup operation.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return a single API Management service resource in List or Get response along with {@link Response} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> backupWithResponseAsync(
@@ -685,15 +693,15 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * Creates a backup of the API Management service to the given Azure Storage Account. This is long running operation
      * and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the ApiManagementService_Backup operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return the {@link PollerFlux} for polling of a single API Management service resource in List or Get response.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner>
         beginBackupAsync(
             String resourceGroupName, String serviceName, ApiManagementServiceBackupRestoreParameters parameters) {
@@ -705,23 +713,23 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
                 this.client.getHttpPipeline(),
                 ApiManagementServiceResourceInner.class,
                 ApiManagementServiceResourceInner.class,
-                Context.NONE);
+                this.client.getContext());
     }
 
     /**
      * Creates a backup of the API Management service to the given Azure Storage Account. This is long running operation
      * and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the ApiManagementService_Backup operation.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return the {@link PollerFlux} for polling of a single API Management service resource in List or Get response.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner>
         beginBackupAsync(
             String resourceGroupName,
@@ -745,53 +753,54 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * Creates a backup of the API Management service to the given Azure Storage Account. This is long running operation
      * and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the ApiManagementService_Backup operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return the {@link SyncPoller} for polling of a single API Management service resource in List or Get response.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner> beginBackup(
         String resourceGroupName, String serviceName, ApiManagementServiceBackupRestoreParameters parameters) {
-        return beginBackupAsync(resourceGroupName, serviceName, parameters).getSyncPoller();
+        return this.beginBackupAsync(resourceGroupName, serviceName, parameters).getSyncPoller();
     }
 
     /**
      * Creates a backup of the API Management service to the given Azure Storage Account. This is long running operation
      * and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the ApiManagementService_Backup operation.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return the {@link SyncPoller} for polling of a single API Management service resource in List or Get response.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner> beginBackup(
         String resourceGroupName,
         String serviceName,
         ApiManagementServiceBackupRestoreParameters parameters,
         Context context) {
-        return beginBackupAsync(resourceGroupName, serviceName, parameters, context).getSyncPoller();
+        return this.beginBackupAsync(resourceGroupName, serviceName, parameters, context).getSyncPoller();
     }
 
     /**
      * Creates a backup of the API Management service to the given Azure Storage Account. This is long running operation
      * and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the ApiManagementService_Backup operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return a single API Management service resource in List or Get response on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiManagementServiceResourceInner> backupAsync(
@@ -805,14 +814,15 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * Creates a backup of the API Management service to the given Azure Storage Account. This is long running operation
      * and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the ApiManagementService_Backup operation.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return a single API Management service resource in List or Get response on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiManagementServiceResourceInner> backupAsync(
@@ -829,7 +839,7 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * Creates a backup of the API Management service to the given Azure Storage Account. This is long running operation
      * and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the ApiManagementService_Backup operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -847,7 +857,7 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * Creates a backup of the API Management service to the given Azure Storage Account. This is long running operation
      * and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the ApiManagementService_Backup operation.
      * @param context The context to associate with this operation.
@@ -869,13 +879,14 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * Creates or updates an API Management service. This is long running operation and could take several minutes to
      * complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the CreateOrUpdate API Management service operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return a single API Management service resource in List or Get response along with {@link Response} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(
@@ -925,14 +936,15 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * Creates or updates an API Management service. This is long running operation and could take several minutes to
      * complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the CreateOrUpdate API Management service operation.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return a single API Management service resource in List or Get response along with {@link Response} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(
@@ -979,15 +991,15 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * Creates or updates an API Management service. This is long running operation and could take several minutes to
      * complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the CreateOrUpdate API Management service operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return the {@link PollerFlux} for polling of a single API Management service resource in List or Get response.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner>
         beginCreateOrUpdateAsync(
             String resourceGroupName, String serviceName, ApiManagementServiceResourceInner parameters) {
@@ -1000,23 +1012,23 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
                 this.client.getHttpPipeline(),
                 ApiManagementServiceResourceInner.class,
                 ApiManagementServiceResourceInner.class,
-                Context.NONE);
+                this.client.getContext());
     }
 
     /**
      * Creates or updates an API Management service. This is long running operation and could take several minutes to
      * complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the CreateOrUpdate API Management service operation.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return the {@link PollerFlux} for polling of a single API Management service resource in List or Get response.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner>
         beginCreateOrUpdateAsync(
             String resourceGroupName,
@@ -1040,55 +1052,56 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * Creates or updates an API Management service. This is long running operation and could take several minutes to
      * complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the CreateOrUpdate API Management service operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return the {@link SyncPoller} for polling of a single API Management service resource in List or Get response.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner>
         beginCreateOrUpdate(
             String resourceGroupName, String serviceName, ApiManagementServiceResourceInner parameters) {
-        return beginCreateOrUpdateAsync(resourceGroupName, serviceName, parameters).getSyncPoller();
+        return this.beginCreateOrUpdateAsync(resourceGroupName, serviceName, parameters).getSyncPoller();
     }
 
     /**
      * Creates or updates an API Management service. This is long running operation and could take several minutes to
      * complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the CreateOrUpdate API Management service operation.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return the {@link SyncPoller} for polling of a single API Management service resource in List or Get response.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner>
         beginCreateOrUpdate(
             String resourceGroupName,
             String serviceName,
             ApiManagementServiceResourceInner parameters,
             Context context) {
-        return beginCreateOrUpdateAsync(resourceGroupName, serviceName, parameters, context).getSyncPoller();
+        return this.beginCreateOrUpdateAsync(resourceGroupName, serviceName, parameters, context).getSyncPoller();
     }
 
     /**
      * Creates or updates an API Management service. This is long running operation and could take several minutes to
      * complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the CreateOrUpdate API Management service operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return a single API Management service resource in List or Get response on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiManagementServiceResourceInner> createOrUpdateAsync(
@@ -1102,14 +1115,15 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * Creates or updates an API Management service. This is long running operation and could take several minutes to
      * complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the CreateOrUpdate API Management service operation.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return a single API Management service resource in List or Get response on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiManagementServiceResourceInner> createOrUpdateAsync(
@@ -1123,7 +1137,7 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * Creates or updates an API Management service. This is long running operation and could take several minutes to
      * complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the CreateOrUpdate API Management service operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -1141,7 +1155,7 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * Creates or updates an API Management service. This is long running operation and could take several minutes to
      * complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the CreateOrUpdate API Management service operation.
      * @param context The context to associate with this operation.
@@ -1159,13 +1173,14 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Updates an existing API Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the CreateOrUpdate API Management service operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return a single API Management service resource in List or Get response along with {@link Response} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(
@@ -1214,14 +1229,15 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Updates an existing API Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the CreateOrUpdate API Management service operation.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return a single API Management service resource in List or Get response along with {@link Response} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> updateWithResponseAsync(
@@ -1270,15 +1286,15 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Updates an existing API Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the CreateOrUpdate API Management service operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return the {@link PollerFlux} for polling of a single API Management service resource in List or Get response.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner>
         beginUpdateAsync(
             String resourceGroupName, String serviceName, ApiManagementServiceUpdateParameters parameters) {
@@ -1290,22 +1306,22 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
                 this.client.getHttpPipeline(),
                 ApiManagementServiceResourceInner.class,
                 ApiManagementServiceResourceInner.class,
-                Context.NONE);
+                this.client.getContext());
     }
 
     /**
      * Updates an existing API Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the CreateOrUpdate API Management service operation.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return the {@link PollerFlux} for polling of a single API Management service resource in List or Get response.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner>
         beginUpdateAsync(
             String resourceGroupName,
@@ -1328,51 +1344,52 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Updates an existing API Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the CreateOrUpdate API Management service operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return the {@link SyncPoller} for polling of a single API Management service resource in List or Get response.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner> beginUpdate(
         String resourceGroupName, String serviceName, ApiManagementServiceUpdateParameters parameters) {
-        return beginUpdateAsync(resourceGroupName, serviceName, parameters).getSyncPoller();
+        return this.beginUpdateAsync(resourceGroupName, serviceName, parameters).getSyncPoller();
     }
 
     /**
      * Updates an existing API Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the CreateOrUpdate API Management service operation.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return the {@link SyncPoller} for polling of a single API Management service resource in List or Get response.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner> beginUpdate(
         String resourceGroupName,
         String serviceName,
         ApiManagementServiceUpdateParameters parameters,
         Context context) {
-        return beginUpdateAsync(resourceGroupName, serviceName, parameters, context).getSyncPoller();
+        return this.beginUpdateAsync(resourceGroupName, serviceName, parameters, context).getSyncPoller();
     }
 
     /**
      * Updates an existing API Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the CreateOrUpdate API Management service operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return a single API Management service resource in List or Get response on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiManagementServiceResourceInner> updateAsync(
@@ -1385,14 +1402,15 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Updates an existing API Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the CreateOrUpdate API Management service operation.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return a single API Management service resource in List or Get response on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiManagementServiceResourceInner> updateAsync(
@@ -1408,7 +1426,7 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Updates an existing API Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the CreateOrUpdate API Management service operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -1425,7 +1443,7 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Updates an existing API Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the CreateOrUpdate API Management service operation.
      * @param context The context to associate with this operation.
@@ -1446,12 +1464,13 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Gets an API Management service resource description.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an API Management service resource description.
+     * @return an API Management service resource description along with {@link Response} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<ApiManagementServiceResourceInner>> getByResourceGroupWithResponseAsync(
@@ -1494,13 +1513,14 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Gets an API Management service resource description.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an API Management service resource description.
+     * @return an API Management service resource description along with {@link Response} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<ApiManagementServiceResourceInner>> getByResourceGroupWithResponseAsync(
@@ -1540,52 +1560,30 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Gets an API Management service resource description.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an API Management service resource description.
+     * @return an API Management service resource description on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiManagementServiceResourceInner> getByResourceGroupAsync(
         String resourceGroupName, String serviceName) {
         return getByResourceGroupWithResponseAsync(resourceGroupName, serviceName)
-            .flatMap(
-                (Response<ApiManagementServiceResourceInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Gets an API Management service resource description.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an API Management service resource description.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public ApiManagementServiceResourceInner getByResourceGroup(String resourceGroupName, String serviceName) {
-        return getByResourceGroupAsync(resourceGroupName, serviceName).block();
-    }
-
-    /**
-     * Gets an API Management service resource description.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an API Management service resource description.
+     * @return an API Management service resource description along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Response<ApiManagementServiceResourceInner> getByResourceGroupWithResponse(
@@ -1594,14 +1592,29 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     }
 
     /**
-     * Deletes an existing API Management service.
+     * Gets an API Management service resource description.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return an API Management service resource description.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public ApiManagementServiceResourceInner getByResourceGroup(String resourceGroupName, String serviceName) {
+        return getByResourceGroupWithResponse(resourceGroupName, serviceName, Context.NONE).getValue();
+    }
+
+    /**
+     * Deletes an existing API Management service.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(String resourceGroupName, String serviceName) {
@@ -1643,13 +1656,13 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Deletes an existing API Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the response body along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> deleteWithResponseAsync(
@@ -1689,14 +1702,14 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Deletes an existing API Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner>
         beginDeleteAsync(String resourceGroupName, String serviceName) {
         Mono<Response<Flux<ByteBuffer>>> mono = deleteWithResponseAsync(resourceGroupName, serviceName);
@@ -1707,21 +1720,21 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
                 this.client.getHttpPipeline(),
                 ApiManagementServiceResourceInner.class,
                 ApiManagementServiceResourceInner.class,
-                Context.NONE);
+                this.client.getContext());
     }
 
     /**
      * Deletes an existing API Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link PollerFlux} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner>
         beginDeleteAsync(String resourceGroupName, String serviceName, Context context) {
         context = this.client.mergeContext(context);
@@ -1739,45 +1752,45 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Deletes an existing API Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner> beginDelete(
         String resourceGroupName, String serviceName) {
-        return beginDeleteAsync(resourceGroupName, serviceName).getSyncPoller();
+        return this.beginDeleteAsync(resourceGroupName, serviceName).getSyncPoller();
     }
 
     /**
      * Deletes an existing API Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner> beginDelete(
         String resourceGroupName, String serviceName, Context context) {
-        return beginDeleteAsync(resourceGroupName, serviceName, context).getSyncPoller();
+        return this.beginDeleteAsync(resourceGroupName, serviceName, context).getSyncPoller();
     }
 
     /**
      * Deletes an existing API Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the response body on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiManagementServiceResourceInner> deleteAsync(String resourceGroupName, String serviceName) {
@@ -1787,13 +1800,13 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Deletes an existing API Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return the response body on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiManagementServiceResourceInner> deleteAsync(
@@ -1806,7 +1819,7 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Deletes an existing API Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
@@ -1821,7 +1834,7 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Deletes an existing API Management service.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -1835,13 +1848,273 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     }
 
     /**
-     * List all API Management services within a resource group.
+     * Upgrades an API Management service to the Stv2 platform. For details refer to https://aka.ms/apim-migrate-stv2.
+     * This change is not reversible. This is long running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of the List API Management services operation.
+     * @return a single API Management service resource in List or Get response along with {@link Response} on
+     *     successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    private Mono<Response<Flux<ByteBuffer>>> migrateToStv2WithResponseAsync(
+        String resourceGroupName, String serviceName) {
+        if (this.client.getEndpoint() == null) {
+            return Mono
+                .error(
+                    new IllegalArgumentException(
+                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+        }
+        if (resourceGroupName == null) {
+            return Mono
+                .error(new IllegalArgumentException("Parameter resourceGroupName is required and cannot be null."));
+        }
+        if (serviceName == null) {
+            return Mono.error(new IllegalArgumentException("Parameter serviceName is required and cannot be null."));
+        }
+        if (this.client.getSubscriptionId() == null) {
+            return Mono
+                .error(
+                    new IllegalArgumentException(
+                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+        }
+        final String accept = "application/json";
+        return FluxUtil
+            .withContext(
+                context ->
+                    service
+                        .migrateToStv2(
+                            this.client.getEndpoint(),
+                            resourceGroupName,
+                            serviceName,
+                            this.client.getApiVersion(),
+                            this.client.getSubscriptionId(),
+                            accept,
+                            context))
+            .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
+    }
+
+    /**
+     * Upgrades an API Management service to the Stv2 platform. For details refer to https://aka.ms/apim-migrate-stv2.
+     * This change is not reversible. This is long running operation and could take several minutes to complete.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a single API Management service resource in List or Get response along with {@link Response} on
+     *     successful completion of {@link Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    private Mono<Response<Flux<ByteBuffer>>> migrateToStv2WithResponseAsync(
+        String resourceGroupName, String serviceName, Context context) {
+        if (this.client.getEndpoint() == null) {
+            return Mono
+                .error(
+                    new IllegalArgumentException(
+                        "Parameter this.client.getEndpoint() is required and cannot be null."));
+        }
+        if (resourceGroupName == null) {
+            return Mono
+                .error(new IllegalArgumentException("Parameter resourceGroupName is required and cannot be null."));
+        }
+        if (serviceName == null) {
+            return Mono.error(new IllegalArgumentException("Parameter serviceName is required and cannot be null."));
+        }
+        if (this.client.getSubscriptionId() == null) {
+            return Mono
+                .error(
+                    new IllegalArgumentException(
+                        "Parameter this.client.getSubscriptionId() is required and cannot be null."));
+        }
+        final String accept = "application/json";
+        context = this.client.mergeContext(context);
+        return service
+            .migrateToStv2(
+                this.client.getEndpoint(),
+                resourceGroupName,
+                serviceName,
+                this.client.getApiVersion(),
+                this.client.getSubscriptionId(),
+                accept,
+                context);
+    }
+
+    /**
+     * Upgrades an API Management service to the Stv2 platform. For details refer to https://aka.ms/apim-migrate-stv2.
+     * This change is not reversible. This is long running operation and could take several minutes to complete.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link PollerFlux} for polling of a single API Management service resource in List or Get response.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner>
+        beginMigrateToStv2Async(String resourceGroupName, String serviceName) {
+        Mono<Response<Flux<ByteBuffer>>> mono = migrateToStv2WithResponseAsync(resourceGroupName, serviceName);
+        return this
+            .client
+            .<ApiManagementServiceResourceInner, ApiManagementServiceResourceInner>getLroResult(
+                mono,
+                this.client.getHttpPipeline(),
+                ApiManagementServiceResourceInner.class,
+                ApiManagementServiceResourceInner.class,
+                this.client.getContext());
+    }
+
+    /**
+     * Upgrades an API Management service to the Stv2 platform. For details refer to https://aka.ms/apim-migrate-stv2.
+     * This change is not reversible. This is long running operation and could take several minutes to complete.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link PollerFlux} for polling of a single API Management service resource in List or Get response.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner>
+        beginMigrateToStv2Async(String resourceGroupName, String serviceName, Context context) {
+        context = this.client.mergeContext(context);
+        Mono<Response<Flux<ByteBuffer>>> mono = migrateToStv2WithResponseAsync(resourceGroupName, serviceName, context);
+        return this
+            .client
+            .<ApiManagementServiceResourceInner, ApiManagementServiceResourceInner>getLroResult(
+                mono,
+                this.client.getHttpPipeline(),
+                ApiManagementServiceResourceInner.class,
+                ApiManagementServiceResourceInner.class,
+                context);
+    }
+
+    /**
+     * Upgrades an API Management service to the Stv2 platform. For details refer to https://aka.ms/apim-migrate-stv2.
+     * This change is not reversible. This is long running operation and could take several minutes to complete.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of a single API Management service resource in List or Get response.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner>
+        beginMigrateToStv2(String resourceGroupName, String serviceName) {
+        return this.beginMigrateToStv2Async(resourceGroupName, serviceName).getSyncPoller();
+    }
+
+    /**
+     * Upgrades an API Management service to the Stv2 platform. For details refer to https://aka.ms/apim-migrate-stv2.
+     * This change is not reversible. This is long running operation and could take several minutes to complete.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link SyncPoller} for polling of a single API Management service resource in List or Get response.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    public SyncPoller<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner>
+        beginMigrateToStv2(String resourceGroupName, String serviceName, Context context) {
+        return this.beginMigrateToStv2Async(resourceGroupName, serviceName, context).getSyncPoller();
+    }
+
+    /**
+     * Upgrades an API Management service to the Stv2 platform. For details refer to https://aka.ms/apim-migrate-stv2.
+     * This change is not reversible. This is long running operation and could take several minutes to complete.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a single API Management service resource in List or Get response on successful completion of {@link
+     *     Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    private Mono<ApiManagementServiceResourceInner> migrateToStv2Async(String resourceGroupName, String serviceName) {
+        return beginMigrateToStv2Async(resourceGroupName, serviceName)
+            .last()
+            .flatMap(this.client::getLroFinalResultOrError);
+    }
+
+    /**
+     * Upgrades an API Management service to the Stv2 platform. For details refer to https://aka.ms/apim-migrate-stv2.
+     * This change is not reversible. This is long running operation and could take several minutes to complete.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a single API Management service resource in List or Get response on successful completion of {@link
+     *     Mono}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    private Mono<ApiManagementServiceResourceInner> migrateToStv2Async(
+        String resourceGroupName, String serviceName, Context context) {
+        return beginMigrateToStv2Async(resourceGroupName, serviceName, context)
+            .last()
+            .flatMap(this.client::getLroFinalResultOrError);
+    }
+
+    /**
+     * Upgrades an API Management service to the Stv2 platform. For details refer to https://aka.ms/apim-migrate-stv2.
+     * This change is not reversible. This is long running operation and could take several minutes to complete.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a single API Management service resource in List or Get response.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public ApiManagementServiceResourceInner migrateToStv2(String resourceGroupName, String serviceName) {
+        return migrateToStv2Async(resourceGroupName, serviceName).block();
+    }
+
+    /**
+     * Upgrades an API Management service to the Stv2 platform. For details refer to https://aka.ms/apim-migrate-stv2.
+     * This change is not reversible. This is long running operation and could take several minutes to complete.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a single API Management service resource in List or Get response.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public ApiManagementServiceResourceInner migrateToStv2(
+        String resourceGroupName, String serviceName, Context context) {
+        return migrateToStv2Async(resourceGroupName, serviceName, context).block();
+    }
+
+    /**
+     * List all API Management services within a resource group.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the response of the List API Management services operation along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ApiManagementServiceResourceInner>> listByResourceGroupSinglePageAsync(
@@ -1889,12 +2162,13 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * List all API Management services within a resource group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of the List API Management services operation.
+     * @return the response of the List API Management services operation along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ApiManagementServiceResourceInner>> listByResourceGroupSinglePageAsync(
@@ -1939,11 +2213,11 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * List all API Management services within a resource group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of the List API Management services operation.
+     * @return the response of the List API Management services operation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<ApiManagementServiceResourceInner> listByResourceGroupAsync(String resourceGroupName) {
@@ -1955,12 +2229,12 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * List all API Management services within a resource group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of the List API Management services operation.
+     * @return the response of the List API Management services operation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<ApiManagementServiceResourceInner> listByResourceGroupAsync(
@@ -1973,11 +2247,12 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * List all API Management services within a resource group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of the List API Management services operation.
+     * @return the response of the List API Management services operation as paginated response with {@link
+     *     PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<ApiManagementServiceResourceInner> listByResourceGroup(String resourceGroupName) {
@@ -1987,12 +2262,13 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * List all API Management services within a resource group.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of the List API Management services operation.
+     * @return the response of the List API Management services operation as paginated response with {@link
+     *     PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<ApiManagementServiceResourceInner> listByResourceGroup(
@@ -2005,7 +2281,8 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      *
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of the List API Management services operation.
+     * @return the response of the List API Management services operation along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ApiManagementServiceResourceInner>> listSinglePageAsync() {
@@ -2051,7 +2328,8 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of the List API Management services operation.
+     * @return the response of the List API Management services operation along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ApiManagementServiceResourceInner>> listSinglePageAsync(Context context) {
@@ -2092,7 +2370,7 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      *
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of the List API Management services operation.
+     * @return the response of the List API Management services operation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<ApiManagementServiceResourceInner> listAsync() {
@@ -2106,7 +2384,7 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of the List API Management services operation.
+     * @return the response of the List API Management services operation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<ApiManagementServiceResourceInner> listAsync(Context context) {
@@ -2119,7 +2397,8 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      *
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of the List API Management services operation.
+     * @return the response of the List API Management services operation as paginated response with {@link
+     *     PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<ApiManagementServiceResourceInner> list() {
@@ -2133,7 +2412,8 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of the List API Management services operation.
+     * @return the response of the List API Management services operation as paginated response with {@link
+     *     PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<ApiManagementServiceResourceInner> list(Context context) {
@@ -2143,12 +2423,13 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Gets the Single-Sign-On token for the API Management Service which is valid for 5 Minutes.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the Single-Sign-On token for the API Management Service which is valid for 5 Minutes.
+     * @return the Single-Sign-On token for the API Management Service which is valid for 5 Minutes along with {@link
+     *     Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<ApiManagementServiceGetSsoTokenResultInner>> getSsoTokenWithResponseAsync(
@@ -2191,13 +2472,14 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Gets the Single-Sign-On token for the API Management Service which is valid for 5 Minutes.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the Single-Sign-On token for the API Management Service which is valid for 5 Minutes.
+     * @return the Single-Sign-On token for the API Management Service which is valid for 5 Minutes along with {@link
+     *     Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<ApiManagementServiceGetSsoTokenResultInner>> getSsoTokenWithResponseAsync(
@@ -2237,31 +2519,43 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Gets the Single-Sign-On token for the API Management Service which is valid for 5 Minutes.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the Single-Sign-On token for the API Management Service which is valid for 5 Minutes.
+     * @return the Single-Sign-On token for the API Management Service which is valid for 5 Minutes on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiManagementServiceGetSsoTokenResultInner> getSsoTokenAsync(
         String resourceGroupName, String serviceName) {
         return getSsoTokenWithResponseAsync(resourceGroupName, serviceName)
-            .flatMap(
-                (Response<ApiManagementServiceGetSsoTokenResultInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Gets the Single-Sign-On token for the API Management Service which is valid for 5 Minutes.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the Single-Sign-On token for the API Management Service which is valid for 5 Minutes along with {@link
+     *     Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<ApiManagementServiceGetSsoTokenResultInner> getSsoTokenWithResponse(
+        String resourceGroupName, String serviceName, Context context) {
+        return getSsoTokenWithResponseAsync(resourceGroupName, serviceName, context).block();
+    }
+
+    /**
+     * Gets the Single-Sign-On token for the API Management Service which is valid for 5 Minutes.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
@@ -2270,24 +2564,7 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public ApiManagementServiceGetSsoTokenResultInner getSsoToken(String resourceGroupName, String serviceName) {
-        return getSsoTokenAsync(resourceGroupName, serviceName).block();
-    }
-
-    /**
-     * Gets the Single-Sign-On token for the API Management Service which is valid for 5 Minutes.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the Single-Sign-On token for the API Management Service which is valid for 5 Minutes.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<ApiManagementServiceGetSsoTokenResultInner> getSsoTokenWithResponse(
-        String resourceGroupName, String serviceName, Context context) {
-        return getSsoTokenWithResponseAsync(resourceGroupName, serviceName, context).block();
+        return getSsoTokenWithResponse(resourceGroupName, serviceName, Context.NONE).getValue();
     }
 
     /**
@@ -2297,7 +2574,8 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return response of the CheckNameAvailability operation.
+     * @return response of the CheckNameAvailability operation along with {@link Response} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<ApiManagementServiceNameAvailabilityResultInner>> checkNameAvailabilityWithResponseAsync(
@@ -2342,7 +2620,8 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return response of the CheckNameAvailability operation.
+     * @return response of the CheckNameAvailability operation along with {@link Response} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<ApiManagementServiceNameAvailabilityResultInner>> checkNameAvailabilityWithResponseAsync(
@@ -2383,20 +2662,28 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return response of the CheckNameAvailability operation.
+     * @return response of the CheckNameAvailability operation on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiManagementServiceNameAvailabilityResultInner> checkNameAvailabilityAsync(
         ApiManagementServiceCheckNameAvailabilityParameters parameters) {
-        return checkNameAvailabilityWithResponseAsync(parameters)
-            .flatMap(
-                (Response<ApiManagementServiceNameAvailabilityResultInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+        return checkNameAvailabilityWithResponseAsync(parameters).flatMap(res -> Mono.justOrEmpty(res.getValue()));
+    }
+
+    /**
+     * Checks availability and correctness of a name for an API Management service.
+     *
+     * @param parameters Parameters supplied to the CheckNameAvailability operation.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return response of the CheckNameAvailability operation along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<ApiManagementServiceNameAvailabilityResultInner> checkNameAvailabilityWithResponse(
+        ApiManagementServiceCheckNameAvailabilityParameters parameters, Context context) {
+        return checkNameAvailabilityWithResponseAsync(parameters, context).block();
     }
 
     /**
@@ -2411,23 +2698,7 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     @ServiceMethod(returns = ReturnType.SINGLE)
     public ApiManagementServiceNameAvailabilityResultInner checkNameAvailability(
         ApiManagementServiceCheckNameAvailabilityParameters parameters) {
-        return checkNameAvailabilityAsync(parameters).block();
-    }
-
-    /**
-     * Checks availability and correctness of a name for an API Management service.
-     *
-     * @param parameters Parameters supplied to the CheckNameAvailability operation.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return response of the CheckNameAvailability operation.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<ApiManagementServiceNameAvailabilityResultInner> checkNameAvailabilityWithResponse(
-        ApiManagementServiceCheckNameAvailabilityParameters parameters, Context context) {
-        return checkNameAvailabilityWithResponseAsync(parameters, context).block();
+        return checkNameAvailabilityWithResponse(parameters, Context.NONE).getValue();
     }
 
     /**
@@ -2435,7 +2706,8 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      *
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the custom domain ownership identifier for an API Management service.
+     * @return the custom domain ownership identifier for an API Management service along with {@link Response} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<ApiManagementServiceGetDomainOwnershipIdentifierResultInner>>
@@ -2473,7 +2745,8 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the custom domain ownership identifier for an API Management service.
+     * @return the custom domain ownership identifier for an API Management service along with {@link Response} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<ApiManagementServiceGetDomainOwnershipIdentifierResultInner>>
@@ -2506,19 +2779,27 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      *
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the custom domain ownership identifier for an API Management service.
+     * @return the custom domain ownership identifier for an API Management service on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiManagementServiceGetDomainOwnershipIdentifierResultInner> getDomainOwnershipIdentifierAsync() {
-        return getDomainOwnershipIdentifierWithResponseAsync()
-            .flatMap(
-                (Response<ApiManagementServiceGetDomainOwnershipIdentifierResultInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+        return getDomainOwnershipIdentifierWithResponseAsync().flatMap(res -> Mono.justOrEmpty(res.getValue()));
+    }
+
+    /**
+     * Get the custom domain ownership identifier for an API Management service.
+     *
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the custom domain ownership identifier for an API Management service along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<ApiManagementServiceGetDomainOwnershipIdentifierResultInner>
+        getDomainOwnershipIdentifierWithResponse(Context context) {
+        return getDomainOwnershipIdentifierWithResponseAsync(context).block();
     }
 
     /**
@@ -2530,28 +2811,13 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public ApiManagementServiceGetDomainOwnershipIdentifierResultInner getDomainOwnershipIdentifier() {
-        return getDomainOwnershipIdentifierAsync().block();
-    }
-
-    /**
-     * Get the custom domain ownership identifier for an API Management service.
-     *
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the custom domain ownership identifier for an API Management service.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<ApiManagementServiceGetDomainOwnershipIdentifierResultInner>
-        getDomainOwnershipIdentifierWithResponse(Context context) {
-        return getDomainOwnershipIdentifierWithResponseAsync(context).block();
+        return getDomainOwnershipIdentifierWithResponse(Context.NONE).getValue();
     }
 
     /**
      * Updates the Microsoft.ApiManagement resource running in the Virtual network to pick the updated DNS changes.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the Apply Network Configuration operation. If the parameters are empty,
      *     all the regions in which the Api Management service is deployed will be updated sequentially without
@@ -2559,7 +2825,8 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return a single API Management service resource in List or Get response along with {@link Response} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> applyNetworkConfigurationUpdatesWithResponseAsync(
@@ -2608,7 +2875,7 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Updates the Microsoft.ApiManagement resource running in the Virtual network to pick the updated DNS changes.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the Apply Network Configuration operation. If the parameters are empty,
      *     all the regions in which the Api Management service is deployed will be updated sequentially without
@@ -2617,7 +2884,8 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return a single API Management service resource in List or Get response along with {@link Response} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> applyNetworkConfigurationUpdatesWithResponseAsync(
@@ -2664,7 +2932,7 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Updates the Microsoft.ApiManagement resource running in the Virtual network to pick the updated DNS changes.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the Apply Network Configuration operation. If the parameters are empty,
      *     all the regions in which the Api Management service is deployed will be updated sequentially without
@@ -2672,9 +2940,9 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return the {@link PollerFlux} for polling of a single API Management service resource in List or Get response.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner>
         beginApplyNetworkConfigurationUpdatesAsync(
             String resourceGroupName,
@@ -2689,13 +2957,39 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
                 this.client.getHttpPipeline(),
                 ApiManagementServiceResourceInner.class,
                 ApiManagementServiceResourceInner.class,
-                Context.NONE);
+                this.client.getContext());
     }
 
     /**
      * Updates the Microsoft.ApiManagement resource running in the Virtual network to pick the updated DNS changes.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link PollerFlux} for polling of a single API Management service resource in List or Get response.
+     */
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
+    private PollerFlux<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner>
+        beginApplyNetworkConfigurationUpdatesAsync(String resourceGroupName, String serviceName) {
+        final ApiManagementServiceApplyNetworkConfigurationParameters parameters = null;
+        Mono<Response<Flux<ByteBuffer>>> mono =
+            applyNetworkConfigurationUpdatesWithResponseAsync(resourceGroupName, serviceName, parameters);
+        return this
+            .client
+            .<ApiManagementServiceResourceInner, ApiManagementServiceResourceInner>getLroResult(
+                mono,
+                this.client.getHttpPipeline(),
+                ApiManagementServiceResourceInner.class,
+                ApiManagementServiceResourceInner.class,
+                this.client.getContext());
+    }
+
+    /**
+     * Updates the Microsoft.ApiManagement resource running in the Virtual network to pick the updated DNS changes.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the Apply Network Configuration operation. If the parameters are empty,
      *     all the regions in which the Api Management service is deployed will be updated sequentially without
@@ -2704,9 +2998,9 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return the {@link PollerFlux} for polling of a single API Management service resource in List or Get response.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner>
         beginApplyNetworkConfigurationUpdatesAsync(
             String resourceGroupName,
@@ -2729,29 +3023,26 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Updates the Microsoft.ApiManagement resource running in the Virtual network to pick the updated DNS changes.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
-     * @param parameters Parameters supplied to the Apply Network Configuration operation. If the parameters are empty,
-     *     all the regions in which the Api Management service is deployed will be updated sequentially without
-     *     incurring downtime in the region.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return the {@link SyncPoller} for polling of a single API Management service resource in List or Get response.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner>
-        beginApplyNetworkConfigurationUpdates(
-            String resourceGroupName,
-            String serviceName,
-            ApiManagementServiceApplyNetworkConfigurationParameters parameters) {
-        return beginApplyNetworkConfigurationUpdatesAsync(resourceGroupName, serviceName, parameters).getSyncPoller();
+        beginApplyNetworkConfigurationUpdates(String resourceGroupName, String serviceName) {
+        final ApiManagementServiceApplyNetworkConfigurationParameters parameters = null;
+        return this
+            .beginApplyNetworkConfigurationUpdatesAsync(resourceGroupName, serviceName, parameters)
+            .getSyncPoller();
     }
 
     /**
      * Updates the Microsoft.ApiManagement resource running in the Virtual network to pick the updated DNS changes.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the Apply Network Configuration operation. If the parameters are empty,
      *     all the regions in which the Api Management service is deployed will be updated sequentially without
@@ -2760,23 +3051,24 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return the {@link SyncPoller} for polling of a single API Management service resource in List or Get response.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<ApiManagementServiceResourceInner>, ApiManagementServiceResourceInner>
         beginApplyNetworkConfigurationUpdates(
             String resourceGroupName,
             String serviceName,
             ApiManagementServiceApplyNetworkConfigurationParameters parameters,
             Context context) {
-        return beginApplyNetworkConfigurationUpdatesAsync(resourceGroupName, serviceName, parameters, context)
+        return this
+            .beginApplyNetworkConfigurationUpdatesAsync(resourceGroupName, serviceName, parameters, context)
             .getSyncPoller();
     }
 
     /**
      * Updates the Microsoft.ApiManagement resource running in the Virtual network to pick the updated DNS changes.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the Apply Network Configuration operation. If the parameters are empty,
      *     all the regions in which the Api Management service is deployed will be updated sequentially without
@@ -2784,7 +3076,8 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return a single API Management service resource in List or Get response on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiManagementServiceResourceInner> applyNetworkConfigurationUpdatesAsync(
@@ -2799,12 +3092,13 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Updates the Microsoft.ApiManagement resource running in the Virtual network to pick the updated DNS changes.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return a single API Management service resource in List or Get response on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiManagementServiceResourceInner> applyNetworkConfigurationUpdatesAsync(
@@ -2818,7 +3112,7 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Updates the Microsoft.ApiManagement resource running in the Virtual network to pick the updated DNS changes.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the Apply Network Configuration operation. If the parameters are empty,
      *     all the regions in which the Api Management service is deployed will be updated sequentially without
@@ -2827,7 +3121,8 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
+     * @return a single API Management service resource in List or Get response on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApiManagementServiceResourceInner> applyNetworkConfigurationUpdatesAsync(
@@ -2843,28 +3138,7 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Updates the Microsoft.ApiManagement resource running in the Virtual network to pick the updated DNS changes.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param parameters Parameters supplied to the Apply Network Configuration operation. If the parameters are empty,
-     *     all the regions in which the Api Management service is deployed will be updated sequentially without
-     *     incurring downtime in the region.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a single API Management service resource in List or Get response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public ApiManagementServiceResourceInner applyNetworkConfigurationUpdates(
-        String resourceGroupName,
-        String serviceName,
-        ApiManagementServiceApplyNetworkConfigurationParameters parameters) {
-        return applyNetworkConfigurationUpdatesAsync(resourceGroupName, serviceName, parameters).block();
-    }
-
-    /**
-     * Updates the Microsoft.ApiManagement resource running in the Virtual network to pick the updated DNS changes.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
@@ -2881,7 +3155,7 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Updates the Microsoft.ApiManagement resource running in the Virtual network to pick the updated DNS changes.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param parameters Parameters supplied to the Apply Network Configuration operation. If the parameters are empty,
      *     all the regions in which the Api Management service is deployed will be updated sequentially without
@@ -2904,11 +3178,13 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of the List API Management services operation.
+     * @return the response of the List API Management services operation along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ApiManagementServiceResourceInner>> listByResourceGroupNextSinglePageAsync(
@@ -2941,12 +3217,14 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of the List API Management services operation.
+     * @return the response of the List API Management services operation along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ApiManagementServiceResourceInner>> listByResourceGroupNextSinglePageAsync(
@@ -2978,11 +3256,13 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of the List API Management services operation.
+     * @return the response of the List API Management services operation along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ApiManagementServiceResourceInner>> listNextSinglePageAsync(String nextLink) {
@@ -3013,12 +3293,14 @@ public final class ApiManagementServicesClientImpl implements ApiManagementServi
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response of the List API Management services operation.
+     * @return the response of the List API Management services operation along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ApiManagementServiceResourceInner>> listNextSinglePageAsync(

@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The LogAnalyticsConfiguration model. */
+/**
+ * The LogAnalyticsConfiguration model.
+ */
 @Fluent
 public final class LogAnalyticsConfiguration {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(LogAnalyticsConfiguration.class);
-
     /*
      * The customerId property.
      */
@@ -27,8 +25,14 @@ public final class LogAnalyticsConfiguration {
     private String sharedKey;
 
     /**
+     * Creates an instance of LogAnalyticsConfiguration class.
+     */
+    public LogAnalyticsConfiguration() {
+    }
+
+    /**
      * Get the customerId property: The customerId property.
-     *
+     * 
      * @return the customerId value.
      */
     public String customerId() {
@@ -37,7 +41,7 @@ public final class LogAnalyticsConfiguration {
 
     /**
      * Set the customerId property: The customerId property.
-     *
+     * 
      * @param customerId the customerId value to set.
      * @return the LogAnalyticsConfiguration object itself.
      */
@@ -48,7 +52,7 @@ public final class LogAnalyticsConfiguration {
 
     /**
      * Get the sharedKey property: The sharedKey property.
-     *
+     * 
      * @return the sharedKey value.
      */
     public String sharedKey() {
@@ -57,7 +61,7 @@ public final class LogAnalyticsConfiguration {
 
     /**
      * Set the sharedKey property: The sharedKey property.
-     *
+     * 
      * @param sharedKey the sharedKey value to set.
      * @return the LogAnalyticsConfiguration object itself.
      */
@@ -68,7 +72,7 @@ public final class LogAnalyticsConfiguration {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

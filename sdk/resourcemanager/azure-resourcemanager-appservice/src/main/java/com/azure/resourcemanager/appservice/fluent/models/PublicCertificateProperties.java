@@ -6,16 +6,14 @@ package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.CoreUtils;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.PublicCertificateLocation;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** PublicCertificate resource specific properties. */
+/**
+ * PublicCertificate resource specific properties.
+ */
 @Fluent
 public final class PublicCertificateProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PublicCertificateProperties.class);
-
     /*
      * Public Certificate byte array
      */
@@ -35,8 +33,14 @@ public final class PublicCertificateProperties {
     private String thumbprint;
 
     /**
+     * Creates an instance of PublicCertificateProperties class.
+     */
+    public PublicCertificateProperties() {
+    }
+
+    /**
      * Get the blob property: Public Certificate byte array.
-     *
+     * 
      * @return the blob value.
      */
     public byte[] blob() {
@@ -45,7 +49,7 @@ public final class PublicCertificateProperties {
 
     /**
      * Set the blob property: Public Certificate byte array.
-     *
+     * 
      * @param blob the blob value to set.
      * @return the PublicCertificateProperties object itself.
      */
@@ -56,7 +60,7 @@ public final class PublicCertificateProperties {
 
     /**
      * Get the publicCertificateLocation property: Public Certificate Location.
-     *
+     * 
      * @return the publicCertificateLocation value.
      */
     public PublicCertificateLocation publicCertificateLocation() {
@@ -65,19 +69,19 @@ public final class PublicCertificateProperties {
 
     /**
      * Set the publicCertificateLocation property: Public Certificate Location.
-     *
+     * 
      * @param publicCertificateLocation the publicCertificateLocation value to set.
      * @return the PublicCertificateProperties object itself.
      */
-    public PublicCertificateProperties withPublicCertificateLocation(
-        PublicCertificateLocation publicCertificateLocation) {
+    public PublicCertificateProperties
+        withPublicCertificateLocation(PublicCertificateLocation publicCertificateLocation) {
         this.publicCertificateLocation = publicCertificateLocation;
         return this;
     }
 
     /**
      * Get the thumbprint property: Certificate Thumbprint.
-     *
+     * 
      * @return the thumbprint value.
      */
     public String thumbprint() {
@@ -86,7 +90,7 @@ public final class PublicCertificateProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

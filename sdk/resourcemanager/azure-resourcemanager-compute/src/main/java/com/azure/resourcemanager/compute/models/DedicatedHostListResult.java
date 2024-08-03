@@ -7,15 +7,14 @@ package com.azure.resourcemanager.compute.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.compute.fluent.models.DedicatedHostInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The list dedicated host operation response. */
+/**
+ * The list dedicated host operation response.
+ */
 @Fluent
 public final class DedicatedHostListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DedicatedHostListResult.class);
-
     /*
      * The list of dedicated hosts
      */
@@ -23,15 +22,21 @@ public final class DedicatedHostListResult {
     private List<DedicatedHostInner> value;
 
     /*
-     * The URI to fetch the next page of dedicated hosts. Call ListNext() with
-     * this URI to fetch the next page of dedicated hosts.
+     * The URI to fetch the next page of dedicated hosts. Call ListNext() with this URI to fetch the next page of
+     * dedicated hosts.
      */
     @JsonProperty(value = "nextLink")
     private String nextLink;
 
     /**
+     * Creates an instance of DedicatedHostListResult class.
+     */
+    public DedicatedHostListResult() {
+    }
+
+    /**
      * Get the value property: The list of dedicated hosts.
-     *
+     * 
      * @return the value value.
      */
     public List<DedicatedHostInner> value() {
@@ -40,7 +45,7 @@ public final class DedicatedHostListResult {
 
     /**
      * Set the value property: The list of dedicated hosts.
-     *
+     * 
      * @param value the value value to set.
      * @return the DedicatedHostListResult object itself.
      */
@@ -52,7 +57,7 @@ public final class DedicatedHostListResult {
     /**
      * Get the nextLink property: The URI to fetch the next page of dedicated hosts. Call ListNext() with this URI to
      * fetch the next page of dedicated hosts.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -62,7 +67,7 @@ public final class DedicatedHostListResult {
     /**
      * Set the nextLink property: The URI to fetch the next page of dedicated hosts. Call ListNext() with this URI to
      * fetch the next page of dedicated hosts.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the DedicatedHostListResult object itself.
      */
@@ -73,16 +78,17 @@ public final class DedicatedHostListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property value in model DedicatedHostListResult"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property value in model DedicatedHostListResult"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(DedicatedHostListResult.class);
 }

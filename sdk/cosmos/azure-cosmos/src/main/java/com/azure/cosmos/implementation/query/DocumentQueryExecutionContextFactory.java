@@ -4,18 +4,21 @@ package com.azure.cosmos.implementation.query;
 
 import com.azure.cosmos.BridgeInternal;
 import com.azure.cosmos.implementation.BadRequestException;
+import com.azure.cosmos.implementation.Configs;
+import com.azure.cosmos.implementation.Constants;
 import com.azure.cosmos.implementation.DiagnosticsClientContext;
 import com.azure.cosmos.implementation.DocumentCollection;
+import com.azure.cosmos.implementation.HttpConstants;
 import com.azure.cosmos.implementation.ImplementationBridgeHelpers;
 import com.azure.cosmos.implementation.OperationType;
 import com.azure.cosmos.implementation.PartitionKeyRange;
-import com.azure.cosmos.implementation.Resource;
 import com.azure.cosmos.implementation.ResourceType;
 import com.azure.cosmos.implementation.RxDocumentServiceRequest;
 import com.azure.cosmos.implementation.Utils;
 import com.azure.cosmos.implementation.apachecommons.lang.StringUtils;
 import com.azure.cosmos.implementation.apachecommons.lang.tuple.Pair;
 import com.azure.cosmos.implementation.caches.RxCollectionCache;
+import com.azure.cosmos.implementation.changefeed.CancellationToken;
 import com.azure.cosmos.implementation.feedranges.FeedRangeEpkImpl;
 import com.azure.cosmos.implementation.feedranges.FeedRangeInternal;
 import com.azure.cosmos.implementation.routing.PartitionKeyInternal;
@@ -24,6 +27,8 @@ import com.azure.cosmos.models.CosmosQueryRequestOptions;
 import com.azure.cosmos.models.FeedRange;
 import com.azure.cosmos.models.ModelBridgeInternal;
 import com.azure.cosmos.models.PartitionKey;
+import com.azure.cosmos.models.PartitionKeyDefinition;
+import com.azure.cosmos.models.PartitionKind;
 import com.azure.cosmos.models.SqlQuerySpec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,10 +36,12 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
@@ -43,10 +50,15 @@ import java.util.stream.Collectors;
  */
 public class DocumentQueryExecutionContextFactory {
 
+    private static final ImplementationBridgeHelpers
+        .CosmosQueryRequestOptionsHelper
+        .CosmosQueryRequestOptionsAccessor qryOptAccessor = ImplementationBridgeHelpers
+        .CosmosQueryRequestOptionsHelper
+        .getCosmosQueryRequestOptionsAccessor();
+
     private final static int PageSizeFactorForTop = 5;
     private static final Logger logger = LoggerFactory.getLogger(DocumentQueryExecutionContextFactory.class);
-    // Limiting cache size to 1000 for now. Can be updated in future based on need
-    private static final int MAX_CACHE_SIZE = 1000;
+    private static final ImplementationBridgeHelpers.CosmosQueryRequestOptionsHelper.CosmosQueryRequestOptionsAccessor queryRequestOptionsAccessor = ImplementationBridgeHelpers.CosmosQueryRequestOptionsHelper.getCosmosQueryRequestOptionsAccessor();
     private static Mono<Utils.ValueHolder<DocumentCollection>> resolveCollection(DiagnosticsClientContext diagnosticsClientContext,
                                                                                  IDocumentQueryClient client,
                                                                                  ResourceType resourceTypeEnum,
@@ -63,7 +75,7 @@ public class DocumentQueryExecutionContextFactory {
         return collectionCache.resolveCollectionAsync(null, request);
     }
 
-    private static <T extends Resource> Mono<Pair<List<Range<String>>,QueryInfo>> getPartitionKeyRangesAndQueryInfo(
+    private static <T> Mono<Pair<List<Range<String>>,QueryInfo>> getPartitionKeyRangesAndQueryInfo(
         DiagnosticsClientContext diagnosticsClientContext,
         IDocumentQueryClient client,
         SqlQuerySpec query,
@@ -127,7 +139,7 @@ public class DocumentQueryExecutionContextFactory {
                 client,
                 query,
                 resourceLink,
-                cosmosQueryRequestOptions != null ? cosmosQueryRequestOptions.getPartitionKey() : null);
+                cosmosQueryRequestOptions);
 
         return queryExecutionInfoMono.flatMap(
             partitionedQueryExecutionInfo -> {
@@ -143,7 +155,7 @@ public class DocumentQueryExecutionContextFactory {
             });
     }
 
-    private static <T extends Resource> Mono<Pair<List<Range<String>>, QueryInfo>> getTargetRangesFromQueryPlan(
+    private static <T> Mono<Pair<List<Range<String>>, QueryInfo>> getTargetRangesFromQueryPlan(
         CosmosQueryRequestOptions cosmosQueryRequestOptions, DocumentCollection collection,
         DefaultDocumentQueryExecutionContext<T> queryExecutionContext,
         PartitionedQueryExecutionInfo partitionedQueryExecutionInfo, Instant planFetchStartTime,
@@ -183,7 +195,7 @@ public class DocumentQueryExecutionContextFactory {
                 });
     }
 
-    private static <T extends Resource> Mono<Pair<List<Range<String>>, QueryInfo>> getTargetRangesFromEmptyQueryPlan(
+    private static <T> Mono<Pair<List<Range<String>>, QueryInfo>> getTargetRangesFromEmptyQueryPlan(
         CosmosQueryRequestOptions cosmosQueryRequestOptions,
         DocumentCollection collection,
         DefaultDocumentQueryExecutionContext<T> queryExecutionContext,
@@ -214,12 +226,15 @@ public class DocumentQueryExecutionContextFactory {
                 queryInfo));
     }
 
-    private static void tryCacheQueryPlan(
+    synchronized private static void tryCacheQueryPlan(
         SqlQuerySpec query,
         PartitionedQueryExecutionInfo partitionedQueryExecutionInfo,
         Map<String, PartitionedQueryExecutionInfo> queryPlanCache) {
-        QueryInfo queryInfo = partitionedQueryExecutionInfo.getQueryInfo();
-        if (canCacheQuery(queryInfo) && !queryPlanCache.containsKey(query.getQueryText())) {
+        if (canCacheQuery(partitionedQueryExecutionInfo.getQueryInfo()) && !queryPlanCache.containsKey(query.getQueryText())) {
+            if (queryPlanCache.size() >= Constants.QUERYPLAN_CACHE_SIZE) {
+                logger.warn("Clearing query plan cache as it has reached the maximum size : {}", queryPlanCache.size());
+                queryPlanCache.clear();
+            }
             queryPlanCache.put(query.getQueryText(), partitionedQueryExecutionInfo);
         }
     }
@@ -233,7 +248,8 @@ public class DocumentQueryExecutionContextFactory {
                    && !queryInfo.hasTop()
                    && !queryInfo.hasOffset()
                    && !queryInfo.hasDCount()
-                   && !queryInfo.hasOrderBy();
+                   && !queryInfo.hasOrderBy()
+                   && !queryInfo.hasNonStreamingOrderBy();
     }
 
     private static boolean isScopedToSinglePartition(CosmosQueryRequestOptions cosmosQueryRequestOptions) {
@@ -242,7 +258,23 @@ public class DocumentQueryExecutionContextFactory {
                    && cosmosQueryRequestOptions.getPartitionKey() != PartitionKey.NONE;
     }
 
-    public static <T extends Resource> Flux<? extends IDocumentQueryExecutionContext<T>> createDocumentQueryExecutionContextAsync(
+    private static List<FeedRangeEpkImpl> resolveFeedRangeBasedOnPrefixContainer(
+        List<FeedRangeEpkImpl> feedRanges,
+        PartitionKeyDefinition partitionKeyDefinition,
+        PartitionKey partitionKey) {
+        PartitionKeyInternal partitionKeyInternal = ModelBridgeInternal.getPartitionKeyInternal(partitionKey);
+        if (partitionKeyInternal.getComponents().size() >= partitionKeyDefinition.getPaths().size()) {
+            return feedRanges;
+        }
+        List<FeedRangeEpkImpl> feedRanges2 = new ArrayList<>();
+        for (int i = 0; i < feedRanges.size(); i++) {
+            feedRanges2.add(new FeedRangeEpkImpl(partitionKeyInternal
+                .getEPKRangeForPrefixPartitionKey(partitionKeyDefinition)));
+        }
+        return feedRanges2;
+    }
+
+    public static <T> Flux<? extends IDocumentQueryExecutionContext<T>> createDocumentQueryExecutionContextAsync(
         DiagnosticsClientContext diagnosticsClientContext,
         IDocumentQueryClient client,
         ResourceType resourceTypeEnum,
@@ -253,7 +285,8 @@ public class DocumentQueryExecutionContextFactory {
         boolean isContinuationExpected,
         UUID correlatedActivityId,
         boolean queryPlanCachingEnabled,
-        Map<String, PartitionedQueryExecutionInfo> queryPlanCache) {
+        Map<String, PartitionedQueryExecutionInfo> queryPlanCache,
+        final AtomicBoolean isQueryCancelledOnTimeout) {
 
         // return proxy
         Flux<Utils.ValueHolder<DocumentCollection>> collectionObs = Flux.just(new Utils.ValueHolder<>(null));
@@ -262,7 +295,7 @@ public class DocumentQueryExecutionContextFactory {
             collectionObs = resolveCollection(diagnosticsClientContext, client, resourceTypeEnum, resourceLink).flux();
         }
 
-        DefaultDocumentQueryExecutionContext<T> queryExecutionContext = new DefaultDocumentQueryExecutionContext<T>(
+        DefaultDocumentQueryExecutionContext<T> queryExecutionContext = new DefaultDocumentQueryExecutionContext<>(
             diagnosticsClientContext,
             client,
             resourceTypeEnum,
@@ -271,13 +304,17 @@ public class DocumentQueryExecutionContextFactory {
             cosmosQueryRequestOptions,
             resourceLink,
             correlatedActivityId,
-            isContinuationExpected);
+            isQueryCancelledOnTimeout);
 
         if ((ResourceType.Document != resourceTypeEnum && (ResourceType.Conflict != resourceTypeEnum))) {
             return Flux.just(queryExecutionContext);
         }
 
         return collectionObs.single().flatMap(collectionValueHolder -> {
+
+            queryRequestOptionsAccessor.setPartitionKeyDefinition(cosmosQueryRequestOptions, collectionValueHolder.v.getPartitionKey());
+            queryRequestOptionsAccessor.setCollectionRid(cosmosQueryRequestOptions, collectionValueHolder.v.getResourceId());
+
             Mono<Pair<List<Range<String>>, QueryInfo>> queryPlanTask =
                 getPartitionKeyRangesAndQueryInfo(diagnosticsClientContext,
                                                   client,
@@ -300,13 +337,14 @@ public class DocumentQueryExecutionContextFactory {
                     isContinuationExpected,
                     queryPlan.getRight(),
                     queryPlan.getLeft(),
-                    collectionValueHolder.v.getResourceId(),
-                    correlatedActivityId)
+                    collectionValueHolder.v,
+                    correlatedActivityId,
+                    isQueryCancelledOnTimeout)
                     .single());
         }).flux();
     }
 
-	public static <T extends Resource> Flux<? extends IDocumentQueryExecutionContext<T>> createSpecializedDocumentQueryExecutionContextAsync(
+	public static <T> Flux<? extends IDocumentQueryExecutionContext<T>> createSpecializedDocumentQueryExecutionContextAsync(
             DiagnosticsClientContext diagnosticsClientContext,
 	        IDocumentQueryClient client,
             ResourceType resourceTypeEnum,
@@ -317,8 +355,9 @@ public class DocumentQueryExecutionContextFactory {
             boolean isContinuationExpected,
             QueryInfo queryInfo,
             List<Range<String>> targetRanges,
-            String collectionRid,
-            UUID correlatedActivityId) {
+            DocumentCollection collection,
+            UUID correlatedActivityId,
+            final AtomicBoolean isQueryCancelledOnTimeout) {
 
         int initialPageSize = Utils.getValueOrDefault(
             ModelBridgeInternal.getMaxItemCountFromQueryRequestOptions(cosmosQueryRequestOptions),
@@ -332,6 +371,34 @@ public class DocumentQueryExecutionContextFactory {
         }
 
         boolean getLazyFeedResponse = queryInfo.hasTop();
+
+        // We need to compute the optimal initial age size for non-streaming order-by queries
+        if (queryInfo.hasNonStreamingOrderBy()) {
+            // Validate the TOP or LIMIT for non-streaming order-by queries
+            if (!queryInfo.hasTop() && !queryInfo.hasLimit() && queryInfo.getTop() < 0 && queryInfo.getLimit() < 0) {
+                throw new NonStreamingOrderByBadRequestException(HttpConstants.StatusCodes.BADREQUEST,
+                    "Executing a vector search query without TOP or LIMIT can consume a large number of RUs" +
+                        "very fast and have long runtimes. Please ensure you are using one of the above two filters" +
+                        "with you vector search query.");
+            }
+            // Validate the size of TOP or LIMIT against MaxItemSizeForVectorSearch
+            int maxLimit = Math.max(queryInfo.hasTop() ? queryInfo.getTop() : 0,
+                queryInfo.hasLimit() ? queryInfo.getLimit() : 0);
+            int maxItemSizeForVectorSearch = Math.max(Configs.getMaxItemCountForVectorSearch(),
+                qryOptAccessor.getMaxItemCountForVectorSearch(cosmosQueryRequestOptions));
+            if (maxLimit > maxItemSizeForVectorSearch) {
+                throw new NonStreamingOrderByBadRequestException(HttpConstants.StatusCodes.BADREQUEST,
+                    "Executing a vector search query with TOP or LIMIT larger than the maxItemSizeForVectorSearch " +
+                        "is not allowed");
+            }
+            // Set initialPageSize based on the smallest of TOP or LIMIT
+            if (queryInfo.hasTop() || queryInfo.hasLimit()) {
+                int pageSizeWithTopOrLimit = Math.min(queryInfo.hasTop() ? queryInfo.getTop() : Integer.MAX_VALUE,
+                                           queryInfo.hasLimit() && queryInfo.hasOffset() ?
+                                               queryInfo.getLimit() + queryInfo.getOffset() : Integer.MAX_VALUE);
+                initialPageSize = pageSizeWithTopOrLimit;
+            }
+        }
 
         // We need to compute the optimal initial page size for order-by queries
         if (queryInfo.hasOrderBy()) {
@@ -366,34 +433,49 @@ public class DocumentQueryExecutionContextFactory {
         List<FeedRangeEpkImpl> feedRangeEpks = targetRanges.stream().map(FeedRangeEpkImpl::new)
                                                    .collect(Collectors.toList());
 
-        PipelinedDocumentQueryParams<T> documentQueryParams = new PipelinedDocumentQueryParams<T>(
+        if (collection.getPartitionKey() != null && cosmosQueryRequestOptions.getPartitionKey() != null
+            && collection.getPartitionKey().getKind().equals(PartitionKind.MULTI_HASH)) {
+            feedRangeEpks = resolveFeedRangeBasedOnPrefixContainer(feedRangeEpks, collection.getPartitionKey(),
+                cosmosQueryRequestOptions.getPartitionKey());
+        }
+
+        PipelinedDocumentQueryParams<T> documentQueryParams = new PipelinedDocumentQueryParams<>(
             resourceTypeEnum,
             resourceType,
             query,
             resourceLink,
-            collectionRid,
+            collection.getResourceId(),
             getLazyFeedResponse,
             isContinuationExpected,
             initialPageSize,
             queryInfo,
             cosmosQueryRequestOptions,
             correlatedActivityId,
-            feedRangeEpks);
+            feedRangeEpks,
+            isQueryCancelledOnTimeout);
 
-        return PipelinedDocumentQueryExecutionContext.createAsync(diagnosticsClientContext, client, documentQueryParams);
+        return PipelinedQueryExecutionContextBase.createAsync(
+            diagnosticsClientContext, client, documentQueryParams, resourceType, collection);
     }
 
-    public static <T extends Resource> Flux<? extends IDocumentQueryExecutionContext<T>> createReadManyQueryAsync(
+    public static <T> Flux<? extends IDocumentQueryExecutionContext<T>> createReadManyQueryAsync(
         DiagnosticsClientContext diagnosticsClientContext, IDocumentQueryClient queryClient, String collectionResourceId, SqlQuerySpec sqlQuery,
         Map<PartitionKeyRange, SqlQuerySpec> rangeQueryMap, CosmosQueryRequestOptions cosmosQueryRequestOptions,
-        String resourceId, String collectionLink, UUID activityId, Class<T> klass,
-        ResourceType resourceTypeEnum) {
+        DocumentCollection collection, String collectionLink, UUID activityId, Class<T> klass,
+        ResourceType resourceTypeEnum,
+        final AtomicBoolean isQueryCancelledOnTimeout) {
 
-        return PipelinedDocumentQueryExecutionContext.createReadManyAsync(diagnosticsClientContext, queryClient,
-                                                                          collectionResourceId, sqlQuery, rangeQueryMap,
-                                                                          cosmosQueryRequestOptions, resourceId,
-                                                                          collectionLink,
-                                                                          activityId, klass,
-                                                                          resourceTypeEnum);
+        return PipelinedQueryExecutionContext.createReadManyAsync(
+            diagnosticsClientContext,
+            queryClient,
+            sqlQuery,
+            rangeQueryMap,
+            cosmosQueryRequestOptions,
+            collection,
+            collectionLink,
+            activityId,
+            klass,
+            resourceTypeEnum,
+            isQueryCancelledOnTimeout);
     }
 }

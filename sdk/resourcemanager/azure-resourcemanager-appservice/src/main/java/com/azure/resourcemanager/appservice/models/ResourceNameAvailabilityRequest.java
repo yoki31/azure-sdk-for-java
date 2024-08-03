@@ -6,14 +6,13 @@ package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Resource name availability request content. */
+/**
+ * Resource name availability request content.
+ */
 @Fluent
 public final class ResourceNameAvailabilityRequest {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ResourceNameAvailabilityRequest.class);
-
     /*
      * Resource name to verify.
      */
@@ -32,9 +31,21 @@ public final class ResourceNameAvailabilityRequest {
     @JsonProperty(value = "isFqdn")
     private Boolean isFqdn;
 
+    /*
+     * Azure Resource Manager ID of the customer's selected Container Apps Environment on which to host the Function app. This must be of the form /subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.App/managedEnvironments/{managedEnvironmentName}
+     */
+    @JsonProperty(value = "environmentId")
+    private String environmentId;
+
+    /**
+     * Creates an instance of ResourceNameAvailabilityRequest class.
+     */
+    public ResourceNameAvailabilityRequest() {
+    }
+
     /**
      * Get the name property: Resource name to verify.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -43,7 +54,7 @@ public final class ResourceNameAvailabilityRequest {
 
     /**
      * Set the name property: Resource name to verify.
-     *
+     * 
      * @param name the name value to set.
      * @return the ResourceNameAvailabilityRequest object itself.
      */
@@ -54,7 +65,7 @@ public final class ResourceNameAvailabilityRequest {
 
     /**
      * Get the type property: Resource type used for verification.
-     *
+     * 
      * @return the type value.
      */
     public CheckNameResourceTypes type() {
@@ -63,7 +74,7 @@ public final class ResourceNameAvailabilityRequest {
 
     /**
      * Set the type property: Resource type used for verification.
-     *
+     * 
      * @param type the type value to set.
      * @return the ResourceNameAvailabilityRequest object itself.
      */
@@ -74,7 +85,7 @@ public final class ResourceNameAvailabilityRequest {
 
     /**
      * Get the isFqdn property: Is fully qualified domain name.
-     *
+     * 
      * @return the isFqdn value.
      */
     public Boolean isFqdn() {
@@ -83,7 +94,7 @@ public final class ResourceNameAvailabilityRequest {
 
     /**
      * Set the isFqdn property: Is fully qualified domain name.
-     *
+     * 
      * @param isFqdn the isFqdn value to set.
      * @return the ResourceNameAvailabilityRequest object itself.
      */
@@ -93,22 +104,46 @@ public final class ResourceNameAvailabilityRequest {
     }
 
     /**
+     * Get the environmentId property: Azure Resource Manager ID of the customer's selected Container Apps Environment
+     * on which to host the Function app. This must be of the form
+     * /subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.App/managedEnvironments/{managedEnvironmentName}.
+     * 
+     * @return the environmentId value.
+     */
+    public String environmentId() {
+        return this.environmentId;
+    }
+
+    /**
+     * Set the environmentId property: Azure Resource Manager ID of the customer's selected Container Apps Environment
+     * on which to host the Function app. This must be of the form
+     * /subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.App/managedEnvironments/{managedEnvironmentName}.
+     * 
+     * @param environmentId the environmentId value to set.
+     * @return the ResourceNameAvailabilityRequest object itself.
+     */
+    public ResourceNameAvailabilityRequest withEnvironmentId(String environmentId) {
+        this.environmentId = environmentId;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (name() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property name in model ResourceNameAvailabilityRequest"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property name in model ResourceNameAvailabilityRequest"));
         }
         if (type() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property type in model ResourceNameAvailabilityRequest"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property type in model ResourceNameAvailabilityRequest"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ResourceNameAvailabilityRequest.class);
 }

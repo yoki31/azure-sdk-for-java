@@ -7,15 +7,23 @@ package com.azure.resourcemanager.appservice.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** Defines values for DnsType. */
+/**
+ * Current DNS type.
+ */
 public enum DnsType {
-    /** Enum value AzureDns. */
+    /**
+     * Enum value AzureDns.
+     */
     AZURE_DNS("AzureDns"),
 
-    /** Enum value DefaultDomainRegistrarDns. */
+    /**
+     * Enum value DefaultDomainRegistrarDns.
+     */
     DEFAULT_DOMAIN_REGISTRAR_DNS("DefaultDomainRegistrarDns");
 
-    /** The actual serialized value for a DnsType instance. */
+    /**
+     * The actual serialized value for a DnsType instance.
+     */
     private final String value;
 
     DnsType(String value) {
@@ -24,12 +32,15 @@ public enum DnsType {
 
     /**
      * Parses a serialized value to a DnsType instance.
-     *
+     * 
      * @param value the serialized value to parse.
      * @return the parsed DnsType object, or null if unable to parse.
      */
     @JsonCreator
     public static DnsType fromString(String value) {
+        if (value == null) {
+            return null;
+        }
         DnsType[] items = DnsType.values();
         for (DnsType item : items) {
             if (item.toString().equalsIgnoreCase(value)) {
@@ -39,6 +50,9 @@ public enum DnsType {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @JsonValue
     @Override
     public String toString() {

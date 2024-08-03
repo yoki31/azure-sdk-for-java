@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.ProxyOnlyResource;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Full view of networking configuration for an ASE. */
+/**
+ * Full view of networking configuration for an ASE.
+ */
 @Fluent
 public final class AseV3NetworkingConfigurationInner extends ProxyOnlyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AseV3NetworkingConfigurationInner.class);
-
     /*
      * AseV3NetworkingConfiguration resource specific properties
      */
@@ -23,15 +21,23 @@ public final class AseV3NetworkingConfigurationInner extends ProxyOnlyResource {
     private AseV3NetworkingConfigurationProperties innerProperties;
 
     /**
+     * Creates an instance of AseV3NetworkingConfigurationInner class.
+     */
+    public AseV3NetworkingConfigurationInner() {
+    }
+
+    /**
      * Get the innerProperties property: AseV3NetworkingConfiguration resource specific properties.
-     *
+     * 
      * @return the innerProperties value.
      */
     private AseV3NetworkingConfigurationProperties innerProperties() {
         return this.innerProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AseV3NetworkingConfigurationInner withKind(String kind) {
         super.withKind(kind);
@@ -40,7 +46,7 @@ public final class AseV3NetworkingConfigurationInner extends ProxyOnlyResource {
 
     /**
      * Get the windowsOutboundIpAddresses property: The windowsOutboundIpAddresses property.
-     *
+     * 
      * @return the windowsOutboundIpAddresses value.
      */
     public List<String> windowsOutboundIpAddresses() {
@@ -49,7 +55,7 @@ public final class AseV3NetworkingConfigurationInner extends ProxyOnlyResource {
 
     /**
      * Get the linuxOutboundIpAddresses property: The linuxOutboundIpAddresses property.
-     *
+     * 
      * @return the linuxOutboundIpAddresses value.
      */
     public List<String> linuxOutboundIpAddresses() {
@@ -58,7 +64,7 @@ public final class AseV3NetworkingConfigurationInner extends ProxyOnlyResource {
 
     /**
      * Get the externalInboundIpAddresses property: The externalInboundIpAddresses property.
-     *
+     * 
      * @return the externalInboundIpAddresses value.
      */
     public List<String> externalInboundIpAddresses() {
@@ -67,7 +73,7 @@ public final class AseV3NetworkingConfigurationInner extends ProxyOnlyResource {
 
     /**
      * Get the internalInboundIpAddresses property: The internalInboundIpAddresses property.
-     *
+     * 
      * @return the internalInboundIpAddresses value.
      */
     public List<String> internalInboundIpAddresses() {
@@ -77,7 +83,7 @@ public final class AseV3NetworkingConfigurationInner extends ProxyOnlyResource {
     /**
      * Get the allowNewPrivateEndpointConnections property: Property to enable and disable new private endpoint
      * connection creation on ASE.
-     *
+     * 
      * @return the allowNewPrivateEndpointConnections value.
      */
     public Boolean allowNewPrivateEndpointConnections() {
@@ -87,12 +93,12 @@ public final class AseV3NetworkingConfigurationInner extends ProxyOnlyResource {
     /**
      * Set the allowNewPrivateEndpointConnections property: Property to enable and disable new private endpoint
      * connection creation on ASE.
-     *
+     * 
      * @param allowNewPrivateEndpointConnections the allowNewPrivateEndpointConnections value to set.
      * @return the AseV3NetworkingConfigurationInner object itself.
      */
-    public AseV3NetworkingConfigurationInner withAllowNewPrivateEndpointConnections(
-        Boolean allowNewPrivateEndpointConnections) {
+    public AseV3NetworkingConfigurationInner
+        withAllowNewPrivateEndpointConnections(Boolean allowNewPrivateEndpointConnections) {
         if (this.innerProperties() == null) {
             this.innerProperties = new AseV3NetworkingConfigurationProperties();
         }
@@ -101,8 +107,79 @@ public final class AseV3NetworkingConfigurationInner extends ProxyOnlyResource {
     }
 
     /**
+     * Get the ftpEnabled property: Property to enable and disable FTP on ASEV3.
+     * 
+     * @return the ftpEnabled value.
+     */
+    public Boolean ftpEnabled() {
+        return this.innerProperties() == null ? null : this.innerProperties().ftpEnabled();
+    }
+
+    /**
+     * Set the ftpEnabled property: Property to enable and disable FTP on ASEV3.
+     * 
+     * @param ftpEnabled the ftpEnabled value to set.
+     * @return the AseV3NetworkingConfigurationInner object itself.
+     */
+    public AseV3NetworkingConfigurationInner withFtpEnabled(Boolean ftpEnabled) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AseV3NetworkingConfigurationProperties();
+        }
+        this.innerProperties().withFtpEnabled(ftpEnabled);
+        return this;
+    }
+
+    /**
+     * Get the remoteDebugEnabled property: Property to enable and disable Remote Debug on ASEV3.
+     * 
+     * @return the remoteDebugEnabled value.
+     */
+    public Boolean remoteDebugEnabled() {
+        return this.innerProperties() == null ? null : this.innerProperties().remoteDebugEnabled();
+    }
+
+    /**
+     * Set the remoteDebugEnabled property: Property to enable and disable Remote Debug on ASEV3.
+     * 
+     * @param remoteDebugEnabled the remoteDebugEnabled value to set.
+     * @return the AseV3NetworkingConfigurationInner object itself.
+     */
+    public AseV3NetworkingConfigurationInner withRemoteDebugEnabled(Boolean remoteDebugEnabled) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AseV3NetworkingConfigurationProperties();
+        }
+        this.innerProperties().withRemoteDebugEnabled(remoteDebugEnabled);
+        return this;
+    }
+
+    /**
+     * Get the inboundIpAddressOverride property: Customer provided Inbound IP Address. Only able to be set on Ase
+     * create.
+     * 
+     * @return the inboundIpAddressOverride value.
+     */
+    public String inboundIpAddressOverride() {
+        return this.innerProperties() == null ? null : this.innerProperties().inboundIpAddressOverride();
+    }
+
+    /**
+     * Set the inboundIpAddressOverride property: Customer provided Inbound IP Address. Only able to be set on Ase
+     * create.
+     * 
+     * @param inboundIpAddressOverride the inboundIpAddressOverride value to set.
+     * @return the AseV3NetworkingConfigurationInner object itself.
+     */
+    public AseV3NetworkingConfigurationInner withInboundIpAddressOverride(String inboundIpAddressOverride) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new AseV3NetworkingConfigurationProperties();
+        }
+        this.innerProperties().withInboundIpAddressOverride(inboundIpAddressOverride);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

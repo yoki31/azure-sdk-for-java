@@ -22,6 +22,12 @@ public final class AttestationPolicySetOptions {
     private String policy;
     private AttestationSigningKey signer;
 
+
+    /**
+     * Creates an instance of {@link AttestationPolicySetOptions}
+     */
+    public AttestationPolicySetOptions() { }
+
     /**
      * Sets the options used to validate attestation tokens returned from the service.
      * @param validationOptions Token Validation options to be used to enhance the validations
@@ -42,7 +48,7 @@ public final class AttestationPolicySetOptions {
     }
 
     /**
-     * Gets the attestation policy which will be used to generate an policy set request.
+     * Gets the attestation policy which will be used to generate a policy set request.
      * @return Attestation Policy Token associated with this request.
      */
     public String getAttestationPolicy() {
@@ -50,7 +56,7 @@ public final class AttestationPolicySetOptions {
     }
 
     /**
-     * Sets the attestation policy which will be used to generate an policy set request.
+     * Sets the attestation policy which will be used to generate a policy set request.
      * @param policy Attestation Token to be set.
      * @return This {@link AttestationPolicySetOptions}.
      */

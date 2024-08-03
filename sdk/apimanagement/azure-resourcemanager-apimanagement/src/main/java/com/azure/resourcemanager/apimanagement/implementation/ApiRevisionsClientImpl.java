@@ -25,7 +25,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.ApiRevisionsClient;
 import com.azure.resourcemanager.apimanagement.fluent.models.ApiRevisionContractInner;
 import com.azure.resourcemanager.apimanagement.models.ApiRevisionCollection;
@@ -33,8 +32,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in ApiRevisionsClient. */
 public final class ApiRevisionsClientImpl implements ApiRevisionsClient {
-    private final ClientLogger logger = new ClientLogger(ApiRevisionsClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final ApiRevisionsService service;
 
@@ -58,11 +55,10 @@ public final class ApiRevisionsClientImpl implements ApiRevisionsClient {
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApiManagementClientA")
-    private interface ApiRevisionsService {
+    public interface ApiRevisionsService {
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/apis/{apiId}/revisions")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/apis/{apiId}/revisions")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<ApiRevisionCollection>> listByService(
@@ -92,7 +88,7 @@ public final class ApiRevisionsClientImpl implements ApiRevisionsClient {
     /**
      * Lists all revisions of an API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -103,7 +99,8 @@ public final class ApiRevisionsClientImpl implements ApiRevisionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Api Revision list representation.
+     * @return paged API Revision list representation along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ApiRevisionContractInner>> listByServiceSinglePageAsync(
@@ -162,7 +159,7 @@ public final class ApiRevisionsClientImpl implements ApiRevisionsClient {
     /**
      * Lists all revisions of an API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -174,7 +171,8 @@ public final class ApiRevisionsClientImpl implements ApiRevisionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Api Revision list representation.
+     * @return paged API Revision list representation along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ApiRevisionContractInner>> listByServiceSinglePageAsync(
@@ -236,7 +234,7 @@ public final class ApiRevisionsClientImpl implements ApiRevisionsClient {
     /**
      * Lists all revisions of an API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -247,7 +245,7 @@ public final class ApiRevisionsClientImpl implements ApiRevisionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Api Revision list representation.
+     * @return paged API Revision list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<ApiRevisionContractInner> listByServiceAsync(
@@ -260,13 +258,13 @@ public final class ApiRevisionsClientImpl implements ApiRevisionsClient {
     /**
      * Lists all revisions of an API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Api Revision list representation.
+     * @return paged API Revision list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<ApiRevisionContractInner> listByServiceAsync(
@@ -282,7 +280,7 @@ public final class ApiRevisionsClientImpl implements ApiRevisionsClient {
     /**
      * Lists all revisions of an API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -294,7 +292,7 @@ public final class ApiRevisionsClientImpl implements ApiRevisionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Api Revision list representation.
+     * @return paged API Revision list representation as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<ApiRevisionContractInner> listByServiceAsync(
@@ -313,13 +311,13 @@ public final class ApiRevisionsClientImpl implements ApiRevisionsClient {
     /**
      * Lists all revisions of an API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Api Revision list representation.
+     * @return paged API Revision list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<ApiRevisionContractInner> listByService(
@@ -333,7 +331,7 @@ public final class ApiRevisionsClientImpl implements ApiRevisionsClient {
     /**
      * Lists all revisions of an API.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param apiId API identifier. Must be unique in the current API Management service instance.
      * @param filter | Field | Usage | Supported operators | Supported functions
@@ -345,7 +343,7 @@ public final class ApiRevisionsClientImpl implements ApiRevisionsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Api Revision list representation.
+     * @return paged API Revision list representation as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<ApiRevisionContractInner> listByService(
@@ -363,11 +361,13 @@ public final class ApiRevisionsClientImpl implements ApiRevisionsClient {
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Api Revision list representation.
+     * @return paged API Revision list representation along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ApiRevisionContractInner>> listByServiceNextSinglePageAsync(String nextLink) {
@@ -398,12 +398,14 @@ public final class ApiRevisionsClientImpl implements ApiRevisionsClient {
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return paged Api Revision list representation.
+     * @return paged API Revision list representation along with {@link PagedResponse} on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ApiRevisionContractInner>> listByServiceNextSinglePageAsync(

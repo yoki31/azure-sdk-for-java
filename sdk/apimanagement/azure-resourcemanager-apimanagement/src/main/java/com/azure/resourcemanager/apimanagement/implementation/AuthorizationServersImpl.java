@@ -18,10 +18,9 @@ import com.azure.resourcemanager.apimanagement.models.AuthorizationServers;
 import com.azure.resourcemanager.apimanagement.models.AuthorizationServersGetEntityTagResponse;
 import com.azure.resourcemanager.apimanagement.models.AuthorizationServersGetResponse;
 import com.azure.resourcemanager.apimanagement.models.AuthorizationServersListSecretsResponse;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class AuthorizationServersImpl implements AuthorizationServers {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AuthorizationServersImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(AuthorizationServersImpl.class);
 
     private final AuthorizationServersClient innerClient;
 
@@ -47,22 +46,13 @@ public final class AuthorizationServersImpl implements AuthorizationServers {
         return Utils.mapPage(inner, inner1 -> new AuthorizationServerContractImpl(inner1, this.manager()));
     }
 
-    public void getEntityTag(String resourceGroupName, String serviceName, String authsid) {
-        this.serviceClient().getEntityTag(resourceGroupName, serviceName, authsid);
-    }
-
     public AuthorizationServersGetEntityTagResponse getEntityTagWithResponse(
         String resourceGroupName, String serviceName, String authsid, Context context) {
         return this.serviceClient().getEntityTagWithResponse(resourceGroupName, serviceName, authsid, context);
     }
 
-    public AuthorizationServerContract get(String resourceGroupName, String serviceName, String authsid) {
-        AuthorizationServerContractInner inner = this.serviceClient().get(resourceGroupName, serviceName, authsid);
-        if (inner != null) {
-            return new AuthorizationServerContractImpl(inner, this.manager());
-        } else {
-            return null;
-        }
+    public void getEntityTag(String resourceGroupName, String serviceName, String authsid) {
+        this.serviceClient().getEntityTag(resourceGroupName, serviceName, authsid);
     }
 
     public Response<AuthorizationServerContract> getWithResponse(
@@ -80,8 +70,13 @@ public final class AuthorizationServersImpl implements AuthorizationServers {
         }
     }
 
-    public void delete(String resourceGroupName, String serviceName, String authsid, String ifMatch) {
-        this.serviceClient().delete(resourceGroupName, serviceName, authsid, ifMatch);
+    public AuthorizationServerContract get(String resourceGroupName, String serviceName, String authsid) {
+        AuthorizationServerContractInner inner = this.serviceClient().get(resourceGroupName, serviceName, authsid);
+        if (inner != null) {
+            return new AuthorizationServerContractImpl(inner, this.manager());
+        } else {
+            return null;
+        }
     }
 
     public Response<Void> deleteWithResponse(
@@ -89,15 +84,8 @@ public final class AuthorizationServersImpl implements AuthorizationServers {
         return this.serviceClient().deleteWithResponse(resourceGroupName, serviceName, authsid, ifMatch, context);
     }
 
-    public AuthorizationServerSecretsContract listSecrets(
-        String resourceGroupName, String serviceName, String authsid) {
-        AuthorizationServerSecretsContractInner inner =
-            this.serviceClient().listSecrets(resourceGroupName, serviceName, authsid);
-        if (inner != null) {
-            return new AuthorizationServerSecretsContractImpl(inner, this.manager());
-        } else {
-            return null;
-        }
+    public void delete(String resourceGroupName, String serviceName, String authsid, String ifMatch) {
+        this.serviceClient().delete(resourceGroupName, serviceName, authsid, ifMatch);
     }
 
     public Response<AuthorizationServerSecretsContract> listSecretsWithResponse(
@@ -115,10 +103,21 @@ public final class AuthorizationServersImpl implements AuthorizationServers {
         }
     }
 
+    public AuthorizationServerSecretsContract listSecrets(
+        String resourceGroupName, String serviceName, String authsid) {
+        AuthorizationServerSecretsContractInner inner =
+            this.serviceClient().listSecrets(resourceGroupName, serviceName, authsid);
+        if (inner != null) {
+            return new AuthorizationServerSecretsContractImpl(inner, this.manager());
+        } else {
+            return null;
+        }
+    }
+
     public AuthorizationServerContract getById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -126,14 +125,14 @@ public final class AuthorizationServersImpl implements AuthorizationServers {
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String authsid = Utils.getValueFromIdByName(id, "authorizationServers");
         if (authsid == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -147,7 +146,7 @@ public final class AuthorizationServersImpl implements AuthorizationServers {
     public Response<AuthorizationServerContract> getByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -155,14 +154,14 @@ public final class AuthorizationServersImpl implements AuthorizationServers {
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String authsid = Utils.getValueFromIdByName(id, "authorizationServers");
         if (authsid == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -176,7 +175,7 @@ public final class AuthorizationServersImpl implements AuthorizationServers {
     public void deleteById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -184,14 +183,14 @@ public final class AuthorizationServersImpl implements AuthorizationServers {
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String authsid = Utils.getValueFromIdByName(id, "authorizationServers");
         if (authsid == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -200,13 +199,13 @@ public final class AuthorizationServersImpl implements AuthorizationServers {
                                 id)));
         }
         String localIfMatch = null;
-        this.deleteWithResponse(resourceGroupName, serviceName, authsid, localIfMatch, Context.NONE).getValue();
+        this.deleteWithResponse(resourceGroupName, serviceName, authsid, localIfMatch, Context.NONE);
     }
 
     public Response<Void> deleteByIdWithResponse(String id, String ifMatch, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -214,14 +213,14 @@ public final class AuthorizationServersImpl implements AuthorizationServers {
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String authsid = Utils.getValueFromIdByName(id, "authorizationServers");
         if (authsid == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String

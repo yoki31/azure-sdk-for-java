@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.AppServicePlanRestrictions;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** PremierAddOnOffer resource specific properties. */
+/**
+ * PremierAddOnOffer resource specific properties.
+ */
 @Fluent
 public final class PremierAddOnOfferProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PremierAddOnOfferProperties.class);
-
     /*
      * Premier add on SKU.
      */
@@ -34,8 +32,7 @@ public final class PremierAddOnOfferProperties {
     private String vendor;
 
     /*
-     * <code>true</code> if promotion code is required; otherwise,
-     * <code>false</code>.
+     * <code>true</code> if promotion code is required; otherwise, <code>false</code>.
      */
     @JsonProperty(value = "promoCodeRequired")
     private Boolean promoCodeRequired;
@@ -77,8 +74,14 @@ public final class PremierAddOnOfferProperties {
     private String marketplaceOffer;
 
     /**
+     * Creates an instance of PremierAddOnOfferProperties class.
+     */
+    public PremierAddOnOfferProperties() {
+    }
+
+    /**
      * Get the sku property: Premier add on SKU.
-     *
+     * 
      * @return the sku value.
      */
     public String sku() {
@@ -87,7 +90,7 @@ public final class PremierAddOnOfferProperties {
 
     /**
      * Set the sku property: Premier add on SKU.
-     *
+     * 
      * @param sku the sku value to set.
      * @return the PremierAddOnOfferProperties object itself.
      */
@@ -98,7 +101,7 @@ public final class PremierAddOnOfferProperties {
 
     /**
      * Get the product property: Premier add on offer Product.
-     *
+     * 
      * @return the product value.
      */
     public String product() {
@@ -107,7 +110,7 @@ public final class PremierAddOnOfferProperties {
 
     /**
      * Set the product property: Premier add on offer Product.
-     *
+     * 
      * @param product the product value to set.
      * @return the PremierAddOnOfferProperties object itself.
      */
@@ -118,7 +121,7 @@ public final class PremierAddOnOfferProperties {
 
     /**
      * Get the vendor property: Premier add on offer Vendor.
-     *
+     * 
      * @return the vendor value.
      */
     public String vendor() {
@@ -127,7 +130,7 @@ public final class PremierAddOnOfferProperties {
 
     /**
      * Set the vendor property: Premier add on offer Vendor.
-     *
+     * 
      * @param vendor the vendor value to set.
      * @return the PremierAddOnOfferProperties object itself.
      */
@@ -139,7 +142,7 @@ public final class PremierAddOnOfferProperties {
     /**
      * Get the promoCodeRequired property: &lt;code&gt;true&lt;/code&gt; if promotion code is required; otherwise,
      * &lt;code&gt;false&lt;/code&gt;.
-     *
+     * 
      * @return the promoCodeRequired value.
      */
     public Boolean promoCodeRequired() {
@@ -149,7 +152,7 @@ public final class PremierAddOnOfferProperties {
     /**
      * Set the promoCodeRequired property: &lt;code&gt;true&lt;/code&gt; if promotion code is required; otherwise,
      * &lt;code&gt;false&lt;/code&gt;.
-     *
+     * 
      * @param promoCodeRequired the promoCodeRequired value to set.
      * @return the PremierAddOnOfferProperties object itself.
      */
@@ -160,7 +163,7 @@ public final class PremierAddOnOfferProperties {
 
     /**
      * Get the quota property: Premier add on offer Quota.
-     *
+     * 
      * @return the quota value.
      */
     public Integer quota() {
@@ -169,7 +172,7 @@ public final class PremierAddOnOfferProperties {
 
     /**
      * Set the quota property: Premier add on offer Quota.
-     *
+     * 
      * @param quota the quota value to set.
      * @return the PremierAddOnOfferProperties object itself.
      */
@@ -180,7 +183,7 @@ public final class PremierAddOnOfferProperties {
 
     /**
      * Get the webHostingPlanRestrictions property: App Service plans this offer is restricted to.
-     *
+     * 
      * @return the webHostingPlanRestrictions value.
      */
     public AppServicePlanRestrictions webHostingPlanRestrictions() {
@@ -189,19 +192,19 @@ public final class PremierAddOnOfferProperties {
 
     /**
      * Set the webHostingPlanRestrictions property: App Service plans this offer is restricted to.
-     *
+     * 
      * @param webHostingPlanRestrictions the webHostingPlanRestrictions value to set.
      * @return the PremierAddOnOfferProperties object itself.
      */
-    public PremierAddOnOfferProperties withWebHostingPlanRestrictions(
-        AppServicePlanRestrictions webHostingPlanRestrictions) {
+    public PremierAddOnOfferProperties
+        withWebHostingPlanRestrictions(AppServicePlanRestrictions webHostingPlanRestrictions) {
         this.webHostingPlanRestrictions = webHostingPlanRestrictions;
         return this;
     }
 
     /**
      * Get the privacyPolicyUrl property: Privacy policy URL.
-     *
+     * 
      * @return the privacyPolicyUrl value.
      */
     public String privacyPolicyUrl() {
@@ -210,7 +213,7 @@ public final class PremierAddOnOfferProperties {
 
     /**
      * Set the privacyPolicyUrl property: Privacy policy URL.
-     *
+     * 
      * @param privacyPolicyUrl the privacyPolicyUrl value to set.
      * @return the PremierAddOnOfferProperties object itself.
      */
@@ -221,7 +224,7 @@ public final class PremierAddOnOfferProperties {
 
     /**
      * Get the legalTermsUrl property: Legal terms URL.
-     *
+     * 
      * @return the legalTermsUrl value.
      */
     public String legalTermsUrl() {
@@ -230,7 +233,7 @@ public final class PremierAddOnOfferProperties {
 
     /**
      * Set the legalTermsUrl property: Legal terms URL.
-     *
+     * 
      * @param legalTermsUrl the legalTermsUrl value to set.
      * @return the PremierAddOnOfferProperties object itself.
      */
@@ -241,7 +244,7 @@ public final class PremierAddOnOfferProperties {
 
     /**
      * Get the marketplacePublisher property: Marketplace publisher.
-     *
+     * 
      * @return the marketplacePublisher value.
      */
     public String marketplacePublisher() {
@@ -250,7 +253,7 @@ public final class PremierAddOnOfferProperties {
 
     /**
      * Set the marketplacePublisher property: Marketplace publisher.
-     *
+     * 
      * @param marketplacePublisher the marketplacePublisher value to set.
      * @return the PremierAddOnOfferProperties object itself.
      */
@@ -261,7 +264,7 @@ public final class PremierAddOnOfferProperties {
 
     /**
      * Get the marketplaceOffer property: Marketplace offer.
-     *
+     * 
      * @return the marketplaceOffer value.
      */
     public String marketplaceOffer() {
@@ -270,7 +273,7 @@ public final class PremierAddOnOfferProperties {
 
     /**
      * Set the marketplaceOffer property: Marketplace offer.
-     *
+     * 
      * @param marketplaceOffer the marketplaceOffer value to set.
      * @return the PremierAddOnOfferProperties object itself.
      */
@@ -281,7 +284,7 @@ public final class PremierAddOnOfferProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

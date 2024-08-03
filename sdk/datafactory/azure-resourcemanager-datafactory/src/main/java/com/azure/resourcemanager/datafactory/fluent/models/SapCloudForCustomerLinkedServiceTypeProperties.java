@@ -7,26 +7,22 @@ package com.azure.resourcemanager.datafactory.fluent.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.models.SecretBase;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** SAP Cloud for Customer linked service properties. */
+/**
+ * SAP Cloud for Customer linked service properties.
+ */
 @Fluent
 public final class SapCloudForCustomerLinkedServiceTypeProperties {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(SapCloudForCustomerLinkedServiceTypeProperties.class);
-
     /*
      * The URL of SAP Cloud for Customer OData API. For example,
-     * '[https://[tenantname].crm.ondemand.com/sap/c4c/odata/v1]'. Type: string
-     * (or Expression with resultType string).
+     * '[https://[tenantname].crm.ondemand.com/sap/c4c/odata/v1]'. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "url", required = true)
     private Object url;
 
     /*
-     * The username for Basic authentication. Type: string (or Expression with
-     * resultType string).
+     * The username for Basic authentication. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "username")
     private Object username;
@@ -38,18 +34,22 @@ public final class SapCloudForCustomerLinkedServiceTypeProperties {
     private SecretBase password;
 
     /*
-     * The encrypted credential used for authentication. Credentials are
-     * encrypted using the integration runtime credential manager. Either
-     * encryptedCredential or username/password must be provided. Type: string
-     * (or Expression with resultType string).
+     * The encrypted credential used for authentication. Credentials are encrypted using the integration runtime
+     * credential manager. Either encryptedCredential or username/password must be provided. Type: string.
      */
     @JsonProperty(value = "encryptedCredential")
-    private Object encryptedCredential;
+    private String encryptedCredential;
+
+    /**
+     * Creates an instance of SapCloudForCustomerLinkedServiceTypeProperties class.
+     */
+    public SapCloudForCustomerLinkedServiceTypeProperties() {
+    }
 
     /**
      * Get the url property: The URL of SAP Cloud for Customer OData API. For example,
      * '[https://[tenantname].crm.ondemand.com/sap/c4c/odata/v1]'. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the url value.
      */
     public Object url() {
@@ -59,7 +59,7 @@ public final class SapCloudForCustomerLinkedServiceTypeProperties {
     /**
      * Set the url property: The URL of SAP Cloud for Customer OData API. For example,
      * '[https://[tenantname].crm.ondemand.com/sap/c4c/odata/v1]'. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param url the url value to set.
      * @return the SapCloudForCustomerLinkedServiceTypeProperties object itself.
      */
@@ -71,7 +71,7 @@ public final class SapCloudForCustomerLinkedServiceTypeProperties {
     /**
      * Get the username property: The username for Basic authentication. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @return the username value.
      */
     public Object username() {
@@ -81,7 +81,7 @@ public final class SapCloudForCustomerLinkedServiceTypeProperties {
     /**
      * Set the username property: The username for Basic authentication. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @param username the username value to set.
      * @return the SapCloudForCustomerLinkedServiceTypeProperties object itself.
      */
@@ -92,7 +92,7 @@ public final class SapCloudForCustomerLinkedServiceTypeProperties {
 
     /**
      * Get the password property: The password for Basic authentication.
-     *
+     * 
      * @return the password value.
      */
     public SecretBase password() {
@@ -101,7 +101,7 @@ public final class SapCloudForCustomerLinkedServiceTypeProperties {
 
     /**
      * Set the password property: The password for Basic authentication.
-     *
+     * 
      * @param password the password value to set.
      * @return the SapCloudForCustomerLinkedServiceTypeProperties object itself.
      */
@@ -113,41 +113,42 @@ public final class SapCloudForCustomerLinkedServiceTypeProperties {
     /**
      * Get the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
      * using the integration runtime credential manager. Either encryptedCredential or username/password must be
-     * provided. Type: string (or Expression with resultType string).
-     *
+     * provided. Type: string.
+     * 
      * @return the encryptedCredential value.
      */
-    public Object encryptedCredential() {
+    public String encryptedCredential() {
         return this.encryptedCredential;
     }
 
     /**
      * Set the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
      * using the integration runtime credential manager. Either encryptedCredential or username/password must be
-     * provided. Type: string (or Expression with resultType string).
-     *
+     * provided. Type: string.
+     * 
      * @param encryptedCredential the encryptedCredential value to set.
      * @return the SapCloudForCustomerLinkedServiceTypeProperties object itself.
      */
-    public SapCloudForCustomerLinkedServiceTypeProperties withEncryptedCredential(Object encryptedCredential) {
+    public SapCloudForCustomerLinkedServiceTypeProperties withEncryptedCredential(String encryptedCredential) {
         this.encryptedCredential = encryptedCredential;
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (url() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property url in model SapCloudForCustomerLinkedServiceTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property url in model SapCloudForCustomerLinkedServiceTypeProperties"));
         }
         if (password() != null) {
             password().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(SapCloudForCustomerLinkedServiceTypeProperties.class);
 }

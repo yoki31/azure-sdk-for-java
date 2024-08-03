@@ -5,21 +5,21 @@
 package com.azure.resourcemanager.mediaservices.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** The Asset Storage container SAS URLs. */
 @Fluent
 public final class AssetContainerSasInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AssetContainerSasInner.class);
-
     /*
      * The list of Asset container SAS URLs.
      */
     @JsonProperty(value = "assetContainerSasUrls")
     private List<String> assetContainerSasUrls;
+
+    /** Creates an instance of AssetContainerSasInner class. */
+    public AssetContainerSasInner() {
+    }
 
     /**
      * Get the assetContainerSasUrls property: The list of Asset container SAS URLs.

@@ -119,13 +119,8 @@ public final class WorkspaceImpl implements Workspace, Workspace.Definition, Wor
         return this.innerModel().workspaceUid();
     }
 
-    public Map<String, Object> extraProperties() {
-        Map<String, Object> inner = this.innerModel().extraProperties();
-        if (inner != null) {
-            return Collections.unmodifiableMap(inner);
-        } else {
-            return Collections.emptyMap();
-        }
+    public Object extraProperties() {
+        return this.innerModel().extraProperties();
     }
 
     public ManagedVirtualNetworkSettings managedVirtualNetworkSettings() {
@@ -165,12 +160,20 @@ public final class WorkspaceImpl implements Workspace, Workspace.Definition, Wor
         return this.innerModel().azureADOnlyAuthentication();
     }
 
+    public Boolean trustedServiceBypassEnabled() {
+        return this.innerModel().trustedServiceBypassEnabled();
+    }
+
     public Region region() {
         return Region.fromName(this.regionName());
     }
 
     public String regionName() {
         return this.location();
+    }
+
+    public String resourceGroupName() {
+        return resourceGroupName;
     }
 
     public WorkspaceInner innerModel() {
@@ -326,11 +329,6 @@ public final class WorkspaceImpl implements Workspace, Workspace.Definition, Wor
         return this;
     }
 
-    public WorkspaceImpl withConnectivityEndpoints(Map<String, String> connectivityEndpoints) {
-        this.innerModel().withConnectivityEndpoints(connectivityEndpoints);
-        return this;
-    }
-
     public WorkspaceImpl withManagedVirtualNetwork(String managedVirtualNetwork) {
         this.innerModel().withManagedVirtualNetwork(managedVirtualNetwork);
         return this;
@@ -401,6 +399,11 @@ public final class WorkspaceImpl implements Workspace, Workspace.Definition, Wor
 
     public WorkspaceImpl withAzureADOnlyAuthentication(Boolean azureADOnlyAuthentication) {
         this.innerModel().withAzureADOnlyAuthentication(azureADOnlyAuthentication);
+        return this;
+    }
+
+    public WorkspaceImpl withTrustedServiceBypassEnabled(Boolean trustedServiceBypassEnabled) {
+        this.innerModel().withTrustedServiceBypassEnabled(trustedServiceBypassEnabled);
         return this;
     }
 

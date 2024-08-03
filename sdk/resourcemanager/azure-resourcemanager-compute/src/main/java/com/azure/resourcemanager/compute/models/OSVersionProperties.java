@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** OS version properties. */
+/**
+ * OS version properties.
+ */
 @Immutable
 public final class OSVersionProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OSVersionProperties.class);
-
     /*
      * The family of this OS version.
      */
@@ -51,8 +49,14 @@ public final class OSVersionProperties {
     private Boolean isActive;
 
     /**
+     * Creates an instance of OSVersionProperties class.
+     */
+    public OSVersionProperties() {
+    }
+
+    /**
      * Get the family property: The family of this OS version.
-     *
+     * 
      * @return the family value.
      */
     public String family() {
@@ -61,7 +65,7 @@ public final class OSVersionProperties {
 
     /**
      * Get the familyLabel property: The family label of this OS version.
-     *
+     * 
      * @return the familyLabel value.
      */
     public String familyLabel() {
@@ -70,7 +74,7 @@ public final class OSVersionProperties {
 
     /**
      * Get the version property: The OS version.
-     *
+     * 
      * @return the version value.
      */
     public String version() {
@@ -79,7 +83,7 @@ public final class OSVersionProperties {
 
     /**
      * Get the label property: The OS version label.
-     *
+     * 
      * @return the label value.
      */
     public String label() {
@@ -88,7 +92,7 @@ public final class OSVersionProperties {
 
     /**
      * Get the isDefault property: Specifies whether this is the default OS version for its family.
-     *
+     * 
      * @return the isDefault value.
      */
     public Boolean isDefault() {
@@ -97,7 +101,7 @@ public final class OSVersionProperties {
 
     /**
      * Get the isActive property: Specifies whether this OS version is active.
-     *
+     * 
      * @return the isActive value.
      */
     public Boolean isActive() {
@@ -106,7 +110,7 @@ public final class OSVersionProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

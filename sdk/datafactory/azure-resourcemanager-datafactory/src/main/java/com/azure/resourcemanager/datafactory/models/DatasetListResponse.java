@@ -7,15 +7,14 @@ package com.azure.resourcemanager.datafactory.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.fluent.models.DatasetResourceInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** A list of dataset resources. */
+/**
+ * A list of dataset resources.
+ */
 @Fluent
 public final class DatasetListResponse {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DatasetListResponse.class);
-
     /*
      * List of datasets.
      */
@@ -29,8 +28,14 @@ public final class DatasetListResponse {
     private String nextLink;
 
     /**
+     * Creates an instance of DatasetListResponse class.
+     */
+    public DatasetListResponse() {
+    }
+
+    /**
      * Get the value property: List of datasets.
-     *
+     * 
      * @return the value value.
      */
     public List<DatasetResourceInner> value() {
@@ -39,7 +44,7 @@ public final class DatasetListResponse {
 
     /**
      * Set the value property: List of datasets.
-     *
+     * 
      * @param value the value value to set.
      * @return the DatasetListResponse object itself.
      */
@@ -50,7 +55,7 @@ public final class DatasetListResponse {
 
     /**
      * Get the nextLink property: The link to the next page of results, if any remaining results exist.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,7 +64,7 @@ public final class DatasetListResponse {
 
     /**
      * Set the nextLink property: The link to the next page of results, if any remaining results exist.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the DatasetListResponse object itself.
      */
@@ -70,16 +75,17 @@ public final class DatasetListResponse {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property value in model DatasetListResponse"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property value in model DatasetListResponse"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(DatasetListResponse.class);
 }

@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.compute.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The identifier information of community gallery. */
+/**
+ * The identifier information of community gallery.
+ */
 @Fluent
 public final class CommunityGalleryIdentifier {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CommunityGalleryIdentifier.class);
-
     /*
      * The unique id of this community gallery.
      */
@@ -21,8 +19,14 @@ public final class CommunityGalleryIdentifier {
     private String uniqueId;
 
     /**
+     * Creates an instance of CommunityGalleryIdentifier class.
+     */
+    public CommunityGalleryIdentifier() {
+    }
+
+    /**
      * Get the uniqueId property: The unique id of this community gallery.
-     *
+     * 
      * @return the uniqueId value.
      */
     public String uniqueId() {
@@ -31,7 +35,7 @@ public final class CommunityGalleryIdentifier {
 
     /**
      * Set the uniqueId property: The unique id of this community gallery.
-     *
+     * 
      * @param uniqueId the uniqueId value to set.
      * @return the CommunityGalleryIdentifier object itself.
      */
@@ -42,7 +46,7 @@ public final class CommunityGalleryIdentifier {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -5,19 +5,49 @@
 package com.azure.resourcemanager.eventgrid.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** IsNullOrUndefined Advanced Filter. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "operatorType")
+/**
+ * IsNullOrUndefined Advanced Filter.
+ */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "operatorType",
+    defaultImpl = IsNullOrUndefinedAdvancedFilter.class,
+    visible = true)
 @JsonTypeName("IsNullOrUndefined")
 @Fluent
 public final class IsNullOrUndefinedAdvancedFilter extends AdvancedFilter {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(IsNullOrUndefinedAdvancedFilter.class);
+    /*
+     * The operator type used for filtering, e.g., NumberIn, StringContains, BoolEquals and others.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "operatorType", required = true)
+    private AdvancedFilterOperatorType operatorType = AdvancedFilterOperatorType.IS_NULL_OR_UNDEFINED;
 
-    /** {@inheritDoc} */
+    /**
+     * Creates an instance of IsNullOrUndefinedAdvancedFilter class.
+     */
+    public IsNullOrUndefinedAdvancedFilter() {
+    }
+
+    /**
+     * Get the operatorType property: The operator type used for filtering, e.g., NumberIn, StringContains, BoolEquals
+     * and others.
+     * 
+     * @return the operatorType value.
+     */
+    @Override
+    public AdvancedFilterOperatorType operatorType() {
+        return this.operatorType;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public IsNullOrUndefinedAdvancedFilter withKey(String key) {
         super.withKey(key);
@@ -26,7 +56,7 @@ public final class IsNullOrUndefinedAdvancedFilter extends AdvancedFilter {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

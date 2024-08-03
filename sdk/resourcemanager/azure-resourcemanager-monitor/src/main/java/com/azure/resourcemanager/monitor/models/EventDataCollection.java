@@ -7,15 +7,14 @@ package com.azure.resourcemanager.monitor.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.monitor.fluent.models.EventDataInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Represents collection of events. */
+/**
+ * Represents collection of events.
+ */
 @Fluent
 public final class EventDataCollection {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(EventDataCollection.class);
-
     /*
      * this list that includes the Azure audit logs.
      */
@@ -29,8 +28,14 @@ public final class EventDataCollection {
     private String nextLink;
 
     /**
+     * Creates an instance of EventDataCollection class.
+     */
+    public EventDataCollection() {
+    }
+
+    /**
      * Get the value property: this list that includes the Azure audit logs.
-     *
+     * 
      * @return the value value.
      */
     public List<EventDataInner> value() {
@@ -39,7 +44,7 @@ public final class EventDataCollection {
 
     /**
      * Set the value property: this list that includes the Azure audit logs.
-     *
+     * 
      * @param value the value value to set.
      * @return the EventDataCollection object itself.
      */
@@ -50,7 +55,7 @@ public final class EventDataCollection {
 
     /**
      * Get the nextLink property: Provides the link to retrieve the next set of events.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,7 +64,7 @@ public final class EventDataCollection {
 
     /**
      * Set the nextLink property: Provides the link to retrieve the next set of events.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the EventDataCollection object itself.
      */
@@ -70,16 +75,17 @@ public final class EventDataCollection {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property value in model EventDataCollection"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property value in model EventDataCollection"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(EventDataCollection.class);
 }

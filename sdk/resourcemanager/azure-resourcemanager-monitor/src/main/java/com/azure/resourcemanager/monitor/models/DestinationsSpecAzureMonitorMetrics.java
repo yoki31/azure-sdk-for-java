@@ -5,15 +5,21 @@
 package com.azure.resourcemanager.monitor.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
-/** Azure Monitor Metrics destination. */
+/**
+ * Azure Monitor Metrics destination.
+ */
 @Fluent
 public final class DestinationsSpecAzureMonitorMetrics extends AzureMonitorMetricsDestination {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DestinationsSpecAzureMonitorMetrics.class);
+    /**
+     * Creates an instance of DestinationsSpecAzureMonitorMetrics class.
+     */
+    public DestinationsSpecAzureMonitorMetrics() {
+    }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DestinationsSpecAzureMonitorMetrics withName(String name) {
         super.withName(name);
@@ -22,7 +28,7 @@ public final class DestinationsSpecAzureMonitorMetrics extends AzureMonitorMetri
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

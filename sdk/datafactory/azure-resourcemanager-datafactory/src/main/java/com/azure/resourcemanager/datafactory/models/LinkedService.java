@@ -5,28 +5,24 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * The Azure Data Factory nested object which contains the information and credential which can be used to connect with
- * related store or compute resource.
+ * The nested object which contains the information and credential which can be used to connect with related store or
+ * compute resource.
  */
-@JsonTypeInfo(
-    use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.PROPERTY,
-    property = "type",
-    defaultImpl = LinkedService.class)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = LinkedService.class, visible = true)
 @JsonTypeName("LinkedService")
 @JsonSubTypes({
     @JsonSubTypes.Type(name = "AzureStorage", value = AzureStorageLinkedService.class),
@@ -54,6 +50,7 @@ import java.util.Map;
     @JsonSubTypes.Type(name = "AzureMySql", value = AzureMySqlLinkedService.class),
     @JsonSubTypes.Type(name = "MySql", value = MySqlLinkedService.class),
     @JsonSubTypes.Type(name = "PostgreSql", value = PostgreSqlLinkedService.class),
+    @JsonSubTypes.Type(name = "PostgreSqlV2", value = PostgreSqlV2LinkedService.class),
     @JsonSubTypes.Type(name = "Sybase", value = SybaseLinkedService.class),
     @JsonSubTypes.Type(name = "Db2", value = Db2LinkedService.class),
     @JsonSubTypes.Type(name = "Teradata", value = TeradataLinkedService.class),
@@ -78,7 +75,17 @@ import java.util.Map;
     @JsonSubTypes.Type(name = "SapCloudForCustomer", value = SapCloudForCustomerLinkedService.class),
     @JsonSubTypes.Type(name = "SapEcc", value = SapEccLinkedService.class),
     @JsonSubTypes.Type(name = "SapOpenHub", value = SapOpenHubLinkedService.class),
+    @JsonSubTypes.Type(name = "SapOdp", value = SapOdpLinkedService.class),
     @JsonSubTypes.Type(name = "RestService", value = RestServiceLinkedService.class),
+    @JsonSubTypes.Type(name = "TeamDesk", value = TeamDeskLinkedService.class),
+    @JsonSubTypes.Type(name = "Quickbase", value = QuickbaseLinkedService.class),
+    @JsonSubTypes.Type(name = "Smartsheet", value = SmartsheetLinkedService.class),
+    @JsonSubTypes.Type(name = "Zendesk", value = ZendeskLinkedService.class),
+    @JsonSubTypes.Type(name = "Dataworld", value = DataworldLinkedService.class),
+    @JsonSubTypes.Type(name = "AppFigures", value = AppFiguresLinkedService.class),
+    @JsonSubTypes.Type(name = "Asana", value = AsanaLinkedService.class),
+    @JsonSubTypes.Type(name = "Twilio", value = TwilioLinkedService.class),
+    @JsonSubTypes.Type(name = "GoogleSheets", value = GoogleSheetsLinkedService.class),
     @JsonSubTypes.Type(name = "AmazonS3", value = AmazonS3LinkedService.class),
     @JsonSubTypes.Type(name = "AmazonRedshift", value = AmazonRedshiftLinkedService.class),
     @JsonSubTypes.Type(name = "CustomDataSource", value = CustomDataSourceLinkedService.class),
@@ -95,6 +102,7 @@ import java.util.Map;
     @JsonSubTypes.Type(name = "Drill", value = DrillLinkedService.class),
     @JsonSubTypes.Type(name = "Eloqua", value = EloquaLinkedService.class),
     @JsonSubTypes.Type(name = "GoogleBigQuery", value = GoogleBigQueryLinkedService.class),
+    @JsonSubTypes.Type(name = "GoogleBigQueryV2", value = GoogleBigQueryV2LinkedService.class),
     @JsonSubTypes.Type(name = "Greenplum", value = GreenplumLinkedService.class),
     @JsonSubTypes.Type(name = "HBase", value = HBaseLinkedService.class),
     @JsonSubTypes.Type(name = "Hive", value = HiveLinkedService.class),
@@ -130,11 +138,22 @@ import java.util.Map;
     @JsonSubTypes.Type(name = "AzureDataExplorer", value = AzureDataExplorerLinkedService.class),
     @JsonSubTypes.Type(name = "AzureFunction", value = AzureFunctionLinkedService.class),
     @JsonSubTypes.Type(name = "Snowflake", value = SnowflakeLinkedService.class),
-    @JsonSubTypes.Type(name = "SharePointOnlineList", value = SharePointOnlineListLinkedService.class)
-})
+    @JsonSubTypes.Type(name = "SnowflakeV2", value = SnowflakeV2LinkedService.class),
+    @JsonSubTypes.Type(name = "SharePointOnlineList", value = SharePointOnlineListLinkedService.class),
+    @JsonSubTypes.Type(name = "AzureSynapseArtifacts", value = AzureSynapseArtifactsLinkedService.class),
+    @JsonSubTypes.Type(name = "LakeHouse", value = LakeHouseLinkedService.class),
+    @JsonSubTypes.Type(name = "SalesforceV2", value = SalesforceV2LinkedService.class),
+    @JsonSubTypes.Type(name = "SalesforceServiceCloudV2", value = SalesforceServiceCloudV2LinkedService.class),
+    @JsonSubTypes.Type(name = "Warehouse", value = WarehouseLinkedService.class),
+    @JsonSubTypes.Type(name = "ServiceNowV2", value = ServiceNowV2LinkedService.class) })
 @Fluent
 public class LinkedService {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(LinkedService.class);
+    /*
+     * Type of linked service.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "LinkedService";
 
     /*
      * The integration runtime reference.
@@ -162,15 +181,30 @@ public class LinkedService {
     private List<Object> annotations;
 
     /*
-     * The Azure Data Factory nested object which contains the information and
-     * credential which can be used to connect with related store or compute
-     * resource.
+     * The nested object which contains the information and credential which can be used to connect with related store
+     * or compute resource.
      */
-    @JsonIgnore private Map<String, Object> additionalProperties;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties;
+
+    /**
+     * Creates an instance of LinkedService class.
+     */
+    public LinkedService() {
+    }
+
+    /**
+     * Get the type property: Type of linked service.
+     * 
+     * @return the type value.
+     */
+    public String type() {
+        return this.type;
+    }
 
     /**
      * Get the connectVia property: The integration runtime reference.
-     *
+     * 
      * @return the connectVia value.
      */
     public IntegrationRuntimeReference connectVia() {
@@ -179,7 +213,7 @@ public class LinkedService {
 
     /**
      * Set the connectVia property: The integration runtime reference.
-     *
+     * 
      * @param connectVia the connectVia value to set.
      * @return the LinkedService object itself.
      */
@@ -190,7 +224,7 @@ public class LinkedService {
 
     /**
      * Get the description property: Linked service description.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
@@ -199,7 +233,7 @@ public class LinkedService {
 
     /**
      * Set the description property: Linked service description.
-     *
+     * 
      * @param description the description value to set.
      * @return the LinkedService object itself.
      */
@@ -210,7 +244,7 @@ public class LinkedService {
 
     /**
      * Get the parameters property: Parameters for linked service.
-     *
+     * 
      * @return the parameters value.
      */
     public Map<String, ParameterSpecification> parameters() {
@@ -219,7 +253,7 @@ public class LinkedService {
 
     /**
      * Set the parameters property: Parameters for linked service.
-     *
+     * 
      * @param parameters the parameters value to set.
      * @return the LinkedService object itself.
      */
@@ -230,7 +264,7 @@ public class LinkedService {
 
     /**
      * Get the annotations property: List of tags that can be used for describing the linked service.
-     *
+     * 
      * @return the annotations value.
      */
     public List<Object> annotations() {
@@ -239,7 +273,7 @@ public class LinkedService {
 
     /**
      * Set the annotations property: List of tags that can be used for describing the linked service.
-     *
+     * 
      * @param annotations the annotations value to set.
      * @return the LinkedService object itself.
      */
@@ -249,9 +283,9 @@ public class LinkedService {
     }
 
     /**
-     * Get the additionalProperties property: The Azure Data Factory nested object which contains the information and
-     * credential which can be used to connect with related store or compute resource.
-     *
+     * Get the additionalProperties property: The nested object which contains the information and credential which can
+     * be used to connect with related store or compute resource.
+     * 
      * @return the additionalProperties value.
      */
     @JsonAnyGetter
@@ -260,9 +294,9 @@ public class LinkedService {
     }
 
     /**
-     * Set the additionalProperties property: The Azure Data Factory nested object which contains the information and
-     * credential which can be used to connect with related store or compute resource.
-     *
+     * Set the additionalProperties property: The nested object which contains the information and credential which can
+     * be used to connect with related store or compute resource.
+     * 
      * @param additionalProperties the additionalProperties value to set.
      * @return the LinkedService object itself.
      */
@@ -274,14 +308,14 @@ public class LinkedService {
     @JsonAnySetter
     void withAdditionalProperties(String key, Object value) {
         if (additionalProperties == null) {
-            additionalProperties = new HashMap<>();
+            additionalProperties = new LinkedHashMap<>();
         }
         additionalProperties.put(key, value);
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
@@ -289,14 +323,11 @@ public class LinkedService {
             connectVia().validate();
         }
         if (parameters() != null) {
-            parameters()
-                .values()
-                .forEach(
-                    e -> {
-                        if (e != null) {
-                            e.validate();
-                        }
-                    });
+            parameters().values().forEach(e -> {
+                if (e != null) {
+                    e.validate();
+                }
+            });
         }
     }
 }

@@ -28,7 +28,6 @@ import com.azure.core.management.exception.ManagementException;
 import com.azure.core.management.polling.PollResult;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.core.util.polling.PollerFlux;
 import com.azure.core.util.polling.SyncPoller;
 import com.azure.resourcemanager.synapse.fluent.WorkspaceManagedSqlServerSecurityAlertPoliciesClient;
@@ -45,9 +44,6 @@ import reactor.core.publisher.Mono;
  */
 public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
     implements WorkspaceManagedSqlServerSecurityAlertPoliciesClient {
-    private final ClientLogger logger =
-        new ClientLogger(WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final WorkspaceManagedSqlServerSecurityAlertPoliciesService service;
 
@@ -75,7 +71,7 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
      */
     @Host("{$host}")
     @ServiceInterface(name = "SynapseManagementCli")
-    private interface WorkspaceManagedSqlServerSecurityAlertPoliciesService {
+    public interface WorkspaceManagedSqlServerSecurityAlertPoliciesService {
         @Headers({"Content-Type: application/json"})
         @Get(
             "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
@@ -136,7 +132,9 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
     }
 
     /**
-     * Get a workspace managed sql server's security alert policy.
+     * Get server's security alert policy.
+     *
+     * <p>Get a workspace managed sql server's security alert policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -144,7 +142,8 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a workspace managed sql server's security alert policy.
+     * @return a workspace managed sql server's security alert policy along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<ServerSecurityAlertPolicyInner>> getWithResponseAsync(
@@ -192,7 +191,9 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
     }
 
     /**
-     * Get a workspace managed sql server's security alert policy.
+     * Get server's security alert policy.
+     *
+     * <p>Get a workspace managed sql server's security alert policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -201,7 +202,8 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a workspace managed sql server's security alert policy.
+     * @return a workspace managed sql server's security alert policy along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<ServerSecurityAlertPolicyInner>> getWithResponseAsync(
@@ -249,7 +251,9 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
     }
 
     /**
-     * Get a workspace managed sql server's security alert policy.
+     * Get server's security alert policy.
+     *
+     * <p>Get a workspace managed sql server's security alert policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -257,24 +261,42 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a workspace managed sql server's security alert policy.
+     * @return a workspace managed sql server's security alert policy on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ServerSecurityAlertPolicyInner> getAsync(
         String resourceGroupName, String workspaceName, SecurityAlertPolicyNameAutoGenerated securityAlertPolicyName) {
         return getWithResponseAsync(resourceGroupName, workspaceName, securityAlertPolicyName)
-            .flatMap(
-                (Response<ServerSecurityAlertPolicyInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
-     * Get a workspace managed sql server's security alert policy.
+     * Get server's security alert policy.
+     *
+     * <p>Get a workspace managed sql server's security alert policy.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param securityAlertPolicyName The name of the security alert policy.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a workspace managed sql server's security alert policy along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<ServerSecurityAlertPolicyInner> getWithResponse(
+        String resourceGroupName,
+        String workspaceName,
+        SecurityAlertPolicyNameAutoGenerated securityAlertPolicyName,
+        Context context) {
+        return getWithResponseAsync(resourceGroupName, workspaceName, securityAlertPolicyName, context).block();
+    }
+
+    /**
+     * Get server's security alert policy.
+     *
+     * <p>Get a workspace managed sql server's security alert policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -287,32 +309,13 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
     @ServiceMethod(returns = ReturnType.SINGLE)
     public ServerSecurityAlertPolicyInner get(
         String resourceGroupName, String workspaceName, SecurityAlertPolicyNameAutoGenerated securityAlertPolicyName) {
-        return getAsync(resourceGroupName, workspaceName, securityAlertPolicyName).block();
+        return getWithResponse(resourceGroupName, workspaceName, securityAlertPolicyName, Context.NONE).getValue();
     }
 
     /**
-     * Get a workspace managed sql server's security alert policy.
+     * Create or Update server's threat detection policy.
      *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param securityAlertPolicyName The name of the security alert policy.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a workspace managed sql server's security alert policy.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<ServerSecurityAlertPolicyInner> getWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        SecurityAlertPolicyNameAutoGenerated securityAlertPolicyName,
-        Context context) {
-        return getWithResponseAsync(resourceGroupName, workspaceName, securityAlertPolicyName, context).block();
-    }
-
-    /**
-     * Create or Update a workspace managed sql server's threat detection policy.
+     * <p>Create or Update a workspace managed sql server's threat detection policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -321,7 +324,8 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return workspace managed Sql server security alert policy.
+     * @return workspace managed Sql server security alert policy along with {@link Response} on successful completion
+     *     of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(
@@ -378,7 +382,9 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
     }
 
     /**
-     * Create or Update a workspace managed sql server's threat detection policy.
+     * Create or Update server's threat detection policy.
+     *
+     * <p>Create or Update a workspace managed sql server's threat detection policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -388,7 +394,8 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return workspace managed Sql server security alert policy.
+     * @return workspace managed Sql server security alert policy along with {@link Response} on successful completion
+     *     of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> createOrUpdateWithResponseAsync(
@@ -443,7 +450,9 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
     }
 
     /**
-     * Create or Update a workspace managed sql server's threat detection policy.
+     * Create or Update server's threat detection policy.
+     *
+     * <p>Create or Update a workspace managed sql server's threat detection policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -452,7 +461,7 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return workspace managed Sql server security alert policy.
+     * @return the {@link PollerFlux} for polling of workspace managed Sql server security alert policy.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<ServerSecurityAlertPolicyInner>, ServerSecurityAlertPolicyInner>
@@ -470,11 +479,13 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
                 this.client.getHttpPipeline(),
                 ServerSecurityAlertPolicyInner.class,
                 ServerSecurityAlertPolicyInner.class,
-                Context.NONE);
+                this.client.getContext());
     }
 
     /**
-     * Create or Update a workspace managed sql server's threat detection policy.
+     * Create or Update server's threat detection policy.
+     *
+     * <p>Create or Update a workspace managed sql server's threat detection policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -484,7 +495,7 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return workspace managed Sql server security alert policy.
+     * @return the {@link PollerFlux} for polling of workspace managed Sql server security alert policy.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<ServerSecurityAlertPolicyInner>, ServerSecurityAlertPolicyInner>
@@ -509,7 +520,9 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
     }
 
     /**
-     * Create or Update a workspace managed sql server's threat detection policy.
+     * Create or Update server's threat detection policy.
+     *
+     * <p>Create or Update a workspace managed sql server's threat detection policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -518,7 +531,7 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return workspace managed Sql server security alert policy.
+     * @return the {@link SyncPoller} for polling of workspace managed Sql server security alert policy.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<ServerSecurityAlertPolicyInner>, ServerSecurityAlertPolicyInner> beginCreateOrUpdate(
@@ -526,12 +539,15 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
         String workspaceName,
         SecurityAlertPolicyNameAutoGenerated securityAlertPolicyName,
         ServerSecurityAlertPolicyInner parameters) {
-        return beginCreateOrUpdateAsync(resourceGroupName, workspaceName, securityAlertPolicyName, parameters)
+        return this
+            .beginCreateOrUpdateAsync(resourceGroupName, workspaceName, securityAlertPolicyName, parameters)
             .getSyncPoller();
     }
 
     /**
-     * Create or Update a workspace managed sql server's threat detection policy.
+     * Create or Update server's threat detection policy.
+     *
+     * <p>Create or Update a workspace managed sql server's threat detection policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -541,7 +557,7 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return workspace managed Sql server security alert policy.
+     * @return the {@link SyncPoller} for polling of workspace managed Sql server security alert policy.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<ServerSecurityAlertPolicyInner>, ServerSecurityAlertPolicyInner> beginCreateOrUpdate(
@@ -550,12 +566,15 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
         SecurityAlertPolicyNameAutoGenerated securityAlertPolicyName,
         ServerSecurityAlertPolicyInner parameters,
         Context context) {
-        return beginCreateOrUpdateAsync(resourceGroupName, workspaceName, securityAlertPolicyName, parameters, context)
+        return this
+            .beginCreateOrUpdateAsync(resourceGroupName, workspaceName, securityAlertPolicyName, parameters, context)
             .getSyncPoller();
     }
 
     /**
-     * Create or Update a workspace managed sql server's threat detection policy.
+     * Create or Update server's threat detection policy.
+     *
+     * <p>Create or Update a workspace managed sql server's threat detection policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -564,7 +583,7 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return workspace managed Sql server security alert policy.
+     * @return workspace managed Sql server security alert policy on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ServerSecurityAlertPolicyInner> createOrUpdateAsync(
@@ -578,7 +597,9 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
     }
 
     /**
-     * Create or Update a workspace managed sql server's threat detection policy.
+     * Create or Update server's threat detection policy.
+     *
+     * <p>Create or Update a workspace managed sql server's threat detection policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -588,7 +609,7 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return workspace managed Sql server security alert policy.
+     * @return workspace managed Sql server security alert policy on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ServerSecurityAlertPolicyInner> createOrUpdateAsync(
@@ -603,7 +624,9 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
     }
 
     /**
-     * Create or Update a workspace managed sql server's threat detection policy.
+     * Create or Update server's threat detection policy.
+     *
+     * <p>Create or Update a workspace managed sql server's threat detection policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -624,7 +647,9 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
     }
 
     /**
-     * Create or Update a workspace managed sql server's threat detection policy.
+     * Create or Update server's threat detection policy.
+     *
+     * <p>Create or Update a workspace managed sql server's threat detection policy.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -648,14 +673,17 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
     }
 
     /**
-     * Get workspace managed sql server's threat detection policies.
+     * Get server's threat detection policies.
+     *
+     * <p>Get workspace managed sql server's threat detection policies.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return workspace managed sql server's threat detection policies.
+     * @return workspace managed sql server's threat detection policies along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ServerSecurityAlertPolicyInner>> listSinglePageAsync(
@@ -706,7 +734,9 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
     }
 
     /**
-     * Get workspace managed sql server's threat detection policies.
+     * Get server's threat detection policies.
+     *
+     * <p>Get workspace managed sql server's threat detection policies.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -714,7 +744,8 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return workspace managed sql server's threat detection policies.
+     * @return workspace managed sql server's threat detection policies along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ServerSecurityAlertPolicyInner>> listSinglePageAsync(
@@ -762,14 +793,16 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
     }
 
     /**
-     * Get workspace managed sql server's threat detection policies.
+     * Get server's threat detection policies.
+     *
+     * <p>Get workspace managed sql server's threat detection policies.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return workspace managed sql server's threat detection policies.
+     * @return workspace managed sql server's threat detection policies as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<ServerSecurityAlertPolicyInner> listAsync(String resourceGroupName, String workspaceName) {
@@ -778,7 +811,9 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
     }
 
     /**
-     * Get workspace managed sql server's threat detection policies.
+     * Get server's threat detection policies.
+     *
+     * <p>Get workspace managed sql server's threat detection policies.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -786,7 +821,7 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return workspace managed sql server's threat detection policies.
+     * @return workspace managed sql server's threat detection policies as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<ServerSecurityAlertPolicyInner> listAsync(
@@ -797,14 +832,17 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
     }
 
     /**
-     * Get workspace managed sql server's threat detection policies.
+     * Get server's threat detection policies.
+     *
+     * <p>Get workspace managed sql server's threat detection policies.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return workspace managed sql server's threat detection policies.
+     * @return workspace managed sql server's threat detection policies as paginated response with {@link
+     *     PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<ServerSecurityAlertPolicyInner> list(String resourceGroupName, String workspaceName) {
@@ -812,7 +850,9 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
     }
 
     /**
-     * Get workspace managed sql server's threat detection policies.
+     * Get server's threat detection policies.
+     *
+     * <p>Get workspace managed sql server's threat detection policies.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -820,7 +860,8 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return workspace managed sql server's threat detection policies.
+     * @return workspace managed sql server's threat detection policies as paginated response with {@link
+     *     PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<ServerSecurityAlertPolicyInner> list(
@@ -831,11 +872,13 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of the workspace managed sql server's security alert policies.
+     * @return a list of the workspace managed sql server's security alert policies along with {@link PagedResponse} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ServerSecurityAlertPolicyInner>> listNextSinglePageAsync(String nextLink) {
@@ -866,12 +909,14 @@ public final class WorkspaceManagedSqlServerSecurityAlertPoliciesClientImpl
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a list of the workspace managed sql server's security alert policies.
+     * @return a list of the workspace managed sql server's security alert policies along with {@link PagedResponse} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ServerSecurityAlertPolicyInner>> listNextSinglePageAsync(

@@ -6,17 +6,16 @@ package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 import java.util.UUID;
 
-/** Identity properties of the factory resource. */
+/**
+ * Identity properties of the factory resource.
+ */
 @Fluent
-public class FactoryIdentity {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(FactoryIdentity.class);
-
+public final class FactoryIdentity {
     /*
      * The identity type.
      */
@@ -43,8 +42,14 @@ public class FactoryIdentity {
     private Map<String, Object> userAssignedIdentities;
 
     /**
+     * Creates an instance of FactoryIdentity class.
+     */
+    public FactoryIdentity() {
+    }
+
+    /**
      * Get the type property: The identity type.
-     *
+     * 
      * @return the type value.
      */
     public FactoryIdentityType type() {
@@ -53,7 +58,7 @@ public class FactoryIdentity {
 
     /**
      * Set the type property: The identity type.
-     *
+     * 
      * @param type the type value to set.
      * @return the FactoryIdentity object itself.
      */
@@ -64,7 +69,7 @@ public class FactoryIdentity {
 
     /**
      * Get the principalId property: The principal id of the identity.
-     *
+     * 
      * @return the principalId value.
      */
     public UUID principalId() {
@@ -73,7 +78,7 @@ public class FactoryIdentity {
 
     /**
      * Get the tenantId property: The client tenant id of the identity.
-     *
+     * 
      * @return the tenantId value.
      */
     public UUID tenantId() {
@@ -82,7 +87,7 @@ public class FactoryIdentity {
 
     /**
      * Get the userAssignedIdentities property: List of user assigned identities for the factory.
-     *
+     * 
      * @return the userAssignedIdentities value.
      */
     public Map<String, Object> userAssignedIdentities() {
@@ -91,7 +96,7 @@ public class FactoryIdentity {
 
     /**
      * Set the userAssignedIdentities property: List of user assigned identities for the factory.
-     *
+     * 
      * @param userAssignedIdentities the userAssignedIdentities value to set.
      * @return the FactoryIdentity object itself.
      */
@@ -102,14 +107,15 @@ public class FactoryIdentity {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (type() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property type in model FactoryIdentity"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property type in model FactoryIdentity"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(FactoryIdentity.class);
 }

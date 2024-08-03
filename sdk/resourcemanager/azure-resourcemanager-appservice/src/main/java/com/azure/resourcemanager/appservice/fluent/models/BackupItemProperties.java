@@ -5,19 +5,17 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.BackupItemStatus;
 import com.azure.resourcemanager.appservice.models.DatabaseBackupSetting;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-/** BackupItem resource specific properties. */
+/**
+ * BackupItem resource specific properties.
+ */
 @Immutable
 public final class BackupItemProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(BackupItemProperties.class);
-
     /*
      * Id of the backup.
      */
@@ -91,8 +89,7 @@ public final class BackupItemProperties {
     private OffsetDateTime finishedTimestamp;
 
     /*
-     * Unique correlation identifier. Please use this along with the timestamp
-     * while communicating with Azure support.
+     * Unique correlation identifier. Please use this along with the timestamp while communicating with Azure support.
      */
     @JsonProperty(value = "correlationId", access = JsonProperty.Access.WRITE_ONLY)
     private String correlationId;
@@ -104,8 +101,14 @@ public final class BackupItemProperties {
     private Long websiteSizeInBytes;
 
     /**
+     * Creates an instance of BackupItemProperties class.
+     */
+    public BackupItemProperties() {
+    }
+
+    /**
      * Get the backupId property: Id of the backup.
-     *
+     * 
      * @return the backupId value.
      */
     public Integer backupId() {
@@ -114,7 +117,7 @@ public final class BackupItemProperties {
 
     /**
      * Get the storageAccountUrl property: SAS URL for the storage account container which contains this backup.
-     *
+     * 
      * @return the storageAccountUrl value.
      */
     public String storageAccountUrl() {
@@ -123,7 +126,7 @@ public final class BackupItemProperties {
 
     /**
      * Get the blobName property: Name of the blob which contains data for this backup.
-     *
+     * 
      * @return the blobName value.
      */
     public String blobName() {
@@ -132,7 +135,7 @@ public final class BackupItemProperties {
 
     /**
      * Get the name property: Name of this backup.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -141,7 +144,7 @@ public final class BackupItemProperties {
 
     /**
      * Get the status property: Backup status.
-     *
+     * 
      * @return the status value.
      */
     public BackupItemStatus status() {
@@ -150,7 +153,7 @@ public final class BackupItemProperties {
 
     /**
      * Get the sizeInBytes property: Size of the backup in bytes.
-     *
+     * 
      * @return the sizeInBytes value.
      */
     public Long sizeInBytes() {
@@ -159,7 +162,7 @@ public final class BackupItemProperties {
 
     /**
      * Get the created property: Timestamp of the backup creation.
-     *
+     * 
      * @return the created value.
      */
     public OffsetDateTime created() {
@@ -168,7 +171,7 @@ public final class BackupItemProperties {
 
     /**
      * Get the log property: Details regarding this backup. Might contain an error message.
-     *
+     * 
      * @return the log value.
      */
     public String log() {
@@ -177,7 +180,7 @@ public final class BackupItemProperties {
 
     /**
      * Get the databases property: List of databases included in the backup.
-     *
+     * 
      * @return the databases value.
      */
     public List<DatabaseBackupSetting> databases() {
@@ -186,7 +189,7 @@ public final class BackupItemProperties {
 
     /**
      * Get the scheduled property: True if this backup has been created due to a schedule being triggered.
-     *
+     * 
      * @return the scheduled value.
      */
     public Boolean scheduled() {
@@ -195,7 +198,7 @@ public final class BackupItemProperties {
 
     /**
      * Get the lastRestoreTimestamp property: Timestamp of a last restore operation which used this backup.
-     *
+     * 
      * @return the lastRestoreTimestamp value.
      */
     public OffsetDateTime lastRestoreTimestamp() {
@@ -204,7 +207,7 @@ public final class BackupItemProperties {
 
     /**
      * Get the finishedTimestamp property: Timestamp when this backup finished.
-     *
+     * 
      * @return the finishedTimestamp value.
      */
     public OffsetDateTime finishedTimestamp() {
@@ -214,7 +217,7 @@ public final class BackupItemProperties {
     /**
      * Get the correlationId property: Unique correlation identifier. Please use this along with the timestamp while
      * communicating with Azure support.
-     *
+     * 
      * @return the correlationId value.
      */
     public String correlationId() {
@@ -223,7 +226,7 @@ public final class BackupItemProperties {
 
     /**
      * Get the websiteSizeInBytes property: Size of the original web app which has been backed up.
-     *
+     * 
      * @return the websiteSizeInBytes value.
      */
     public Long websiteSizeInBytes() {
@@ -232,7 +235,7 @@ public final class BackupItemProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

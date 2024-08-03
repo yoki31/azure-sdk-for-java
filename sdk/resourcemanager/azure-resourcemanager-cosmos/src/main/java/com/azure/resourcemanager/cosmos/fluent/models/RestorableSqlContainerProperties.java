@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.cosmos.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cosmos.models.RestorableSqlContainerPropertiesResource;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The properties of an Azure Cosmos DB SQL container event. */
+/**
+ * The properties of an Azure Cosmos DB SQL container event.
+ */
 @Fluent
 public final class RestorableSqlContainerProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RestorableSqlContainerProperties.class);
-
     /*
      * The resource of an Azure Cosmos DB SQL container event
      */
@@ -22,8 +20,14 @@ public final class RestorableSqlContainerProperties {
     private RestorableSqlContainerPropertiesResource resource;
 
     /**
+     * Creates an instance of RestorableSqlContainerProperties class.
+     */
+    public RestorableSqlContainerProperties() {
+    }
+
+    /**
      * Get the resource property: The resource of an Azure Cosmos DB SQL container event.
-     *
+     * 
      * @return the resource value.
      */
     public RestorableSqlContainerPropertiesResource resource() {
@@ -32,7 +36,7 @@ public final class RestorableSqlContainerProperties {
 
     /**
      * Set the resource property: The resource of an Azure Cosmos DB SQL container event.
-     *
+     * 
      * @param resource the resource value to set.
      * @return the RestorableSqlContainerProperties object itself.
      */
@@ -43,7 +47,7 @@ public final class RestorableSqlContainerProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

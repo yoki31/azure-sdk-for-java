@@ -8,17 +8,32 @@ import com.azure.core.util.ExpandableStringEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collection;
 
-/** Defines values for TriggerTypes. */
+/**
+ * The trigger type of the function.
+ */
 public final class TriggerTypes extends ExpandableStringEnum<TriggerTypes> {
-    /** Static value HttpTrigger for TriggerTypes. */
+    /**
+     * Static value HttpTrigger for TriggerTypes.
+     */
     public static final TriggerTypes HTTP_TRIGGER = fromString("HttpTrigger");
 
-    /** Static value Unknown for TriggerTypes. */
+    /**
+     * Static value Unknown for TriggerTypes.
+     */
     public static final TriggerTypes UNKNOWN = fromString("Unknown");
 
     /**
+     * Creates a new instance of TriggerTypes value.
+     * 
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public TriggerTypes() {
+    }
+
+    /**
      * Creates or finds a TriggerTypes from its string representation.
-     *
+     * 
      * @param name a name to look for.
      * @return the corresponding TriggerTypes.
      */
@@ -27,7 +42,11 @@ public final class TriggerTypes extends ExpandableStringEnum<TriggerTypes> {
         return fromString(name, TriggerTypes.class);
     }
 
-    /** @return known TriggerTypes values. */
+    /**
+     * Gets known TriggerTypes values.
+     * 
+     * @return known TriggerTypes values.
+     */
     public static Collection<TriggerTypes> values() {
         return values(TriggerTypes.class);
     }

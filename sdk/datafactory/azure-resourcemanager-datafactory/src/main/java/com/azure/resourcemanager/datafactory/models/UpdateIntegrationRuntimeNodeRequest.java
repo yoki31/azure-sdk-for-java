@@ -5,27 +5,30 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Update integration runtime node request. */
+/**
+ * Update integration runtime node request.
+ */
 @Fluent
 public final class UpdateIntegrationRuntimeNodeRequest {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(UpdateIntegrationRuntimeNodeRequest.class);
-
     /*
-     * The number of concurrent jobs permitted to run on the integration
-     * runtime node. Values between 1 and maxConcurrentJobs(inclusive) are
-     * allowed.
+     * The number of concurrent jobs permitted to run on the integration runtime node. Values between 1 and
+     * maxConcurrentJobs(inclusive) are allowed.
      */
     @JsonProperty(value = "concurrentJobsLimit")
     private Integer concurrentJobsLimit;
 
     /**
+     * Creates an instance of UpdateIntegrationRuntimeNodeRequest class.
+     */
+    public UpdateIntegrationRuntimeNodeRequest() {
+    }
+
+    /**
      * Get the concurrentJobsLimit property: The number of concurrent jobs permitted to run on the integration runtime
      * node. Values between 1 and maxConcurrentJobs(inclusive) are allowed.
-     *
+     * 
      * @return the concurrentJobsLimit value.
      */
     public Integer concurrentJobsLimit() {
@@ -35,7 +38,7 @@ public final class UpdateIntegrationRuntimeNodeRequest {
     /**
      * Set the concurrentJobsLimit property: The number of concurrent jobs permitted to run on the integration runtime
      * node. Values between 1 and maxConcurrentJobs(inclusive) are allowed.
-     *
+     * 
      * @param concurrentJobsLimit the concurrentJobsLimit value to set.
      * @return the UpdateIntegrationRuntimeNodeRequest object itself.
      */
@@ -46,7 +49,7 @@ public final class UpdateIntegrationRuntimeNodeRequest {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Class representing detector definition. */
+/**
+ * Class representing detector definition.
+ */
 @Immutable
 public final class DetectorDefinition {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DetectorDefinition.class);
-
     /*
      * Display name of the detector
      */
@@ -39,8 +37,14 @@ public final class DetectorDefinition {
     private Boolean isEnabled;
 
     /**
+     * Creates an instance of DetectorDefinition class.
+     */
+    public DetectorDefinition() {
+    }
+
+    /**
      * Get the displayName property: Display name of the detector.
-     *
+     * 
      * @return the displayName value.
      */
     public String displayName() {
@@ -49,7 +53,7 @@ public final class DetectorDefinition {
 
     /**
      * Get the description property: Description of the detector.
-     *
+     * 
      * @return the description value.
      */
     public String description() {
@@ -58,7 +62,7 @@ public final class DetectorDefinition {
 
     /**
      * Get the rank property: Detector Rank.
-     *
+     * 
      * @return the rank value.
      */
     public Double rank() {
@@ -67,7 +71,7 @@ public final class DetectorDefinition {
 
     /**
      * Get the isEnabled property: Flag representing whether detector is enabled or not.
-     *
+     * 
      * @return the isEnabled value.
      */
     public Boolean isEnabled() {
@@ -76,7 +80,7 @@ public final class DetectorDefinition {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

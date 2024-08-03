@@ -5,27 +5,36 @@
 package com.azure.resourcemanager.batch.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Allocation configuration used by Batch Service to provision the nodes. */
+/**
+ * Node placement configuration for batch pools.
+ * 
+ * Allocation configuration used by Batch Service to provision the nodes.
+ */
 @Fluent
 public final class NodePlacementConfiguration {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(NodePlacementConfiguration.class);
-
     /*
-     * The placement policy for allocating nodes in the pool. Allocation policy
-     * used by Batch Service to provision the nodes. If not specified, Batch
-     * will use the regional policy.
+     * The placement policy for allocating nodes in the pool.
+     * 
+     * Allocation policy used by Batch Service to provision the nodes. If not specified, Batch will use the regional
+     * policy.
      */
     @JsonProperty(value = "policy")
     private NodePlacementPolicyType policy;
 
     /**
-     * Get the policy property: The placement policy for allocating nodes in the pool. Allocation policy used by Batch
-     * Service to provision the nodes. If not specified, Batch will use the regional policy.
-     *
+     * Creates an instance of NodePlacementConfiguration class.
+     */
+    public NodePlacementConfiguration() {
+    }
+
+    /**
+     * Get the policy property: The placement policy for allocating nodes in the pool.
+     * 
+     * Allocation policy used by Batch Service to provision the nodes. If not specified, Batch will use the regional
+     * policy.
+     * 
      * @return the policy value.
      */
     public NodePlacementPolicyType policy() {
@@ -33,9 +42,11 @@ public final class NodePlacementConfiguration {
     }
 
     /**
-     * Set the policy property: The placement policy for allocating nodes in the pool. Allocation policy used by Batch
-     * Service to provision the nodes. If not specified, Batch will use the regional policy.
-     *
+     * Set the policy property: The placement policy for allocating nodes in the pool.
+     * 
+     * Allocation policy used by Batch Service to provision the nodes. If not specified, Batch will use the regional
+     * policy.
+     * 
      * @param policy the policy value to set.
      * @return the NodePlacementConfiguration object itself.
      */
@@ -46,7 +57,7 @@ public final class NodePlacementConfiguration {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -5,22 +5,19 @@
 package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** settings for security policy patterns to match. */
+/**
+ * settings for security policy patterns to match.
+ */
 @Fluent
 public final class SecurityPolicyWebApplicationFirewallAssociation {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(SecurityPolicyWebApplicationFirewallAssociation.class);
-
     /*
      * List of domains.
      */
     @JsonProperty(value = "domains")
-    private List<ResourceReference> domains;
+    private List<ActivatedResourceReference> domains;
 
     /*
      * List of paths
@@ -29,28 +26,34 @@ public final class SecurityPolicyWebApplicationFirewallAssociation {
     private List<String> patternsToMatch;
 
     /**
+     * Creates an instance of SecurityPolicyWebApplicationFirewallAssociation class.
+     */
+    public SecurityPolicyWebApplicationFirewallAssociation() {
+    }
+
+    /**
      * Get the domains property: List of domains.
-     *
+     * 
      * @return the domains value.
      */
-    public List<ResourceReference> domains() {
+    public List<ActivatedResourceReference> domains() {
         return this.domains;
     }
 
     /**
      * Set the domains property: List of domains.
-     *
+     * 
      * @param domains the domains value to set.
      * @return the SecurityPolicyWebApplicationFirewallAssociation object itself.
      */
-    public SecurityPolicyWebApplicationFirewallAssociation withDomains(List<ResourceReference> domains) {
+    public SecurityPolicyWebApplicationFirewallAssociation withDomains(List<ActivatedResourceReference> domains) {
         this.domains = domains;
         return this;
     }
 
     /**
      * Get the patternsToMatch property: List of paths.
-     *
+     * 
      * @return the patternsToMatch value.
      */
     public List<String> patternsToMatch() {
@@ -59,7 +62,7 @@ public final class SecurityPolicyWebApplicationFirewallAssociation {
 
     /**
      * Set the patternsToMatch property: List of paths.
-     *
+     * 
      * @param patternsToMatch the patternsToMatch value to set.
      * @return the SecurityPolicyWebApplicationFirewallAssociation object itself.
      */
@@ -70,7 +73,7 @@ public final class SecurityPolicyWebApplicationFirewallAssociation {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

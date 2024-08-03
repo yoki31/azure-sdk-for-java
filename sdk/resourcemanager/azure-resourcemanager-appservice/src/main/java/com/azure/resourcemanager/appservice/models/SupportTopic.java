@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Defines a unique Support Topic. */
+/**
+ * Defines a unique Support Topic.
+ */
 @Immutable
 public final class SupportTopic {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SupportTopic.class);
-
     /*
      * Support Topic Id
      */
@@ -27,8 +25,14 @@ public final class SupportTopic {
     private String pesId;
 
     /**
+     * Creates an instance of SupportTopic class.
+     */
+    public SupportTopic() {
+    }
+
+    /**
      * Get the id property: Support Topic Id.
-     *
+     * 
      * @return the id value.
      */
     public String id() {
@@ -37,7 +41,7 @@ public final class SupportTopic {
 
     /**
      * Get the pesId property: Unique resource Id.
-     *
+     * 
      * @return the pesId value.
      */
     public String pesId() {
@@ -46,7 +50,7 @@ public final class SupportTopic {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

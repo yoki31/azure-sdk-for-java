@@ -5,6 +5,8 @@ package com.azure.resourcemanager.appservice;
 
 import com.azure.core.http.HttpPipeline;
 import com.azure.core.http.rest.PagedIterable;
+import com.azure.core.management.Region;
+import com.azure.core.management.profile.AzureProfile;
 import com.azure.resourcemanager.appservice.models.AppServicePlan;
 import com.azure.resourcemanager.appservice.models.FunctionApp;
 import com.azure.resourcemanager.appservice.models.FunctionAppBasic;
@@ -13,14 +15,13 @@ import com.azure.resourcemanager.appservice.models.IpSecurityRestriction;
 import com.azure.resourcemanager.appservice.models.LogLevel;
 import com.azure.resourcemanager.appservice.models.NetFrameworkVersion;
 import com.azure.resourcemanager.appservice.models.OperatingSystem;
+import com.azure.resourcemanager.appservice.models.PublicNetworkAccess;
 import com.azure.resourcemanager.appservice.models.PricingTier;
 import com.azure.resourcemanager.appservice.models.RemoteVisualStudioVersion;
 import com.azure.resourcemanager.appservice.models.WebApp;
 import com.azure.resourcemanager.appservice.models.WebAppBasic;
 import com.azure.resourcemanager.appservice.models.WebAppRuntimeStack;
 import com.azure.resourcemanager.test.utils.TestUtilities;
-import com.azure.core.management.Region;
-import com.azure.core.management.profile.AzureProfile;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -213,7 +214,6 @@ public class WebAppsTests extends AppServiceTest {
             .define(webappName2)
             .withRegion(Region.US_WEST)
             .withExistingResourceGroup(rgName1)
-            .withNewFreeAppServicePlan()
             .create();
 
         PagedIterable<WebAppBasic> webApps = appServiceManager.webApps().listByResourceGroup(rgName1);
@@ -284,5 +284,46 @@ public class WebAppsTests extends AppServiceTest {
         Assertions.assertEquals(1, webApp1.ipSecurityRules().size());
         Assertions.assertEquals("Allow", webApp1.ipSecurityRules().iterator().next().action());
         Assertions.assertEquals("Any", webApp1.ipSecurityRules().iterator().next().ipAddress());
+    }
+
+    @Test
+    public void canCreateWebAppWithDisablePublicNetworkAccess() {
+        resourceManager.resourceGroups().define(rgName1).withRegion(Region.US_WEST).create();
+        resourceManager.resourceGroups().define(rgName2).withRegion(Region.US_WEST).create();
+        WebApp webApp =
+            appServiceManager
+                .webApps()
+                .define(webappName1)
+                .withRegion(Region.US_WEST)
+                .withExistingResourceGroup(rgName1)
+                .withNewWindowsPlan(appServicePlanName1, PricingTier.BASIC_B1)
+                .disablePublicNetworkAccess()
+                .withRemoteDebuggingEnabled(RemoteVisualStudioVersion.VS2019)
+                .create();
+        webApp.refresh();
+        Assertions.assertEquals(PublicNetworkAccess.DISABLED, webApp.publicNetworkAccess());
+    }
+
+    @Test
+    public void canUpdatePublicNetworkAccess() {
+        resourceManager.resourceGroups().define(rgName1).withRegion(Region.US_WEST).create();
+        resourceManager.resourceGroups().define(rgName2).withRegion(Region.US_WEST).create();
+        WebApp webApp =
+            appServiceManager
+                .webApps()
+                .define(webappName1)
+                .withRegion(Region.US_WEST)
+                .withExistingResourceGroup(rgName1)
+                .withNewWindowsPlan(appServicePlanName1, PricingTier.BASIC_B1)
+                .withRemoteDebuggingEnabled(RemoteVisualStudioVersion.VS2019)
+                .create();
+
+        webApp.update().disablePublicNetworkAccess().apply();
+        webApp.refresh();
+        Assertions.assertEquals(PublicNetworkAccess.DISABLED, webApp.publicNetworkAccess());
+
+        webApp.update().enablePublicNetworkAccess().apply();
+        webApp.refresh();
+        Assertions.assertEquals(PublicNetworkAccess.ENABLED, webApp.publicNetworkAccess());
     }
 }

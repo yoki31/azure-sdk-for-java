@@ -5,7 +5,6 @@
 package com.azure.resourcemanager.compute.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.compute.models.BootDiagnosticsInstanceView;
 import com.azure.resourcemanager.compute.models.DiskInstanceView;
 import com.azure.resourcemanager.compute.models.HyperVGenerationType;
@@ -15,15 +14,14 @@ import com.azure.resourcemanager.compute.models.VirtualMachineAgentInstanceView;
 import com.azure.resourcemanager.compute.models.VirtualMachineExtensionInstanceView;
 import com.azure.resourcemanager.compute.models.VirtualMachineHealthStatus;
 import com.azure.resourcemanager.compute.models.VirtualMachinePatchStatus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The instance view of a virtual machine. */
+/**
+ * The instance view of a virtual machine.
+ */
 @Fluent
 public final class VirtualMachineInstanceViewInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VirtualMachineInstanceViewInner.class);
-
     /*
      * Specifies the update domain of the virtual machine.
      */
@@ -97,19 +95,17 @@ public final class VirtualMachineInstanceViewInner {
     private VirtualMachineHealthStatus vmHealth;
 
     /*
-     * Boot Diagnostics is a debugging feature which allows you to view Console
-     * Output and Screenshot to diagnose VM status. <br><br> You can easily
-     * view the output of your console log. <br><br> Azure also enables you to
-     * see a screenshot of the VM from the hypervisor.
+     * Boot Diagnostics is a debugging feature which allows you to view Console Output and Screenshot to diagnose VM
+     * status. You can easily view the output of your console log. Azure also enables you to see a screenshot of the VM
+     * from the hypervisor.
      */
     @JsonProperty(value = "bootDiagnostics")
     private BootDiagnosticsInstanceView bootDiagnostics;
 
     /*
-     * Resource id of the dedicated host, on which the virtual machine is
-     * allocated through automatic placement, when the virtual machine is
-     * associated with a dedicated host group that has automatic placement
-     * enabled. <br><br>Minimum api-version: 2020-06-01.
+     * Resource id of the dedicated host, on which the virtual machine is allocated through automatic placement, when
+     * the virtual machine is associated with a dedicated host group that has automatic placement enabled. Minimum
+     * api-version: 2020-06-01.
      */
     @JsonProperty(value = "assignedHost", access = JsonProperty.Access.WRITE_ONLY)
     private String assignedHost;
@@ -126,9 +122,21 @@ public final class VirtualMachineInstanceViewInner {
     @JsonProperty(value = "patchStatus")
     private VirtualMachinePatchStatus patchStatus;
 
+    /*
+     * [Preview Feature] Specifies whether the VM is currently in or out of the Standby Pool.
+     */
+    @JsonProperty(value = "isVMInStandbyPool", access = JsonProperty.Access.WRITE_ONLY)
+    private Boolean isVMInStandbyPool;
+
+    /**
+     * Creates an instance of VirtualMachineInstanceViewInner class.
+     */
+    public VirtualMachineInstanceViewInner() {
+    }
+
     /**
      * Get the platformUpdateDomain property: Specifies the update domain of the virtual machine.
-     *
+     * 
      * @return the platformUpdateDomain value.
      */
     public Integer platformUpdateDomain() {
@@ -137,7 +145,7 @@ public final class VirtualMachineInstanceViewInner {
 
     /**
      * Set the platformUpdateDomain property: Specifies the update domain of the virtual machine.
-     *
+     * 
      * @param platformUpdateDomain the platformUpdateDomain value to set.
      * @return the VirtualMachineInstanceViewInner object itself.
      */
@@ -148,7 +156,7 @@ public final class VirtualMachineInstanceViewInner {
 
     /**
      * Get the platformFaultDomain property: Specifies the fault domain of the virtual machine.
-     *
+     * 
      * @return the platformFaultDomain value.
      */
     public Integer platformFaultDomain() {
@@ -157,7 +165,7 @@ public final class VirtualMachineInstanceViewInner {
 
     /**
      * Set the platformFaultDomain property: Specifies the fault domain of the virtual machine.
-     *
+     * 
      * @param platformFaultDomain the platformFaultDomain value to set.
      * @return the VirtualMachineInstanceViewInner object itself.
      */
@@ -168,7 +176,7 @@ public final class VirtualMachineInstanceViewInner {
 
     /**
      * Get the computerName property: The computer name assigned to the virtual machine.
-     *
+     * 
      * @return the computerName value.
      */
     public String computerName() {
@@ -177,7 +185,7 @@ public final class VirtualMachineInstanceViewInner {
 
     /**
      * Set the computerName property: The computer name assigned to the virtual machine.
-     *
+     * 
      * @param computerName the computerName value to set.
      * @return the VirtualMachineInstanceViewInner object itself.
      */
@@ -188,7 +196,7 @@ public final class VirtualMachineInstanceViewInner {
 
     /**
      * Get the osName property: The Operating System running on the virtual machine.
-     *
+     * 
      * @return the osName value.
      */
     public String osName() {
@@ -197,7 +205,7 @@ public final class VirtualMachineInstanceViewInner {
 
     /**
      * Set the osName property: The Operating System running on the virtual machine.
-     *
+     * 
      * @param osName the osName value to set.
      * @return the VirtualMachineInstanceViewInner object itself.
      */
@@ -208,7 +216,7 @@ public final class VirtualMachineInstanceViewInner {
 
     /**
      * Get the osVersion property: The version of Operating System running on the virtual machine.
-     *
+     * 
      * @return the osVersion value.
      */
     public String osVersion() {
@@ -217,7 +225,7 @@ public final class VirtualMachineInstanceViewInner {
 
     /**
      * Set the osVersion property: The version of Operating System running on the virtual machine.
-     *
+     * 
      * @param osVersion the osVersion value to set.
      * @return the VirtualMachineInstanceViewInner object itself.
      */
@@ -228,7 +236,7 @@ public final class VirtualMachineInstanceViewInner {
 
     /**
      * Get the hyperVGeneration property: Specifies the HyperVGeneration Type associated with a resource.
-     *
+     * 
      * @return the hyperVGeneration value.
      */
     public HyperVGenerationType hyperVGeneration() {
@@ -237,7 +245,7 @@ public final class VirtualMachineInstanceViewInner {
 
     /**
      * Set the hyperVGeneration property: Specifies the HyperVGeneration Type associated with a resource.
-     *
+     * 
      * @param hyperVGeneration the hyperVGeneration value to set.
      * @return the VirtualMachineInstanceViewInner object itself.
      */
@@ -248,7 +256,7 @@ public final class VirtualMachineInstanceViewInner {
 
     /**
      * Get the rdpThumbPrint property: The Remote desktop certificate thumbprint.
-     *
+     * 
      * @return the rdpThumbPrint value.
      */
     public String rdpThumbPrint() {
@@ -257,7 +265,7 @@ public final class VirtualMachineInstanceViewInner {
 
     /**
      * Set the rdpThumbPrint property: The Remote desktop certificate thumbprint.
-     *
+     * 
      * @param rdpThumbPrint the rdpThumbPrint value to set.
      * @return the VirtualMachineInstanceViewInner object itself.
      */
@@ -268,7 +276,7 @@ public final class VirtualMachineInstanceViewInner {
 
     /**
      * Get the vmAgent property: The VM Agent running on the virtual machine.
-     *
+     * 
      * @return the vmAgent value.
      */
     public VirtualMachineAgentInstanceView vmAgent() {
@@ -277,7 +285,7 @@ public final class VirtualMachineInstanceViewInner {
 
     /**
      * Set the vmAgent property: The VM Agent running on the virtual machine.
-     *
+     * 
      * @param vmAgent the vmAgent value to set.
      * @return the VirtualMachineInstanceViewInner object itself.
      */
@@ -288,7 +296,7 @@ public final class VirtualMachineInstanceViewInner {
 
     /**
      * Get the maintenanceRedeployStatus property: The Maintenance Operation status on the virtual machine.
-     *
+     * 
      * @return the maintenanceRedeployStatus value.
      */
     public MaintenanceRedeployStatus maintenanceRedeployStatus() {
@@ -297,19 +305,19 @@ public final class VirtualMachineInstanceViewInner {
 
     /**
      * Set the maintenanceRedeployStatus property: The Maintenance Operation status on the virtual machine.
-     *
+     * 
      * @param maintenanceRedeployStatus the maintenanceRedeployStatus value to set.
      * @return the VirtualMachineInstanceViewInner object itself.
      */
-    public VirtualMachineInstanceViewInner withMaintenanceRedeployStatus(
-        MaintenanceRedeployStatus maintenanceRedeployStatus) {
+    public VirtualMachineInstanceViewInner
+        withMaintenanceRedeployStatus(MaintenanceRedeployStatus maintenanceRedeployStatus) {
         this.maintenanceRedeployStatus = maintenanceRedeployStatus;
         return this;
     }
 
     /**
      * Get the disks property: The virtual machine disk information.
-     *
+     * 
      * @return the disks value.
      */
     public List<DiskInstanceView> disks() {
@@ -318,7 +326,7 @@ public final class VirtualMachineInstanceViewInner {
 
     /**
      * Set the disks property: The virtual machine disk information.
-     *
+     * 
      * @param disks the disks value to set.
      * @return the VirtualMachineInstanceViewInner object itself.
      */
@@ -329,7 +337,7 @@ public final class VirtualMachineInstanceViewInner {
 
     /**
      * Get the extensions property: The extensions information.
-     *
+     * 
      * @return the extensions value.
      */
     public List<VirtualMachineExtensionInstanceView> extensions() {
@@ -338,7 +346,7 @@ public final class VirtualMachineInstanceViewInner {
 
     /**
      * Set the extensions property: The extensions information.
-     *
+     * 
      * @param extensions the extensions value to set.
      * @return the VirtualMachineInstanceViewInner object itself.
      */
@@ -349,7 +357,7 @@ public final class VirtualMachineInstanceViewInner {
 
     /**
      * Get the vmHealth property: The health status for the VM.
-     *
+     * 
      * @return the vmHealth value.
      */
     public VirtualMachineHealthStatus vmHealth() {
@@ -358,9 +366,9 @@ public final class VirtualMachineInstanceViewInner {
 
     /**
      * Get the bootDiagnostics property: Boot Diagnostics is a debugging feature which allows you to view Console Output
-     * and Screenshot to diagnose VM status. &lt;br&gt;&lt;br&gt; You can easily view the output of your console log.
-     * &lt;br&gt;&lt;br&gt; Azure also enables you to see a screenshot of the VM from the hypervisor.
-     *
+     * and Screenshot to diagnose VM status. You can easily view the output of your console log. Azure also enables you
+     * to see a screenshot of the VM from the hypervisor.
+     * 
      * @return the bootDiagnostics value.
      */
     public BootDiagnosticsInstanceView bootDiagnostics() {
@@ -369,9 +377,9 @@ public final class VirtualMachineInstanceViewInner {
 
     /**
      * Set the bootDiagnostics property: Boot Diagnostics is a debugging feature which allows you to view Console Output
-     * and Screenshot to diagnose VM status. &lt;br&gt;&lt;br&gt; You can easily view the output of your console log.
-     * &lt;br&gt;&lt;br&gt; Azure also enables you to see a screenshot of the VM from the hypervisor.
-     *
+     * and Screenshot to diagnose VM status. You can easily view the output of your console log. Azure also enables you
+     * to see a screenshot of the VM from the hypervisor.
+     * 
      * @param bootDiagnostics the bootDiagnostics value to set.
      * @return the VirtualMachineInstanceViewInner object itself.
      */
@@ -383,8 +391,8 @@ public final class VirtualMachineInstanceViewInner {
     /**
      * Get the assignedHost property: Resource id of the dedicated host, on which the virtual machine is allocated
      * through automatic placement, when the virtual machine is associated with a dedicated host group that has
-     * automatic placement enabled. &lt;br&gt;&lt;br&gt;Minimum api-version: 2020-06-01.
-     *
+     * automatic placement enabled. Minimum api-version: 2020-06-01.
+     * 
      * @return the assignedHost value.
      */
     public String assignedHost() {
@@ -393,7 +401,7 @@ public final class VirtualMachineInstanceViewInner {
 
     /**
      * Get the statuses property: The resource status information.
-     *
+     * 
      * @return the statuses value.
      */
     public List<InstanceViewStatus> statuses() {
@@ -402,7 +410,7 @@ public final class VirtualMachineInstanceViewInner {
 
     /**
      * Set the statuses property: The resource status information.
-     *
+     * 
      * @param statuses the statuses value to set.
      * @return the VirtualMachineInstanceViewInner object itself.
      */
@@ -413,7 +421,7 @@ public final class VirtualMachineInstanceViewInner {
 
     /**
      * Get the patchStatus property: [Preview Feature] The status of virtual machine patch operations.
-     *
+     * 
      * @return the patchStatus value.
      */
     public VirtualMachinePatchStatus patchStatus() {
@@ -422,7 +430,7 @@ public final class VirtualMachineInstanceViewInner {
 
     /**
      * Set the patchStatus property: [Preview Feature] The status of virtual machine patch operations.
-     *
+     * 
      * @param patchStatus the patchStatus value to set.
      * @return the VirtualMachineInstanceViewInner object itself.
      */
@@ -432,8 +440,18 @@ public final class VirtualMachineInstanceViewInner {
     }
 
     /**
+     * Get the isVMInStandbyPool property: [Preview Feature] Specifies whether the VM is currently in or out of the
+     * Standby Pool.
+     * 
+     * @return the isVMInStandbyPool value.
+     */
+    public Boolean isVMInStandbyPool() {
+        return this.isVMInStandbyPool;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

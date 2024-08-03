@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
-/** SourceControl resource specific properties. */
+/**
+ * SourceControl resource specific properties.
+ */
 @Fluent
 public final class SourceControlProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SourceControlProperties.class);
-
     /*
      * OAuth access token.
      */
@@ -40,8 +38,14 @@ public final class SourceControlProperties {
     private OffsetDateTime expirationTime;
 
     /**
+     * Creates an instance of SourceControlProperties class.
+     */
+    public SourceControlProperties() {
+    }
+
+    /**
      * Get the token property: OAuth access token.
-     *
+     * 
      * @return the token value.
      */
     public String token() {
@@ -50,7 +54,7 @@ public final class SourceControlProperties {
 
     /**
      * Set the token property: OAuth access token.
-     *
+     * 
      * @param token the token value to set.
      * @return the SourceControlProperties object itself.
      */
@@ -61,7 +65,7 @@ public final class SourceControlProperties {
 
     /**
      * Get the tokenSecret property: OAuth access token secret.
-     *
+     * 
      * @return the tokenSecret value.
      */
     public String tokenSecret() {
@@ -70,7 +74,7 @@ public final class SourceControlProperties {
 
     /**
      * Set the tokenSecret property: OAuth access token secret.
-     *
+     * 
      * @param tokenSecret the tokenSecret value to set.
      * @return the SourceControlProperties object itself.
      */
@@ -81,7 +85,7 @@ public final class SourceControlProperties {
 
     /**
      * Get the refreshToken property: OAuth refresh token.
-     *
+     * 
      * @return the refreshToken value.
      */
     public String refreshToken() {
@@ -90,7 +94,7 @@ public final class SourceControlProperties {
 
     /**
      * Set the refreshToken property: OAuth refresh token.
-     *
+     * 
      * @param refreshToken the refreshToken value to set.
      * @return the SourceControlProperties object itself.
      */
@@ -101,7 +105,7 @@ public final class SourceControlProperties {
 
     /**
      * Get the expirationTime property: OAuth token expiration.
-     *
+     * 
      * @return the expirationTime value.
      */
     public OffsetDateTime expirationTime() {
@@ -110,7 +114,7 @@ public final class SourceControlProperties {
 
     /**
      * Set the expirationTime property: OAuth token expiration.
-     *
+     * 
      * @param expirationTime the expirationTime value to set.
      * @return the SourceControlProperties object itself.
      */
@@ -121,7 +125,7 @@ public final class SourceControlProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

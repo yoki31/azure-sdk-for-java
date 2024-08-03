@@ -7,14 +7,13 @@ package com.azure.resourcemanager.datafactory.fluent.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.models.DatasetLocation;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** DelimitedText dataset properties. */
+/**
+ * DelimitedText dataset properties.
+ */
 @Fluent
 public final class DelimitedTextDatasetTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DelimitedTextDatasetTypeProperties.class);
-
     /*
      * The location of the delimited text storage.
      */
@@ -22,8 +21,7 @@ public final class DelimitedTextDatasetTypeProperties {
     private DatasetLocation location;
 
     /*
-     * The column delimiter. Type: string (or Expression with resultType
-     * string).
+     * The column delimiter. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "columnDelimiter")
     private Object columnDelimiter;
@@ -35,18 +33,16 @@ public final class DelimitedTextDatasetTypeProperties {
     private Object rowDelimiter;
 
     /*
-     * The code page name of the preferred encoding. If miss, the default value
-     * is UTF-8, unless BOM denotes another Unicode encoding. Refer to the name
-     * column of the table in the following link to set supported values:
-     * https://msdn.microsoft.com/library/system.text.encoding.aspx. Type:
-     * string (or Expression with resultType string).
+     * The code page name of the preferred encoding. If miss, the default value is UTF-8, unless BOM denotes another
+     * Unicode encoding. Refer to the name column of the table in the following link to set supported values:
+     * https://msdn.microsoft.com/library/system.text.encoding.aspx. Type: string (or Expression with resultType
+     * string).
      */
     @JsonProperty(value = "encodingName")
     private Object encodingName;
 
     /*
-     * The data compressionCodec. Type: string (or Expression with resultType
-     * string).
+     * The data compressionCodec. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "compressionCodec")
     private Object compressionCodec;
@@ -58,38 +54,39 @@ public final class DelimitedTextDatasetTypeProperties {
     private Object compressionLevel;
 
     /*
-     * The quote character. Type: string (or Expression with resultType
-     * string).
+     * The quote character. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "quoteChar")
     private Object quoteChar;
 
     /*
-     * The escape character. Type: string (or Expression with resultType
-     * string).
+     * The escape character. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "escapeChar")
     private Object escapeChar;
 
     /*
-     * When used as input, treat the first row of data as headers. When used as
-     * output,write the headers into the output as the first row of data. The
-     * default value is false. Type: boolean (or Expression with resultType
-     * boolean).
+     * When used as input, treat the first row of data as headers. When used as output,write the headers into the output
+     * as the first row of data. The default value is false. Type: boolean (or Expression with resultType boolean).
      */
     @JsonProperty(value = "firstRowAsHeader")
     private Object firstRowAsHeader;
 
     /*
-     * The null value string. Type: string (or Expression with resultType
-     * string).
+     * The null value string. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "nullValue")
     private Object nullValue;
 
     /**
+     * Creates an instance of DelimitedTextDatasetTypeProperties class.
+     */
+    public DelimitedTextDatasetTypeProperties() {
+    }
+
+    /**
      * Get the location property: The location of the delimited text storage.
-     *
+     * 
      * @return the location value.
      */
     public DatasetLocation location() {
@@ -98,7 +95,7 @@ public final class DelimitedTextDatasetTypeProperties {
 
     /**
      * Set the location property: The location of the delimited text storage.
-     *
+     * 
      * @param location the location value to set.
      * @return the DelimitedTextDatasetTypeProperties object itself.
      */
@@ -109,7 +106,7 @@ public final class DelimitedTextDatasetTypeProperties {
 
     /**
      * Get the columnDelimiter property: The column delimiter. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the columnDelimiter value.
      */
     public Object columnDelimiter() {
@@ -118,7 +115,7 @@ public final class DelimitedTextDatasetTypeProperties {
 
     /**
      * Set the columnDelimiter property: The column delimiter. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param columnDelimiter the columnDelimiter value to set.
      * @return the DelimitedTextDatasetTypeProperties object itself.
      */
@@ -129,7 +126,7 @@ public final class DelimitedTextDatasetTypeProperties {
 
     /**
      * Get the rowDelimiter property: The row delimiter. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the rowDelimiter value.
      */
     public Object rowDelimiter() {
@@ -138,7 +135,7 @@ public final class DelimitedTextDatasetTypeProperties {
 
     /**
      * Set the rowDelimiter property: The row delimiter. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param rowDelimiter the rowDelimiter value to set.
      * @return the DelimitedTextDatasetTypeProperties object itself.
      */
@@ -152,7 +149,7 @@ public final class DelimitedTextDatasetTypeProperties {
      * unless BOM denotes another Unicode encoding. Refer to the name column of the table in the following link to set
      * supported values: https://msdn.microsoft.com/library/system.text.encoding.aspx. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the encodingName value.
      */
     public Object encodingName() {
@@ -164,7 +161,7 @@ public final class DelimitedTextDatasetTypeProperties {
      * unless BOM denotes another Unicode encoding. Refer to the name column of the table in the following link to set
      * supported values: https://msdn.microsoft.com/library/system.text.encoding.aspx. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param encodingName the encodingName value to set.
      * @return the DelimitedTextDatasetTypeProperties object itself.
      */
@@ -176,7 +173,7 @@ public final class DelimitedTextDatasetTypeProperties {
     /**
      * Get the compressionCodec property: The data compressionCodec. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @return the compressionCodec value.
      */
     public Object compressionCodec() {
@@ -186,7 +183,7 @@ public final class DelimitedTextDatasetTypeProperties {
     /**
      * Set the compressionCodec property: The data compressionCodec. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @param compressionCodec the compressionCodec value to set.
      * @return the DelimitedTextDatasetTypeProperties object itself.
      */
@@ -197,7 +194,7 @@ public final class DelimitedTextDatasetTypeProperties {
 
     /**
      * Get the compressionLevel property: The data compression method used for DelimitedText.
-     *
+     * 
      * @return the compressionLevel value.
      */
     public Object compressionLevel() {
@@ -206,7 +203,7 @@ public final class DelimitedTextDatasetTypeProperties {
 
     /**
      * Set the compressionLevel property: The data compression method used for DelimitedText.
-     *
+     * 
      * @param compressionLevel the compressionLevel value to set.
      * @return the DelimitedTextDatasetTypeProperties object itself.
      */
@@ -217,7 +214,7 @@ public final class DelimitedTextDatasetTypeProperties {
 
     /**
      * Get the quoteChar property: The quote character. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the quoteChar value.
      */
     public Object quoteChar() {
@@ -226,7 +223,7 @@ public final class DelimitedTextDatasetTypeProperties {
 
     /**
      * Set the quoteChar property: The quote character. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param quoteChar the quoteChar value to set.
      * @return the DelimitedTextDatasetTypeProperties object itself.
      */
@@ -237,7 +234,7 @@ public final class DelimitedTextDatasetTypeProperties {
 
     /**
      * Get the escapeChar property: The escape character. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the escapeChar value.
      */
     public Object escapeChar() {
@@ -246,7 +243,7 @@ public final class DelimitedTextDatasetTypeProperties {
 
     /**
      * Set the escapeChar property: The escape character. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param escapeChar the escapeChar value to set.
      * @return the DelimitedTextDatasetTypeProperties object itself.
      */
@@ -259,7 +256,7 @@ public final class DelimitedTextDatasetTypeProperties {
      * Get the firstRowAsHeader property: When used as input, treat the first row of data as headers. When used as
      * output,write the headers into the output as the first row of data. The default value is false. Type: boolean (or
      * Expression with resultType boolean).
-     *
+     * 
      * @return the firstRowAsHeader value.
      */
     public Object firstRowAsHeader() {
@@ -270,7 +267,7 @@ public final class DelimitedTextDatasetTypeProperties {
      * Set the firstRowAsHeader property: When used as input, treat the first row of data as headers. When used as
      * output,write the headers into the output as the first row of data. The default value is false. Type: boolean (or
      * Expression with resultType boolean).
-     *
+     * 
      * @param firstRowAsHeader the firstRowAsHeader value to set.
      * @return the DelimitedTextDatasetTypeProperties object itself.
      */
@@ -281,7 +278,7 @@ public final class DelimitedTextDatasetTypeProperties {
 
     /**
      * Get the nullValue property: The null value string. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the nullValue value.
      */
     public Object nullValue() {
@@ -290,7 +287,7 @@ public final class DelimitedTextDatasetTypeProperties {
 
     /**
      * Set the nullValue property: The null value string. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param nullValue the nullValue value to set.
      * @return the DelimitedTextDatasetTypeProperties object itself.
      */
@@ -301,17 +298,18 @@ public final class DelimitedTextDatasetTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (location() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property location in model DelimitedTextDatasetTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property location in model DelimitedTextDatasetTypeProperties"));
         } else {
             location().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(DelimitedTextDatasetTypeProperties.class);
 }

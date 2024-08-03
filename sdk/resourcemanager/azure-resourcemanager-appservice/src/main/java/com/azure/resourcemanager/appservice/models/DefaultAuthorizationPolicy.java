@@ -5,33 +5,35 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The configuration settings of the Azure Active Directory default authorization policy. */
+/**
+ * The configuration settings of the Azure Active Directory default authorization policy.
+ */
 @Fluent
 public final class DefaultAuthorizationPolicy {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DefaultAuthorizationPolicy.class);
-
     /*
-     * The configuration settings of the Azure Active Directory allowed
-     * principals.
+     * The configuration settings of the Azure Active Directory allowed principals.
      */
     @JsonProperty(value = "allowedPrincipals")
     private AllowedPrincipals allowedPrincipals;
 
     /*
-     * The configuration settings of the Azure Active Directory allowed
-     * applications.
+     * The configuration settings of the Azure Active Directory allowed applications.
      */
     @JsonProperty(value = "allowedApplications")
     private List<String> allowedApplications;
 
     /**
+     * Creates an instance of DefaultAuthorizationPolicy class.
+     */
+    public DefaultAuthorizationPolicy() {
+    }
+
+    /**
      * Get the allowedPrincipals property: The configuration settings of the Azure Active Directory allowed principals.
-     *
+     * 
      * @return the allowedPrincipals value.
      */
     public AllowedPrincipals allowedPrincipals() {
@@ -40,7 +42,7 @@ public final class DefaultAuthorizationPolicy {
 
     /**
      * Set the allowedPrincipals property: The configuration settings of the Azure Active Directory allowed principals.
-     *
+     * 
      * @param allowedPrincipals the allowedPrincipals value to set.
      * @return the DefaultAuthorizationPolicy object itself.
      */
@@ -52,7 +54,7 @@ public final class DefaultAuthorizationPolicy {
     /**
      * Get the allowedApplications property: The configuration settings of the Azure Active Directory allowed
      * applications.
-     *
+     * 
      * @return the allowedApplications value.
      */
     public List<String> allowedApplications() {
@@ -62,7 +64,7 @@ public final class DefaultAuthorizationPolicy {
     /**
      * Set the allowedApplications property: The configuration settings of the Azure Active Directory allowed
      * applications.
-     *
+     * 
      * @param allowedApplications the allowedApplications value to set.
      * @return the DefaultAuthorizationPolicy object itself.
      */
@@ -73,7 +75,7 @@ public final class DefaultAuthorizationPolicy {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

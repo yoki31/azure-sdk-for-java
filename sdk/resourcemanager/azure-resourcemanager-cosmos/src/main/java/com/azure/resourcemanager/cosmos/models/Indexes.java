@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The indexes for the path. */
+/**
+ * The indexes for the path.
+ */
 @Fluent
 public final class Indexes {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Indexes.class);
-
     /*
      * The datatype for which the indexing behavior is applied to.
      */
@@ -33,8 +31,14 @@ public final class Indexes {
     private IndexKind kind;
 
     /**
+     * Creates an instance of Indexes class.
+     */
+    public Indexes() {
+    }
+
+    /**
      * Get the dataType property: The datatype for which the indexing behavior is applied to.
-     *
+     * 
      * @return the dataType value.
      */
     public DataType dataType() {
@@ -43,7 +47,7 @@ public final class Indexes {
 
     /**
      * Set the dataType property: The datatype for which the indexing behavior is applied to.
-     *
+     * 
      * @param dataType the dataType value to set.
      * @return the Indexes object itself.
      */
@@ -54,7 +58,7 @@ public final class Indexes {
 
     /**
      * Get the precision property: The precision of the index. -1 is maximum precision.
-     *
+     * 
      * @return the precision value.
      */
     public Integer precision() {
@@ -63,7 +67,7 @@ public final class Indexes {
 
     /**
      * Set the precision property: The precision of the index. -1 is maximum precision.
-     *
+     * 
      * @param precision the precision value to set.
      * @return the Indexes object itself.
      */
@@ -74,7 +78,7 @@ public final class Indexes {
 
     /**
      * Get the kind property: Indicates the type of index.
-     *
+     * 
      * @return the kind value.
      */
     public IndexKind kind() {
@@ -83,7 +87,7 @@ public final class Indexes {
 
     /**
      * Set the kind property: Indicates the type of index.
-     *
+     * 
      * @param kind the kind value to set.
      * @return the Indexes object itself.
      */
@@ -94,7 +98,7 @@ public final class Indexes {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

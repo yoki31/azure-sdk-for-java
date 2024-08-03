@@ -7,15 +7,14 @@ package com.azure.resourcemanager.compute.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.compute.fluent.models.DiskRestorePointInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The List Disk Restore Points operation response. */
+/**
+ * The List Disk Restore Points operation response.
+ */
 @Fluent
 public final class DiskRestorePointList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DiskRestorePointList.class);
-
     /*
      * A list of disk restore points.
      */
@@ -23,15 +22,21 @@ public final class DiskRestorePointList {
     private List<DiskRestorePointInner> value;
 
     /*
-     * The uri to fetch the next page of disk restore points. Call ListNext()
-     * with this to fetch the next page of disk restore points.
+     * The uri to fetch the next page of disk restore points. Call ListNext() with this to fetch the next page of disk
+     * restore points.
      */
     @JsonProperty(value = "nextLink")
     private String nextLink;
 
     /**
+     * Creates an instance of DiskRestorePointList class.
+     */
+    public DiskRestorePointList() {
+    }
+
+    /**
      * Get the value property: A list of disk restore points.
-     *
+     * 
      * @return the value value.
      */
     public List<DiskRestorePointInner> value() {
@@ -40,7 +45,7 @@ public final class DiskRestorePointList {
 
     /**
      * Set the value property: A list of disk restore points.
-     *
+     * 
      * @param value the value value to set.
      * @return the DiskRestorePointList object itself.
      */
@@ -52,7 +57,7 @@ public final class DiskRestorePointList {
     /**
      * Get the nextLink property: The uri to fetch the next page of disk restore points. Call ListNext() with this to
      * fetch the next page of disk restore points.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -62,7 +67,7 @@ public final class DiskRestorePointList {
     /**
      * Set the nextLink property: The uri to fetch the next page of disk restore points. Call ListNext() with this to
      * fetch the next page of disk restore points.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the DiskRestorePointList object itself.
      */
@@ -73,16 +78,17 @@ public final class DiskRestorePointList {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property value in model DiskRestorePointList"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property value in model DiskRestorePointList"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(DiskRestorePointList.class);
 }

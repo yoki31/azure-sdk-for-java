@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.monitor.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Display metadata associated with the operation. */
+/**
+ * Display metadata associated with the operation.
+ */
 @Fluent
 public final class OperationDisplay {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OperationDisplay.class);
-
     /*
      * Service provider: Microsoft.Insights
      */
@@ -21,8 +19,7 @@ public final class OperationDisplay {
     private String provider;
 
     /*
-     * Resource on which the operation is performed: AlertRules, Autoscale,
-     * etc.
+     * Resource on which the operation is performed: AlertRules, Autoscale, etc.
      */
     @JsonProperty(value = "resource")
     private String resource;
@@ -34,8 +31,14 @@ public final class OperationDisplay {
     private String operation;
 
     /**
+     * Creates an instance of OperationDisplay class.
+     */
+    public OperationDisplay() {
+    }
+
+    /**
      * Get the provider property: Service provider: Microsoft.Insights.
-     *
+     * 
      * @return the provider value.
      */
     public String provider() {
@@ -44,7 +47,7 @@ public final class OperationDisplay {
 
     /**
      * Set the provider property: Service provider: Microsoft.Insights.
-     *
+     * 
      * @param provider the provider value to set.
      * @return the OperationDisplay object itself.
      */
@@ -55,7 +58,7 @@ public final class OperationDisplay {
 
     /**
      * Get the resource property: Resource on which the operation is performed: AlertRules, Autoscale, etc.
-     *
+     * 
      * @return the resource value.
      */
     public String resource() {
@@ -64,7 +67,7 @@ public final class OperationDisplay {
 
     /**
      * Set the resource property: Resource on which the operation is performed: AlertRules, Autoscale, etc.
-     *
+     * 
      * @param resource the resource value to set.
      * @return the OperationDisplay object itself.
      */
@@ -75,7 +78,7 @@ public final class OperationDisplay {
 
     /**
      * Get the operation property: Operation type: Read, write, delete, etc.
-     *
+     * 
      * @return the operation value.
      */
     public String operation() {
@@ -84,7 +87,7 @@ public final class OperationDisplay {
 
     /**
      * Set the operation property: Operation type: Read, write, delete, etc.
-     *
+     * 
      * @param operation the operation value to set.
      * @return the OperationDisplay object itself.
      */
@@ -95,7 +98,7 @@ public final class OperationDisplay {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -21,15 +21,12 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.applicationinsights.fluent.ComponentFeatureCapabilitiesClient;
 import com.azure.resourcemanager.applicationinsights.fluent.models.ApplicationInsightsComponentFeatureCapabilitiesInner;
 import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in ComponentFeatureCapabilitiesClient. */
 public final class ComponentFeatureCapabilitiesClientImpl implements ComponentFeatureCapabilitiesClient {
-    private final ClientLogger logger = new ClientLogger(ComponentFeatureCapabilitiesClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final ComponentFeatureCapabilitiesService service;
 
@@ -55,11 +52,10 @@ public final class ComponentFeatureCapabilitiesClientImpl implements ComponentFe
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApplicationInsightsM")
-    private interface ComponentFeatureCapabilitiesService {
+    public interface ComponentFeatureCapabilitiesService {
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Insights/components"
-                + "/{resourceName}/featurecapabilities")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Insights/components/{resourceName}/featurecapabilities")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<ApplicationInsightsComponentFeatureCapabilitiesInner>> get(
@@ -80,7 +76,8 @@ public final class ComponentFeatureCapabilitiesClientImpl implements ComponentFe
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Application Insights component feature capabilities.
+     * @return an Application Insights component feature capabilities along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<ApplicationInsightsComponentFeatureCapabilitiesInner>> getWithResponseAsync(
@@ -130,7 +127,8 @@ public final class ComponentFeatureCapabilitiesClientImpl implements ComponentFe
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Application Insights component feature capabilities.
+     * @return an Application Insights component feature capabilities along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<ApplicationInsightsComponentFeatureCapabilitiesInner>> getWithResponseAsync(
@@ -176,20 +174,29 @@ public final class ComponentFeatureCapabilitiesClientImpl implements ComponentFe
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Application Insights component feature capabilities.
+     * @return an Application Insights component feature capabilities on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<ApplicationInsightsComponentFeatureCapabilitiesInner> getAsync(
         String resourceGroupName, String resourceName) {
-        return getWithResponseAsync(resourceGroupName, resourceName)
-            .flatMap(
-                (Response<ApplicationInsightsComponentFeatureCapabilitiesInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+        return getWithResponseAsync(resourceGroupName, resourceName).flatMap(res -> Mono.justOrEmpty(res.getValue()));
+    }
+
+    /**
+     * Returns feature capabilities of the application insights component.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param resourceName The name of the Application Insights component resource.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return an Application Insights component feature capabilities along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<ApplicationInsightsComponentFeatureCapabilitiesInner> getWithResponse(
+        String resourceGroupName, String resourceName, Context context) {
+        return getWithResponseAsync(resourceGroupName, resourceName, context).block();
     }
 
     /**
@@ -204,23 +211,6 @@ public final class ComponentFeatureCapabilitiesClientImpl implements ComponentFe
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public ApplicationInsightsComponentFeatureCapabilitiesInner get(String resourceGroupName, String resourceName) {
-        return getAsync(resourceGroupName, resourceName).block();
-    }
-
-    /**
-     * Returns feature capabilities of the application insights component.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param resourceName The name of the Application Insights component resource.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Application Insights component feature capabilities.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<ApplicationInsightsComponentFeatureCapabilitiesInner> getWithResponse(
-        String resourceGroupName, String resourceName, Context context) {
-        return getWithResponseAsync(resourceGroupName, resourceName, context).block();
+        return getWithResponse(resourceGroupName, resourceName, Context.NONE).getValue();
     }
 }

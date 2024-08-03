@@ -5,34 +5,35 @@
 package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** AmazonRdsForOracle dataset properties. */
+/**
+ * AmazonRdsForOracle dataset properties.
+ */
 @Fluent
 public final class AmazonRdsForOracleTableDatasetTypeProperties {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(AmazonRdsForOracleTableDatasetTypeProperties.class);
-
     /*
-     * The schema name of the AmazonRdsForOracle database. Type: string (or
-     * Expression with resultType string).
+     * The schema name of the AmazonRdsForOracle database. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "schema")
     private Object schema;
 
     /*
-     * The table name of the AmazonRdsForOracle database. Type: string (or
-     * Expression with resultType string).
+     * The table name of the AmazonRdsForOracle database. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "table")
     private Object table;
 
     /**
+     * Creates an instance of AmazonRdsForOracleTableDatasetTypeProperties class.
+     */
+    public AmazonRdsForOracleTableDatasetTypeProperties() {
+    }
+
+    /**
      * Get the schema property: The schema name of the AmazonRdsForOracle database. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the schema value.
      */
     public Object schema() {
@@ -42,7 +43,7 @@ public final class AmazonRdsForOracleTableDatasetTypeProperties {
     /**
      * Set the schema property: The schema name of the AmazonRdsForOracle database. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param schema the schema value to set.
      * @return the AmazonRdsForOracleTableDatasetTypeProperties object itself.
      */
@@ -54,7 +55,7 @@ public final class AmazonRdsForOracleTableDatasetTypeProperties {
     /**
      * Get the table property: The table name of the AmazonRdsForOracle database. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the table value.
      */
     public Object table() {
@@ -64,7 +65,7 @@ public final class AmazonRdsForOracleTableDatasetTypeProperties {
     /**
      * Set the table property: The table name of the AmazonRdsForOracle database. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param table the table value to set.
      * @return the AmazonRdsForOracleTableDatasetTypeProperties object itself.
      */
@@ -75,7 +76,7 @@ public final class AmazonRdsForOracleTableDatasetTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

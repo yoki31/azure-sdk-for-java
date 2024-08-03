@@ -28,6 +28,29 @@ public interface KustoPoolDatabasePrincipalAssignmentsClient {
      * @param databaseName The name of the database in the Kusto pool.
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param principalAssignmentName The name of the resource.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the result returned from a check name availability request along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<CheckNameResultInner> checkNameAvailabilityWithResponse(
+        String workspaceName,
+        String kustoPoolName,
+        String databaseName,
+        String resourceGroupName,
+        DatabasePrincipalAssignmentCheckNameRequest principalAssignmentName,
+        Context context);
+
+    /**
+     * Checks that the database principal assignment is valid and is not already in use.
+     *
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param databaseName The name of the database in the Kusto pool.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param principalAssignmentName The name of the resource.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
@@ -42,29 +65,6 @@ public interface KustoPoolDatabasePrincipalAssignmentsClient {
         DatabasePrincipalAssignmentCheckNameRequest principalAssignmentName);
 
     /**
-     * Checks that the database principal assignment is valid and is not already in use.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param databaseName The name of the database in the Kusto pool.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param principalAssignmentName The name of the resource.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<CheckNameResultInner> checkNameAvailabilityWithResponse(
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String resourceGroupName,
-        DatabasePrincipalAssignmentCheckNameRequest principalAssignmentName,
-        Context context);
-
-    /**
      * Lists all Kusto pool database principalAssignments.
      *
      * @param workspaceName The name of the workspace.
@@ -74,7 +74,8 @@ public interface KustoPoolDatabasePrincipalAssignmentsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database principal assignments operation response.
+     * @return the list Kusto database principal assignments operation response as paginated response with {@link
+     *     PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<DatabasePrincipalAssignmentInner> list(
@@ -91,11 +92,35 @@ public interface KustoPoolDatabasePrincipalAssignmentsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database principal assignments operation response.
+     * @return the list Kusto database principal assignments operation response as paginated response with {@link
+     *     PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<DatabasePrincipalAssignmentInner> list(
         String workspaceName, String kustoPoolName, String databaseName, String resourceGroupName, Context context);
+
+    /**
+     * Gets a Kusto pool database principalAssignment.
+     *
+     * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param databaseName The name of the database in the Kusto pool.
+     * @param principalAssignmentName The name of the Kusto principalAssignment.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return a Kusto pool database principalAssignment along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<DatabasePrincipalAssignmentInner> getWithResponse(
+        String workspaceName,
+        String kustoPoolName,
+        String databaseName,
+        String principalAssignmentName,
+        String resourceGroupName,
+        Context context);
 
     /**
      * Gets a Kusto pool database principalAssignment.
@@ -119,29 +144,6 @@ public interface KustoPoolDatabasePrincipalAssignmentsClient {
         String resourceGroupName);
 
     /**
-     * Gets a Kusto pool database principalAssignment.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param databaseName The name of the database in the Kusto pool.
-     * @param principalAssignmentName The name of the Kusto principalAssignment.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Kusto pool database principalAssignment.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<DatabasePrincipalAssignmentInner> getWithResponse(
-        String workspaceName,
-        String kustoPoolName,
-        String databaseName,
-        String principalAssignmentName,
-        String resourceGroupName,
-        Context context);
-
-    /**
      * Creates a Kusto pool database principalAssignment.
      *
      * @param workspaceName The name of the workspace.
@@ -153,7 +155,7 @@ public interface KustoPoolDatabasePrincipalAssignmentsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a database principal assignment.
+     * @return the {@link SyncPoller} for polling of class representing a database principal assignment.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<DatabasePrincipalAssignmentInner>, DatabasePrincipalAssignmentInner> beginCreateOrUpdate(
@@ -177,7 +179,7 @@ public interface KustoPoolDatabasePrincipalAssignmentsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return class representing a database principal assignment.
+     * @return the {@link SyncPoller} for polling of class representing a database principal assignment.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<DatabasePrincipalAssignmentInner>, DatabasePrincipalAssignmentInner> beginCreateOrUpdate(
@@ -248,7 +250,7 @@ public interface KustoPoolDatabasePrincipalAssignmentsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginDelete(
@@ -270,7 +272,7 @@ public interface KustoPoolDatabasePrincipalAssignmentsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link SyncPoller} for polling of long-running operation.
      */
     @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<Void>, Void> beginDelete(

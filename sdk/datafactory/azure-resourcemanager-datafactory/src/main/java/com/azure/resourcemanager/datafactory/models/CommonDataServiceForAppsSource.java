@@ -5,39 +5,63 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-/** A copy activity Common Data Service for Apps source. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * A copy activity Common Data Service for Apps source.
+ */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "type",
+    defaultImpl = CommonDataServiceForAppsSource.class,
+    visible = true)
 @JsonTypeName("CommonDataServiceForAppsSource")
 @Fluent
 public final class CommonDataServiceForAppsSource extends CopySource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CommonDataServiceForAppsSource.class);
+    /*
+     * Copy source type.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "CommonDataServiceForAppsSource";
 
     /*
-     * FetchXML is a proprietary query language that is used in Microsoft
-     * Common Data Service for Apps (online & on-premises). Type: string (or
-     * Expression with resultType string).
+     * FetchXML is a proprietary query language that is used in Microsoft Common Data Service for Apps (online &
+     * on-premises). Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "query")
     private Object query;
 
     /*
-     * Specifies the additional columns to be added to source data. Type: array
-     * of objects(AdditionalColumns) (or Expression with resultType array of
-     * objects).
+     * Specifies the additional columns to be added to source data. Type: array of objects(AdditionalColumns) (or
+     * Expression with resultType array of objects).
      */
     @JsonProperty(value = "additionalColumns")
     private Object additionalColumns;
 
     /**
+     * Creates an instance of CommonDataServiceForAppsSource class.
+     */
+    public CommonDataServiceForAppsSource() {
+    }
+
+    /**
+     * Get the type property: Copy source type.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the query property: FetchXML is a proprietary query language that is used in Microsoft Common Data Service
      * for Apps (online &amp; on-premises). Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the query value.
      */
     public Object query() {
@@ -47,7 +71,7 @@ public final class CommonDataServiceForAppsSource extends CopySource {
     /**
      * Set the query property: FetchXML is a proprietary query language that is used in Microsoft Common Data Service
      * for Apps (online &amp; on-premises). Type: string (or Expression with resultType string).
-     *
+     * 
      * @param query the query value to set.
      * @return the CommonDataServiceForAppsSource object itself.
      */
@@ -59,7 +83,7 @@ public final class CommonDataServiceForAppsSource extends CopySource {
     /**
      * Get the additionalColumns property: Specifies the additional columns to be added to source data. Type: array of
      * objects(AdditionalColumns) (or Expression with resultType array of objects).
-     *
+     * 
      * @return the additionalColumns value.
      */
     public Object additionalColumns() {
@@ -69,7 +93,7 @@ public final class CommonDataServiceForAppsSource extends CopySource {
     /**
      * Set the additionalColumns property: Specifies the additional columns to be added to source data. Type: array of
      * objects(AdditionalColumns) (or Expression with resultType array of objects).
-     *
+     * 
      * @param additionalColumns the additionalColumns value to set.
      * @return the CommonDataServiceForAppsSource object itself.
      */
@@ -78,28 +102,36 @@ public final class CommonDataServiceForAppsSource extends CopySource {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommonDataServiceForAppsSource withSourceRetryCount(Object sourceRetryCount) {
         super.withSourceRetryCount(sourceRetryCount);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommonDataServiceForAppsSource withSourceRetryWait(Object sourceRetryWait) {
         super.withSourceRetryWait(sourceRetryWait);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommonDataServiceForAppsSource withMaxConcurrentConnections(Object maxConcurrentConnections) {
         super.withMaxConcurrentConnections(maxConcurrentConnections);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommonDataServiceForAppsSource withDisableMetricsCollection(Object disableMetricsCollection) {
         super.withDisableMetricsCollection(disableMetricsCollection);
@@ -108,7 +140,7 @@ public final class CommonDataServiceForAppsSource extends CopySource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

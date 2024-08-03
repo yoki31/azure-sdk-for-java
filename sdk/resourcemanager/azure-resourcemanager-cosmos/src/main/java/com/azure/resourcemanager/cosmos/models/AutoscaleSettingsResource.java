@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Cosmos DB provisioned throughput settings object. */
+/**
+ * Cosmos DB provisioned throughput settings object.
+ */
 @Fluent
 public final class AutoscaleSettingsResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AutoscaleSettingsResource.class);
-
     /*
      * Represents maximum throughput container can scale up to.
      */
@@ -27,15 +25,20 @@ public final class AutoscaleSettingsResource {
     private AutoUpgradePolicyResource autoUpgradePolicy;
 
     /*
-     * Represents target maximum throughput container can scale up to once
-     * offer is no longer in pending state.
+     * Represents target maximum throughput container can scale up to once offer is no longer in pending state.
      */
     @JsonProperty(value = "targetMaxThroughput", access = JsonProperty.Access.WRITE_ONLY)
     private Integer targetMaxThroughput;
 
     /**
+     * Creates an instance of AutoscaleSettingsResource class.
+     */
+    public AutoscaleSettingsResource() {
+    }
+
+    /**
      * Get the maxThroughput property: Represents maximum throughput container can scale up to.
-     *
+     * 
      * @return the maxThroughput value.
      */
     public int maxThroughput() {
@@ -44,7 +47,7 @@ public final class AutoscaleSettingsResource {
 
     /**
      * Set the maxThroughput property: Represents maximum throughput container can scale up to.
-     *
+     * 
      * @param maxThroughput the maxThroughput value to set.
      * @return the AutoscaleSettingsResource object itself.
      */
@@ -55,7 +58,7 @@ public final class AutoscaleSettingsResource {
 
     /**
      * Get the autoUpgradePolicy property: Cosmos DB resource auto-upgrade policy.
-     *
+     * 
      * @return the autoUpgradePolicy value.
      */
     public AutoUpgradePolicyResource autoUpgradePolicy() {
@@ -64,7 +67,7 @@ public final class AutoscaleSettingsResource {
 
     /**
      * Set the autoUpgradePolicy property: Cosmos DB resource auto-upgrade policy.
-     *
+     * 
      * @param autoUpgradePolicy the autoUpgradePolicy value to set.
      * @return the AutoscaleSettingsResource object itself.
      */
@@ -76,7 +79,7 @@ public final class AutoscaleSettingsResource {
     /**
      * Get the targetMaxThroughput property: Represents target maximum throughput container can scale up to once offer
      * is no longer in pending state.
-     *
+     * 
      * @return the targetMaxThroughput value.
      */
     public Integer targetMaxThroughput() {
@@ -85,7 +88,7 @@ public final class AutoscaleSettingsResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

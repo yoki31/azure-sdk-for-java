@@ -22,10 +22,9 @@ import com.azure.resourcemanager.apimanagement.models.TagsGetEntityStateByOperat
 import com.azure.resourcemanager.apimanagement.models.TagsGetEntityStateByProductResponse;
 import com.azure.resourcemanager.apimanagement.models.TagsGetEntityStateResponse;
 import com.azure.resourcemanager.apimanagement.models.TagsGetResponse;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class TagsImpl implements Tags {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TagsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(TagsImpl.class);
 
     private final TagsClient innerClient;
 
@@ -60,11 +59,6 @@ public final class TagsImpl implements Tags {
         return Utils.mapPage(inner, inner1 -> new TagContractImpl(inner1, this.manager()));
     }
 
-    public void getEntityStateByOperation(
-        String resourceGroupName, String serviceName, String apiId, String operationId, String tagId) {
-        this.serviceClient().getEntityStateByOperation(resourceGroupName, serviceName, apiId, operationId, tagId);
-    }
-
     public TagsGetEntityStateByOperationResponse getEntityStateByOperationWithResponse(
         String resourceGroupName, String serviceName, String apiId, String operationId, String tagId, Context context) {
         return this
@@ -72,15 +66,9 @@ public final class TagsImpl implements Tags {
             .getEntityStateByOperationWithResponse(resourceGroupName, serviceName, apiId, operationId, tagId, context);
     }
 
-    public TagContract getByOperation(
+    public void getEntityStateByOperation(
         String resourceGroupName, String serviceName, String apiId, String operationId, String tagId) {
-        TagContractInner inner =
-            this.serviceClient().getByOperation(resourceGroupName, serviceName, apiId, operationId, tagId);
-        if (inner != null) {
-            return new TagContractImpl(inner, this.manager());
-        } else {
-            return null;
-        }
+        this.serviceClient().getEntityStateByOperation(resourceGroupName, serviceName, apiId, operationId, tagId);
     }
 
     public Response<TagContract> getByOperationWithResponse(
@@ -100,10 +88,10 @@ public final class TagsImpl implements Tags {
         }
     }
 
-    public TagContract assignToOperation(
+    public TagContract getByOperation(
         String resourceGroupName, String serviceName, String apiId, String operationId, String tagId) {
         TagContractInner inner =
-            this.serviceClient().assignToOperation(resourceGroupName, serviceName, apiId, operationId, tagId);
+            this.serviceClient().getByOperation(resourceGroupName, serviceName, apiId, operationId, tagId);
         if (inner != null) {
             return new TagContractImpl(inner, this.manager());
         } else {
@@ -128,9 +116,15 @@ public final class TagsImpl implements Tags {
         }
     }
 
-    public void detachFromOperation(
+    public TagContract assignToOperation(
         String resourceGroupName, String serviceName, String apiId, String operationId, String tagId) {
-        this.serviceClient().detachFromOperation(resourceGroupName, serviceName, apiId, operationId, tagId);
+        TagContractInner inner =
+            this.serviceClient().assignToOperation(resourceGroupName, serviceName, apiId, operationId, tagId);
+        if (inner != null) {
+            return new TagContractImpl(inner, this.manager());
+        } else {
+            return null;
+        }
     }
 
     public Response<Void> detachFromOperationWithResponse(
@@ -138,6 +132,11 @@ public final class TagsImpl implements Tags {
         return this
             .serviceClient()
             .detachFromOperationWithResponse(resourceGroupName, serviceName, apiId, operationId, tagId, context);
+    }
+
+    public void detachFromOperation(
+        String resourceGroupName, String serviceName, String apiId, String operationId, String tagId) {
+        this.serviceClient().detachFromOperation(resourceGroupName, serviceName, apiId, operationId, tagId);
     }
 
     public PagedIterable<TagContract> listByApi(String resourceGroupName, String serviceName, String apiId) {
@@ -158,10 +157,6 @@ public final class TagsImpl implements Tags {
         return Utils.mapPage(inner, inner1 -> new TagContractImpl(inner1, this.manager()));
     }
 
-    public void getEntityStateByApi(String resourceGroupName, String serviceName, String apiId, String tagId) {
-        this.serviceClient().getEntityStateByApi(resourceGroupName, serviceName, apiId, tagId);
-    }
-
     public TagsGetEntityStateByApiResponse getEntityStateByApiWithResponse(
         String resourceGroupName, String serviceName, String apiId, String tagId, Context context) {
         return this
@@ -169,13 +164,8 @@ public final class TagsImpl implements Tags {
             .getEntityStateByApiWithResponse(resourceGroupName, serviceName, apiId, tagId, context);
     }
 
-    public TagContract getByApi(String resourceGroupName, String serviceName, String apiId, String tagId) {
-        TagContractInner inner = this.serviceClient().getByApi(resourceGroupName, serviceName, apiId, tagId);
-        if (inner != null) {
-            return new TagContractImpl(inner, this.manager());
-        } else {
-            return null;
-        }
+    public void getEntityStateByApi(String resourceGroupName, String serviceName, String apiId, String tagId) {
+        this.serviceClient().getEntityStateByApi(resourceGroupName, serviceName, apiId, tagId);
     }
 
     public Response<TagContract> getByApiWithResponse(
@@ -193,8 +183,8 @@ public final class TagsImpl implements Tags {
         }
     }
 
-    public TagContract assignToApi(String resourceGroupName, String serviceName, String apiId, String tagId) {
-        TagContractInner inner = this.serviceClient().assignToApi(resourceGroupName, serviceName, apiId, tagId);
+    public TagContract getByApi(String resourceGroupName, String serviceName, String apiId, String tagId) {
+        TagContractInner inner = this.serviceClient().getByApi(resourceGroupName, serviceName, apiId, tagId);
         if (inner != null) {
             return new TagContractImpl(inner, this.manager());
         } else {
@@ -217,13 +207,22 @@ public final class TagsImpl implements Tags {
         }
     }
 
-    public void detachFromApi(String resourceGroupName, String serviceName, String apiId, String tagId) {
-        this.serviceClient().detachFromApi(resourceGroupName, serviceName, apiId, tagId);
+    public TagContract assignToApi(String resourceGroupName, String serviceName, String apiId, String tagId) {
+        TagContractInner inner = this.serviceClient().assignToApi(resourceGroupName, serviceName, apiId, tagId);
+        if (inner != null) {
+            return new TagContractImpl(inner, this.manager());
+        } else {
+            return null;
+        }
     }
 
     public Response<Void> detachFromApiWithResponse(
         String resourceGroupName, String serviceName, String apiId, String tagId, Context context) {
         return this.serviceClient().detachFromApiWithResponse(resourceGroupName, serviceName, apiId, tagId, context);
+    }
+
+    public void detachFromApi(String resourceGroupName, String serviceName, String apiId, String tagId) {
+        this.serviceClient().detachFromApi(resourceGroupName, serviceName, apiId, tagId);
     }
 
     public PagedIterable<TagContract> listByProduct(String resourceGroupName, String serviceName, String productId) {
@@ -245,10 +244,6 @@ public final class TagsImpl implements Tags {
         return Utils.mapPage(inner, inner1 -> new TagContractImpl(inner1, this.manager()));
     }
 
-    public void getEntityStateByProduct(String resourceGroupName, String serviceName, String productId, String tagId) {
-        this.serviceClient().getEntityStateByProduct(resourceGroupName, serviceName, productId, tagId);
-    }
-
     public TagsGetEntityStateByProductResponse getEntityStateByProductWithResponse(
         String resourceGroupName, String serviceName, String productId, String tagId, Context context) {
         return this
@@ -256,13 +251,8 @@ public final class TagsImpl implements Tags {
             .getEntityStateByProductWithResponse(resourceGroupName, serviceName, productId, tagId, context);
     }
 
-    public TagContract getByProduct(String resourceGroupName, String serviceName, String productId, String tagId) {
-        TagContractInner inner = this.serviceClient().getByProduct(resourceGroupName, serviceName, productId, tagId);
-        if (inner != null) {
-            return new TagContractImpl(inner, this.manager());
-        } else {
-            return null;
-        }
+    public void getEntityStateByProduct(String resourceGroupName, String serviceName, String productId, String tagId) {
+        this.serviceClient().getEntityStateByProduct(resourceGroupName, serviceName, productId, tagId);
     }
 
     public Response<TagContract> getByProductWithResponse(
@@ -280,8 +270,8 @@ public final class TagsImpl implements Tags {
         }
     }
 
-    public TagContract assignToProduct(String resourceGroupName, String serviceName, String productId, String tagId) {
-        TagContractInner inner = this.serviceClient().assignToProduct(resourceGroupName, serviceName, productId, tagId);
+    public TagContract getByProduct(String resourceGroupName, String serviceName, String productId, String tagId) {
+        TagContractInner inner = this.serviceClient().getByProduct(resourceGroupName, serviceName, productId, tagId);
         if (inner != null) {
             return new TagContractImpl(inner, this.manager());
         } else {
@@ -304,8 +294,13 @@ public final class TagsImpl implements Tags {
         }
     }
 
-    public void detachFromProduct(String resourceGroupName, String serviceName, String productId, String tagId) {
-        this.serviceClient().detachFromProduct(resourceGroupName, serviceName, productId, tagId);
+    public TagContract assignToProduct(String resourceGroupName, String serviceName, String productId, String tagId) {
+        TagContractInner inner = this.serviceClient().assignToProduct(resourceGroupName, serviceName, productId, tagId);
+        if (inner != null) {
+            return new TagContractImpl(inner, this.manager());
+        } else {
+            return null;
+        }
     }
 
     public Response<Void> detachFromProductWithResponse(
@@ -313,6 +308,10 @@ public final class TagsImpl implements Tags {
         return this
             .serviceClient()
             .detachFromProductWithResponse(resourceGroupName, serviceName, productId, tagId, context);
+    }
+
+    public void detachFromProduct(String resourceGroupName, String serviceName, String productId, String tagId) {
+        this.serviceClient().detachFromProduct(resourceGroupName, serviceName, productId, tagId);
     }
 
     public PagedIterable<TagContract> listByService(String resourceGroupName, String serviceName) {
@@ -333,22 +332,13 @@ public final class TagsImpl implements Tags {
         return Utils.mapPage(inner, inner1 -> new TagContractImpl(inner1, this.manager()));
     }
 
-    public void getEntityState(String resourceGroupName, String serviceName, String tagId) {
-        this.serviceClient().getEntityState(resourceGroupName, serviceName, tagId);
-    }
-
     public TagsGetEntityStateResponse getEntityStateWithResponse(
         String resourceGroupName, String serviceName, String tagId, Context context) {
         return this.serviceClient().getEntityStateWithResponse(resourceGroupName, serviceName, tagId, context);
     }
 
-    public TagContract get(String resourceGroupName, String serviceName, String tagId) {
-        TagContractInner inner = this.serviceClient().get(resourceGroupName, serviceName, tagId);
-        if (inner != null) {
-            return new TagContractImpl(inner, this.manager());
-        } else {
-            return null;
-        }
+    public void getEntityState(String resourceGroupName, String serviceName, String tagId) {
+        this.serviceClient().getEntityState(resourceGroupName, serviceName, tagId);
     }
 
     public Response<TagContract> getWithResponse(
@@ -365,8 +355,13 @@ public final class TagsImpl implements Tags {
         }
     }
 
-    public void delete(String resourceGroupName, String serviceName, String tagId, String ifMatch) {
-        this.serviceClient().delete(resourceGroupName, serviceName, tagId, ifMatch);
+    public TagContract get(String resourceGroupName, String serviceName, String tagId) {
+        TagContractInner inner = this.serviceClient().get(resourceGroupName, serviceName, tagId);
+        if (inner != null) {
+            return new TagContractImpl(inner, this.manager());
+        } else {
+            return null;
+        }
     }
 
     public Response<Void> deleteWithResponse(
@@ -374,10 +369,14 @@ public final class TagsImpl implements Tags {
         return this.serviceClient().deleteWithResponse(resourceGroupName, serviceName, tagId, ifMatch, context);
     }
 
+    public void delete(String resourceGroupName, String serviceName, String tagId, String ifMatch) {
+        this.serviceClient().delete(resourceGroupName, serviceName, tagId, ifMatch);
+    }
+
     public TagContract getById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -385,14 +384,14 @@ public final class TagsImpl implements Tags {
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String tagId = Utils.getValueFromIdByName(id, "tags");
         if (tagId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'tags'.", id)));
@@ -403,7 +402,7 @@ public final class TagsImpl implements Tags {
     public Response<TagContract> getByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -411,14 +410,14 @@ public final class TagsImpl implements Tags {
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String tagId = Utils.getValueFromIdByName(id, "tags");
         if (tagId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'tags'.", id)));
@@ -429,7 +428,7 @@ public final class TagsImpl implements Tags {
     public void deleteById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -437,26 +436,26 @@ public final class TagsImpl implements Tags {
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String tagId = Utils.getValueFromIdByName(id, "tags");
         if (tagId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'tags'.", id)));
         }
         String localIfMatch = null;
-        this.deleteWithResponse(resourceGroupName, serviceName, tagId, localIfMatch, Context.NONE).getValue();
+        this.deleteWithResponse(resourceGroupName, serviceName, tagId, localIfMatch, Context.NONE);
     }
 
     public Response<Void> deleteByIdWithResponse(String id, String ifMatch, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -464,14 +463,14 @@ public final class TagsImpl implements Tags {
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
         }
         String tagId = Utils.getValueFromIdByName(id, "tags");
         if (tagId == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'tags'.", id)));

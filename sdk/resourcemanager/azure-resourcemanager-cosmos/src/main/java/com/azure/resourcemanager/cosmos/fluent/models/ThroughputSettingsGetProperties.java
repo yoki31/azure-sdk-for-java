@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.cosmos.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cosmos.models.ThroughputSettingsGetPropertiesResource;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The properties of an Azure Cosmos DB resource throughput. */
+/**
+ * The properties of an Azure Cosmos DB resource throughput.
+ */
 @Fluent
 public final class ThroughputSettingsGetProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ThroughputSettingsGetProperties.class);
-
     /*
      * The resource property.
      */
@@ -22,8 +20,14 @@ public final class ThroughputSettingsGetProperties {
     private ThroughputSettingsGetPropertiesResource resource;
 
     /**
+     * Creates an instance of ThroughputSettingsGetProperties class.
+     */
+    public ThroughputSettingsGetProperties() {
+    }
+
+    /**
      * Get the resource property: The resource property.
-     *
+     * 
      * @return the resource value.
      */
     public ThroughputSettingsGetPropertiesResource resource() {
@@ -32,7 +36,7 @@ public final class ThroughputSettingsGetProperties {
 
     /**
      * Set the resource property: The resource property.
-     *
+     * 
      * @param resource the resource value to set.
      * @return the ThroughputSettingsGetProperties object itself.
      */
@@ -43,7 +47,7 @@ public final class ThroughputSettingsGetProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

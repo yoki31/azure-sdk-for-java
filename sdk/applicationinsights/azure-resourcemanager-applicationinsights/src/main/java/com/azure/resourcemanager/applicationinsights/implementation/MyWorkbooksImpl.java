@@ -14,11 +14,10 @@ import com.azure.resourcemanager.applicationinsights.fluent.models.MyWorkbookInn
 import com.azure.resourcemanager.applicationinsights.models.CategoryType;
 import com.azure.resourcemanager.applicationinsights.models.MyWorkbook;
 import com.azure.resourcemanager.applicationinsights.models.MyWorkbooks;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.List;
 
 public final class MyWorkbooksImpl implements MyWorkbooks {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MyWorkbooksImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(MyWorkbooksImpl.class);
 
     private final MyWorkbooksClient innerClient;
 
@@ -61,15 +60,6 @@ public final class MyWorkbooksImpl implements MyWorkbooks {
         return Utils.mapPage(inner, inner1 -> new MyWorkbookImpl(inner1, this.manager()));
     }
 
-    public MyWorkbook getByResourceGroup(String resourceGroupName, String resourceName) {
-        MyWorkbookInner inner = this.serviceClient().getByResourceGroup(resourceGroupName, resourceName);
-        if (inner != null) {
-            return new MyWorkbookImpl(inner, this.manager());
-        } else {
-            return null;
-        }
-    }
-
     public Response<MyWorkbook> getByResourceGroupWithResponse(
         String resourceGroupName, String resourceName, Context context) {
         Response<MyWorkbookInner> inner =
@@ -85,18 +75,28 @@ public final class MyWorkbooksImpl implements MyWorkbooks {
         }
     }
 
-    public void deleteByResourceGroup(String resourceGroupName, String resourceName) {
-        this.serviceClient().delete(resourceGroupName, resourceName);
+    public MyWorkbook getByResourceGroup(String resourceGroupName, String resourceName) {
+        MyWorkbookInner inner = this.serviceClient().getByResourceGroup(resourceGroupName, resourceName);
+        if (inner != null) {
+            return new MyWorkbookImpl(inner, this.manager());
+        } else {
+            return null;
+        }
     }
 
-    public Response<Void> deleteWithResponse(String resourceGroupName, String resourceName, Context context) {
+    public Response<Void> deleteByResourceGroupWithResponse(
+        String resourceGroupName, String resourceName, Context context) {
         return this.serviceClient().deleteWithResponse(resourceGroupName, resourceName, context);
+    }
+
+    public void deleteByResourceGroup(String resourceGroupName, String resourceName) {
+        this.serviceClient().delete(resourceGroupName, resourceName);
     }
 
     public MyWorkbook getById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -104,7 +104,7 @@ public final class MyWorkbooksImpl implements MyWorkbooks {
         }
         String resourceName = Utils.getValueFromIdByName(id, "myWorkbooks");
         if (resourceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'myWorkbooks'.", id)));
@@ -115,7 +115,7 @@ public final class MyWorkbooksImpl implements MyWorkbooks {
     public Response<MyWorkbook> getByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -123,7 +123,7 @@ public final class MyWorkbooksImpl implements MyWorkbooks {
         }
         String resourceName = Utils.getValueFromIdByName(id, "myWorkbooks");
         if (resourceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'myWorkbooks'.", id)));
@@ -134,7 +134,7 @@ public final class MyWorkbooksImpl implements MyWorkbooks {
     public void deleteById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -142,18 +142,18 @@ public final class MyWorkbooksImpl implements MyWorkbooks {
         }
         String resourceName = Utils.getValueFromIdByName(id, "myWorkbooks");
         if (resourceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'myWorkbooks'.", id)));
         }
-        this.deleteWithResponse(resourceGroupName, resourceName, Context.NONE);
+        this.deleteByResourceGroupWithResponse(resourceGroupName, resourceName, Context.NONE);
     }
 
     public Response<Void> deleteByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -161,12 +161,12 @@ public final class MyWorkbooksImpl implements MyWorkbooks {
         }
         String resourceName = Utils.getValueFromIdByName(id, "myWorkbooks");
         if (resourceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'myWorkbooks'.", id)));
         }
-        return this.deleteWithResponse(resourceGroupName, resourceName, context);
+        return this.deleteByResourceGroupWithResponse(resourceGroupName, resourceName, context);
     }
 
     private MyWorkbooksClient serviceClient() {

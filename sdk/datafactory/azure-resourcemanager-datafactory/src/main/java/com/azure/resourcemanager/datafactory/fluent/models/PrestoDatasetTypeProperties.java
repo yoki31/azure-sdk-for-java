@@ -5,40 +5,41 @@
 package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Presto Dataset Properties. */
+/**
+ * Presto Dataset Properties.
+ */
 @Fluent
 public final class PrestoDatasetTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PrestoDatasetTypeProperties.class);
-
     /*
-     * This property will be retired. Please consider using schema + table
-     * properties instead.
+     * This property will be retired. Please consider using schema + table properties instead.
      */
     @JsonProperty(value = "tableName")
     private Object tableName;
 
     /*
-     * The table name of the Presto. Type: string (or Expression with
-     * resultType string).
+     * The table name of the Presto. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "table")
     private Object table;
 
     /*
-     * The schema name of the Presto. Type: string (or Expression with
-     * resultType string).
+     * The schema name of the Presto. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "schema")
     private Object schema;
 
     /**
+     * Creates an instance of PrestoDatasetTypeProperties class.
+     */
+    public PrestoDatasetTypeProperties() {
+    }
+
+    /**
      * Get the tableName property: This property will be retired. Please consider using schema + table properties
      * instead.
-     *
+     * 
      * @return the tableName value.
      */
     public Object tableName() {
@@ -48,7 +49,7 @@ public final class PrestoDatasetTypeProperties {
     /**
      * Set the tableName property: This property will be retired. Please consider using schema + table properties
      * instead.
-     *
+     * 
      * @param tableName the tableName value to set.
      * @return the PrestoDatasetTypeProperties object itself.
      */
@@ -59,7 +60,7 @@ public final class PrestoDatasetTypeProperties {
 
     /**
      * Get the table property: The table name of the Presto. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the table value.
      */
     public Object table() {
@@ -68,7 +69,7 @@ public final class PrestoDatasetTypeProperties {
 
     /**
      * Set the table property: The table name of the Presto. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param table the table value to set.
      * @return the PrestoDatasetTypeProperties object itself.
      */
@@ -79,7 +80,7 @@ public final class PrestoDatasetTypeProperties {
 
     /**
      * Get the schema property: The schema name of the Presto. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the schema value.
      */
     public Object schema() {
@@ -88,7 +89,7 @@ public final class PrestoDatasetTypeProperties {
 
     /**
      * Set the schema property: The schema name of the Presto. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param schema the schema value to set.
      * @return the PrestoDatasetTypeProperties object itself.
      */
@@ -99,7 +100,7 @@ public final class PrestoDatasetTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

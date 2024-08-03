@@ -5,9 +5,7 @@
 package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cdn.fluent.models.OriginInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
@@ -17,8 +15,6 @@ import java.util.List;
  */
 @Fluent
 public final class OriginListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(OriginListResult.class);
-
     /*
      * List of CDN origins within an endpoint
      */
@@ -32,8 +28,14 @@ public final class OriginListResult {
     private String nextLink;
 
     /**
+     * Creates an instance of OriginListResult class.
+     */
+    public OriginListResult() {
+    }
+
+    /**
      * Get the value property: List of CDN origins within an endpoint.
-     *
+     * 
      * @return the value value.
      */
     public List<OriginInner> value() {
@@ -42,7 +44,7 @@ public final class OriginListResult {
 
     /**
      * Get the nextLink property: URL to get the next set of origin objects if there are any.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -51,7 +53,7 @@ public final class OriginListResult {
 
     /**
      * Set the nextLink property: URL to get the next set of origin objects if there are any.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the OriginListResult object itself.
      */
@@ -62,7 +64,7 @@ public final class OriginListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Network trace. */
+/**
+ * Network trace.
+ */
 @Fluent
 public final class NetworkTraceInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(NetworkTraceInner.class);
-
     /*
      * Local file path for the captured network trace file.
      */
@@ -21,22 +19,26 @@ public final class NetworkTraceInner {
     private String path;
 
     /*
-     * Current status of the network trace operation, same as Operation.Status
-     * (InProgress/Succeeded/Failed).
+     * Current status of the network trace operation, same as Operation.Status (InProgress/Succeeded/Failed).
      */
     @JsonProperty(value = "status")
     private String status;
 
     /*
-     * Detailed message of a network trace operation, e.g. error message in
-     * case of failure.
+     * Detailed message of a network trace operation, e.g. error message in case of failure.
      */
     @JsonProperty(value = "message")
     private String message;
 
     /**
+     * Creates an instance of NetworkTraceInner class.
+     */
+    public NetworkTraceInner() {
+    }
+
+    /**
      * Get the path property: Local file path for the captured network trace file.
-     *
+     * 
      * @return the path value.
      */
     public String path() {
@@ -45,7 +47,7 @@ public final class NetworkTraceInner {
 
     /**
      * Set the path property: Local file path for the captured network trace file.
-     *
+     * 
      * @param path the path value to set.
      * @return the NetworkTraceInner object itself.
      */
@@ -57,7 +59,7 @@ public final class NetworkTraceInner {
     /**
      * Get the status property: Current status of the network trace operation, same as Operation.Status
      * (InProgress/Succeeded/Failed).
-     *
+     * 
      * @return the status value.
      */
     public String status() {
@@ -67,7 +69,7 @@ public final class NetworkTraceInner {
     /**
      * Set the status property: Current status of the network trace operation, same as Operation.Status
      * (InProgress/Succeeded/Failed).
-     *
+     * 
      * @param status the status value to set.
      * @return the NetworkTraceInner object itself.
      */
@@ -78,7 +80,7 @@ public final class NetworkTraceInner {
 
     /**
      * Get the message property: Detailed message of a network trace operation, e.g. error message in case of failure.
-     *
+     * 
      * @return the message value.
      */
     public String message() {
@@ -87,7 +89,7 @@ public final class NetworkTraceInner {
 
     /**
      * Set the message property: Detailed message of a network trace operation, e.g. error message in case of failure.
-     *
+     * 
      * @param message the message value to set.
      * @return the NetworkTraceInner object itself.
      */
@@ -98,7 +100,7 @@ public final class NetworkTraceInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

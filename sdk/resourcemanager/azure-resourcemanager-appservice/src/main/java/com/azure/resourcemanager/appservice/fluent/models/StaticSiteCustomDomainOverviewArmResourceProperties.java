@@ -5,18 +5,15 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.CustomDomainStatus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
-/** StaticSiteCustomDomainOverviewARMResource resource specific properties. */
+/**
+ * StaticSiteCustomDomainOverviewARMResource resource specific properties.
+ */
 @Immutable
 public final class StaticSiteCustomDomainOverviewArmResourceProperties {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(StaticSiteCustomDomainOverviewArmResourceProperties.class);
-
     /*
      * The domain name for the static site custom domain.
      */
@@ -24,8 +21,7 @@ public final class StaticSiteCustomDomainOverviewArmResourceProperties {
     private String domainName;
 
     /*
-     * The date and time on which the custom domain was created for the static
-     * site.
+     * The date and time on which the custom domain was created for the static site.
      */
     @JsonProperty(value = "createdOn", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime createdOn;
@@ -49,8 +45,14 @@ public final class StaticSiteCustomDomainOverviewArmResourceProperties {
     private String errorMessage;
 
     /**
+     * Creates an instance of StaticSiteCustomDomainOverviewArmResourceProperties class.
+     */
+    public StaticSiteCustomDomainOverviewArmResourceProperties() {
+    }
+
+    /**
      * Get the domainName property: The domain name for the static site custom domain.
-     *
+     * 
      * @return the domainName value.
      */
     public String domainName() {
@@ -59,7 +61,7 @@ public final class StaticSiteCustomDomainOverviewArmResourceProperties {
 
     /**
      * Get the createdOn property: The date and time on which the custom domain was created for the static site.
-     *
+     * 
      * @return the createdOn value.
      */
     public OffsetDateTime createdOn() {
@@ -68,7 +70,7 @@ public final class StaticSiteCustomDomainOverviewArmResourceProperties {
 
     /**
      * Get the status property: The status of the custom domain.
-     *
+     * 
      * @return the status value.
      */
     public CustomDomainStatus status() {
@@ -77,7 +79,7 @@ public final class StaticSiteCustomDomainOverviewArmResourceProperties {
 
     /**
      * Get the validationToken property: The TXT record validation token.
-     *
+     * 
      * @return the validationToken value.
      */
     public String validationToken() {
@@ -86,7 +88,7 @@ public final class StaticSiteCustomDomainOverviewArmResourceProperties {
 
     /**
      * Get the errorMessage property: The errorMessage property.
-     *
+     * 
      * @return the errorMessage value.
      */
     public String errorMessage() {
@@ -95,7 +97,7 @@ public final class StaticSiteCustomDomainOverviewArmResourceProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

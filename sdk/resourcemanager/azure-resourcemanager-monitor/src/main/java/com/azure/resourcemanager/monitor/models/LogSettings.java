@@ -5,22 +5,26 @@
 package com.azure.resourcemanager.monitor.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Part of MultiTenantDiagnosticSettings. Specifies the settings for a particular log. */
+/**
+ * Part of MultiTenantDiagnosticSettings. Specifies the settings for a particular log.
+ */
 @Fluent
 public final class LogSettings {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(LogSettings.class);
-
     /*
-     * Name of a Diagnostic Log category for a resource type this setting is
-     * applied to. To obtain the list of Diagnostic Log categories for a
-     * resource, first perform a GET diagnostic settings operation.
+     * Name of a Diagnostic Log category for a resource type this setting is applied to. To obtain the list of
+     * Diagnostic Log categories for a resource, first perform a GET diagnostic settings operation.
      */
     @JsonProperty(value = "category")
     private String category;
+
+    /*
+     * Name of a Diagnostic Log category group for a resource type this setting is applied to. To obtain the list of
+     * Diagnostic Log categories for a resource, first perform a GET diagnostic settings operation.
+     */
+    @JsonProperty(value = "categoryGroup")
+    private String categoryGroup;
 
     /*
      * a value indicating whether this log is enabled.
@@ -35,9 +39,15 @@ public final class LogSettings {
     private RetentionPolicy retentionPolicy;
 
     /**
+     * Creates an instance of LogSettings class.
+     */
+    public LogSettings() {
+    }
+
+    /**
      * Get the category property: Name of a Diagnostic Log category for a resource type this setting is applied to. To
      * obtain the list of Diagnostic Log categories for a resource, first perform a GET diagnostic settings operation.
-     *
+     * 
      * @return the category value.
      */
     public String category() {
@@ -47,7 +57,7 @@ public final class LogSettings {
     /**
      * Set the category property: Name of a Diagnostic Log category for a resource type this setting is applied to. To
      * obtain the list of Diagnostic Log categories for a resource, first perform a GET diagnostic settings operation.
-     *
+     * 
      * @param category the category value to set.
      * @return the LogSettings object itself.
      */
@@ -57,8 +67,32 @@ public final class LogSettings {
     }
 
     /**
+     * Get the categoryGroup property: Name of a Diagnostic Log category group for a resource type this setting is
+     * applied to. To obtain the list of Diagnostic Log categories for a resource, first perform a GET diagnostic
+     * settings operation.
+     * 
+     * @return the categoryGroup value.
+     */
+    public String categoryGroup() {
+        return this.categoryGroup;
+    }
+
+    /**
+     * Set the categoryGroup property: Name of a Diagnostic Log category group for a resource type this setting is
+     * applied to. To obtain the list of Diagnostic Log categories for a resource, first perform a GET diagnostic
+     * settings operation.
+     * 
+     * @param categoryGroup the categoryGroup value to set.
+     * @return the LogSettings object itself.
+     */
+    public LogSettings withCategoryGroup(String categoryGroup) {
+        this.categoryGroup = categoryGroup;
+        return this;
+    }
+
+    /**
      * Get the enabled property: a value indicating whether this log is enabled.
-     *
+     * 
      * @return the enabled value.
      */
     public boolean enabled() {
@@ -67,7 +101,7 @@ public final class LogSettings {
 
     /**
      * Set the enabled property: a value indicating whether this log is enabled.
-     *
+     * 
      * @param enabled the enabled value to set.
      * @return the LogSettings object itself.
      */
@@ -78,7 +112,7 @@ public final class LogSettings {
 
     /**
      * Get the retentionPolicy property: the retention policy for this log.
-     *
+     * 
      * @return the retentionPolicy value.
      */
     public RetentionPolicy retentionPolicy() {
@@ -87,7 +121,7 @@ public final class LogSettings {
 
     /**
      * Set the retentionPolicy property: the retention policy for this log.
-     *
+     * 
      * @param retentionPolicy the retentionPolicy value to set.
      * @return the LogSettings object itself.
      */
@@ -98,7 +132,7 @@ public final class LogSettings {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

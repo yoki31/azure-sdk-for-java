@@ -5,42 +5,44 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The settings that will be leveraged for Netezza source partitioning. */
+/**
+ * The settings that will be leveraged for Netezza source partitioning.
+ */
 @Fluent
 public final class NetezzaPartitionSettings {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(NetezzaPartitionSettings.class);
-
     /*
-     * The name of the column in integer type that will be used for proceeding
-     * range partitioning. Type: string (or Expression with resultType string).
+     * The name of the column in integer type that will be used for proceeding range partitioning. Type: string (or
+     * Expression with resultType string).
      */
     @JsonProperty(value = "partitionColumnName")
     private Object partitionColumnName;
 
     /*
-     * The maximum value of column specified in partitionColumnName that will
-     * be used for proceeding range partitioning. Type: string (or Expression
-     * with resultType string).
+     * The maximum value of column specified in partitionColumnName that will be used for proceeding range partitioning.
+     * Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "partitionUpperBound")
     private Object partitionUpperBound;
 
     /*
-     * The minimum value of column specified in partitionColumnName that will
-     * be used for proceeding range partitioning. Type: string (or Expression
-     * with resultType string).
+     * The minimum value of column specified in partitionColumnName that will be used for proceeding range partitioning.
+     * Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "partitionLowerBound")
     private Object partitionLowerBound;
 
     /**
+     * Creates an instance of NetezzaPartitionSettings class.
+     */
+    public NetezzaPartitionSettings() {
+    }
+
+    /**
      * Get the partitionColumnName property: The name of the column in integer type that will be used for proceeding
      * range partitioning. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the partitionColumnName value.
      */
     public Object partitionColumnName() {
@@ -50,7 +52,7 @@ public final class NetezzaPartitionSettings {
     /**
      * Set the partitionColumnName property: The name of the column in integer type that will be used for proceeding
      * range partitioning. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param partitionColumnName the partitionColumnName value to set.
      * @return the NetezzaPartitionSettings object itself.
      */
@@ -62,7 +64,7 @@ public final class NetezzaPartitionSettings {
     /**
      * Get the partitionUpperBound property: The maximum value of column specified in partitionColumnName that will be
      * used for proceeding range partitioning. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the partitionUpperBound value.
      */
     public Object partitionUpperBound() {
@@ -72,7 +74,7 @@ public final class NetezzaPartitionSettings {
     /**
      * Set the partitionUpperBound property: The maximum value of column specified in partitionColumnName that will be
      * used for proceeding range partitioning. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param partitionUpperBound the partitionUpperBound value to set.
      * @return the NetezzaPartitionSettings object itself.
      */
@@ -84,7 +86,7 @@ public final class NetezzaPartitionSettings {
     /**
      * Get the partitionLowerBound property: The minimum value of column specified in partitionColumnName that will be
      * used for proceeding range partitioning. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the partitionLowerBound value.
      */
     public Object partitionLowerBound() {
@@ -94,7 +96,7 @@ public final class NetezzaPartitionSettings {
     /**
      * Set the partitionLowerBound property: The minimum value of column specified in partitionColumnName that will be
      * used for proceeding range partitioning. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param partitionLowerBound the partitionLowerBound value to set.
      * @return the NetezzaPartitionSettings object itself.
      */
@@ -105,7 +107,7 @@ public final class NetezzaPartitionSettings {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

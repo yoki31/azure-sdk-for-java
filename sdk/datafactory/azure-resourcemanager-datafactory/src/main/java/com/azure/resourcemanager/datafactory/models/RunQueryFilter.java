@@ -6,21 +6,18 @@ package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Query filter option for listing runs. */
+/**
+ * Query filter option for listing runs.
+ */
 @Fluent
 public final class RunQueryFilter {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RunQueryFilter.class);
-
     /*
-     * Parameter name to be used for filter. The allowed operands to query
-     * pipeline runs are PipelineName, RunStart, RunEnd and Status; to query
-     * activity runs are ActivityName, ActivityRunStart, ActivityRunEnd,
-     * ActivityType and Status, and to query trigger runs are TriggerName,
-     * TriggerRunTimestamp and Status.
+     * Parameter name to be used for filter. The allowed operands to query pipeline runs are PipelineName, RunStart,
+     * RunEnd and Status; to query activity runs are ActivityName, ActivityRunStart, ActivityRunEnd, ActivityType and
+     * Status, and to query trigger runs are TriggerName, TriggerRunTimestamp and Status.
      */
     @JsonProperty(value = "operand", required = true)
     private RunQueryFilterOperand operand;
@@ -38,11 +35,17 @@ public final class RunQueryFilter {
     private List<String> values;
 
     /**
+     * Creates an instance of RunQueryFilter class.
+     */
+    public RunQueryFilter() {
+    }
+
+    /**
      * Get the operand property: Parameter name to be used for filter. The allowed operands to query pipeline runs are
      * PipelineName, RunStart, RunEnd and Status; to query activity runs are ActivityName, ActivityRunStart,
      * ActivityRunEnd, ActivityType and Status, and to query trigger runs are TriggerName, TriggerRunTimestamp and
      * Status.
-     *
+     * 
      * @return the operand value.
      */
     public RunQueryFilterOperand operand() {
@@ -54,7 +57,7 @@ public final class RunQueryFilter {
      * PipelineName, RunStart, RunEnd and Status; to query activity runs are ActivityName, ActivityRunStart,
      * ActivityRunEnd, ActivityType and Status, and to query trigger runs are TriggerName, TriggerRunTimestamp and
      * Status.
-     *
+     * 
      * @param operand the operand value to set.
      * @return the RunQueryFilter object itself.
      */
@@ -65,7 +68,7 @@ public final class RunQueryFilter {
 
     /**
      * Get the operator property: Operator to be used for filter.
-     *
+     * 
      * @return the operator value.
      */
     public RunQueryFilterOperator operator() {
@@ -74,7 +77,7 @@ public final class RunQueryFilter {
 
     /**
      * Set the operator property: Operator to be used for filter.
-     *
+     * 
      * @param operator the operator value to set.
      * @return the RunQueryFilter object itself.
      */
@@ -85,7 +88,7 @@ public final class RunQueryFilter {
 
     /**
      * Get the values property: List of filter values.
-     *
+     * 
      * @return the values value.
      */
     public List<String> values() {
@@ -94,7 +97,7 @@ public final class RunQueryFilter {
 
     /**
      * Set the values property: List of filter values.
-     *
+     * 
      * @param values the values value to set.
      * @return the RunQueryFilter object itself.
      */
@@ -105,24 +108,23 @@ public final class RunQueryFilter {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (operand() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property operand in model RunQueryFilter"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property operand in model RunQueryFilter"));
         }
         if (operator() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property operator in model RunQueryFilter"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property operator in model RunQueryFilter"));
         }
         if (values() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property values in model RunQueryFilter"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property values in model RunQueryFilter"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(RunQueryFilter.class);
 }

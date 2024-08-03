@@ -16,7 +16,7 @@ public interface KustoPools {
      *
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of the SKU descriptions.
+     * @return the list of the SKU descriptions as paginated response with {@link PagedIterable}.
      */
     PagedIterable<SkuDescription> list();
 
@@ -27,9 +27,23 @@ public interface KustoPools {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of the SKU descriptions.
+     * @return the list of the SKU descriptions as paginated response with {@link PagedIterable}.
      */
     PagedIterable<SkuDescription> list(Context context);
+
+    /**
+     * Checks that the kusto pool name is valid and is not already in use.
+     *
+     * @param location The name of Azure region.
+     * @param kustoPoolName The name of the cluster.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the result returned from a check name availability request along with {@link Response}.
+     */
+    Response<CheckNameResult> checkNameAvailabilityWithResponse(
+        String location, KustoPoolCheckNameRequest kustoPoolName, Context context);
 
     /**
      * Checks that the kusto pool name is valid and is not already in use.
@@ -44,21 +58,25 @@ public interface KustoPools {
     CheckNameResult checkNameAvailability(String location, KustoPoolCheckNameRequest kustoPoolName);
 
     /**
-     * Checks that the kusto pool name is valid and is not already in use.
+     * List Kusto pools
      *
-     * @param location The name of Azure region.
-     * @param kustoPoolName The name of the cluster.
+     * <p>List all Kusto pools.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
+     * @return the list Kusto pools operation response along with {@link Response}.
      */
-    Response<CheckNameResult> checkNameAvailabilityWithResponse(
-        String location, KustoPoolCheckNameRequest kustoPoolName, Context context);
+    Response<KustoPoolListResult> listByWorkspaceWithResponse(
+        String resourceGroupName, String workspaceName, Context context);
 
     /**
-     * List all Kusto pools.
+     * List Kusto pools
+     *
+     * <p>List all Kusto pools.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -70,18 +88,19 @@ public interface KustoPools {
     KustoPoolListResult listByWorkspace(String resourceGroupName, String workspaceName);
 
     /**
-     * List all Kusto pools.
+     * Gets a Kusto pool.
      *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
+     * @param kustoPoolName The name of the Kusto pool.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto pools operation response.
+     * @return a Kusto pool along with {@link Response}.
      */
-    Response<KustoPoolListResult> listByWorkspaceWithResponse(
-        String resourceGroupName, String workspaceName, Context context);
+    Response<KustoPool> getWithResponse(
+        String workspaceName, String kustoPoolName, String resourceGroupName, Context context);
 
     /**
      * Gets a Kusto pool.
@@ -95,21 +114,6 @@ public interface KustoPools {
      * @return a Kusto pool.
      */
     KustoPool get(String workspaceName, String kustoPoolName, String resourceGroupName);
-
-    /**
-     * Gets a Kusto pool.
-     *
-     * @param workspaceName The name of the workspace.
-     * @param kustoPoolName The name of the Kusto pool.
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Kusto pool.
-     */
-    Response<KustoPool> getWithResponse(
-        String workspaceName, String kustoPoolName, String resourceGroupName, Context context);
 
     /**
      * Deletes a Kusto pool.
@@ -195,7 +199,7 @@ public interface KustoPools {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of available SKUs for a Kusto Pool.
+     * @return list of available SKUs for a Kusto Pool as paginated response with {@link PagedIterable}.
      */
     PagedIterable<AzureResourceSku> listSkusByResource(
         String workspaceName, String kustoPoolName, String resourceGroupName);
@@ -210,7 +214,7 @@ public interface KustoPools {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of available SKUs for a Kusto Pool.
+     * @return list of available SKUs for a Kusto Pool as paginated response with {@link PagedIterable}.
      */
     PagedIterable<AzureResourceSku> listSkusByResource(
         String workspaceName, String kustoPoolName, String resourceGroupName, Context context);
@@ -224,7 +228,7 @@ public interface KustoPools {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of language extension objects.
+     * @return the list of language extension objects as paginated response with {@link PagedIterable}.
      */
     PagedIterable<LanguageExtension> listLanguageExtensions(
         String workspaceName, String kustoPoolName, String resourceGroupName);
@@ -239,7 +243,7 @@ public interface KustoPools {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of language extension objects.
+     * @return the list of language extension objects as paginated response with {@link PagedIterable}.
      */
     PagedIterable<LanguageExtension> listLanguageExtensions(
         String workspaceName, String kustoPoolName, String resourceGroupName, Context context);
@@ -325,7 +329,7 @@ public interface KustoPools {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database principals operation response.
+     * @return the list Kusto database principals operation response as paginated response with {@link PagedIterable}.
      */
     PagedIterable<FollowerDatabaseDefinition> listFollowerDatabases(
         String workspaceName, String kustoPoolName, String resourceGroupName);
@@ -340,7 +344,7 @@ public interface KustoPools {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list Kusto database principals operation response.
+     * @return the list Kusto database principals operation response as paginated response with {@link PagedIterable}.
      */
     PagedIterable<FollowerDatabaseDefinition> listFollowerDatabases(
         String workspaceName, String kustoPoolName, String resourceGroupName, Context context);
@@ -388,7 +392,7 @@ public interface KustoPools {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Kusto pool.
+     * @return a Kusto pool along with {@link Response}.
      */
     KustoPool getById(String id);
 
@@ -400,7 +404,7 @@ public interface KustoPools {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a Kusto pool.
+     * @return a Kusto pool along with {@link Response}.
      */
     Response<KustoPool> getByIdWithResponse(String id, Context context);
 

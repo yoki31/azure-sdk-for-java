@@ -7,15 +7,14 @@ package com.azure.resourcemanager.compute.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.compute.fluent.models.VirtualMachineRunCommandInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The List run command operation response. */
+/**
+ * The List run command operation response.
+ */
 @Fluent
 public final class VirtualMachineRunCommandsListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VirtualMachineRunCommandsListResult.class);
-
     /*
      * The list of run commands
      */
@@ -29,8 +28,14 @@ public final class VirtualMachineRunCommandsListResult {
     private String nextLink;
 
     /**
+     * Creates an instance of VirtualMachineRunCommandsListResult class.
+     */
+    public VirtualMachineRunCommandsListResult() {
+    }
+
+    /**
      * Get the value property: The list of run commands.
-     *
+     * 
      * @return the value value.
      */
     public List<VirtualMachineRunCommandInner> value() {
@@ -39,7 +44,7 @@ public final class VirtualMachineRunCommandsListResult {
 
     /**
      * Set the value property: The list of run commands.
-     *
+     * 
      * @param value the value value to set.
      * @return the VirtualMachineRunCommandsListResult object itself.
      */
@@ -50,7 +55,7 @@ public final class VirtualMachineRunCommandsListResult {
 
     /**
      * Get the nextLink property: The uri to fetch the next page of run commands.
-     *
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -59,7 +64,7 @@ public final class VirtualMachineRunCommandsListResult {
 
     /**
      * Set the nextLink property: The uri to fetch the next page of run commands.
-     *
+     * 
      * @param nextLink the nextLink value to set.
      * @return the VirtualMachineRunCommandsListResult object itself.
      */
@@ -70,17 +75,18 @@ public final class VirtualMachineRunCommandsListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property value in model VirtualMachineRunCommandsListResult"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property value in model VirtualMachineRunCommandsListResult"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(VirtualMachineRunCommandsListResult.class);
 }

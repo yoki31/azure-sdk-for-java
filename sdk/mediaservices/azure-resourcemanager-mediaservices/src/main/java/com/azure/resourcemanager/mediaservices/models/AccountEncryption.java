@@ -6,14 +6,11 @@ package com.azure.resourcemanager.mediaservices.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** The AccountEncryption model. */
 @Fluent
 public final class AccountEncryption {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AccountEncryption.class);
-
     /*
      * The type of key used to encrypt the Account Key.
      */
@@ -37,6 +34,10 @@ public final class AccountEncryption {
      */
     @JsonProperty(value = "status", access = JsonProperty.Access.WRITE_ONLY)
     private String status;
+
+    /** Creates an instance of AccountEncryption class. */
+    public AccountEncryption() {
+    }
 
     /**
      * Get the type property: The type of key used to encrypt the Account Key.
@@ -114,7 +115,7 @@ public final class AccountEncryption {
      */
     public void validate() {
         if (type() == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException("Missing required property type in model AccountEncryption"));
         }
@@ -125,4 +126,6 @@ public final class AccountEncryption {
             identity().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(AccountEncryption.class);
 }

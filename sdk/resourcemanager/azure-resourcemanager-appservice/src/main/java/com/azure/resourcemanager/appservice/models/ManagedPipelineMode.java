@@ -7,15 +7,23 @@ package com.azure.resourcemanager.appservice.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-/** Defines values for ManagedPipelineMode. */
+/**
+ * Managed pipeline mode.
+ */
 public enum ManagedPipelineMode {
-    /** Enum value Integrated. */
+    /**
+     * Enum value Integrated.
+     */
     INTEGRATED("Integrated"),
 
-    /** Enum value Classic. */
+    /**
+     * Enum value Classic.
+     */
     CLASSIC("Classic");
 
-    /** The actual serialized value for a ManagedPipelineMode instance. */
+    /**
+     * The actual serialized value for a ManagedPipelineMode instance.
+     */
     private final String value;
 
     ManagedPipelineMode(String value) {
@@ -24,12 +32,15 @@ public enum ManagedPipelineMode {
 
     /**
      * Parses a serialized value to a ManagedPipelineMode instance.
-     *
+     * 
      * @param value the serialized value to parse.
      * @return the parsed ManagedPipelineMode object, or null if unable to parse.
      */
     @JsonCreator
     public static ManagedPipelineMode fromString(String value) {
+        if (value == null) {
+            return null;
+        }
         ManagedPipelineMode[] items = ManagedPipelineMode.values();
         for (ManagedPipelineMode item : items) {
             if (item.toString().equalsIgnoreCase(value)) {
@@ -39,6 +50,9 @@ public enum ManagedPipelineMode {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @JsonValue
     @Override
     public String toString() {

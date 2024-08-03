@@ -17,7 +17,23 @@ public interface NotificationRecipientUsersClient {
     /**
      * Gets the list of the Notification Recipient User subscribed to the notification.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param notificationName Notification Name Identifier.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the list of the Notification Recipient User subscribed to the notification along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<RecipientUserCollectionInner> listByNotificationWithResponse(
+        String resourceGroupName, String serviceName, NotificationName notificationName, Context context);
+
+    /**
+     * Gets the list of the Notification Recipient User subscribed to the notification.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param notificationName Notification Name Identifier.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -30,25 +46,30 @@ public interface NotificationRecipientUsersClient {
         String resourceGroupName, String serviceName, NotificationName notificationName);
 
     /**
-     * Gets the list of the Notification Recipient User subscribed to the notification.
+     * Determine if the Notification Recipient User is subscribed to the notification.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param notificationName Notification Name Identifier.
+     * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of the Notification Recipient User subscribed to the notification.
+     * @return whether resource exists along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<RecipientUserCollectionInner> listByNotificationWithResponse(
-        String resourceGroupName, String serviceName, NotificationName notificationName, Context context);
+    Response<Boolean> checkEntityExistsWithResponse(
+        String resourceGroupName,
+        String serviceName,
+        NotificationName notificationName,
+        String userId,
+        Context context);
 
     /**
      * Determine if the Notification Recipient User is subscribed to the notification.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param notificationName Notification Name Identifier.
      * @param userId User identifier. Must be unique in the current API Management service instance.
@@ -62,9 +83,9 @@ public interface NotificationRecipientUsersClient {
         String resourceGroupName, String serviceName, NotificationName notificationName, String userId);
 
     /**
-     * Determine if the Notification Recipient User is subscribed to the notification.
+     * Adds the API Management User to the list of Recipients for the Notification.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param notificationName Notification Name Identifier.
      * @param userId User identifier. Must be unique in the current API Management service instance.
@@ -72,10 +93,10 @@ public interface NotificationRecipientUsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return recipient User details along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<Boolean> checkEntityExistsWithResponse(
+    Response<RecipientUserContractInner> createOrUpdateWithResponse(
         String resourceGroupName,
         String serviceName,
         NotificationName notificationName,
@@ -85,7 +106,7 @@ public interface NotificationRecipientUsersClient {
     /**
      * Adds the API Management User to the list of Recipients for the Notification.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param notificationName Notification Name Identifier.
      * @param userId User identifier. Must be unique in the current API Management service instance.
@@ -99,9 +120,9 @@ public interface NotificationRecipientUsersClient {
         String resourceGroupName, String serviceName, NotificationName notificationName, String userId);
 
     /**
-     * Adds the API Management User to the list of Recipients for the Notification.
+     * Removes the API Management user from the list of Notification.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param notificationName Notification Name Identifier.
      * @param userId User identifier. Must be unique in the current API Management service instance.
@@ -109,10 +130,10 @@ public interface NotificationRecipientUsersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return recipient User details.
+     * @return the {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<RecipientUserContractInner> createOrUpdateWithResponse(
+    Response<Void> deleteWithResponse(
         String resourceGroupName,
         String serviceName,
         NotificationName notificationName,
@@ -122,7 +143,7 @@ public interface NotificationRecipientUsersClient {
     /**
      * Removes the API Management user from the list of Notification.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param notificationName Notification Name Identifier.
      * @param userId User identifier. Must be unique in the current API Management service instance.
@@ -132,25 +153,4 @@ public interface NotificationRecipientUsersClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     void delete(String resourceGroupName, String serviceName, NotificationName notificationName, String userId);
-
-    /**
-     * Removes the API Management user from the list of Notification.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param notificationName Notification Name Identifier.
-     * @param userId User identifier. Must be unique in the current API Management service instance.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<Void> deleteWithResponse(
-        String resourceGroupName,
-        String serviceName,
-        NotificationName notificationName,
-        String userId,
-        Context context);
 }

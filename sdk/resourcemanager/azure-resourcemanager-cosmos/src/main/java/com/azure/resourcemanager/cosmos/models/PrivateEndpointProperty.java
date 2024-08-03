@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Private endpoint which the connection belongs to. */
+/**
+ * Private endpoint which the connection belongs to.
+ */
 @Fluent
 public final class PrivateEndpointProperty {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PrivateEndpointProperty.class);
-
     /*
      * Resource id of the private endpoint.
      */
@@ -21,8 +19,14 @@ public final class PrivateEndpointProperty {
     private String id;
 
     /**
+     * Creates an instance of PrivateEndpointProperty class.
+     */
+    public PrivateEndpointProperty() {
+    }
+
+    /**
      * Get the id property: Resource id of the private endpoint.
-     *
+     * 
      * @return the id value.
      */
     public String id() {
@@ -31,7 +35,7 @@ public final class PrivateEndpointProperty {
 
     /**
      * Set the id property: Resource id of the private endpoint.
-     *
+     * 
      * @param id the id value to set.
      * @return the PrivateEndpointProperty object itself.
      */
@@ -42,7 +46,7 @@ public final class PrivateEndpointProperty {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

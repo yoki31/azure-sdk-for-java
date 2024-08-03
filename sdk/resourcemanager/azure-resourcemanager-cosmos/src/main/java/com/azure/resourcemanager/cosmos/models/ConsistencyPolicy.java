@@ -6,43 +6,41 @@ package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The consistency policy for the Cosmos DB database account. */
+/**
+ * The consistency policy for the Cosmos DB database account.
+ */
 @Fluent
 public final class ConsistencyPolicy {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ConsistencyPolicy.class);
-
     /*
-     * The default consistency level and configuration settings of the Cosmos
-     * DB account.
+     * The default consistency level and configuration settings of the Cosmos DB account.
      */
     @JsonProperty(value = "defaultConsistencyLevel", required = true)
     private DefaultConsistencyLevel defaultConsistencyLevel;
 
     /*
-     * When used with the Bounded Staleness consistency level, this value
-     * represents the number of stale requests tolerated. Accepted range for
-     * this value is 1 – 2,147,483,647. Required when defaultConsistencyPolicy
-     * is set to 'BoundedStaleness'.
+     * When used with the Bounded Staleness consistency level, this value represents the number of stale requests tolerated. Accepted range for this value is 1 – 2,147,483,647. Required when defaultConsistencyPolicy is set to 'BoundedStaleness'.
      */
     @JsonProperty(value = "maxStalenessPrefix")
     private Long maxStalenessPrefix;
 
     /*
-     * When used with the Bounded Staleness consistency level, this value
-     * represents the time amount of staleness (in seconds) tolerated. Accepted
-     * range for this value is 5 - 86400. Required when
-     * defaultConsistencyPolicy is set to 'BoundedStaleness'.
+     * When used with the Bounded Staleness consistency level, this value represents the time amount of staleness (in seconds) tolerated. Accepted range for this value is 5 - 86400. Required when defaultConsistencyPolicy is set to 'BoundedStaleness'.
      */
     @JsonProperty(value = "maxIntervalInSeconds")
     private Integer maxIntervalInSeconds;
 
     /**
+     * Creates an instance of ConsistencyPolicy class.
+     */
+    public ConsistencyPolicy() {
+    }
+
+    /**
      * Get the defaultConsistencyLevel property: The default consistency level and configuration settings of the Cosmos
      * DB account.
-     *
+     * 
      * @return the defaultConsistencyLevel value.
      */
     public DefaultConsistencyLevel defaultConsistencyLevel() {
@@ -52,7 +50,7 @@ public final class ConsistencyPolicy {
     /**
      * Set the defaultConsistencyLevel property: The default consistency level and configuration settings of the Cosmos
      * DB account.
-     *
+     * 
      * @param defaultConsistencyLevel the defaultConsistencyLevel value to set.
      * @return the ConsistencyPolicy object itself.
      */
@@ -65,7 +63,7 @@ public final class ConsistencyPolicy {
      * Get the maxStalenessPrefix property: When used with the Bounded Staleness consistency level, this value
      * represents the number of stale requests tolerated. Accepted range for this value is 1 – 2,147,483,647. Required
      * when defaultConsistencyPolicy is set to 'BoundedStaleness'.
-     *
+     * 
      * @return the maxStalenessPrefix value.
      */
     public Long maxStalenessPrefix() {
@@ -76,7 +74,7 @@ public final class ConsistencyPolicy {
      * Set the maxStalenessPrefix property: When used with the Bounded Staleness consistency level, this value
      * represents the number of stale requests tolerated. Accepted range for this value is 1 – 2,147,483,647. Required
      * when defaultConsistencyPolicy is set to 'BoundedStaleness'.
-     *
+     * 
      * @param maxStalenessPrefix the maxStalenessPrefix value to set.
      * @return the ConsistencyPolicy object itself.
      */
@@ -89,7 +87,7 @@ public final class ConsistencyPolicy {
      * Get the maxIntervalInSeconds property: When used with the Bounded Staleness consistency level, this value
      * represents the time amount of staleness (in seconds) tolerated. Accepted range for this value is 5 - 86400.
      * Required when defaultConsistencyPolicy is set to 'BoundedStaleness'.
-     *
+     * 
      * @return the maxIntervalInSeconds value.
      */
     public Integer maxIntervalInSeconds() {
@@ -100,7 +98,7 @@ public final class ConsistencyPolicy {
      * Set the maxIntervalInSeconds property: When used with the Bounded Staleness consistency level, this value
      * represents the time amount of staleness (in seconds) tolerated. Accepted range for this value is 5 - 86400.
      * Required when defaultConsistencyPolicy is set to 'BoundedStaleness'.
-     *
+     * 
      * @param maxIntervalInSeconds the maxIntervalInSeconds value to set.
      * @return the ConsistencyPolicy object itself.
      */
@@ -111,15 +109,16 @@ public final class ConsistencyPolicy {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (defaultConsistencyLevel() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property defaultConsistencyLevel in model ConsistencyPolicy"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property defaultConsistencyLevel in model ConsistencyPolicy"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ConsistencyPolicy.class);
 }

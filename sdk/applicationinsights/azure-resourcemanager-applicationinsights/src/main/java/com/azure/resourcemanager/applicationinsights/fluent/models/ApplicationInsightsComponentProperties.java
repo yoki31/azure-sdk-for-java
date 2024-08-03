@@ -12,7 +12,6 @@ import com.azure.resourcemanager.applicationinsights.models.IngestionMode;
 import com.azure.resourcemanager.applicationinsights.models.PrivateLinkScopedResource;
 import com.azure.resourcemanager.applicationinsights.models.PublicNetworkAccessType;
 import com.azure.resourcemanager.applicationinsights.models.RequestSource;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -20,11 +19,8 @@ import java.util.List;
 /** Properties that define an Application Insights component resource. */
 @Fluent
 public final class ApplicationInsightsComponentProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApplicationInsightsComponentProperties.class);
-
     /*
-     * The unique ID of your application. This field mirrors the 'Name' field
-     * and cannot be changed.
+     * The unique ID of your application. This field mirrors the 'Name' field and cannot be changed.
      */
     @JsonProperty(value = "ApplicationId", access = JsonProperty.Access.WRITE_ONLY)
     private String applicationId;
@@ -36,38 +32,41 @@ public final class ApplicationInsightsComponentProperties {
     private String appId;
 
     /*
+     * Application name.
+     */
+    @JsonProperty(value = "Name", access = JsonProperty.Access.WRITE_ONLY)
+    private String name;
+
+    /*
      * Type of application being monitored.
      */
     @JsonProperty(value = "Application_Type", required = true)
     private ApplicationType applicationType;
 
     /*
-     * Used by the Application Insights system to determine what kind of flow
-     * this component was created by. This is to be set to 'Bluefield' when
-     * creating/updating a component via the REST API.
+     * Used by the Application Insights system to determine what kind of flow this component was created by. This is to
+     * be set to 'Bluefield' when creating/updating a component via the REST API.
      */
     @JsonProperty(value = "Flow_Type")
     private FlowType flowType;
 
     /*
-     * Describes what tool created this Application Insights component.
-     * Customers using this API should set this to the default 'rest'.
+     * Describes what tool created this Application Insights component. Customers using this API should set this to the
+     * default 'rest'.
      */
     @JsonProperty(value = "Request_Source")
     private RequestSource requestSource;
 
     /*
-     * Application Insights Instrumentation key. A read-only value that
-     * applications can use to identify the destination for all telemetry sent
-     * to Azure Application Insights. This value will be supplied upon
-     * construction of each new Application Insights component.
+     * Application Insights Instrumentation key. A read-only value that applications can use to identify the
+     * destination for all telemetry sent to Azure Application Insights. This value will be supplied upon construction
+     * of each new Application Insights component.
      */
     @JsonProperty(value = "InstrumentationKey", access = JsonProperty.Access.WRITE_ONLY)
     private String instrumentationKey;
 
     /*
-     * Creation Date for the Application Insights component, in ISO 8601
-     * format.
+     * Creation Date for the Application Insights component, in ISO 8601 format.
      */
     @JsonProperty(value = "CreationDate", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime creationDate;
@@ -79,31 +78,29 @@ public final class ApplicationInsightsComponentProperties {
     private String tenantId;
 
     /*
-     * The unique application ID created when a new application is added to
-     * HockeyApp, used for communications with HockeyApp.
+     * The unique application ID created when a new application is added to HockeyApp, used for communications with
+     * HockeyApp.
      */
     @JsonProperty(value = "HockeyAppId")
     private String hockeyAppId;
 
     /*
-     * Token used to authenticate communications with between Application
-     * Insights and HockeyApp.
+     * Token used to authenticate communications with between Application Insights and HockeyApp.
      */
     @JsonProperty(value = "HockeyAppToken", access = JsonProperty.Access.WRITE_ONLY)
     private String hockeyAppToken;
 
     /*
-     * Current state of this component: whether or not is has been provisioned
-     * within the resource group it is defined. Users cannot change this value
-     * but are able to read from it. Values will include Succeeded, Deploying,
-     * Canceled, and Failed.
+     * Current state of this component: whether or not is has been provisioned within the resource group it is defined.
+     * Users cannot change this value but are able to read from it. Values will include Succeeded, Deploying, Canceled,
+     * and Failed.
      */
     @JsonProperty(value = "provisioningState", access = JsonProperty.Access.WRITE_ONLY)
     private String provisioningState;
 
     /*
-     * Percentage of the data produced by the application being monitored that
-     * is being sampled for Application Insights telemetry.
+     * Percentage of the data produced by the application being monitored that is being sampled for Application
+     * Insights telemetry.
      */
     @JsonProperty(value = "SamplingPercentage")
     private Double samplingPercentage;
@@ -133,6 +130,19 @@ public final class ApplicationInsightsComponentProperties {
     private Boolean immediatePurgeDataOn30Days;
 
     /*
+     * Resource Id of the log analytics workspace which the data will be ingested to. This property is required to
+     * create an application with this API version. Applications from older versions will not have this property.
+     */
+    @JsonProperty(value = "WorkspaceResourceId")
+    private String workspaceResourceId;
+
+    /*
+     * The date which the component got migrated to LA, in ISO 8601 format.
+     */
+    @JsonProperty(value = "LaMigrationDate", access = JsonProperty.Access.WRITE_ONLY)
+    private OffsetDateTime laMigrationDate;
+
+    /*
      * List of linked private link scope resources.
      */
     @JsonProperty(value = "PrivateLinkScopedResources", access = JsonProperty.Access.WRITE_ONLY)
@@ -156,6 +166,22 @@ public final class ApplicationInsightsComponentProperties {
     @JsonProperty(value = "IngestionMode")
     private IngestionMode ingestionMode;
 
+    /*
+     * Disable Non-AAD based Auth.
+     */
+    @JsonProperty(value = "DisableLocalAuth")
+    private Boolean disableLocalAuth;
+
+    /*
+     * Force users to create their own storage account for profiler and debugger.
+     */
+    @JsonProperty(value = "ForceCustomerStorageForProfiler")
+    private Boolean forceCustomerStorageForProfiler;
+
+    /** Creates an instance of ApplicationInsightsComponentProperties class. */
+    public ApplicationInsightsComponentProperties() {
+    }
+
     /**
      * Get the applicationId property: The unique ID of your application. This field mirrors the 'Name' field and cannot
      * be changed.
@@ -173,6 +199,15 @@ public final class ApplicationInsightsComponentProperties {
      */
     public String appId() {
         return this.appId;
+    }
+
+    /**
+     * Get the name property: Application name.
+     *
+     * @return the name value.
+     */
+    public String name() {
+        return this.name;
     }
 
     /**
@@ -403,6 +438,39 @@ public final class ApplicationInsightsComponentProperties {
     }
 
     /**
+     * Get the workspaceResourceId property: Resource Id of the log analytics workspace which the data will be ingested
+     * to. This property is required to create an application with this API version. Applications from older versions
+     * will not have this property.
+     *
+     * @return the workspaceResourceId value.
+     */
+    public String workspaceResourceId() {
+        return this.workspaceResourceId;
+    }
+
+    /**
+     * Set the workspaceResourceId property: Resource Id of the log analytics workspace which the data will be ingested
+     * to. This property is required to create an application with this API version. Applications from older versions
+     * will not have this property.
+     *
+     * @param workspaceResourceId the workspaceResourceId value to set.
+     * @return the ApplicationInsightsComponentProperties object itself.
+     */
+    public ApplicationInsightsComponentProperties withWorkspaceResourceId(String workspaceResourceId) {
+        this.workspaceResourceId = workspaceResourceId;
+        return this;
+    }
+
+    /**
+     * Get the laMigrationDate property: The date which the component got migrated to LA, in ISO 8601 format.
+     *
+     * @return the laMigrationDate value.
+     */
+    public OffsetDateTime laMigrationDate() {
+        return this.laMigrationDate;
+    }
+
+    /**
      * Get the privateLinkScopedResources property: List of linked private link scope resources.
      *
      * @return the privateLinkScopedResources value.
@@ -476,13 +544,56 @@ public final class ApplicationInsightsComponentProperties {
     }
 
     /**
+     * Get the disableLocalAuth property: Disable Non-AAD based Auth.
+     *
+     * @return the disableLocalAuth value.
+     */
+    public Boolean disableLocalAuth() {
+        return this.disableLocalAuth;
+    }
+
+    /**
+     * Set the disableLocalAuth property: Disable Non-AAD based Auth.
+     *
+     * @param disableLocalAuth the disableLocalAuth value to set.
+     * @return the ApplicationInsightsComponentProperties object itself.
+     */
+    public ApplicationInsightsComponentProperties withDisableLocalAuth(Boolean disableLocalAuth) {
+        this.disableLocalAuth = disableLocalAuth;
+        return this;
+    }
+
+    /**
+     * Get the forceCustomerStorageForProfiler property: Force users to create their own storage account for profiler
+     * and debugger.
+     *
+     * @return the forceCustomerStorageForProfiler value.
+     */
+    public Boolean forceCustomerStorageForProfiler() {
+        return this.forceCustomerStorageForProfiler;
+    }
+
+    /**
+     * Set the forceCustomerStorageForProfiler property: Force users to create their own storage account for profiler
+     * and debugger.
+     *
+     * @param forceCustomerStorageForProfiler the forceCustomerStorageForProfiler value to set.
+     * @return the ApplicationInsightsComponentProperties object itself.
+     */
+    public ApplicationInsightsComponentProperties withForceCustomerStorageForProfiler(
+        Boolean forceCustomerStorageForProfiler) {
+        this.forceCustomerStorageForProfiler = forceCustomerStorageForProfiler;
+        return this;
+    }
+
+    /**
      * Validates the instance.
      *
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (applicationType() == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         "Missing required property applicationType in model ApplicationInsightsComponentProperties"));
@@ -491,4 +602,6 @@ public final class ApplicationInsightsComponentProperties {
             privateLinkScopedResources().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(ApplicationInsightsComponentProperties.class);
 }

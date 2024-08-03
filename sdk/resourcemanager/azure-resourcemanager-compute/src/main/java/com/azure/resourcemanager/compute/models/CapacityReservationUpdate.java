@@ -5,19 +5,17 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.compute.fluent.models.CapacityReservationProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 
-/** Specifies information about the capacity reservation. Only tags and sku.capacity can be updated. */
+/**
+ * Specifies information about the capacity reservation. Only tags and sku.capacity can be updated.
+ */
 @Fluent
 public final class CapacityReservationUpdate extends UpdateResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CapacityReservationUpdate.class);
-
     /*
      * Properties of the Capacity reservation.
      */
@@ -25,19 +23,23 @@ public final class CapacityReservationUpdate extends UpdateResource {
     private CapacityReservationProperties innerProperties;
 
     /*
-     * SKU of the resource for which capacity needs be reserved. The SKU name
-     * and capacity is required to be set. Currently VM Skus with the
-     * capability called 'CapacityReservationSupported' set to true are
-     * supported. Refer to List Microsoft.Compute SKUs in a region
-     * (https://docs.microsoft.com/rest/api/compute/resourceskus/list) for
+     * SKU of the resource for which capacity needs be reserved. The SKU name and capacity is required to be set.
+     * Currently VM Skus with the capability called 'CapacityReservationSupported' set to true are supported. Refer to
+     * List Microsoft.Compute SKUs in a region (https://docs.microsoft.com/rest/api/compute/resourceskus/list) for
      * supported values.
      */
     @JsonProperty(value = "sku")
     private Sku sku;
 
     /**
+     * Creates an instance of CapacityReservationUpdate class.
+     */
+    public CapacityReservationUpdate() {
+    }
+
+    /**
      * Get the innerProperties property: Properties of the Capacity reservation.
-     *
+     * 
      * @return the innerProperties value.
      */
     private CapacityReservationProperties innerProperties() {
@@ -49,7 +51,7 @@ public final class CapacityReservationUpdate extends UpdateResource {
      * required to be set. Currently VM Skus with the capability called 'CapacityReservationSupported' set to true are
      * supported. Refer to List Microsoft.Compute SKUs in a region
      * (https://docs.microsoft.com/rest/api/compute/resourceskus/list) for supported values.
-     *
+     * 
      * @return the sku value.
      */
     public Sku sku() {
@@ -61,7 +63,7 @@ public final class CapacityReservationUpdate extends UpdateResource {
      * required to be set. Currently VM Skus with the capability called 'CapacityReservationSupported' set to true are
      * supported. Refer to List Microsoft.Compute SKUs in a region
      * (https://docs.microsoft.com/rest/api/compute/resourceskus/list) for supported values.
-     *
+     * 
      * @param sku the sku value to set.
      * @return the CapacityReservationUpdate object itself.
      */
@@ -70,7 +72,9 @@ public final class CapacityReservationUpdate extends UpdateResource {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CapacityReservationUpdate withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -80,7 +84,7 @@ public final class CapacityReservationUpdate extends UpdateResource {
     /**
      * Get the reservationId property: A unique id generated and assigned to the capacity reservation by the platform
      * which does not change throughout the lifetime of the resource.
-     *
+     * 
      * @return the reservationId value.
      */
     public String reservationId() {
@@ -88,9 +92,21 @@ public final class CapacityReservationUpdate extends UpdateResource {
     }
 
     /**
+     * Get the platformFaultDomainCount property: Specifies the value of fault domain count that Capacity Reservation
+     * supports for requested VM size. **Note:** The fault domain count specified for a resource (like virtual machines
+     * scale set) must be less than or equal to this value if it deploys using capacity reservation. Minimum
+     * api-version: 2022-08-01.
+     * 
+     * @return the platformFaultDomainCount value.
+     */
+    public Integer platformFaultDomainCount() {
+        return this.innerProperties() == null ? null : this.innerProperties().platformFaultDomainCount();
+    }
+
+    /**
      * Get the virtualMachinesAssociated property: A list of all virtual machine resource ids that are associated with
      * the capacity reservation.
-     *
+     * 
      * @return the virtualMachinesAssociated value.
      */
     public List<SubResourceReadOnly> virtualMachinesAssociated() {
@@ -99,7 +115,7 @@ public final class CapacityReservationUpdate extends UpdateResource {
 
     /**
      * Get the provisioningTime property: The date time when the capacity reservation was last updated.
-     *
+     * 
      * @return the provisioningTime value.
      */
     public OffsetDateTime provisioningTime() {
@@ -108,7 +124,7 @@ public final class CapacityReservationUpdate extends UpdateResource {
 
     /**
      * Get the provisioningState property: The provisioning state, which only appears in the response.
-     *
+     * 
      * @return the provisioningState value.
      */
     public String provisioningState() {
@@ -117,7 +133,7 @@ public final class CapacityReservationUpdate extends UpdateResource {
 
     /**
      * Get the instanceView property: The Capacity reservation instance view.
-     *
+     * 
      * @return the instanceView value.
      */
     public CapacityReservationInstanceView instanceView() {
@@ -125,8 +141,18 @@ public final class CapacityReservationUpdate extends UpdateResource {
     }
 
     /**
+     * Get the timeCreated property: Specifies the time at which the Capacity Reservation resource was created. Minimum
+     * api-version: 2021-11-01.
+     * 
+     * @return the timeCreated value.
+     */
+    public OffsetDateTime timeCreated() {
+        return this.innerProperties() == null ? null : this.innerProperties().timeCreated();
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

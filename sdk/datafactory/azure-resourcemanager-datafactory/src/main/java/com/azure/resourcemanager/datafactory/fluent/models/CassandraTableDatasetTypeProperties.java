@@ -5,33 +5,35 @@
 package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Cassandra dataset properties. */
+/**
+ * Cassandra dataset properties.
+ */
 @Fluent
 public final class CassandraTableDatasetTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CassandraTableDatasetTypeProperties.class);
-
     /*
-     * The table name of the Cassandra database. Type: string (or Expression
-     * with resultType string).
+     * The table name of the Cassandra database. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "tableName")
     private Object tableName;
 
     /*
-     * The keyspace of the Cassandra database. Type: string (or Expression with
-     * resultType string).
+     * The keyspace of the Cassandra database. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "keyspace")
     private Object keyspace;
 
     /**
+     * Creates an instance of CassandraTableDatasetTypeProperties class.
+     */
+    public CassandraTableDatasetTypeProperties() {
+    }
+
+    /**
      * Get the tableName property: The table name of the Cassandra database. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @return the tableName value.
      */
     public Object tableName() {
@@ -41,7 +43,7 @@ public final class CassandraTableDatasetTypeProperties {
     /**
      * Set the tableName property: The table name of the Cassandra database. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @param tableName the tableName value to set.
      * @return the CassandraTableDatasetTypeProperties object itself.
      */
@@ -53,7 +55,7 @@ public final class CassandraTableDatasetTypeProperties {
     /**
      * Get the keyspace property: The keyspace of the Cassandra database. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @return the keyspace value.
      */
     public Object keyspace() {
@@ -63,7 +65,7 @@ public final class CassandraTableDatasetTypeProperties {
     /**
      * Set the keyspace property: The keyspace of the Cassandra database. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @param keyspace the keyspace value to set.
      * @return the CassandraTableDatasetTypeProperties object itself.
      */
@@ -74,7 +76,7 @@ public final class CassandraTableDatasetTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

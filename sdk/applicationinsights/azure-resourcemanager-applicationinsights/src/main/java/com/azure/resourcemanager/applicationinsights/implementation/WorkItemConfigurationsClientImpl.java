@@ -29,7 +29,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.applicationinsights.fluent.WorkItemConfigurationsClient;
 import com.azure.resourcemanager.applicationinsights.fluent.models.WorkItemConfigurationInner;
 import com.azure.resourcemanager.applicationinsights.models.WorkItemConfigurationErrorException;
@@ -39,8 +38,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in WorkItemConfigurationsClient. */
 public final class WorkItemConfigurationsClientImpl implements WorkItemConfigurationsClient {
-    private final ClientLogger logger = new ClientLogger(WorkItemConfigurationsClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final WorkItemConfigurationsService service;
 
@@ -65,11 +62,10 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApplicationInsightsM")
-    private interface WorkItemConfigurationsService {
+    public interface WorkItemConfigurationsService {
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Insights/components"
-                + "/{resourceName}/WorkItemConfigs")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Insights/components/{resourceName}/WorkItemConfigs")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(WorkItemConfigurationErrorException.class)
         Mono<Response<WorkItemConfigurationsListResult>> list(
@@ -83,8 +79,7 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
 
         @Headers({"Content-Type: application/json"})
         @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Insights/components"
-                + "/{resourceName}/WorkItemConfigs")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Insights/components/{resourceName}/WorkItemConfigs")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<WorkItemConfigurationInner>> create(
@@ -99,8 +94,7 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
 
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Insights/components"
-                + "/{resourceName}/DefaultWorkItemConfig")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Insights/components/{resourceName}/DefaultWorkItemConfig")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<WorkItemConfigurationInner>> getDefault(
@@ -114,8 +108,7 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
 
         @Headers({"Accept: application/json;q=0.9", "Content-Type: application/json"})
         @Delete(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Insights/components"
-                + "/{resourceName}/WorkItemConfigs/{workItemConfigId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Insights/components/{resourceName}/WorkItemConfigs/{workItemConfigId}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Void>> delete(
@@ -129,8 +122,7 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
 
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Insights/components"
-                + "/{resourceName}/WorkItemConfigs/{workItemConfigId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Insights/components/{resourceName}/WorkItemConfigs/{workItemConfigId}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<WorkItemConfigurationInner>> getItem(
@@ -145,8 +137,7 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
 
         @Headers({"Content-Type: application/json"})
         @Patch(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Insights/components"
-                + "/{resourceName}/WorkItemConfigs/{workItemConfigId}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Insights/components/{resourceName}/WorkItemConfigs/{workItemConfigId}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<WorkItemConfigurationInner>> updateItem(
@@ -169,7 +160,8 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws WorkItemConfigurationErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list work item configurations that exist for the application.
+     * @return the list work item configurations that exist for the application along with {@link PagedResponse} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<WorkItemConfigurationInner>> listSinglePageAsync(
@@ -223,7 +215,8 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws WorkItemConfigurationErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list work item configurations that exist for the application.
+     * @return the list work item configurations that exist for the application along with {@link PagedResponse} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<WorkItemConfigurationInner>> listSinglePageAsync(
@@ -273,7 +266,8 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws WorkItemConfigurationErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list work item configurations that exist for the application.
+     * @return the list work item configurations that exist for the application as paginated response with {@link
+     *     PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<WorkItemConfigurationInner> listAsync(String resourceGroupName, String resourceName) {
@@ -289,7 +283,8 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws WorkItemConfigurationErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list work item configurations that exist for the application.
+     * @return the list work item configurations that exist for the application as paginated response with {@link
+     *     PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<WorkItemConfigurationInner> listAsync(
@@ -305,7 +300,8 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws WorkItemConfigurationErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list work item configurations that exist for the application.
+     * @return the list work item configurations that exist for the application as paginated response with {@link
+     *     PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<WorkItemConfigurationInner> list(String resourceGroupName, String resourceName) {
@@ -321,7 +317,8 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws WorkItemConfigurationErrorException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list work item configurations that exist for the application.
+     * @return the list work item configurations that exist for the application as paginated response with {@link
+     *     PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<WorkItemConfigurationInner> list(
@@ -339,7 +336,8 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return work item configuration associated with an application insights resource.
+     * @return work item configuration associated with an application insights resource along with {@link Response} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<WorkItemConfigurationInner>> createWithResponseAsync(
@@ -400,7 +398,8 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return work item configuration associated with an application insights resource.
+     * @return work item configuration associated with an application insights resource along with {@link Response} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<WorkItemConfigurationInner>> createWithResponseAsync(
@@ -460,20 +459,37 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return work item configuration associated with an application insights resource.
+     * @return work item configuration associated with an application insights resource on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<WorkItemConfigurationInner> createAsync(
         String resourceGroupName, String resourceName, WorkItemCreateConfiguration workItemConfigurationProperties) {
         return createWithResponseAsync(resourceGroupName, resourceName, workItemConfigurationProperties)
-            .flatMap(
-                (Response<WorkItemConfigurationInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
+    }
+
+    /**
+     * Create a work item configuration for an Application Insights component.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param resourceName The name of the Application Insights component resource.
+     * @param workItemConfigurationProperties Properties that need to be specified to create a work item configuration
+     *     of a Application Insights component.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return work item configuration associated with an application insights resource along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<WorkItemConfigurationInner> createWithResponse(
+        String resourceGroupName,
+        String resourceName,
+        WorkItemCreateConfiguration workItemConfigurationProperties,
+        Context context) {
+        return createWithResponseAsync(resourceGroupName, resourceName, workItemConfigurationProperties, context)
+            .block();
     }
 
     /**
@@ -491,30 +507,8 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
     @ServiceMethod(returns = ReturnType.SINGLE)
     public WorkItemConfigurationInner create(
         String resourceGroupName, String resourceName, WorkItemCreateConfiguration workItemConfigurationProperties) {
-        return createAsync(resourceGroupName, resourceName, workItemConfigurationProperties).block();
-    }
-
-    /**
-     * Create a work item configuration for an Application Insights component.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param resourceName The name of the Application Insights component resource.
-     * @param workItemConfigurationProperties Properties that need to be specified to create a work item configuration
-     *     of a Application Insights component.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return work item configuration associated with an application insights resource.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<WorkItemConfigurationInner> createWithResponse(
-        String resourceGroupName,
-        String resourceName,
-        WorkItemCreateConfiguration workItemConfigurationProperties,
-        Context context) {
-        return createWithResponseAsync(resourceGroupName, resourceName, workItemConfigurationProperties, context)
-            .block();
+        return createWithResponse(resourceGroupName, resourceName, workItemConfigurationProperties, Context.NONE)
+            .getValue();
     }
 
     /**
@@ -525,7 +519,8 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return default work item configurations that exist for the application.
+     * @return default work item configurations that exist for the application along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<WorkItemConfigurationInner>> getDefaultWithResponseAsync(
@@ -575,7 +570,8 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return default work item configurations that exist for the application.
+     * @return default work item configurations that exist for the application along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<WorkItemConfigurationInner>> getDefaultWithResponseAsync(
@@ -621,19 +617,29 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return default work item configurations that exist for the application.
+     * @return default work item configurations that exist for the application on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<WorkItemConfigurationInner> getDefaultAsync(String resourceGroupName, String resourceName) {
         return getDefaultWithResponseAsync(resourceGroupName, resourceName)
-            .flatMap(
-                (Response<WorkItemConfigurationInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
+    }
+
+    /**
+     * Gets default work item configurations that exist for the application.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param resourceName The name of the Application Insights component resource.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return default work item configurations that exist for the application along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<WorkItemConfigurationInner> getDefaultWithResponse(
+        String resourceGroupName, String resourceName, Context context) {
+        return getDefaultWithResponseAsync(resourceGroupName, resourceName, context).block();
     }
 
     /**
@@ -648,24 +654,7 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public WorkItemConfigurationInner getDefault(String resourceGroupName, String resourceName) {
-        return getDefaultAsync(resourceGroupName, resourceName).block();
-    }
-
-    /**
-     * Gets default work item configurations that exist for the application.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param resourceName The name of the Application Insights component resource.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return default work item configurations that exist for the application.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<WorkItemConfigurationInner> getDefaultWithResponse(
-        String resourceGroupName, String resourceName, Context context) {
-        return getDefaultWithResponseAsync(resourceGroupName, resourceName, context).block();
+        return getDefaultWithResponse(resourceGroupName, resourceName, Context.NONE).getValue();
     }
 
     /**
@@ -678,7 +667,7 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -733,7 +722,7 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -784,12 +773,31 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(String resourceGroupName, String resourceName, String workItemConfigId) {
         return deleteWithResponseAsync(resourceGroupName, resourceName, workItemConfigId)
-            .flatMap((Response<Void> res) -> Mono.empty());
+            .flatMap(ignored -> Mono.empty());
+    }
+
+    /**
+     * Delete a work item configuration of an Application Insights component.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param resourceName The name of the Application Insights component resource.
+     * @param workItemConfigId The unique work item configuration Id. This can be either friendly name of connector as
+     *     defined in connector configuration.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> deleteWithResponse(
+        String resourceGroupName, String resourceName, String workItemConfigId, Context context) {
+        return deleteWithResponseAsync(resourceGroupName, resourceName, workItemConfigId, context).block();
     }
 
     /**
@@ -805,26 +813,7 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public void delete(String resourceGroupName, String resourceName, String workItemConfigId) {
-        deleteAsync(resourceGroupName, resourceName, workItemConfigId).block();
-    }
-
-    /**
-     * Delete a work item configuration of an Application Insights component.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param resourceName The name of the Application Insights component resource.
-     * @param workItemConfigId The unique work item configuration Id. This can be either friendly name of connector as
-     *     defined in connector configuration.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> deleteWithResponse(
-        String resourceGroupName, String resourceName, String workItemConfigId, Context context) {
-        return deleteWithResponseAsync(resourceGroupName, resourceName, workItemConfigId, context).block();
+        deleteWithResponse(resourceGroupName, resourceName, workItemConfigId, Context.NONE);
     }
 
     /**
@@ -837,7 +826,8 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return specified work item configuration for an Application Insights component.
+     * @return specified work item configuration for an Application Insights component along with {@link Response} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<WorkItemConfigurationInner>> getItemWithResponseAsync(
@@ -894,7 +884,8 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return specified work item configuration for an Application Insights component.
+     * @return specified work item configuration for an Application Insights component along with {@link Response} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<WorkItemConfigurationInner>> getItemWithResponseAsync(
@@ -947,20 +938,33 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return specified work item configuration for an Application Insights component.
+     * @return specified work item configuration for an Application Insights component on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<WorkItemConfigurationInner> getItemAsync(
         String resourceGroupName, String resourceName, String workItemConfigId) {
         return getItemWithResponseAsync(resourceGroupName, resourceName, workItemConfigId)
-            .flatMap(
-                (Response<WorkItemConfigurationInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
+    }
+
+    /**
+     * Gets specified work item configuration for an Application Insights component.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param resourceName The name of the Application Insights component resource.
+     * @param workItemConfigId The unique work item configuration Id. This can be either friendly name of connector as
+     *     defined in connector configuration.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return specified work item configuration for an Application Insights component along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<WorkItemConfigurationInner> getItemWithResponse(
+        String resourceGroupName, String resourceName, String workItemConfigId, Context context) {
+        return getItemWithResponseAsync(resourceGroupName, resourceName, workItemConfigId, context).block();
     }
 
     /**
@@ -977,26 +981,7 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public WorkItemConfigurationInner getItem(String resourceGroupName, String resourceName, String workItemConfigId) {
-        return getItemAsync(resourceGroupName, resourceName, workItemConfigId).block();
-    }
-
-    /**
-     * Gets specified work item configuration for an Application Insights component.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param resourceName The name of the Application Insights component resource.
-     * @param workItemConfigId The unique work item configuration Id. This can be either friendly name of connector as
-     *     defined in connector configuration.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return specified work item configuration for an Application Insights component.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<WorkItemConfigurationInner> getItemWithResponse(
-        String resourceGroupName, String resourceName, String workItemConfigId, Context context) {
-        return getItemWithResponseAsync(resourceGroupName, resourceName, workItemConfigId, context).block();
+        return getItemWithResponse(resourceGroupName, resourceName, workItemConfigId, Context.NONE).getValue();
     }
 
     /**
@@ -1011,7 +996,8 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return work item configuration associated with an application insights resource.
+     * @return work item configuration associated with an application insights resource along with {@link Response} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<WorkItemConfigurationInner>> updateItemWithResponseAsync(
@@ -1082,7 +1068,8 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return work item configuration associated with an application insights resource.
+     * @return work item configuration associated with an application insights resource along with {@link Response} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<WorkItemConfigurationInner>> updateItemWithResponseAsync(
@@ -1150,7 +1137,8 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return work item configuration associated with an application insights resource.
+     * @return work item configuration associated with an application insights resource on successful completion of
+     *     {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<WorkItemConfigurationInner> updateItemAsync(
@@ -1160,14 +1148,34 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
         WorkItemCreateConfiguration workItemConfigurationProperties) {
         return updateItemWithResponseAsync(
                 resourceGroupName, resourceName, workItemConfigId, workItemConfigurationProperties)
-            .flatMap(
-                (Response<WorkItemConfigurationInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
+    }
+
+    /**
+     * Update a work item configuration for an Application Insights component.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param resourceName The name of the Application Insights component resource.
+     * @param workItemConfigId The unique work item configuration Id. This can be either friendly name of connector as
+     *     defined in connector configuration.
+     * @param workItemConfigurationProperties Properties that need to be specified to update a work item configuration
+     *     for this Application Insights component.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return work item configuration associated with an application insights resource along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<WorkItemConfigurationInner> updateItemWithResponse(
+        String resourceGroupName,
+        String resourceName,
+        String workItemConfigId,
+        WorkItemCreateConfiguration workItemConfigurationProperties,
+        Context context) {
+        return updateItemWithResponseAsync(
+                resourceGroupName, resourceName, workItemConfigId, workItemConfigurationProperties, context)
+            .block();
     }
 
     /**
@@ -1190,34 +1198,8 @@ public final class WorkItemConfigurationsClientImpl implements WorkItemConfigura
         String resourceName,
         String workItemConfigId,
         WorkItemCreateConfiguration workItemConfigurationProperties) {
-        return updateItemAsync(resourceGroupName, resourceName, workItemConfigId, workItemConfigurationProperties)
-            .block();
-    }
-
-    /**
-     * Update a work item configuration for an Application Insights component.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param resourceName The name of the Application Insights component resource.
-     * @param workItemConfigId The unique work item configuration Id. This can be either friendly name of connector as
-     *     defined in connector configuration.
-     * @param workItemConfigurationProperties Properties that need to be specified to update a work item configuration
-     *     for this Application Insights component.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return work item configuration associated with an application insights resource.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<WorkItemConfigurationInner> updateItemWithResponse(
-        String resourceGroupName,
-        String resourceName,
-        String workItemConfigId,
-        WorkItemCreateConfiguration workItemConfigurationProperties,
-        Context context) {
-        return updateItemWithResponseAsync(
-                resourceGroupName, resourceName, workItemConfigId, workItemConfigurationProperties, context)
-            .block();
+        return updateItemWithResponse(
+                resourceGroupName, resourceName, workItemConfigId, workItemConfigurationProperties, Context.NONE)
+            .getValue();
     }
 }

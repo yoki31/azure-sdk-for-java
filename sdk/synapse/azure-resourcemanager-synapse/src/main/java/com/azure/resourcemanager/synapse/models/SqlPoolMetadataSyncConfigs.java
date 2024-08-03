@@ -11,7 +11,26 @@ import com.azure.resourcemanager.synapse.fluent.models.MetadataSyncConfigInner;
 /** Resource collection API of SqlPoolMetadataSyncConfigs. */
 public interface SqlPoolMetadataSyncConfigs {
     /**
-     * Get the metadata sync configuration for a SQL pool.
+     * Get SQL pool metadata sync config
+     *
+     * <p>Get the metadata sync configuration for a SQL pool.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param workspaceName The name of the workspace.
+     * @param sqlPoolName SQL pool name.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the metadata sync configuration for a SQL pool along with {@link Response}.
+     */
+    Response<MetadataSyncConfig> getWithResponse(
+        String resourceGroupName, String workspaceName, String sqlPoolName, Context context);
+
+    /**
+     * Get SQL pool metadata sync config
+     *
+     * <p>Get the metadata sync configuration for a SQL pool.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -24,22 +43,31 @@ public interface SqlPoolMetadataSyncConfigs {
     MetadataSyncConfig get(String resourceGroupName, String workspaceName, String sqlPoolName);
 
     /**
-     * Get the metadata sync configuration for a SQL pool.
+     * Set SQL pool metadata sync config
+     *
+     * <p>Set the metadata sync configuration for a SQL pool.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @param sqlPoolName SQL pool name.
+     * @param metadataSyncConfiguration Metadata sync configuration.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the metadata sync configuration for a SQL pool.
+     * @return metadata sync configuration along with {@link Response}.
      */
-    Response<MetadataSyncConfig> getWithResponse(
-        String resourceGroupName, String workspaceName, String sqlPoolName, Context context);
+    Response<MetadataSyncConfig> createWithResponse(
+        String resourceGroupName,
+        String workspaceName,
+        String sqlPoolName,
+        MetadataSyncConfigInner metadataSyncConfiguration,
+        Context context);
 
     /**
-     * Set the metadata sync configuration for a SQL pool.
+     * Set SQL pool metadata sync config
+     *
+     * <p>Set the metadata sync configuration for a SQL pool.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -55,24 +83,4 @@ public interface SqlPoolMetadataSyncConfigs {
         String workspaceName,
         String sqlPoolName,
         MetadataSyncConfigInner metadataSyncConfiguration);
-
-    /**
-     * Set the metadata sync configuration for a SQL pool.
-     *
-     * @param resourceGroupName The name of the resource group. The name is case insensitive.
-     * @param workspaceName The name of the workspace.
-     * @param sqlPoolName SQL pool name.
-     * @param metadataSyncConfiguration Metadata sync configuration.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return metadata sync configuration.
-     */
-    Response<MetadataSyncConfig> createWithResponse(
-        String resourceGroupName,
-        String workspaceName,
-        String sqlPoolName,
-        MetadataSyncConfigInner metadataSyncConfiguration,
-        Context context);
 }

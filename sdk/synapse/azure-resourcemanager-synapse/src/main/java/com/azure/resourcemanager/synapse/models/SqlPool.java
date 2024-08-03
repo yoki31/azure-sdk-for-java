@@ -49,7 +49,9 @@ public interface SqlPool {
     Map<String, String> tags();
 
     /**
-     * Gets the sku property: Sku SQL pool SKU.
+     * Gets the sku property: Sku
+     *
+     * <p>SQL pool SKU.
      *
      * @return the sku value.
      */
@@ -159,6 +161,13 @@ public interface SqlPool {
     String regionName();
 
     /**
+     * Gets the name of the resource group.
+     *
+     * @return the name of the resource group.
+     */
+    String resourceGroupName();
+
+    /**
      * Gets the inner com.azure.resourcemanager.synapse.fluent.models.SqlPoolInner object.
      *
      * @return the inner object.
@@ -218,10 +227,8 @@ public interface SqlPool {
                 DefinitionStages.WithSourceDatabaseId,
                 DefinitionStages.WithRecoverableDatabaseId,
                 DefinitionStages.WithProvisioningState,
-                DefinitionStages.WithStatus,
                 DefinitionStages.WithRestorePointInTime,
                 DefinitionStages.WithCreateMode,
-                DefinitionStages.WithCreationDate,
                 DefinitionStages.WithStorageAccountType,
                 DefinitionStages.WithSourceDatabaseDeletionDate {
             /**
@@ -252,9 +259,12 @@ public interface SqlPool {
         /** The stage of the SqlPool definition allowing to specify sku. */
         interface WithSku {
             /**
-             * Specifies the sku property: Sku SQL pool SKU.
+             * Specifies the sku property: Sku
              *
-             * @param sku Sku SQL pool SKU.
+             * <p>SQL pool SKU.
+             *
+             * @param sku Sku
+             *     <p>SQL pool SKU.
              * @return the next definition stage.
              */
             WithCreate withSku(Sku sku);
@@ -309,16 +319,6 @@ public interface SqlPool {
              */
             WithCreate withProvisioningState(String provisioningState);
         }
-        /** The stage of the SqlPool definition allowing to specify status. */
-        interface WithStatus {
-            /**
-             * Specifies the status property: Resource status.
-             *
-             * @param status Resource status.
-             * @return the next definition stage.
-             */
-            WithCreate withStatus(String status);
-        }
         /** The stage of the SqlPool definition allowing to specify restorePointInTime. */
         interface WithRestorePointInTime {
             /**
@@ -360,16 +360,6 @@ public interface SqlPool {
              */
             WithCreate withCreateMode(CreateMode createMode);
         }
-        /** The stage of the SqlPool definition allowing to specify creationDate. */
-        interface WithCreationDate {
-            /**
-             * Specifies the creationDate property: Date the SQL pool was created.
-             *
-             * @param creationDate Date the SQL pool was created.
-             * @return the next definition stage.
-             */
-            WithCreate withCreationDate(OffsetDateTime creationDate);
-        }
         /** The stage of the SqlPool definition allowing to specify storageAccountType. */
         interface WithStorageAccountType {
             /**
@@ -404,16 +394,11 @@ public interface SqlPool {
         extends UpdateStages.WithTags,
             UpdateStages.WithSku,
             UpdateStages.WithMaxSizeBytes,
-            UpdateStages.WithCollation,
             UpdateStages.WithSourceDatabaseId,
             UpdateStages.WithRecoverableDatabaseId,
             UpdateStages.WithProvisioningState,
-            UpdateStages.WithStatus,
-            UpdateStages.WithRestorePointInTime,
             UpdateStages.WithCreateMode,
-            UpdateStages.WithCreationDate,
-            UpdateStages.WithStorageAccountType,
-            UpdateStages.WithSourceDatabaseDeletionDate {
+            UpdateStages.WithStorageAccountType {
         /**
          * Executes the update request.
          *
@@ -444,9 +429,12 @@ public interface SqlPool {
         /** The stage of the SqlPool update allowing to specify sku. */
         interface WithSku {
             /**
-             * Specifies the sku property: Sku SQL pool SKU.
+             * Specifies the sku property: Sku
              *
-             * @param sku Sku SQL pool SKU.
+             * <p>SQL pool SKU.
+             *
+             * @param sku Sku
+             *     <p>SQL pool SKU.
              * @return the next definition stage.
              */
             Update withSku(Sku sku);
@@ -460,16 +448,6 @@ public interface SqlPool {
              * @return the next definition stage.
              */
             Update withMaxSizeBytes(Long maxSizeBytes);
-        }
-        /** The stage of the SqlPool update allowing to specify collation. */
-        interface WithCollation {
-            /**
-             * Specifies the collation property: Collation mode.
-             *
-             * @param collation Collation mode.
-             * @return the next definition stage.
-             */
-            Update withCollation(String collation);
         }
         /** The stage of the SqlPool update allowing to specify sourceDatabaseId. */
         interface WithSourceDatabaseId {
@@ -500,26 +478,6 @@ public interface SqlPool {
              * @return the next definition stage.
              */
             Update withProvisioningState(String provisioningState);
-        }
-        /** The stage of the SqlPool update allowing to specify status. */
-        interface WithStatus {
-            /**
-             * Specifies the status property: Resource status.
-             *
-             * @param status Resource status.
-             * @return the next definition stage.
-             */
-            Update withStatus(String status);
-        }
-        /** The stage of the SqlPool update allowing to specify restorePointInTime. */
-        interface WithRestorePointInTime {
-            /**
-             * Specifies the restorePointInTime property: Snapshot time to restore.
-             *
-             * @param restorePointInTime Snapshot time to restore.
-             * @return the next definition stage.
-             */
-            Update withRestorePointInTime(OffsetDateTime restorePointInTime);
         }
         /** The stage of the SqlPool update allowing to specify createMode. */
         interface WithCreateMode {
@@ -552,16 +510,6 @@ public interface SqlPool {
              */
             Update withCreateMode(CreateMode createMode);
         }
-        /** The stage of the SqlPool update allowing to specify creationDate. */
-        interface WithCreationDate {
-            /**
-             * Specifies the creationDate property: Date the SQL pool was created.
-             *
-             * @param creationDate Date the SQL pool was created.
-             * @return the next definition stage.
-             */
-            Update withCreationDate(OffsetDateTime creationDate);
-        }
         /** The stage of the SqlPool update allowing to specify storageAccountType. */
         interface WithStorageAccountType {
             /**
@@ -572,16 +520,6 @@ public interface SqlPool {
              * @return the next definition stage.
              */
             Update withStorageAccountType(StorageAccountType storageAccountType);
-        }
-        /** The stage of the SqlPool update allowing to specify sourceDatabaseDeletionDate. */
-        interface WithSourceDatabaseDeletionDate {
-            /**
-             * Specifies the sourceDatabaseDeletionDate property: Specifies the time that the sql pool was deleted.
-             *
-             * @param sourceDatabaseDeletionDate Specifies the time that the sql pool was deleted.
-             * @return the next definition stage.
-             */
-            Update withSourceDatabaseDeletionDate(OffsetDateTime sourceDatabaseDeletionDate);
         }
     }
     /**
@@ -600,47 +538,71 @@ public interface SqlPool {
     SqlPool refresh(Context context);
 
     /**
-     * Pause a SQL pool.
+     * Pause SQL pool
+     *
+     * <p>Pause a SQL pool.
      *
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return any object.
+     * @return sQL pool.
      */
-    Object pause();
+    SqlPool pause();
 
     /**
-     * Pause a SQL pool.
+     * Pause SQL pool
      *
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return any object.
-     */
-    Object pause(Context context);
-
-    /**
-     * Resume a SQL pool.
-     *
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return any object.
-     */
-    Object resume();
-
-    /**
-     * Resume a SQL pool.
+     * <p>Pause a SQL pool.
      *
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return any object.
+     * @return sQL pool.
      */
-    Object resume(Context context);
+    SqlPool pause(Context context);
 
     /**
-     * Rename a SQL pool.
+     * Resume SQL pool
+     *
+     * <p>Resume a SQL pool.
+     *
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return sQL pool.
+     */
+    SqlPool resume();
+
+    /**
+     * Resume SQL pool
+     *
+     * <p>Resume a SQL pool.
+     *
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return sQL pool.
+     */
+    SqlPool resume(Context context);
+
+    /**
+     * Rename a SQL pool
+     *
+     * <p>Rename a SQL pool.
+     *
+     * @param parameters The resource move definition for renaming this Sql pool.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    Response<Void> renameWithResponse(ResourceMoveDefinition parameters, Context context);
+
+    /**
+     * Rename a SQL pool
+     *
+     * <p>Rename a SQL pool.
      *
      * @param parameters The resource move definition for renaming this Sql pool.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -648,16 +610,4 @@ public interface SqlPool {
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      */
     void rename(ResourceMoveDefinition parameters);
-
-    /**
-     * Rename a SQL pool.
-     *
-     * @param parameters The resource move definition for renaming this Sql pool.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    Response<Void> renameWithResponse(ResourceMoveDefinition parameters, Context context);
 }

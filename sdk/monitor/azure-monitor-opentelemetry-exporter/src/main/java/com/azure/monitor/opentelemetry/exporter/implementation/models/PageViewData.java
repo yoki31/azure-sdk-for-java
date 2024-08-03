@@ -5,7 +5,11 @@
 package com.azure.monitor.opentelemetry.exporter.implementation.models;
 
 import com.azure.core.annotation.Fluent;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -15,52 +19,45 @@ import java.util.Map;
 @Fluent
 public final class PageViewData extends MonitorDomain {
     /*
-     * Identifier of a page view instance. Used for correlation between page
-     * view and other telemetry items.
+     * Identifier of a page view instance. Used for correlation between page view and other telemetry items.
      */
-    @JsonProperty(value = "id", required = true)
     private String id;
 
     /*
-     * Event name. Keep it low cardinality to allow proper grouping and useful
-     * metrics.
+     * Event name. Keep it low cardinality to allow proper grouping and useful metrics.
      */
-    @JsonProperty(value = "name", required = true)
     private String name;
 
     /*
      * Request URL with all query string parameters
      */
-    @JsonProperty(value = "url")
     private String url;
 
     /*
-     * Request duration in format: DD.HH:MM:SS.MMMMMM. For a page view
-     * (PageViewData), this is the duration. For a page view with performance
-     * information (PageViewPerfData), this is the page load time. Must be less
-     * than 1000 days.
+     * Request duration in format: DD.HH:MM:SS.MMMMMM. For a page view (PageViewData), this is the duration. For a page view with performance information (PageViewPerfData), this is the page load time. Must be less than 1000 days.
      */
-    @JsonProperty(value = "duration")
     private String duration;
 
     /*
-     * Fully qualified page URI or URL of the referring page; if unknown, leave
-     * blank
+     * Fully qualified page URI or URL of the referring page; if unknown, leave blank
      */
-    @JsonProperty(value = "referredUri")
     private String referredUri;
 
     /*
      * Collection of custom properties.
      */
-    @JsonProperty(value = "properties")
     private Map<String, String> properties;
 
     /*
      * Collection of custom measurements.
      */
-    @JsonProperty(value = "measurements")
     private Map<String, Double> measurements;
+
+    /**
+     * Creates an instance of PageViewData class.
+     */
+    public PageViewData() {
+    }
 
     /**
      * Get the id property: Identifier of a page view instance. Used for correlation between page view and other
@@ -206,5 +203,82 @@ public final class PageViewData extends MonitorDomain {
     public PageViewData setMeasurements(Map<String, Double> measurements) {
         this.measurements = measurements;
         return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PageViewData setVersion(int version) {
+        super.setVersion(version);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeIntField("ver", getVersion());
+        jsonWriter.writeStringField("id", this.id);
+        jsonWriter.writeStringField("name", this.name);
+        jsonWriter.writeStringField("url", this.url);
+        jsonWriter.writeStringField("duration", this.duration);
+        jsonWriter.writeStringField("referredUri", this.referredUri);
+        jsonWriter.writeMapField("properties", this.properties, JsonWriter::writeString);
+        if (getAdditionalProperties() != null) {
+            for (Map.Entry<String, Object> additionalProperty : getAdditionalProperties().entrySet()) {
+                jsonWriter.writeUntypedField(additionalProperty.getKey(), additionalProperty.getValue());
+            }
+        }
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of PageViewData from the JsonReader.
+     *
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of PageViewData if the JsonReader was pointing to an instance of it, or null if it was
+     * pointing to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the PageViewData.
+     */
+    public static PageViewData fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            PageViewData deserializedPageViewData = new PageViewData();
+            Map<String, Object> additionalProperties = null;
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("ver".equals(fieldName)) {
+                    deserializedPageViewData.setVersion(reader.getInt());
+                } else if ("id".equals(fieldName)) {
+                    deserializedPageViewData.id = reader.getString();
+                } else if ("name".equals(fieldName)) {
+                    deserializedPageViewData.name = reader.getString();
+                } else if ("url".equals(fieldName)) {
+                    deserializedPageViewData.url = reader.getString();
+                } else if ("duration".equals(fieldName)) {
+                    deserializedPageViewData.duration = reader.getString();
+                } else if ("referredUri".equals(fieldName)) {
+                    deserializedPageViewData.referredUri = reader.getString();
+                } else if ("properties".equals(fieldName)) {
+                    deserializedPageViewData.properties = reader.readMap(JsonReader::getString);
+                } else if ("measurements".equals(fieldName)) {
+                    deserializedPageViewData.measurements = reader.readMap(JsonReader::getDouble);
+                } else {
+                    if (additionalProperties == null) {
+                        additionalProperties = new LinkedHashMap<>();
+                    }
+
+                    additionalProperties.put(fieldName, reader.readUntyped());
+                }
+            }
+            deserializedPageViewData.setAdditionalProperties(additionalProperties);
+
+            return deserializedPageViewData;
+        });
     }
 }

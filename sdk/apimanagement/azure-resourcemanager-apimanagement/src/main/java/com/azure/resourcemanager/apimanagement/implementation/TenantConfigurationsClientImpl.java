@@ -24,7 +24,6 @@ import com.azure.core.management.exception.ManagementException;
 import com.azure.core.management.polling.PollResult;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.core.util.polling.PollerFlux;
 import com.azure.core.util.polling.SyncPoller;
 import com.azure.resourcemanager.apimanagement.fluent.TenantConfigurationsClient;
@@ -39,8 +38,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in TenantConfigurationsClient. */
 public final class TenantConfigurationsClientImpl implements TenantConfigurationsClient {
-    private final ClientLogger logger = new ClientLogger(TenantConfigurationsClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final TenantConfigurationsService service;
 
@@ -65,11 +62,10 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApiManagementClientT")
-    private interface TenantConfigurationsService {
+    public interface TenantConfigurationsService {
         @Headers({"Content-Type: application/json"})
         @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/tenant/{configurationName}/deploy")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/tenant/{configurationName}/deploy")
         @ExpectedResponses({200, 202})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Flux<ByteBuffer>>> deploy(
@@ -85,8 +81,7 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
 
         @Headers({"Content-Type: application/json"})
         @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/tenant/{configurationName}/save")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/tenant/{configurationName}/save")
         @ExpectedResponses({200, 202})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Flux<ByteBuffer>>> save(
@@ -102,8 +97,7 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
 
         @Headers({"Content-Type: application/json"})
         @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/tenant/{configurationName}/validate")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/tenant/{configurationName}/validate")
         @ExpectedResponses({200, 202})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Flux<ByteBuffer>>> validate(
@@ -119,8 +113,7 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
 
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/tenant/{configurationName}/syncState")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/tenant/{configurationName}/syncState")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<TenantConfigurationSyncStateContractInner>> getSyncState(
@@ -138,14 +131,14 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * This operation applies changes from the specified Git branch to the configuration database. This is a long
      * running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Deploy Configuration parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return long Running Git Operation Results.
+     * @return long Running Git Operation Results along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> deployWithResponseAsync(
@@ -203,7 +196,7 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * This operation applies changes from the specified Git branch to the configuration database. This is a long
      * running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Deploy Configuration parameters.
@@ -211,7 +204,7 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return long Running Git Operation Results.
+     * @return long Running Git Operation Results along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> deployWithResponseAsync(
@@ -267,16 +260,16 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * This operation applies changes from the specified Git branch to the configuration database. This is a long
      * running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Deploy Configuration parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return long Running Git Operation Results.
+     * @return the {@link PollerFlux} for polling of long Running Git Operation Results.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<OperationResultContractInner>, OperationResultContractInner> beginDeployAsync(
         String resourceGroupName,
         String serviceName,
@@ -291,14 +284,14 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
                 this.client.getHttpPipeline(),
                 OperationResultContractInner.class,
                 OperationResultContractInner.class,
-                Context.NONE);
+                this.client.getContext());
     }
 
     /**
      * This operation applies changes from the specified Git branch to the configuration database. This is a long
      * running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Deploy Configuration parameters.
@@ -306,9 +299,9 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return long Running Git Operation Results.
+     * @return the {@link PollerFlux} for polling of long Running Git Operation Results.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<OperationResultContractInner>, OperationResultContractInner> beginDeployAsync(
         String resourceGroupName,
         String serviceName,
@@ -332,29 +325,29 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * This operation applies changes from the specified Git branch to the configuration database. This is a long
      * running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Deploy Configuration parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return long Running Git Operation Results.
+     * @return the {@link SyncPoller} for polling of long Running Git Operation Results.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<OperationResultContractInner>, OperationResultContractInner> beginDeploy(
         String resourceGroupName,
         String serviceName,
         ConfigurationIdName configurationName,
         DeployConfigurationParameters parameters) {
-        return beginDeployAsync(resourceGroupName, serviceName, configurationName, parameters).getSyncPoller();
+        return this.beginDeployAsync(resourceGroupName, serviceName, configurationName, parameters).getSyncPoller();
     }
 
     /**
      * This operation applies changes from the specified Git branch to the configuration database. This is a long
      * running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Deploy Configuration parameters.
@@ -362,30 +355,32 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return long Running Git Operation Results.
+     * @return the {@link SyncPoller} for polling of long Running Git Operation Results.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<OperationResultContractInner>, OperationResultContractInner> beginDeploy(
         String resourceGroupName,
         String serviceName,
         ConfigurationIdName configurationName,
         DeployConfigurationParameters parameters,
         Context context) {
-        return beginDeployAsync(resourceGroupName, serviceName, configurationName, parameters, context).getSyncPoller();
+        return this
+            .beginDeployAsync(resourceGroupName, serviceName, configurationName, parameters, context)
+            .getSyncPoller();
     }
 
     /**
      * This operation applies changes from the specified Git branch to the configuration database. This is a long
      * running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Deploy Configuration parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return long Running Git Operation Results.
+     * @return long Running Git Operation Results on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<OperationResultContractInner> deployAsync(
@@ -402,7 +397,7 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * This operation applies changes from the specified Git branch to the configuration database. This is a long
      * running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Deploy Configuration parameters.
@@ -410,7 +405,7 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return long Running Git Operation Results.
+     * @return long Running Git Operation Results on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<OperationResultContractInner> deployAsync(
@@ -428,7 +423,7 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * This operation applies changes from the specified Git branch to the configuration database. This is a long
      * running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Deploy Configuration parameters.
@@ -450,7 +445,7 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * This operation applies changes from the specified Git branch to the configuration database. This is a long
      * running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Deploy Configuration parameters.
@@ -474,14 +469,14 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * This operation creates a commit with the current configuration snapshot to the specified branch in the
      * repository. This is a long running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Save Configuration parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return long Running Git Operation Results.
+     * @return long Running Git Operation Results along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> saveWithResponseAsync(
@@ -539,7 +534,7 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * This operation creates a commit with the current configuration snapshot to the specified branch in the
      * repository. This is a long running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Save Configuration parameters.
@@ -547,7 +542,7 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return long Running Git Operation Results.
+     * @return long Running Git Operation Results along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> saveWithResponseAsync(
@@ -603,16 +598,16 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * This operation creates a commit with the current configuration snapshot to the specified branch in the
      * repository. This is a long running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Save Configuration parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return long Running Git Operation Results.
+     * @return the {@link PollerFlux} for polling of long Running Git Operation Results.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<OperationResultContractInner>, OperationResultContractInner> beginSaveAsync(
         String resourceGroupName,
         String serviceName,
@@ -627,14 +622,14 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
                 this.client.getHttpPipeline(),
                 OperationResultContractInner.class,
                 OperationResultContractInner.class,
-                Context.NONE);
+                this.client.getContext());
     }
 
     /**
      * This operation creates a commit with the current configuration snapshot to the specified branch in the
      * repository. This is a long running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Save Configuration parameters.
@@ -642,9 +637,9 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return long Running Git Operation Results.
+     * @return the {@link PollerFlux} for polling of long Running Git Operation Results.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<OperationResultContractInner>, OperationResultContractInner> beginSaveAsync(
         String resourceGroupName,
         String serviceName,
@@ -668,29 +663,29 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * This operation creates a commit with the current configuration snapshot to the specified branch in the
      * repository. This is a long running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Save Configuration parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return long Running Git Operation Results.
+     * @return the {@link SyncPoller} for polling of long Running Git Operation Results.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<OperationResultContractInner>, OperationResultContractInner> beginSave(
         String resourceGroupName,
         String serviceName,
         ConfigurationIdName configurationName,
         SaveConfigurationParameter parameters) {
-        return beginSaveAsync(resourceGroupName, serviceName, configurationName, parameters).getSyncPoller();
+        return this.beginSaveAsync(resourceGroupName, serviceName, configurationName, parameters).getSyncPoller();
     }
 
     /**
      * This operation creates a commit with the current configuration snapshot to the specified branch in the
      * repository. This is a long running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Save Configuration parameters.
@@ -698,30 +693,32 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return long Running Git Operation Results.
+     * @return the {@link SyncPoller} for polling of long Running Git Operation Results.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<OperationResultContractInner>, OperationResultContractInner> beginSave(
         String resourceGroupName,
         String serviceName,
         ConfigurationIdName configurationName,
         SaveConfigurationParameter parameters,
         Context context) {
-        return beginSaveAsync(resourceGroupName, serviceName, configurationName, parameters, context).getSyncPoller();
+        return this
+            .beginSaveAsync(resourceGroupName, serviceName, configurationName, parameters, context)
+            .getSyncPoller();
     }
 
     /**
      * This operation creates a commit with the current configuration snapshot to the specified branch in the
      * repository. This is a long running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Save Configuration parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return long Running Git Operation Results.
+     * @return long Running Git Operation Results on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<OperationResultContractInner> saveAsync(
@@ -738,7 +735,7 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * This operation creates a commit with the current configuration snapshot to the specified branch in the
      * repository. This is a long running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Save Configuration parameters.
@@ -746,7 +743,7 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return long Running Git Operation Results.
+     * @return long Running Git Operation Results on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<OperationResultContractInner> saveAsync(
@@ -764,7 +761,7 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * This operation creates a commit with the current configuration snapshot to the specified branch in the
      * repository. This is a long running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Save Configuration parameters.
@@ -786,7 +783,7 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * This operation creates a commit with the current configuration snapshot to the specified branch in the
      * repository. This is a long running operation and could take several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Save Configuration parameters.
@@ -810,14 +807,14 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * This operation validates the changes in the specified Git branch. This is a long running operation and could take
      * several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Validate Configuration parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return long Running Git Operation Results.
+     * @return long Running Git Operation Results along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> validateWithResponseAsync(
@@ -875,7 +872,7 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * This operation validates the changes in the specified Git branch. This is a long running operation and could take
      * several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Validate Configuration parameters.
@@ -883,7 +880,7 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return long Running Git Operation Results.
+     * @return long Running Git Operation Results along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Flux<ByteBuffer>>> validateWithResponseAsync(
@@ -939,16 +936,16 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * This operation validates the changes in the specified Git branch. This is a long running operation and could take
      * several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Validate Configuration parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return long Running Git Operation Results.
+     * @return the {@link PollerFlux} for polling of long Running Git Operation Results.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<OperationResultContractInner>, OperationResultContractInner> beginValidateAsync(
         String resourceGroupName,
         String serviceName,
@@ -963,14 +960,14 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
                 this.client.getHttpPipeline(),
                 OperationResultContractInner.class,
                 OperationResultContractInner.class,
-                Context.NONE);
+                this.client.getContext());
     }
 
     /**
      * This operation validates the changes in the specified Git branch. This is a long running operation and could take
      * several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Validate Configuration parameters.
@@ -978,9 +975,9 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return long Running Git Operation Results.
+     * @return the {@link PollerFlux} for polling of long Running Git Operation Results.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     private PollerFlux<PollResult<OperationResultContractInner>, OperationResultContractInner> beginValidateAsync(
         String resourceGroupName,
         String serviceName,
@@ -1004,29 +1001,29 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * This operation validates the changes in the specified Git branch. This is a long running operation and could take
      * several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Validate Configuration parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return long Running Git Operation Results.
+     * @return the {@link SyncPoller} for polling of long Running Git Operation Results.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<OperationResultContractInner>, OperationResultContractInner> beginValidate(
         String resourceGroupName,
         String serviceName,
         ConfigurationIdName configurationName,
         DeployConfigurationParameters parameters) {
-        return beginValidateAsync(resourceGroupName, serviceName, configurationName, parameters).getSyncPoller();
+        return this.beginValidateAsync(resourceGroupName, serviceName, configurationName, parameters).getSyncPoller();
     }
 
     /**
      * This operation validates the changes in the specified Git branch. This is a long running operation and could take
      * several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Validate Configuration parameters.
@@ -1034,16 +1031,17 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return long Running Git Operation Results.
+     * @return the {@link SyncPoller} for polling of long Running Git Operation Results.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     public SyncPoller<PollResult<OperationResultContractInner>, OperationResultContractInner> beginValidate(
         String resourceGroupName,
         String serviceName,
         ConfigurationIdName configurationName,
         DeployConfigurationParameters parameters,
         Context context) {
-        return beginValidateAsync(resourceGroupName, serviceName, configurationName, parameters, context)
+        return this
+            .beginValidateAsync(resourceGroupName, serviceName, configurationName, parameters, context)
             .getSyncPoller();
     }
 
@@ -1051,14 +1049,14 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * This operation validates the changes in the specified Git branch. This is a long running operation and could take
      * several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Validate Configuration parameters.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return long Running Git Operation Results.
+     * @return long Running Git Operation Results on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<OperationResultContractInner> validateAsync(
@@ -1075,7 +1073,7 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * This operation validates the changes in the specified Git branch. This is a long running operation and could take
      * several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Validate Configuration parameters.
@@ -1083,7 +1081,7 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return long Running Git Operation Results.
+     * @return long Running Git Operation Results on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<OperationResultContractInner> validateAsync(
@@ -1101,7 +1099,7 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * This operation validates the changes in the specified Git branch. This is a long running operation and could take
      * several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Validate Configuration parameters.
@@ -1123,7 +1121,7 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
      * This operation validates the changes in the specified Git branch. This is a long running operation and could take
      * several minutes to complete.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param parameters Validate Configuration parameters.
@@ -1146,13 +1144,14 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
     /**
      * Gets the status of the most recent synchronization between the configuration database and the Git repository.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the status of the most recent synchronization between the configuration database and the Git repository.
+     * @return the status of the most recent synchronization between the configuration database and the Git repository
+     *     along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<TenantConfigurationSyncStateContractInner>> getSyncStateWithResponseAsync(
@@ -1200,14 +1199,15 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
     /**
      * Gets the status of the most recent synchronization between the configuration database and the Git repository.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the status of the most recent synchronization between the configuration database and the Git repository.
+     * @return the status of the most recent synchronization between the configuration database and the Git repository
+     *     along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<TenantConfigurationSyncStateContractInner>> getSyncStateWithResponseAsync(
@@ -1252,32 +1252,45 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
     /**
      * Gets the status of the most recent synchronization between the configuration database and the Git repository.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the status of the most recent synchronization between the configuration database and the Git repository.
+     * @return the status of the most recent synchronization between the configuration database and the Git repository
+     *     on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<TenantConfigurationSyncStateContractInner> getSyncStateAsync(
         String resourceGroupName, String serviceName, ConfigurationIdName configurationName) {
         return getSyncStateWithResponseAsync(resourceGroupName, serviceName, configurationName)
-            .flatMap(
-                (Response<TenantConfigurationSyncStateContractInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Gets the status of the most recent synchronization between the configuration database and the Git repository.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param configurationName The identifier of the Git Configuration Operation.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the status of the most recent synchronization between the configuration database and the Git repository
+     *     along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<TenantConfigurationSyncStateContractInner> getSyncStateWithResponse(
+        String resourceGroupName, String serviceName, ConfigurationIdName configurationName, Context context) {
+        return getSyncStateWithResponseAsync(resourceGroupName, serviceName, configurationName, context).block();
+    }
+
+    /**
+     * Gets the status of the most recent synchronization between the configuration database and the Git repository.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param configurationName The identifier of the Git Configuration Operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -1288,24 +1301,6 @@ public final class TenantConfigurationsClientImpl implements TenantConfiguration
     @ServiceMethod(returns = ReturnType.SINGLE)
     public TenantConfigurationSyncStateContractInner getSyncState(
         String resourceGroupName, String serviceName, ConfigurationIdName configurationName) {
-        return getSyncStateAsync(resourceGroupName, serviceName, configurationName).block();
-    }
-
-    /**
-     * Gets the status of the most recent synchronization between the configuration database and the Git repository.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param configurationName The identifier of the Git Configuration Operation.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the status of the most recent synchronization between the configuration database and the Git repository.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<TenantConfigurationSyncStateContractInner> getSyncStateWithResponse(
-        String resourceGroupName, String serviceName, ConfigurationIdName configurationName, Context context) {
-        return getSyncStateWithResponseAsync(resourceGroupName, serviceName, configurationName, context).block();
+        return getSyncStateWithResponse(resourceGroupName, serviceName, configurationName, Context.NONE).getValue();
     }
 }

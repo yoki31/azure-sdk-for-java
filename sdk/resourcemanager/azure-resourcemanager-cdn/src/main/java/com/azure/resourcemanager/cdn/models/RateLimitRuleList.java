@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Defines contents of rate limit rules. */
+/**
+ * Defines contents of rate limit rules.
+ */
 @Fluent
 public final class RateLimitRuleList {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RateLimitRuleList.class);
-
     /*
      * List of rules
      */
@@ -22,8 +20,14 @@ public final class RateLimitRuleList {
     private List<RateLimitRule> rules;
 
     /**
+     * Creates an instance of RateLimitRuleList class.
+     */
+    public RateLimitRuleList() {
+    }
+
+    /**
      * Get the rules property: List of rules.
-     *
+     * 
      * @return the rules value.
      */
     public List<RateLimitRule> rules() {
@@ -32,7 +36,7 @@ public final class RateLimitRuleList {
 
     /**
      * Set the rules property: List of rules.
-     *
+     * 
      * @param rules the rules value to set.
      * @return the RateLimitRuleList object itself.
      */
@@ -43,7 +47,7 @@ public final class RateLimitRuleList {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

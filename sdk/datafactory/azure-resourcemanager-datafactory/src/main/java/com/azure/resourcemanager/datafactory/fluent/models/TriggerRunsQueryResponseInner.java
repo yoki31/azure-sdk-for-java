@@ -7,15 +7,14 @@ package com.azure.resourcemanager.datafactory.fluent.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.models.TriggerRun;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** A list of trigger runs. */
+/**
+ * A list of trigger runs.
+ */
 @Fluent
 public final class TriggerRunsQueryResponseInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TriggerRunsQueryResponseInner.class);
-
     /*
      * List of trigger runs.
      */
@@ -23,15 +22,20 @@ public final class TriggerRunsQueryResponseInner {
     private List<TriggerRun> value;
 
     /*
-     * The continuation token for getting the next page of results, if any
-     * remaining results exist, null otherwise.
+     * The continuation token for getting the next page of results, if any remaining results exist, null otherwise.
      */
     @JsonProperty(value = "continuationToken")
     private String continuationToken;
 
     /**
+     * Creates an instance of TriggerRunsQueryResponseInner class.
+     */
+    public TriggerRunsQueryResponseInner() {
+    }
+
+    /**
      * Get the value property: List of trigger runs.
-     *
+     * 
      * @return the value value.
      */
     public List<TriggerRun> value() {
@@ -40,7 +44,7 @@ public final class TriggerRunsQueryResponseInner {
 
     /**
      * Set the value property: List of trigger runs.
-     *
+     * 
      * @param value the value value to set.
      * @return the TriggerRunsQueryResponseInner object itself.
      */
@@ -52,7 +56,7 @@ public final class TriggerRunsQueryResponseInner {
     /**
      * Get the continuationToken property: The continuation token for getting the next page of results, if any remaining
      * results exist, null otherwise.
-     *
+     * 
      * @return the continuationToken value.
      */
     public String continuationToken() {
@@ -62,7 +66,7 @@ public final class TriggerRunsQueryResponseInner {
     /**
      * Set the continuationToken property: The continuation token for getting the next page of results, if any remaining
      * results exist, null otherwise.
-     *
+     * 
      * @param continuationToken the continuationToken value to set.
      * @return the TriggerRunsQueryResponseInner object itself.
      */
@@ -73,17 +77,18 @@ public final class TriggerRunsQueryResponseInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property value in model TriggerRunsQueryResponseInner"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property value in model TriggerRunsQueryResponseInner"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(TriggerRunsQueryResponseInner.class);
 }

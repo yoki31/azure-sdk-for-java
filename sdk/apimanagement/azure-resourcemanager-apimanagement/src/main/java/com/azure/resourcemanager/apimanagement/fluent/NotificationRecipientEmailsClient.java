@@ -17,7 +17,23 @@ public interface NotificationRecipientEmailsClient {
     /**
      * Gets the list of the Notification Recipient Emails subscribed to a notification.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param notificationName Notification Name Identifier.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the list of the Notification Recipient Emails subscribed to a notification along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<RecipientEmailCollectionInner> listByNotificationWithResponse(
+        String resourceGroupName, String serviceName, NotificationName notificationName, Context context);
+
+    /**
+     * Gets the list of the Notification Recipient Emails subscribed to a notification.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param notificationName Notification Name Identifier.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -30,25 +46,26 @@ public interface NotificationRecipientEmailsClient {
         String resourceGroupName, String serviceName, NotificationName notificationName);
 
     /**
-     * Gets the list of the Notification Recipient Emails subscribed to a notification.
+     * Determine if Notification Recipient Email subscribed to the notification.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param notificationName Notification Name Identifier.
+     * @param email Email identifier.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the list of the Notification Recipient Emails subscribed to a notification.
+     * @return whether resource exists along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<RecipientEmailCollectionInner> listByNotificationWithResponse(
-        String resourceGroupName, String serviceName, NotificationName notificationName, Context context);
+    Response<Boolean> checkEntityExistsWithResponse(
+        String resourceGroupName, String serviceName, NotificationName notificationName, String email, Context context);
 
     /**
      * Determine if Notification Recipient Email subscribed to the notification.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param notificationName Notification Name Identifier.
      * @param email Email identifier.
@@ -62,9 +79,9 @@ public interface NotificationRecipientEmailsClient {
         String resourceGroupName, String serviceName, NotificationName notificationName, String email);
 
     /**
-     * Determine if Notification Recipient Email subscribed to the notification.
+     * Adds the Email address to the list of Recipients for the Notification.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param notificationName Notification Name Identifier.
      * @param email Email identifier.
@@ -72,16 +89,16 @@ public interface NotificationRecipientEmailsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
+     * @return recipient Email details along with {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<Boolean> checkEntityExistsWithResponse(
+    Response<RecipientEmailContractInner> createOrUpdateWithResponse(
         String resourceGroupName, String serviceName, NotificationName notificationName, String email, Context context);
 
     /**
      * Adds the Email address to the list of Recipients for the Notification.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param notificationName Notification Name Identifier.
      * @param email Email identifier.
@@ -95,9 +112,9 @@ public interface NotificationRecipientEmailsClient {
         String resourceGroupName, String serviceName, NotificationName notificationName, String email);
 
     /**
-     * Adds the Email address to the list of Recipients for the Notification.
+     * Removes the email from the list of Notification.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param notificationName Notification Name Identifier.
      * @param email Email identifier.
@@ -105,16 +122,16 @@ public interface NotificationRecipientEmailsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return recipient Email details.
+     * @return the {@link Response}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<RecipientEmailContractInner> createOrUpdateWithResponse(
+    Response<Void> deleteWithResponse(
         String resourceGroupName, String serviceName, NotificationName notificationName, String email, Context context);
 
     /**
      * Removes the email from the list of Notification.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param notificationName Notification Name Identifier.
      * @param email Email identifier.
@@ -124,21 +141,4 @@ public interface NotificationRecipientEmailsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     void delete(String resourceGroupName, String serviceName, NotificationName notificationName, String email);
-
-    /**
-     * Removes the email from the list of Notification.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param notificationName Notification Name Identifier.
-     * @param email Email identifier.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<Void> deleteWithResponse(
-        String resourceGroupName, String serviceName, NotificationName notificationName, String email, Context context);
 }

@@ -6,23 +6,28 @@ package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Wait activity properties. */
+/**
+ * Wait activity properties.
+ */
 @Fluent
 public final class WaitActivityTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(WaitActivityTypeProperties.class);
-
     /*
-     * Duration in seconds.
+     * Duration in seconds. Type: integer (or Expression with resultType integer).
      */
     @JsonProperty(value = "waitTimeInSeconds", required = true)
     private Object waitTimeInSeconds;
 
     /**
-     * Get the waitTimeInSeconds property: Duration in seconds.
-     *
+     * Creates an instance of WaitActivityTypeProperties class.
+     */
+    public WaitActivityTypeProperties() {
+    }
+
+    /**
+     * Get the waitTimeInSeconds property: Duration in seconds. Type: integer (or Expression with resultType integer).
+     * 
      * @return the waitTimeInSeconds value.
      */
     public Object waitTimeInSeconds() {
@@ -30,8 +35,8 @@ public final class WaitActivityTypeProperties {
     }
 
     /**
-     * Set the waitTimeInSeconds property: Duration in seconds.
-     *
+     * Set the waitTimeInSeconds property: Duration in seconds. Type: integer (or Expression with resultType integer).
+     * 
      * @param waitTimeInSeconds the waitTimeInSeconds value to set.
      * @return the WaitActivityTypeProperties object itself.
      */
@@ -42,15 +47,16 @@ public final class WaitActivityTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (waitTimeInSeconds() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property waitTimeInSeconds in model WaitActivityTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property waitTimeInSeconds in model WaitActivityTypeProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(WaitActivityTypeProperties.class);
 }

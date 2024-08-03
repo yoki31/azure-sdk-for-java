@@ -5,17 +5,13 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The details of Azure-SSIS integration runtime outbound network dependency endpoint. */
+/**
+ * The details of Azure-SSIS integration runtime outbound network dependency endpoint.
+ */
 @Fluent
 public final class IntegrationRuntimeOutboundNetworkDependenciesEndpointDetails {
-    @JsonIgnore
-    private final ClientLogger logger =
-        new ClientLogger(IntegrationRuntimeOutboundNetworkDependenciesEndpointDetails.class);
-
     /*
      * The port of endpoint.
      */
@@ -23,8 +19,14 @@ public final class IntegrationRuntimeOutboundNetworkDependenciesEndpointDetails 
     private Integer port;
 
     /**
+     * Creates an instance of IntegrationRuntimeOutboundNetworkDependenciesEndpointDetails class.
+     */
+    public IntegrationRuntimeOutboundNetworkDependenciesEndpointDetails() {
+    }
+
+    /**
      * Get the port property: The port of endpoint.
-     *
+     * 
      * @return the port value.
      */
     public Integer port() {
@@ -33,7 +35,7 @@ public final class IntegrationRuntimeOutboundNetworkDependenciesEndpointDetails 
 
     /**
      * Set the port property: The port of endpoint.
-     *
+     * 
      * @param port the port value to set.
      * @return the IntegrationRuntimeOutboundNetworkDependenciesEndpointDetails object itself.
      */
@@ -44,7 +46,7 @@ public final class IntegrationRuntimeOutboundNetworkDependenciesEndpointDetails 
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

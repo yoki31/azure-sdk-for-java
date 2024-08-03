@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** A domain name that a service is reached at, including details of the current connection status. */
+/**
+ * A domain name that a service is reached at, including details of the current connection status.
+ */
 @Fluent
 public final class EndpointDependency {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(EndpointDependency.class);
-
     /*
      * The domain name of the dependency.
      */
@@ -28,8 +26,14 @@ public final class EndpointDependency {
     private List<EndpointDetail> endpointDetails;
 
     /**
+     * Creates an instance of EndpointDependency class.
+     */
+    public EndpointDependency() {
+    }
+
+    /**
      * Get the domainName property: The domain name of the dependency.
-     *
+     * 
      * @return the domainName value.
      */
     public String domainName() {
@@ -38,7 +42,7 @@ public final class EndpointDependency {
 
     /**
      * Set the domainName property: The domain name of the dependency.
-     *
+     * 
      * @param domainName the domainName value to set.
      * @return the EndpointDependency object itself.
      */
@@ -49,7 +53,7 @@ public final class EndpointDependency {
 
     /**
      * Get the endpointDetails property: The IP Addresses and Ports used when connecting to DomainName.
-     *
+     * 
      * @return the endpointDetails value.
      */
     public List<EndpointDetail> endpointDetails() {
@@ -58,7 +62,7 @@ public final class EndpointDependency {
 
     /**
      * Set the endpointDetails property: The IP Addresses and Ports used when connecting to DomainName.
-     *
+     * 
      * @param endpointDetails the endpointDetails value to set.
      * @return the EndpointDependency object itself.
      */
@@ -69,7 +73,7 @@ public final class EndpointDependency {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

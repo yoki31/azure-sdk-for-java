@@ -6,20 +6,20 @@ package com.azure.resourcemanager.apimanagement.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Gateway hostname configuration details. */
 @Fluent
 public final class GatewayHostnameConfigurationContractInner extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GatewayHostnameConfigurationContractInner.class);
-
     /*
      * Gateway hostname configuration details.
      */
     @JsonProperty(value = "properties")
     private GatewayHostnameConfigurationContractProperties innerProperties;
+
+    /** Creates an instance of GatewayHostnameConfigurationContractInner class. */
+    public GatewayHostnameConfigurationContractInner() {
+    }
 
     /**
      * Get the innerProperties property: Gateway hostname configuration details.

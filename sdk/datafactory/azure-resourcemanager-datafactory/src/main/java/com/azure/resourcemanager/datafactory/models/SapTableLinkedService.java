@@ -7,19 +7,26 @@ package com.azure.resourcemanager.datafactory.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.fluent.models.SapTableLinkedServiceTypeProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.List;
 import java.util.Map;
 
-/** SAP Table Linked Service. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * SAP Table Linked Service.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = SapTableLinkedService.class, visible = true)
 @JsonTypeName("SapTable")
 @Fluent
 public final class SapTableLinkedService extends LinkedService {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(SapTableLinkedService.class);
+    /*
+     * Type of linked service.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "SapTable";
 
     /*
      * Properties specific to this linked service type.
@@ -28,36 +35,60 @@ public final class SapTableLinkedService extends LinkedService {
     private SapTableLinkedServiceTypeProperties innerTypeProperties = new SapTableLinkedServiceTypeProperties();
 
     /**
+     * Creates an instance of SapTableLinkedService class.
+     */
+    public SapTableLinkedService() {
+    }
+
+    /**
+     * Get the type property: Type of linked service.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the innerTypeProperties property: Properties specific to this linked service type.
-     *
+     * 
      * @return the innerTypeProperties value.
      */
     private SapTableLinkedServiceTypeProperties innerTypeProperties() {
         return this.innerTypeProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SapTableLinkedService withConnectVia(IntegrationRuntimeReference connectVia) {
         super.withConnectVia(connectVia);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SapTableLinkedService withDescription(String description) {
         super.withDescription(description);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SapTableLinkedService withParameters(Map<String, ParameterSpecification> parameters) {
         super.withParameters(parameters);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SapTableLinkedService withAnnotations(List<Object> annotations) {
         super.withAnnotations(annotations);
@@ -67,7 +98,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Get the server property: Host name of the SAP instance where the table is located. Type: string (or Expression
      * with resultType string).
-     *
+     * 
      * @return the server value.
      */
     public Object server() {
@@ -77,7 +108,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Set the server property: Host name of the SAP instance where the table is located. Type: string (or Expression
      * with resultType string).
-     *
+     * 
      * @param server the server value to set.
      * @return the SapTableLinkedService object itself.
      */
@@ -92,7 +123,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Get the systemNumber property: System number of the SAP system where the table is located. (Usually a two-digit
      * decimal number represented as a string.) Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the systemNumber value.
      */
     public Object systemNumber() {
@@ -102,7 +133,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Set the systemNumber property: System number of the SAP system where the table is located. (Usually a two-digit
      * decimal number represented as a string.) Type: string (or Expression with resultType string).
-     *
+     * 
      * @param systemNumber the systemNumber value to set.
      * @return the SapTableLinkedService object itself.
      */
@@ -117,7 +148,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Get the clientId property: Client ID of the client on the SAP system where the table is located. (Usually a
      * three-digit decimal number represented as a string) Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the clientId value.
      */
     public Object clientId() {
@@ -127,7 +158,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Set the clientId property: Client ID of the client on the SAP system where the table is located. (Usually a
      * three-digit decimal number represented as a string) Type: string (or Expression with resultType string).
-     *
+     * 
      * @param clientId the clientId value to set.
      * @return the SapTableLinkedService object itself.
      */
@@ -142,7 +173,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Get the language property: Language of the SAP system where the table is located. The default value is EN. Type:
      * string (or Expression with resultType string).
-     *
+     * 
      * @return the language value.
      */
     public Object language() {
@@ -152,7 +183,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Set the language property: Language of the SAP system where the table is located. The default value is EN. Type:
      * string (or Expression with resultType string).
-     *
+     * 
      * @param language the language value to set.
      * @return the SapTableLinkedService object itself.
      */
@@ -167,7 +198,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Get the systemId property: SystemID of the SAP system where the table is located. Type: string (or Expression
      * with resultType string).
-     *
+     * 
      * @return the systemId value.
      */
     public Object systemId() {
@@ -177,7 +208,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Set the systemId property: SystemID of the SAP system where the table is located. Type: string (or Expression
      * with resultType string).
-     *
+     * 
      * @param systemId the systemId value to set.
      * @return the SapTableLinkedService object itself.
      */
@@ -192,7 +223,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Get the username property: Username to access the SAP server where the table is located. Type: string (or
      * Expression with resultType string).
-     *
+     * 
      * @return the username value.
      */
     public Object username() {
@@ -202,7 +233,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Set the username property: Username to access the SAP server where the table is located. Type: string (or
      * Expression with resultType string).
-     *
+     * 
      * @param username the username value to set.
      * @return the SapTableLinkedService object itself.
      */
@@ -216,7 +247,7 @@ public final class SapTableLinkedService extends LinkedService {
 
     /**
      * Get the password property: Password to access the SAP server where the table is located.
-     *
+     * 
      * @return the password value.
      */
     public SecretBase password() {
@@ -225,7 +256,7 @@ public final class SapTableLinkedService extends LinkedService {
 
     /**
      * Set the password property: Password to access the SAP server where the table is located.
-     *
+     * 
      * @param password the password value to set.
      * @return the SapTableLinkedService object itself.
      */
@@ -240,7 +271,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Get the messageServer property: The hostname of the SAP Message Server. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the messageServer value.
      */
     public Object messageServer() {
@@ -250,7 +281,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Set the messageServer property: The hostname of the SAP Message Server. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param messageServer the messageServer value to set.
      * @return the SapTableLinkedService object itself.
      */
@@ -265,7 +296,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Get the messageServerService property: The service name or port number of the Message Server. Type: string (or
      * Expression with resultType string).
-     *
+     * 
      * @return the messageServerService value.
      */
     public Object messageServerService() {
@@ -275,7 +306,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Set the messageServerService property: The service name or port number of the Message Server. Type: string (or
      * Expression with resultType string).
-     *
+     * 
      * @param messageServerService the messageServerService value to set.
      * @return the SapTableLinkedService object itself.
      */
@@ -290,7 +321,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Get the sncMode property: SNC activation indicator to access the SAP server where the table is located. Must be
      * either 0 (off) or 1 (on). Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the sncMode value.
      */
     public Object sncMode() {
@@ -300,7 +331,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Set the sncMode property: SNC activation indicator to access the SAP server where the table is located. Must be
      * either 0 (off) or 1 (on). Type: string (or Expression with resultType string).
-     *
+     * 
      * @param sncMode the sncMode value to set.
      * @return the SapTableLinkedService object itself.
      */
@@ -315,7 +346,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Get the sncMyName property: Initiator's SNC name to access the SAP server where the table is located. Type:
      * string (or Expression with resultType string).
-     *
+     * 
      * @return the sncMyName value.
      */
     public Object sncMyName() {
@@ -325,7 +356,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Set the sncMyName property: Initiator's SNC name to access the SAP server where the table is located. Type:
      * string (or Expression with resultType string).
-     *
+     * 
      * @param sncMyName the sncMyName value to set.
      * @return the SapTableLinkedService object itself.
      */
@@ -340,7 +371,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Get the sncPartnerName property: Communication partner's SNC name to access the SAP server where the table is
      * located. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the sncPartnerName value.
      */
     public Object sncPartnerName() {
@@ -350,7 +381,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Set the sncPartnerName property: Communication partner's SNC name to access the SAP server where the table is
      * located. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param sncPartnerName the sncPartnerName value to set.
      * @return the SapTableLinkedService object itself.
      */
@@ -365,7 +396,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Get the sncLibraryPath property: External security product's library to access the SAP server where the table is
      * located. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the sncLibraryPath value.
      */
     public Object sncLibraryPath() {
@@ -375,7 +406,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Set the sncLibraryPath property: External security product's library to access the SAP server where the table is
      * located. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param sncLibraryPath the sncLibraryPath value to set.
      * @return the SapTableLinkedService object itself.
      */
@@ -390,7 +421,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Get the sncQop property: SNC Quality of Protection. Allowed value include: 1, 2, 3, 8, 9. Type: string (or
      * Expression with resultType string).
-     *
+     * 
      * @return the sncQop value.
      */
     public Object sncQop() {
@@ -400,7 +431,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Set the sncQop property: SNC Quality of Protection. Allowed value include: 1, 2, 3, 8, 9. Type: string (or
      * Expression with resultType string).
-     *
+     * 
      * @param sncQop the sncQop value to set.
      * @return the SapTableLinkedService object itself.
      */
@@ -415,7 +446,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Get the logonGroup property: The Logon Group for the SAP System. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @return the logonGroup value.
      */
     public Object logonGroup() {
@@ -425,7 +456,7 @@ public final class SapTableLinkedService extends LinkedService {
     /**
      * Set the logonGroup property: The Logon Group for the SAP System. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @param logonGroup the logonGroup value to set.
      * @return the SapTableLinkedService object itself.
      */
@@ -439,22 +470,22 @@ public final class SapTableLinkedService extends LinkedService {
 
     /**
      * Get the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @return the encryptedCredential value.
      */
-    public Object encryptedCredential() {
+    public String encryptedCredential() {
         return this.innerTypeProperties() == null ? null : this.innerTypeProperties().encryptedCredential();
     }
 
     /**
      * Set the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @param encryptedCredential the encryptedCredential value to set.
      * @return the SapTableLinkedService object itself.
      */
-    public SapTableLinkedService withEncryptedCredential(Object encryptedCredential) {
+    public SapTableLinkedService withEncryptedCredential(String encryptedCredential) {
         if (this.innerTypeProperties() == null) {
             this.innerTypeProperties = new SapTableLinkedServiceTypeProperties();
         }
@@ -464,19 +495,20 @@ public final class SapTableLinkedService extends LinkedService {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override
     public void validate() {
         super.validate();
         if (innerTypeProperties() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property innerTypeProperties in model SapTableLinkedService"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property innerTypeProperties in model SapTableLinkedService"));
         } else {
             innerTypeProperties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(SapTableLinkedService.class);
 }

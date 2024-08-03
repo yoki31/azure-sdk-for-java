@@ -7,31 +7,28 @@ package com.azure.resourcemanager.datafactory.fluent.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.models.SecretBase;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Office365 linked service properties. */
+/**
+ * Office365 linked service properties.
+ */
 @Fluent
 public final class Office365LinkedServiceTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Office365LinkedServiceTypeProperties.class);
-
     /*
-     * Azure tenant ID to which the Office 365 account belongs. Type: string
-     * (or Expression with resultType string).
+     * Azure tenant ID to which the Office 365 account belongs. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "office365TenantId", required = true)
     private Object office365TenantId;
 
     /*
-     * Specify the tenant information under which your Azure AD web application
-     * resides. Type: string (or Expression with resultType string).
+     * Specify the tenant information under which your Azure AD web application resides. Type: string (or Expression
+     * with resultType string).
      */
     @JsonProperty(value = "servicePrincipalTenantId", required = true)
     private Object servicePrincipalTenantId;
 
     /*
-     * Specify the application's client ID. Type: string (or Expression with
-     * resultType string).
+     * Specify the application's client ID. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "servicePrincipalId", required = true)
     private Object servicePrincipalId;
@@ -43,17 +40,22 @@ public final class Office365LinkedServiceTypeProperties {
     private SecretBase servicePrincipalKey;
 
     /*
-     * The encrypted credential used for authentication. Credentials are
-     * encrypted using the integration runtime credential manager. Type: string
-     * (or Expression with resultType string).
+     * The encrypted credential used for authentication. Credentials are encrypted using the integration runtime
+     * credential manager. Type: string.
      */
     @JsonProperty(value = "encryptedCredential")
-    private Object encryptedCredential;
+    private String encryptedCredential;
+
+    /**
+     * Creates an instance of Office365LinkedServiceTypeProperties class.
+     */
+    public Office365LinkedServiceTypeProperties() {
+    }
 
     /**
      * Get the office365TenantId property: Azure tenant ID to which the Office 365 account belongs. Type: string (or
      * Expression with resultType string).
-     *
+     * 
      * @return the office365TenantId value.
      */
     public Object office365TenantId() {
@@ -63,7 +65,7 @@ public final class Office365LinkedServiceTypeProperties {
     /**
      * Set the office365TenantId property: Azure tenant ID to which the Office 365 account belongs. Type: string (or
      * Expression with resultType string).
-     *
+     * 
      * @param office365TenantId the office365TenantId value to set.
      * @return the Office365LinkedServiceTypeProperties object itself.
      */
@@ -75,7 +77,7 @@ public final class Office365LinkedServiceTypeProperties {
     /**
      * Get the servicePrincipalTenantId property: Specify the tenant information under which your Azure AD web
      * application resides. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the servicePrincipalTenantId value.
      */
     public Object servicePrincipalTenantId() {
@@ -85,7 +87,7 @@ public final class Office365LinkedServiceTypeProperties {
     /**
      * Set the servicePrincipalTenantId property: Specify the tenant information under which your Azure AD web
      * application resides. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param servicePrincipalTenantId the servicePrincipalTenantId value to set.
      * @return the Office365LinkedServiceTypeProperties object itself.
      */
@@ -97,7 +99,7 @@ public final class Office365LinkedServiceTypeProperties {
     /**
      * Get the servicePrincipalId property: Specify the application's client ID. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the servicePrincipalId value.
      */
     public Object servicePrincipalId() {
@@ -107,7 +109,7 @@ public final class Office365LinkedServiceTypeProperties {
     /**
      * Set the servicePrincipalId property: Specify the application's client ID. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param servicePrincipalId the servicePrincipalId value to set.
      * @return the Office365LinkedServiceTypeProperties object itself.
      */
@@ -118,7 +120,7 @@ public final class Office365LinkedServiceTypeProperties {
 
     /**
      * Get the servicePrincipalKey property: Specify the application's key.
-     *
+     * 
      * @return the servicePrincipalKey value.
      */
     public SecretBase servicePrincipalKey() {
@@ -127,7 +129,7 @@ public final class Office365LinkedServiceTypeProperties {
 
     /**
      * Set the servicePrincipalKey property: Specify the application's key.
-     *
+     * 
      * @param servicePrincipalKey the servicePrincipalKey value to set.
      * @return the Office365LinkedServiceTypeProperties object itself.
      */
@@ -138,58 +140,55 @@ public final class Office365LinkedServiceTypeProperties {
 
     /**
      * Get the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @return the encryptedCredential value.
      */
-    public Object encryptedCredential() {
+    public String encryptedCredential() {
         return this.encryptedCredential;
     }
 
     /**
      * Set the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @param encryptedCredential the encryptedCredential value to set.
      * @return the Office365LinkedServiceTypeProperties object itself.
      */
-    public Office365LinkedServiceTypeProperties withEncryptedCredential(Object encryptedCredential) {
+    public Office365LinkedServiceTypeProperties withEncryptedCredential(String encryptedCredential) {
         this.encryptedCredential = encryptedCredential;
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (office365TenantId() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property office365TenantId in model Office365LinkedServiceTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property office365TenantId in model Office365LinkedServiceTypeProperties"));
         }
         if (servicePrincipalTenantId() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property servicePrincipalTenantId in model"
-                            + " Office365LinkedServiceTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property servicePrincipalTenantId in model Office365LinkedServiceTypeProperties"));
         }
         if (servicePrincipalId() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property servicePrincipalId in model Office365LinkedServiceTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property servicePrincipalId in model Office365LinkedServiceTypeProperties"));
         }
         if (servicePrincipalKey() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property servicePrincipalKey in model Office365LinkedServiceTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property servicePrincipalKey in model Office365LinkedServiceTypeProperties"));
         } else {
             servicePrincipalKey().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(Office365LinkedServiceTypeProperties.class);
 }

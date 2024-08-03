@@ -11,6 +11,8 @@ trigger:
     exclude:
       - sdk/translation/pom.xml
       - sdk/translation/azure-ai-documenttranslator/pom.xml
+      - sdk/translation/azure-ai-translation-text/pom.xml
+      - sdk/translation/azure-ai-translation-document/pom.xml
 
 pr:
   branches:
@@ -25,6 +27,8 @@ pr:
     exclude:
       - sdk/translation/pom.xml
       - sdk/translation/azure-ai-documenttranslator/pom.xml
+      - sdk/translation/azure-ai-translation-text/pom.xml
+      - sdk/translation/azure-ai-translation-document/pom.xml
 
 extends:
   template: ../../eng/pipelines/templates/stages/archetype-sdk-client.yml
@@ -34,3 +38,9 @@ extends:
       - name: azure-ai-documenttranslator
         groupId: com.azure
         safeName: azureaidocumenttranslator
+      - name: azure-ai-translation-text
+        groupId: com.azure
+        safeName: azureaitranslationtext
+      - name: azure-ai-translation-document
+        groupId: com.azure
+        safeName: azureaitranslationdocument

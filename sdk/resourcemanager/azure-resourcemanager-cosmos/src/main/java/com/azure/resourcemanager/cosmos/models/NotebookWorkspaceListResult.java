@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cosmos.fluent.models.NotebookWorkspaceInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** A list of notebook workspace resources. */
+/**
+ * A list of notebook workspace resources.
+ */
 @Fluent
 public final class NotebookWorkspaceListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(NotebookWorkspaceListResult.class);
-
     /*
      * Array of notebook workspace resources
      */
@@ -23,8 +21,14 @@ public final class NotebookWorkspaceListResult {
     private List<NotebookWorkspaceInner> value;
 
     /**
+     * Creates an instance of NotebookWorkspaceListResult class.
+     */
+    public NotebookWorkspaceListResult() {
+    }
+
+    /**
      * Get the value property: Array of notebook workspace resources.
-     *
+     * 
      * @return the value value.
      */
     public List<NotebookWorkspaceInner> value() {
@@ -33,7 +37,7 @@ public final class NotebookWorkspaceListResult {
 
     /**
      * Set the value property: Array of notebook workspace resources.
-     *
+     * 
      * @param value the value value to set.
      * @return the NotebookWorkspaceListResult object itself.
      */
@@ -44,7 +48,7 @@ public final class NotebookWorkspaceListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

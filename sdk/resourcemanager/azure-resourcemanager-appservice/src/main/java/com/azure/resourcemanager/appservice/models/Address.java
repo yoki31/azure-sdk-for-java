@@ -6,14 +6,13 @@ package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Address information for domain registration. */
+/**
+ * Address information for domain registration.
+ */
 @Fluent
 public final class Address {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Address.class);
-
     /*
      * First line of an Address.
      */
@@ -51,8 +50,14 @@ public final class Address {
     private String state;
 
     /**
+     * Creates an instance of Address class.
+     */
+    public Address() {
+    }
+
+    /**
      * Get the address1 property: First line of an Address.
-     *
+     * 
      * @return the address1 value.
      */
     public String address1() {
@@ -61,7 +66,7 @@ public final class Address {
 
     /**
      * Set the address1 property: First line of an Address.
-     *
+     * 
      * @param address1 the address1 value to set.
      * @return the Address object itself.
      */
@@ -72,7 +77,7 @@ public final class Address {
 
     /**
      * Get the address2 property: The second line of the Address. Optional.
-     *
+     * 
      * @return the address2 value.
      */
     public String address2() {
@@ -81,7 +86,7 @@ public final class Address {
 
     /**
      * Set the address2 property: The second line of the Address. Optional.
-     *
+     * 
      * @param address2 the address2 value to set.
      * @return the Address object itself.
      */
@@ -92,7 +97,7 @@ public final class Address {
 
     /**
      * Get the city property: The city for the address.
-     *
+     * 
      * @return the city value.
      */
     public String city() {
@@ -101,7 +106,7 @@ public final class Address {
 
     /**
      * Set the city property: The city for the address.
-     *
+     * 
      * @param city the city value to set.
      * @return the Address object itself.
      */
@@ -112,7 +117,7 @@ public final class Address {
 
     /**
      * Get the country property: The country for the address.
-     *
+     * 
      * @return the country value.
      */
     public String country() {
@@ -121,7 +126,7 @@ public final class Address {
 
     /**
      * Set the country property: The country for the address.
-     *
+     * 
      * @param country the country value to set.
      * @return the Address object itself.
      */
@@ -132,7 +137,7 @@ public final class Address {
 
     /**
      * Get the postalCode property: The postal code for the address.
-     *
+     * 
      * @return the postalCode value.
      */
     public String postalCode() {
@@ -141,7 +146,7 @@ public final class Address {
 
     /**
      * Set the postalCode property: The postal code for the address.
-     *
+     * 
      * @param postalCode the postalCode value to set.
      * @return the Address object itself.
      */
@@ -152,7 +157,7 @@ public final class Address {
 
     /**
      * Get the state property: The state or province for the address.
-     *
+     * 
      * @return the state value.
      */
     public String state() {
@@ -161,7 +166,7 @@ public final class Address {
 
     /**
      * Set the state property: The state or province for the address.
-     *
+     * 
      * @param state the state value to set.
      * @return the Address object itself.
      */
@@ -172,32 +177,30 @@ public final class Address {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (address1() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property address1 in model Address"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property address1 in model Address"));
         }
         if (city() == null) {
-            throw logger
-                .logExceptionAsError(new IllegalArgumentException("Missing required property city in model Address"));
+            throw LOGGER.atError().log(new IllegalArgumentException("Missing required property city in model Address"));
         }
         if (country() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property country in model Address"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property country in model Address"));
         }
         if (postalCode() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property postalCode in model Address"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property postalCode in model Address"));
         }
         if (state() == null) {
-            throw logger
-                .logExceptionAsError(new IllegalArgumentException("Missing required property state in model Address"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property state in model Address"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(Address.class);
 }

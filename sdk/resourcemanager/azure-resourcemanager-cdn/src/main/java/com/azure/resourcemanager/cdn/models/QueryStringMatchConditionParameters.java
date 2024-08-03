@@ -6,20 +6,19 @@ package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Defines the parameters for QueryString match conditions. */
+/**
+ * Defines the parameters for QueryString match conditions.
+ */
 @Fluent
 public final class QueryStringMatchConditionParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(QueryStringMatchConditionParameters.class);
-
     /*
-     * The @odata.type property.
+     * The typeName property.
      */
-    @JsonProperty(value = "@odata.type", required = true)
-    private String odataType;
+    @JsonProperty(value = "typeName", required = true)
+    private String typeName = "DeliveryRuleQueryStringConditionParameters";
 
     /*
      * Describes operator to be matched
@@ -45,34 +44,35 @@ public final class QueryStringMatchConditionParameters {
     @JsonProperty(value = "transforms")
     private List<Transform> transforms;
 
-    /** Creates an instance of QueryStringMatchConditionParameters class. */
-    public QueryStringMatchConditionParameters() {
-        odataType = "#Microsoft.Azure.Cdn.Models.DeliveryRuleQueryStringConditionParameters";
-    }
-
     /**
-     * Get the odataType property: The @odata.type property.
-     *
-     * @return the odataType value.
+     * Creates an instance of QueryStringMatchConditionParameters class.
      */
-    public String odataType() {
-        return this.odataType;
+    public QueryStringMatchConditionParameters() {
     }
 
     /**
-     * Set the odataType property: The @odata.type property.
-     *
-     * @param odataType the odataType value to set.
+     * Get the typeName property: The typeName property.
+     * 
+     * @return the typeName value.
+     */
+    public String typeName() {
+        return this.typeName;
+    }
+
+    /**
+     * Set the typeName property: The typeName property.
+     * 
+     * @param typeName the typeName value to set.
      * @return the QueryStringMatchConditionParameters object itself.
      */
-    public QueryStringMatchConditionParameters withOdataType(String odataType) {
-        this.odataType = odataType;
+    public QueryStringMatchConditionParameters withTypeName(String typeName) {
+        this.typeName = typeName;
         return this;
     }
 
     /**
      * Get the operator property: Describes operator to be matched.
-     *
+     * 
      * @return the operator value.
      */
     public QueryStringOperator operator() {
@@ -81,7 +81,7 @@ public final class QueryStringMatchConditionParameters {
 
     /**
      * Set the operator property: Describes operator to be matched.
-     *
+     * 
      * @param operator the operator value to set.
      * @return the QueryStringMatchConditionParameters object itself.
      */
@@ -92,7 +92,7 @@ public final class QueryStringMatchConditionParameters {
 
     /**
      * Get the negateCondition property: Describes if this is negate condition or not.
-     *
+     * 
      * @return the negateCondition value.
      */
     public Boolean negateCondition() {
@@ -101,7 +101,7 @@ public final class QueryStringMatchConditionParameters {
 
     /**
      * Set the negateCondition property: Describes if this is negate condition or not.
-     *
+     * 
      * @param negateCondition the negateCondition value to set.
      * @return the QueryStringMatchConditionParameters object itself.
      */
@@ -112,7 +112,7 @@ public final class QueryStringMatchConditionParameters {
 
     /**
      * Get the matchValues property: The match value for the condition of the delivery rule.
-     *
+     * 
      * @return the matchValues value.
      */
     public List<String> matchValues() {
@@ -121,7 +121,7 @@ public final class QueryStringMatchConditionParameters {
 
     /**
      * Set the matchValues property: The match value for the condition of the delivery rule.
-     *
+     * 
      * @param matchValues the matchValues value to set.
      * @return the QueryStringMatchConditionParameters object itself.
      */
@@ -132,7 +132,7 @@ public final class QueryStringMatchConditionParameters {
 
     /**
      * Get the transforms property: List of transforms.
-     *
+     * 
      * @return the transforms value.
      */
     public List<Transform> transforms() {
@@ -141,7 +141,7 @@ public final class QueryStringMatchConditionParameters {
 
     /**
      * Set the transforms property: List of transforms.
-     *
+     * 
      * @param transforms the transforms value to set.
      * @return the QueryStringMatchConditionParameters object itself.
      */
@@ -152,15 +152,15 @@ public final class QueryStringMatchConditionParameters {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (operator() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property operator in model QueryStringMatchConditionParameters"));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
+                "Missing required property operator in model QueryStringMatchConditionParameters"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(QueryStringMatchConditionParameters.class);
 }

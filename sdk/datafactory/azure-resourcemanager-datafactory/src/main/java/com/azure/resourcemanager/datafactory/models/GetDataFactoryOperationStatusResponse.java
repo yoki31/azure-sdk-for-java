@@ -5,19 +5,18 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-/** Response body structure for get data factory operation status. */
+/**
+ * Response body structure for get data factory operation status.
+ */
 @Fluent
 public final class GetDataFactoryOperationStatusResponse {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GetDataFactoryOperationStatusResponse.class);
-
     /*
      * Status of the operation.
      */
@@ -27,11 +26,18 @@ public final class GetDataFactoryOperationStatusResponse {
     /*
      * Response body structure for get data factory operation status.
      */
-    @JsonIgnore private Map<String, Object> additionalProperties;
+    @JsonIgnore
+    private Map<String, Object> additionalProperties;
+
+    /**
+     * Creates an instance of GetDataFactoryOperationStatusResponse class.
+     */
+    public GetDataFactoryOperationStatusResponse() {
+    }
 
     /**
      * Get the status property: Status of the operation.
-     *
+     * 
      * @return the status value.
      */
     public String status() {
@@ -40,7 +46,7 @@ public final class GetDataFactoryOperationStatusResponse {
 
     /**
      * Set the status property: Status of the operation.
-     *
+     * 
      * @param status the status value to set.
      * @return the GetDataFactoryOperationStatusResponse object itself.
      */
@@ -51,7 +57,7 @@ public final class GetDataFactoryOperationStatusResponse {
 
     /**
      * Get the additionalProperties property: Response body structure for get data factory operation status.
-     *
+     * 
      * @return the additionalProperties value.
      */
     @JsonAnyGetter
@@ -61,7 +67,7 @@ public final class GetDataFactoryOperationStatusResponse {
 
     /**
      * Set the additionalProperties property: Response body structure for get data factory operation status.
-     *
+     * 
      * @param additionalProperties the additionalProperties value to set.
      * @return the GetDataFactoryOperationStatusResponse object itself.
      */
@@ -73,14 +79,14 @@ public final class GetDataFactoryOperationStatusResponse {
     @JsonAnySetter
     void withAdditionalProperties(String key, Object value) {
         if (additionalProperties == null) {
-            additionalProperties = new HashMap<>();
+            additionalProperties = new LinkedHashMap<>();
         }
         additionalProperties.put(key, value);
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

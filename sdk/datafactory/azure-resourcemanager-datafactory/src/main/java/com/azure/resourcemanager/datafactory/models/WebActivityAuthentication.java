@@ -5,55 +5,48 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Web activity authentication properties. */
+/**
+ * Web activity authentication properties.
+ */
 @Fluent
 public final class WebActivityAuthentication {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(WebActivityAuthentication.class);
-
     /*
-     * Web activity authentication
-     * (Basic/ClientCertificate/MSI/ServicePrincipal)
+     * Web activity authentication (Basic/ClientCertificate/MSI/ServicePrincipal)
      */
     @JsonProperty(value = "type")
     private String type;
 
     /*
-     * Base64-encoded contents of a PFX file or Certificate when used for
-     * ServicePrincipal
+     * Base64-encoded contents of a PFX file or Certificate when used for ServicePrincipal
      */
     @JsonProperty(value = "pfx")
     private SecretBase pfx;
 
     /*
-     * Web activity authentication user name for basic authentication or
-     * ClientID when used for ServicePrincipal. Type: string (or Expression
-     * with resultType string).
+     * Web activity authentication user name for basic authentication or ClientID when used for ServicePrincipal. Type:
+     * string (or Expression with resultType string).
      */
     @JsonProperty(value = "username")
     private Object username;
 
     /*
-     * Password for the PFX file or basic authentication / Secret when used for
-     * ServicePrincipal
+     * Password for the PFX file or basic authentication / Secret when used for ServicePrincipal
      */
     @JsonProperty(value = "password")
     private SecretBase password;
 
     /*
-     * Resource for which Azure Auth token will be requested when using MSI
-     * Authentication. Type: string (or Expression with resultType string).
+     * Resource for which Azure Auth token will be requested when using MSI Authentication. Type: string (or Expression
+     * with resultType string).
      */
     @JsonProperty(value = "resource")
     private Object resource;
 
     /*
-     * TenantId for which Azure Auth token will be requested when using
-     * ServicePrincipal Authentication. Type: string (or Expression with
-     * resultType string).
+     * TenantId for which Azure Auth token will be requested when using ServicePrincipal Authentication. Type: string
+     * (or Expression with resultType string).
      */
     @JsonProperty(value = "userTenant")
     private Object userTenant;
@@ -65,8 +58,14 @@ public final class WebActivityAuthentication {
     private CredentialReference credential;
 
     /**
+     * Creates an instance of WebActivityAuthentication class.
+     */
+    public WebActivityAuthentication() {
+    }
+
+    /**
      * Get the type property: Web activity authentication (Basic/ClientCertificate/MSI/ServicePrincipal).
-     *
+     * 
      * @return the type value.
      */
     public String type() {
@@ -75,7 +74,7 @@ public final class WebActivityAuthentication {
 
     /**
      * Set the type property: Web activity authentication (Basic/ClientCertificate/MSI/ServicePrincipal).
-     *
+     * 
      * @param type the type value to set.
      * @return the WebActivityAuthentication object itself.
      */
@@ -86,7 +85,7 @@ public final class WebActivityAuthentication {
 
     /**
      * Get the pfx property: Base64-encoded contents of a PFX file or Certificate when used for ServicePrincipal.
-     *
+     * 
      * @return the pfx value.
      */
     public SecretBase pfx() {
@@ -95,7 +94,7 @@ public final class WebActivityAuthentication {
 
     /**
      * Set the pfx property: Base64-encoded contents of a PFX file or Certificate when used for ServicePrincipal.
-     *
+     * 
      * @param pfx the pfx value to set.
      * @return the WebActivityAuthentication object itself.
      */
@@ -107,7 +106,7 @@ public final class WebActivityAuthentication {
     /**
      * Get the username property: Web activity authentication user name for basic authentication or ClientID when used
      * for ServicePrincipal. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the username value.
      */
     public Object username() {
@@ -117,7 +116,7 @@ public final class WebActivityAuthentication {
     /**
      * Set the username property: Web activity authentication user name for basic authentication or ClientID when used
      * for ServicePrincipal. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param username the username value to set.
      * @return the WebActivityAuthentication object itself.
      */
@@ -129,7 +128,7 @@ public final class WebActivityAuthentication {
     /**
      * Get the password property: Password for the PFX file or basic authentication / Secret when used for
      * ServicePrincipal.
-     *
+     * 
      * @return the password value.
      */
     public SecretBase password() {
@@ -139,7 +138,7 @@ public final class WebActivityAuthentication {
     /**
      * Set the password property: Password for the PFX file or basic authentication / Secret when used for
      * ServicePrincipal.
-     *
+     * 
      * @param password the password value to set.
      * @return the WebActivityAuthentication object itself.
      */
@@ -151,7 +150,7 @@ public final class WebActivityAuthentication {
     /**
      * Get the resource property: Resource for which Azure Auth token will be requested when using MSI Authentication.
      * Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the resource value.
      */
     public Object resource() {
@@ -161,7 +160,7 @@ public final class WebActivityAuthentication {
     /**
      * Set the resource property: Resource for which Azure Auth token will be requested when using MSI Authentication.
      * Type: string (or Expression with resultType string).
-     *
+     * 
      * @param resource the resource value to set.
      * @return the WebActivityAuthentication object itself.
      */
@@ -173,7 +172,7 @@ public final class WebActivityAuthentication {
     /**
      * Get the userTenant property: TenantId for which Azure Auth token will be requested when using ServicePrincipal
      * Authentication. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the userTenant value.
      */
     public Object userTenant() {
@@ -183,7 +182,7 @@ public final class WebActivityAuthentication {
     /**
      * Set the userTenant property: TenantId for which Azure Auth token will be requested when using ServicePrincipal
      * Authentication. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param userTenant the userTenant value to set.
      * @return the WebActivityAuthentication object itself.
      */
@@ -194,7 +193,7 @@ public final class WebActivityAuthentication {
 
     /**
      * Get the credential property: The credential reference containing authentication information.
-     *
+     * 
      * @return the credential value.
      */
     public CredentialReference credential() {
@@ -203,7 +202,7 @@ public final class WebActivityAuthentication {
 
     /**
      * Set the credential property: The credential reference containing authentication information.
-     *
+     * 
      * @param credential the credential value to set.
      * @return the WebActivityAuthentication object itself.
      */
@@ -214,7 +213,7 @@ public final class WebActivityAuthentication {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

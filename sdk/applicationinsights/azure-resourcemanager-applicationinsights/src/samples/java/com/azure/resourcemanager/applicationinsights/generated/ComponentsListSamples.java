@@ -4,12 +4,10 @@
 
 package com.azure.resourcemanager.applicationinsights.generated;
 
-import com.azure.core.util.Context;
-
 /** Samples for Components List. */
 public final class ComponentsListSamples {
     /*
-     * x-ms-original-file: specification/applicationinsights/resource-manager/Microsoft.Insights/preview/2018-05-01-preview/examples/ComponentsList.json
+     * x-ms-original-file: specification/applicationinsights/resource-manager/Microsoft.Insights/stable/2020-02-02/examples/ComponentsList.json
      */
     /**
      * Sample code: ComponentsList.json.
@@ -18,6 +16,6 @@ public final class ComponentsListSamples {
      */
     public static void componentsListJson(
         com.azure.resourcemanager.applicationinsights.ApplicationInsightsManager manager) {
-        manager.components().list(Context.NONE);
+        manager.components().list(com.azure.core.util.Context.NONE);
     }
 }

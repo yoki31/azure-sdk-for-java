@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Cosmos DB Cassandra table cluster key. */
+/**
+ * Cosmos DB Cassandra table cluster key.
+ */
 @Fluent
 public final class ClusterKey {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ClusterKey.class);
-
     /*
      * Name of the Cosmos DB Cassandra table cluster key
      */
@@ -21,15 +19,20 @@ public final class ClusterKey {
     private String name;
 
     /*
-     * Order of the Cosmos DB Cassandra table cluster key, only support "Asc"
-     * and "Desc"
+     * Order of the Cosmos DB Cassandra table cluster key, only support "Asc" and "Desc"
      */
     @JsonProperty(value = "orderBy")
     private String orderBy;
 
     /**
+     * Creates an instance of ClusterKey class.
+     */
+    public ClusterKey() {
+    }
+
+    /**
      * Get the name property: Name of the Cosmos DB Cassandra table cluster key.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -38,7 +41,7 @@ public final class ClusterKey {
 
     /**
      * Set the name property: Name of the Cosmos DB Cassandra table cluster key.
-     *
+     * 
      * @param name the name value to set.
      * @return the ClusterKey object itself.
      */
@@ -49,7 +52,7 @@ public final class ClusterKey {
 
     /**
      * Get the orderBy property: Order of the Cosmos DB Cassandra table cluster key, only support "Asc" and "Desc".
-     *
+     * 
      * @return the orderBy value.
      */
     public String orderBy() {
@@ -58,7 +61,7 @@ public final class ClusterKey {
 
     /**
      * Set the orderBy property: Order of the Cosmos DB Cassandra table cluster key, only support "Asc" and "Desc".
-     *
+     * 
      * @param orderBy the orderBy value to set.
      * @return the ClusterKey object itself.
      */
@@ -69,7 +72,7 @@ public final class ClusterKey {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

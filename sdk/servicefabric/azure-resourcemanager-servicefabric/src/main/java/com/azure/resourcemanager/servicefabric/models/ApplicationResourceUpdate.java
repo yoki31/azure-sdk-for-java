@@ -7,19 +7,17 @@ package com.azure.resourcemanager.servicefabric.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.ProxyResource;
 import com.azure.core.management.SystemData;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.servicefabric.fluent.models.ApplicationResourceUpdateProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;
 
-/** The application resource for patch operations. */
+/**
+ * The application resource for patch operations.
+ */
 @Fluent
 public final class ApplicationResourceUpdate extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApplicationResourceUpdate.class);
-
     /*
      * The application resource properties for patch operations.
      */
@@ -27,8 +25,7 @@ public final class ApplicationResourceUpdate extends ProxyResource {
     private ApplicationResourceUpdateProperties innerProperties;
 
     /*
-     * It will be deprecated in New API, resource location depends on the
-     * parent resource.
+     * It will be deprecated in New API, resource location depends on the parent resource.
      */
     @JsonProperty(value = "location")
     private String location;
@@ -53,8 +50,14 @@ public final class ApplicationResourceUpdate extends ProxyResource {
     private SystemData systemData;
 
     /**
+     * Creates an instance of ApplicationResourceUpdate class.
+     */
+    public ApplicationResourceUpdate() {
+    }
+
+    /**
      * Get the innerProperties property: The application resource properties for patch operations.
-     *
+     * 
      * @return the innerProperties value.
      */
     private ApplicationResourceUpdateProperties innerProperties() {
@@ -63,7 +66,7 @@ public final class ApplicationResourceUpdate extends ProxyResource {
 
     /**
      * Get the location property: It will be deprecated in New API, resource location depends on the parent resource.
-     *
+     * 
      * @return the location value.
      */
     public String location() {
@@ -72,7 +75,7 @@ public final class ApplicationResourceUpdate extends ProxyResource {
 
     /**
      * Set the location property: It will be deprecated in New API, resource location depends on the parent resource.
-     *
+     * 
      * @param location the location value to set.
      * @return the ApplicationResourceUpdate object itself.
      */
@@ -83,7 +86,7 @@ public final class ApplicationResourceUpdate extends ProxyResource {
 
     /**
      * Get the tags property: Azure resource tags.
-     *
+     * 
      * @return the tags value.
      */
     public Map<String, String> tags() {
@@ -92,7 +95,7 @@ public final class ApplicationResourceUpdate extends ProxyResource {
 
     /**
      * Set the tags property: Azure resource tags.
-     *
+     * 
      * @param tags the tags value to set.
      * @return the ApplicationResourceUpdate object itself.
      */
@@ -103,7 +106,7 @@ public final class ApplicationResourceUpdate extends ProxyResource {
 
     /**
      * Get the etag property: Azure resource etag.
-     *
+     * 
      * @return the etag value.
      */
     public String etag() {
@@ -112,7 +115,7 @@ public final class ApplicationResourceUpdate extends ProxyResource {
 
     /**
      * Get the systemData property: Metadata pertaining to creation and last modification of the resource.
-     *
+     * 
      * @return the systemData value.
      */
     public SystemData systemData() {
@@ -121,7 +124,7 @@ public final class ApplicationResourceUpdate extends ProxyResource {
 
     /**
      * Get the typeVersion property: The version of the application type as defined in the application manifest.
-     *
+     * 
      * @return the typeVersion value.
      */
     public String typeVersion() {
@@ -130,7 +133,7 @@ public final class ApplicationResourceUpdate extends ProxyResource {
 
     /**
      * Set the typeVersion property: The version of the application type as defined in the application manifest.
-     *
+     * 
      * @param typeVersion the typeVersion value to set.
      * @return the ApplicationResourceUpdate object itself.
      */
@@ -145,7 +148,7 @@ public final class ApplicationResourceUpdate extends ProxyResource {
     /**
      * Get the parameters property: List of application parameters with overridden values from their default values
      * specified in the application manifest.
-     *
+     * 
      * @return the parameters value.
      */
     public Map<String, String> parameters() {
@@ -155,7 +158,7 @@ public final class ApplicationResourceUpdate extends ProxyResource {
     /**
      * Set the parameters property: List of application parameters with overridden values from their default values
      * specified in the application manifest.
-     *
+     * 
      * @param parameters the parameters value to set.
      * @return the ApplicationResourceUpdate object itself.
      */
@@ -169,7 +172,7 @@ public final class ApplicationResourceUpdate extends ProxyResource {
 
     /**
      * Get the upgradePolicy property: Describes the policy for a monitored application upgrade.
-     *
+     * 
      * @return the upgradePolicy value.
      */
     public ApplicationUpgradePolicy upgradePolicy() {
@@ -178,7 +181,7 @@ public final class ApplicationResourceUpdate extends ProxyResource {
 
     /**
      * Set the upgradePolicy property: Describes the policy for a monitored application upgrade.
-     *
+     * 
      * @param upgradePolicy the upgradePolicy value to set.
      * @return the ApplicationResourceUpdate object itself.
      */
@@ -195,7 +198,7 @@ public final class ApplicationResourceUpdate extends ProxyResource {
      * application. Note that this does not mean that the services of this application will be placed on all of those
      * nodes. If this property is set to zero, no capacity will be reserved. The value of this property cannot be more
      * than the value of the MaximumNodes property.
-     *
+     * 
      * @return the minimumNodes value.
      */
     public Long minimumNodes() {
@@ -207,7 +210,7 @@ public final class ApplicationResourceUpdate extends ProxyResource {
      * application. Note that this does not mean that the services of this application will be placed on all of those
      * nodes. If this property is set to zero, no capacity will be reserved. The value of this property cannot be more
      * than the value of the MaximumNodes property.
-     *
+     * 
      * @param minimumNodes the minimumNodes value to set.
      * @return the ApplicationResourceUpdate object itself.
      */
@@ -223,7 +226,7 @@ public final class ApplicationResourceUpdate extends ProxyResource {
      * Get the maximumNodes property: The maximum number of nodes where Service Fabric will reserve capacity for this
      * application. Note that this does not mean that the services of this application will be placed on all of those
      * nodes. By default, the value of this property is zero and it means that the services can be placed on any node.
-     *
+     * 
      * @return the maximumNodes value.
      */
     public Long maximumNodes() {
@@ -234,7 +237,7 @@ public final class ApplicationResourceUpdate extends ProxyResource {
      * Set the maximumNodes property: The maximum number of nodes where Service Fabric will reserve capacity for this
      * application. Note that this does not mean that the services of this application will be placed on all of those
      * nodes. By default, the value of this property is zero and it means that the services can be placed on any node.
-     *
+     * 
      * @param maximumNodes the maximumNodes value to set.
      * @return the ApplicationResourceUpdate object itself.
      */
@@ -248,7 +251,7 @@ public final class ApplicationResourceUpdate extends ProxyResource {
 
     /**
      * Get the removeApplicationCapacity property: Remove the current application capacity settings.
-     *
+     * 
      * @return the removeApplicationCapacity value.
      */
     public Boolean removeApplicationCapacity() {
@@ -257,7 +260,7 @@ public final class ApplicationResourceUpdate extends ProxyResource {
 
     /**
      * Set the removeApplicationCapacity property: Remove the current application capacity settings.
-     *
+     * 
      * @param removeApplicationCapacity the removeApplicationCapacity value to set.
      * @return the ApplicationResourceUpdate object itself.
      */
@@ -271,7 +274,7 @@ public final class ApplicationResourceUpdate extends ProxyResource {
 
     /**
      * Get the metrics property: List of application capacity metric description.
-     *
+     * 
      * @return the metrics value.
      */
     public List<ApplicationMetricDescription> metrics() {
@@ -280,7 +283,7 @@ public final class ApplicationResourceUpdate extends ProxyResource {
 
     /**
      * Set the metrics property: List of application capacity metric description.
-     *
+     * 
      * @param metrics the metrics value to set.
      * @return the ApplicationResourceUpdate object itself.
      */
@@ -295,7 +298,7 @@ public final class ApplicationResourceUpdate extends ProxyResource {
     /**
      * Get the managedIdentities property: List of user assigned identities for the application, each mapped to a
      * friendly name.
-     *
+     * 
      * @return the managedIdentities value.
      */
     public List<ApplicationUserAssignedIdentity> managedIdentities() {
@@ -305,7 +308,7 @@ public final class ApplicationResourceUpdate extends ProxyResource {
     /**
      * Set the managedIdentities property: List of user assigned identities for the application, each mapped to a
      * friendly name.
-     *
+     * 
      * @param managedIdentities the managedIdentities value to set.
      * @return the ApplicationResourceUpdate object itself.
      */
@@ -319,7 +322,7 @@ public final class ApplicationResourceUpdate extends ProxyResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

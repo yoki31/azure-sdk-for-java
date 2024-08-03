@@ -6,26 +6,45 @@ package com.azure.resourcemanager.compute.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.Resource;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.core.management.SystemData;
 import com.azure.resourcemanager.compute.models.CloudServiceProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 import java.util.Map;
 
-/** Describes the cloud service. */
+/**
+ * Describes the cloud service.
+ */
 @Fluent
 public final class CloudServiceInner extends Resource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CloudServiceInner.class);
-
     /*
      * Cloud service properties
      */
     @JsonProperty(value = "properties")
     private CloudServiceProperties properties;
 
+    /*
+     * The system meta data relating to this resource.
+     */
+    @JsonProperty(value = "systemData")
+    private SystemData systemData;
+
+    /*
+     * List of logical availability zone of the resource. List should contain only 1 zone where cloud service should be
+     * provisioned. This field is optional.
+     */
+    @JsonProperty(value = "zones")
+    private List<String> zones;
+
+    /**
+     * Creates an instance of CloudServiceInner class.
+     */
+    public CloudServiceInner() {
+    }
+
     /**
      * Get the properties property: Cloud service properties.
-     *
+     * 
      * @return the properties value.
      */
     public CloudServiceProperties properties() {
@@ -34,7 +53,7 @@ public final class CloudServiceInner extends Resource {
 
     /**
      * Set the properties property: Cloud service properties.
-     *
+     * 
      * @param properties the properties value to set.
      * @return the CloudServiceInner object itself.
      */
@@ -43,14 +62,60 @@ public final class CloudServiceInner extends Resource {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * Get the systemData property: The system meta data relating to this resource.
+     * 
+     * @return the systemData value.
+     */
+    public SystemData systemData() {
+        return this.systemData;
+    }
+
+    /**
+     * Set the systemData property: The system meta data relating to this resource.
+     * 
+     * @param systemData the systemData value to set.
+     * @return the CloudServiceInner object itself.
+     */
+    public CloudServiceInner withSystemData(SystemData systemData) {
+        this.systemData = systemData;
+        return this;
+    }
+
+    /**
+     * Get the zones property: List of logical availability zone of the resource. List should contain only 1 zone where
+     * cloud service should be provisioned. This field is optional.
+     * 
+     * @return the zones value.
+     */
+    public List<String> zones() {
+        return this.zones;
+    }
+
+    /**
+     * Set the zones property: List of logical availability zone of the resource. List should contain only 1 zone where
+     * cloud service should be provisioned. This field is optional.
+     * 
+     * @param zones the zones value to set.
+     * @return the CloudServiceInner object itself.
+     */
+    public CloudServiceInner withZones(List<String> zones) {
+        this.zones = zones;
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CloudServiceInner withLocation(String location) {
         super.withLocation(location);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CloudServiceInner withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -59,7 +124,7 @@ public final class CloudServiceInner extends Resource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -5,24 +5,33 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-/** Azure SQL workload-specific backup item. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "protectedItemType")
+/**
+ * Azure SQL workload-specific backup item.
+ */
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.NAME,
+    property = "protectedItemType",
+    defaultImpl = AzureSqlProtectedItem.class,
+    visible = true)
 @JsonTypeName("Microsoft.Sql/servers/databases")
 @Fluent
 public final class AzureSqlProtectedItem extends ProtectedItem {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureSqlProtectedItem.class);
+    /*
+     * backup item type.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "protectedItemType", required = true)
+    private String protectedItemType = "Microsoft.Sql/servers/databases";
 
     /*
-     * Internal ID of a backup item. Used by Azure SQL Backup engine to contact
-     * Recovery Services.
+     * Internal ID of a backup item. Used by Azure SQL Backup engine to contact Recovery Services.
      */
     @JsonProperty(value = "protectedItemDataId")
     private String protectedItemDataId;
@@ -40,9 +49,25 @@ public final class AzureSqlProtectedItem extends ProtectedItem {
     private AzureSqlProtectedItemExtendedInfo extendedInfo;
 
     /**
+     * Creates an instance of AzureSqlProtectedItem class.
+     */
+    public AzureSqlProtectedItem() {
+    }
+
+    /**
+     * Get the protectedItemType property: backup item type.
+     * 
+     * @return the protectedItemType value.
+     */
+    @Override
+    public String protectedItemType() {
+        return this.protectedItemType;
+    }
+
+    /**
      * Get the protectedItemDataId property: Internal ID of a backup item. Used by Azure SQL Backup engine to contact
      * Recovery Services.
-     *
+     * 
      * @return the protectedItemDataId value.
      */
     public String protectedItemDataId() {
@@ -52,7 +77,7 @@ public final class AzureSqlProtectedItem extends ProtectedItem {
     /**
      * Set the protectedItemDataId property: Internal ID of a backup item. Used by Azure SQL Backup engine to contact
      * Recovery Services.
-     *
+     * 
      * @param protectedItemDataId the protectedItemDataId value to set.
      * @return the AzureSqlProtectedItem object itself.
      */
@@ -63,7 +88,7 @@ public final class AzureSqlProtectedItem extends ProtectedItem {
 
     /**
      * Get the protectionState property: Backup state of the backed up item.
-     *
+     * 
      * @return the protectionState value.
      */
     public ProtectedItemState protectionState() {
@@ -72,7 +97,7 @@ public final class AzureSqlProtectedItem extends ProtectedItem {
 
     /**
      * Set the protectionState property: Backup state of the backed up item.
-     *
+     * 
      * @param protectionState the protectionState value to set.
      * @return the AzureSqlProtectedItem object itself.
      */
@@ -83,7 +108,7 @@ public final class AzureSqlProtectedItem extends ProtectedItem {
 
     /**
      * Get the extendedInfo property: Additional information for this backup item.
-     *
+     * 
      * @return the extendedInfo value.
      */
     public AzureSqlProtectedItemExtendedInfo extendedInfo() {
@@ -92,7 +117,7 @@ public final class AzureSqlProtectedItem extends ProtectedItem {
 
     /**
      * Set the extendedInfo property: Additional information for this backup item.
-     *
+     * 
      * @param extendedInfo the extendedInfo value to set.
      * @return the AzureSqlProtectedItem object itself.
      */
@@ -101,98 +126,108 @@ public final class AzureSqlProtectedItem extends ProtectedItem {
         return this;
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public AzureSqlProtectedItem withBackupManagementType(BackupManagementType backupManagementType) {
-        super.withBackupManagementType(backupManagementType);
-        return this;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public AzureSqlProtectedItem withWorkloadType(DataSourceType workloadType) {
-        super.withWorkloadType(workloadType);
-        return this;
-    }
-
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureSqlProtectedItem withContainerName(String containerName) {
         super.withContainerName(containerName);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureSqlProtectedItem withSourceResourceId(String sourceResourceId) {
         super.withSourceResourceId(sourceResourceId);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureSqlProtectedItem withPolicyId(String policyId) {
         super.withPolicyId(policyId);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureSqlProtectedItem withLastRecoveryPoint(OffsetDateTime lastRecoveryPoint) {
         super.withLastRecoveryPoint(lastRecoveryPoint);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureSqlProtectedItem withBackupSetName(String backupSetName) {
         super.withBackupSetName(backupSetName);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureSqlProtectedItem withCreateMode(CreateMode createMode) {
         super.withCreateMode(createMode);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureSqlProtectedItem withDeferredDeleteTimeInUtc(OffsetDateTime deferredDeleteTimeInUtc) {
         super.withDeferredDeleteTimeInUtc(deferredDeleteTimeInUtc);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureSqlProtectedItem withIsScheduledForDeferredDelete(Boolean isScheduledForDeferredDelete) {
         super.withIsScheduledForDeferredDelete(isScheduledForDeferredDelete);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureSqlProtectedItem withDeferredDeleteTimeRemaining(String deferredDeleteTimeRemaining) {
         super.withDeferredDeleteTimeRemaining(deferredDeleteTimeRemaining);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureSqlProtectedItem withIsDeferredDeleteScheduleUpcoming(Boolean isDeferredDeleteScheduleUpcoming) {
         super.withIsDeferredDeleteScheduleUpcoming(isDeferredDeleteScheduleUpcoming);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureSqlProtectedItem withIsRehydrate(Boolean isRehydrate) {
         super.withIsRehydrate(isRehydrate);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AzureSqlProtectedItem withResourceGuardOperationRequests(List<String> resourceGuardOperationRequests) {
         super.withResourceGuardOperationRequests(resourceGuardOperationRequests);
@@ -200,8 +235,35 @@ public final class AzureSqlProtectedItem extends ProtectedItem {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AzureSqlProtectedItem withIsArchiveEnabled(Boolean isArchiveEnabled) {
+        super.withIsArchiveEnabled(isArchiveEnabled);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AzureSqlProtectedItem withPolicyName(String policyName) {
+        super.withPolicyName(policyName);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public AzureSqlProtectedItem withSoftDeleteRetentionPeriod(Integer softDeleteRetentionPeriod) {
+        super.withSoftDeleteRetentionPeriod(softDeleteRetentionPeriod);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

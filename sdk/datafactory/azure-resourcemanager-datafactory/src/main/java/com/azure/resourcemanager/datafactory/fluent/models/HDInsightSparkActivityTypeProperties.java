@@ -8,27 +8,26 @@ import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.models.HDInsightActivityDebugInfoOption;
 import com.azure.resourcemanager.datafactory.models.LinkedServiceReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;
 
-/** HDInsight spark activity properties. */
+/**
+ * HDInsight spark activity properties.
+ */
 @Fluent
 public final class HDInsightSparkActivityTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(HDInsightSparkActivityTypeProperties.class);
-
     /*
-     * The root path in 'sparkJobLinkedService' for all the job’s files. Type:
-     * string (or Expression with resultType string).
+     * The root path in 'sparkJobLinkedService' for all the job’s files. Type: string (or Expression with resultType
+     * string).
      */
     @JsonProperty(value = "rootPath", required = true)
     private Object rootPath;
 
     /*
-     * The relative path to the root folder of the code/package to be executed.
-     * Type: string (or Expression with resultType string).
+     * The relative path to the root folder of the code/package to be executed. Type: string (or Expression with
+     * resultType string).
      */
     @JsonProperty(value = "entryFilePath", required = true)
     private Object entryFilePath;
@@ -46,8 +45,7 @@ public final class HDInsightSparkActivityTypeProperties {
     private HDInsightActivityDebugInfoOption getDebugInfo;
 
     /*
-     * The storage linked service for uploading the entry file and
-     * dependencies, and for receiving logs.
+     * The storage linked service for uploading the entry file and dependencies, and for receiving logs.
      */
     @JsonProperty(value = "sparkJobLinkedService")
     private LinkedServiceReference sparkJobLinkedService;
@@ -59,8 +57,7 @@ public final class HDInsightSparkActivityTypeProperties {
     private String className;
 
     /*
-     * The user to impersonate that will execute the job. Type: string (or
-     * Expression with resultType string).
+     * The user to impersonate that will execute the job. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "proxyUser")
     private Object proxyUser;
@@ -73,9 +70,15 @@ public final class HDInsightSparkActivityTypeProperties {
     private Map<String, Object> sparkConfig;
 
     /**
+     * Creates an instance of HDInsightSparkActivityTypeProperties class.
+     */
+    public HDInsightSparkActivityTypeProperties() {
+    }
+
+    /**
      * Get the rootPath property: The root path in 'sparkJobLinkedService' for all the job’s files. Type: string (or
      * Expression with resultType string).
-     *
+     * 
      * @return the rootPath value.
      */
     public Object rootPath() {
@@ -85,7 +88,7 @@ public final class HDInsightSparkActivityTypeProperties {
     /**
      * Set the rootPath property: The root path in 'sparkJobLinkedService' for all the job’s files. Type: string (or
      * Expression with resultType string).
-     *
+     * 
      * @param rootPath the rootPath value to set.
      * @return the HDInsightSparkActivityTypeProperties object itself.
      */
@@ -97,7 +100,7 @@ public final class HDInsightSparkActivityTypeProperties {
     /**
      * Get the entryFilePath property: The relative path to the root folder of the code/package to be executed. Type:
      * string (or Expression with resultType string).
-     *
+     * 
      * @return the entryFilePath value.
      */
     public Object entryFilePath() {
@@ -107,7 +110,7 @@ public final class HDInsightSparkActivityTypeProperties {
     /**
      * Set the entryFilePath property: The relative path to the root folder of the code/package to be executed. Type:
      * string (or Expression with resultType string).
-     *
+     * 
      * @param entryFilePath the entryFilePath value to set.
      * @return the HDInsightSparkActivityTypeProperties object itself.
      */
@@ -118,7 +121,7 @@ public final class HDInsightSparkActivityTypeProperties {
 
     /**
      * Get the arguments property: The user-specified arguments to HDInsightSparkActivity.
-     *
+     * 
      * @return the arguments value.
      */
     public List<Object> arguments() {
@@ -127,7 +130,7 @@ public final class HDInsightSparkActivityTypeProperties {
 
     /**
      * Set the arguments property: The user-specified arguments to HDInsightSparkActivity.
-     *
+     * 
      * @param arguments the arguments value to set.
      * @return the HDInsightSparkActivityTypeProperties object itself.
      */
@@ -138,7 +141,7 @@ public final class HDInsightSparkActivityTypeProperties {
 
     /**
      * Get the getDebugInfo property: Debug info option.
-     *
+     * 
      * @return the getDebugInfo value.
      */
     public HDInsightActivityDebugInfoOption getDebugInfo() {
@@ -147,7 +150,7 @@ public final class HDInsightSparkActivityTypeProperties {
 
     /**
      * Set the getDebugInfo property: Debug info option.
-     *
+     * 
      * @param getDebugInfo the getDebugInfo value to set.
      * @return the HDInsightSparkActivityTypeProperties object itself.
      */
@@ -159,7 +162,7 @@ public final class HDInsightSparkActivityTypeProperties {
     /**
      * Get the sparkJobLinkedService property: The storage linked service for uploading the entry file and dependencies,
      * and for receiving logs.
-     *
+     * 
      * @return the sparkJobLinkedService value.
      */
     public LinkedServiceReference sparkJobLinkedService() {
@@ -169,19 +172,19 @@ public final class HDInsightSparkActivityTypeProperties {
     /**
      * Set the sparkJobLinkedService property: The storage linked service for uploading the entry file and dependencies,
      * and for receiving logs.
-     *
+     * 
      * @param sparkJobLinkedService the sparkJobLinkedService value to set.
      * @return the HDInsightSparkActivityTypeProperties object itself.
      */
-    public HDInsightSparkActivityTypeProperties withSparkJobLinkedService(
-        LinkedServiceReference sparkJobLinkedService) {
+    public HDInsightSparkActivityTypeProperties
+        withSparkJobLinkedService(LinkedServiceReference sparkJobLinkedService) {
         this.sparkJobLinkedService = sparkJobLinkedService;
         return this;
     }
 
     /**
      * Get the className property: The application's Java/Spark main class.
-     *
+     * 
      * @return the className value.
      */
     public String className() {
@@ -190,7 +193,7 @@ public final class HDInsightSparkActivityTypeProperties {
 
     /**
      * Set the className property: The application's Java/Spark main class.
-     *
+     * 
      * @param className the className value to set.
      * @return the HDInsightSparkActivityTypeProperties object itself.
      */
@@ -202,7 +205,7 @@ public final class HDInsightSparkActivityTypeProperties {
     /**
      * Get the proxyUser property: The user to impersonate that will execute the job. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the proxyUser value.
      */
     public Object proxyUser() {
@@ -212,7 +215,7 @@ public final class HDInsightSparkActivityTypeProperties {
     /**
      * Set the proxyUser property: The user to impersonate that will execute the job. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param proxyUser the proxyUser value to set.
      * @return the HDInsightSparkActivityTypeProperties object itself.
      */
@@ -223,7 +226,7 @@ public final class HDInsightSparkActivityTypeProperties {
 
     /**
      * Get the sparkConfig property: Spark configuration property.
-     *
+     * 
      * @return the sparkConfig value.
      */
     public Map<String, Object> sparkConfig() {
@@ -232,7 +235,7 @@ public final class HDInsightSparkActivityTypeProperties {
 
     /**
      * Set the sparkConfig property: Spark configuration property.
-     *
+     * 
      * @param sparkConfig the sparkConfig value to set.
      * @return the HDInsightSparkActivityTypeProperties object itself.
      */
@@ -243,24 +246,24 @@ public final class HDInsightSparkActivityTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (rootPath() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property rootPath in model HDInsightSparkActivityTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property rootPath in model HDInsightSparkActivityTypeProperties"));
         }
         if (entryFilePath() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property entryFilePath in model HDInsightSparkActivityTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property entryFilePath in model HDInsightSparkActivityTypeProperties"));
         }
         if (sparkJobLinkedService() != null) {
             sparkJobLinkedService().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(HDInsightSparkActivityTypeProperties.class);
 }

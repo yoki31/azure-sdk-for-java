@@ -23,6 +23,21 @@ public interface DigitalTwinsClient {
      *
      * @param resourceGroupName The name of the resource group that contains the DigitalTwinsInstance.
      * @param resourceName The name of the DigitalTwinsInstance.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return digitalTwinsInstances resource along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<DigitalTwinsDescriptionInner> getByResourceGroupWithResponse(
+        String resourceGroupName, String resourceName, Context context);
+
+    /**
+     * Get DigitalTwinsInstances resource.
+     *
+     * @param resourceGroupName The name of the resource group that contains the DigitalTwinsInstance.
+     * @param resourceName The name of the DigitalTwinsInstance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
@@ -30,21 +45,6 @@ public interface DigitalTwinsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     DigitalTwinsDescriptionInner getByResourceGroup(String resourceGroupName, String resourceName);
-
-    /**
-     * Get DigitalTwinsInstances resource.
-     *
-     * @param resourceGroupName The name of the resource group that contains the DigitalTwinsInstance.
-     * @param resourceName The name of the DigitalTwinsInstance.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return digitalTwinsInstances resource.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<DigitalTwinsDescriptionInner> getByResourceGroupWithResponse(
-        String resourceGroupName, String resourceName, Context context);
 
     /**
      * Create or update the metadata of a DigitalTwinsInstance. The usual pattern to modify a property is to retrieve
@@ -57,9 +57,9 @@ public interface DigitalTwinsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the description of the DigitalTwins service.
+     * @return the {@link SyncPoller} for polling of the description of the DigitalTwins service.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<DigitalTwinsDescriptionInner>, DigitalTwinsDescriptionInner> beginCreateOrUpdate(
         String resourceGroupName, String resourceName, DigitalTwinsDescriptionInner digitalTwinsCreate);
 
@@ -75,9 +75,9 @@ public interface DigitalTwinsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the description of the DigitalTwins service.
+     * @return the {@link SyncPoller} for polling of the description of the DigitalTwins service.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<DigitalTwinsDescriptionInner>, DigitalTwinsDescriptionInner> beginCreateOrUpdate(
         String resourceGroupName,
         String resourceName,
@@ -131,9 +131,9 @@ public interface DigitalTwinsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the description of the DigitalTwins service.
+     * @return the {@link SyncPoller} for polling of the description of the DigitalTwins service.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<DigitalTwinsDescriptionInner>, DigitalTwinsDescriptionInner> beginUpdate(
         String resourceGroupName, String resourceName, DigitalTwinsPatchDescription digitalTwinsPatchDescription);
 
@@ -147,9 +147,9 @@ public interface DigitalTwinsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the description of the DigitalTwins service.
+     * @return the {@link SyncPoller} for polling of the description of the DigitalTwins service.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<DigitalTwinsDescriptionInner>, DigitalTwinsDescriptionInner> beginUpdate(
         String resourceGroupName,
         String resourceName,
@@ -198,9 +198,9 @@ public interface DigitalTwinsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the description of the DigitalTwins service.
+     * @return the {@link SyncPoller} for polling of the description of the DigitalTwins service.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<DigitalTwinsDescriptionInner>, DigitalTwinsDescriptionInner> beginDelete(
         String resourceGroupName, String resourceName);
 
@@ -213,9 +213,9 @@ public interface DigitalTwinsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the description of the DigitalTwins service.
+     * @return the {@link SyncPoller} for polling of the description of the DigitalTwins service.
      */
-    @ServiceMethod(returns = ReturnType.SINGLE)
+    @ServiceMethod(returns = ReturnType.LONG_RUNNING_OPERATION)
     SyncPoller<PollResult<DigitalTwinsDescriptionInner>, DigitalTwinsDescriptionInner> beginDelete(
         String resourceGroupName, String resourceName, Context context);
 
@@ -251,7 +251,7 @@ public interface DigitalTwinsClient {
      *
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all the DigitalTwinsInstances in a subscription.
+     * @return all the DigitalTwinsInstances in a subscription as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<DigitalTwinsDescriptionInner> list();
@@ -263,7 +263,7 @@ public interface DigitalTwinsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all the DigitalTwinsInstances in a subscription.
+     * @return all the DigitalTwinsInstances in a subscription as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<DigitalTwinsDescriptionInner> list(Context context);
@@ -275,7 +275,7 @@ public interface DigitalTwinsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all the DigitalTwinsInstances in a resource group.
+     * @return all the DigitalTwinsInstances in a resource group as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<DigitalTwinsDescriptionInner> listByResourceGroup(String resourceGroupName);
@@ -288,10 +288,26 @@ public interface DigitalTwinsClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all the DigitalTwinsInstances in a resource group.
+     * @return all the DigitalTwinsInstances in a resource group as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     PagedIterable<DigitalTwinsDescriptionInner> listByResourceGroup(String resourceGroupName, Context context);
+
+    /**
+     * Check if a DigitalTwinsInstance name is available.
+     *
+     * @param location Location of DigitalTwinsInstance.
+     * @param digitalTwinsInstanceCheckName Set the name parameter in the DigitalTwinsInstanceCheckName structure to the
+     *     name of the DigitalTwinsInstance to check.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the result returned from a check name availability request along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    Response<CheckNameResultInner> checkNameAvailabilityWithResponse(
+        String location, CheckNameRequest digitalTwinsInstanceCheckName, Context context);
 
     /**
      * Check if a DigitalTwinsInstance name is available.
@@ -306,20 +322,4 @@ public interface DigitalTwinsClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     CheckNameResultInner checkNameAvailability(String location, CheckNameRequest digitalTwinsInstanceCheckName);
-
-    /**
-     * Check if a DigitalTwinsInstance name is available.
-     *
-     * @param location Location of DigitalTwinsInstance.
-     * @param digitalTwinsInstanceCheckName Set the name parameter in the DigitalTwinsInstanceCheckName structure to the
-     *     name of the DigitalTwinsInstance to check.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the result returned from a check name availability request.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    Response<CheckNameResultInner> checkNameAvailabilityWithResponse(
-        String location, CheckNameRequest digitalTwinsInstanceCheckName, Context context);
 }

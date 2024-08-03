@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Routing rules in production experiments. */
+/**
+ * Routing rules in production experiments.
+ */
 @Fluent
 public final class Experiments {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(Experiments.class);
-
     /*
      * List of ramp-up rules.
      */
@@ -22,8 +20,14 @@ public final class Experiments {
     private List<RampUpRule> rampUpRules;
 
     /**
+     * Creates an instance of Experiments class.
+     */
+    public Experiments() {
+    }
+
+    /**
      * Get the rampUpRules property: List of ramp-up rules.
-     *
+     * 
      * @return the rampUpRules value.
      */
     public List<RampUpRule> rampUpRules() {
@@ -32,7 +36,7 @@ public final class Experiments {
 
     /**
      * Set the rampUpRules property: List of ramp-up rules.
-     *
+     * 
      * @param rampUpRules the rampUpRules value to set.
      * @return the Experiments object itself.
      */
@@ -43,7 +47,7 @@ public final class Experiments {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

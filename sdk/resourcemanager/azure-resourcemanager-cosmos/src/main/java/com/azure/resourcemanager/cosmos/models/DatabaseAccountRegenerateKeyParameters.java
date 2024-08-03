@@ -6,14 +6,13 @@ package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Parameters to regenerate the keys within the database account. */
+/**
+ * Parameters to regenerate the keys within the database account.
+ */
 @Fluent
 public final class DatabaseAccountRegenerateKeyParameters {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DatabaseAccountRegenerateKeyParameters.class);
-
     /*
      * The access key to regenerate.
      */
@@ -21,8 +20,14 @@ public final class DatabaseAccountRegenerateKeyParameters {
     private KeyKind keyKind;
 
     /**
+     * Creates an instance of DatabaseAccountRegenerateKeyParameters class.
+     */
+    public DatabaseAccountRegenerateKeyParameters() {
+    }
+
+    /**
      * Get the keyKind property: The access key to regenerate.
-     *
+     * 
      * @return the keyKind value.
      */
     public KeyKind keyKind() {
@@ -31,7 +36,7 @@ public final class DatabaseAccountRegenerateKeyParameters {
 
     /**
      * Set the keyKind property: The access key to regenerate.
-     *
+     * 
      * @param keyKind the keyKind value to set.
      * @return the DatabaseAccountRegenerateKeyParameters object itself.
      */
@@ -42,15 +47,16 @@ public final class DatabaseAccountRegenerateKeyParameters {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (keyKind() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property keyKind in model DatabaseAccountRegenerateKeyParameters"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property keyKind in model DatabaseAccountRegenerateKeyParameters"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(DatabaseAccountRegenerateKeyParameters.class);
 }

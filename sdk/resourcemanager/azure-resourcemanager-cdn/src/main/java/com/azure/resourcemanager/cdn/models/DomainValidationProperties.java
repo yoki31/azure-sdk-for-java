@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The JSON object that contains the properties to validate a domain. */
+/**
+ * The JSON object that contains the properties to validate a domain.
+ */
 @Immutable
 public final class DomainValidationProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DomainValidationProperties.class);
-
     /*
      * Challenge used for DNS TXT record or file based validation
      */
@@ -27,8 +25,14 @@ public final class DomainValidationProperties {
     private String expirationDate;
 
     /**
+     * Creates an instance of DomainValidationProperties class.
+     */
+    public DomainValidationProperties() {
+    }
+
+    /**
      * Get the validationToken property: Challenge used for DNS TXT record or file based validation.
-     *
+     * 
      * @return the validationToken value.
      */
     public String validationToken() {
@@ -37,7 +41,7 @@ public final class DomainValidationProperties {
 
     /**
      * Get the expirationDate property: The date time that the token expires.
-     *
+     * 
      * @return the expirationDate value.
      */
     public String expirationDate() {
@@ -46,7 +50,7 @@ public final class DomainValidationProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

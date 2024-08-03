@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.cosmos.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cosmos.models.CassandraKeyspaceGetPropertiesOptions;
 import com.azure.resourcemanager.cosmos.models.CassandraKeyspaceGetPropertiesResource;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The properties of an Azure Cosmos DB Cassandra keyspace. */
+/**
+ * The properties of an Azure Cosmos DB Cassandra keyspace.
+ */
 @Fluent
 public final class CassandraKeyspaceGetProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CassandraKeyspaceGetProperties.class);
-
     /*
      * The resource property.
      */
@@ -29,8 +27,14 @@ public final class CassandraKeyspaceGetProperties {
     private CassandraKeyspaceGetPropertiesOptions options;
 
     /**
+     * Creates an instance of CassandraKeyspaceGetProperties class.
+     */
+    public CassandraKeyspaceGetProperties() {
+    }
+
+    /**
      * Get the resource property: The resource property.
-     *
+     * 
      * @return the resource value.
      */
     public CassandraKeyspaceGetPropertiesResource resource() {
@@ -39,7 +43,7 @@ public final class CassandraKeyspaceGetProperties {
 
     /**
      * Set the resource property: The resource property.
-     *
+     * 
      * @param resource the resource value to set.
      * @return the CassandraKeyspaceGetProperties object itself.
      */
@@ -50,7 +54,7 @@ public final class CassandraKeyspaceGetProperties {
 
     /**
      * Get the options property: The options property.
-     *
+     * 
      * @return the options value.
      */
     public CassandraKeyspaceGetPropertiesOptions options() {
@@ -59,7 +63,7 @@ public final class CassandraKeyspaceGetProperties {
 
     /**
      * Set the options property: The options property.
-     *
+     * 
      * @param options the options value to set.
      * @return the CassandraKeyspaceGetProperties object itself.
      */
@@ -70,7 +74,7 @@ public final class CassandraKeyspaceGetProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

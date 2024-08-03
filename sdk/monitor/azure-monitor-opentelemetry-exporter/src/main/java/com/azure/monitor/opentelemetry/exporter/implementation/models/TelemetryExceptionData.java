@@ -5,7 +5,11 @@
 package com.azure.monitor.opentelemetry.exporter.implementation.models;
 
 import com.azure.core.annotation.Fluent;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
+import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,35 +22,33 @@ public final class TelemetryExceptionData extends MonitorDomain {
     /*
      * Exception chain - list of inner exceptions.
      */
-    @JsonProperty(value = "exceptions", required = true)
     private List<TelemetryExceptionDetails> exceptions;
 
     /*
-     * Severity level. Mostly used to indicate exception severity level when it
-     * is reported by logging library.
+     * Severity level. Mostly used to indicate exception severity level when it is reported by logging library.
      */
-    @JsonProperty(value = "severityLevel")
     private SeverityLevel severityLevel;
 
     /*
-     * Identifier of where the exception was thrown in code. Used for
-     * exceptions grouping. Typically a combination of exception type and a
-     * function from the call stack.
+     * Identifier of where the exception was thrown in code. Used for exceptions grouping. Typically a combination of exception type and a function from the call stack.
      */
-    @JsonProperty(value = "problemId")
     private String problemId;
 
     /*
      * Collection of custom properties.
      */
-    @JsonProperty(value = "properties")
     private Map<String, String> properties;
 
     /*
      * Collection of custom measurements.
      */
-    @JsonProperty(value = "measurements")
     private Map<String, Double> measurements;
+
+    /**
+     * Creates an instance of TelemetryExceptionData class.
+     */
+    public TelemetryExceptionData() {
+    }
 
     /**
      * Get the exceptions property: Exception chain - list of inner exceptions.
@@ -150,5 +152,77 @@ public final class TelemetryExceptionData extends MonitorDomain {
     public TelemetryExceptionData setMeasurements(Map<String, Double> measurements) {
         this.measurements = measurements;
         return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public TelemetryExceptionData setVersion(int version) {
+        super.setVersion(version);
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeIntField("ver", getVersion());
+        jsonWriter.writeArrayField("exceptions", this.exceptions, JsonWriter::writeJson);
+        jsonWriter.writeStringField("severityLevel", this.severityLevel == null ? null : this.severityLevel.toString());
+        jsonWriter.writeStringField("problemId", this.problemId);
+        jsonWriter.writeMapField("properties", this.properties, JsonWriter::writeString);
+        jsonWriter.writeMapField("measurements", this.measurements, JsonWriter::writeDouble);
+        if (getAdditionalProperties() != null) {
+            for (Map.Entry<String, Object> additionalProperty : getAdditionalProperties().entrySet()) {
+                jsonWriter.writeUntypedField(additionalProperty.getKey(), additionalProperty.getValue());
+            }
+        }
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of TelemetryExceptionData from the JsonReader.
+     *
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of TelemetryExceptionData if the JsonReader was pointing to an instance of it, or null if it
+     * was pointing to JSON null.
+     * @throws IllegalStateException If the deserialized JSON object was missing any required properties.
+     * @throws IOException If an error occurs while reading the TelemetryExceptionData.
+     */
+    public static TelemetryExceptionData fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            TelemetryExceptionData deserializedTelemetryExceptionData = new TelemetryExceptionData();
+            Map<String, Object> additionalProperties = null;
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("ver".equals(fieldName)) {
+                    deserializedTelemetryExceptionData.setVersion(reader.getInt());
+                } else if ("exceptions".equals(fieldName)) {
+                    deserializedTelemetryExceptionData.exceptions = reader.readArray(TelemetryExceptionDetails::fromJson);
+                } else if ("severityLevel".equals(fieldName)) {
+                    deserializedTelemetryExceptionData.severityLevel = SeverityLevel.fromString(reader.getString());
+                } else if ("problemId".equals(fieldName)) {
+                    deserializedTelemetryExceptionData.problemId = reader.getString();
+                } else if ("properties".equals(fieldName)) {
+                    deserializedTelemetryExceptionData.properties = reader.readMap(JsonReader::getString);
+                } else if ("measurements".equals(fieldName)) {
+                    deserializedTelemetryExceptionData.measurements = reader.readMap(JsonReader::getDouble);
+                } else {
+                    if (additionalProperties == null) {
+                        additionalProperties = new LinkedHashMap<>();
+                    }
+
+                    additionalProperties.put(fieldName, reader.readUntyped());
+                }
+            }
+            deserializedTelemetryExceptionData.setAdditionalProperties(additionalProperties);
+
+            return deserializedTelemetryExceptionData;
+        });
     }
 }

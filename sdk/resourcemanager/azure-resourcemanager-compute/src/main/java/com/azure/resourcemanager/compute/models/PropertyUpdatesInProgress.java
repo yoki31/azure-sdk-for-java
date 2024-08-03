@@ -5,25 +5,28 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Properties of the disk for which update is pending. */
+/**
+ * Properties of the disk for which update is pending.
+ */
 @Fluent
 public final class PropertyUpdatesInProgress {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(PropertyUpdatesInProgress.class);
-
     /*
-     * The target performance tier of the disk if a tier change operation is in
-     * progress.
+     * The target performance tier of the disk if a tier change operation is in progress.
      */
     @JsonProperty(value = "targetTier")
     private String targetTier;
 
     /**
+     * Creates an instance of PropertyUpdatesInProgress class.
+     */
+    public PropertyUpdatesInProgress() {
+    }
+
+    /**
      * Get the targetTier property: The target performance tier of the disk if a tier change operation is in progress.
-     *
+     * 
      * @return the targetTier value.
      */
     public String targetTier() {
@@ -32,7 +35,7 @@ public final class PropertyUpdatesInProgress {
 
     /**
      * Set the targetTier property: The target performance tier of the disk if a tier change operation is in progress.
-     *
+     * 
      * @param targetTier the targetTier value to set.
      * @return the PropertyUpdatesInProgress object itself.
      */
@@ -43,7 +46,7 @@ public final class PropertyUpdatesInProgress {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -5,26 +5,29 @@
 package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Azure Data Explorer (Kusto) dataset properties. */
+/**
+ * Azure Data Explorer (Kusto) dataset properties.
+ */
 @Fluent
 public final class AzureDataExplorerDatasetTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureDataExplorerDatasetTypeProperties.class);
-
     /*
-     * The table name of the Azure Data Explorer database. Type: string (or
-     * Expression with resultType string).
+     * The table name of the Azure Data Explorer database. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "table")
     private Object table;
 
     /**
+     * Creates an instance of AzureDataExplorerDatasetTypeProperties class.
+     */
+    public AzureDataExplorerDatasetTypeProperties() {
+    }
+
+    /**
      * Get the table property: The table name of the Azure Data Explorer database. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the table value.
      */
     public Object table() {
@@ -34,7 +37,7 @@ public final class AzureDataExplorerDatasetTypeProperties {
     /**
      * Set the table property: The table name of the Azure Data Explorer database. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param table the table value to set.
      * @return the AzureDataExplorerDatasetTypeProperties object itself.
      */
@@ -45,7 +48,7 @@ public final class AzureDataExplorerDatasetTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

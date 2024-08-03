@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Function App stack runtimes. */
+/**
+ * Function App stack runtimes.
+ */
 @Immutable
 public final class FunctionAppRuntimes {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(FunctionAppRuntimes.class);
-
     /*
      * Linux-specific settings associated with the minor version.
      */
@@ -27,8 +25,14 @@ public final class FunctionAppRuntimes {
     private FunctionAppRuntimeSettings windowsRuntimeSettings;
 
     /**
+     * Creates an instance of FunctionAppRuntimes class.
+     */
+    public FunctionAppRuntimes() {
+    }
+
+    /**
      * Get the linuxRuntimeSettings property: Linux-specific settings associated with the minor version.
-     *
+     * 
      * @return the linuxRuntimeSettings value.
      */
     public FunctionAppRuntimeSettings linuxRuntimeSettings() {
@@ -37,7 +41,7 @@ public final class FunctionAppRuntimes {
 
     /**
      * Get the windowsRuntimeSettings property: Windows-specific settings associated with the minor version.
-     *
+     * 
      * @return the windowsRuntimeSettings value.
      */
     public FunctionAppRuntimeSettings windowsRuntimeSettings() {
@@ -46,7 +50,7 @@ public final class FunctionAppRuntimes {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

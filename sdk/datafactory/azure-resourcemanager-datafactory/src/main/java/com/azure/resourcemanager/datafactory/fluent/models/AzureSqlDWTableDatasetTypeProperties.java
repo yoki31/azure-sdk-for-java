@@ -5,40 +5,41 @@
 package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Azure SQL Data Warehouse dataset properties. */
+/**
+ * Azure SQL Data Warehouse dataset properties.
+ */
 @Fluent
 public final class AzureSqlDWTableDatasetTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureSqlDWTableDatasetTypeProperties.class);
-
     /*
-     * This property will be retired. Please consider using schema + table
-     * properties instead.
+     * This property will be retired. Please consider using schema + table properties instead.
      */
     @JsonProperty(value = "tableName")
     private Object tableName;
 
     /*
-     * The schema name of the Azure SQL Data Warehouse. Type: string (or
-     * Expression with resultType string).
+     * The schema name of the Azure SQL Data Warehouse. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "schema")
     private Object schema;
 
     /*
-     * The table name of the Azure SQL Data Warehouse. Type: string (or
-     * Expression with resultType string).
+     * The table name of the Azure SQL Data Warehouse. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "table")
     private Object table;
 
     /**
+     * Creates an instance of AzureSqlDWTableDatasetTypeProperties class.
+     */
+    public AzureSqlDWTableDatasetTypeProperties() {
+    }
+
+    /**
      * Get the tableName property: This property will be retired. Please consider using schema + table properties
      * instead.
-     *
+     * 
      * @return the tableName value.
      */
     public Object tableName() {
@@ -48,7 +49,7 @@ public final class AzureSqlDWTableDatasetTypeProperties {
     /**
      * Set the tableName property: This property will be retired. Please consider using schema + table properties
      * instead.
-     *
+     * 
      * @param tableName the tableName value to set.
      * @return the AzureSqlDWTableDatasetTypeProperties object itself.
      */
@@ -60,7 +61,7 @@ public final class AzureSqlDWTableDatasetTypeProperties {
     /**
      * Get the schema property: The schema name of the Azure SQL Data Warehouse. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the schema value.
      */
     public Object schema() {
@@ -70,7 +71,7 @@ public final class AzureSqlDWTableDatasetTypeProperties {
     /**
      * Set the schema property: The schema name of the Azure SQL Data Warehouse. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param schema the schema value to set.
      * @return the AzureSqlDWTableDatasetTypeProperties object itself.
      */
@@ -82,7 +83,7 @@ public final class AzureSqlDWTableDatasetTypeProperties {
     /**
      * Get the table property: The table name of the Azure SQL Data Warehouse. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the table value.
      */
     public Object table() {
@@ -92,7 +93,7 @@ public final class AzureSqlDWTableDatasetTypeProperties {
     /**
      * Set the table property: The table name of the Azure SQL Data Warehouse. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param table the table value to set.
      * @return the AzureSqlDWTableDatasetTypeProperties object itself.
      */
@@ -103,7 +104,7 @@ public final class AzureSqlDWTableDatasetTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

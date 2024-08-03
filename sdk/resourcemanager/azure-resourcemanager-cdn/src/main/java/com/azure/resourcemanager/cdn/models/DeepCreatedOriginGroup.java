@@ -5,9 +5,8 @@
 package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.annotation.JsonFlatten;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.azure.resourcemanager.cdn.fluent.models.DeepCreatedOriginGroupProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
@@ -15,11 +14,8 @@ import java.util.List;
  * The origin group for CDN content which is added when creating a CDN endpoint. Traffic is sent to the origins within
  * the origin group based on origin health.
  */
-@JsonFlatten
 @Fluent
-public class DeepCreatedOriginGroup {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DeepCreatedOriginGroup.class);
-
+public final class DeepCreatedOriginGroup {
     /*
      * Origin group name which must be unique within the endpoint.
      */
@@ -27,37 +23,20 @@ public class DeepCreatedOriginGroup {
     private String name;
 
     /*
-     * Health probe settings to the origin that is used to determine the health
-     * of the origin.
+     * Properties of the origin group created on the CDN endpoint.
      */
-    @JsonProperty(value = "properties.healthProbeSettings")
-    private HealthProbeParameters healthProbeSettings;
+    @JsonProperty(value = "properties")
+    private DeepCreatedOriginGroupProperties innerProperties;
 
-    /*
-     * The source of the content being delivered via CDN within given origin
-     * group.
+    /**
+     * Creates an instance of DeepCreatedOriginGroup class.
      */
-    @JsonProperty(value = "properties.origins")
-    private List<ResourceReference> origins;
-
-    /*
-     * Time in minutes to shift the traffic to the endpoint gradually when an
-     * unhealthy endpoint comes healthy or a new endpoint is added. Default is
-     * 10 mins. This property is currently not supported.
-     */
-    @JsonProperty(value = "properties.trafficRestorationTimeToHealedOrNewEndpointsInMinutes")
-    private Integer trafficRestorationTimeToHealedOrNewEndpointsInMinutes;
-
-    /*
-     * The JSON object that contains the properties to determine origin health
-     * using real requests/responses.This property is currently not supported.
-     */
-    @JsonProperty(value = "properties.responseBasedOriginErrorDetectionSettings")
-    private ResponseBasedOriginErrorDetectionParameters responseBasedOriginErrorDetectionSettings;
+    public DeepCreatedOriginGroup() {
+    }
 
     /**
      * Get the name property: Origin group name which must be unique within the endpoint.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -66,7 +45,7 @@ public class DeepCreatedOriginGroup {
 
     /**
      * Set the name property: Origin group name which must be unique within the endpoint.
-     *
+     * 
      * @param name the name value to set.
      * @return the DeepCreatedOriginGroup object itself.
      */
@@ -76,44 +55,59 @@ public class DeepCreatedOriginGroup {
     }
 
     /**
-     * Get the healthProbeSettings property: Health probe settings to the origin that is used to determine the health of
-     * the origin.
-     *
-     * @return the healthProbeSettings value.
+     * Get the innerProperties property: Properties of the origin group created on the CDN endpoint.
+     * 
+     * @return the innerProperties value.
      */
-    public HealthProbeParameters healthProbeSettings() {
-        return this.healthProbeSettings;
+    private DeepCreatedOriginGroupProperties innerProperties() {
+        return this.innerProperties;
     }
 
     /**
-     * Set the healthProbeSettings property: Health probe settings to the origin that is used to determine the health of
-     * the origin.
-     *
+     * Get the healthProbeSettings property: Health probe settings to the origin that is used to determine the health
+     * of the origin.
+     * 
+     * @return the healthProbeSettings value.
+     */
+    public HealthProbeParameters healthProbeSettings() {
+        return this.innerProperties() == null ? null : this.innerProperties().healthProbeSettings();
+    }
+
+    /**
+     * Set the healthProbeSettings property: Health probe settings to the origin that is used to determine the health
+     * of the origin.
+     * 
      * @param healthProbeSettings the healthProbeSettings value to set.
      * @return the DeepCreatedOriginGroup object itself.
      */
     public DeepCreatedOriginGroup withHealthProbeSettings(HealthProbeParameters healthProbeSettings) {
-        this.healthProbeSettings = healthProbeSettings;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new DeepCreatedOriginGroupProperties();
+        }
+        this.innerProperties().withHealthProbeSettings(healthProbeSettings);
         return this;
     }
 
     /**
      * Get the origins property: The source of the content being delivered via CDN within given origin group.
-     *
+     * 
      * @return the origins value.
      */
     public List<ResourceReference> origins() {
-        return this.origins;
+        return this.innerProperties() == null ? null : this.innerProperties().origins();
     }
 
     /**
      * Set the origins property: The source of the content being delivered via CDN within given origin group.
-     *
+     * 
      * @param origins the origins value to set.
      * @return the DeepCreatedOriginGroup object itself.
      */
     public DeepCreatedOriginGroup withOrigins(List<ResourceReference> origins) {
-        this.origins = origins;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new DeepCreatedOriginGroupProperties();
+        }
+        this.innerProperties().withOrigins(origins);
         return this;
     }
 
@@ -121,71 +115,74 @@ public class DeepCreatedOriginGroup {
      * Get the trafficRestorationTimeToHealedOrNewEndpointsInMinutes property: Time in minutes to shift the traffic to
      * the endpoint gradually when an unhealthy endpoint comes healthy or a new endpoint is added. Default is 10 mins.
      * This property is currently not supported.
-     *
+     * 
      * @return the trafficRestorationTimeToHealedOrNewEndpointsInMinutes value.
      */
     public Integer trafficRestorationTimeToHealedOrNewEndpointsInMinutes() {
-        return this.trafficRestorationTimeToHealedOrNewEndpointsInMinutes;
+        return this.innerProperties() == null ? null
+            : this.innerProperties().trafficRestorationTimeToHealedOrNewEndpointsInMinutes();
     }
 
     /**
      * Set the trafficRestorationTimeToHealedOrNewEndpointsInMinutes property: Time in minutes to shift the traffic to
      * the endpoint gradually when an unhealthy endpoint comes healthy or a new endpoint is added. Default is 10 mins.
      * This property is currently not supported.
-     *
+     * 
      * @param trafficRestorationTimeToHealedOrNewEndpointsInMinutes the
-     *     trafficRestorationTimeToHealedOrNewEndpointsInMinutes value to set.
+     * trafficRestorationTimeToHealedOrNewEndpointsInMinutes value to set.
      * @return the DeepCreatedOriginGroup object itself.
      */
     public DeepCreatedOriginGroup withTrafficRestorationTimeToHealedOrNewEndpointsInMinutes(
         Integer trafficRestorationTimeToHealedOrNewEndpointsInMinutes) {
-        this.trafficRestorationTimeToHealedOrNewEndpointsInMinutes =
-            trafficRestorationTimeToHealedOrNewEndpointsInMinutes;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new DeepCreatedOriginGroupProperties();
+        }
+        this.innerProperties().withTrafficRestorationTimeToHealedOrNewEndpointsInMinutes(
+            trafficRestorationTimeToHealedOrNewEndpointsInMinutes);
         return this;
     }
 
     /**
      * Get the responseBasedOriginErrorDetectionSettings property: The JSON object that contains the properties to
      * determine origin health using real requests/responses.This property is currently not supported.
-     *
+     * 
      * @return the responseBasedOriginErrorDetectionSettings value.
      */
     public ResponseBasedOriginErrorDetectionParameters responseBasedOriginErrorDetectionSettings() {
-        return this.responseBasedOriginErrorDetectionSettings;
+        return this.innerProperties() == null ? null
+            : this.innerProperties().responseBasedOriginErrorDetectionSettings();
     }
 
     /**
      * Set the responseBasedOriginErrorDetectionSettings property: The JSON object that contains the properties to
      * determine origin health using real requests/responses.This property is currently not supported.
-     *
+     * 
      * @param responseBasedOriginErrorDetectionSettings the responseBasedOriginErrorDetectionSettings value to set.
      * @return the DeepCreatedOriginGroup object itself.
      */
     public DeepCreatedOriginGroup withResponseBasedOriginErrorDetectionSettings(
         ResponseBasedOriginErrorDetectionParameters responseBasedOriginErrorDetectionSettings) {
-        this.responseBasedOriginErrorDetectionSettings = responseBasedOriginErrorDetectionSettings;
+        if (this.innerProperties() == null) {
+            this.innerProperties = new DeepCreatedOriginGroupProperties();
+        }
+        this.innerProperties().withResponseBasedOriginErrorDetectionSettings(responseBasedOriginErrorDetectionSettings);
         return this;
     }
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (name() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property name in model DeepCreatedOriginGroup"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property name in model DeepCreatedOriginGroup"));
         }
-        if (healthProbeSettings() != null) {
-            healthProbeSettings().validate();
-        }
-        if (origins() != null) {
-            origins().forEach(e -> e.validate());
-        }
-        if (responseBasedOriginErrorDetectionSettings() != null) {
-            responseBasedOriginErrorDetectionSettings().validate();
+        if (innerProperties() != null) {
+            innerProperties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(DeepCreatedOriginGroup.class);
 }

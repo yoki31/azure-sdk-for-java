@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cosmos.fluent.models.MetricInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The response to a list metrics request. */
+/**
+ * The response to a list metrics request.
+ */
 @Immutable
 public final class MetricListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MetricListResult.class);
-
     /*
      * The list of metrics for the account.
      */
@@ -23,8 +21,14 @@ public final class MetricListResult {
     private List<MetricInner> value;
 
     /**
+     * Creates an instance of MetricListResult class.
+     */
+    public MetricListResult() {
+    }
+
+    /**
      * Get the value property: The list of metrics for the account.
-     *
+     * 
      * @return the value value.
      */
     public List<MetricInner> value() {
@@ -33,7 +37,7 @@ public final class MetricListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

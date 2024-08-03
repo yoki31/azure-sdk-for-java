@@ -5,15 +5,20 @@ package com.azure.messaging.servicebus;
 
 import com.azure.core.amqp.AmqpMessageConstant;
 import com.azure.core.util.BinaryData;
+import com.azure.messaging.servicebus.models.ServiceBusMessageState;
 import org.apache.qpid.proton.amqp.Binary;
 import org.apache.qpid.proton.amqp.messaging.Data;
 import org.apache.qpid.proton.message.Message;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import static com.azure.core.amqp.AmqpMessageConstant.DEAD_LETTER_DESCRIPTION_ANNOTATION_NAME;
 import static com.azure.core.amqp.AmqpMessageConstant.DEAD_LETTER_REASON_ANNOTATION_NAME;
@@ -21,12 +26,15 @@ import static com.azure.core.amqp.AmqpMessageConstant.DEAD_LETTER_SOURCE_KEY_ANN
 import static com.azure.core.amqp.AmqpMessageConstant.ENQUEUED_SEQUENCE_NUMBER_ANNOTATION_NAME;
 import static com.azure.core.amqp.AmqpMessageConstant.ENQUEUED_TIME_UTC_ANNOTATION_NAME;
 import static com.azure.core.amqp.AmqpMessageConstant.LOCKED_UNTIL_KEY_ANNOTATION_NAME;
+import static com.azure.core.amqp.AmqpMessageConstant.SCHEDULED_ENQUEUE_UTC_TIME_NAME;
 import static com.azure.core.amqp.AmqpMessageConstant.SEQUENCE_NUMBER_ANNOTATION_NAME;
+import static com.azure.core.amqp.AmqpMessageConstant.MESSAGE_STATE_ANNOTATION_NAME;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -111,7 +119,7 @@ public class ServiceBusReceivedMessageTest {
         originalMessageAnnotations.put(ENQUEUED_SEQUENCE_NUMBER_ANNOTATION_NAME.getValue(), Long.valueOf(3));
         originalMessageAnnotations.put(LOCKED_UNTIL_KEY_ANNOTATION_NAME.getValue(), new Date(Instant.now().toEpochMilli()));
         originalMessageAnnotations.put(ENQUEUED_TIME_UTC_ANNOTATION_NAME.getValue(), new Date(Instant.now().toEpochMilli()));
-
+        originalMessageAnnotations.put(SCHEDULED_ENQUEUE_UTC_TIME_NAME.getValue(), new Date(Instant.now().toEpochMilli()));
         originalMessageAnnotations.put(SEQUENCE_NUMBER_ANNOTATION_NAME.getValue(), Long.valueOf(3));
 
         final Map<String, Object> originalApplicationProperties = originalMessage.getRawAmqpMessage().getApplicationProperties();
@@ -145,6 +153,46 @@ public class ServiceBusReceivedMessageTest {
             DEAD_LETTER_REASON_ANNOTATION_NAME);
 
         assertNull(actual.getRawAmqpMessage().getHeader().getDeliveryCount());
+        assertNull(actual.getScheduledEnqueueTime());
+    }
+
+    public static Stream<Arguments> canGetMessageState() {
+        return Stream.of(
+            Arguments.of(0, ServiceBusMessageState.ACTIVE),
+            Arguments.of(1, ServiceBusMessageState.DEFERRED),
+            Arguments.of(2, ServiceBusMessageState.SCHEDULED)
+        );
+    }
+
+    @MethodSource
+    @ParameterizedTest
+    public void canGetMessageState(Integer value, ServiceBusMessageState expected) {
+        // Arrange
+        final ServiceBusReceivedMessage message = new ServiceBusReceivedMessage(PAYLOAD_BINARY);
+        message.getRawAmqpMessage().getMessageAnnotations().put(MESSAGE_STATE_ANNOTATION_NAME.getValue(), value);
+
+        // Act
+        final ServiceBusMessageState actual = message.getState();
+
+        // Assert
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void defaultMessageState() {
+        final ServiceBusReceivedMessage message = new ServiceBusReceivedMessage(PAYLOAD_BINARY);
+
+        assertEquals(ServiceBusMessageState.ACTIVE, message.getState());
+    }
+
+    @Test
+    public void throwsOnInvalidMessageState() {
+        // Arrange
+        final ServiceBusReceivedMessage message = new ServiceBusReceivedMessage(PAYLOAD_BINARY);
+        message.getRawAmqpMessage().getMessageAnnotations().put(MESSAGE_STATE_ANNOTATION_NAME.getValue(), 10);
+
+        // Act & Assert
+        assertThrows(UnsupportedOperationException.class, () -> message.getState());
     }
 
     public void assertNullValues(Map<String, Object> dataMap, AmqpMessageConstant... keys) {

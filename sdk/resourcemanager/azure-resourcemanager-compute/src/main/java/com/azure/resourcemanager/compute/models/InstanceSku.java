@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.compute.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The InstanceSku model. */
+/**
+ * The role instance SKU.
+ */
 @Immutable
 public final class InstanceSku {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(InstanceSku.class);
-
     /*
      * The sku name.
      */
@@ -27,8 +25,14 @@ public final class InstanceSku {
     private String tier;
 
     /**
+     * Creates an instance of InstanceSku class.
+     */
+    public InstanceSku() {
+    }
+
+    /**
      * Get the name property: The sku name.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -37,7 +41,7 @@ public final class InstanceSku {
 
     /**
      * Get the tier property: The tier of the cloud service role instance.
-     *
+     * 
      * @return the tier value.
      */
     public String tier() {
@@ -46,7 +50,7 @@ public final class InstanceSku {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

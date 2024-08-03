@@ -6,16 +6,14 @@ package com.azure.resourcemanager.batch.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.ProxyResource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.batch.fluent.models.CertificateCreateOrUpdateProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Contains information about a certificate. */
+/**
+ * Contains information about a certificate.
+ */
 @Fluent
 public final class CertificateCreateOrUpdateParameters extends ProxyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CertificateCreateOrUpdateParameters.class);
-
     /*
      * The properties associated with the certificate.
      */
@@ -29,8 +27,14 @@ public final class CertificateCreateOrUpdateParameters extends ProxyResource {
     private String etag;
 
     /**
+     * Creates an instance of CertificateCreateOrUpdateParameters class.
+     */
+    public CertificateCreateOrUpdateParameters() {
+    }
+
+    /**
      * Get the innerProperties property: The properties associated with the certificate.
-     *
+     * 
      * @return the innerProperties value.
      */
     private CertificateCreateOrUpdateProperties innerProperties() {
@@ -39,7 +43,7 @@ public final class CertificateCreateOrUpdateParameters extends ProxyResource {
 
     /**
      * Get the etag property: The ETag of the resource, used for concurrency statements.
-     *
+     * 
      * @return the etag value.
      */
     public String etag() {
@@ -47,8 +51,10 @@ public final class CertificateCreateOrUpdateParameters extends ProxyResource {
     }
 
     /**
-     * Get the data property: The base64-encoded contents of the certificate. The maximum size is 10KB.
-     *
+     * Get the data property: The base64-encoded contents of the certificate.
+     * 
+     * The maximum size is 10KB.
+     * 
      * @return the data value.
      */
     public String data() {
@@ -56,8 +62,10 @@ public final class CertificateCreateOrUpdateParameters extends ProxyResource {
     }
 
     /**
-     * Set the data property: The base64-encoded contents of the certificate. The maximum size is 10KB.
-     *
+     * Set the data property: The base64-encoded contents of the certificate.
+     * 
+     * The maximum size is 10KB.
+     * 
      * @param data the data value to set.
      * @return the CertificateCreateOrUpdateParameters object itself.
      */
@@ -70,9 +78,10 @@ public final class CertificateCreateOrUpdateParameters extends ProxyResource {
     }
 
     /**
-     * Get the password property: The password to access the certificate's private key. This must not be specified if
-     * the certificate format is Cer.
-     *
+     * Get the password property: The password to access the certificate's private key.
+     * 
+     * This must not be specified if the certificate format is Cer.
+     * 
      * @return the password value.
      */
     public String password() {
@@ -80,9 +89,10 @@ public final class CertificateCreateOrUpdateParameters extends ProxyResource {
     }
 
     /**
-     * Set the password property: The password to access the certificate's private key. This must not be specified if
-     * the certificate format is Cer.
-     *
+     * Set the password property: The password to access the certificate's private key.
+     * 
+     * This must not be specified if the certificate format is Cer.
+     * 
      * @param password the password value to set.
      * @return the CertificateCreateOrUpdateParameters object itself.
      */
@@ -95,9 +105,10 @@ public final class CertificateCreateOrUpdateParameters extends ProxyResource {
     }
 
     /**
-     * Get the thumbprintAlgorithm property: The algorithm of the certificate thumbprint. This must match the first
-     * portion of the certificate name. Currently required to be 'SHA1'.
-     *
+     * Get the thumbprintAlgorithm property: The algorithm of the certificate thumbprint.
+     * 
+     * This must match the first portion of the certificate name. Currently required to be 'SHA1'.
+     * 
      * @return the thumbprintAlgorithm value.
      */
     public String thumbprintAlgorithm() {
@@ -105,9 +116,10 @@ public final class CertificateCreateOrUpdateParameters extends ProxyResource {
     }
 
     /**
-     * Set the thumbprintAlgorithm property: The algorithm of the certificate thumbprint. This must match the first
-     * portion of the certificate name. Currently required to be 'SHA1'.
-     *
+     * Set the thumbprintAlgorithm property: The algorithm of the certificate thumbprint.
+     * 
+     * This must match the first portion of the certificate name. Currently required to be 'SHA1'.
+     * 
      * @param thumbprintAlgorithm the thumbprintAlgorithm value to set.
      * @return the CertificateCreateOrUpdateParameters object itself.
      */
@@ -120,8 +132,10 @@ public final class CertificateCreateOrUpdateParameters extends ProxyResource {
     }
 
     /**
-     * Get the thumbprint property: The thumbprint of the certificate. This must match the thumbprint from the name.
-     *
+     * Get the thumbprint property: The thumbprint of the certificate.
+     * 
+     * This must match the thumbprint from the name.
+     * 
      * @return the thumbprint value.
      */
     public String thumbprint() {
@@ -129,8 +143,10 @@ public final class CertificateCreateOrUpdateParameters extends ProxyResource {
     }
 
     /**
-     * Set the thumbprint property: The thumbprint of the certificate. This must match the thumbprint from the name.
-     *
+     * Set the thumbprint property: The thumbprint of the certificate.
+     * 
+     * This must match the thumbprint from the name.
+     * 
      * @param thumbprint the thumbprint value to set.
      * @return the CertificateCreateOrUpdateParameters object itself.
      */
@@ -144,7 +160,7 @@ public final class CertificateCreateOrUpdateParameters extends ProxyResource {
 
     /**
      * Get the format property: The format of the certificate - either Pfx or Cer. If omitted, the default is Pfx.
-     *
+     * 
      * @return the format value.
      */
     public CertificateFormat format() {
@@ -153,7 +169,7 @@ public final class CertificateCreateOrUpdateParameters extends ProxyResource {
 
     /**
      * Set the format property: The format of the certificate - either Pfx or Cer. If omitted, the default is Pfx.
-     *
+     * 
      * @param format the format value to set.
      * @return the CertificateCreateOrUpdateParameters object itself.
      */
@@ -167,7 +183,7 @@ public final class CertificateCreateOrUpdateParameters extends ProxyResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

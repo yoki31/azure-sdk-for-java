@@ -15,6 +15,9 @@ import com.azure.core.util.BinaryData;
 import com.azure.core.util.Context;
 import com.azure.core.util.CoreUtils;
 import com.azure.core.util.FluxUtil;
+import com.azure.core.util.ProgressListener;
+import com.azure.core.util.ProgressReporter;
+import com.azure.core.util.io.IOUtils;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.core.util.polling.LongRunningOperationStatus;
 import com.azure.core.util.polling.PollResponse;
@@ -23,9 +26,9 @@ import com.azure.storage.blob.BlobContainerAsyncClient;
 import com.azure.storage.blob.BlobContainerClientBuilder;
 import com.azure.storage.blob.BlobServiceAsyncClient;
 import com.azure.storage.blob.BlobServiceVersion;
-import com.azure.storage.blob.ProgressReporter;
 import com.azure.storage.blob.implementation.AzureBlobStorageImpl;
 import com.azure.storage.blob.implementation.AzureBlobStorageImplBuilder;
+import com.azure.storage.blob.implementation.accesshelpers.BlobDownloadAsyncResponseConstructorProxy;
 import com.azure.storage.blob.implementation.accesshelpers.BlobPropertiesConstructorProxy;
 import com.azure.storage.blob.implementation.models.BlobPropertiesInternalGetProperties;
 import com.azure.storage.blob.implementation.models.BlobTag;
@@ -102,6 +105,8 @@ import java.nio.file.StandardOpenOption;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -109,16 +114,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.BiFunction;
 
 import static com.azure.core.util.FluxUtil.fluxError;
 import static com.azure.core.util.FluxUtil.monoError;
 import static com.azure.core.util.FluxUtil.withContext;
-import static com.azure.core.util.tracing.Tracer.AZ_TRACING_NAMESPACE_KEY;
-import static com.azure.storage.common.Utility.STORAGE_TRACING_NAMESPACE_VALUE;
 
 /**
  * This class provides a client that contains all operations that apply to any blob type.
@@ -128,9 +128,10 @@ import static com.azure.storage.common.Utility.STORAGE_TRACING_NAMESPACE_VALUE;
  * refer to the {@link BlockBlobClient}, {@link PageBlobClient}, or {@link AppendBlobClient} for upload options.
  */
 public class BlobAsyncClientBase {
+    private static final ClientLogger LOGGER = new ClientLogger(BlobAsyncClientBase.class);
 
-    private final ClientLogger logger = new ClientLogger(BlobAsyncClientBase.class);
-    private static final Duration TIMEOUT_VALUE = Duration.ofSeconds(60);
+    private static final Set<OpenOption> DEFAULT_OPEN_OPTIONS_SET = Collections.unmodifiableSet(new HashSet<>(
+        Arrays.asList(StandardOpenOption.CREATE_NEW, StandardOpenOption.READ, StandardOpenOption.WRITE)));
 
     /**
      * Backing REST client for the blob client.
@@ -226,8 +227,11 @@ public class BlobAsyncClientBase {
         String accountName, String containerName, String blobName, String snapshot, CpkInfo customerProvidedKey,
         EncryptionScope encryptionScope, String versionId) {
         if (snapshot != null && versionId != null) {
-            throw logger.logExceptionAsError(
+            throw LOGGER.logExceptionAsError(
                 new IllegalArgumentException("'snapshot' and 'versionId' cannot be used at the same time."));
+        }
+        if (blobName == null) {
+            throw LOGGER.logExceptionAsError(new NullPointerException("'blobName' can not be set to null."));
         }
         this.azureBlobStorage = new AzureBlobStorageImplBuilder()
             .pipeline(pipeline)
@@ -238,7 +242,7 @@ public class BlobAsyncClientBase {
 
         this.accountName = accountName;
         this.containerName = containerName;
-        this.blobName = Utility.urlDecode(blobName);
+        this.blobName = blobName;
         this.snapshot = snapshot;
         this.customerProvidedKey = customerProvidedKey;
         this.encryptionScope = encryptionScope;
@@ -248,7 +252,7 @@ public class BlobAsyncClientBase {
         try {
             URI.create(getBlobUrl());
         } catch (IllegalArgumentException ex) {
-            throw logger.logExceptionAsError(ex);
+            throw LOGGER.logExceptionAsError(ex);
         }
     }
 
@@ -410,7 +414,7 @@ public class BlobAsyncClientBase {
      * @return The decoded name of the blob.
      */
     public final String getBlobName() {
-        return blobName; // The blob name is decoded when the client is constructor
+        return blobName;
     }
 
     /**
@@ -491,11 +495,7 @@ public class BlobAsyncClientBase {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Boolean> exists() {
-        try {
-            return existsWithResponse().flatMap(FluxUtil::toMono);
-        } catch (RuntimeException ex) {
-            return monoError(logger, ex);
-        }
+        return existsWithResponse().flatMap(FluxUtil::toMono);
     }
 
     /**
@@ -516,27 +516,26 @@ public class BlobAsyncClientBase {
         try {
             return withContext(this::existsWithResponse);
         } catch (RuntimeException ex) {
-            return monoError(logger, ex);
+            return monoError(LOGGER, ex);
         }
     }
 
     Mono<Response<Boolean>> existsWithResponse(Context context) {
-        return this.getPropertiesWithResponse(null, context)
+        return this.getPropertiesWithResponseNoHeaders(context)
             .map(cp -> (Response<Boolean>) new SimpleResponse<>(cp, true))
-            .onErrorResume(t -> t instanceof BlobStorageException
-                    && BlobErrorCode.BLOB_USES_CUSTOMER_SPECIFIED_ENCRYPTION
-                    .equals(((BlobStorageException) t).getErrorCode()),
-                t -> {
-                    HttpResponse response = ((BlobStorageException) t).getResponse();
+            .onErrorResume(BlobStorageException.class, e -> {
+                if (BlobErrorCode.BLOB_USES_CUSTOMER_SPECIFIED_ENCRYPTION.equals(e.getErrorCode())) {
+                    HttpResponse response = e.getResponse();
                     return Mono.just(new SimpleResponse<>(response.getRequest(), response.getStatusCode(),
                         response.getHeaders(), true));
-                })
-            .onErrorResume(t -> t instanceof BlobStorageException && ((BlobStorageException) t).getStatusCode() == 404,
-                t -> {
-                    HttpResponse response = ((BlobStorageException) t).getResponse();
+                } else if (e.getStatusCode() == 404) {
+                    HttpResponse response = e.getResponse();
                     return Mono.just(new SimpleResponse<>(response.getRequest(), response.getStatusCode(),
                         response.getHeaders(), false));
-                });
+                } else {
+                    return Mono.error(e);
+                }
+            });
     }
 
     /**
@@ -619,10 +618,14 @@ public class BlobAsyncClientBase {
     public PollerFlux<BlobCopyInfo, Void> beginCopy(String sourceUrl, Map<String, String> metadata, AccessTier tier,
         RehydratePriority priority, RequestConditions sourceModifiedRequestConditions,
         BlobRequestConditions destRequestConditions, Duration pollInterval) {
-        return this.beginCopy(new BlobBeginCopyOptions(sourceUrl).setMetadata(metadata).setTier(tier)
-            .setRehydratePriority(priority).setSourceRequestConditions(
-                ModelHelper.populateBlobSourceRequestConditions(sourceModifiedRequestConditions))
-            .setDestinationRequestConditions(destRequestConditions).setPollInterval(pollInterval));
+        try {
+            return this.beginCopy(new BlobBeginCopyOptions(sourceUrl).setMetadata(metadata).setTier(tier)
+                .setRehydratePriority(priority).setSourceRequestConditions(
+                    ModelHelper.populateBlobSourceRequestConditions(sourceModifiedRequestConditions))
+                .setDestinationRequestConditions(destRequestConditions).setPollInterval(pollInterval));
+        } catch (RuntimeException ex) {
+            return PollerFlux.error(LOGGER.logExceptionAsError(ex));
+        }
     }
 
     /**
@@ -714,25 +717,25 @@ public class BlobAsyncClientBase {
                         sourceModifiedCondition, destinationRequestConditions, immutabilityPolicy,
                         options.isLegalHold());
                 } catch (RuntimeException ex) {
-                    return monoError(logger, ex);
+                    return monoError(LOGGER, ex);
                 }
             },
             (pollingContext) -> {
                 try {
                     return onPoll(pollingContext.getLatestResponse());
                 } catch (RuntimeException ex) {
-                    return monoError(logger, ex);
+                    return monoError(LOGGER, ex);
                 }
             },
             (pollingContext, firstResponse) -> {
                 if (firstResponse == null || firstResponse.getValue() == null) {
-                    return Mono.error(logger.logExceptionAsError(
+                    return Mono.error(LOGGER.logExceptionAsError(
                         new IllegalArgumentException("Cannot cancel a poll response that never started.")));
                 }
                 final String copyIdentifier = firstResponse.getValue().getCopyId();
 
                 if (!CoreUtils.isNullOrEmpty(copyIdentifier)) {
-                    logger.info("Cancelling copy operation for copy id: {}", copyIdentifier);
+                    LOGGER.info("Cancelling copy operation for copy id: {}", copyIdentifier);
 
                     return abortCopyFromUrl(copyIdentifier).thenReturn(firstResponse.getValue());
                 }
@@ -750,19 +753,18 @@ public class BlobAsyncClientBase {
         try {
             new URL(sourceUrl);
         } catch (MalformedURLException ex) {
-            throw logger.logExceptionAsError(new IllegalArgumentException("'sourceUrl' is not a valid url.", ex));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException("'sourceUrl' is not a valid url.", ex));
         }
 
-        return withContext(
-            context -> azureBlobStorage.getBlobs().startCopyFromURLWithResponseAsync(containerName, blobName, sourceUrl, null, metadata,
-                tier, priority, sourceModifiedRequestConditions.getIfModifiedSince(),
-                sourceModifiedRequestConditions.getIfUnmodifiedSince(), sourceModifiedRequestConditions.getIfMatch(),
-                sourceModifiedRequestConditions.getIfNoneMatch(), sourceModifiedRequestConditions.getTagsConditions(),
-                destinationRequestConditions.getIfModifiedSince(), destinationRequestConditions.getIfUnmodifiedSince(),
-                destinationRequestConditions.getIfMatch(), destinationRequestConditions.getIfNoneMatch(),
-                destinationRequestConditions.getTagsConditions(), destinationRequestConditions.getLeaseId(), null,
-                tagsToString(tags), sealBlob, immutabilityPolicy.getExpiryTime(), immutabilityPolicy.getPolicyMode(),
-                legalHold, context))
+        return withContext(context -> azureBlobStorage.getBlobs().startCopyFromURLWithResponseAsync(containerName,
+            blobName, sourceUrl, null, metadata, tier, priority, sourceModifiedRequestConditions.getIfModifiedSince(),
+            sourceModifiedRequestConditions.getIfUnmodifiedSince(), sourceModifiedRequestConditions.getIfMatch(),
+            sourceModifiedRequestConditions.getIfNoneMatch(), sourceModifiedRequestConditions.getTagsConditions(),
+            destinationRequestConditions.getIfModifiedSince(), destinationRequestConditions.getIfUnmodifiedSince(),
+            destinationRequestConditions.getIfMatch(), destinationRequestConditions.getIfNoneMatch(),
+            destinationRequestConditions.getTagsConditions(), destinationRequestConditions.getLeaseId(), null,
+            tagsToString(tags), sealBlob, immutabilityPolicy.getExpiryTime(), immutabilityPolicy.getPolicyMode(),
+            legalHold, context))
             .map(response -> {
                 final BlobsStartCopyFromURLHeaders headers = response.getDeserializedHeaders();
 
@@ -784,7 +786,7 @@ public class BlobAsyncClientBase {
                 sb.append(URLEncoder.encode(entry.getValue(), Charset.defaultCharset().toString()));
                 sb.append("&");
             } catch (UnsupportedEncodingException e) {
-                throw logger.logExceptionAsError(new IllegalStateException(e));
+                throw LOGGER.logExceptionAsError(new IllegalStateException(e));
             }
         }
 
@@ -800,7 +802,7 @@ public class BlobAsyncClientBase {
 
         final BlobCopyInfo lastInfo = pollResponse.getValue();
         if (lastInfo == null) {
-            logger.warning("BlobCopyInfo does not exist. Activation operation failed.");
+            LOGGER.warning("BlobCopyInfo does not exist. Activation operation failed.");
             return Mono.just(new PollResponse<>(
                 LongRunningOperationStatus.fromString("COPY_START_FAILED", true), null));
         }
@@ -826,7 +828,7 @@ public class BlobAsyncClientBase {
                     operationStatus = LongRunningOperationStatus.IN_PROGRESS;
                     break;
                 default:
-                    throw logger.logExceptionAsError(new IllegalArgumentException(
+                    throw LOGGER.logExceptionAsError(new IllegalArgumentException(
                         "CopyStatusType is not supported. Status: " + status));
             }
 
@@ -857,11 +859,7 @@ public class BlobAsyncClientBase {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Void> abortCopyFromUrl(String copyId) {
-        try {
-            return abortCopyFromUrlWithResponse(copyId, null).flatMap(FluxUtil::toMono);
-        } catch (RuntimeException ex) {
-            return monoError(logger, ex);
-        }
+        return abortCopyFromUrlWithResponse(copyId, null).flatMap(FluxUtil::toMono);
     }
 
     /**
@@ -891,14 +889,13 @@ public class BlobAsyncClientBase {
         try {
             return withContext(context -> abortCopyFromUrlWithResponse(copyId, leaseId, context));
         } catch (RuntimeException ex) {
-            return monoError(logger, ex);
+            return monoError(LOGGER, ex);
         }
     }
 
     Mono<Response<Void>> abortCopyFromUrlWithResponse(String copyId, String leaseId, Context context) {
-        return this.azureBlobStorage.getBlobs().abortCopyFromURLWithResponseAsync(
-            containerName, blobName, copyId, null, leaseId, null, context)
-            .map(response -> new SimpleResponse<>(response, null));
+        return this.azureBlobStorage.getBlobs().abortCopyFromURLNoCustomHeadersWithResponseAsync(
+            containerName, blobName, copyId, null, leaseId, null, context);
     }
 
     /**
@@ -919,15 +916,11 @@ public class BlobAsyncClientBase {
      * <a href="https://docs.microsoft.com/rest/api/storageservices/copy-blob-from-url">Azure Docs</a></p>
      *
      * @param copySource The source URL to copy from.
-     * @return A reactive response containing the copy ID for the long running operation.
+     * @return A reactive response containing the copy ID for the long-running operation.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<String> copyFromUrl(String copySource) {
-        try {
-            return copyFromUrlWithResponse(copySource, null, null, null, null).flatMap(FluxUtil::toMono);
-        } catch (RuntimeException ex) {
-            return monoError(logger, ex);
-        }
+        return copyFromUrlWithResponse(copySource, null, null, null, null).flatMap(FluxUtil::toMono);
     }
 
     /**
@@ -962,15 +955,19 @@ public class BlobAsyncClientBase {
      * related to when the blob was changed relative to the given request. The request will fail if the specified
      * condition is not satisfied.
      * @param destRequestConditions {@link BlobRequestConditions} against the destination.
-     * @return A reactive response containing the copy ID for the long running operation.
+     * @return A reactive response containing the copy ID for the long-running operation.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<String>> copyFromUrlWithResponse(String copySource, Map<String, String> metadata,
         AccessTier tier, RequestConditions sourceModifiedRequestConditions,
         BlobRequestConditions destRequestConditions) {
-        return this.copyFromUrlWithResponse(new BlobCopyFromUrlOptions(copySource).setMetadata(metadata)
-            .setTier(tier).setSourceRequestConditions(sourceModifiedRequestConditions)
-            .setDestinationRequestConditions(destRequestConditions));
+        try {
+            return this.copyFromUrlWithResponse(new BlobCopyFromUrlOptions(copySource).setMetadata(metadata)
+                .setTier(tier).setSourceRequestConditions(sourceModifiedRequestConditions)
+                .setDestinationRequestConditions(destRequestConditions));
+        } catch (RuntimeException ex) {
+            return monoError(LOGGER, ex);
+        }
     }
 
     /**
@@ -1000,14 +997,14 @@ public class BlobAsyncClientBase {
      * <a href="https://docs.microsoft.com/rest/api/storageservices/copy-blob-from-url">Azure Docs</a></p>
      *
      * @param options {@link BlobCopyFromUrlOptions}
-     * @return A reactive response containing the copy ID for the long running operation.
+     * @return A reactive response containing the copy ID for the long-running operation.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<String>> copyFromUrlWithResponse(BlobCopyFromUrlOptions options) {
         try {
             return withContext(context -> copyFromUrlWithResponse(options, context));
         } catch (RuntimeException ex) {
-            return monoError(logger, ex);
+            return monoError(LOGGER, ex);
         }
     }
 
@@ -1023,7 +1020,7 @@ public class BlobAsyncClientBase {
         try {
             new URL(options.getCopySource());
         } catch (MalformedURLException ex) {
-            throw logger.logExceptionAsError(new IllegalArgumentException("'copySource' is not a valid url."));
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException("'copySource' is not a valid url.", ex));
         }
         String sourceAuth = options.getSourceAuthorization() == null
             ? null : options.getSourceAuthorization().toString();
@@ -1037,7 +1034,7 @@ public class BlobAsyncClientBase {
             destRequestConditions.getIfNoneMatch(), destRequestConditions.getTagsConditions(),
             destRequestConditions.getLeaseId(), null, null,
             tagsToString(options.getTags()), immutabilityPolicy.getExpiryTime(), immutabilityPolicy.getPolicyMode(),
-            options.hasLegalHold(), sourceAuth, this.encryptionScope, context)
+            options.hasLegalHold(), sourceAuth, options.getCopySourceTagsMode(), this.encryptionScope, context)
             .map(rb -> new SimpleResponse<>(rb, rb.getDeserializedHeaders().getXMsCopyId()));
     }
 
@@ -1066,8 +1063,10 @@ public class BlobAsyncClientBase {
      * <p>This method will be deprecated in the future. Use {@link #downloadStream()} instead.
      *
      * @return A reactive response containing the blob data.
+     * @deprecated use {@link #downloadStream()} instead.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
+    @Deprecated
     public Flux<ByteBuffer> download() {
         return downloadStream();
     }
@@ -1098,12 +1097,7 @@ public class BlobAsyncClientBase {
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public Flux<ByteBuffer> downloadStream() {
-        try {
-            return downloadWithResponse(null, null, null, false)
-                .flatMapMany(BlobDownloadAsyncResponse::getValue);
-        } catch (RuntimeException ex) {
-            return fluxError(logger, ex);
-        }
+        return downloadWithResponse(null, null, null, false).flatMapMany(BlobDownloadAsyncResponse::getValue);
     }
 
     /**
@@ -1123,19 +1117,15 @@ public class BlobAsyncClientBase {
      * <p>For more information, see the
      * <a href="https://docs.microsoft.com/rest/api/storageservices/get-blob">Azure Docs</a></p>
      *
-     * <p>This method supports downloads up to 2GB of data.
-     * Use {@link #downloadStream()} to download larger blobs.</p>
+     * <p>This method supports downloads up to 2GB of data. Content will be buffered in memory. If the blob is larger,
+     * use {@link #downloadStream()} to download larger blobs.</p>
      *
      * @return A reactive response containing the blob data.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<BinaryData> downloadContent() {
-        try {
-            return downloadWithResponse(null, null, null, false)
-                .flatMap(response -> BinaryData.fromFlux(response.getValue()));
-        } catch (RuntimeException ex) {
-            return monoError(logger, ex);
-        }
+        return downloadWithResponse(null, null, null, false)
+            .flatMap(response -> BinaryData.fromFlux(response.getValue()));
     }
 
     /**
@@ -1173,8 +1163,10 @@ public class BlobAsyncClientBase {
      * @param requestConditions {@link BlobRequestConditions}
      * @param getRangeContentMd5 Whether the contentMD5 for the specified blob range should be returned.
      * @return A reactive response containing the blob data.
+     * @deprecated use {@link #downloadStreamWithResponse(BlobRange, DownloadRetryOptions, BlobRequestConditions, boolean)} instead.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
+    @Deprecated
     public Mono<BlobDownloadAsyncResponse> downloadWithResponse(BlobRange range, DownloadRetryOptions options,
         BlobRequestConditions requestConditions, boolean getRangeContentMd5) {
         return downloadStreamWithResponse(range, options, requestConditions, getRangeContentMd5);
@@ -1218,10 +1210,9 @@ public class BlobAsyncClientBase {
         BlobRequestConditions requestConditions, boolean getRangeContentMd5) {
         try {
             return withContext(context ->
-                downloadStreamWithResponse(range, options, requestConditions, getRangeContentMd5,
-                    context));
+                downloadStreamWithResponse(range, options, requestConditions, getRangeContentMd5, context));
         } catch (RuntimeException ex) {
-            return monoError(logger, ex);
+            return monoError(LOGGER, ex);
         }
     }
 
@@ -1245,8 +1236,8 @@ public class BlobAsyncClientBase {
      * <p>For more information, see the
      * <a href="https://docs.microsoft.com/rest/api/storageservices/get-blob">Azure Docs</a></p>
      *
-     * <p>This method supports downloads up to 2GB of data.
-     * Use {@link #downloadStreamWithResponse(BlobRange, DownloadRetryOptions, BlobRequestConditions, boolean)}
+     * <p>This method supports downloads up to 2GB of data. Content will be buffered in memory. If the blob is larger,
+     * use {@link #downloadStreamWithResponse(BlobRange, DownloadRetryOptions, BlobRequestConditions, boolean)}
      * to download larger blobs.</p>
      *
      * @param options {@link DownloadRetryOptions}
@@ -1258,19 +1249,12 @@ public class BlobAsyncClientBase {
         DownloadRetryOptions options,
         BlobRequestConditions requestConditions) {
         try {
-            return withContext(context ->
-                downloadStreamWithResponse(null, options, requestConditions, false,
-                    context)
-                    .flatMap(r ->
-                        BinaryData.fromFlux(r.getValue())
-                        .map(data ->
-                            new BlobDownloadContentAsyncResponse(
-                                r.getRequest(), r.getStatusCode(),
-                                r.getHeaders(), data,
-                                r.getDeserializedHeaders())
-                        )));
+            return withContext(context -> downloadStreamWithResponse(null, options, requestConditions, false, context)
+                .flatMap(r -> BinaryData.fromFlux(r.getValue())
+                    .map(data -> new BlobDownloadContentAsyncResponse(r.getRequest(), r.getStatusCode(), r.getHeaders(),
+                        data, r.getDeserializedHeaders()))));
         } catch (RuntimeException ex) {
-            return monoError(logger, ex);
+            return monoError(LOGGER, ex);
         }
     }
 
@@ -1282,70 +1266,70 @@ public class BlobAsyncClientBase {
             requestConditions == null ? new BlobRequestConditions() : requestConditions;
         DownloadRetryOptions finalOptions = (options == null) ? new DownloadRetryOptions() : options;
 
-        return downloadRange(finalRange, finalRequestConditions, finalRequestConditions.getIfMatch(), getMD5, context)
+        // The first range should eagerly convert headers as they'll be used to create response types.
+        Context firstRangeContext = context == null ? new Context("azure-eagerly-convert-headers", true)
+            : context.addData("azure-eagerly-convert-headers", true);
+
+        return downloadRange(finalRange, finalRequestConditions, finalRequestConditions.getIfMatch(), getMD5,
+            firstRangeContext)
             .map(response -> {
-                String eTag = ModelHelper.getETag(response.getHeaders());
-                BlobsDownloadHeaders blobsDownloadHeaders =
-                    ModelHelper.transformBlobDownloadHeaders(response.getHeaders());
+                BlobsDownloadHeaders blobsDownloadHeaders = new BlobsDownloadHeaders(response.getHeaders());
+                String eTag = blobsDownloadHeaders.getETag();
                 BlobDownloadHeaders blobDownloadHeaders = ModelHelper.populateBlobDownloadHeaders(
                     blobsDownloadHeaders, ModelHelper.getErrorCode(response.getHeaders()));
 
                 /*
-                    If the customer did not specify a count, they are reading to the end of the blob. Extract this value
-                    from the response for better book keeping towards the end.
-                */
+                 * If the customer did not specify a count, they are reading to the end of the blob. Extract this value
+                 * from the response for better book-keeping towards the end.
+                 */
                 long finalCount;
+                long initialOffset = finalRange.getOffset();
                 if (finalRange.getCount() == null) {
                     long blobLength = ModelHelper.getBlobLength(blobDownloadHeaders);
-                    finalCount = blobLength - finalRange.getOffset();
+                    finalCount = blobLength - initialOffset;
                 } else {
                     finalCount = finalRange.getCount();
                 }
 
-                Flux<ByteBuffer> bufferFlux  = FluxUtil.createRetriableDownloadFlux(
-                    () -> response.getValue().timeout(TIMEOUT_VALUE),
-                    (throwable, offset) -> {
-                        if (!(throwable instanceof IOException || throwable instanceof TimeoutException)) {
-                            return Flux.error(throwable);
-                        }
+                // The resume function takes throwable and offset at the destination.
+                // I.e. offset is relative to the starting point.
+                BiFunction<Throwable, Long, Mono<StreamResponse>> onDownloadErrorResume = (throwable, offset) -> {
+                    if (!(throwable instanceof IOException || throwable instanceof TimeoutException)) {
+                        return Mono.error(throwable);
+                    }
 
-                        long newCount = finalCount - (offset - finalRange.getOffset());
+                    long newCount = finalCount - offset;
 
-                        /*
-                         It is possible that the network stream will throw an error after emitting all data but before
-                         completing. Issuing a retry at this stage would leave the download in a bad state with incorrect count
-                         and offset values. Because we have read the intended amount of data, we can ignore the error at the end
-                         of the stream.
-                         */
-                        if (newCount == 0) {
-                            logger.warning("Exception encountered in ReliableDownload after all data read from the network but "
-                                + "but before stream signaled completion. Returning success as all data was downloaded. "
-                                + "Exception message: " + throwable.getMessage());
-                            return Flux.empty();
-                        }
+                    /*
+                     * It's possible that the network stream will throw an error after emitting all data but before
+                     * completing. Issuing a retry at this stage would leave the download in a bad state with
+                     * incorrect count and offset values. Because we have read the intended amount of data, we can
+                     * ignore the error at the end of the stream.
+                     */
+                    if (newCount == 0) {
+                        LOGGER.warning("Exception encountered in ReliableDownload after all data read from the network "
+                            + "but before stream signaled completion. Returning success as all data was downloaded. "
+                            + "Exception message: " + throwable.getMessage());
+                        return Mono.empty();
+                    }
 
-                        try {
-                            return downloadRange(
-                                new BlobRange(offset, newCount), finalRequestConditions, eTag, getMD5, context)
-                                .flatMapMany(r -> r.getValue().timeout(TIMEOUT_VALUE));
-                        } catch (Exception e) {
-                            return Flux.error(e);
-                        }
-                    },
-                    finalOptions.getMaxRetryRequests(),
-                    finalRange.getOffset()
-                ).switchIfEmpty(Flux.defer(() -> Flux.just(ByteBuffer.wrap(new byte[0]))));
+                    try {
+                        return downloadRange(
+                            new BlobRange(initialOffset + offset, newCount), finalRequestConditions, eTag, getMD5, context);
+                    } catch (Exception e) {
+                        return Mono.error(e);
+                    }
+                };
 
-                return new BlobDownloadAsyncResponse(response.getRequest(), response.getStatusCode(),
-                    response.getHeaders(), bufferFlux, blobDownloadHeaders);
+                return BlobDownloadAsyncResponseConstructorProxy.create(response, onDownloadErrorResume, finalOptions);
             });
     }
 
-    private Mono<StreamResponse> downloadRange(BlobRange range, BlobRequestConditions requestConditions,
-        String eTag, Boolean getMD5, Context context) {
-        return azureBlobStorage.getBlobs().downloadWithResponseAsync(containerName, blobName, snapshot, versionId, null,
-            range.toHeaderValue(), requestConditions.getLeaseId(), getMD5, null, requestConditions.getIfModifiedSince(),
-            requestConditions.getIfUnmodifiedSince(), eTag,
+    private Mono<StreamResponse> downloadRange(BlobRange range, BlobRequestConditions requestConditions, String eTag,
+        Boolean getMD5, Context context) {
+        return azureBlobStorage.getBlobs().downloadNoCustomHeadersWithResponseAsync(containerName, blobName, snapshot,
+            versionId, null, range.toHeaderValue(), requestConditions.getLeaseId(), getMD5, null,
+            requestConditions.getIfModifiedSince(), requestConditions.getIfUnmodifiedSince(), eTag,
             requestConditions.getIfNoneMatch(), requestConditions.getTagsConditions(), null,
             customerProvidedKey, context);
     }
@@ -1394,26 +1378,22 @@ public class BlobAsyncClientBase {
      * <a href="https://docs.microsoft.com/rest/api/storageservices/get-blob">Azure Docs</a></p>
      *
      * @param filePath A {@link String} representing the filePath where the downloaded data will be written.
-     * @param overwrite Whether or not to overwrite the file, should the file exist.
+     * @param overwrite Whether to overwrite the file, should the file exist.
      * @return A reactive response containing the blob properties and metadata.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<BlobProperties> downloadToFile(String filePath, boolean overwrite) {
-        try {
-            Set<OpenOption> openOptions = null;
-            if (overwrite) {
-                openOptions = new HashSet<>();
-                openOptions.add(StandardOpenOption.CREATE);
-                openOptions.add(StandardOpenOption.TRUNCATE_EXISTING); // If the file already exists and it is opened
-                // for WRITE access, then its length is truncated to 0.
-                openOptions.add(StandardOpenOption.READ);
-                openOptions.add(StandardOpenOption.WRITE);
-            }
-            return downloadToFileWithResponse(filePath, null, null, null, null, false, openOptions)
-                .flatMap(FluxUtil::toMono);
-        } catch (RuntimeException ex) {
-            return monoError(logger, ex);
+        Set<OpenOption> openOptions = null;
+        if (overwrite) {
+            openOptions = new HashSet<>();
+            openOptions.add(StandardOpenOption.CREATE);
+            openOptions.add(StandardOpenOption.TRUNCATE_EXISTING); // If the file already exists and it is opened
+            // for WRITE access, then its length is truncated to 0.
+            openOptions.add(StandardOpenOption.READ);
+            openOptions.add(StandardOpenOption.WRITE);
         }
+        return downloadToFileWithResponse(filePath, null, null, null, null, false, openOptions)
+            .flatMap(FluxUtil::toMono);
     }
 
     /**
@@ -1505,7 +1485,7 @@ public class BlobAsyncClientBase {
                         .setDownloadRetryOptions(options).setRequestConditions(requestConditions)
                         .setRetrieveContentRangeMd5(rangeGetContentMd5).setOpenOptions(openOptions), context));
         } catch (RuntimeException ex) {
-            return monoError(logger, ex);
+            return monoError(LOGGER, ex);
         }
     }
 
@@ -1542,7 +1522,7 @@ public class BlobAsyncClientBase {
         try {
             return withContext(context -> downloadToFileWithResponse(options, context));
         } catch (RuntimeException ex) {
-            return monoError(logger, ex);
+            return monoError(LOGGER, ex);
         }
     }
 
@@ -1558,10 +1538,7 @@ public class BlobAsyncClientBase {
         // Default behavior is not to overwrite
         Set<OpenOption> openOptions = options.getOpenOptions();
         if (openOptions == null) {
-            openOptions = new HashSet<>();
-            openOptions.add(StandardOpenOption.CREATE_NEW);
-            openOptions.add(StandardOpenOption.WRITE);
-            openOptions.add(StandardOpenOption.READ);
+            openOptions = DEFAULT_OPEN_OPTIONS_SET;
         }
 
         AsynchronousFileChannel channel = downloadToFileResourceSupplier(options.getFilePath(), openOptions);
@@ -1575,7 +1552,7 @@ public class BlobAsyncClientBase {
         try {
             return AsynchronousFileChannel.open(Paths.get(filePath), openOptions, null);
         } catch (IOException e) {
-            throw logger.logExceptionAsError(new UncheckedIOException(e));
+            throw LOGGER.logExceptionAsError(new UncheckedIOException(e));
         }
     }
 
@@ -1584,8 +1561,9 @@ public class BlobAsyncClientBase {
         DownloadRetryOptions downloadRetryOptions, BlobRequestConditions requestConditions, boolean rangeGetContentMd5,
         Context context) {
         // See ProgressReporter for an explanation on why this lock is necessary and why we use AtomicLong.
-        Lock progressLock = new ReentrantLock();
-        AtomicLong totalProgress = new AtomicLong(0);
+        ProgressListener progressReceiver = finalParallelTransferOptions.getProgressListener();
+        ProgressReporter progressReporter = progressReceiver == null ? null : ProgressReporter.withProgressListener(
+            progressReceiver);
 
         /*
          * Downloads the first chunk and gets the size of the data and etag if not specified by the user.
@@ -1611,7 +1589,8 @@ public class BlobAsyncClientBase {
                     .flatMap(chunkNum -> ChunkedDownloadUtils.downloadChunk(chunkNum, initialResponse,
                         finalRange, finalParallelTransferOptions, finalConditions, newCount, downloadFunc,
                         response -> writeBodyToFile(response, file, chunkNum, finalParallelTransferOptions,
-                            progressLock, totalProgress).flux()), finalParallelTransferOptions.getMaxConcurrency())
+                            progressReporter == null ? null : progressReporter.createChild()).flux()),
+                        finalParallelTransferOptions.getMaxConcurrency())
 
                     // Only the first download call returns a value.
                     .then(Mono.just(ModelHelper.buildBlobPropertiesResponse(initialResponse)));
@@ -1619,19 +1598,11 @@ public class BlobAsyncClientBase {
     }
 
     private static Mono<Void> writeBodyToFile(BlobDownloadAsyncResponse response, AsynchronousFileChannel file,
-        long chunkNum, com.azure.storage.common.ParallelTransferOptions finalParallelTransferOptions, Lock progressLock,
-        AtomicLong totalProgress) {
+        long chunkNum, com.azure.storage.common.ParallelTransferOptions finalParallelTransferOptions,
+        ProgressReporter progressReporter) {
 
-        // Extract the body.
-        Flux<ByteBuffer> data = response.getValue();
-
-        // Report progress as necessary.
-        data = ProgressReporter.addParallelProgressReporting(data,
-            ModelHelper.wrapCommonReceiver(finalParallelTransferOptions.getProgressReceiver()), progressLock,
-            totalProgress);
-
-        // Write to the file.
-        return FluxUtil.writeFile(data, file, chunkNum * finalParallelTransferOptions.getBlockSizeLong());
+        long position = chunkNum * finalParallelTransferOptions.getBlockSizeLong();
+        return response.writeValueToAsync(IOUtils.toAsynchronousByteChannel(file, position), progressReporter);
     }
 
     private void downloadToFileCleanup(AsynchronousFileChannel channel, String filePath, SignalType signalType) {
@@ -1639,16 +1610,16 @@ public class BlobAsyncClientBase {
             channel.close();
             if (!signalType.equals(SignalType.ON_COMPLETE)) {
                 Files.deleteIfExists(Paths.get(filePath));
-                logger.verbose("Downloading to file failed. Cleaning up resources.");
+                LOGGER.verbose("Downloading to file failed. Cleaning up resources.");
             }
         } catch (IOException e) {
-            throw logger.logExceptionAsError(new UncheckedIOException(e));
+            throw LOGGER.logExceptionAsError(new UncheckedIOException(e));
         }
     }
 
     /**
      * Deletes the specified blob or snapshot. To delete a blob with its snapshots use
-     * {@link #deleteWithResponse(DeleteSnapshotsOptionType, BlobRequestConditions)} and set
+     * {@link #deleteIfExistsWithResponse(DeleteSnapshotsOptionType, BlobRequestConditions)} and set
      * {@code DeleteSnapshotsOptionType} to INCLUDE.
      *
      * <p><strong>Code Samples</strong></p>
@@ -1666,11 +1637,7 @@ public class BlobAsyncClientBase {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Void> delete() {
-        try {
-            return deleteWithResponse(null, null).flatMap(FluxUtil::toMono);
-        } catch (RuntimeException ex) {
-            return monoError(logger, ex);
-        }
+        return deleteWithResponse(null, null).flatMap(FluxUtil::toMono);
     }
 
     /**
@@ -1699,10 +1666,9 @@ public class BlobAsyncClientBase {
     public Mono<Response<Void>> deleteWithResponse(DeleteSnapshotsOptionType deleteBlobSnapshotOptions,
         BlobRequestConditions requestConditions) {
         try {
-            return withContext(context -> deleteWithResponse(deleteBlobSnapshotOptions,
-                requestConditions, context));
+            return withContext(context -> deleteWithResponse(deleteBlobSnapshotOptions, requestConditions, context));
         } catch (RuntimeException ex) {
-            return monoError(logger, ex);
+            return monoError(LOGGER, ex);
         }
     }
 
@@ -1710,11 +1676,94 @@ public class BlobAsyncClientBase {
         BlobRequestConditions requestConditions, Context context) {
         requestConditions = requestConditions == null ? new BlobRequestConditions() : requestConditions;
 
-        return this.azureBlobStorage.getBlobs().deleteWithResponseAsync(containerName, blobName, snapshot, versionId,
-            null, requestConditions.getLeaseId(), deleteBlobSnapshotOptions, requestConditions.getIfModifiedSince(),
-            requestConditions.getIfUnmodifiedSince(), requestConditions.getIfMatch(),
-            requestConditions.getIfNoneMatch(), requestConditions.getTagsConditions(), null, null, context)
-            .map(response -> new SimpleResponse<>(response, null));
+        return this.azureBlobStorage.getBlobs().deleteNoCustomHeadersWithResponseAsync(containerName, blobName,
+            snapshot, versionId, null, requestConditions.getLeaseId(), deleteBlobSnapshotOptions,
+            requestConditions.getIfModifiedSince(), requestConditions.getIfUnmodifiedSince(),
+            requestConditions.getIfMatch(), requestConditions.getIfNoneMatch(), requestConditions.getTagsConditions(),
+            null, null, context);
+    }
+
+    /**
+     * Deletes the specified blob or snapshot if it exists. To delete a blob with its snapshots use
+     * {@link #deleteWithResponse(DeleteSnapshotsOptionType, BlobRequestConditions)} and set
+     * {@code DeleteSnapshotsOptionType} to INCLUDE.
+     *
+     * <p><strong>Code Samples</strong></p>
+     *
+     * <!-- src_embed com.azure.storage.blob.specialized.BlobAsyncClientBase.deleteIfExists -->
+     * <pre>
+     * client.deleteIfExists&#40;&#41;.subscribe&#40;deleted -&gt; &#123;
+     *     if &#40;deleted&#41; &#123;
+     *         System.out.println&#40;&quot;Successfully deleted.&quot;&#41;;
+     *     &#125; else &#123;
+     *         System.out.println&#40;&quot;Does not exist.&quot;&#41;;
+     *     &#125;
+     * &#125;&#41;;
+     * </pre>
+     * <!-- end com.azure.storage.blob.specialized.BlobAsyncClientBase.deleteIfExists -->
+     *
+     * <p>For more information, see the
+     * <a href="https://docs.microsoft.com/rest/api/storageservices/delete-blob">Azure Docs</a></p>
+     *
+     * @return A reactive response signaling completion. {@code true} indicates that the blob was deleted.
+     * {@code false} indicates the blob does not exist at this location.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Mono<Boolean> deleteIfExists() {
+        return deleteIfExistsWithResponse(null, null).flatMap(FluxUtil::toMono);
+    }
+
+    /**
+     * Deletes the specified blob or snapshot if it exists. To delete a blob with its snapshots set {@code DeleteSnapshotsOptionType}
+     * to INCLUDE.
+     *
+     * <p><strong>Code Samples</strong></p>
+     *
+     * <!-- src_embed com.azure.storage.blob.specialized.BlobAsyncClientBase.deleteIfExistsWithResponse#DeleteSnapshotsOptionType-BlobRequestConditions -->
+     * <pre>
+     * client.deleteIfExistsWithResponse&#40;DeleteSnapshotsOptionType.INCLUDE, null&#41;.subscribe&#40;response -&gt; &#123;
+     *     if &#40;response.getStatusCode&#40;&#41; == 404&#41; &#123;
+     *         System.out.println&#40;&quot;Does not exist.&quot;&#41;;
+     *     &#125; else &#123;
+     *         System.out.println&#40;&quot;successfully deleted.&quot;&#41;;
+     *     &#125;
+     * &#125;&#41;;
+     * </pre>
+     * <!-- end com.azure.storage.blob.specialized.BlobAsyncClientBase.deleteIfExistsWithResponse#DeleteSnapshotsOptionType-BlobRequestConditions -->
+     *
+     * <p>For more information, see the
+     * <a href="https://docs.microsoft.com/rest/api/storageservices/delete-blob">Azure Docs</a></p>
+     *
+     * @param deleteBlobSnapshotOptions Specifies the behavior for deleting the snapshots on this blob. {@code Include}
+     * will delete the base blob and all snapshots. {@code Only} will delete only the snapshots. If a snapshot is being
+     * deleted, you must pass null.
+     * @param requestConditions {@link BlobRequestConditions}
+     * @return A reactive response signaling completion. If {@link Response}'s status code is 202, the base blob was
+     * successfully deleted. If status code is 404, the base blob does not exist.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Mono<Response<Boolean>> deleteIfExistsWithResponse(DeleteSnapshotsOptionType deleteBlobSnapshotOptions,
+        BlobRequestConditions requestConditions) {
+        try {
+            return withContext(context -> deleteIfExistsWithResponse(deleteBlobSnapshotOptions,
+                requestConditions, context));
+        } catch (RuntimeException ex) {
+            return monoError(LOGGER, ex);
+        }
+    }
+
+    Mono<Response<Boolean>> deleteIfExistsWithResponse(DeleteSnapshotsOptionType deleteBlobSnapshotOptions,
+        BlobRequestConditions requestConditions, Context context) {
+        requestConditions = requestConditions == null ? new BlobRequestConditions() : requestConditions;
+
+        return deleteWithResponse(deleteBlobSnapshotOptions, requestConditions, context)
+            .map(response -> (Response<Boolean>) new SimpleResponse<>(response, true))
+            .onErrorResume(t -> t instanceof BlobStorageException && ((BlobStorageException) t).getStatusCode() == 404,
+                t -> {
+                    HttpResponse response = ((BlobStorageException) t).getResponse();
+                    return Mono.just(new SimpleResponse<>(response.getRequest(), response.getStatusCode(),
+                        response.getHeaders(), false));
+                });
     }
 
     /**
@@ -1736,11 +1785,7 @@ public class BlobAsyncClientBase {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<BlobProperties> getProperties() {
-        try {
-            return getPropertiesWithResponse(null).flatMap(FluxUtil::toMono);
-        } catch (RuntimeException ex) {
-            return monoError(logger, ex);
-        }
+        return getPropertiesWithResponse(null).flatMap(FluxUtil::toMono);
     }
 
     /**
@@ -1769,7 +1814,7 @@ public class BlobAsyncClientBase {
         try {
             return withContext(context -> getPropertiesWithResponse(requestConditions, context));
         } catch (RuntimeException ex) {
-            return monoError(logger, ex);
+            return monoError(LOGGER, ex);
         }
     }
 
@@ -1777,14 +1822,20 @@ public class BlobAsyncClientBase {
         requestConditions = requestConditions == null ? new BlobRequestConditions() : requestConditions;
         context = context == null ? Context.NONE : context;
 
-        return this.azureBlobStorage.getBlobs().getPropertiesWithResponseAsync(
-            containerName, blobName, snapshot, versionId, null, requestConditions.getLeaseId(),
-            requestConditions.getIfModifiedSince(),
-            requestConditions.getIfUnmodifiedSince(), requestConditions.getIfMatch(),
-            requestConditions.getIfNoneMatch(), requestConditions.getTagsConditions(), null, customerProvidedKey,
-            context.addData(AZ_TRACING_NAMESPACE_KEY, STORAGE_TRACING_NAMESPACE_VALUE))
+        return this.azureBlobStorage.getBlobs().getPropertiesWithResponseAsync(containerName, blobName, snapshot,
+                versionId, null, requestConditions.getLeaseId(), requestConditions.getIfModifiedSince(),
+                requestConditions.getIfUnmodifiedSince(), requestConditions.getIfMatch(),
+                requestConditions.getIfNoneMatch(), requestConditions.getTagsConditions(), null, customerProvidedKey,
+                context)
             .map(rb -> new SimpleResponse<>(rb, BlobPropertiesConstructorProxy
                 .create(new BlobPropertiesInternalGetProperties(rb.getDeserializedHeaders()))));
+    }
+
+    Mono<Response<Void>> getPropertiesWithResponseNoHeaders(Context context) {
+        context = context == null ? Context.NONE : context;
+
+        return this.azureBlobStorage.getBlobs().getPropertiesNoCustomHeadersWithResponseAsync(containerName, blobName,
+            snapshot, versionId, null, null, null, null, null, null, null, null, customerProvidedKey, context);
     }
 
     /**
@@ -1809,11 +1860,7 @@ public class BlobAsyncClientBase {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Void> setHttpHeaders(BlobHttpHeaders headers) {
-        try {
-            return setHttpHeadersWithResponse(headers, null).flatMap(FluxUtil::toMono);
-        } catch (RuntimeException ex) {
-            return monoError(logger, ex);
-        }
+        return setHttpHeadersWithResponse(headers, null).flatMap(FluxUtil::toMono);
     }
 
     /**
@@ -1848,7 +1895,7 @@ public class BlobAsyncClientBase {
         try {
             return withContext(context -> setHttpHeadersWithResponse(headers, requestConditions, context));
         } catch (RuntimeException ex) {
-            return monoError(logger, ex);
+            return monoError(LOGGER, ex);
         }
     }
 
@@ -1856,11 +1903,10 @@ public class BlobAsyncClientBase {
         Context context) {
         requestConditions = requestConditions == null ? new BlobRequestConditions() : requestConditions;
 
-        return this.azureBlobStorage.getBlobs().setHttpHeadersWithResponseAsync(
-            containerName, blobName, null, requestConditions.getLeaseId(), requestConditions.getIfModifiedSince(),
+        return this.azureBlobStorage.getBlobs().setHttpHeadersNoCustomHeadersWithResponseAsync(containerName, blobName,
+            null, requestConditions.getLeaseId(), requestConditions.getIfModifiedSince(),
             requestConditions.getIfUnmodifiedSince(), requestConditions.getIfMatch(),
-            requestConditions.getIfNoneMatch(), requestConditions.getTagsConditions(), null, headers, context)
-            .map(response -> new SimpleResponse<>(response, null));
+            requestConditions.getIfNoneMatch(), requestConditions.getTagsConditions(), null, headers, context);
     }
 
     /**
@@ -1884,11 +1930,7 @@ public class BlobAsyncClientBase {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Void> setMetadata(Map<String, String> metadata) {
-        try {
-            return setMetadataWithResponse(metadata, null).flatMap(FluxUtil::toMono);
-        } catch (RuntimeException ex) {
-            return monoError(logger, ex);
-        }
+        return setMetadataWithResponse(metadata, null).flatMap(FluxUtil::toMono);
     }
 
     /**
@@ -1920,7 +1962,7 @@ public class BlobAsyncClientBase {
         try {
             return withContext(context -> setMetadataWithResponse(metadata, requestConditions, context));
         } catch (RuntimeException ex) {
-            return monoError(logger, ex);
+            return monoError(LOGGER, ex);
         }
     }
 
@@ -1929,12 +1971,11 @@ public class BlobAsyncClientBase {
         requestConditions = requestConditions == null ? new BlobRequestConditions() : requestConditions;
         context = context == null ? Context.NONE : context;
 
-        return this.azureBlobStorage.getBlobs().setMetadataWithResponseAsync(
-            containerName, blobName, null, metadata, requestConditions.getLeaseId(), requestConditions.getIfModifiedSince(),
+        return this.azureBlobStorage.getBlobs().setMetadataNoCustomHeadersWithResponseAsync(containerName, blobName,
+            null, metadata, requestConditions.getLeaseId(), requestConditions.getIfModifiedSince(),
             requestConditions.getIfUnmodifiedSince(), requestConditions.getIfMatch(),
             requestConditions.getIfNoneMatch(), requestConditions.getTagsConditions(), null, customerProvidedKey,
-            encryptionScope, context.addData(AZ_TRACING_NAMESPACE_KEY, STORAGE_TRACING_NAMESPACE_VALUE))
-            .map(response -> new SimpleResponse<>(response, null));
+            encryptionScope, context);
     }
 
     /**
@@ -1982,7 +2023,7 @@ public class BlobAsyncClientBase {
         try {
             return withContext(context -> getTagsWithResponse(options, context));
         } catch (RuntimeException ex) {
-            return monoError(logger, ex);
+            return monoError(LOGGER, ex);
         }
     }
 
@@ -2021,7 +2062,11 @@ public class BlobAsyncClientBase {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Void> setTags(Map<String, String> tags) {
-        return this.setTagsWithResponse(new BlobSetTagsOptions(tags)).flatMap(FluxUtil::toMono);
+        try {
+            return this.setTagsWithResponse(new BlobSetTagsOptions(tags)).flatMap(FluxUtil::toMono);
+        } catch (RuntimeException ex) {
+            return monoError(LOGGER, ex);
+        }
     }
 
     /**
@@ -2048,7 +2093,7 @@ public class BlobAsyncClientBase {
         try {
             return withContext(context -> setTagsWithResponse(options, context));
         } catch (RuntimeException ex) {
-            return monoError(logger, ex);
+            return monoError(LOGGER, ex);
         }
     }
 
@@ -2064,9 +2109,9 @@ public class BlobAsyncClientBase {
             }
         }
         BlobTags t = new BlobTags().setBlobTagSet(tagList);
-        return this.azureBlobStorage.getBlobs().setTagsWithResponseAsync(containerName, blobName, null, versionId, null, null, null,
-            requestConditions.getTagsConditions(), requestConditions.getLeaseId(), t, context)
-            .map(response -> new SimpleResponse<>(response, null));
+        return this.azureBlobStorage.getBlobs().setTagsNoCustomHeadersWithResponseAsync(containerName, blobName, null,
+            versionId, null, null, null, requestConditions.getTagsConditions(), requestConditions.getLeaseId(), t,
+            context);
     }
 
     /**
@@ -2090,11 +2135,7 @@ public class BlobAsyncClientBase {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<BlobAsyncClientBase> createSnapshot() {
-        try {
-            return createSnapshotWithResponse(null, null).flatMap(FluxUtil::toMono);
-        } catch (RuntimeException ex) {
-            return monoError(logger, ex);
-        }
+        return createSnapshotWithResponse(null, null).flatMap(FluxUtil::toMono);
     }
 
     /**
@@ -2127,7 +2168,7 @@ public class BlobAsyncClientBase {
         try {
             return withContext(context -> createSnapshotWithResponse(metadata, requestConditions, context));
         } catch (RuntimeException ex) {
-            return monoError(logger, ex);
+            return monoError(LOGGER, ex);
         }
     }
 
@@ -2166,11 +2207,7 @@ public class BlobAsyncClientBase {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Void> setAccessTier(AccessTier tier) {
-        try {
-            return setAccessTierWithResponse(tier, null, null).flatMap(FluxUtil::toMono);
-        } catch (RuntimeException ex) {
-            return monoError(logger, ex);
-        }
+        return setAccessTierWithResponse(tier, null, null).flatMap(FluxUtil::toMono);
     }
 
     /**
@@ -2201,10 +2238,10 @@ public class BlobAsyncClientBase {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<Void>> setAccessTierWithResponse(AccessTier tier, RehydratePriority priority, String leaseId) {
         try {
-            return withContext(context -> setTierWithResponse(new BlobSetAccessTierOptions(tier).setPriority(priority)
-                .setLeaseId(leaseId), context));
+            return setAccessTierWithResponse(new BlobSetAccessTierOptions(tier).setPriority(priority)
+                .setLeaseId(leaseId));
         } catch (RuntimeException ex) {
-            return monoError(logger, ex);
+            return monoError(LOGGER, ex);
         }
     }
 
@@ -2239,17 +2276,16 @@ public class BlobAsyncClientBase {
         try {
             return withContext(context -> setTierWithResponse(options, context));
         } catch (RuntimeException ex) {
-            return monoError(logger, ex);
+            return monoError(LOGGER, ex);
         }
     }
 
     Mono<Response<Void>> setTierWithResponse(BlobSetAccessTierOptions options, Context context) {
         StorageImplUtils.assertNotNull("options", options);
 
-        return this.azureBlobStorage.getBlobs().setTierWithResponseAsync(
-            containerName, blobName, options.getTier(), snapshot, versionId, null,
-            options.getPriority(), null, options.getLeaseId(), options.getTagsConditions(), context)
-            .map(response -> new SimpleResponse<>(response, null));
+        return this.azureBlobStorage.getBlobs().setTierNoCustomHeadersWithResponseAsync(containerName, blobName,
+            options.getTier(), snapshot, versionId, null, options.getPriority(), null, options.getLeaseId(),
+            options.getTagsConditions(), context);
     }
 
     /**
@@ -2270,11 +2306,7 @@ public class BlobAsyncClientBase {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Void> undelete() {
-        try {
-            return undeleteWithResponse().flatMap(FluxUtil::toMono);
-        } catch (RuntimeException ex) {
-            return monoError(logger, ex);
-        }
+        return undeleteWithResponse().flatMap(FluxUtil::toMono);
     }
 
     /**
@@ -2299,13 +2331,13 @@ public class BlobAsyncClientBase {
         try {
             return withContext(this::undeleteWithResponse);
         } catch (RuntimeException ex) {
-            return monoError(logger, ex);
+            return monoError(LOGGER, ex);
         }
     }
 
     Mono<Response<Void>> undeleteWithResponse(Context context) {
-        return this.azureBlobStorage.getBlobs().undeleteWithResponseAsync(containerName, blobName, null,
-            null, context).map(response -> new SimpleResponse<>(response, null));
+        return this.azureBlobStorage.getBlobs().undeleteNoCustomHeadersWithResponseAsync(containerName, blobName, null,
+            null, context);
     }
 
     /**
@@ -2327,11 +2359,7 @@ public class BlobAsyncClientBase {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<StorageAccountInfo> getAccountInfo() {
-        try {
-            return getAccountInfoWithResponse().flatMap(FluxUtil::toMono);
-        } catch (RuntimeException ex) {
-            return monoError(logger, ex);
-        }
+        return getAccountInfoWithResponse().flatMap(FluxUtil::toMono);
     }
 
     /**
@@ -2356,7 +2384,7 @@ public class BlobAsyncClientBase {
         try {
             return withContext(this::getAccountInfoWithResponse);
         } catch (RuntimeException ex) {
-            return monoError(logger, ex);
+            return monoError(LOGGER, ex);
         }
     }
 
@@ -2518,8 +2546,11 @@ public class BlobAsyncClientBase {
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public Flux<ByteBuffer> query(String expression) {
-        return queryWithResponse(new BlobQueryOptions(expression))
-            .flatMapMany(BlobQueryAsyncResponse::getValue);
+        try {
+            return queryWithResponse(new BlobQueryOptions(expression)).flatMapMany(BlobQueryAsyncResponse::getValue);
+        } catch (RuntimeException ex) {
+            return fluxError(LOGGER, ex);
+        }
     }
 
     /**
@@ -2574,7 +2605,7 @@ public class BlobAsyncClientBase {
         try {
             return withContext(context -> queryWithResponse(queryOptions, context));
         } catch (RuntimeException ex) {
-            return monoError(logger, ex);
+            return monoError(LOGGER, ex);
         }
     }
 
@@ -2584,9 +2615,9 @@ public class BlobAsyncClientBase {
             ? new BlobRequestConditions() : queryOptions.getRequestConditions();
 
         QuerySerialization in = BlobQueryReader.transformInputSerialization(queryOptions.getInputSerialization(),
-            logger);
+            LOGGER);
         QuerySerialization out = BlobQueryReader.transformOutputSerialization(queryOptions.getOutputSerialization(),
-            logger);
+            LOGGER);
 
         QueryRequest qr = new QueryRequest()
             .setExpression(queryOptions.getExpression())
@@ -2604,7 +2635,7 @@ public class BlobAsyncClientBase {
                 new BlobQueryReader(response.getValue(), queryOptions.getProgressConsumer(),
                     queryOptions.getErrorConsumer())
                     .read(),
-                ModelHelper.transformQueryHeaders(response.getHeaders())));
+                ModelHelper.transformQueryHeaders(response.getDeserializedHeaders(), response.getHeaders())));
     }
 
     /**
@@ -2629,11 +2660,7 @@ public class BlobAsyncClientBase {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<BlobImmutabilityPolicy> setImmutabilityPolicy(BlobImmutabilityPolicy immutabilityPolicy) {
-        try {
-            return setImmutabilityPolicyWithResponse(immutabilityPolicy, null).flatMap(FluxUtil::toMono);
-        } catch (RuntimeException ex) {
-            return monoError(logger, ex);
-        }
+        return setImmutabilityPolicyWithResponse(immutabilityPolicy, null).flatMap(FluxUtil::toMono);
     }
 
     /**
@@ -2666,7 +2693,7 @@ public class BlobAsyncClientBase {
             return withContext(context -> setImmutabilityPolicyWithResponse(immutabilityPolicy, requestConditions,
                 context));
         } catch (RuntimeException ex) {
-            return monoError(logger, ex);
+            return monoError(LOGGER, ex);
         }
     }
 
@@ -2676,7 +2703,7 @@ public class BlobAsyncClientBase {
         BlobImmutabilityPolicy finalImmutabilityPolicy = immutabilityPolicy == null ? new BlobImmutabilityPolicy()
             : immutabilityPolicy;
         if (BlobImmutabilityPolicyMode.MUTABLE.equals(finalImmutabilityPolicy.getPolicyMode())) {
-            throw logger.logExceptionAsError(new IllegalArgumentException(
+            throw LOGGER.logExceptionAsError(new IllegalArgumentException(
                 String.format("immutabilityPolicy.policyMode must be %s or %s",
                     BlobImmutabilityPolicyMode.LOCKED.toString(), BlobImmutabilityPolicyMode.UNLOCKED.toString())));
         }
@@ -2692,8 +2719,7 @@ public class BlobAsyncClientBase {
 
         return this.azureBlobStorage.getBlobs().setImmutabilityPolicyWithResponseAsync(containerName, blobName, null,
             null, finalRequestConditions.getIfUnmodifiedSince(), finalImmutabilityPolicy.getExpiryTime(),
-            finalImmutabilityPolicy.getPolicyMode(),
-            context.addData(AZ_TRACING_NAMESPACE_KEY, STORAGE_TRACING_NAMESPACE_VALUE))
+            finalImmutabilityPolicy.getPolicyMode(), context)
             .map(response -> {
                 BlobsSetImmutabilityPolicyHeaders headers = response.getDeserializedHeaders();
                 BlobImmutabilityPolicy responsePolicy = new BlobImmutabilityPolicy()
@@ -2721,11 +2747,7 @@ public class BlobAsyncClientBase {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Void> deleteImmutabilityPolicy() {
-        try {
-            return deleteImmutabilityPolicyWithResponse().flatMap(FluxUtil::toMono);
-        } catch (RuntimeException ex) {
-            return monoError(logger, ex);
-        }
+        return deleteImmutabilityPolicyWithResponse().flatMap(FluxUtil::toMono);
     }
 
     /**
@@ -2749,15 +2771,14 @@ public class BlobAsyncClientBase {
         try {
             return withContext(this::deleteImmutabilityPolicyWithResponse);
         } catch (RuntimeException ex) {
-            return monoError(logger, ex);
+            return monoError(LOGGER, ex);
         }
     }
 
     Mono<Response<Void>> deleteImmutabilityPolicyWithResponse(Context context) {
         context = context == null ? Context.NONE : context;
-        return this.azureBlobStorage.getBlobs().deleteImmutabilityPolicyWithResponseAsync(containerName, blobName,
-            null, null, context.addData(AZ_TRACING_NAMESPACE_KEY, STORAGE_TRACING_NAMESPACE_VALUE))
-            .map(response -> new SimpleResponse<>(response, null));
+        return this.azureBlobStorage.getBlobs()
+            .deleteImmutabilityPolicyNoCustomHeadersWithResponseAsync(containerName, blobName, null, null, context);
     }
 
     /**
@@ -2774,16 +2795,12 @@ public class BlobAsyncClientBase {
      * </pre>
      * <!-- end com.azure.storage.blob.specialized.BlobAsyncClientBase.setLegalHold#boolean -->
      *
-     * @param legalHold Whether or not you want a legal hold on the blob.
+     * @param legalHold Whether you want a legal hold on the blob.
      * @return A reactive response containing the legal hold result.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<BlobLegalHoldResult> setLegalHold(boolean legalHold) {
-        try {
-            return setLegalHoldWithResponse(legalHold).flatMap(FluxUtil::toMono);
-        } catch (RuntimeException ex) {
-            return monoError(logger, ex);
-        }
+        return setLegalHoldWithResponse(legalHold).flatMap(FluxUtil::toMono);
     }
 
     /**
@@ -2800,7 +2817,7 @@ public class BlobAsyncClientBase {
      * </pre>
      * <!-- end com.azure.storage.blob.specialized.BlobAsyncClientBase.setLegalHoldWithResponse#boolean -->
      *
-     * @param legalHold Whether or not you want a legal hold on the blob.
+     * @param legalHold Whether you want a legal hold on the blob.
      * @return A reactive response containing the legal hold result.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
@@ -2808,15 +2825,14 @@ public class BlobAsyncClientBase {
         try {
             return withContext(context -> setLegalHoldWithResponse(legalHold, context));
         } catch (RuntimeException ex) {
-            return monoError(logger, ex);
+            return monoError(LOGGER, ex);
         }
     }
 
     Mono<Response<BlobLegalHoldResult>> setLegalHoldWithResponse(boolean legalHold, Context context) {
         context = context == null ? Context.NONE : context;
         return this.azureBlobStorage.getBlobs().setLegalHoldWithResponseAsync(containerName, blobName,
-            legalHold, null, null,
-            context.addData(AZ_TRACING_NAMESPACE_KEY, STORAGE_TRACING_NAMESPACE_VALUE))
+            legalHold, null, null, context)
             .map(response -> new SimpleResponse<>(response,
                 new InternalBlobLegalHoldResult(response.getDeserializedHeaders().isXMsLegalHold())));
     }

@@ -5,19 +5,17 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
-/** Cross-Origin Resource Sharing (CORS) settings for the app. */
+/**
+ * Cross-Origin Resource Sharing (CORS) settings for the app.
+ */
 @Fluent
 public final class CorsSettings {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CorsSettings.class);
-
     /*
-     * Gets or sets the list of origins that should be allowed to make
-     * cross-origin
+     * Gets or sets the list of origins that should be allowed to make cross-origin
      * calls (for example: http://example.com:12345). Use "*" to allow all.
      */
     @JsonProperty(value = "allowedOrigins")
@@ -30,6 +28,12 @@ public final class CorsSettings {
      */
     @JsonProperty(value = "supportCredentials")
     private Boolean supportCredentials;
+
+    /**
+     * Creates an instance of CorsSettings class.
+     */
+    public CorsSettings() {
+    }
 
     /**
      * Get the allowedOrigins property: Gets or sets the list of origins that should be allowed to make cross-origin
@@ -55,7 +59,8 @@ public final class CorsSettings {
 
     /**
      * Get the supportCredentials property: Gets or sets whether CORS requests with credentials are allowed. See
-     * https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#Requests_with_credentials for more details.
+     * https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#Requests_with_credentials
+     * for more details.
      *
      * @return the supportCredentials value.
      */
@@ -65,7 +70,8 @@ public final class CorsSettings {
 
     /**
      * Set the supportCredentials property: Gets or sets whether CORS requests with credentials are allowed. See
-     * https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#Requests_with_credentials for more details.
+     * https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#Requests_with_credentials
+     * for more details.
      *
      * @param supportCredentials the supportCredentials value to set.
      * @return the CorsSettings object itself.

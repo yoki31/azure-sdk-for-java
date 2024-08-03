@@ -14,10 +14,9 @@ import com.azure.resourcemanager.apimanagement.fluent.models.NotificationContrac
 import com.azure.resourcemanager.apimanagement.models.NotificationContract;
 import com.azure.resourcemanager.apimanagement.models.NotificationName;
 import com.azure.resourcemanager.apimanagement.models.Notifications;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class NotificationsImpl implements Notifications {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(NotificationsImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(NotificationsImpl.class);
 
     private final NotificationsClient innerClient;
 
@@ -42,15 +41,6 @@ public final class NotificationsImpl implements Notifications {
         return Utils.mapPage(inner, inner1 -> new NotificationContractImpl(inner1, this.manager()));
     }
 
-    public NotificationContract get(String resourceGroupName, String serviceName, NotificationName notificationName) {
-        NotificationContractInner inner = this.serviceClient().get(resourceGroupName, serviceName, notificationName);
-        if (inner != null) {
-            return new NotificationContractImpl(inner, this.manager());
-        } else {
-            return null;
-        }
-    }
-
     public Response<NotificationContract> getWithResponse(
         String resourceGroupName, String serviceName, NotificationName notificationName, Context context) {
         Response<NotificationContractInner> inner =
@@ -66,10 +56,8 @@ public final class NotificationsImpl implements Notifications {
         }
     }
 
-    public NotificationContract createOrUpdate(
-        String resourceGroupName, String serviceName, NotificationName notificationName) {
-        NotificationContractInner inner =
-            this.serviceClient().createOrUpdate(resourceGroupName, serviceName, notificationName);
+    public NotificationContract get(String resourceGroupName, String serviceName, NotificationName notificationName) {
+        NotificationContractInner inner = this.serviceClient().get(resourceGroupName, serviceName, notificationName);
         if (inner != null) {
             return new NotificationContractImpl(inner, this.manager());
         } else {
@@ -93,6 +81,17 @@ public final class NotificationsImpl implements Notifications {
                 inner.getStatusCode(),
                 inner.getHeaders(),
                 new NotificationContractImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
+    }
+
+    public NotificationContract createOrUpdate(
+        String resourceGroupName, String serviceName, NotificationName notificationName) {
+        NotificationContractInner inner =
+            this.serviceClient().createOrUpdate(resourceGroupName, serviceName, notificationName);
+        if (inner != null) {
+            return new NotificationContractImpl(inner, this.manager());
         } else {
             return null;
         }

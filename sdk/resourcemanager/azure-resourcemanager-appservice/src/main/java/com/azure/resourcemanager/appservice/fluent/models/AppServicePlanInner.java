@@ -6,23 +6,22 @@ package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.Resource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.ExtendedLocation;
 import com.azure.resourcemanager.appservice.models.HostingEnvironmentProfile;
 import com.azure.resourcemanager.appservice.models.KubeEnvironmentProfile;
 import com.azure.resourcemanager.appservice.models.ProvisioningState;
 import com.azure.resourcemanager.appservice.models.SkuDescription;
 import com.azure.resourcemanager.appservice.models.StatusOptions;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.time.OffsetDateTime;
 import java.util.Map;
 
-/** App Service plan. */
+/**
+ * App Service plan.
+ */
 @Fluent
 public final class AppServicePlanInner extends Resource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AppServicePlanInner.class);
-
     /*
      * AppServicePlan resource specific properties
      */
@@ -46,6 +45,12 @@ public final class AppServicePlanInner extends Resource {
      */
     @JsonProperty(value = "kind")
     private String kind;
+
+    /**
+     * Creates an instance of AppServicePlanInner class.
+     */
+    public AppServicePlanInner() {
+    }
 
     /**
      * Get the innerProperties property: AppServicePlan resource specific properties.
@@ -116,14 +121,18 @@ public final class AppServicePlanInner extends Resource {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AppServicePlanInner withLocation(String location) {
         super.withLocation(location);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public AppServicePlanInner withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -207,6 +216,15 @@ public final class AppServicePlanInner extends Resource {
     }
 
     /**
+     * Get the numberOfWorkers property: The number of instances that are assigned to this App Service plan.
+     *
+     * @return the numberOfWorkers value.
+     */
+    public Integer numberOfWorkers() {
+        return this.innerProperties() == null ? null : this.innerProperties().numberOfWorkers();
+    }
+
+    /**
      * Get the geoRegion property: Geographical location for the App Service plan.
      *
      * @return the geoRegion value.
@@ -217,8 +235,9 @@ public final class AppServicePlanInner extends Resource {
 
     /**
      * Get the perSiteScaling property: If &lt;code&gt;true&lt;/code&gt;, apps assigned to this App Service plan can be
-     * scaled independently. If &lt;code&gt;false&lt;/code&gt;, apps assigned to this App Service plan will scale to all
-     * instances of the plan.
+     * scaled independently.
+     * If &lt;code&gt;false&lt;/code&gt;, apps assigned to this App Service plan will scale to all instances of the
+     * plan.
      *
      * @return the perSiteScaling value.
      */
@@ -228,8 +247,9 @@ public final class AppServicePlanInner extends Resource {
 
     /**
      * Set the perSiteScaling property: If &lt;code&gt;true&lt;/code&gt;, apps assigned to this App Service plan can be
-     * scaled independently. If &lt;code&gt;false&lt;/code&gt;, apps assigned to this App Service plan will scale to all
-     * instances of the plan.
+     * scaled independently.
+     * If &lt;code&gt;false&lt;/code&gt;, apps assigned to this App Service plan will scale to all instances of the
+     * plan.
      *
      * @param perSiteScaling the perSiteScaling value to set.
      * @return the AppServicePlanInner object itself.
@@ -538,8 +558,8 @@ public final class AppServicePlanInner extends Resource {
 
     /**
      * Get the zoneRedundant property: If &lt;code&gt;true&lt;/code&gt;, this App Service Plan will perform availability
-     * zone balancing. If &lt;code&gt;false&lt;/code&gt;, this App Service Plan will not perform availability zone
-     * balancing.
+     * zone balancing.
+     * If &lt;code&gt;false&lt;/code&gt;, this App Service Plan will not perform availability zone balancing.
      *
      * @return the zoneRedundant value.
      */
@@ -549,8 +569,8 @@ public final class AppServicePlanInner extends Resource {
 
     /**
      * Set the zoneRedundant property: If &lt;code&gt;true&lt;/code&gt;, this App Service Plan will perform availability
-     * zone balancing. If &lt;code&gt;false&lt;/code&gt;, this App Service Plan will not perform availability zone
-     * balancing.
+     * zone balancing.
+     * If &lt;code&gt;false&lt;/code&gt;, this App Service Plan will not perform availability zone balancing.
      *
      * @param zoneRedundant the zoneRedundant value to set.
      * @return the AppServicePlanInner object itself.

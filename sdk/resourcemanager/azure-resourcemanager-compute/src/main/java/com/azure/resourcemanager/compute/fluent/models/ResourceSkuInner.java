@@ -5,21 +5,19 @@
 package com.azure.resourcemanager.compute.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.compute.models.ResourceSkuCapabilities;
 import com.azure.resourcemanager.compute.models.ResourceSkuCapacity;
 import com.azure.resourcemanager.compute.models.ResourceSkuCosts;
 import com.azure.resourcemanager.compute.models.ResourceSkuLocationInfo;
 import com.azure.resourcemanager.compute.models.ResourceSkuRestrictions;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Describes an available Compute SKU. */
+/**
+ * Describes an available Compute SKU.
+ */
 @Immutable
 public final class ResourceSkuInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ResourceSkuInner.class);
-
     /*
      * The type of resource the SKU applies to.
      */
@@ -33,8 +31,8 @@ public final class ResourceSkuInner {
     private String name;
 
     /*
-     * Specifies the tier of virtual machines in a scale set.<br /><br />
-     * Possible Values:<br /><br /> **Standard**<br /><br /> **Basic**
+     * Specifies the tier of virtual machines in a scale set.<br /><br /> Possible Values:<br /><br /> **Standard**<br
+     * /><br /> **Basic**
      */
     @JsonProperty(value = "tier", access = JsonProperty.Access.WRITE_ONLY)
     private String tier;
@@ -70,8 +68,7 @@ public final class ResourceSkuInner {
     private List<String> locations;
 
     /*
-     * A list of locations and availability zones in those locations where the
-     * SKU is available.
+     * A list of locations and availability zones in those locations where the SKU is available.
      */
     @JsonProperty(value = "locationInfo", access = JsonProperty.Access.WRITE_ONLY)
     private List<ResourceSkuLocationInfo> locationInfo;
@@ -95,15 +92,20 @@ public final class ResourceSkuInner {
     private List<ResourceSkuCapabilities> capabilities;
 
     /*
-     * The restrictions because of which SKU cannot be used. This is empty if
-     * there are no restrictions.
+     * The restrictions because of which SKU cannot be used. This is empty if there are no restrictions.
      */
     @JsonProperty(value = "restrictions", access = JsonProperty.Access.WRITE_ONLY)
     private List<ResourceSkuRestrictions> restrictions;
 
     /**
+     * Creates an instance of ResourceSkuInner class.
+     */
+    public ResourceSkuInner() {
+    }
+
+    /**
      * Get the resourceType property: The type of resource the SKU applies to.
-     *
+     * 
      * @return the resourceType value.
      */
     public String resourceType() {
@@ -112,7 +114,7 @@ public final class ResourceSkuInner {
 
     /**
      * Get the name property: The name of SKU.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -122,7 +124,7 @@ public final class ResourceSkuInner {
     /**
      * Get the tier property: Specifies the tier of virtual machines in a scale set.&lt;br /&gt;&lt;br /&gt; Possible
      * Values:&lt;br /&gt;&lt;br /&gt; **Standard**&lt;br /&gt;&lt;br /&gt; **Basic**.
-     *
+     * 
      * @return the tier value.
      */
     public String tier() {
@@ -131,7 +133,7 @@ public final class ResourceSkuInner {
 
     /**
      * Get the size property: The Size of the SKU.
-     *
+     * 
      * @return the size value.
      */
     public String size() {
@@ -140,7 +142,7 @@ public final class ResourceSkuInner {
 
     /**
      * Get the family property: The Family of this particular SKU.
-     *
+     * 
      * @return the family value.
      */
     public String family() {
@@ -149,7 +151,7 @@ public final class ResourceSkuInner {
 
     /**
      * Get the kind property: The Kind of resources that are supported in this SKU.
-     *
+     * 
      * @return the kind value.
      */
     public String kind() {
@@ -158,7 +160,7 @@ public final class ResourceSkuInner {
 
     /**
      * Get the capacity property: Specifies the number of virtual machines in the scale set.
-     *
+     * 
      * @return the capacity value.
      */
     public ResourceSkuCapacity capacity() {
@@ -167,7 +169,7 @@ public final class ResourceSkuInner {
 
     /**
      * Get the locations property: The set of locations that the SKU is available.
-     *
+     * 
      * @return the locations value.
      */
     public List<String> locations() {
@@ -177,7 +179,7 @@ public final class ResourceSkuInner {
     /**
      * Get the locationInfo property: A list of locations and availability zones in those locations where the SKU is
      * available.
-     *
+     * 
      * @return the locationInfo value.
      */
     public List<ResourceSkuLocationInfo> locationInfo() {
@@ -186,7 +188,7 @@ public final class ResourceSkuInner {
 
     /**
      * Get the apiVersions property: The api versions that support this SKU.
-     *
+     * 
      * @return the apiVersions value.
      */
     public List<String> apiVersions() {
@@ -195,7 +197,7 @@ public final class ResourceSkuInner {
 
     /**
      * Get the costs property: Metadata for retrieving price info.
-     *
+     * 
      * @return the costs value.
      */
     public List<ResourceSkuCosts> costs() {
@@ -204,7 +206,7 @@ public final class ResourceSkuInner {
 
     /**
      * Get the capabilities property: A name value pair to describe the capability.
-     *
+     * 
      * @return the capabilities value.
      */
     public List<ResourceSkuCapabilities> capabilities() {
@@ -214,7 +216,7 @@ public final class ResourceSkuInner {
     /**
      * Get the restrictions property: The restrictions because of which SKU cannot be used. This is empty if there are
      * no restrictions.
-     *
+     * 
      * @return the restrictions value.
      */
     public List<ResourceSkuRestrictions> restrictions() {
@@ -223,7 +225,7 @@ public final class ResourceSkuInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

@@ -5,48 +5,41 @@
 package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.models.DatasetCompression;
 import com.azure.resourcemanager.datafactory.models.DatasetStorageFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Azure Blob dataset properties. */
+/**
+ * Azure Blob dataset properties.
+ */
 @Fluent
 public final class AzureBlobDatasetTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureBlobDatasetTypeProperties.class);
-
     /*
-     * The path of the Azure Blob storage. Type: string (or Expression with
-     * resultType string).
+     * The path of the Azure Blob storage. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "folderPath")
     private Object folderPath;
 
     /*
-     * The root of blob path. Type: string (or Expression with resultType
-     * string).
+     * The root of blob path. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "tableRootLocation")
     private Object tableRootLocation;
 
     /*
-     * The name of the Azure Blob. Type: string (or Expression with resultType
-     * string).
+     * The name of the Azure Blob. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "fileName")
     private Object fileName;
 
     /*
-     * The start of Azure Blob's modified datetime. Type: string (or Expression
-     * with resultType string).
+     * The start of Azure Blob's modified datetime. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "modifiedDatetimeStart")
     private Object modifiedDatetimeStart;
 
     /*
-     * The end of Azure Blob's modified datetime. Type: string (or Expression
-     * with resultType string).
+     * The end of Azure Blob's modified datetime. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "modifiedDatetimeEnd")
     private Object modifiedDatetimeEnd;
@@ -64,9 +57,15 @@ public final class AzureBlobDatasetTypeProperties {
     private DatasetCompression compression;
 
     /**
+     * Creates an instance of AzureBlobDatasetTypeProperties class.
+     */
+    public AzureBlobDatasetTypeProperties() {
+    }
+
+    /**
      * Get the folderPath property: The path of the Azure Blob storage. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @return the folderPath value.
      */
     public Object folderPath() {
@@ -76,7 +75,7 @@ public final class AzureBlobDatasetTypeProperties {
     /**
      * Set the folderPath property: The path of the Azure Blob storage. Type: string (or Expression with resultType
      * string).
-     *
+     * 
      * @param folderPath the folderPath value to set.
      * @return the AzureBlobDatasetTypeProperties object itself.
      */
@@ -87,7 +86,7 @@ public final class AzureBlobDatasetTypeProperties {
 
     /**
      * Get the tableRootLocation property: The root of blob path. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the tableRootLocation value.
      */
     public Object tableRootLocation() {
@@ -96,7 +95,7 @@ public final class AzureBlobDatasetTypeProperties {
 
     /**
      * Set the tableRootLocation property: The root of blob path. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param tableRootLocation the tableRootLocation value to set.
      * @return the AzureBlobDatasetTypeProperties object itself.
      */
@@ -107,7 +106,7 @@ public final class AzureBlobDatasetTypeProperties {
 
     /**
      * Get the fileName property: The name of the Azure Blob. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the fileName value.
      */
     public Object fileName() {
@@ -116,7 +115,7 @@ public final class AzureBlobDatasetTypeProperties {
 
     /**
      * Set the fileName property: The name of the Azure Blob. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param fileName the fileName value to set.
      * @return the AzureBlobDatasetTypeProperties object itself.
      */
@@ -128,7 +127,7 @@ public final class AzureBlobDatasetTypeProperties {
     /**
      * Get the modifiedDatetimeStart property: The start of Azure Blob's modified datetime. Type: string (or Expression
      * with resultType string).
-     *
+     * 
      * @return the modifiedDatetimeStart value.
      */
     public Object modifiedDatetimeStart() {
@@ -138,7 +137,7 @@ public final class AzureBlobDatasetTypeProperties {
     /**
      * Set the modifiedDatetimeStart property: The start of Azure Blob's modified datetime. Type: string (or Expression
      * with resultType string).
-     *
+     * 
      * @param modifiedDatetimeStart the modifiedDatetimeStart value to set.
      * @return the AzureBlobDatasetTypeProperties object itself.
      */
@@ -150,7 +149,7 @@ public final class AzureBlobDatasetTypeProperties {
     /**
      * Get the modifiedDatetimeEnd property: The end of Azure Blob's modified datetime. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the modifiedDatetimeEnd value.
      */
     public Object modifiedDatetimeEnd() {
@@ -160,7 +159,7 @@ public final class AzureBlobDatasetTypeProperties {
     /**
      * Set the modifiedDatetimeEnd property: The end of Azure Blob's modified datetime. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param modifiedDatetimeEnd the modifiedDatetimeEnd value to set.
      * @return the AzureBlobDatasetTypeProperties object itself.
      */
@@ -171,7 +170,7 @@ public final class AzureBlobDatasetTypeProperties {
 
     /**
      * Get the format property: The format of the Azure Blob storage.
-     *
+     * 
      * @return the format value.
      */
     public DatasetStorageFormat format() {
@@ -180,7 +179,7 @@ public final class AzureBlobDatasetTypeProperties {
 
     /**
      * Set the format property: The format of the Azure Blob storage.
-     *
+     * 
      * @param format the format value to set.
      * @return the AzureBlobDatasetTypeProperties object itself.
      */
@@ -191,7 +190,7 @@ public final class AzureBlobDatasetTypeProperties {
 
     /**
      * Get the compression property: The data compression method used for the blob storage.
-     *
+     * 
      * @return the compression value.
      */
     public DatasetCompression compression() {
@@ -200,7 +199,7 @@ public final class AzureBlobDatasetTypeProperties {
 
     /**
      * Set the compression property: The data compression method used for the blob storage.
-     *
+     * 
      * @param compression the compression value to set.
      * @return the AzureBlobDatasetTypeProperties object itself.
      */
@@ -211,7 +210,7 @@ public final class AzureBlobDatasetTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

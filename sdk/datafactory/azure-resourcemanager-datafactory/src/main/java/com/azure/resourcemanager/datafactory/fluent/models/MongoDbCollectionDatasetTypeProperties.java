@@ -6,25 +6,29 @@ package com.azure.resourcemanager.datafactory.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** MongoDB database dataset properties. */
+/**
+ * MongoDB database dataset properties.
+ */
 @Fluent
 public final class MongoDbCollectionDatasetTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MongoDbCollectionDatasetTypeProperties.class);
-
     /*
-     * The table name of the MongoDB database. Type: string (or Expression with
-     * resultType string).
+     * The table name of the MongoDB database. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "collectionName", required = true)
     private Object collectionName;
 
     /**
+     * Creates an instance of MongoDbCollectionDatasetTypeProperties class.
+     */
+    public MongoDbCollectionDatasetTypeProperties() {
+    }
+
+    /**
      * Get the collectionName property: The table name of the MongoDB database. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the collectionName value.
      */
     public Object collectionName() {
@@ -34,7 +38,7 @@ public final class MongoDbCollectionDatasetTypeProperties {
     /**
      * Set the collectionName property: The table name of the MongoDB database. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param collectionName the collectionName value to set.
      * @return the MongoDbCollectionDatasetTypeProperties object itself.
      */
@@ -45,15 +49,16 @@ public final class MongoDbCollectionDatasetTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (collectionName() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property collectionName in model MongoDbCollectionDatasetTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property collectionName in model MongoDbCollectionDatasetTypeProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(MongoDbCollectionDatasetTypeProperties.class);
 }

@@ -7,30 +7,36 @@ package com.azure.resourcemanager.compute.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.compute.fluent.models.CloudServiceInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The CloudServiceListResult model. */
+/**
+ * The list operation result.
+ */
 @Fluent
 public final class CloudServiceListResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CloudServiceListResult.class);
-
     /*
-     * The value property.
+     * The list of resources.
      */
     @JsonProperty(value = "value", required = true)
     private List<CloudServiceInner> value;
 
     /*
-     * The nextLink property.
+     * The URI to fetch the next page of resources. Use this to get the next page of resources. Do this till nextLink is
+     * null to fetch all the resources.
      */
     @JsonProperty(value = "nextLink")
     private String nextLink;
 
     /**
-     * Get the value property: The value property.
-     *
+     * Creates an instance of CloudServiceListResult class.
+     */
+    public CloudServiceListResult() {
+    }
+
+    /**
+     * Get the value property: The list of resources.
+     * 
      * @return the value value.
      */
     public List<CloudServiceInner> value() {
@@ -38,8 +44,8 @@ public final class CloudServiceListResult {
     }
 
     /**
-     * Set the value property: The value property.
-     *
+     * Set the value property: The list of resources.
+     * 
      * @param value the value value to set.
      * @return the CloudServiceListResult object itself.
      */
@@ -49,8 +55,9 @@ public final class CloudServiceListResult {
     }
 
     /**
-     * Get the nextLink property: The nextLink property.
-     *
+     * Get the nextLink property: The URI to fetch the next page of resources. Use this to get the next page of
+     * resources. Do this till nextLink is null to fetch all the resources.
+     * 
      * @return the nextLink value.
      */
     public String nextLink() {
@@ -58,8 +65,9 @@ public final class CloudServiceListResult {
     }
 
     /**
-     * Set the nextLink property: The nextLink property.
-     *
+     * Set the nextLink property: The URI to fetch the next page of resources. Use this to get the next page of
+     * resources. Do this till nextLink is null to fetch all the resources.
+     * 
      * @param nextLink the nextLink value to set.
      * @return the CloudServiceListResult object itself.
      */
@@ -70,16 +78,17 @@ public final class CloudServiceListResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (value() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property value in model CloudServiceListResult"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property value in model CloudServiceListResult"));
         } else {
             value().forEach(e -> e.validate());
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(CloudServiceListResult.class);
 }

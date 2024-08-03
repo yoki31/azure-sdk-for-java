@@ -6,15 +6,12 @@ package com.azure.resourcemanager.applicationinsights.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /** Properties that contain a private workbook. */
 @Fluent
 public final class MyWorkbookProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MyWorkbookProperties.class);
-
     /*
      * The user-defined name of the private workbook.
      */
@@ -22,22 +19,20 @@ public final class MyWorkbookProperties {
     private String displayName;
 
     /*
-     * Configuration of this particular private workbook. Configuration data is
-     * a string containing valid JSON
+     * Configuration of this particular private workbook. Configuration data is a string containing valid JSON
      */
     @JsonProperty(value = "serializedData", required = true)
     private String serializedData;
 
     /*
-     * This instance's version of the data model. This can change as new
-     * features are added that can be marked private workbook.
+     * This instance's version of the data model. This can change as new features are added that can be marked private
+     * workbook.
      */
     @JsonProperty(value = "version")
     private String version;
 
     /*
-     * Date and time in UTC of the last modification that was made to this
-     * private workbook definition.
+     * Date and time in UTC of the last modification that was made to this private workbook definition.
      */
     @JsonProperty(value = "timeModified", access = JsonProperty.Access.WRITE_ONLY)
     private String timeModified;
@@ -49,8 +44,7 @@ public final class MyWorkbookProperties {
     private String category;
 
     /*
-     * A list of 0 or more tags that are associated with this private workbook
-     * definition
+     * A list of 0 or more tags that are associated with this private workbook definition
      */
     @JsonProperty(value = "tags")
     private List<String> tags;
@@ -72,6 +66,10 @@ public final class MyWorkbookProperties {
      */
     @JsonProperty(value = "storageUri")
     private String storageUri;
+
+    /** Creates an instance of MyWorkbookProperties class. */
+    public MyWorkbookProperties() {
+    }
 
     /**
      * Get the displayName property: The user-defined name of the private workbook.
@@ -243,21 +241,23 @@ public final class MyWorkbookProperties {
      */
     public void validate() {
         if (displayName() == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         "Missing required property displayName in model MyWorkbookProperties"));
         }
         if (serializedData() == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         "Missing required property serializedData in model MyWorkbookProperties"));
         }
         if (category() == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException("Missing required property category in model MyWorkbookProperties"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(MyWorkbookProperties.class);
 }

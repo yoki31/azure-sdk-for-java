@@ -6,6 +6,7 @@ package com.azure.storage.file.datalake;
 import com.azure.core.annotation.ReturnType;
 import com.azure.core.annotation.ServiceClient;
 import com.azure.core.annotation.ServiceMethod;
+import com.azure.core.credential.AzureSasCredential;
 import com.azure.core.credential.TokenCredential;
 import com.azure.core.http.HttpPipeline;
 import com.azure.core.http.rest.PagedFlux;
@@ -39,7 +40,6 @@ import java.time.OffsetDateTime;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.azure.core.util.FluxUtil.monoError;
 import static com.azure.core.util.FluxUtil.pagedFluxError;
 
 /**
@@ -61,7 +61,7 @@ import static com.azure.core.util.FluxUtil.pagedFluxError;
  */
 @ServiceClient(builder = DataLakeServiceClientBuilder.class, isAsync = true)
 public class DataLakeServiceAsyncClient {
-    private final ClientLogger logger = new ClientLogger(DataLakeServiceAsyncClient.class);
+    private static final ClientLogger LOGGER = new ClientLogger(DataLakeServiceAsyncClient.class);
 
     private final AzureDataLakeStorageRestAPIImpl azureDataLakeStorage;
 
@@ -69,6 +69,10 @@ public class DataLakeServiceAsyncClient {
     private final DataLakeServiceVersion serviceVersion;
 
     private final BlobServiceAsyncClient blobServiceAsyncClient;
+
+    private final AzureSasCredential sasToken;
+
+    private final boolean isTokenCredentialAuthenticated;
 
     /**
      * Package-private constructor for use by {@link DataLakeServiceClientBuilder}.
@@ -80,7 +84,8 @@ public class DataLakeServiceAsyncClient {
      * @param blobServiceAsyncClient The underlying {@link BlobServiceAsyncClient}
      */
     DataLakeServiceAsyncClient(HttpPipeline pipeline, String url, DataLakeServiceVersion serviceVersion,
-        String accountName, BlobServiceAsyncClient blobServiceAsyncClient) {
+        String accountName, BlobServiceAsyncClient blobServiceAsyncClient, AzureSasCredential sasToken,
+        boolean isTokenCredentialAuthenticated) {
         this.azureDataLakeStorage = new AzureDataLakeStorageRestAPIImplBuilder()
             .pipeline(pipeline)
             .url(url)
@@ -91,6 +96,10 @@ public class DataLakeServiceAsyncClient {
         this.accountName = accountName;
 
         this.blobServiceAsyncClient = blobServiceAsyncClient;
+
+        this.sasToken = sasToken;
+
+        this.isTokenCredentialAuthenticated = isTokenCredentialAuthenticated;
     }
 
     /**
@@ -115,7 +124,8 @@ public class DataLakeServiceAsyncClient {
             fileSystemName = DataLakeFileSystemAsyncClient.ROOT_FILESYSTEM_NAME;
         }
         return new DataLakeFileSystemAsyncClient(getHttpPipeline(), getAccountUrl(), getServiceVersion(),
-            getAccountName(), fileSystemName, blobServiceAsyncClient.getBlobContainerAsyncClient(fileSystemName));
+            getAccountName(), fileSystemName, blobServiceAsyncClient.getBlobContainerAsyncClient(fileSystemName),
+            sasToken, isTokenCredentialAuthenticated);
     }
 
     /**
@@ -156,11 +166,7 @@ public class DataLakeServiceAsyncClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<DataLakeFileSystemAsyncClient> createFileSystem(String fileSystemName) {
-        try {
-            return createFileSystemWithResponse(fileSystemName, null, null).flatMap(FluxUtil::toMono);
-        } catch (RuntimeException ex) {
-            return monoError(logger, ex);
-        }
+        return createFileSystemWithResponse(fileSystemName, null, null).flatMap(FluxUtil::toMono);
     }
 
     /**
@@ -190,14 +196,10 @@ public class DataLakeServiceAsyncClient {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<DataLakeFileSystemAsyncClient>> createFileSystemWithResponse(String fileSystemName,
         Map<String, String> metadata, PublicAccessType accessType) {
-        try {
-            DataLakeFileSystemAsyncClient dataLakeFileSystemAsyncClient = getFileSystemAsyncClient(fileSystemName);
+        DataLakeFileSystemAsyncClient dataLakeFileSystemAsyncClient = getFileSystemAsyncClient(fileSystemName);
 
-            return dataLakeFileSystemAsyncClient.createWithResponse(metadata, accessType).
-                map(response -> new SimpleResponse<>(response, dataLakeFileSystemAsyncClient));
-        } catch (RuntimeException ex) {
-            return monoError(logger, ex);
-        }
+        return dataLakeFileSystemAsyncClient.createWithResponse(metadata, accessType).
+            map(response -> new SimpleResponse<>(response, dataLakeFileSystemAsyncClient));
     }
 
     /**
@@ -219,11 +221,7 @@ public class DataLakeServiceAsyncClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Void> deleteFileSystem(String fileSystemName) {
-        try {
-            return deleteFileSystemWithResponse(fileSystemName, null).flatMap(FluxUtil::toMono);
-        } catch (RuntimeException ex) {
-            return monoError(logger, ex);
-        }
+        return deleteFileSystemWithResponse(fileSystemName, null).flatMap(FluxUtil::toMono);
     }
 
     /**
@@ -242,16 +240,12 @@ public class DataLakeServiceAsyncClient {
      *
      * @param fileSystemName Name of the file system to delete
      * @param requestConditions {@link DataLakeRequestConditions}
-     * @return A {@link Mono} containing containing status code and HTTP headers
+     * @return A {@link Mono} containing status code and HTTP headers
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<Void>> deleteFileSystemWithResponse(String fileSystemName,
         DataLakeRequestConditions requestConditions) {
-        try {
-            return getFileSystemAsyncClient(fileSystemName).deleteWithResponse(requestConditions);
-        } catch (RuntimeException ex) {
-            return monoError(logger, ex);
-        }
+        return getFileSystemAsyncClient(fileSystemName).deleteWithResponse(requestConditions);
     }
 
     /**
@@ -279,11 +273,7 @@ public class DataLakeServiceAsyncClient {
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedFlux<FileSystemItem> listFileSystems() {
-        try {
-            return this.listFileSystems(new ListFileSystemsOptions());
-        } catch (RuntimeException ex) {
-            return pagedFluxError(logger, ex);
-        }
+        return this.listFileSystems(new ListFileSystemsOptions());
     }
 
     /**
@@ -310,7 +300,7 @@ public class DataLakeServiceAsyncClient {
         try {
             return listFileSystemsWithOptionalTimeout(options, null);
         } catch (RuntimeException ex) {
-            return pagedFluxError(logger, ex);
+            return pagedFluxError(LOGGER, ex);
         }
     }
 
@@ -318,7 +308,7 @@ public class DataLakeServiceAsyncClient {
         PagedFlux<BlobContainerItem> inputPagedFlux = blobServiceAsyncClient
             .listBlobContainers(Transforms.toListBlobContainersOptions(options));
         /* We need to create a new PagedFlux here because PagedFlux extends Flux, but not all operations were
-            overriden to return PagedFlux - so we need to do the transformations and recreate a PagedFlux. */
+            overridden to return PagedFlux - so we need to do the transformations and recreate a PagedFlux. */
         return PagedFlux.create(() -> (continuationToken, pageSize) -> {
             Flux<PagedResponse<BlobContainerItem>> flux;
             if (continuationToken != null && pageSize != null) {
@@ -368,11 +358,7 @@ public class DataLakeServiceAsyncClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<DataLakeServiceProperties> getProperties() {
-        try {
-            return getPropertiesWithResponse().flatMap(FluxUtil::toMono);
-        } catch (RuntimeException ex) {
-            return monoError(logger, ex);
-        }
+        return getPropertiesWithResponse().flatMap(FluxUtil::toMono);
     }
 
     /**
@@ -395,14 +381,10 @@ public class DataLakeServiceAsyncClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<DataLakeServiceProperties>> getPropertiesWithResponse() {
-        try {
-            return this.blobServiceAsyncClient.getPropertiesWithResponse()
-                .onErrorMap(DataLakeImplUtils::transformBlobStorageException)
-                .map(response ->
-                    new SimpleResponse<>(response, Transforms.toDataLakeServiceProperties(response.getValue())));
-        } catch (RuntimeException ex) {
-            return monoError(logger, ex);
-        }
+        return this.blobServiceAsyncClient.getPropertiesWithResponse()
+            .onErrorMap(DataLakeImplUtils::transformBlobStorageException)
+            .map(response ->
+                new SimpleResponse<>(response, Transforms.toDataLakeServiceProperties(response.getValue())));
     }
 
     /**
@@ -424,12 +406,17 @@ public class DataLakeServiceAsyncClient {
      *     .setLogging&#40;new DataLakeAnalyticsLogging&#40;&#41;
      *         .setWrite&#40;true&#41;
      *         .setDelete&#40;true&#41;
+     *         .setVersion&#40;&quot;1.0&quot;&#41;
      *         .setRetentionPolicy&#40;loggingRetentionPolicy&#41;&#41;
      *     .setHourMetrics&#40;new DataLakeMetrics&#40;&#41;
      *         .setEnabled&#40;true&#41;
+     *         .setVersion&#40;&quot;1.0&quot;&#41;
+     *         .setIncludeApis&#40;true&#41;
      *         .setRetentionPolicy&#40;metricsRetentionPolicy&#41;&#41;
      *     .setMinuteMetrics&#40;new DataLakeMetrics&#40;&#41;
      *         .setEnabled&#40;true&#41;
+     *         .setVersion&#40;&quot;1.0&quot;&#41;
+     *         .setIncludeApis&#40;true&#41;
      *         .setRetentionPolicy&#40;metricsRetentionPolicy&#41;&#41;;
      *
      * client.setProperties&#40;properties&#41;.subscribe&#40;
@@ -443,11 +430,7 @@ public class DataLakeServiceAsyncClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Void> setProperties(DataLakeServiceProperties properties) {
-        try {
-            return setPropertiesWithResponse(properties).flatMap(FluxUtil::toMono);
-        } catch (RuntimeException ex) {
-            return monoError(logger, ex);
-        }
+        return setPropertiesWithResponse(properties).flatMap(FluxUtil::toMono);
     }
 
     /**
@@ -468,12 +451,17 @@ public class DataLakeServiceAsyncClient {
      *     .setLogging&#40;new DataLakeAnalyticsLogging&#40;&#41;
      *         .setWrite&#40;true&#41;
      *         .setDelete&#40;true&#41;
+     *         .setVersion&#40;&quot;1.0&quot;&#41;
      *         .setRetentionPolicy&#40;loggingRetentionPolicy&#41;&#41;
      *     .setHourMetrics&#40;new DataLakeMetrics&#40;&#41;
      *         .setEnabled&#40;true&#41;
+     *         .setVersion&#40;&quot;1.0&quot;&#41;
+     *         .setIncludeApis&#40;true&#41;
      *         .setRetentionPolicy&#40;metricsRetentionPolicy&#41;&#41;
      *     .setMinuteMetrics&#40;new DataLakeMetrics&#40;&#41;
      *         .setEnabled&#40;true&#41;
+     *         .setVersion&#40;&quot;1.0&quot;&#41;
+     *         .setIncludeApis&#40;true&#41;
      *         .setRetentionPolicy&#40;metricsRetentionPolicy&#41;&#41;;
      *
      * client.setPropertiesWithResponse&#40;properties&#41;.subscribe&#40;response -&gt;
@@ -486,12 +474,8 @@ public class DataLakeServiceAsyncClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<Void>> setPropertiesWithResponse(DataLakeServiceProperties properties) {
-        try {
-            return this.blobServiceAsyncClient.setPropertiesWithResponse(Transforms.toBlobServiceProperties(properties))
-                .onErrorMap(DataLakeImplUtils::transformBlobStorageException);
-        } catch (RuntimeException ex) {
-            return monoError(logger, ex);
-        }
+        return this.blobServiceAsyncClient.setPropertiesWithResponse(Transforms.toBlobServiceProperties(properties))
+            .onErrorMap(DataLakeImplUtils::transformBlobStorageException);
     }
 
     /**
@@ -515,11 +499,7 @@ public class DataLakeServiceAsyncClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<UserDelegationKey> getUserDelegationKey(OffsetDateTime start, OffsetDateTime expiry) {
-        try {
-            return this.getUserDelegationKeyWithResponse(start, expiry).flatMap(FluxUtil::toMono);
-        } catch (RuntimeException ex) {
-            return monoError(logger, ex);
-        }
+        return this.getUserDelegationKeyWithResponse(start, expiry).flatMap(FluxUtil::toMono);
     }
 
     /**
@@ -545,14 +525,10 @@ public class DataLakeServiceAsyncClient {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<UserDelegationKey>> getUserDelegationKeyWithResponse(OffsetDateTime start,
         OffsetDateTime expiry) {
-        try {
-            return blobServiceAsyncClient.getUserDelegationKeyWithResponse(start, expiry)
-                .onErrorMap(DataLakeImplUtils::transformBlobStorageException)
-                .map(response ->
-                new SimpleResponse<>(response, Transforms.toDataLakeUserDelegationKey(response.getValue())));
-        } catch (RuntimeException ex) {
-            return monoError(logger, ex);
-        }
+        return blobServiceAsyncClient.getUserDelegationKeyWithResponse(start, expiry)
+            .onErrorMap(DataLakeImplUtils::transformBlobStorageException)
+            .map(response -> new SimpleResponse<>(response,
+                Transforms.toDataLakeUserDelegationKey(response.getValue())));
     }
 
     /**
@@ -667,7 +643,7 @@ public class DataLakeServiceAsyncClient {
     /**
      * Restores a previously deleted file system. The restored file system
      * will be renamed to the <code>destinationFileSystemName</code> if provided in <code>options</code>.
-     * Otherwise <code>deletedFileSystemName</code> is used as he destination file system name.
+     * Otherwise <code>deletedFileSystemName</code> is used as the destination file system name.
      * If the file system associated with provided <code>destinationFileSystemName</code>
      * already exists, this call will result in a 409 (conflict).
      * This API is only functional if Container Soft Delete is enabled  for the storage account associated with the
@@ -697,15 +673,11 @@ public class DataLakeServiceAsyncClient {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public Mono<Response<DataLakeFileSystemAsyncClient>> undeleteFileSystemWithResponse(
         FileSystemUndeleteOptions options) {
-        try {
-            return blobServiceAsyncClient.undeleteBlobContainerWithResponse(
-                Transforms.toBlobContainerUndeleteOptions(options))
-                .onErrorMap(DataLakeImplUtils::transformBlobStorageException)
-                .map(response -> new SimpleResponse<>(response, getFileSystemAsyncClient(response.getValue()
-                    .getBlobContainerName())));
-        } catch (RuntimeException ex) {
-            return monoError(logger, ex);
-        }
+        return blobServiceAsyncClient.undeleteBlobContainerWithResponse(
+            Transforms.toBlobContainerUndeleteOptions(options))
+            .onErrorMap(DataLakeImplUtils::transformBlobStorageException)
+            .map(response -> new SimpleResponse<>(response, getFileSystemAsyncClient(response.getValue()
+                .getBlobContainerName())));
     }
 
 //    /**

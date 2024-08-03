@@ -5,20 +5,18 @@
 package com.azure.resourcemanager.compute.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-/** The DiskAccessProperties model. */
+/**
+ * The DiskAccessProperties model.
+ */
 @Immutable
 public final class DiskAccessProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DiskAccessProperties.class);
-
     /*
-     * A readonly collection of private endpoint connections created on the
-     * disk. Currently only one endpoint connection is supported.
+     * A readonly collection of private endpoint connections created on the disk. Currently only one endpoint connection
+     * is supported.
      */
     @JsonProperty(value = "privateEndpointConnections", access = JsonProperty.Access.WRITE_ONLY)
     private List<PrivateEndpointConnectionInner> privateEndpointConnections;
@@ -36,9 +34,15 @@ public final class DiskAccessProperties {
     private OffsetDateTime timeCreated;
 
     /**
+     * Creates an instance of DiskAccessProperties class.
+     */
+    public DiskAccessProperties() {
+    }
+
+    /**
      * Get the privateEndpointConnections property: A readonly collection of private endpoint connections created on the
      * disk. Currently only one endpoint connection is supported.
-     *
+     * 
      * @return the privateEndpointConnections value.
      */
     public List<PrivateEndpointConnectionInner> privateEndpointConnections() {
@@ -47,7 +51,7 @@ public final class DiskAccessProperties {
 
     /**
      * Get the provisioningState property: The disk access resource provisioning state.
-     *
+     * 
      * @return the provisioningState value.
      */
     public String provisioningState() {
@@ -56,7 +60,7 @@ public final class DiskAccessProperties {
 
     /**
      * Get the timeCreated property: The time when the disk access was created.
-     *
+     * 
      * @return the timeCreated value.
      */
     public OffsetDateTime timeCreated() {
@@ -65,7 +69,7 @@ public final class DiskAccessProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

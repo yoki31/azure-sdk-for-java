@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Database connection string information. */
+/**
+ * Database connection string information.
+ */
 @Fluent
 public final class ConnStringInfo {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ConnStringInfo.class);
-
     /*
      * Name of connection string.
      */
@@ -33,8 +31,14 @@ public final class ConnStringInfo {
     private ConnectionStringType type;
 
     /**
+     * Creates an instance of ConnStringInfo class.
+     */
+    public ConnStringInfo() {
+    }
+
+    /**
      * Get the name property: Name of connection string.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -43,7 +47,7 @@ public final class ConnStringInfo {
 
     /**
      * Set the name property: Name of connection string.
-     *
+     * 
      * @param name the name value to set.
      * @return the ConnStringInfo object itself.
      */
@@ -54,7 +58,7 @@ public final class ConnStringInfo {
 
     /**
      * Get the connectionString property: Connection string value.
-     *
+     * 
      * @return the connectionString value.
      */
     public String connectionString() {
@@ -63,7 +67,7 @@ public final class ConnStringInfo {
 
     /**
      * Set the connectionString property: Connection string value.
-     *
+     * 
      * @param connectionString the connectionString value to set.
      * @return the ConnStringInfo object itself.
      */
@@ -74,7 +78,7 @@ public final class ConnStringInfo {
 
     /**
      * Get the type property: Type of database.
-     *
+     * 
      * @return the type value.
      */
     public ConnectionStringType type() {
@@ -83,7 +87,7 @@ public final class ConnStringInfo {
 
     /**
      * Set the type property: Type of database.
-     *
+     * 
      * @param type the type value to set.
      * @return the ConnStringInfo object itself.
      */
@@ -94,7 +98,7 @@ public final class ConnStringInfo {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

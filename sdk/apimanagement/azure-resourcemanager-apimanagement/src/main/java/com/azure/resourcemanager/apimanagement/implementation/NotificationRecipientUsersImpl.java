@@ -15,10 +15,9 @@ import com.azure.resourcemanager.apimanagement.models.NotificationName;
 import com.azure.resourcemanager.apimanagement.models.NotificationRecipientUsers;
 import com.azure.resourcemanager.apimanagement.models.RecipientUserCollection;
 import com.azure.resourcemanager.apimanagement.models.RecipientUserContract;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class NotificationRecipientUsersImpl implements NotificationRecipientUsers {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(NotificationRecipientUsersImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(NotificationRecipientUsersImpl.class);
 
     private final NotificationRecipientUsersClient innerClient;
 
@@ -29,17 +28,6 @@ public final class NotificationRecipientUsersImpl implements NotificationRecipie
         com.azure.resourcemanager.apimanagement.ApiManagementManager serviceManager) {
         this.innerClient = innerClient;
         this.serviceManager = serviceManager;
-    }
-
-    public RecipientUserCollection listByNotification(
-        String resourceGroupName, String serviceName, NotificationName notificationName) {
-        RecipientUserCollectionInner inner =
-            this.serviceClient().listByNotification(resourceGroupName, serviceName, notificationName);
-        if (inner != null) {
-            return new RecipientUserCollectionImpl(inner, this.manager());
-        } else {
-            return null;
-        }
     }
 
     public Response<RecipientUserCollection> listByNotificationWithResponse(
@@ -59,9 +47,15 @@ public final class NotificationRecipientUsersImpl implements NotificationRecipie
         }
     }
 
-    public boolean checkEntityExists(
-        String resourceGroupName, String serviceName, NotificationName notificationName, String userId) {
-        return this.serviceClient().checkEntityExists(resourceGroupName, serviceName, notificationName, userId);
+    public RecipientUserCollection listByNotification(
+        String resourceGroupName, String serviceName, NotificationName notificationName) {
+        RecipientUserCollectionInner inner =
+            this.serviceClient().listByNotification(resourceGroupName, serviceName, notificationName);
+        if (inner != null) {
+            return new RecipientUserCollectionImpl(inner, this.manager());
+        } else {
+            return null;
+        }
     }
 
     public Response<Boolean> checkEntityExistsWithResponse(
@@ -75,15 +69,9 @@ public final class NotificationRecipientUsersImpl implements NotificationRecipie
             .checkEntityExistsWithResponse(resourceGroupName, serviceName, notificationName, userId, context);
     }
 
-    public RecipientUserContract createOrUpdate(
+    public boolean checkEntityExists(
         String resourceGroupName, String serviceName, NotificationName notificationName, String userId) {
-        RecipientUserContractInner inner =
-            this.serviceClient().createOrUpdate(resourceGroupName, serviceName, notificationName, userId);
-        if (inner != null) {
-            return new RecipientUserContractImpl(inner, this.manager());
-        } else {
-            return null;
-        }
+        return this.serviceClient().checkEntityExists(resourceGroupName, serviceName, notificationName, userId);
     }
 
     public Response<RecipientUserContract> createOrUpdateWithResponse(
@@ -107,8 +95,15 @@ public final class NotificationRecipientUsersImpl implements NotificationRecipie
         }
     }
 
-    public void delete(String resourceGroupName, String serviceName, NotificationName notificationName, String userId) {
-        this.serviceClient().delete(resourceGroupName, serviceName, notificationName, userId);
+    public RecipientUserContract createOrUpdate(
+        String resourceGroupName, String serviceName, NotificationName notificationName, String userId) {
+        RecipientUserContractInner inner =
+            this.serviceClient().createOrUpdate(resourceGroupName, serviceName, notificationName, userId);
+        if (inner != null) {
+            return new RecipientUserContractImpl(inner, this.manager());
+        } else {
+            return null;
+        }
     }
 
     public Response<Void> deleteWithResponse(
@@ -120,6 +115,10 @@ public final class NotificationRecipientUsersImpl implements NotificationRecipie
         return this
             .serviceClient()
             .deleteWithResponse(resourceGroupName, serviceName, notificationName, userId, context);
+    }
+
+    public void delete(String resourceGroupName, String serviceName, NotificationName notificationName, String userId) {
+        this.serviceClient().delete(resourceGroupName, serviceName, notificationName, userId);
     }
 
     private NotificationRecipientUsersClient serviceClient() {

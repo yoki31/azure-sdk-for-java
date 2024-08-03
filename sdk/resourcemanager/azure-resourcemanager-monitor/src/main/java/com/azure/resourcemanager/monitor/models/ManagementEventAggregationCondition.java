@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.monitor.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.Duration;
 
-/** How the data that is collected should be combined over time. */
+/**
+ * How the data that is collected should be combined over time.
+ */
 @Fluent
 public final class ManagementEventAggregationCondition {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ManagementEventAggregationCondition.class);
-
     /*
      * the condition operator.
      */
@@ -28,16 +26,21 @@ public final class ManagementEventAggregationCondition {
     private Double threshold;
 
     /*
-     * the period of time (in ISO 8601 duration format) that is used to monitor
-     * alert activity based on the threshold. If specified then it must be
-     * between 5 minutes and 1 day.
+     * the period of time (in ISO 8601 duration format) that is used to monitor alert activity based on the threshold.
+     * If specified then it must be between 5 minutes and 1 day.
      */
     @JsonProperty(value = "windowSize")
     private Duration windowSize;
 
     /**
+     * Creates an instance of ManagementEventAggregationCondition class.
+     */
+    public ManagementEventAggregationCondition() {
+    }
+
+    /**
      * Get the operator property: the condition operator.
-     *
+     * 
      * @return the operator value.
      */
     public ConditionOperator operator() {
@@ -46,7 +49,7 @@ public final class ManagementEventAggregationCondition {
 
     /**
      * Set the operator property: the condition operator.
-     *
+     * 
      * @param operator the operator value to set.
      * @return the ManagementEventAggregationCondition object itself.
      */
@@ -57,7 +60,7 @@ public final class ManagementEventAggregationCondition {
 
     /**
      * Get the threshold property: The threshold value that activates the alert.
-     *
+     * 
      * @return the threshold value.
      */
     public Double threshold() {
@@ -66,7 +69,7 @@ public final class ManagementEventAggregationCondition {
 
     /**
      * Set the threshold property: The threshold value that activates the alert.
-     *
+     * 
      * @param threshold the threshold value to set.
      * @return the ManagementEventAggregationCondition object itself.
      */
@@ -78,7 +81,7 @@ public final class ManagementEventAggregationCondition {
     /**
      * Get the windowSize property: the period of time (in ISO 8601 duration format) that is used to monitor alert
      * activity based on the threshold. If specified then it must be between 5 minutes and 1 day.
-     *
+     * 
      * @return the windowSize value.
      */
     public Duration windowSize() {
@@ -88,7 +91,7 @@ public final class ManagementEventAggregationCondition {
     /**
      * Set the windowSize property: the period of time (in ISO 8601 duration format) that is used to monitor alert
      * activity based on the threshold. If specified then it must be between 5 minutes and 1 day.
-     *
+     * 
      * @param windowSize the windowSize value to set.
      * @return the ManagementEventAggregationCondition object itself.
      */
@@ -99,7 +102,7 @@ public final class ManagementEventAggregationCondition {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

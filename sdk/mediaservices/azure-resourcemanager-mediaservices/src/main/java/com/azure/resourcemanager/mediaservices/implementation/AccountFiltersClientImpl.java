@@ -29,7 +29,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.mediaservices.fluent.AccountFiltersClient;
 import com.azure.resourcemanager.mediaservices.fluent.models.AccountFilterInner;
 import com.azure.resourcemanager.mediaservices.models.AccountFilterCollection;
@@ -37,8 +36,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in AccountFiltersClient. */
 public final class AccountFiltersClientImpl implements AccountFiltersClient {
-    private final ClientLogger logger = new ClientLogger(AccountFiltersClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final AccountFiltersService service;
 
@@ -62,7 +59,7 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
      */
     @Host("{$host}")
     @ServiceInterface(name = "AzureMediaServicesAc")
-    private interface AccountFiltersService {
+    public interface AccountFiltersService {
         @Headers({"Content-Type: application/json"})
         @Get(
             "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Media/mediaServices"
@@ -156,14 +153,17 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
     }
 
     /**
-     * List Account Filters in the Media Services account.
+     * List Account Filters
+     *
+     * <p>List Account Filters in the Media Services account.
      *
      * @param resourceGroupName The name of the resource group within the Azure subscription.
      * @param accountName The Media Services account name.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of AccountFilter items.
+     * @return a collection of AccountFilter items along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<AccountFilterInner>> listSinglePageAsync(String resourceGroupName, String accountName) {
@@ -186,6 +186,7 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
         if (accountName == null) {
             return Mono.error(new IllegalArgumentException("Parameter accountName is required and cannot be null."));
         }
+        final String apiVersion = "2022-08-01";
         final String accept = "application/json";
         return FluxUtil
             .withContext(
@@ -196,7 +197,7 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
                             this.client.getSubscriptionId(),
                             resourceGroupName,
                             accountName,
-                            this.client.getApiVersion(),
+                            apiVersion,
                             accept,
                             context))
             .<PagedResponse<AccountFilterInner>>map(
@@ -212,7 +213,9 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
     }
 
     /**
-     * List Account Filters in the Media Services account.
+     * List Account Filters
+     *
+     * <p>List Account Filters in the Media Services account.
      *
      * @param resourceGroupName The name of the resource group within the Azure subscription.
      * @param accountName The Media Services account name.
@@ -220,7 +223,8 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of AccountFilter items.
+     * @return a collection of AccountFilter items along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<AccountFilterInner>> listSinglePageAsync(
@@ -244,6 +248,7 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
         if (accountName == null) {
             return Mono.error(new IllegalArgumentException("Parameter accountName is required and cannot be null."));
         }
+        final String apiVersion = "2022-08-01";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
@@ -252,7 +257,7 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
                 this.client.getSubscriptionId(),
                 resourceGroupName,
                 accountName,
-                this.client.getApiVersion(),
+                apiVersion,
                 accept,
                 context)
             .map(
@@ -267,14 +272,16 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
     }
 
     /**
-     * List Account Filters in the Media Services account.
+     * List Account Filters
+     *
+     * <p>List Account Filters in the Media Services account.
      *
      * @param resourceGroupName The name of the resource group within the Azure subscription.
      * @param accountName The Media Services account name.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of AccountFilter items.
+     * @return a collection of AccountFilter items as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<AccountFilterInner> listAsync(String resourceGroupName, String accountName) {
@@ -283,7 +290,9 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
     }
 
     /**
-     * List Account Filters in the Media Services account.
+     * List Account Filters
+     *
+     * <p>List Account Filters in the Media Services account.
      *
      * @param resourceGroupName The name of the resource group within the Azure subscription.
      * @param accountName The Media Services account name.
@@ -291,7 +300,7 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of AccountFilter items.
+     * @return a collection of AccountFilter items as paginated response with {@link PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<AccountFilterInner> listAsync(String resourceGroupName, String accountName, Context context) {
@@ -301,14 +310,16 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
     }
 
     /**
-     * List Account Filters in the Media Services account.
+     * List Account Filters
+     *
+     * <p>List Account Filters in the Media Services account.
      *
      * @param resourceGroupName The name of the resource group within the Azure subscription.
      * @param accountName The Media Services account name.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of AccountFilter items.
+     * @return a collection of AccountFilter items as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<AccountFilterInner> list(String resourceGroupName, String accountName) {
@@ -316,7 +327,9 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
     }
 
     /**
-     * List Account Filters in the Media Services account.
+     * List Account Filters
+     *
+     * <p>List Account Filters in the Media Services account.
      *
      * @param resourceGroupName The name of the resource group within the Azure subscription.
      * @param accountName The Media Services account name.
@@ -324,7 +337,7 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of AccountFilter items.
+     * @return a collection of AccountFilter items as paginated response with {@link PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<AccountFilterInner> list(String resourceGroupName, String accountName, Context context) {
@@ -332,7 +345,9 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
     }
 
     /**
-     * Get the details of an Account Filter in the Media Services account.
+     * Get an Account Filter.
+     *
+     * <p>Get the details of an Account Filter in the Media Services account.
      *
      * @param resourceGroupName The name of the resource group within the Azure subscription.
      * @param accountName The Media Services account name.
@@ -340,7 +355,8 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of an Account Filter in the Media Services account.
+     * @return the details of an Account Filter in the Media Services account along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<AccountFilterInner>> getWithResponseAsync(
@@ -367,6 +383,7 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
         if (filterName == null) {
             return Mono.error(new IllegalArgumentException("Parameter filterName is required and cannot be null."));
         }
+        final String apiVersion = "2022-08-01";
         final String accept = "application/json";
         return FluxUtil
             .withContext(
@@ -378,14 +395,16 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
                             resourceGroupName,
                             accountName,
                             filterName,
-                            this.client.getApiVersion(),
+                            apiVersion,
                             accept,
                             context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
-     * Get the details of an Account Filter in the Media Services account.
+     * Get an Account Filter.
+     *
+     * <p>Get the details of an Account Filter in the Media Services account.
      *
      * @param resourceGroupName The name of the resource group within the Azure subscription.
      * @param accountName The Media Services account name.
@@ -394,7 +413,8 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of an Account Filter in the Media Services account.
+     * @return the details of an Account Filter in the Media Services account along with {@link Response} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<AccountFilterInner>> getWithResponseAsync(
@@ -421,6 +441,7 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
         if (filterName == null) {
             return Mono.error(new IllegalArgumentException("Parameter filterName is required and cannot be null."));
         }
+        final String apiVersion = "2022-08-01";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
@@ -430,13 +451,15 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
                 resourceGroupName,
                 accountName,
                 filterName,
-                this.client.getApiVersion(),
+                apiVersion,
                 accept,
                 context);
     }
 
     /**
-     * Get the details of an Account Filter in the Media Services account.
+     * Get an Account Filter.
+     *
+     * <p>Get the details of an Account Filter in the Media Services account.
      *
      * @param resourceGroupName The name of the resource group within the Azure subscription.
      * @param accountName The Media Services account name.
@@ -444,23 +467,38 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of an Account Filter in the Media Services account.
+     * @return the details of an Account Filter in the Media Services account on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<AccountFilterInner> getAsync(String resourceGroupName, String accountName, String filterName) {
         return getWithResponseAsync(resourceGroupName, accountName, filterName)
-            .flatMap(
-                (Response<AccountFilterInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
-     * Get the details of an Account Filter in the Media Services account.
+     * Get an Account Filter.
+     *
+     * <p>Get the details of an Account Filter in the Media Services account.
+     *
+     * @param resourceGroupName The name of the resource group within the Azure subscription.
+     * @param accountName The Media Services account name.
+     * @param filterName The Account Filter name.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the details of an Account Filter in the Media Services account along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<AccountFilterInner> getWithResponse(
+        String resourceGroupName, String accountName, String filterName, Context context) {
+        return getWithResponseAsync(resourceGroupName, accountName, filterName, context).block();
+    }
+
+    /**
+     * Get an Account Filter.
+     *
+     * <p>Get the details of an Account Filter in the Media Services account.
      *
      * @param resourceGroupName The name of the resource group within the Azure subscription.
      * @param accountName The Media Services account name.
@@ -472,29 +510,13 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public AccountFilterInner get(String resourceGroupName, String accountName, String filterName) {
-        return getAsync(resourceGroupName, accountName, filterName).block();
+        return getWithResponse(resourceGroupName, accountName, filterName, Context.NONE).getValue();
     }
 
     /**
-     * Get the details of an Account Filter in the Media Services account.
+     * Create or update an Account Filter
      *
-     * @param resourceGroupName The name of the resource group within the Azure subscription.
-     * @param accountName The Media Services account name.
-     * @param filterName The Account Filter name.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the details of an Account Filter in the Media Services account.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<AccountFilterInner> getWithResponse(
-        String resourceGroupName, String accountName, String filterName, Context context) {
-        return getWithResponseAsync(resourceGroupName, accountName, filterName, context).block();
-    }
-
-    /**
-     * Creates or updates an Account Filter in the Media Services account.
+     * <p>Creates or updates an Account Filter in the Media Services account.
      *
      * @param resourceGroupName The name of the resource group within the Azure subscription.
      * @param accountName The Media Services account name.
@@ -503,7 +525,7 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Account Filter.
+     * @return an Account Filter along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<AccountFilterInner>> createOrUpdateWithResponseAsync(
@@ -535,6 +557,7 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
         } else {
             parameters.validate();
         }
+        final String apiVersion = "2022-08-01";
         final String accept = "application/json";
         return FluxUtil
             .withContext(
@@ -546,7 +569,7 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
                             resourceGroupName,
                             accountName,
                             filterName,
-                            this.client.getApiVersion(),
+                            apiVersion,
                             parameters,
                             accept,
                             context))
@@ -554,7 +577,9 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
     }
 
     /**
-     * Creates or updates an Account Filter in the Media Services account.
+     * Create or update an Account Filter
+     *
+     * <p>Creates or updates an Account Filter in the Media Services account.
      *
      * @param resourceGroupName The name of the resource group within the Azure subscription.
      * @param accountName The Media Services account name.
@@ -564,7 +589,7 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Account Filter.
+     * @return an Account Filter along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<AccountFilterInner>> createOrUpdateWithResponseAsync(
@@ -600,6 +625,7 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
         } else {
             parameters.validate();
         }
+        final String apiVersion = "2022-08-01";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
@@ -609,14 +635,16 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
                 resourceGroupName,
                 accountName,
                 filterName,
-                this.client.getApiVersion(),
+                apiVersion,
                 parameters,
                 accept,
                 context);
     }
 
     /**
-     * Creates or updates an Account Filter in the Media Services account.
+     * Create or update an Account Filter
+     *
+     * <p>Creates or updates an Account Filter in the Media Services account.
      *
      * @param resourceGroupName The name of the resource group within the Azure subscription.
      * @param accountName The Media Services account name.
@@ -625,24 +653,44 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Account Filter.
+     * @return an Account Filter on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<AccountFilterInner> createOrUpdateAsync(
         String resourceGroupName, String accountName, String filterName, AccountFilterInner parameters) {
         return createOrUpdateWithResponseAsync(resourceGroupName, accountName, filterName, parameters)
-            .flatMap(
-                (Response<AccountFilterInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
-     * Creates or updates an Account Filter in the Media Services account.
+     * Create or update an Account Filter
+     *
+     * <p>Creates or updates an Account Filter in the Media Services account.
+     *
+     * @param resourceGroupName The name of the resource group within the Azure subscription.
+     * @param accountName The Media Services account name.
+     * @param filterName The Account Filter name.
+     * @param parameters The request parameters.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return an Account Filter along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<AccountFilterInner> createOrUpdateWithResponse(
+        String resourceGroupName,
+        String accountName,
+        String filterName,
+        AccountFilterInner parameters,
+        Context context) {
+        return createOrUpdateWithResponseAsync(resourceGroupName, accountName, filterName, parameters, context).block();
+    }
+
+    /**
+     * Create or update an Account Filter
+     *
+     * <p>Creates or updates an Account Filter in the Media Services account.
      *
      * @param resourceGroupName The name of the resource group within the Azure subscription.
      * @param accountName The Media Services account name.
@@ -656,34 +704,14 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public AccountFilterInner createOrUpdate(
         String resourceGroupName, String accountName, String filterName, AccountFilterInner parameters) {
-        return createOrUpdateAsync(resourceGroupName, accountName, filterName, parameters).block();
+        return createOrUpdateWithResponse(resourceGroupName, accountName, filterName, parameters, Context.NONE)
+            .getValue();
     }
 
     /**
-     * Creates or updates an Account Filter in the Media Services account.
+     * Delete an Account Filter.
      *
-     * @param resourceGroupName The name of the resource group within the Azure subscription.
-     * @param accountName The Media Services account name.
-     * @param filterName The Account Filter name.
-     * @param parameters The request parameters.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Account Filter.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<AccountFilterInner> createOrUpdateWithResponse(
-        String resourceGroupName,
-        String accountName,
-        String filterName,
-        AccountFilterInner parameters,
-        Context context) {
-        return createOrUpdateWithResponseAsync(resourceGroupName, accountName, filterName, parameters, context).block();
-    }
-
-    /**
-     * Deletes an Account Filter in the Media Services account.
+     * <p>Deletes an Account Filter in the Media Services account.
      *
      * @param resourceGroupName The name of the resource group within the Azure subscription.
      * @param accountName The Media Services account name.
@@ -691,7 +719,7 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -718,6 +746,7 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
         if (filterName == null) {
             return Mono.error(new IllegalArgumentException("Parameter filterName is required and cannot be null."));
         }
+        final String apiVersion = "2022-08-01";
         final String accept = "application/json";
         return FluxUtil
             .withContext(
@@ -729,14 +758,16 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
                             resourceGroupName,
                             accountName,
                             filterName,
-                            this.client.getApiVersion(),
+                            apiVersion,
                             accept,
                             context))
             .contextWrite(context -> context.putAll(FluxUtil.toReactorContext(this.client.getContext()).readOnly()));
     }
 
     /**
-     * Deletes an Account Filter in the Media Services account.
+     * Delete an Account Filter.
+     *
+     * <p>Deletes an Account Filter in the Media Services account.
      *
      * @param resourceGroupName The name of the resource group within the Azure subscription.
      * @param accountName The Media Services account name.
@@ -745,7 +776,7 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> deleteWithResponseAsync(
@@ -772,6 +803,7 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
         if (filterName == null) {
             return Mono.error(new IllegalArgumentException("Parameter filterName is required and cannot be null."));
         }
+        final String apiVersion = "2022-08-01";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
@@ -781,13 +813,15 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
                 resourceGroupName,
                 accountName,
                 filterName,
-                this.client.getApiVersion(),
+                apiVersion,
                 accept,
                 context);
     }
 
     /**
-     * Deletes an Account Filter in the Media Services account.
+     * Delete an Account Filter.
+     *
+     * <p>Deletes an Account Filter in the Media Services account.
      *
      * @param resourceGroupName The name of the resource group within the Azure subscription.
      * @param accountName The Media Services account name.
@@ -795,16 +829,37 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> deleteAsync(String resourceGroupName, String accountName, String filterName) {
-        return deleteWithResponseAsync(resourceGroupName, accountName, filterName)
-            .flatMap((Response<Void> res) -> Mono.empty());
+        return deleteWithResponseAsync(resourceGroupName, accountName, filterName).flatMap(ignored -> Mono.empty());
     }
 
     /**
-     * Deletes an Account Filter in the Media Services account.
+     * Delete an Account Filter.
+     *
+     * <p>Deletes an Account Filter in the Media Services account.
+     *
+     * @param resourceGroupName The name of the resource group within the Azure subscription.
+     * @param accountName The Media Services account name.
+     * @param filterName The Account Filter name.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> deleteWithResponse(
+        String resourceGroupName, String accountName, String filterName, Context context) {
+        return deleteWithResponseAsync(resourceGroupName, accountName, filterName, context).block();
+    }
+
+    /**
+     * Delete an Account Filter.
+     *
+     * <p>Deletes an Account Filter in the Media Services account.
      *
      * @param resourceGroupName The name of the resource group within the Azure subscription.
      * @param accountName The Media Services account name.
@@ -815,29 +870,13 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     public void delete(String resourceGroupName, String accountName, String filterName) {
-        deleteAsync(resourceGroupName, accountName, filterName).block();
+        deleteWithResponse(resourceGroupName, accountName, filterName, Context.NONE);
     }
 
     /**
-     * Deletes an Account Filter in the Media Services account.
+     * Update an Account Filter
      *
-     * @param resourceGroupName The name of the resource group within the Azure subscription.
-     * @param accountName The Media Services account name.
-     * @param filterName The Account Filter name.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> deleteWithResponse(
-        String resourceGroupName, String accountName, String filterName, Context context) {
-        return deleteWithResponseAsync(resourceGroupName, accountName, filterName, context).block();
-    }
-
-    /**
-     * Updates an existing Account Filter in the Media Services account.
+     * <p>Updates an existing Account Filter in the Media Services account.
      *
      * @param resourceGroupName The name of the resource group within the Azure subscription.
      * @param accountName The Media Services account name.
@@ -846,7 +885,7 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Account Filter.
+     * @return an Account Filter along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<AccountFilterInner>> updateWithResponseAsync(
@@ -878,6 +917,7 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
         } else {
             parameters.validate();
         }
+        final String apiVersion = "2022-08-01";
         final String accept = "application/json";
         return FluxUtil
             .withContext(
@@ -889,7 +929,7 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
                             resourceGroupName,
                             accountName,
                             filterName,
-                            this.client.getApiVersion(),
+                            apiVersion,
                             parameters,
                             accept,
                             context))
@@ -897,7 +937,9 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
     }
 
     /**
-     * Updates an existing Account Filter in the Media Services account.
+     * Update an Account Filter
+     *
+     * <p>Updates an existing Account Filter in the Media Services account.
      *
      * @param resourceGroupName The name of the resource group within the Azure subscription.
      * @param accountName The Media Services account name.
@@ -907,7 +949,7 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Account Filter.
+     * @return an Account Filter along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<AccountFilterInner>> updateWithResponseAsync(
@@ -943,6 +985,7 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
         } else {
             parameters.validate();
         }
+        final String apiVersion = "2022-08-01";
         final String accept = "application/json";
         context = this.client.mergeContext(context);
         return service
@@ -952,14 +995,16 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
                 resourceGroupName,
                 accountName,
                 filterName,
-                this.client.getApiVersion(),
+                apiVersion,
                 parameters,
                 accept,
                 context);
     }
 
     /**
-     * Updates an existing Account Filter in the Media Services account.
+     * Update an Account Filter
+     *
+     * <p>Updates an existing Account Filter in the Media Services account.
      *
      * @param resourceGroupName The name of the resource group within the Azure subscription.
      * @param accountName The Media Services account name.
@@ -968,24 +1013,44 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Account Filter.
+     * @return an Account Filter on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<AccountFilterInner> updateAsync(
         String resourceGroupName, String accountName, String filterName, AccountFilterInner parameters) {
         return updateWithResponseAsync(resourceGroupName, accountName, filterName, parameters)
-            .flatMap(
-                (Response<AccountFilterInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
-     * Updates an existing Account Filter in the Media Services account.
+     * Update an Account Filter
+     *
+     * <p>Updates an existing Account Filter in the Media Services account.
+     *
+     * @param resourceGroupName The name of the resource group within the Azure subscription.
+     * @param accountName The Media Services account name.
+     * @param filterName The Account Filter name.
+     * @param parameters The request parameters.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return an Account Filter along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<AccountFilterInner> updateWithResponse(
+        String resourceGroupName,
+        String accountName,
+        String filterName,
+        AccountFilterInner parameters,
+        Context context) {
+        return updateWithResponseAsync(resourceGroupName, accountName, filterName, parameters, context).block();
+    }
+
+    /**
+     * Update an Account Filter
+     *
+     * <p>Updates an existing Account Filter in the Media Services account.
      *
      * @param resourceGroupName The name of the resource group within the Azure subscription.
      * @param accountName The Media Services account name.
@@ -999,40 +1064,19 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
     @ServiceMethod(returns = ReturnType.SINGLE)
     public AccountFilterInner update(
         String resourceGroupName, String accountName, String filterName, AccountFilterInner parameters) {
-        return updateAsync(resourceGroupName, accountName, filterName, parameters).block();
-    }
-
-    /**
-     * Updates an existing Account Filter in the Media Services account.
-     *
-     * @param resourceGroupName The name of the resource group within the Azure subscription.
-     * @param accountName The Media Services account name.
-     * @param filterName The Account Filter name.
-     * @param parameters The request parameters.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return an Account Filter.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<AccountFilterInner> updateWithResponse(
-        String resourceGroupName,
-        String accountName,
-        String filterName,
-        AccountFilterInner parameters,
-        Context context) {
-        return updateWithResponseAsync(resourceGroupName, accountName, filterName, parameters, context).block();
+        return updateWithResponse(resourceGroupName, accountName, filterName, parameters, Context.NONE).getValue();
     }
 
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of AccountFilter items.
+     * @return a collection of AccountFilter items along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<AccountFilterInner>> listNextSinglePageAsync(String nextLink) {
@@ -1063,12 +1107,14 @@ public final class AccountFiltersClientImpl implements AccountFiltersClient {
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a collection of AccountFilter items.
+     * @return a collection of AccountFilter items along with {@link PagedResponse} on successful completion of {@link
+     *     Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<AccountFilterInner>> listNextSinglePageAsync(String nextLink, Context context) {

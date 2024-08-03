@@ -3,8 +3,12 @@ $LanguageDisplayName = "Java"
 $PackageRepository = "Maven"
 $packagePattern = "*.pom"
 $MetadataUri = "https://raw.githubusercontent.com/Azure/azure-sdk/main/_data/releases/latest/java-packages.csv"
-$BlobStorageUrl = "https://azuresdkdocs.blob.core.windows.net/%24web?restype=container&comp=list&prefix=java%2F&delimiter=%2F"
 $CampaignTag = Resolve-Path (Join-Path -Path $PSScriptRoot -ChildPath "../repo-docs/ga_tag.html")
+$GithubUri = "https://github.com/Azure/azure-sdk-for-java"
+$PackageRepositoryUri = "https://repo1.maven.org/maven2"
+
+. "$PSScriptRoot/docs/Docs-ToC.ps1"
+. "$PSScriptRoot/docs/Docs-Onboarding.ps1"
 
 function Get-java-PackageInfoFromRepo ($pkgPath, $serviceDirectory)
 {
@@ -59,34 +63,43 @@ function Get-java-PackageInfoFromRepo ($pkgPath, $serviceDirectory)
 # Returns the maven (really sonatype) publish status of a package id and version.
 function IsMavenPackageVersionPublished($pkgId, $pkgVersion, $groupId)
 {
-  try
+  $uri = "https://oss.sonatype.org/content/repositories/releases/$($groupId.Replace('.', '/'))/$pkgId/$pkgVersion/$pkgId-$pkgVersion.pom"
+
+  $attempt = 1
+  while ($attempt -le 3)
   {
-    $uri = "https://oss.sonatype.org/content/repositories/releases/$groupId/$pkgId/$pkgVersion/$pkgId-$pkgVersion.pom"
-    $pomContent = Invoke-RestMethod -MaximumRetryCount 3 -RetryIntervalSec 10 -Method "GET" -uri $uri
-
-    if ($pomContent -ne $null -or $pomContent.Length -eq 0)
+    try
     {
-      return $true
+      if ($attempt -gt 1) {
+        Start-Sleep -Seconds ([Math]::Pow(2, $attempt))
+      }
+
+      Write-Host "Checking published package at $uri"
+      $response = Invoke-WebRequest -Method "GET" -uri $uri -SkipHttpErrorCheck
+
+      if ($response.BaseResponse.IsSuccessStatusCode)
+      {
+        return $true
+      }
+
+      $statusCode = $response.StatusCode
+
+      if ($statusCode -eq 404)
+      {
+        return $false
+      }
+
+      Write-Host "Http request for maven package $groupId`:$pkgId`:$pkgVersion failed attempt $attempt with statuscode $statusCode"
     }
-    else
+    catch
     {
-      return $false
-    }
-  }
-  catch
-  {
-    $statusCode = $_.Exception.Response.StatusCode.value__
-    $statusDescription = $_.Exception.Response.StatusDescription
-
-    # if this is 404ing, then this pkg has never been published before
-    if ($statusCode -eq 404) {
-      return $false
+      Write-Host "Http request for maven package $groupId`:$pkgId`:$pkgVersion failed attempt $attempt with exception $($_.Exception.Message)"
     }
 
-    Write-Host "VersionCheck to maven for packageId $pkgId failed with statuscode $statusCode"
-    Write-Host $statusDescription
-    exit(1)
+    $attempt += 1
   }
+
+  throw "Http request for maven package $groupId`:$pkgId`:$pkgVersion failed after 3 attempts"
 }
 
 # Parse out package publishing information given a maven POM file
@@ -97,7 +110,7 @@ function Get-java-PackageInfoFromPackageFile ($pkg, $workingDirectory)
   $pkgId = $contentXML.project.artifactId
   $docsReadMeName = $pkgId -replace "^azure-" , ""
   $pkgVersion = $contentXML.project.version
-  $groupId = if ($contentXML.project.groupId -eq $null) { $contentXML.project.parent.groupId } else { $contentXML.project.groupId }
+  $groupId = if ($null -eq $contentXML.project.groupId) { $contentXML.project.parent.groupId } else { $contentXML.project.groupId }
   $releaseNotes = ""
   $readmeContent = ""
 
@@ -126,6 +139,38 @@ function Get-java-PackageInfoFromPackageFile ($pkg, $workingDirectory)
     ReadmeContent  = $readmeContent
     DocsReadMeName = $docsReadMeName
   }
+}
+
+# Defined in common.ps1 as:
+# $GetDocsMsDevLanguageSpecificPackageInfoFn = "Get-${Language}-DocsMsDevLanguageSpecificPackageInfo"
+function Get-java-DocsMsDevLanguageSpecificPackageInfo($packageInfo, $packageSourceOverride) {
+  # If the default namespace isn't in the package info then it needs to be added
+  # Can't check if (!$packageInfo.Namespaces) in strict mode because Namespaces won't exist
+  # at all.
+  if (!($packageInfo | Get-Member Namespaces)) {
+    $version = $packageInfo.Version
+    # If the dev version is set, use that
+    if ($packageInfo.DevVersion) {
+      $version = $packageInfo.DevVersion
+    }
+    $namespaces = Fetch-Namespaces-From-Javadoc $packageInfo.Name $packageInfo.Group $version
+    # If there are namespaces found from the javadoc.jar then add them to the packageInfo which
+    # will later update the metadata json file in the docs repository. If there aren't any namespaces
+    # then don't add the namespaces member with an empty list. The reason being is that the
+    # UpdateDocsMsMetadataForPackage function will merge the packageInfo json and the metadata json
+    # files by taking any properties in the metadata json file that aren't in the packageInfo and add
+    # them from the metadata. This allows us to set the namespaces for things that can't be figured out
+    # through the javadoc, like track 1 libraries whose javadoc.jar files don't contain anything, in
+    # the metadata json files.
+    if ($namespaces.Count -gt 0) {
+      Write-Host "Get-java-DocsMsDevLanguageSpecificPackageInfo:adding namespaces property with the following namespaces:"
+      $namespaces | Write-Host
+      $packageInfo | Add-Member -Type NoteProperty -Name "Namespaces" -Value $namespaces
+    } else {
+      Write-Host "Get-java-DocsMsDevLanguageSpecificPackageInfo: no namespaces to add"
+    }
+  }
+  return $packageInfo
 }
 
 # Stage and Upload Docs to blob Storage
@@ -208,361 +253,36 @@ function Get-java-GithubIoDocIndex()
   $nonClientPackages = $metadata | Where-Object { $_.GroupId -ne 'com.azure' -and !$clientPackages.Package.Contains($_.Package) }
   $uniquePackages = $clientPackages + $nonClientPackages
   # Get the artifacts name from blob storage
-  $artifacts =  Get-BlobStorage-Artifacts -blobStorageUrl $BlobStorageUrl -blobDirectoryRegex "^java/(.*)/$" -blobArtifactsReplacement '$1'
+  $artifacts =  Get-BlobStorage-Artifacts `
+    -blobDirectoryRegex "^java/(.*)/$" `
+    -blobArtifactsReplacement '$1' `
+    -storageAccountName 'azuresdkdocs' `
+    -storageContainerName '$web' `
+    -storagePrefix 'java/'
+
   # Build up the artifact to service name mapping for GithubIo toc.
   $tocContent = Get-TocMapping -metadata $uniquePackages -artifacts $artifacts
   # Generate yml/md toc files and build site.
   GenerateDocfxTocContent -tocContent $tocContent -lang "Java" -campaignId "UA-62780441-42"
 }
 
-# a "package.json configures target packages for all the monikers in a Repository, it also has a slightly different
-# schema than the moniker-specific json config that is seen in python and js
-function Update-java-CIConfig($pkgs, $ciRepo, $locationInDocRepo, $monikerId=$null)
-{
-  $pkgJsonLoc = (Join-Path -Path $ciRepo -ChildPath $locationInDocRepo)
-
-  if (-not (Test-Path $pkgJsonLoc)) {
-    Write-Error "Unable to locate package json at location $pkgJsonLoc, exiting."
-    exit(1)
-  }
-
-  $allJsonData = Get-Content $pkgJsonLoc | ConvertFrom-Json
-
-  $visibleInCI = @{}
-
-  for ($i=0; $i -lt $allJsonData[$monikerId].packages.Length; $i++) {
-    $pkgDef = $allJsonData[$monikerId].packages[$i]
-    $visibleInCI[$pkgDef.packageArtifactId] = $i
-  }
-
-  foreach ($releasingPkg in $pkgs) {
-    if ($visibleInCI.ContainsKey($releasingPkg.PackageId)) {
-      $packagesIndex = $visibleInCI[$releasingPkg.PackageId]
-      $existingPackageDef = $allJsonData[$monikerId].packages[$packagesIndex]
-      $existingPackageDef.packageVersion = $releasingPkg.PackageVersion
-    }
-    else {
-      $newItem = New-Object PSObject -Property @{
-        packageDownloadUrl = "https://repo1.maven.org/maven2"
-        packageGroupId = $releasingPkg.GroupId
-        packageArtifactId = $releasingPkg.PackageId
-        packageVersion = $releasingPkg.PackageVersion
-        inputPath = @()
-        excludePath = @()
-      }
-
-      $allJsonData[$monikerId].packages += $newItem
-    }
-  }
-
-  $jsonContent = $allJsonData | ConvertTo-Json -Depth 10 | % {$_ -replace "(?m)  (?<=^(?:  )*)", "    " }
-
-  Set-Content -Path $pkgJsonLoc -Value $jsonContent
-}
-
-$PackageExclusions = @{
-  "azure-core-experimental" = "Don't want to include an experimental package.";
-  "azure-sdk-bom" = "Don't want to include the sdk bom.";
-}
-
-# Validates if the package will succeed in the CI build by validating the
-# existence of a com folder in the unzipped source package
-function SourcePackageHasComFolder($artifactNamePrefix, $packageDirectory) {
-  try
-  {
-    $packageArtifact = "${artifactNamePrefix}:jar:sources"
-    $mvnResults = mvn `
-      dependency:copy `
-      -Dartifact="$packageArtifact" `
-      -DoutputDirectory="$packageDirectory" 
-
-    if ($LASTEXITCODE) {
-      LogWarning "Could not download source artifact: $packageArtifact"
-      $mvnResults | Write-Host
-      return $false
-    }
-
-    $sourcesJarPath = (Get-ChildItem -File -Path $packageDirectory -Filter "*-sources.jar")[0]
-    $sourcesExtractPath = Join-Path $packageDirectory "sources"
-    Add-Type -AssemblyName System.IO.Compression.FileSystem
-    [System.IO.Compression.ZipFile]::ExtractToDirectory($sourcesJarPath, $sourcesExtractPath)
-
-    if (!(Test-Path "$sourcesExtractPath\com")) {
-      LogWarning "Could not locate 'com' folder extracting $packageArtifact"
-      return $false
-    }
-  }
-  catch
-  {
-    LogError "Exception while updating checking if package can be documented: $($package.packageGroupId):$($package.packageArtifactId)"
-    LogError $_
-    LogError $_.ScriptStackTrace
-    return $false
-  }
-
-  return $true
-}
-
-function PackageDependenciesResolve($artifactNamePrefix, $packageDirectory) {
-
-  $pomArtifactName = "${artifactNamePrefix}:pom"
-  $artifactDownloadOutput = mvn `
-    dependency:copy `
-    -Dartifact="$pomArtifactName" `
-    -DoutputDirectory="$packageDirectory"
-
-  if ($LASTEXITCODE) {
-    LogWarning "Could not download pom artifact: $pomArtifactName"
-    $artifactDownloadOutput | Write-Host
-    return $false
-  }
-
-  $downloadedPomPath = (Get-ChildItem -File -Path $packageDirectory -Filter '*.pom')[0]
-
-  # -P '!azure-mgmt-sdk-test-jar' excludes the unpublished test jar from
-  # dependencies
-  $copyDependencyOutput = mvn `
-    -f $downloadedPomPath `
-    dependency:copy-dependencies `
-    -P '!azure-mgmt-sdk-test-jar' `
-    -DoutputDirectory="$packageDirectory"
-
-  if ($LASTEXITCODE) {
-    LogWarning "Could not resolve dependencies for: $pomArtifactName"
-    $copyDependencyOutput | Write-Host
-    return $false
-  }
-
-  return $true
-}
-
-function ValidatePackage($groupId, $artifactId, $version, $DocValidationImageId) {
-  $workingDirectory = Join-Path ([System.IO.Path]::GetTempPath()) "validation"
-  if (!(Test-Path $workingDirectory)) {
-    New-Item -ItemType Directory -Force -Path $workingDirectory | Out-Null
-  }
-
-  $artifactNamePrefix = "${groupId}:${artifactId}:${version}"
-
-  $packageDirectory = Join-Path `
-    $workingDirectory `
-    "${groupId}__${artifactId}__${version}"
-  New-Item -ItemType Directory -Path $packageDirectory -Force | Out-Null
-
-  # Add more validation by replicating as much of the docs CI process as
-  # possible
-  # https://github.com/Azure/azure-sdk-for-python/issues/20109
-  if (!$DocValidationImageId) 
-  {
-    Write-Host "Validating using mvn command directly on $artifactId."
-    return FallbackValidation -artifactNamePrefix $artifactNamePrefix -workingDirectory $packageDirectory
-  } 
-  else 
-  {
-    Write-Host "Validating using $DocValidationImageId on $artifactId."
-    return DockerValidation -packageName "$artifactId" -packageVersion "$version" -groupId "$groupId" -DocValidationImageId $DocValidationImageId -workingDirectory $packageDirectory
-  }
-}
-
-function FallbackValidation ($artifactNamePrefix, $workingDirectory) 
-{
-  return (SourcePackageHasComFolder $artifactNamePrefix $workingDirectory) `
-    -and (PackageDependenciesResolve $artifactNamePrefix $workingDirectory)
-}
-
-function DockerValidation($packageName, $packageVersion, $groupId, $DocValidationImageId, $workingdirectory) 
-{
-  $output = docker run -v "${workingDirectory}:/workdir/out" `
-    -e TARGET_PACKAGE=$packageName -e TARGET_VERSION=$packageVersion -e TARGET_GROUP_ID=$groupId -t $DocValidationImageId 2>&1 
-  # The docker exit codes: https://docs.docker.com/engine/reference/run/#exit-status
-  # If the docker failed because of docker itself instead of the application, 
-  # we should skip the validation and keep the packages. 
-  $artifactNamePrefix = "${groupId}:${packageName}:${packageVersion}"
-  if ($LASTEXITCODE -eq 125 -Or $LASTEXITCODE -eq 126 -Or $LASTEXITCODE -eq 127) 
-  { 
-    LogWarning "The `docker` command does not work with exit code $LASTEXITCODE. Fall back to mvn install $artifactNamePrefix directly."
-    $output | Write-Host
-    FallbackValidation -artifactNamePrefix "$artifactNamePrefix" -workingDirectory $workingdirectory
-  }
-  elseif ($LASTEXITCODE -ne 0) 
-  { 
-    LogWarning "Package $artifactNamePrefix ref docs validation failed."
-    $output | Write-Host
-    return $false
-  }
-  return $true
-}
-
-function Update-java-DocsMsPackages($DocsRepoLocation, $DocsMetadata, $DocValidationImageId) {
-  Write-Host "Excluded packages:"
-  foreach ($excludedPackage in $PackageExclusions.Keys) {
-    Write-Host "  $excludedPackage - $($PackageExclusions[$excludedPackage])"
-  }
-
-  # Also exclude 'spring' packages
-  # https://github.com/Azure/azure-sdk-for-java/issues/23087
-  $FilteredMetadata = $DocsMetadata.Where({ !($PackageExclusions.ContainsKey($_.Package) -or $_.Type -eq 'spring') })
-
-  UpdateDocsMsPackages `
-    (Join-Path $DocsRepoLocation 'package.json') `
-    'preview' `
-    $FilteredMetadata
-
-  UpdateDocsMsPackages `
-    (Join-Path $DocsRepoLocation 'package.json') `
-    'latest' `
-    $FilteredMetadata
-}
-
-function UpdateDocsMsPackages($DocConfigFile, $Mode, $DocsMetadata) {
-  $packageConfig = Get-Content $DocConfigFile -Raw | ConvertFrom-Json
-
-  $packageOutputPath = 'docs-ref-autogen'
-  if ($Mode -eq 'preview') {
-    $packageOutputPath = 'preview/docs-ref-autogen'
-  }
-  $targetPackageList = $packageConfig.Where({ $_.output_path -eq $packageOutputPath})
-  if ($targetPackageList.Length -eq 0) {
-    LogError "Unable to find package config for $packageOutputPath in $DocConfigFile"
-    exit 1
-  } elseif ($targetPackageList.Length -gt 1) {
-    LogError "Found multiple package configs for $packageOutputPath in $DocConfigFile"
-    exit 1
-  }
-
-  $targetPackageList = $targetPackageList[0]
-
-  $outputPackages = @()
-  foreach ($package in $targetPackageList.packages) {
-    $packageGroupId = $package.packageGroupId
-    $packageName = $package.packageArtifactId
-
-    $matchingPublishedPackageArray = $DocsMetadata.Where({
-      $_.Package -eq $packageName -and $_.GroupId -eq $packageGroupId
-    })
-
-    # If this package does not match any published packages keep it in the list.
-    # This handles packages which are not tracked in metadata but still need to
-    # be built in Docs CI.
-    if ($matchingPublishedPackageArray.Count -eq 0) {
-      Write-Host "Keep non-tracked package: $packageName"
-      $outputPackages += $package
-      continue
-    }
-
-    if ($matchingPublishedPackageArray.Count -gt 1) {
-      LogWarning "Found more than one matching published package in metadata for $packageName; only updating first entry"
-    }
-    $matchingPublishedPackage = $matchingPublishedPackageArray[0]
-
-    if ($Mode -eq 'preview' -and !$matchingPublishedPackage.VersionPreview.Trim()) {
-      # If we are in preview mode and the package does not have a superseding
-      # preview version, remove the package from the list.
-      Write-Host "Remove superseded preview package: $packageName"
-      continue
-    }
-
-    if ($Mode -eq 'latest' -and !$matchingPublishedPackage.VersionGA.Trim()) {
-      LogWarning "Metadata is missing GA version for GA package $packageName. Keeping existing package."
-      $outputPackages += $package
-      continue
-    }
-
-    $packageVersion = $($matchingPublishedPackage.VersionGA)
-    if ($Mode -eq 'preview') {
-      if (!$matchingPublishedPackage.VersionPreview.Trim()) {
-        LogWarning "Metadata is missing preview version for preview package $packageName. Keeping existing package."
-        $outputPackages += $package
-        continue
-      }
-      $packageVersion = $matchingPublishedPackage.VersionPreview
-    }
-
-    # If upgrading the package, run basic sanity checks against the package
-    if ($package.packageVersion -ne $packageVersion) {
-      Write-Host "Validating new version detected for $packageName ($packageVersion)"
-      $validatePackageResult = ValidatePackage $package.packageGroupId $package.packageArtifactId $packageVersion 
-
-      if (!$validatePackageResult) {
-        LogWarning "Package is not valid: $packageName. Keeping old version."
-        $outputPackages += $package
-        continue
-      }
-
-      $package.packageVersion = $packageVersion
-    }
-
-    Write-Host "Keeping tracked package: $packageName."
-    $outputPackages += $package
-  }
-
-  $outputPackagesHash = @{}
-  foreach ($package in $outputPackages) {
-    $outputPackagesHash["$($package.packageGroupId):$($package.packageArtifactId)"] = $true
-  }
-
-  $remainingPackages = @()
-  if ($Mode -eq 'preview') {
-    $remainingPackages = $DocsMetadata.Where({
-      $_.VersionPreview.Trim() -and !$outputPackagesHash.ContainsKey("$($_.GroupId):$($_.Package)")
-    })
-  } else {
-    $remainingPackages = $DocsMetadata.Where({
-      $_.VersionGA.Trim() -and !$outputPackagesHash.ContainsKey("$($_.GroupId):$($_.Package)")
-    })
-  }
-
-  # Add packages that exist in the metadata but are not onboarded in docs config
-  foreach ($package in $remainingPackages) {
-    $packageName = $package.Package
-    $packageGroupId = $package.GroupId
-    $packageVersion = $package.VersionGA
-    if ($Mode -eq 'preview') {
-      $packageVersion = $package.VersionPreview
-    }
-
-    Write-Host "Validating new package $($packageGroupId):$($packageName):$($packageVersion)"
-    $validatePackageResult = ValidatePackage $packageGroupId $packageName $packageVersion 
-    if (!$validatePackageResult) {
-      LogWarning "Package is not valid: ${packageGroupId}:$packageName. Cannot onboard."
-      continue
-    }
-
-    Write-Host "Add new package from metadata: ${packageGroupId}:$packageName"
-    $package = [ordered]@{
-      packageArtifactId = $packageName
-      packageGroupId = $packageGroupId
-      packageVersion = $packageVersion
-      packageDownloadUrl = "https://repo1.maven.org/maven2"
-    }
-
-    $outputPackages += $package
-  }
-
-  $targetPackageList.packages = $outputPackages
-
-  # It is assumed that there is a matching config from above when the number of
-  # matching $targetPackageList is 1
-  foreach ($config in $packageConfig) {
-    if ($config.output_path -eq $packageOutputPath) {
-      $config = $targetPackageList
-      break
-    }
-  }
-
-  $outputJson = ConvertTo-Json $packageConfig -Depth 100
-  Set-Content -Path $DocConfigFile -Value $outputJson
-  Write-Host "Onboarding configuration $Mode written to: $DocConfigFile"
-}
-
 # function is used to filter packages to submit to API view tool
 function Find-java-Artifacts-For-Apireview($artifactDir, $pkgName)
 {
+  # skip spark packages
+  if ($pkgName.Contains("-spark")) {
+    return $null
+  }
+  # skip azure-cosmos-test package because it needs to be releaesd
+  if ($pkgName.Contains("azure-cosmos-test")) {
+    return $null
+  }
+
   # Find all source jar files in given artifact directory
   # Filter for package in "com.azure*" groupid.
   $artifactPath = Join-Path $artifactDir "com.azure*" $pkgName
   Write-Host "Checking for source jar in artifact path $($artifactPath)"
-  $files = Get-ChildItem -Recurse "${artifactPath}" | Where-Object -FilterScript {$_.Name.EndsWith("sources.jar")}
+  $files = @(Get-ChildItem -Recurse "${artifactPath}" | Where-Object -FilterScript {$_.Name.EndsWith("sources.jar")})
   if (!$files)
   {
     Write-Host "$($artifactPath) does not have any package"
@@ -602,8 +322,10 @@ function SetPackageVersion ($PackageName, $Version, $ServiceDirectory, $ReleaseD
   {
     $ReleaseDate = Get-Date -Format "yyyy-MM-dd"
   }
+  $fullLibraryName = $GroupId + ":" + $PackageName
   python "$EngDir/versioning/set_versions.py" --build-type $BuildType --new-version $Version --ai $PackageName --gi $GroupId
-  python "$EngDir/versioning/update_versions.py" --update-type library --build-type $BuildType --sr
+  # -ll option says "only update README and CHANGELOG entries for libraries that are on the list"
+  python "$EngDir/versioning/update_versions.py" --update-type library --build-type $BuildType --ll $fullLibraryName
   & "$EngCommonScriptsDir/Update-ChangeLog.ps1" -Version $Version -ServiceDirectory $ServiceDirectory -PackageName $PackageName `
   -Unreleased $False -ReplaceLatestEntryTitle $ReplaceLatestEntryTitle -ReleaseDate $ReleaseDate
 }
@@ -616,7 +338,7 @@ function GetExistingPackageVersions ($PackageName, $GroupId=$null)
     if($response.numFound -ne 0)
     {
       $existingVersion = $response.docs.v
-      if ($existingVersion.Count -gt 0) 
+      if ($existingVersion.Count -gt 0)
       {
         [Array]::Reverse($existingVersion)
         return $existingVersion
@@ -630,15 +352,17 @@ function GetExistingPackageVersions ($PackageName, $GroupId=$null)
   }
 }
 
-function Get-java-DocsMsMetadataForPackage($PackageInfo) { 
+# Defined in common.ps1
+# $GetDocsMsMetadataForPackageFn = "Get-${Language}-DocsMsMetadataForPackage"
+function Get-java-DocsMsMetadataForPackage($PackageInfo) {
   $readmeName = $PackageInfo.Name.ToLower()
   Write-Host "Docs.ms Readme name: $($readmeName)"
 
   # Readme names (which are used in the URL) should not include redundant terms
-  # when viewed in URL form. For example: 
+  # when viewed in URL form. For example:
   # https://review.docs.microsoft.com/en-us/java/api/overview/azure/storage-blob-readme
   # Note how the end of the URL doesn't look like:
-  # ".../azure/azure-storage-blobs-readme" 
+  # ".../azure/azure-storage-blobs-readme"
 
   # This logic eliminates a preceeding "azure-" in the readme filename.
   # "azure-storage-blobs" -> "storage-blobs"
@@ -650,15 +374,143 @@ function Get-java-DocsMsMetadataForPackage($PackageInfo) {
     DocsMsReadMeName = $readmeName
     LatestReadMeLocation  = 'docs-ref-services/latest'
     PreviewReadMeLocation = 'docs-ref-services/preview'
+    LegacyReadMeLocation  = 'docs-ref-services/legacy'
     Suffix = ''
   }
 }
 
-function Validate-java-DocMsPackages ($PackageInfo, $DocValidationImageId) 
-{
-  if (!(ValidatePackage $PackageInfo.Group $PackageInfo.Name $PackageInfo.Version $DocValidationImageId)) 
-  {
-    Write-Error "Package $($PackageInfo.Name) failed on validation" -ErrorAction Continue
+# Defined in common.ps1 as:
+# $ValidateDocsMsPackagesFn = "Validate-${Language}-DocMsPackages"
+function Validate-java-DocMsPackages ($PackageInfo, $PackageInfos, $DocValidationImageId) {
+  # While eng/common/scripts/Update-DocsMsMetadata.ps1 is still passing a single packageInfo, process as a batch
+  if (!$PackageInfos) {
+    $PackageInfos = @($PackageInfo)
   }
-  return
+
+  # The install-rex-validation-tool.yml will install the java2docfx jar file into the Build.BinariesDirectory
+  # which is a DevOps variable for the directory. In PS that variable is BUILD_BINARIESDIRECTORY.
+  # The reason why this is necessary is that the command for java2docfx is in the following format:
+  # java –jar java2docfx-1.0.0.jar.jar --packagesJsonFile "C\temp\package.json"
+  # or
+  # java –jar java2docfx-1.0.0.jar --package "<GroupId>:<ArtifactId>:<Version>"
+  # which means we need to know where, exactly, because the java command requires the full path
+  # to the jar file as an argument
+  $java2docfxJar = $null
+  if (!$Env:BUILD_BINARIESDIRECTORY) {
+    LogError "Env:BUILD_BINARIESDIRECTORY is not set and this is where the java2docfx jar file should be installed."
+    return $false
+  }
+  $java2docfxDir = Join-Path $Env:BUILD_BINARIESDIRECTORY "java2docfx"
+  if (!(Test-Path $java2docfxDir)) {
+    LogError "There should be a java2docfx directory under Env:BUILD_BINARIESDIRECTORY. Ensure that the /eng/pipelines/templates/steps/install-rex-validation-tool.yml template was run prior to whatever step is running this."
+    return $false
+  }
+  $java2docfxJarLoc = @(Get-ChildItem -Path $java2docfxDir -File -Filter "java2docfx*.jar")
+  if (!$java2docfxJarLoc) {
+    LogError "The java2docfx jar file should be installed in $java2docfxDir and is not there."
+    return $false
+  } else {
+    # In theory, this shouldn't happen as the install-rex-validation-tool.yml is the only thing
+    # that'll ever install the jar
+    if ($java2docfxJarLoc.Count -gt 1) {
+        Write-Host "There were $($java2docfxJarLoc.Count) java2docfx jar files found in $Build_BinariesDirectory, using the first one"
+    }
+    $java2docfxJar = $java2docfxJarLoc[0]
+    Write-Host "java2docfx jar location=$java2docfxJar"
+  }
+
+  $allSuccess = $true
+  $originLocation = Get-Location
+  foreach ($packageInfo in $PackageInfos) {
+    $artifact = "$($packageInfo.Group):$($packageInfo.Name):$($packageInfo.Version)"
+    $tempDirectory = Join-Path ([System.IO.Path]::GetTempPath()) "$($packageInfo.Group)-$($packageInfo.Name)-$($packageInfo.Version)"
+    New-Item $tempDirectory -ItemType Directory | Out-Null
+    # Set the location to the temp directory. The reason being is that it'll effectively be empty, no
+    # other jars, no POM files aka nothing Java related to pick up.
+    Set-Location $tempDirectory
+    try {
+      Write-Host "Calling java2docfx for $artifact"
+      Write-Host "java -jar ""$java2docfxJar"" -p ""$artifact"""
+      $java2docfxResults = java `
+      -jar "$java2docfxJar"`
+      -p "$artifact"
+      # JRS-TODO: The -o option is something I'm currently questioning the behavior of but
+      # I can do some initial testing without that option being set
+      # -p "$artifact" `
+      # -o "$tempDirectory"
+
+      if ($LASTEXITCODE -ne 0) {
+        LogWarning "java2docfx failed for $artifact"
+        $java2docfxResults | Write-Host
+        $allSuccess = $false
+      }
+    }
+    catch {
+      LogError "Exception while trying to download: $artifact"
+      LogError $_
+      LogError $_.ScriptStackTrace
+      $allSuccess = $false
+    }
+    finally {
+      # Ensure that the origianl location is restored
+      Set-Location $originLocation
+      # everything is contained within the temp directory, clean it up every time
+      if (Test-Path $tempDirectory) {
+        Remove-Item $tempDirectory -Recurse -Force
+      }
+    }
+  }
+
+  return $allSuccess
 }
+
+function Get-java-EmitterName() {
+  return "@azure-tools/typespec-java"
+}
+
+function Get-java-EmitterAdditionalOptions([string]$projectDirectory) {
+  return "--option @azure-tools/typespec-java.emitter-output-dir=$projectDirectory/"
+}
+
+function Get-java-DirectoriesForGeneration() {
+    $sdkDirectories = Get-ChildItem -Path "$RepoRoot/sdk" -Directory | Get-ChildItem -Directory
+
+    return $sdkDirectories | Where-Object {
+        (Test-Path -Path "$_/tsp-location.yaml") -or
+        (Test-Path -Path "$_/swagger/Update-Codegeneration.ps1")
+    }
+}
+
+function Update-java-GeneratedSdks([string]$PackageDirectoriesFile) {
+  $packageDirectories = Get-Content $PackageDirectoriesFile | ConvertFrom-Json
+
+  foreach ($directory in $packageDirectories) {
+    Push-Location $RepoRoot
+    try {
+        $tspLocationFile = Get-Item -Path "sdk/$directory/tsp-location.yaml" -ErrorAction SilentlyContinue
+        $updateScript = Get-Item -Path "sdk/$directory/swagger/Update-CodeGeneration.ps1" -ErrorAction SilentlyContinue
+
+        if ($tspLocationFile) {
+            Write-Host "Found tsp-location.yaml in $directory, using typespec to generate projects"
+            ./eng/common/scripts/TypeSpec-Project-Sync.ps1 "sdk/$directory"
+            ./eng/common/scripts/TypeSpec-Project-Generate.ps1 "sdk/$directory"
+        } elseif ($updateScript) {
+            Write-Host "Using $updateScript to generate projects"
+            & $updateScript.FullName
+        } else {
+            Write-Host "No tsp-location.yaml or swagger/Update-Codegeneration.ps1 found in $directory, skipping"
+        }
+    }
+    finally {
+      Pop-Location
+    }
+  }
+}
+
+function Get-java-ApiviewStatusCheckRequirement($packageInfo) {
+  if ($packageInfo.IsNewSdk -and ($packageInfo.SdkType -eq "client" -or $packageInfo.SdkType -eq "spring")) {
+    return $true
+  }
+  return $false
+}
+

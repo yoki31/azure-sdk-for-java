@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Describes the capabilities/features allowed for a specific SKU. */
+/**
+ * Describes the capabilities/features allowed for a specific SKU.
+ */
 @Fluent
 public final class CapabilityInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(CapabilityInner.class);
-
     /*
      * Name of the SKU capability.
      */
@@ -33,8 +31,14 @@ public final class CapabilityInner {
     private String reason;
 
     /**
+     * Creates an instance of CapabilityInner class.
+     */
+    public CapabilityInner() {
+    }
+
+    /**
      * Get the name property: Name of the SKU capability.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -43,7 +47,7 @@ public final class CapabilityInner {
 
     /**
      * Set the name property: Name of the SKU capability.
-     *
+     * 
      * @param name the name value to set.
      * @return the CapabilityInner object itself.
      */
@@ -54,7 +58,7 @@ public final class CapabilityInner {
 
     /**
      * Get the value property: Value of the SKU capability.
-     *
+     * 
      * @return the value value.
      */
     public String value() {
@@ -63,7 +67,7 @@ public final class CapabilityInner {
 
     /**
      * Set the value property: Value of the SKU capability.
-     *
+     * 
      * @param value the value value to set.
      * @return the CapabilityInner object itself.
      */
@@ -74,7 +78,7 @@ public final class CapabilityInner {
 
     /**
      * Get the reason property: Reason of the SKU capability.
-     *
+     * 
      * @return the reason value.
      */
     public String reason() {
@@ -83,7 +87,7 @@ public final class CapabilityInner {
 
     /**
      * Set the reason property: Reason of the SKU capability.
-     *
+     * 
      * @param reason the reason value to set.
      * @return the CapabilityInner object itself.
      */
@@ -94,7 +98,7 @@ public final class CapabilityInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

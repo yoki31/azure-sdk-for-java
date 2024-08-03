@@ -5,37 +5,40 @@
 package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeId;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.List;
 
-/** A copy activity Azure Blob sink. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
+/**
+ * A copy activity Azure Blob sink.
+ */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type", defaultImpl = BlobSink.class, visible = true)
 @JsonTypeName("BlobSink")
 @Fluent
 public final class BlobSink extends CopySink {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(BlobSink.class);
+    /*
+     * Copy sink type.
+     */
+    @JsonTypeId
+    @JsonProperty(value = "type", required = true)
+    private String type = "BlobSink";
 
     /*
-     * Blob writer overwrite files. Type: boolean (or Expression with
-     * resultType boolean).
+     * Blob writer overwrite files. Type: boolean (or Expression with resultType boolean).
      */
     @JsonProperty(value = "blobWriterOverwriteFiles")
     private Object blobWriterOverwriteFiles;
 
     /*
-     * Blob writer date time format. Type: string (or Expression with
-     * resultType string).
+     * Blob writer date time format. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "blobWriterDateTimeFormat")
     private Object blobWriterDateTimeFormat;
 
     /*
-     * Blob writer add header. Type: boolean (or Expression with resultType
-     * boolean).
+     * Blob writer add header. Type: boolean (or Expression with resultType boolean).
      */
     @JsonProperty(value = "blobWriterAddHeader")
     private Object blobWriterAddHeader;
@@ -47,16 +50,32 @@ public final class BlobSink extends CopySink {
     private Object copyBehavior;
 
     /*
-     * Specify the custom metadata to be added to sink data. Type: array of
-     * objects (or Expression with resultType array of objects).
+     * Specify the custom metadata to be added to sink data. Type: array of objects (or Expression with resultType array
+     * of objects).
      */
     @JsonProperty(value = "metadata")
     private List<MetadataItem> metadata;
 
     /**
+     * Creates an instance of BlobSink class.
+     */
+    public BlobSink() {
+    }
+
+    /**
+     * Get the type property: Copy sink type.
+     * 
+     * @return the type value.
+     */
+    @Override
+    public String type() {
+        return this.type;
+    }
+
+    /**
      * Get the blobWriterOverwriteFiles property: Blob writer overwrite files. Type: boolean (or Expression with
      * resultType boolean).
-     *
+     * 
      * @return the blobWriterOverwriteFiles value.
      */
     public Object blobWriterOverwriteFiles() {
@@ -66,7 +85,7 @@ public final class BlobSink extends CopySink {
     /**
      * Set the blobWriterOverwriteFiles property: Blob writer overwrite files. Type: boolean (or Expression with
      * resultType boolean).
-     *
+     * 
      * @param blobWriterOverwriteFiles the blobWriterOverwriteFiles value to set.
      * @return the BlobSink object itself.
      */
@@ -78,7 +97,7 @@ public final class BlobSink extends CopySink {
     /**
      * Get the blobWriterDateTimeFormat property: Blob writer date time format. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @return the blobWriterDateTimeFormat value.
      */
     public Object blobWriterDateTimeFormat() {
@@ -88,7 +107,7 @@ public final class BlobSink extends CopySink {
     /**
      * Set the blobWriterDateTimeFormat property: Blob writer date time format. Type: string (or Expression with
      * resultType string).
-     *
+     * 
      * @param blobWriterDateTimeFormat the blobWriterDateTimeFormat value to set.
      * @return the BlobSink object itself.
      */
@@ -100,7 +119,7 @@ public final class BlobSink extends CopySink {
     /**
      * Get the blobWriterAddHeader property: Blob writer add header. Type: boolean (or Expression with resultType
      * boolean).
-     *
+     * 
      * @return the blobWriterAddHeader value.
      */
     public Object blobWriterAddHeader() {
@@ -110,7 +129,7 @@ public final class BlobSink extends CopySink {
     /**
      * Set the blobWriterAddHeader property: Blob writer add header. Type: boolean (or Expression with resultType
      * boolean).
-     *
+     * 
      * @param blobWriterAddHeader the blobWriterAddHeader value to set.
      * @return the BlobSink object itself.
      */
@@ -121,7 +140,7 @@ public final class BlobSink extends CopySink {
 
     /**
      * Get the copyBehavior property: The type of copy behavior for copy sink.
-     *
+     * 
      * @return the copyBehavior value.
      */
     public Object copyBehavior() {
@@ -130,7 +149,7 @@ public final class BlobSink extends CopySink {
 
     /**
      * Set the copyBehavior property: The type of copy behavior for copy sink.
-     *
+     * 
      * @param copyBehavior the copyBehavior value to set.
      * @return the BlobSink object itself.
      */
@@ -142,7 +161,7 @@ public final class BlobSink extends CopySink {
     /**
      * Get the metadata property: Specify the custom metadata to be added to sink data. Type: array of objects (or
      * Expression with resultType array of objects).
-     *
+     * 
      * @return the metadata value.
      */
     public List<MetadataItem> metadata() {
@@ -152,7 +171,7 @@ public final class BlobSink extends CopySink {
     /**
      * Set the metadata property: Specify the custom metadata to be added to sink data. Type: array of objects (or
      * Expression with resultType array of objects).
-     *
+     * 
      * @param metadata the metadata value to set.
      * @return the BlobSink object itself.
      */
@@ -161,42 +180,54 @@ public final class BlobSink extends CopySink {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BlobSink withWriteBatchSize(Object writeBatchSize) {
         super.withWriteBatchSize(writeBatchSize);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BlobSink withWriteBatchTimeout(Object writeBatchTimeout) {
         super.withWriteBatchTimeout(writeBatchTimeout);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BlobSink withSinkRetryCount(Object sinkRetryCount) {
         super.withSinkRetryCount(sinkRetryCount);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BlobSink withSinkRetryWait(Object sinkRetryWait) {
         super.withSinkRetryWait(sinkRetryWait);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BlobSink withMaxConcurrentConnections(Object maxConcurrentConnections) {
         super.withMaxConcurrentConnections(maxConcurrentConnections);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public BlobSink withDisableMetricsCollection(Object disableMetricsCollection) {
         super.withDisableMetricsCollection(disableMetricsCollection);
@@ -205,7 +236,7 @@ public final class BlobSink extends CopySink {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

@@ -5,26 +5,31 @@
 package com.azure.resourcemanager.cdn.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** Properties required to update a CdnWebApplicationFirewallPolicy. */
+/**
+ * Properties required to update a CdnWebApplicationFirewallPolicy.
+ */
 @Fluent
 public final class CdnWebApplicationFirewallPolicyPatchParameters {
-    @JsonIgnore
-    private final ClientLogger logger = new ClientLogger(CdnWebApplicationFirewallPolicyPatchParameters.class);
-
     /*
      * CdnWebApplicationFirewallPolicy tags
      */
     @JsonProperty(value = "tags")
+    @JsonInclude(value = JsonInclude.Include.NON_NULL, content = JsonInclude.Include.ALWAYS)
     private Map<String, String> tags;
 
     /**
+     * Creates an instance of CdnWebApplicationFirewallPolicyPatchParameters class.
+     */
+    public CdnWebApplicationFirewallPolicyPatchParameters() {
+    }
+
+    /**
      * Get the tags property: CdnWebApplicationFirewallPolicy tags.
-     *
+     * 
      * @return the tags value.
      */
     public Map<String, String> tags() {
@@ -33,7 +38,7 @@ public final class CdnWebApplicationFirewallPolicyPatchParameters {
 
     /**
      * Set the tags property: CdnWebApplicationFirewallPolicy tags.
-     *
+     * 
      * @param tags the tags value to set.
      * @return the CdnWebApplicationFirewallPolicyPatchParameters object itself.
      */
@@ -44,7 +49,7 @@ public final class CdnWebApplicationFirewallPolicyPatchParameters {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

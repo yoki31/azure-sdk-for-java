@@ -7,20 +7,26 @@ package com.azure.resourcemanager.cosmos.models;
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cosmos.fluent.models.MongoDBDatabaseCreateUpdateProperties;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Map;
 
-/** Parameters to create and update Cosmos DB MongoDB database. */
+/**
+ * Parameters to create and update Cosmos DB MongoDB database.
+ */
 @Fluent
 public final class MongoDBDatabaseCreateUpdateParameters extends ArmResourceProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MongoDBDatabaseCreateUpdateParameters.class);
-
     /*
      * Properties to create and update Azure Cosmos DB MongoDB database.
      */
     @JsonProperty(value = "properties", required = true)
     private MongoDBDatabaseCreateUpdateProperties innerProperties = new MongoDBDatabaseCreateUpdateProperties();
+
+    /**
+     * Creates an instance of MongoDBDatabaseCreateUpdateParameters class.
+     */
+    public MongoDBDatabaseCreateUpdateParameters() {
+    }
 
     /**
      * Get the innerProperties property: Properties to create and update Azure Cosmos DB MongoDB database.
@@ -31,14 +37,18 @@ public final class MongoDBDatabaseCreateUpdateParameters extends ArmResourceProp
         return this.innerProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public MongoDBDatabaseCreateUpdateParameters withLocation(String location) {
         super.withLocation(location);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public MongoDBDatabaseCreateUpdateParameters withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -102,12 +112,13 @@ public final class MongoDBDatabaseCreateUpdateParameters extends ArmResourceProp
     public void validate() {
         super.validate();
         if (innerProperties() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property innerProperties in model MongoDBDatabaseCreateUpdateParameters"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property innerProperties in model MongoDBDatabaseCreateUpdateParameters"));
         } else {
             innerProperties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(MongoDBDatabaseCreateUpdateParameters.class);
 }

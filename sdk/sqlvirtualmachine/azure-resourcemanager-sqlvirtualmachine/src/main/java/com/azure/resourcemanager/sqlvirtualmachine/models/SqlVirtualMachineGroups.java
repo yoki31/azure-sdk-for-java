@@ -16,12 +16,14 @@ public interface SqlVirtualMachineGroups {
      * @param resourceGroupName Name of the resource group that contains the resource. You can obtain this value from
      *     the Azure Resource Manager API or the portal.
      * @param sqlVirtualMachineGroupName Name of the SQL virtual machine group.
+     * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a SQL virtual machine group.
+     * @return a SQL virtual machine group along with {@link Response}.
      */
-    SqlVirtualMachineGroup getByResourceGroup(String resourceGroupName, String sqlVirtualMachineGroupName);
+    Response<SqlVirtualMachineGroup> getByResourceGroupWithResponse(
+        String resourceGroupName, String sqlVirtualMachineGroupName, Context context);
 
     /**
      * Gets a SQL virtual machine group.
@@ -29,14 +31,12 @@ public interface SqlVirtualMachineGroups {
      * @param resourceGroupName Name of the resource group that contains the resource. You can obtain this value from
      *     the Azure Resource Manager API or the portal.
      * @param sqlVirtualMachineGroupName Name of the SQL virtual machine group.
-     * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return a SQL virtual machine group.
      */
-    Response<SqlVirtualMachineGroup> getByResourceGroupWithResponse(
-        String resourceGroupName, String sqlVirtualMachineGroupName, Context context);
+    SqlVirtualMachineGroup getByResourceGroup(String resourceGroupName, String sqlVirtualMachineGroupName);
 
     /**
      * Deletes a SQL virtual machine group.
@@ -71,7 +71,7 @@ public interface SqlVirtualMachineGroups {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all SQL virtual machine groups in a resource group.
+     * @return all SQL virtual machine groups in a resource group as paginated response with {@link PagedIterable}.
      */
     PagedIterable<SqlVirtualMachineGroup> listByResourceGroup(String resourceGroupName);
 
@@ -84,7 +84,7 @@ public interface SqlVirtualMachineGroups {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all SQL virtual machine groups in a resource group.
+     * @return all SQL virtual machine groups in a resource group as paginated response with {@link PagedIterable}.
      */
     PagedIterable<SqlVirtualMachineGroup> listByResourceGroup(String resourceGroupName, Context context);
 
@@ -93,7 +93,7 @@ public interface SqlVirtualMachineGroups {
      *
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all SQL virtual machine groups in a subscription.
+     * @return all SQL virtual machine groups in a subscription as paginated response with {@link PagedIterable}.
      */
     PagedIterable<SqlVirtualMachineGroup> list();
 
@@ -104,7 +104,7 @@ public interface SqlVirtualMachineGroups {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return all SQL virtual machine groups in a subscription.
+     * @return all SQL virtual machine groups in a subscription as paginated response with {@link PagedIterable}.
      */
     PagedIterable<SqlVirtualMachineGroup> list(Context context);
 
@@ -115,7 +115,7 @@ public interface SqlVirtualMachineGroups {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a SQL virtual machine group.
+     * @return a SQL virtual machine group along with {@link Response}.
      */
     SqlVirtualMachineGroup getById(String id);
 
@@ -127,7 +127,7 @@ public interface SqlVirtualMachineGroups {
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws com.azure.core.management.exception.ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return a SQL virtual machine group.
+     * @return a SQL virtual machine group along with {@link Response}.
      */
     Response<SqlVirtualMachineGroup> getByIdWithResponse(String id, Context context);
 

@@ -6,20 +6,20 @@ package com.azure.resourcemanager.compute.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.Resource;
-import com.azure.core.util.logging.ClientLogger;
-import com.azure.resourcemanager.compute.models.GalleryImageVersionPropertiesProvisioningState;
 import com.azure.resourcemanager.compute.models.GalleryImageVersionPublishingProfile;
+import com.azure.resourcemanager.compute.models.GalleryImageVersionSafetyProfile;
 import com.azure.resourcemanager.compute.models.GalleryImageVersionStorageProfile;
+import com.azure.resourcemanager.compute.models.GalleryProvisioningState;
+import com.azure.resourcemanager.compute.models.ImageVersionSecurityProfile;
 import com.azure.resourcemanager.compute.models.ReplicationStatus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Map;
 
-/** Specifies information about the gallery image version that you want to create or update. */
+/**
+ * Specifies information about the gallery image version that you want to create or update.
+ */
 @Fluent
 public final class GalleryImageVersionInner extends Resource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(GalleryImageVersionInner.class);
-
     /*
      * Describes the properties of a gallery image version.
      */
@@ -27,22 +27,32 @@ public final class GalleryImageVersionInner extends Resource {
     private GalleryImageVersionProperties innerProperties;
 
     /**
+     * Creates an instance of GalleryImageVersionInner class.
+     */
+    public GalleryImageVersionInner() {
+    }
+
+    /**
      * Get the innerProperties property: Describes the properties of a gallery image version.
-     *
+     * 
      * @return the innerProperties value.
      */
     private GalleryImageVersionProperties innerProperties() {
         return this.innerProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GalleryImageVersionInner withLocation(String location) {
         super.withLocation(location);
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GalleryImageVersionInner withTags(Map<String, String> tags) {
         super.withTags(tags);
@@ -51,7 +61,7 @@ public final class GalleryImageVersionInner extends Resource {
 
     /**
      * Get the publishingProfile property: The publishing profile of a gallery image Version.
-     *
+     * 
      * @return the publishingProfile value.
      */
     public GalleryImageVersionPublishingProfile publishingProfile() {
@@ -60,7 +70,7 @@ public final class GalleryImageVersionInner extends Resource {
 
     /**
      * Set the publishingProfile property: The publishing profile of a gallery image Version.
-     *
+     * 
      * @param publishingProfile the publishingProfile value to set.
      * @return the GalleryImageVersionInner object itself.
      */
@@ -73,18 +83,17 @@ public final class GalleryImageVersionInner extends Resource {
     }
 
     /**
-     * Get the provisioningState property: The current state of the gallery image version. The provisioning state, which
-     * only appears in the response.
-     *
+     * Get the provisioningState property: The provisioning state, which only appears in the response.
+     * 
      * @return the provisioningState value.
      */
-    public GalleryImageVersionPropertiesProvisioningState provisioningState() {
+    public GalleryProvisioningState provisioningState() {
         return this.innerProperties() == null ? null : this.innerProperties().provisioningState();
     }
 
     /**
      * Get the storageProfile property: This is the storage profile of a Gallery Image Version.
-     *
+     * 
      * @return the storageProfile value.
      */
     public GalleryImageVersionStorageProfile storageProfile() {
@@ -93,7 +102,7 @@ public final class GalleryImageVersionInner extends Resource {
 
     /**
      * Set the storageProfile property: This is the storage profile of a Gallery Image Version.
-     *
+     * 
      * @param storageProfile the storageProfile value to set.
      * @return the GalleryImageVersionInner object itself.
      */
@@ -106,8 +115,31 @@ public final class GalleryImageVersionInner extends Resource {
     }
 
     /**
+     * Get the safetyProfile property: This is the safety profile of the Gallery Image Version.
+     * 
+     * @return the safetyProfile value.
+     */
+    public GalleryImageVersionSafetyProfile safetyProfile() {
+        return this.innerProperties() == null ? null : this.innerProperties().safetyProfile();
+    }
+
+    /**
+     * Set the safetyProfile property: This is the safety profile of the Gallery Image Version.
+     * 
+     * @param safetyProfile the safetyProfile value to set.
+     * @return the GalleryImageVersionInner object itself.
+     */
+    public GalleryImageVersionInner withSafetyProfile(GalleryImageVersionSafetyProfile safetyProfile) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new GalleryImageVersionProperties();
+        }
+        this.innerProperties().withSafetyProfile(safetyProfile);
+        return this;
+    }
+
+    /**
      * Get the replicationStatus property: This is the replication status of the gallery image version.
-     *
+     * 
      * @return the replicationStatus value.
      */
     public ReplicationStatus replicationStatus() {
@@ -115,8 +147,31 @@ public final class GalleryImageVersionInner extends Resource {
     }
 
     /**
+     * Get the securityProfile property: The security profile of a gallery image version.
+     * 
+     * @return the securityProfile value.
+     */
+    public ImageVersionSecurityProfile securityProfile() {
+        return this.innerProperties() == null ? null : this.innerProperties().securityProfile();
+    }
+
+    /**
+     * Set the securityProfile property: The security profile of a gallery image version.
+     * 
+     * @param securityProfile the securityProfile value to set.
+     * @return the GalleryImageVersionInner object itself.
+     */
+    public GalleryImageVersionInner withSecurityProfile(ImageVersionSecurityProfile securityProfile) {
+        if (this.innerProperties() == null) {
+            this.innerProperties = new GalleryImageVersionProperties();
+        }
+        this.innerProperties().withSecurityProfile(securityProfile);
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

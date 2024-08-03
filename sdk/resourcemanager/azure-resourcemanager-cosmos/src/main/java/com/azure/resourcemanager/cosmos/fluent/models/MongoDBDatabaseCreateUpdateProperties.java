@@ -8,14 +8,13 @@ import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cosmos.models.CreateUpdateOptions;
 import com.azure.resourcemanager.cosmos.models.MongoDBDatabaseResource;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Properties to create and update Azure Cosmos DB MongoDB database. */
+/**
+ * Properties to create and update Azure Cosmos DB MongoDB database.
+ */
 @Fluent
 public final class MongoDBDatabaseCreateUpdateProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MongoDBDatabaseCreateUpdateProperties.class);
-
     /*
      * The standard JSON format of a MongoDB database
      */
@@ -23,15 +22,20 @@ public final class MongoDBDatabaseCreateUpdateProperties {
     private MongoDBDatabaseResource resource;
 
     /*
-     * A key-value pair of options to be applied for the request. This
-     * corresponds to the headers sent with the request.
+     * A key-value pair of options to be applied for the request. This corresponds to the headers sent with the request.
      */
     @JsonProperty(value = "options")
     private CreateUpdateOptions options;
 
     /**
+     * Creates an instance of MongoDBDatabaseCreateUpdateProperties class.
+     */
+    public MongoDBDatabaseCreateUpdateProperties() {
+    }
+
+    /**
      * Get the resource property: The standard JSON format of a MongoDB database.
-     *
+     * 
      * @return the resource value.
      */
     public MongoDBDatabaseResource resource() {
@@ -40,7 +44,7 @@ public final class MongoDBDatabaseCreateUpdateProperties {
 
     /**
      * Set the resource property: The standard JSON format of a MongoDB database.
-     *
+     * 
      * @param resource the resource value to set.
      * @return the MongoDBDatabaseCreateUpdateProperties object itself.
      */
@@ -52,7 +56,7 @@ public final class MongoDBDatabaseCreateUpdateProperties {
     /**
      * Get the options property: A key-value pair of options to be applied for the request. This corresponds to the
      * headers sent with the request.
-     *
+     * 
      * @return the options value.
      */
     public CreateUpdateOptions options() {
@@ -62,7 +66,7 @@ public final class MongoDBDatabaseCreateUpdateProperties {
     /**
      * Set the options property: A key-value pair of options to be applied for the request. This corresponds to the
      * headers sent with the request.
-     *
+     * 
      * @param options the options value to set.
      * @return the MongoDBDatabaseCreateUpdateProperties object itself.
      */
@@ -73,15 +77,14 @@ public final class MongoDBDatabaseCreateUpdateProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (resource() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property resource in model MongoDBDatabaseCreateUpdateProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property resource in model MongoDBDatabaseCreateUpdateProperties"));
         } else {
             resource().validate();
         }
@@ -89,4 +92,6 @@ public final class MongoDBDatabaseCreateUpdateProperties {
             options().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(MongoDBDatabaseCreateUpdateProperties.class);
 }

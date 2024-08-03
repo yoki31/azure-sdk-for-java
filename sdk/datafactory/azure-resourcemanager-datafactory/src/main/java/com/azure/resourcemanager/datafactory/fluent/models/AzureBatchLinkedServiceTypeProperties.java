@@ -9,17 +9,15 @@ import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.models.CredentialReference;
 import com.azure.resourcemanager.datafactory.models.LinkedServiceReference;
 import com.azure.resourcemanager.datafactory.models.SecretBase;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Azure Batch linked service properties. */
+/**
+ * Azure Batch linked service properties.
+ */
 @Fluent
 public final class AzureBatchLinkedServiceTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AzureBatchLinkedServiceTypeProperties.class);
-
     /*
-     * The Azure Batch account name. Type: string (or Expression with
-     * resultType string).
+     * The Azure Batch account name. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "accountName", required = true)
     private Object accountName;
@@ -31,15 +29,13 @@ public final class AzureBatchLinkedServiceTypeProperties {
     private SecretBase accessKey;
 
     /*
-     * The Azure Batch URI. Type: string (or Expression with resultType
-     * string).
+     * The Azure Batch URI. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "batchUri", required = true)
     private Object batchUri;
 
     /*
-     * The Azure Batch pool name. Type: string (or Expression with resultType
-     * string).
+     * The Azure Batch pool name. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "poolName", required = true)
     private Object poolName;
@@ -51,12 +47,11 @@ public final class AzureBatchLinkedServiceTypeProperties {
     private LinkedServiceReference linkedServiceName;
 
     /*
-     * The encrypted credential used for authentication. Credentials are
-     * encrypted using the integration runtime credential manager. Type: string
-     * (or Expression with resultType string).
+     * The encrypted credential used for authentication. Credentials are encrypted using the integration runtime
+     * credential manager. Type: string.
      */
     @JsonProperty(value = "encryptedCredential")
-    private Object encryptedCredential;
+    private String encryptedCredential;
 
     /*
      * The credential reference containing authentication information.
@@ -65,8 +60,14 @@ public final class AzureBatchLinkedServiceTypeProperties {
     private CredentialReference credential;
 
     /**
+     * Creates an instance of AzureBatchLinkedServiceTypeProperties class.
+     */
+    public AzureBatchLinkedServiceTypeProperties() {
+    }
+
+    /**
      * Get the accountName property: The Azure Batch account name. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the accountName value.
      */
     public Object accountName() {
@@ -75,7 +76,7 @@ public final class AzureBatchLinkedServiceTypeProperties {
 
     /**
      * Set the accountName property: The Azure Batch account name. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param accountName the accountName value to set.
      * @return the AzureBatchLinkedServiceTypeProperties object itself.
      */
@@ -86,7 +87,7 @@ public final class AzureBatchLinkedServiceTypeProperties {
 
     /**
      * Get the accessKey property: The Azure Batch account access key.
-     *
+     * 
      * @return the accessKey value.
      */
     public SecretBase accessKey() {
@@ -95,7 +96,7 @@ public final class AzureBatchLinkedServiceTypeProperties {
 
     /**
      * Set the accessKey property: The Azure Batch account access key.
-     *
+     * 
      * @param accessKey the accessKey value to set.
      * @return the AzureBatchLinkedServiceTypeProperties object itself.
      */
@@ -106,7 +107,7 @@ public final class AzureBatchLinkedServiceTypeProperties {
 
     /**
      * Get the batchUri property: The Azure Batch URI. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the batchUri value.
      */
     public Object batchUri() {
@@ -115,7 +116,7 @@ public final class AzureBatchLinkedServiceTypeProperties {
 
     /**
      * Set the batchUri property: The Azure Batch URI. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param batchUri the batchUri value to set.
      * @return the AzureBatchLinkedServiceTypeProperties object itself.
      */
@@ -126,7 +127,7 @@ public final class AzureBatchLinkedServiceTypeProperties {
 
     /**
      * Get the poolName property: The Azure Batch pool name. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the poolName value.
      */
     public Object poolName() {
@@ -135,7 +136,7 @@ public final class AzureBatchLinkedServiceTypeProperties {
 
     /**
      * Set the poolName property: The Azure Batch pool name. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param poolName the poolName value to set.
      * @return the AzureBatchLinkedServiceTypeProperties object itself.
      */
@@ -146,7 +147,7 @@ public final class AzureBatchLinkedServiceTypeProperties {
 
     /**
      * Get the linkedServiceName property: The Azure Storage linked service reference.
-     *
+     * 
      * @return the linkedServiceName value.
      */
     public LinkedServiceReference linkedServiceName() {
@@ -155,7 +156,7 @@ public final class AzureBatchLinkedServiceTypeProperties {
 
     /**
      * Set the linkedServiceName property: The Azure Storage linked service reference.
-     *
+     * 
      * @param linkedServiceName the linkedServiceName value to set.
      * @return the AzureBatchLinkedServiceTypeProperties object itself.
      */
@@ -166,29 +167,29 @@ public final class AzureBatchLinkedServiceTypeProperties {
 
     /**
      * Get the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @return the encryptedCredential value.
      */
-    public Object encryptedCredential() {
+    public String encryptedCredential() {
         return this.encryptedCredential;
     }
 
     /**
      * Set the encryptedCredential property: The encrypted credential used for authentication. Credentials are encrypted
-     * using the integration runtime credential manager. Type: string (or Expression with resultType string).
-     *
+     * using the integration runtime credential manager. Type: string.
+     * 
      * @param encryptedCredential the encryptedCredential value to set.
      * @return the AzureBatchLinkedServiceTypeProperties object itself.
      */
-    public AzureBatchLinkedServiceTypeProperties withEncryptedCredential(Object encryptedCredential) {
+    public AzureBatchLinkedServiceTypeProperties withEncryptedCredential(String encryptedCredential) {
         this.encryptedCredential = encryptedCredential;
         return this;
     }
 
     /**
      * Get the credential property: The credential reference containing authentication information.
-     *
+     * 
      * @return the credential value.
      */
     public CredentialReference credential() {
@@ -197,7 +198,7 @@ public final class AzureBatchLinkedServiceTypeProperties {
 
     /**
      * Set the credential property: The credential reference containing authentication information.
-     *
+     * 
      * @param credential the credential value to set.
      * @return the AzureBatchLinkedServiceTypeProperties object itself.
      */
@@ -208,36 +209,32 @@ public final class AzureBatchLinkedServiceTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (accountName() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property accountName in model AzureBatchLinkedServiceTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property accountName in model AzureBatchLinkedServiceTypeProperties"));
         }
         if (accessKey() != null) {
             accessKey().validate();
         }
         if (batchUri() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property batchUri in model AzureBatchLinkedServiceTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property batchUri in model AzureBatchLinkedServiceTypeProperties"));
         }
         if (poolName() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property poolName in model AzureBatchLinkedServiceTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property poolName in model AzureBatchLinkedServiceTypeProperties"));
         }
         if (linkedServiceName() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property linkedServiceName in model AzureBatchLinkedServiceTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property linkedServiceName in model AzureBatchLinkedServiceTypeProperties"));
         } else {
             linkedServiceName().validate();
         }
@@ -245,4 +242,6 @@ public final class AzureBatchLinkedServiceTypeProperties {
             credential().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(AzureBatchLinkedServiceTypeProperties.class);
 }

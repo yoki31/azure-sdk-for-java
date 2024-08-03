@@ -25,7 +25,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.synapse.fluent.WorkspaceManagedSqlServerUsagesClient;
 import com.azure.resourcemanager.synapse.fluent.models.ServerUsageInner;
 import com.azure.resourcemanager.synapse.models.ServerUsageListResult;
@@ -33,8 +32,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in WorkspaceManagedSqlServerUsagesClient. */
 public final class WorkspaceManagedSqlServerUsagesClientImpl implements WorkspaceManagedSqlServerUsagesClient {
-    private final ClientLogger logger = new ClientLogger(WorkspaceManagedSqlServerUsagesClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final WorkspaceManagedSqlServerUsagesService service;
 
@@ -62,7 +59,7 @@ public final class WorkspaceManagedSqlServerUsagesClientImpl implements Workspac
      */
     @Host("{$host}")
     @ServiceInterface(name = "SynapseManagementCli")
-    private interface WorkspaceManagedSqlServerUsagesService {
+    public interface WorkspaceManagedSqlServerUsagesService {
         @Headers({"Content-Type: application/json"})
         @Get(
             "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Synapse/workspaces"
@@ -90,14 +87,17 @@ public final class WorkspaceManagedSqlServerUsagesClientImpl implements Workspac
     }
 
     /**
-     * Get list of server usages metric for workspace managed sql server.
+     * Get list of usages metric for the server.
+     *
+     * <p>Get list of server usages metric for workspace managed sql server.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of server usages metric for workspace managed sql server.
+     * @return list of server usages metric for workspace managed sql server along with {@link PagedResponse} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ServerUsageInner>> listSinglePageAsync(String resourceGroupName, String workspaceName) {
@@ -147,7 +147,9 @@ public final class WorkspaceManagedSqlServerUsagesClientImpl implements Workspac
     }
 
     /**
-     * Get list of server usages metric for workspace managed sql server.
+     * Get list of usages metric for the server.
+     *
+     * <p>Get list of server usages metric for workspace managed sql server.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -155,7 +157,8 @@ public final class WorkspaceManagedSqlServerUsagesClientImpl implements Workspac
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of server usages metric for workspace managed sql server.
+     * @return list of server usages metric for workspace managed sql server along with {@link PagedResponse} on
+     *     successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ServerUsageInner>> listSinglePageAsync(
@@ -203,14 +206,17 @@ public final class WorkspaceManagedSqlServerUsagesClientImpl implements Workspac
     }
 
     /**
-     * Get list of server usages metric for workspace managed sql server.
+     * Get list of usages metric for the server.
+     *
+     * <p>Get list of server usages metric for workspace managed sql server.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of server usages metric for workspace managed sql server.
+     * @return list of server usages metric for workspace managed sql server as paginated response with {@link
+     *     PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<ServerUsageInner> listAsync(String resourceGroupName, String workspaceName) {
@@ -219,7 +225,9 @@ public final class WorkspaceManagedSqlServerUsagesClientImpl implements Workspac
     }
 
     /**
-     * Get list of server usages metric for workspace managed sql server.
+     * Get list of usages metric for the server.
+     *
+     * <p>Get list of server usages metric for workspace managed sql server.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -227,7 +235,8 @@ public final class WorkspaceManagedSqlServerUsagesClientImpl implements Workspac
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of server usages metric for workspace managed sql server.
+     * @return list of server usages metric for workspace managed sql server as paginated response with {@link
+     *     PagedFlux}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     private PagedFlux<ServerUsageInner> listAsync(String resourceGroupName, String workspaceName, Context context) {
@@ -237,14 +246,17 @@ public final class WorkspaceManagedSqlServerUsagesClientImpl implements Workspac
     }
 
     /**
-     * Get list of server usages metric for workspace managed sql server.
+     * Get list of usages metric for the server.
+     *
+     * <p>Get list of server usages metric for workspace managed sql server.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of server usages metric for workspace managed sql server.
+     * @return list of server usages metric for workspace managed sql server as paginated response with {@link
+     *     PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<ServerUsageInner> list(String resourceGroupName, String workspaceName) {
@@ -252,7 +264,9 @@ public final class WorkspaceManagedSqlServerUsagesClientImpl implements Workspac
     }
 
     /**
-     * Get list of server usages metric for workspace managed sql server.
+     * Get list of usages metric for the server.
+     *
+     * <p>Get list of server usages metric for workspace managed sql server.
      *
      * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param workspaceName The name of the workspace.
@@ -260,7 +274,8 @@ public final class WorkspaceManagedSqlServerUsagesClientImpl implements Workspac
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return list of server usages metric for workspace managed sql server.
+     * @return list of server usages metric for workspace managed sql server as paginated response with {@link
+     *     PagedIterable}.
      */
     @ServiceMethod(returns = ReturnType.COLLECTION)
     public PagedIterable<ServerUsageInner> list(String resourceGroupName, String workspaceName, Context context) {
@@ -270,11 +285,13 @@ public final class WorkspaceManagedSqlServerUsagesClientImpl implements Workspac
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return represents the response to a list server metrics request.
+     * @return represents the response to a list server metrics request along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ServerUsageInner>> listNextSinglePageAsync(String nextLink) {
@@ -305,12 +322,14 @@ public final class WorkspaceManagedSqlServerUsagesClientImpl implements Workspac
     /**
      * Get the next page of items.
      *
-     * @param nextLink The nextLink parameter.
+     * @param nextLink The URL to get the next list of items
+     *     <p>The nextLink parameter.
      * @param context The context to associate with this operation.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return represents the response to a list server metrics request.
+     * @return represents the response to a list server metrics request along with {@link PagedResponse} on successful
+     *     completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<PagedResponse<ServerUsageInner>> listNextSinglePageAsync(String nextLink, Context context) {

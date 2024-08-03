@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** HybridConnectionLimits resource specific properties. */
+/**
+ * HybridConnectionLimits resource specific properties.
+ */
 @Immutable
 public final class HybridConnectionLimitsProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(HybridConnectionLimitsProperties.class);
-
     /*
      * The current number of Hybrid Connections.
      */
@@ -27,8 +25,14 @@ public final class HybridConnectionLimitsProperties {
     private Integer maximum;
 
     /**
+     * Creates an instance of HybridConnectionLimitsProperties class.
+     */
+    public HybridConnectionLimitsProperties() {
+    }
+
+    /**
      * Get the current property: The current number of Hybrid Connections.
-     *
+     * 
      * @return the current value.
      */
     public Integer current() {
@@ -37,7 +41,7 @@ public final class HybridConnectionLimitsProperties {
 
     /**
      * Get the maximum property: The maximum number of Hybrid Connections allowed.
-     *
+     * 
      * @return the maximum value.
      */
     public Integer maximum() {
@@ -46,7 +50,7 @@ public final class HybridConnectionLimitsProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

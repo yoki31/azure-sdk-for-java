@@ -6,15 +6,14 @@ package com.azure.resourcemanager.monitor.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
-/** Represents a metric value. */
+/**
+ * Represents a metric value.
+ */
 @Fluent
 public final class MetricValue {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(MetricValue.class);
-
     /*
      * the timestamp for the metric value in ISO 8601 format.
      */
@@ -46,15 +45,21 @@ public final class MetricValue {
     private Double total;
 
     /*
-     * the number of samples in the time range. Can be used to determine the
-     * number of values that contributed to the average value.
+     * the number of samples in the time range. Can be used to determine the number of values that contributed to the
+     * average value.
      */
     @JsonProperty(value = "count")
     private Double count;
 
     /**
+     * Creates an instance of MetricValue class.
+     */
+    public MetricValue() {
+    }
+
+    /**
      * Get the timestamp property: the timestamp for the metric value in ISO 8601 format.
-     *
+     * 
      * @return the timestamp value.
      */
     public OffsetDateTime timestamp() {
@@ -63,7 +68,7 @@ public final class MetricValue {
 
     /**
      * Set the timestamp property: the timestamp for the metric value in ISO 8601 format.
-     *
+     * 
      * @param timestamp the timestamp value to set.
      * @return the MetricValue object itself.
      */
@@ -74,7 +79,7 @@ public final class MetricValue {
 
     /**
      * Get the average property: the average value in the time range.
-     *
+     * 
      * @return the average value.
      */
     public Double average() {
@@ -83,7 +88,7 @@ public final class MetricValue {
 
     /**
      * Set the average property: the average value in the time range.
-     *
+     * 
      * @param average the average value to set.
      * @return the MetricValue object itself.
      */
@@ -94,7 +99,7 @@ public final class MetricValue {
 
     /**
      * Get the minimum property: the least value in the time range.
-     *
+     * 
      * @return the minimum value.
      */
     public Double minimum() {
@@ -103,7 +108,7 @@ public final class MetricValue {
 
     /**
      * Set the minimum property: the least value in the time range.
-     *
+     * 
      * @param minimum the minimum value to set.
      * @return the MetricValue object itself.
      */
@@ -114,7 +119,7 @@ public final class MetricValue {
 
     /**
      * Get the maximum property: the greatest value in the time range.
-     *
+     * 
      * @return the maximum value.
      */
     public Double maximum() {
@@ -123,7 +128,7 @@ public final class MetricValue {
 
     /**
      * Set the maximum property: the greatest value in the time range.
-     *
+     * 
      * @param maximum the maximum value to set.
      * @return the MetricValue object itself.
      */
@@ -134,7 +139,7 @@ public final class MetricValue {
 
     /**
      * Get the total property: the sum of all of the values in the time range.
-     *
+     * 
      * @return the total value.
      */
     public Double total() {
@@ -143,7 +148,7 @@ public final class MetricValue {
 
     /**
      * Set the total property: the sum of all of the values in the time range.
-     *
+     * 
      * @param total the total value to set.
      * @return the MetricValue object itself.
      */
@@ -155,7 +160,7 @@ public final class MetricValue {
     /**
      * Get the count property: the number of samples in the time range. Can be used to determine the number of values
      * that contributed to the average value.
-     *
+     * 
      * @return the count value.
      */
     public Double count() {
@@ -165,7 +170,7 @@ public final class MetricValue {
     /**
      * Set the count property: the number of samples in the time range. Can be used to determine the number of values
      * that contributed to the average value.
-     *
+     * 
      * @param count the count value to set.
      * @return the MetricValue object itself.
      */
@@ -176,14 +181,15 @@ public final class MetricValue {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (timestamp() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property timestamp in model MetricValue"));
+            throw LOGGER.logExceptionAsError(
+                new IllegalArgumentException("Missing required property timestamp in model MetricValue"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(MetricValue.class);
 }

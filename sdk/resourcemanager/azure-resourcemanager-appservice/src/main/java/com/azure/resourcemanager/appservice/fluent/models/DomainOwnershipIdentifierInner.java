@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.ProxyOnlyResource;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Domain ownership Identifier. */
+/**
+ * Domain ownership Identifier.
+ */
 @Fluent
 public final class DomainOwnershipIdentifierInner extends ProxyOnlyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DomainOwnershipIdentifierInner.class);
-
     /*
      * DomainOwnershipIdentifier resource specific properties
      */
@@ -22,15 +20,23 @@ public final class DomainOwnershipIdentifierInner extends ProxyOnlyResource {
     private DomainOwnershipIdentifierProperties innerProperties;
 
     /**
+     * Creates an instance of DomainOwnershipIdentifierInner class.
+     */
+    public DomainOwnershipIdentifierInner() {
+    }
+
+    /**
      * Get the innerProperties property: DomainOwnershipIdentifier resource specific properties.
-     *
+     * 
      * @return the innerProperties value.
      */
     private DomainOwnershipIdentifierProperties innerProperties() {
         return this.innerProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public DomainOwnershipIdentifierInner withKind(String kind) {
         super.withKind(kind);
@@ -39,7 +45,7 @@ public final class DomainOwnershipIdentifierInner extends ProxyOnlyResource {
 
     /**
      * Get the ownershipId property: Ownership Id.
-     *
+     * 
      * @return the ownershipId value.
      */
     public String ownershipId() {
@@ -48,7 +54,7 @@ public final class DomainOwnershipIdentifierInner extends ProxyOnlyResource {
 
     /**
      * Set the ownershipId property: Ownership Id.
-     *
+     * 
      * @param ownershipId the ownershipId value to set.
      * @return the DomainOwnershipIdentifierInner object itself.
      */
@@ -62,7 +68,7 @@ public final class DomainOwnershipIdentifierInner extends ProxyOnlyResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

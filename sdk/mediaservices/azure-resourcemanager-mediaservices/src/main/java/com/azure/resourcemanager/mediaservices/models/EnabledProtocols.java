@@ -5,15 +5,11 @@
 package com.azure.resourcemanager.mediaservices.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /** Class to specify which protocols are enabled. */
 @Fluent
 public final class EnabledProtocols {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(EnabledProtocols.class);
-
     /*
      * Enable Download protocol or not
      */
@@ -37,6 +33,10 @@ public final class EnabledProtocols {
      */
     @JsonProperty(value = "smoothStreaming", required = true)
     private boolean smoothStreaming;
+
+    /** Creates an instance of EnabledProtocols class. */
+    public EnabledProtocols() {
+    }
 
     /**
      * Get the download property: Enable Download protocol or not.

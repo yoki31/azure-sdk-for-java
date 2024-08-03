@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.appservice.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Specification for a Kubernetes Environment to use for this resource. */
+/**
+ * Specification for a Kubernetes Environment to use for this resource.
+ */
 @Fluent
 public final class KubeEnvironmentProfile {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(KubeEnvironmentProfile.class);
-
     /*
      * Resource ID of the Kubernetes Environment.
      */
@@ -33,8 +31,14 @@ public final class KubeEnvironmentProfile {
     private String type;
 
     /**
+     * Creates an instance of KubeEnvironmentProfile class.
+     */
+    public KubeEnvironmentProfile() {
+    }
+
+    /**
      * Get the id property: Resource ID of the Kubernetes Environment.
-     *
+     * 
      * @return the id value.
      */
     public String id() {
@@ -43,7 +47,7 @@ public final class KubeEnvironmentProfile {
 
     /**
      * Set the id property: Resource ID of the Kubernetes Environment.
-     *
+     * 
      * @param id the id value to set.
      * @return the KubeEnvironmentProfile object itself.
      */
@@ -54,7 +58,7 @@ public final class KubeEnvironmentProfile {
 
     /**
      * Get the name property: Name of the Kubernetes Environment.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -63,7 +67,7 @@ public final class KubeEnvironmentProfile {
 
     /**
      * Get the type property: Resource type of the Kubernetes Environment.
-     *
+     * 
      * @return the type value.
      */
     public String type() {
@@ -72,7 +76,7 @@ public final class KubeEnvironmentProfile {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

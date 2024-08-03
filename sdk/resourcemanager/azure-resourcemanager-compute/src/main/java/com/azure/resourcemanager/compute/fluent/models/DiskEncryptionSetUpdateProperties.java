@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.compute.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.compute.models.DiskEncryptionSetType;
 import com.azure.resourcemanager.compute.models.KeyForDiskEncryptionSet;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** disk encryption set resource update properties. */
+/**
+ * disk encryption set resource update properties.
+ */
 @Fluent
 public final class DiskEncryptionSetUpdateProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(DiskEncryptionSetUpdateProperties.class);
-
     /*
      * The type of key used to encrypt the data of the disk.
      */
@@ -23,22 +21,33 @@ public final class DiskEncryptionSetUpdateProperties {
     private DiskEncryptionSetType encryptionType;
 
     /*
-     * Key Vault Key Url to be used for server side encryption of Managed Disks
-     * and Snapshots
+     * Key Vault Key Url to be used for server side encryption of Managed Disks and Snapshots
      */
     @JsonProperty(value = "activeKey")
     private KeyForDiskEncryptionSet activeKey;
 
     /*
-     * Set this flag to true to enable auto-updating of this disk encryption
-     * set to the latest key version.
+     * Set this flag to true to enable auto-updating of this disk encryption set to the latest key version.
      */
     @JsonProperty(value = "rotationToLatestKeyVersionEnabled")
     private Boolean rotationToLatestKeyVersionEnabled;
 
+    /*
+     * Multi-tenant application client id to access key vault in a different tenant. Setting the value to 'None' will
+     * clear the property.
+     */
+    @JsonProperty(value = "federatedClientId")
+    private String federatedClientId;
+
+    /**
+     * Creates an instance of DiskEncryptionSetUpdateProperties class.
+     */
+    public DiskEncryptionSetUpdateProperties() {
+    }
+
     /**
      * Get the encryptionType property: The type of key used to encrypt the data of the disk.
-     *
+     * 
      * @return the encryptionType value.
      */
     public DiskEncryptionSetType encryptionType() {
@@ -47,7 +56,7 @@ public final class DiskEncryptionSetUpdateProperties {
 
     /**
      * Set the encryptionType property: The type of key used to encrypt the data of the disk.
-     *
+     * 
      * @param encryptionType the encryptionType value to set.
      * @return the DiskEncryptionSetUpdateProperties object itself.
      */
@@ -59,7 +68,7 @@ public final class DiskEncryptionSetUpdateProperties {
     /**
      * Get the activeKey property: Key Vault Key Url to be used for server side encryption of Managed Disks and
      * Snapshots.
-     *
+     * 
      * @return the activeKey value.
      */
     public KeyForDiskEncryptionSet activeKey() {
@@ -69,7 +78,7 @@ public final class DiskEncryptionSetUpdateProperties {
     /**
      * Set the activeKey property: Key Vault Key Url to be used for server side encryption of Managed Disks and
      * Snapshots.
-     *
+     * 
      * @param activeKey the activeKey value to set.
      * @return the DiskEncryptionSetUpdateProperties object itself.
      */
@@ -81,7 +90,7 @@ public final class DiskEncryptionSetUpdateProperties {
     /**
      * Get the rotationToLatestKeyVersionEnabled property: Set this flag to true to enable auto-updating of this disk
      * encryption set to the latest key version.
-     *
+     * 
      * @return the rotationToLatestKeyVersionEnabled value.
      */
     public Boolean rotationToLatestKeyVersionEnabled() {
@@ -91,19 +100,41 @@ public final class DiskEncryptionSetUpdateProperties {
     /**
      * Set the rotationToLatestKeyVersionEnabled property: Set this flag to true to enable auto-updating of this disk
      * encryption set to the latest key version.
-     *
+     * 
      * @param rotationToLatestKeyVersionEnabled the rotationToLatestKeyVersionEnabled value to set.
      * @return the DiskEncryptionSetUpdateProperties object itself.
      */
-    public DiskEncryptionSetUpdateProperties withRotationToLatestKeyVersionEnabled(
-        Boolean rotationToLatestKeyVersionEnabled) {
+    public DiskEncryptionSetUpdateProperties
+        withRotationToLatestKeyVersionEnabled(Boolean rotationToLatestKeyVersionEnabled) {
         this.rotationToLatestKeyVersionEnabled = rotationToLatestKeyVersionEnabled;
         return this;
     }
 
     /**
+     * Get the federatedClientId property: Multi-tenant application client id to access key vault in a different tenant.
+     * Setting the value to 'None' will clear the property.
+     * 
+     * @return the federatedClientId value.
+     */
+    public String federatedClientId() {
+        return this.federatedClientId;
+    }
+
+    /**
+     * Set the federatedClientId property: Multi-tenant application client id to access key vault in a different tenant.
+     * Setting the value to 'None' will clear the property.
+     * 
+     * @param federatedClientId the federatedClientId value to set.
+     * @return the DiskEncryptionSetUpdateProperties object itself.
+     */
+    public DiskEncryptionSetUpdateProperties withFederatedClientId(String federatedClientId) {
+        this.federatedClientId = federatedClientId;
+        return this;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

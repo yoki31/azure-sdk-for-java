@@ -8,14 +8,13 @@ import com.azure.core.annotation.Fluent;
 import com.azure.core.management.SubResource;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.models.LinkedService;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Linked service resource type. */
+/**
+ * Linked service resource type.
+ */
 @Fluent
 public final class LinkedServiceResourceInner extends SubResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(LinkedServiceResourceInner.class);
-
     /*
      * Properties of linked service.
      */
@@ -41,8 +40,14 @@ public final class LinkedServiceResourceInner extends SubResource {
     private String etag;
 
     /**
+     * Creates an instance of LinkedServiceResourceInner class.
+     */
+    public LinkedServiceResourceInner() {
+    }
+
+    /**
      * Get the properties property: Properties of linked service.
-     *
+     * 
      * @return the properties value.
      */
     public LinkedService properties() {
@@ -51,7 +56,7 @@ public final class LinkedServiceResourceInner extends SubResource {
 
     /**
      * Set the properties property: Properties of linked service.
-     *
+     * 
      * @param properties the properties value to set.
      * @return the LinkedServiceResourceInner object itself.
      */
@@ -62,7 +67,7 @@ public final class LinkedServiceResourceInner extends SubResource {
 
     /**
      * Get the name property: The resource name.
-     *
+     * 
      * @return the name value.
      */
     public String name() {
@@ -71,7 +76,7 @@ public final class LinkedServiceResourceInner extends SubResource {
 
     /**
      * Get the type property: The resource type.
-     *
+     * 
      * @return the type value.
      */
     public String type() {
@@ -80,14 +85,16 @@ public final class LinkedServiceResourceInner extends SubResource {
 
     /**
      * Get the etag property: Etag identifies change in the resource.
-     *
+     * 
      * @return the etag value.
      */
     public String etag() {
         return this.etag;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public LinkedServiceResourceInner withId(String id) {
         super.withId(id);
@@ -96,17 +103,18 @@ public final class LinkedServiceResourceInner extends SubResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (properties() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property properties in model LinkedServiceResourceInner"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property properties in model LinkedServiceResourceInner"));
         } else {
             properties().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(LinkedServiceResourceInner.class);
 }

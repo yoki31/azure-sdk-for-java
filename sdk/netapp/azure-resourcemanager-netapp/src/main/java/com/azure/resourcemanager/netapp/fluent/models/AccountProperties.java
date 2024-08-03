@@ -5,39 +5,49 @@
 package com.azure.resourcemanager.netapp.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
+import com.azure.json.JsonReader;
+import com.azure.json.JsonSerializable;
+import com.azure.json.JsonToken;
+import com.azure.json.JsonWriter;
 import com.azure.resourcemanager.netapp.models.AccountEncryption;
 import com.azure.resourcemanager.netapp.models.ActiveDirectory;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.IOException;
 import java.util.List;
 
-/** NetApp account properties. */
+/**
+ * NetApp account properties.
+ */
 @Fluent
-public final class AccountProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(AccountProperties.class);
-
+public final class AccountProperties implements JsonSerializable<AccountProperties> {
     /*
      * Azure lifecycle management
      */
-    @JsonProperty(value = "provisioningState", access = JsonProperty.Access.WRITE_ONLY)
     private String provisioningState;
 
     /*
      * Active Directories
      */
-    @JsonProperty(value = "activeDirectories")
     private List<ActiveDirectory> activeDirectories;
 
     /*
      * Encryption settings
      */
-    @JsonProperty(value = "encryption")
     private AccountEncryption encryption;
+
+    /*
+     * Shows the status of disableShowmount for all volumes under the subscription, null equals false
+     */
+    private Boolean disableShowmount;
+
+    /**
+     * Creates an instance of AccountProperties class.
+     */
+    public AccountProperties() {
+    }
 
     /**
      * Get the provisioningState property: Azure lifecycle management.
-     *
+     * 
      * @return the provisioningState value.
      */
     public String provisioningState() {
@@ -46,7 +56,7 @@ public final class AccountProperties {
 
     /**
      * Get the activeDirectories property: Active Directories.
-     *
+     * 
      * @return the activeDirectories value.
      */
     public List<ActiveDirectory> activeDirectories() {
@@ -55,7 +65,7 @@ public final class AccountProperties {
 
     /**
      * Set the activeDirectories property: Active Directories.
-     *
+     * 
      * @param activeDirectories the activeDirectories value to set.
      * @return the AccountProperties object itself.
      */
@@ -66,7 +76,7 @@ public final class AccountProperties {
 
     /**
      * Get the encryption property: Encryption settings.
-     *
+     * 
      * @return the encryption value.
      */
     public AccountEncryption encryption() {
@@ -75,7 +85,7 @@ public final class AccountProperties {
 
     /**
      * Set the encryption property: Encryption settings.
-     *
+     * 
      * @param encryption the encryption value to set.
      * @return the AccountProperties object itself.
      */
@@ -85,8 +95,18 @@ public final class AccountProperties {
     }
 
     /**
+     * Get the disableShowmount property: Shows the status of disableShowmount for all volumes under the subscription,
+     * null equals false.
+     * 
+     * @return the disableShowmount value.
+     */
+    public Boolean disableShowmount() {
+        return this.disableShowmount;
+    }
+
+    /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
@@ -96,5 +116,51 @@ public final class AccountProperties {
         if (encryption() != null) {
             encryption().validate();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public JsonWriter toJson(JsonWriter jsonWriter) throws IOException {
+        jsonWriter.writeStartObject();
+        jsonWriter.writeArrayField("activeDirectories", this.activeDirectories,
+            (writer, element) -> writer.writeJson(element));
+        jsonWriter.writeJsonField("encryption", this.encryption);
+        return jsonWriter.writeEndObject();
+    }
+
+    /**
+     * Reads an instance of AccountProperties from the JsonReader.
+     * 
+     * @param jsonReader The JsonReader being read.
+     * @return An instance of AccountProperties if the JsonReader was pointing to an instance of it, or null if it was
+     * pointing to JSON null.
+     * @throws IOException If an error occurs while reading the AccountProperties.
+     */
+    public static AccountProperties fromJson(JsonReader jsonReader) throws IOException {
+        return jsonReader.readObject(reader -> {
+            AccountProperties deserializedAccountProperties = new AccountProperties();
+            while (reader.nextToken() != JsonToken.END_OBJECT) {
+                String fieldName = reader.getFieldName();
+                reader.nextToken();
+
+                if ("provisioningState".equals(fieldName)) {
+                    deserializedAccountProperties.provisioningState = reader.getString();
+                } else if ("activeDirectories".equals(fieldName)) {
+                    List<ActiveDirectory> activeDirectories
+                        = reader.readArray(reader1 -> ActiveDirectory.fromJson(reader1));
+                    deserializedAccountProperties.activeDirectories = activeDirectories;
+                } else if ("encryption".equals(fieldName)) {
+                    deserializedAccountProperties.encryption = AccountEncryption.fromJson(reader);
+                } else if ("disableShowmount".equals(fieldName)) {
+                    deserializedAccountProperties.disableShowmount = reader.getNullable(JsonReader::getBoolean);
+                } else {
+                    reader.skipChildren();
+                }
+            }
+
+            return deserializedAccountProperties;
+        });
     }
 }

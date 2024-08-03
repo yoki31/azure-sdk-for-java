@@ -5,17 +5,15 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.cosmos.fluent.models.UsageInner;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** The response to a list usage request. */
+/**
+ * The response to a list usage request.
+ */
 @Immutable
 public final class UsagesResult {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(UsagesResult.class);
-
     /*
      * The list of usages for the database. A usage is a point in time metric
      */
@@ -23,8 +21,14 @@ public final class UsagesResult {
     private List<UsageInner> value;
 
     /**
+     * Creates an instance of UsagesResult class.
+     */
+    public UsagesResult() {
+    }
+
+    /**
      * Get the value property: The list of usages for the database. A usage is a point in time metric.
-     *
+     * 
      * @return the value value.
      */
     public List<UsageInner> value() {
@@ -33,7 +37,7 @@ public final class UsagesResult {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

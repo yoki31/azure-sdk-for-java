@@ -22,10 +22,9 @@ import com.azure.resourcemanager.apimanagement.models.ApiManagementServiceGetSso
 import com.azure.resourcemanager.apimanagement.models.ApiManagementServiceNameAvailabilityResult;
 import com.azure.resourcemanager.apimanagement.models.ApiManagementServiceResource;
 import com.azure.resourcemanager.apimanagement.models.ApiManagementServices;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class ApiManagementServicesImpl implements ApiManagementServices {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ApiManagementServicesImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(ApiManagementServicesImpl.class);
 
     private final ApiManagementServicesClient innerClient;
 
@@ -88,16 +87,6 @@ public final class ApiManagementServicesImpl implements ApiManagementServices {
         }
     }
 
-    public ApiManagementServiceResource getByResourceGroup(String resourceGroupName, String serviceName) {
-        ApiManagementServiceResourceInner inner =
-            this.serviceClient().getByResourceGroup(resourceGroupName, serviceName);
-        if (inner != null) {
-            return new ApiManagementServiceResourceImpl(inner, this.manager());
-        } else {
-            return null;
-        }
-    }
-
     public Response<ApiManagementServiceResource> getByResourceGroupWithResponse(
         String resourceGroupName, String serviceName, Context context) {
         Response<ApiManagementServiceResourceInner> inner =
@@ -108,6 +97,16 @@ public final class ApiManagementServicesImpl implements ApiManagementServices {
                 inner.getStatusCode(),
                 inner.getHeaders(),
                 new ApiManagementServiceResourceImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
+    }
+
+    public ApiManagementServiceResource getByResourceGroup(String resourceGroupName, String serviceName) {
+        ApiManagementServiceResourceInner inner =
+            this.serviceClient().getByResourceGroup(resourceGroupName, serviceName);
+        if (inner != null) {
+            return new ApiManagementServiceResourceImpl(inner, this.manager());
         } else {
             return null;
         }
@@ -124,6 +123,25 @@ public final class ApiManagementServicesImpl implements ApiManagementServices {
 
     public ApiManagementServiceResource delete(String resourceGroupName, String serviceName, Context context) {
         ApiManagementServiceResourceInner inner = this.serviceClient().delete(resourceGroupName, serviceName, context);
+        if (inner != null) {
+            return new ApiManagementServiceResourceImpl(inner, this.manager());
+        } else {
+            return null;
+        }
+    }
+
+    public ApiManagementServiceResource migrateToStv2(String resourceGroupName, String serviceName) {
+        ApiManagementServiceResourceInner inner = this.serviceClient().migrateToStv2(resourceGroupName, serviceName);
+        if (inner != null) {
+            return new ApiManagementServiceResourceImpl(inner, this.manager());
+        } else {
+            return null;
+        }
+    }
+
+    public ApiManagementServiceResource migrateToStv2(String resourceGroupName, String serviceName, Context context) {
+        ApiManagementServiceResourceInner inner =
+            this.serviceClient().migrateToStv2(resourceGroupName, serviceName, context);
         if (inner != null) {
             return new ApiManagementServiceResourceImpl(inner, this.manager());
         } else {
@@ -153,16 +171,6 @@ public final class ApiManagementServicesImpl implements ApiManagementServices {
         return Utils.mapPage(inner, inner1 -> new ApiManagementServiceResourceImpl(inner1, this.manager()));
     }
 
-    public ApiManagementServiceGetSsoTokenResult getSsoToken(String resourceGroupName, String serviceName) {
-        ApiManagementServiceGetSsoTokenResultInner inner =
-            this.serviceClient().getSsoToken(resourceGroupName, serviceName);
-        if (inner != null) {
-            return new ApiManagementServiceGetSsoTokenResultImpl(inner, this.manager());
-        } else {
-            return null;
-        }
-    }
-
     public Response<ApiManagementServiceGetSsoTokenResult> getSsoTokenWithResponse(
         String resourceGroupName, String serviceName, Context context) {
         Response<ApiManagementServiceGetSsoTokenResultInner> inner =
@@ -178,11 +186,11 @@ public final class ApiManagementServicesImpl implements ApiManagementServices {
         }
     }
 
-    public ApiManagementServiceNameAvailabilityResult checkNameAvailability(
-        ApiManagementServiceCheckNameAvailabilityParameters parameters) {
-        ApiManagementServiceNameAvailabilityResultInner inner = this.serviceClient().checkNameAvailability(parameters);
+    public ApiManagementServiceGetSsoTokenResult getSsoToken(String resourceGroupName, String serviceName) {
+        ApiManagementServiceGetSsoTokenResultInner inner =
+            this.serviceClient().getSsoToken(resourceGroupName, serviceName);
         if (inner != null) {
-            return new ApiManagementServiceNameAvailabilityResultImpl(inner, this.manager());
+            return new ApiManagementServiceGetSsoTokenResultImpl(inner, this.manager());
         } else {
             return null;
         }
@@ -203,11 +211,11 @@ public final class ApiManagementServicesImpl implements ApiManagementServices {
         }
     }
 
-    public ApiManagementServiceGetDomainOwnershipIdentifierResult getDomainOwnershipIdentifier() {
-        ApiManagementServiceGetDomainOwnershipIdentifierResultInner inner =
-            this.serviceClient().getDomainOwnershipIdentifier();
+    public ApiManagementServiceNameAvailabilityResult checkNameAvailability(
+        ApiManagementServiceCheckNameAvailabilityParameters parameters) {
+        ApiManagementServiceNameAvailabilityResultInner inner = this.serviceClient().checkNameAvailability(parameters);
         if (inner != null) {
-            return new ApiManagementServiceGetDomainOwnershipIdentifierResultImpl(inner, this.manager());
+            return new ApiManagementServiceNameAvailabilityResultImpl(inner, this.manager());
         } else {
             return null;
         }
@@ -228,14 +236,11 @@ public final class ApiManagementServicesImpl implements ApiManagementServices {
         }
     }
 
-    public ApiManagementServiceResource applyNetworkConfigurationUpdates(
-        String resourceGroupName,
-        String serviceName,
-        ApiManagementServiceApplyNetworkConfigurationParameters parameters) {
-        ApiManagementServiceResourceInner inner =
-            this.serviceClient().applyNetworkConfigurationUpdates(resourceGroupName, serviceName, parameters);
+    public ApiManagementServiceGetDomainOwnershipIdentifierResult getDomainOwnershipIdentifier() {
+        ApiManagementServiceGetDomainOwnershipIdentifierResultInner inner =
+            this.serviceClient().getDomainOwnershipIdentifier();
         if (inner != null) {
-            return new ApiManagementServiceResourceImpl(inner, this.manager());
+            return new ApiManagementServiceGetDomainOwnershipIdentifierResultImpl(inner, this.manager());
         } else {
             return null;
         }
@@ -268,7 +273,7 @@ public final class ApiManagementServicesImpl implements ApiManagementServices {
     public ApiManagementServiceResource getById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -276,7 +281,7 @@ public final class ApiManagementServicesImpl implements ApiManagementServices {
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
@@ -287,7 +292,7 @@ public final class ApiManagementServicesImpl implements ApiManagementServices {
     public Response<ApiManagementServiceResource> getByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -295,7 +300,7 @@ public final class ApiManagementServicesImpl implements ApiManagementServices {
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
@@ -306,7 +311,7 @@ public final class ApiManagementServicesImpl implements ApiManagementServices {
     public ApiManagementServiceResource deleteById(String id) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -314,7 +319,7 @@ public final class ApiManagementServicesImpl implements ApiManagementServices {
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));
@@ -325,7 +330,7 @@ public final class ApiManagementServicesImpl implements ApiManagementServices {
     public ApiManagementServiceResource deleteByIdWithResponse(String id, Context context) {
         String resourceGroupName = Utils.getValueFromIdByName(id, "resourceGroups");
         if (resourceGroupName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String
@@ -333,7 +338,7 @@ public final class ApiManagementServicesImpl implements ApiManagementServices {
         }
         String serviceName = Utils.getValueFromIdByName(id, "service");
         if (serviceName == null) {
-            throw logger
+            throw LOGGER
                 .logExceptionAsError(
                     new IllegalArgumentException(
                         String.format("The resource ID '%s' is not valid. Missing path segment 'service'.", id)));

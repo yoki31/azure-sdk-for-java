@@ -9,14 +9,16 @@ import com.azure.resourcemanager.batch.models.PrivateEndpoint;
 import com.azure.resourcemanager.batch.models.PrivateEndpointConnection;
 import com.azure.resourcemanager.batch.models.PrivateEndpointConnectionProvisioningState;
 import com.azure.resourcemanager.batch.models.PrivateLinkServiceConnectionState;
+import java.util.Collections;
+import java.util.List;
 
 public final class PrivateEndpointConnectionImpl implements PrivateEndpointConnection {
     private PrivateEndpointConnectionInner innerObject;
 
     private final com.azure.resourcemanager.batch.BatchManager serviceManager;
 
-    PrivateEndpointConnectionImpl(
-        PrivateEndpointConnectionInner innerObject, com.azure.resourcemanager.batch.BatchManager serviceManager) {
+    PrivateEndpointConnectionImpl(PrivateEndpointConnectionInner innerObject,
+        com.azure.resourcemanager.batch.BatchManager serviceManager) {
         this.innerObject = innerObject;
         this.serviceManager = serviceManager;
     }
@@ -43,6 +45,15 @@ public final class PrivateEndpointConnectionImpl implements PrivateEndpointConne
 
     public PrivateEndpoint privateEndpoint() {
         return this.innerModel().privateEndpoint();
+    }
+
+    public List<String> groupIds() {
+        List<String> inner = this.innerModel().groupIds();
+        if (inner != null) {
+            return Collections.unmodifiableList(inner);
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     public PrivateLinkServiceConnectionState privateLinkServiceConnectionState() {

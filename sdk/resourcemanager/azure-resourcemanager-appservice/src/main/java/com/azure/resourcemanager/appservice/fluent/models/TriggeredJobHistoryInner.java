@@ -5,18 +5,16 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.appservice.models.ProxyOnlyResource;
 import com.azure.resourcemanager.appservice.models.TriggeredJobRun;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
-/** Triggered Web Job History. List of Triggered Web Job Run Information elements. */
+/**
+ * Triggered Web Job History. List of Triggered Web Job Run Information elements.
+ */
 @Fluent
 public final class TriggeredJobHistoryInner extends ProxyOnlyResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TriggeredJobHistoryInner.class);
-
     /*
      * TriggeredJobHistory resource specific properties
      */
@@ -24,15 +22,23 @@ public final class TriggeredJobHistoryInner extends ProxyOnlyResource {
     private TriggeredJobHistoryProperties innerProperties;
 
     /**
+     * Creates an instance of TriggeredJobHistoryInner class.
+     */
+    public TriggeredJobHistoryInner() {
+    }
+
+    /**
      * Get the innerProperties property: TriggeredJobHistory resource specific properties.
-     *
+     * 
      * @return the innerProperties value.
      */
     private TriggeredJobHistoryProperties innerProperties() {
         return this.innerProperties;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public TriggeredJobHistoryInner withKind(String kind) {
         super.withKind(kind);
@@ -41,7 +47,7 @@ public final class TriggeredJobHistoryInner extends ProxyOnlyResource {
 
     /**
      * Get the runs property: List of triggered web job runs.
-     *
+     * 
      * @return the runs value.
      */
     public List<TriggeredJobRun> runs() {
@@ -50,7 +56,7 @@ public final class TriggeredJobHistoryInner extends ProxyOnlyResource {
 
     /**
      * Set the runs property: List of triggered web job runs.
-     *
+     * 
      * @param runs the runs value to set.
      * @return the TriggeredJobHistoryInner object itself.
      */
@@ -64,7 +70,7 @@ public final class TriggeredJobHistoryInner extends ProxyOnlyResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     @Override

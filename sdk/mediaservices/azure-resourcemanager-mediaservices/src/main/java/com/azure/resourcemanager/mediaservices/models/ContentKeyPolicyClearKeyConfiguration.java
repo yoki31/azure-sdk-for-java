@@ -5,19 +5,17 @@
 package com.azure.resourcemanager.mediaservices.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.annotation.JsonFlatten;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 /** Represents a configuration for non-DRM keys. */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@odata\\.type")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@odata.type")
 @JsonTypeName("#Microsoft.Media.ContentKeyPolicyClearKeyConfiguration")
-@JsonFlatten
 @Immutable
-public class ContentKeyPolicyClearKeyConfiguration extends ContentKeyPolicyConfiguration {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ContentKeyPolicyClearKeyConfiguration.class);
+public final class ContentKeyPolicyClearKeyConfiguration extends ContentKeyPolicyConfiguration {
+    /** Creates an instance of ContentKeyPolicyClearKeyConfiguration class. */
+    public ContentKeyPolicyClearKeyConfiguration() {
+    }
 
     /**
      * Validates the instance.

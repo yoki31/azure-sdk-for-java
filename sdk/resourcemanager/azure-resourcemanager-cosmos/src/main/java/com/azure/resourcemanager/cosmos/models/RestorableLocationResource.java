@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.cosmos.models;
 
 import com.azure.core.annotation.Immutable;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.OffsetDateTime;
 
-/** Properties of the regional restorable account. */
+/**
+ * Properties of the regional restorable account.
+ */
 @Immutable
 public final class RestorableLocationResource {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RestorableLocationResource.class);
-
     /*
      * The location of the regional restorable account.
      */
@@ -28,22 +26,26 @@ public final class RestorableLocationResource {
     private String regionalDatabaseAccountInstanceId;
 
     /*
-     * The creation time of the regional restorable database account (ISO-8601
-     * format).
+     * The creation time of the regional restorable database account (ISO-8601 format).
      */
     @JsonProperty(value = "creationTime", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime creationTime;
 
     /*
-     * The time at which the regional restorable database account has been
-     * deleted (ISO-8601 format).
+     * The time at which the regional restorable database account has been deleted (ISO-8601 format).
      */
     @JsonProperty(value = "deletionTime", access = JsonProperty.Access.WRITE_ONLY)
     private OffsetDateTime deletionTime;
 
     /**
+     * Creates an instance of RestorableLocationResource class.
+     */
+    public RestorableLocationResource() {
+    }
+
+    /**
      * Get the locationName property: The location of the regional restorable account.
-     *
+     * 
      * @return the locationName value.
      */
     public String locationName() {
@@ -52,7 +54,7 @@ public final class RestorableLocationResource {
 
     /**
      * Get the regionalDatabaseAccountInstanceId property: The instance id of the regional restorable account.
-     *
+     * 
      * @return the regionalDatabaseAccountInstanceId value.
      */
     public String regionalDatabaseAccountInstanceId() {
@@ -61,7 +63,7 @@ public final class RestorableLocationResource {
 
     /**
      * Get the creationTime property: The creation time of the regional restorable database account (ISO-8601 format).
-     *
+     * 
      * @return the creationTime value.
      */
     public OffsetDateTime creationTime() {
@@ -71,7 +73,7 @@ public final class RestorableLocationResource {
     /**
      * Get the deletionTime property: The time at which the regional restorable database account has been deleted
      * (ISO-8601 format).
-     *
+     * 
      * @return the deletionTime value.
      */
     public OffsetDateTime deletionTime() {
@@ -80,7 +82,7 @@ public final class RestorableLocationResource {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

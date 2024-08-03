@@ -8,14 +8,13 @@ import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.datafactory.models.DatasetCompression;
 import com.azure.resourcemanager.datafactory.models.DatasetLocation;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Xml dataset properties. */
+/**
+ * Xml dataset properties.
+ */
 @Fluent
 public final class XmlDatasetTypeProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(XmlDatasetTypeProperties.class);
-
     /*
      * The location of the json data storage.
      */
@@ -23,19 +22,16 @@ public final class XmlDatasetTypeProperties {
     private DatasetLocation location;
 
     /*
-     * The code page name of the preferred encoding. If not specified, the
-     * default value is UTF-8, unless BOM denotes another Unicode encoding.
-     * Refer to the name column of the table in the following link to set
-     * supported values:
-     * https://msdn.microsoft.com/library/system.text.encoding.aspx. Type:
-     * string (or Expression with resultType string).
+     * The code page name of the preferred encoding. If not specified, the default value is UTF-8, unless BOM denotes
+     * another Unicode encoding. Refer to the name column of the table in the following link to set supported values:
+     * https://msdn.microsoft.com/library/system.text.encoding.aspx. Type: string (or Expression with resultType
+     * string).
      */
     @JsonProperty(value = "encodingName")
     private Object encodingName;
 
     /*
-     * The null value string. Type: string (or Expression with resultType
-     * string).
+     * The null value string. Type: string (or Expression with resultType string).
      */
     @JsonProperty(value = "nullValue")
     private Object nullValue;
@@ -47,8 +43,14 @@ public final class XmlDatasetTypeProperties {
     private DatasetCompression compression;
 
     /**
+     * Creates an instance of XmlDatasetTypeProperties class.
+     */
+    public XmlDatasetTypeProperties() {
+    }
+
+    /**
      * Get the location property: The location of the json data storage.
-     *
+     * 
      * @return the location value.
      */
     public DatasetLocation location() {
@@ -57,7 +59,7 @@ public final class XmlDatasetTypeProperties {
 
     /**
      * Set the location property: The location of the json data storage.
-     *
+     * 
      * @param location the location value to set.
      * @return the XmlDatasetTypeProperties object itself.
      */
@@ -71,7 +73,7 @@ public final class XmlDatasetTypeProperties {
      * is UTF-8, unless BOM denotes another Unicode encoding. Refer to the name column of the table in the following
      * link to set supported values: https://msdn.microsoft.com/library/system.text.encoding.aspx. Type: string (or
      * Expression with resultType string).
-     *
+     * 
      * @return the encodingName value.
      */
     public Object encodingName() {
@@ -83,7 +85,7 @@ public final class XmlDatasetTypeProperties {
      * is UTF-8, unless BOM denotes another Unicode encoding. Refer to the name column of the table in the following
      * link to set supported values: https://msdn.microsoft.com/library/system.text.encoding.aspx. Type: string (or
      * Expression with resultType string).
-     *
+     * 
      * @param encodingName the encodingName value to set.
      * @return the XmlDatasetTypeProperties object itself.
      */
@@ -94,7 +96,7 @@ public final class XmlDatasetTypeProperties {
 
     /**
      * Get the nullValue property: The null value string. Type: string (or Expression with resultType string).
-     *
+     * 
      * @return the nullValue value.
      */
     public Object nullValue() {
@@ -103,7 +105,7 @@ public final class XmlDatasetTypeProperties {
 
     /**
      * Set the nullValue property: The null value string. Type: string (or Expression with resultType string).
-     *
+     * 
      * @param nullValue the nullValue value to set.
      * @return the XmlDatasetTypeProperties object itself.
      */
@@ -114,7 +116,7 @@ public final class XmlDatasetTypeProperties {
 
     /**
      * Get the compression property: The data compression method used for the json dataset.
-     *
+     * 
      * @return the compression value.
      */
     public DatasetCompression compression() {
@@ -123,7 +125,7 @@ public final class XmlDatasetTypeProperties {
 
     /**
      * Set the compression property: The data compression method used for the json dataset.
-     *
+     * 
      * @param compression the compression value to set.
      * @return the XmlDatasetTypeProperties object itself.
      */
@@ -134,15 +136,14 @@ public final class XmlDatasetTypeProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (location() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException(
-                        "Missing required property location in model XmlDatasetTypeProperties"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException(
+                    "Missing required property location in model XmlDatasetTypeProperties"));
         } else {
             location().validate();
         }
@@ -150,4 +151,6 @@ public final class XmlDatasetTypeProperties {
             compression().validate();
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(XmlDatasetTypeProperties.class);
 }

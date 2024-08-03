@@ -6,19 +6,18 @@ package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Trigger reference type. */
+/**
+ * Trigger reference type.
+ */
 @Fluent
 public final class TriggerReference {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(TriggerReference.class);
-
     /*
      * Trigger reference type.
      */
     @JsonProperty(value = "type", required = true)
-    private String type = "TriggerReference";
+    private TriggerReferenceType type;
 
     /*
      * Reference trigger name.
@@ -26,34 +25,35 @@ public final class TriggerReference {
     @JsonProperty(value = "referenceName", required = true)
     private String referenceName;
 
-    /** Creates an instance of TriggerReference class. */
+    /**
+     * Creates an instance of TriggerReference class.
+     */
     public TriggerReference() {
-        type = "TriggerReference";
     }
 
     /**
      * Get the type property: Trigger reference type.
-     *
+     * 
      * @return the type value.
      */
-    public String type() {
+    public TriggerReferenceType type() {
         return this.type;
     }
 
     /**
      * Set the type property: Trigger reference type.
-     *
+     * 
      * @param type the type value to set.
      * @return the TriggerReference object itself.
      */
-    public TriggerReference withType(String type) {
+    public TriggerReference withType(TriggerReferenceType type) {
         this.type = type;
         return this;
     }
 
     /**
      * Get the referenceName property: Reference trigger name.
-     *
+     * 
      * @return the referenceName value.
      */
     public String referenceName() {
@@ -62,7 +62,7 @@ public final class TriggerReference {
 
     /**
      * Set the referenceName property: Reference trigger name.
-     *
+     * 
      * @param referenceName the referenceName value to set.
      * @return the TriggerReference object itself.
      */
@@ -73,14 +73,19 @@ public final class TriggerReference {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
+        if (type() == null) {
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property type in model TriggerReference"));
+        }
         if (referenceName() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property referenceName in model TriggerReference"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property referenceName in model TriggerReference"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(TriggerReference.class);
 }

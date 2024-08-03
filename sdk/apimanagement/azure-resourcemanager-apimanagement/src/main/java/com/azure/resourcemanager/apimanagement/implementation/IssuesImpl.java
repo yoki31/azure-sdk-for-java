@@ -14,10 +14,9 @@ import com.azure.resourcemanager.apimanagement.fluent.models.IssueContractInner;
 import com.azure.resourcemanager.apimanagement.models.IssueContract;
 import com.azure.resourcemanager.apimanagement.models.Issues;
 import com.azure.resourcemanager.apimanagement.models.IssuesGetResponse;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public final class IssuesImpl implements Issues {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(IssuesImpl.class);
+    private static final ClientLogger LOGGER = new ClientLogger(IssuesImpl.class);
 
     private final IssuesClient innerClient;
 
@@ -41,15 +40,6 @@ public final class IssuesImpl implements Issues {
         return Utils.mapPage(inner, inner1 -> new IssueContractImpl(inner1, this.manager()));
     }
 
-    public IssueContract get(String resourceGroupName, String serviceName, String issueId) {
-        IssueContractInner inner = this.serviceClient().get(resourceGroupName, serviceName, issueId);
-        if (inner != null) {
-            return new IssueContractImpl(inner, this.manager());
-        } else {
-            return null;
-        }
-    }
-
     public Response<IssueContract> getWithResponse(
         String resourceGroupName, String serviceName, String issueId, Context context) {
         IssuesGetResponse inner =
@@ -60,6 +50,15 @@ public final class IssuesImpl implements Issues {
                 inner.getStatusCode(),
                 inner.getHeaders(),
                 new IssueContractImpl(inner.getValue(), this.manager()));
+        } else {
+            return null;
+        }
+    }
+
+    public IssueContract get(String resourceGroupName, String serviceName, String issueId) {
+        IssueContractInner inner = this.serviceClient().get(resourceGroupName, serviceName, issueId);
+        if (inner != null) {
+            return new IssueContractImpl(inner, this.manager());
         } else {
             return null;
         }

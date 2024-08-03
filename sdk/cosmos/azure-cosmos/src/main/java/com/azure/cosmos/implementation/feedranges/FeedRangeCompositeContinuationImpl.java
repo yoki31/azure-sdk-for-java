@@ -3,11 +3,11 @@
 
 package com.azure.cosmos.implementation.feedranges;
 
+import com.azure.cosmos.CosmosItemSerializer;
 import com.azure.cosmos.implementation.Constants;
 import com.azure.cosmos.implementation.GoneException;
 import com.azure.cosmos.implementation.HttpConstants;
 import com.azure.cosmos.implementation.PartitionKeyRange;
-import com.azure.cosmos.implementation.Resource;
 import com.azure.cosmos.implementation.RxDocumentClientImpl;
 import com.azure.cosmos.implementation.ShouldRetryResult;
 import com.azure.cosmos.implementation.Strings;
@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Queue;
 
-import static com.azure.cosmos.BridgeInternal.setProperty;
 import static com.azure.cosmos.implementation.guava25.base.Preconditions.checkNotNull;
 
 /**
@@ -100,25 +99,25 @@ final class FeedRangeCompositeContinuationImpl extends FeedRangeContinuation {
     public void populatePropertyBag() {
         super.populatePropertyBag();
 
-        setProperty(
-            this,
+        this.set(
             Constants.Properties.FEED_RANGE_COMPOSITE_CONTINUATION_VERSION,
-            FeedRangeContinuationVersions.V1);
+            FeedRangeContinuationVersions.V1,
+            CosmosItemSerializer.DEFAULT_SERIALIZER);
 
-        setProperty(
-            this,
+        this.set(
             Constants.Properties.FEED_RANGE_COMPOSITE_CONTINUATION_RESOURCE_ID,
-            this.getContainerRid());
+            this.getContainerRid(),
+            CosmosItemSerializer.DEFAULT_SERIALIZER);
 
         if (this.compositeContinuationTokens.size() > 0) {
             for (CompositeContinuationToken token : this.compositeContinuationTokens) {
                 ModelBridgeInternal.populatePropertyBag(token);
             }
 
-            setProperty(
-                this,
+            this.set(
                 Constants.Properties.FEED_RANGE_COMPOSITE_CONTINUATION_CONTINUATION,
-                this.compositeContinuationTokens);
+                this.compositeContinuationTokens,
+                CosmosItemSerializer.DEFAULT_SERIALIZER);
         }
 
         if (this.feedRange != null) {
@@ -205,7 +204,7 @@ final class FeedRangeCompositeContinuationImpl extends FeedRangeContinuation {
     }
 
     @Override
-    public <T extends Resource> ShouldRetryResult handleChangeFeedNotModified(final FeedResponse<T> response) {
+    public <T> ShouldRetryResult handleChangeFeedNotModified(final FeedResponse<T> response) {
         checkNotNull(response, "Argument 'response' must not be null");
 
         if (!ModelBridgeInternal.<T>noChanges(response)) {
@@ -231,38 +230,39 @@ final class FeedRangeCompositeContinuationImpl extends FeedRangeContinuation {
     }
 
     @Override
-    public Mono<ShouldRetryResult> handleSplit(final RxDocumentClientImpl client,
-                                               final GoneException goneException) {
+    public Mono<ShouldRetryResult> handleFeedRangeGone(final RxDocumentClientImpl client,
+                                                       final GoneException goneException) {
 
         checkNotNull(client, "Argument 'client' must not be null");
         checkNotNull(goneException, "Argument 'goeException' must not be null");
 
         Integer nSubStatus = goneException.getSubStatusCode();
 
-        final boolean partitionSplit =
+        final boolean partitionSplitOrMerge =
             goneException.getStatusCode() == HttpConstants.StatusCodes.GONE &&
                 nSubStatus != null &&
                 (nSubStatus == HttpConstants.SubStatusCodes.PARTITION_KEY_RANGE_GONE
-                || nSubStatus == HttpConstants.SubStatusCodes.COMPLETING_SPLIT);
+                || nSubStatus == HttpConstants.SubStatusCodes.COMPLETING_SPLIT_OR_MERGE);
 
-        if (!partitionSplit) {
+        if (!partitionSplitOrMerge) {
             return Mono.just(ShouldRetryResult.NO_RETRY);
         }
 
         final RxPartitionKeyRangeCache partitionKeyRangeCache = client.getPartitionKeyRangeCache();
         Range<String> effectiveTokenRange = this.currentToken.getRange();
         final Mono<Utils.ValueHolder<List<PartitionKeyRange>>> resolvedRangesTask =
-            this.tryGetOverlappingRanges(
-                partitionKeyRangeCache,
-                effectiveTokenRange.getMin(),
-                effectiveTokenRange.getMax(),
-                true);
+            this.tryGetOverlappingRanges(partitionKeyRangeCache, effectiveTokenRange, true);
 
         return resolvedRangesTask.flatMap(resolvedRanges -> {
-            if (resolvedRanges.v != null && resolvedRanges.v.size() > 0) {
-                this.createChildRanges(resolvedRanges.v, effectiveTokenRange);
+            if (resolvedRanges.v != null) {
+                if (resolvedRanges.v.size() == 1) {
+                    // Merge happen, will continue draining from the current range
+                    LOGGER.debug("ChangeFeedFetcher detected feed range gone due to merge for range [{}]", effectiveTokenRange);
+                } else {
+                    this.createChildRanges(resolvedRanges.v, effectiveTokenRange);
+                    LOGGER.debug("ChangeFeedFetcher detected feed range gone due to split for range [{}]", effectiveTokenRange);
+                }
             }
-
             return Mono.just(ShouldRetryResult.RETRY_NOW);
         });
     }
@@ -411,11 +411,16 @@ final class FeedRangeCompositeContinuationImpl extends FeedRangeContinuation {
     }
 
     private Mono<Utils.ValueHolder<List<PartitionKeyRange>>> tryGetOverlappingRanges(
-        final RxPartitionKeyRangeCache partitionKeyRangeCache, final String min, final String max,
+        final RxPartitionKeyRangeCache partitionKeyRangeCache,
+        Range<String> effectiveRange,
         final Boolean forceRefresh) {
 
-        return partitionKeyRangeCache.tryGetOverlappingRangesAsync(null, this.getContainerRid(),
-            new Range<>(min, max, false, true), forceRefresh, null);
+        return partitionKeyRangeCache.tryGetOverlappingRangesAsync(
+                null,
+                this.getContainerRid(),
+                effectiveRange,
+                forceRefresh,
+                null);
     }
 
     private static CompositeContinuationToken tryParseAsCompositeContinuationToken(

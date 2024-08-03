@@ -5,16 +5,14 @@
 package com.azure.resourcemanager.compute.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.compute.models.RoleInstanceNetworkProfile;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** The RoleInstanceProperties model. */
+/**
+ * Role instance properties.
+ */
 @Fluent
 public final class RoleInstancePropertiesInner {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(RoleInstancePropertiesInner.class);
-
     /*
      * Describes the network profile for the role instance.
      */
@@ -28,8 +26,14 @@ public final class RoleInstancePropertiesInner {
     private RoleInstanceViewInner instanceView;
 
     /**
+     * Creates an instance of RoleInstancePropertiesInner class.
+     */
+    public RoleInstancePropertiesInner() {
+    }
+
+    /**
      * Get the networkProfile property: Describes the network profile for the role instance.
-     *
+     * 
      * @return the networkProfile value.
      */
     public RoleInstanceNetworkProfile networkProfile() {
@@ -38,7 +42,7 @@ public final class RoleInstancePropertiesInner {
 
     /**
      * Set the networkProfile property: Describes the network profile for the role instance.
-     *
+     * 
      * @param networkProfile the networkProfile value to set.
      * @return the RoleInstancePropertiesInner object itself.
      */
@@ -49,7 +53,7 @@ public final class RoleInstancePropertiesInner {
 
     /**
      * Get the instanceView property: The instance view of the role instance.
-     *
+     * 
      * @return the instanceView value.
      */
     public RoleInstanceViewInner instanceView() {
@@ -58,7 +62,7 @@ public final class RoleInstancePropertiesInner {
 
     /**
      * Set the instanceView property: The instance view of the role instance.
-     *
+     * 
      * @param instanceView the instanceView value to set.
      * @return the RoleInstancePropertiesInner object itself.
      */
@@ -69,7 +73,7 @@ public final class RoleInstancePropertiesInner {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

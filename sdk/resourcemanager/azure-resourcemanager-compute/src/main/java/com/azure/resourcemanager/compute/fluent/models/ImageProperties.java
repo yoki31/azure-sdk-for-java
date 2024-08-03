@@ -6,17 +6,15 @@ package com.azure.resourcemanager.compute.fluent.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.management.SubResource;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.compute.models.HyperVGenerationTypes;
 import com.azure.resourcemanager.compute.models.ImageStorageProfile;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Describes the properties of an Image. */
+/**
+ * Describes the properties of an Image.
+ */
 @Fluent
 public final class ImageProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(ImageProperties.class);
-
     /*
      * The source virtual machine from which Image is created.
      */
@@ -36,18 +34,23 @@ public final class ImageProperties {
     private String provisioningState;
 
     /*
-     * Specifies the HyperVGenerationType of the VirtualMachine created from
-     * the image. From API Version 2019-03-01 if the image source is a blob,
-     * then we need the user to specify the value, if the source is managed
-     * resource like disk or snapshot, we may require the user to specify the
-     * property if we cannot deduce it from the source managed resource.
+     * Specifies the HyperVGenerationType of the VirtualMachine created from the image. From API Version 2019-03-01 if
+     * the image source is a blob, then we need the user to specify the value, if the source is managed resource like
+     * disk or snapshot, we may require the user to specify the property if we cannot deduce it from the source managed
+     * resource.
      */
     @JsonProperty(value = "hyperVGeneration")
     private HyperVGenerationTypes hyperVGeneration;
 
     /**
+     * Creates an instance of ImageProperties class.
+     */
+    public ImageProperties() {
+    }
+
+    /**
      * Get the sourceVirtualMachine property: The source virtual machine from which Image is created.
-     *
+     * 
      * @return the sourceVirtualMachine value.
      */
     public SubResource sourceVirtualMachine() {
@@ -56,7 +59,7 @@ public final class ImageProperties {
 
     /**
      * Set the sourceVirtualMachine property: The source virtual machine from which Image is created.
-     *
+     * 
      * @param sourceVirtualMachine the sourceVirtualMachine value to set.
      * @return the ImageProperties object itself.
      */
@@ -67,7 +70,7 @@ public final class ImageProperties {
 
     /**
      * Get the storageProfile property: Specifies the storage settings for the virtual machine disks.
-     *
+     * 
      * @return the storageProfile value.
      */
     public ImageStorageProfile storageProfile() {
@@ -76,7 +79,7 @@ public final class ImageProperties {
 
     /**
      * Set the storageProfile property: Specifies the storage settings for the virtual machine disks.
-     *
+     * 
      * @param storageProfile the storageProfile value to set.
      * @return the ImageProperties object itself.
      */
@@ -87,7 +90,7 @@ public final class ImageProperties {
 
     /**
      * Get the provisioningState property: The provisioning state.
-     *
+     * 
      * @return the provisioningState value.
      */
     public String provisioningState() {
@@ -99,7 +102,7 @@ public final class ImageProperties {
      * image. From API Version 2019-03-01 if the image source is a blob, then we need the user to specify the value, if
      * the source is managed resource like disk or snapshot, we may require the user to specify the property if we
      * cannot deduce it from the source managed resource.
-     *
+     * 
      * @return the hyperVGeneration value.
      */
     public HyperVGenerationTypes hyperVGeneration() {
@@ -111,7 +114,7 @@ public final class ImageProperties {
      * image. From API Version 2019-03-01 if the image source is a blob, then we need the user to specify the value, if
      * the source is managed resource like disk or snapshot, we may require the user to specify the property if we
      * cannot deduce it from the source managed resource.
-     *
+     * 
      * @param hyperVGeneration the hyperVGeneration value to set.
      * @return the ImageProperties object itself.
      */
@@ -122,7 +125,7 @@ public final class ImageProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

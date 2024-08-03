@@ -21,15 +21,12 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.UserConfirmationPasswordsClient;
 import com.azure.resourcemanager.apimanagement.models.AppType;
 import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in UserConfirmationPasswordsClient. */
 public final class UserConfirmationPasswordsClientImpl implements UserConfirmationPasswordsClient {
-    private final ClientLogger logger = new ClientLogger(UserConfirmationPasswordsClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final UserConfirmationPasswordsService service;
 
@@ -55,11 +52,10 @@ public final class UserConfirmationPasswordsClientImpl implements UserConfirmati
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApiManagementClientU")
-    private interface UserConfirmationPasswordsService {
+    public interface UserConfirmationPasswordsService {
         @Headers({"Content-Type: application/json"})
         @Post(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/users/{userId}/confirmations/password/send")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/users/{userId}/confirmations/password/send")
         @ExpectedResponses({204})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<Void>> send(
@@ -77,7 +73,7 @@ public final class UserConfirmationPasswordsClientImpl implements UserConfirmati
     /**
      * Sends confirmation.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param appType Determines the type of application which send the create user request. Default is legacy publisher
@@ -85,7 +81,7 @@ public final class UserConfirmationPasswordsClientImpl implements UserConfirmati
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> sendWithResponseAsync(
@@ -133,7 +129,7 @@ public final class UserConfirmationPasswordsClientImpl implements UserConfirmati
     /**
      * Sends confirmation.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @param appType Determines the type of application which send the create user request. Default is legacy publisher
@@ -142,7 +138,7 @@ public final class UserConfirmationPasswordsClientImpl implements UserConfirmati
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return the {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<Void>> sendWithResponseAsync(
@@ -187,44 +183,44 @@ public final class UserConfirmationPasswordsClientImpl implements UserConfirmati
     /**
      * Sends confirmation.
      *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param userId User identifier. Must be unique in the current API Management service instance.
-     * @param appType Determines the type of application which send the create user request. Default is legacy publisher
-     *     portal.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    private Mono<Void> sendAsync(String resourceGroupName, String serviceName, String userId, AppType appType) {
-        return sendWithResponseAsync(resourceGroupName, serviceName, userId, appType)
-            .flatMap((Response<Void> res) -> Mono.empty());
-    }
-
-    /**
-     * Sends confirmation.
-     *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the completion.
+     * @return A {@link Mono} that completes when a successful response is received.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Void> sendAsync(String resourceGroupName, String serviceName, String userId) {
         final AppType appType = null;
-        return sendWithResponseAsync(resourceGroupName, serviceName, userId, appType)
-            .flatMap((Response<Void> res) -> Mono.empty());
+        return sendWithResponseAsync(resourceGroupName, serviceName, userId, appType).flatMap(ignored -> Mono.empty());
     }
 
     /**
      * Sends confirmation.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param userId User identifier. Must be unique in the current API Management service instance.
+     * @param appType Determines the type of application which send the create user request. Default is legacy publisher
+     *     portal.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<Void> sendWithResponse(
+        String resourceGroupName, String serviceName, String userId, AppType appType, Context context) {
+        return sendWithResponseAsync(resourceGroupName, serviceName, userId, appType, context).block();
+    }
+
+    /**
+     * Sends confirmation.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param userId User identifier. Must be unique in the current API Management service instance.
      * @throws IllegalArgumentException thrown if parameters fail the validation.
@@ -234,26 +230,6 @@ public final class UserConfirmationPasswordsClientImpl implements UserConfirmati
     @ServiceMethod(returns = ReturnType.SINGLE)
     public void send(String resourceGroupName, String serviceName, String userId) {
         final AppType appType = null;
-        sendAsync(resourceGroupName, serviceName, userId, appType).block();
-    }
-
-    /**
-     * Sends confirmation.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param userId User identifier. Must be unique in the current API Management service instance.
-     * @param appType Determines the type of application which send the create user request. Default is legacy publisher
-     *     portal.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the response.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<Void> sendWithResponse(
-        String resourceGroupName, String serviceName, String userId, AppType appType, Context context) {
-        return sendWithResponseAsync(resourceGroupName, serviceName, userId, appType, context).block();
+        sendWithResponse(resourceGroupName, serviceName, userId, appType, Context.NONE);
     }
 }

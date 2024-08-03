@@ -5,34 +5,36 @@
 package com.azure.resourcemanager.recoveryservicesbackup.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Encapsulates Managed Identity related information. */
+/**
+ * Encapsulates Managed Identity related information.
+ */
 @Fluent
 public final class IdentityInfo {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(IdentityInfo.class);
-
     /*
-     * To differentiate if the managed identity is system assigned or user
-     * assigned
+     * To differentiate if the managed identity is system assigned or user assigned
      */
     @JsonProperty(value = "isSystemAssignedIdentity")
     private Boolean isSystemAssignedIdentity;
 
     /*
      * Managed Identity Resource Id
-     * Optional: Might not be required in the case of system assigned managed
-     * identity
+     * Optional: Might not be required in the case of system assigned managed identity
      */
     @JsonProperty(value = "managedIdentityResourceId")
     private String managedIdentityResourceId;
 
     /**
+     * Creates an instance of IdentityInfo class.
+     */
+    public IdentityInfo() {
+    }
+
+    /**
      * Get the isSystemAssignedIdentity property: To differentiate if the managed identity is system assigned or user
      * assigned.
-     *
+     * 
      * @return the isSystemAssignedIdentity value.
      */
     public Boolean isSystemAssignedIdentity() {
@@ -42,7 +44,7 @@ public final class IdentityInfo {
     /**
      * Set the isSystemAssignedIdentity property: To differentiate if the managed identity is system assigned or user
      * assigned.
-     *
+     * 
      * @param isSystemAssignedIdentity the isSystemAssignedIdentity value to set.
      * @return the IdentityInfo object itself.
      */
@@ -52,9 +54,9 @@ public final class IdentityInfo {
     }
 
     /**
-     * Get the managedIdentityResourceId property: Managed Identity Resource Id Optional: Might not be required in the
-     * case of system assigned managed identity.
-     *
+     * Get the managedIdentityResourceId property: Managed Identity Resource Id
+     * Optional: Might not be required in the case of system assigned managed identity.
+     * 
      * @return the managedIdentityResourceId value.
      */
     public String managedIdentityResourceId() {
@@ -62,9 +64,9 @@ public final class IdentityInfo {
     }
 
     /**
-     * Set the managedIdentityResourceId property: Managed Identity Resource Id Optional: Might not be required in the
-     * case of system assigned managed identity.
-     *
+     * Set the managedIdentityResourceId property: Managed Identity Resource Id
+     * Optional: Might not be required in the case of system assigned managed identity.
+     * 
      * @param managedIdentityResourceId the managedIdentityResourceId value to set.
      * @return the IdentityInfo object itself.
      */
@@ -75,7 +77,7 @@ public final class IdentityInfo {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

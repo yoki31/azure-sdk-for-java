@@ -8,17 +8,32 @@ import com.azure.core.util.ExpandableStringEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.Collection;
 
-/** Defines values for KnownPublicNetworkAccessOptions. */
+/**
+ * The configuration to set whether network access from public internet to the endpoints are allowed.
+ */
 public final class KnownPublicNetworkAccessOptions extends ExpandableStringEnum<KnownPublicNetworkAccessOptions> {
-    /** Static value Enabled for KnownPublicNetworkAccessOptions. */
+    /**
+     * Static value Enabled for KnownPublicNetworkAccessOptions.
+     */
     public static final KnownPublicNetworkAccessOptions ENABLED = fromString("Enabled");
 
-    /** Static value Disabled for KnownPublicNetworkAccessOptions. */
+    /**
+     * Static value Disabled for KnownPublicNetworkAccessOptions.
+     */
     public static final KnownPublicNetworkAccessOptions DISABLED = fromString("Disabled");
 
     /**
+     * Creates a new instance of KnownPublicNetworkAccessOptions value.
+     * 
+     * @deprecated Use the {@link #fromString(String)} factory method.
+     */
+    @Deprecated
+    public KnownPublicNetworkAccessOptions() {
+    }
+
+    /**
      * Creates or finds a KnownPublicNetworkAccessOptions from its string representation.
-     *
+     * 
      * @param name a name to look for.
      * @return the corresponding KnownPublicNetworkAccessOptions.
      */
@@ -27,7 +42,11 @@ public final class KnownPublicNetworkAccessOptions extends ExpandableStringEnum<
         return fromString(name, KnownPublicNetworkAccessOptions.class);
     }
 
-    /** @return known KnownPublicNetworkAccessOptions values. */
+    /**
+     * Gets known KnownPublicNetworkAccessOptions values.
+     * 
+     * @return known KnownPublicNetworkAccessOptions values.
+     */
     public static Collection<KnownPublicNetworkAccessOptions> values() {
         return values(KnownPublicNetworkAccessOptions.class);
     }

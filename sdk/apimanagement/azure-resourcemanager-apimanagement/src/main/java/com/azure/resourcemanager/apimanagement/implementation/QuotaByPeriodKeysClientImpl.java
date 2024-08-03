@@ -23,7 +23,6 @@ import com.azure.core.http.rest.RestProxy;
 import com.azure.core.management.exception.ManagementException;
 import com.azure.core.util.Context;
 import com.azure.core.util.FluxUtil;
-import com.azure.core.util.logging.ClientLogger;
 import com.azure.resourcemanager.apimanagement.fluent.QuotaByPeriodKeysClient;
 import com.azure.resourcemanager.apimanagement.fluent.models.QuotaCounterContractInner;
 import com.azure.resourcemanager.apimanagement.models.QuotaCounterValueUpdateContract;
@@ -31,8 +30,6 @@ import reactor.core.publisher.Mono;
 
 /** An instance of this class provides access to all the operations defined in QuotaByPeriodKeysClient. */
 public final class QuotaByPeriodKeysClientImpl implements QuotaByPeriodKeysClient {
-    private final ClientLogger logger = new ClientLogger(QuotaByPeriodKeysClientImpl.class);
-
     /** The proxy service used to perform REST calls. */
     private final QuotaByPeriodKeysService service;
 
@@ -56,11 +53,10 @@ public final class QuotaByPeriodKeysClientImpl implements QuotaByPeriodKeysClien
      */
     @Host("{$host}")
     @ServiceInterface(name = "ApiManagementClientQ")
-    private interface QuotaByPeriodKeysService {
+    public interface QuotaByPeriodKeysService {
         @Headers({"Content-Type: application/json"})
         @Get(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/quotas/{quotaCounterKey}/periods/{quotaPeriodKey}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/quotas/{quotaCounterKey}/periods/{quotaPeriodKey}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<QuotaCounterContractInner>> get(
@@ -76,8 +72,7 @@ public final class QuotaByPeriodKeysClientImpl implements QuotaByPeriodKeysClien
 
         @Headers({"Content-Type: application/json"})
         @Patch(
-            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement"
-                + "/service/{serviceName}/quotas/{quotaCounterKey}/periods/{quotaPeriodKey}")
+            "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ApiManagement/service/{serviceName}/quotas/{quotaCounterKey}/periods/{quotaPeriodKey}")
         @ExpectedResponses({200})
         @UnexpectedResponseExceptionType(ManagementException.class)
         Mono<Response<QuotaCounterContractInner>> update(
@@ -97,7 +92,7 @@ public final class QuotaByPeriodKeysClientImpl implements QuotaByPeriodKeysClien
      * Gets the value of the quota counter associated with the counter-key in the policy for the specific period in
      * service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param quotaCounterKey Quota counter key identifier.This is the result of expression defined in counter-key
      *     attribute of the quota-by-key policy.For Example, if you specify counter-key="boo" in the policy, then it’s
@@ -108,7 +103,7 @@ public final class QuotaByPeriodKeysClientImpl implements QuotaByPeriodKeysClien
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the value of the quota counter associated with the counter-key in the policy for the specific period in
-     *     service instance.
+     *     service instance along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<QuotaCounterContractInner>> getWithResponseAsync(
@@ -161,7 +156,7 @@ public final class QuotaByPeriodKeysClientImpl implements QuotaByPeriodKeysClien
      * Gets the value of the quota counter associated with the counter-key in the policy for the specific period in
      * service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param quotaCounterKey Quota counter key identifier.This is the result of expression defined in counter-key
      *     attribute of the quota-by-key policy.For Example, if you specify counter-key="boo" in the policy, then it’s
@@ -173,7 +168,7 @@ public final class QuotaByPeriodKeysClientImpl implements QuotaByPeriodKeysClien
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the value of the quota counter associated with the counter-key in the policy for the specific period in
-     *     service instance.
+     *     service instance along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<QuotaCounterContractInner>> getWithResponseAsync(
@@ -223,7 +218,7 @@ public final class QuotaByPeriodKeysClientImpl implements QuotaByPeriodKeysClien
      * Gets the value of the quota counter associated with the counter-key in the policy for the specific period in
      * service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param quotaCounterKey Quota counter key identifier.This is the result of expression defined in counter-key
      *     attribute of the quota-by-key policy.For Example, if you specify counter-key="boo" in the policy, then it’s
@@ -234,27 +229,44 @@ public final class QuotaByPeriodKeysClientImpl implements QuotaByPeriodKeysClien
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
      * @return the value of the quota counter associated with the counter-key in the policy for the specific period in
-     *     service instance.
+     *     service instance on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<QuotaCounterContractInner> getAsync(
         String resourceGroupName, String serviceName, String quotaCounterKey, String quotaPeriodKey) {
         return getWithResponseAsync(resourceGroupName, serviceName, quotaCounterKey, quotaPeriodKey)
-            .flatMap(
-                (Response<QuotaCounterContractInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Gets the value of the quota counter associated with the counter-key in the policy for the specific period in
      * service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param quotaCounterKey Quota counter key identifier.This is the result of expression defined in counter-key
+     *     attribute of the quota-by-key policy.For Example, if you specify counter-key="boo" in the policy, then it’s
+     *     accessible by "boo" counter key. But if it’s defined as counter-key="@("b"+"a")" then it will be accessible
+     *     by "ba" key.
+     * @param quotaPeriodKey Quota period key identifier.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return the value of the quota counter associated with the counter-key in the policy for the specific period in
+     *     service instance along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<QuotaCounterContractInner> getWithResponse(
+        String resourceGroupName, String serviceName, String quotaCounterKey, String quotaPeriodKey, Context context) {
+        return getWithResponseAsync(resourceGroupName, serviceName, quotaCounterKey, quotaPeriodKey, context).block();
+    }
+
+    /**
+     * Gets the value of the quota counter associated with the counter-key in the policy for the specific period in
+     * service instance.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param quotaCounterKey Quota counter key identifier.This is the result of expression defined in counter-key
      *     attribute of the quota-by-key policy.For Example, if you specify counter-key="boo" in the policy, then it’s
@@ -270,37 +282,14 @@ public final class QuotaByPeriodKeysClientImpl implements QuotaByPeriodKeysClien
     @ServiceMethod(returns = ReturnType.SINGLE)
     public QuotaCounterContractInner get(
         String resourceGroupName, String serviceName, String quotaCounterKey, String quotaPeriodKey) {
-        return getAsync(resourceGroupName, serviceName, quotaCounterKey, quotaPeriodKey).block();
-    }
-
-    /**
-     * Gets the value of the quota counter associated with the counter-key in the policy for the specific period in
-     * service instance.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param quotaCounterKey Quota counter key identifier.This is the result of expression defined in counter-key
-     *     attribute of the quota-by-key policy.For Example, if you specify counter-key="boo" in the policy, then it’s
-     *     accessible by "boo" counter key. But if it’s defined as counter-key="@("b"+"a")" then it will be accessible
-     *     by "ba" key.
-     * @param quotaPeriodKey Quota period key identifier.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return the value of the quota counter associated with the counter-key in the policy for the specific period in
-     *     service instance.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<QuotaCounterContractInner> getWithResponse(
-        String resourceGroupName, String serviceName, String quotaCounterKey, String quotaPeriodKey, Context context) {
-        return getWithResponseAsync(resourceGroupName, serviceName, quotaCounterKey, quotaPeriodKey, context).block();
+        return getWithResponse(resourceGroupName, serviceName, quotaCounterKey, quotaPeriodKey, Context.NONE)
+            .getValue();
     }
 
     /**
      * Updates an existing quota counter value in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param quotaCounterKey Quota counter key identifier.This is the result of expression defined in counter-key
      *     attribute of the quota-by-key policy.For Example, if you specify counter-key="boo" in the policy, then it’s
@@ -311,7 +300,7 @@ public final class QuotaByPeriodKeysClientImpl implements QuotaByPeriodKeysClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return quota counter details.
+     * @return quota counter details along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<QuotaCounterContractInner>> updateWithResponseAsync(
@@ -373,7 +362,7 @@ public final class QuotaByPeriodKeysClientImpl implements QuotaByPeriodKeysClien
     /**
      * Updates an existing quota counter value in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param quotaCounterKey Quota counter key identifier.This is the result of expression defined in counter-key
      *     attribute of the quota-by-key policy.For Example, if you specify counter-key="boo" in the policy, then it’s
@@ -385,7 +374,7 @@ public final class QuotaByPeriodKeysClientImpl implements QuotaByPeriodKeysClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return quota counter details.
+     * @return quota counter details along with {@link Response} on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<Response<QuotaCounterContractInner>> updateWithResponseAsync(
@@ -445,7 +434,7 @@ public final class QuotaByPeriodKeysClientImpl implements QuotaByPeriodKeysClien
     /**
      * Updates an existing quota counter value in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param quotaCounterKey Quota counter key identifier.This is the result of expression defined in counter-key
      *     attribute of the quota-by-key policy.For Example, if you specify counter-key="boo" in the policy, then it’s
@@ -456,7 +445,7 @@ public final class QuotaByPeriodKeysClientImpl implements QuotaByPeriodKeysClien
      * @throws IllegalArgumentException thrown if parameters fail the validation.
      * @throws ManagementException thrown if the request is rejected by server.
      * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return quota counter details.
+     * @return quota counter details on successful completion of {@link Mono}.
      */
     @ServiceMethod(returns = ReturnType.SINGLE)
     private Mono<QuotaCounterContractInner> updateAsync(
@@ -466,20 +455,43 @@ public final class QuotaByPeriodKeysClientImpl implements QuotaByPeriodKeysClien
         String quotaPeriodKey,
         QuotaCounterValueUpdateContract parameters) {
         return updateWithResponseAsync(resourceGroupName, serviceName, quotaCounterKey, quotaPeriodKey, parameters)
-            .flatMap(
-                (Response<QuotaCounterContractInner> res) -> {
-                    if (res.getValue() != null) {
-                        return Mono.just(res.getValue());
-                    } else {
-                        return Mono.empty();
-                    }
-                });
+            .flatMap(res -> Mono.justOrEmpty(res.getValue()));
     }
 
     /**
      * Updates an existing quota counter value in the specified service instance.
      *
-     * @param resourceGroupName The name of the resource group.
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
+     * @param serviceName The name of the API Management service.
+     * @param quotaCounterKey Quota counter key identifier.This is the result of expression defined in counter-key
+     *     attribute of the quota-by-key policy.For Example, if you specify counter-key="boo" in the policy, then it’s
+     *     accessible by "boo" counter key. But if it’s defined as counter-key="@("b"+"a")" then it will be accessible
+     *     by "ba" key.
+     * @param quotaPeriodKey Quota period key identifier.
+     * @param parameters The value of the Quota counter to be applied on the specified period.
+     * @param context The context to associate with this operation.
+     * @throws IllegalArgumentException thrown if parameters fail the validation.
+     * @throws ManagementException thrown if the request is rejected by server.
+     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
+     * @return quota counter details along with {@link Response}.
+     */
+    @ServiceMethod(returns = ReturnType.SINGLE)
+    public Response<QuotaCounterContractInner> updateWithResponse(
+        String resourceGroupName,
+        String serviceName,
+        String quotaCounterKey,
+        String quotaPeriodKey,
+        QuotaCounterValueUpdateContract parameters,
+        Context context) {
+        return updateWithResponseAsync(
+                resourceGroupName, serviceName, quotaCounterKey, quotaPeriodKey, parameters, context)
+            .block();
+    }
+
+    /**
+     * Updates an existing quota counter value in the specified service instance.
+     *
+     * @param resourceGroupName The name of the resource group. The name is case insensitive.
      * @param serviceName The name of the API Management service.
      * @param quotaCounterKey Quota counter key identifier.This is the result of expression defined in counter-key
      *     attribute of the quota-by-key policy.For Example, if you specify counter-key="boo" in the policy, then it’s
@@ -499,36 +511,8 @@ public final class QuotaByPeriodKeysClientImpl implements QuotaByPeriodKeysClien
         String quotaCounterKey,
         String quotaPeriodKey,
         QuotaCounterValueUpdateContract parameters) {
-        return updateAsync(resourceGroupName, serviceName, quotaCounterKey, quotaPeriodKey, parameters).block();
-    }
-
-    /**
-     * Updates an existing quota counter value in the specified service instance.
-     *
-     * @param resourceGroupName The name of the resource group.
-     * @param serviceName The name of the API Management service.
-     * @param quotaCounterKey Quota counter key identifier.This is the result of expression defined in counter-key
-     *     attribute of the quota-by-key policy.For Example, if you specify counter-key="boo" in the policy, then it’s
-     *     accessible by "boo" counter key. But if it’s defined as counter-key="@("b"+"a")" then it will be accessible
-     *     by "ba" key.
-     * @param quotaPeriodKey Quota period key identifier.
-     * @param parameters The value of the Quota counter to be applied on the specified period.
-     * @param context The context to associate with this operation.
-     * @throws IllegalArgumentException thrown if parameters fail the validation.
-     * @throws ManagementException thrown if the request is rejected by server.
-     * @throws RuntimeException all other wrapped checked exceptions if the request fails to be sent.
-     * @return quota counter details.
-     */
-    @ServiceMethod(returns = ReturnType.SINGLE)
-    public Response<QuotaCounterContractInner> updateWithResponse(
-        String resourceGroupName,
-        String serviceName,
-        String quotaCounterKey,
-        String quotaPeriodKey,
-        QuotaCounterValueUpdateContract parameters,
-        Context context) {
-        return updateWithResponseAsync(
-                resourceGroupName, serviceName, quotaCounterKey, quotaPeriodKey, parameters, context)
-            .block();
+        return updateWithResponse(
+                resourceGroupName, serviceName, quotaCounterKey, quotaPeriodKey, parameters, Context.NONE)
+            .getValue();
     }
 }

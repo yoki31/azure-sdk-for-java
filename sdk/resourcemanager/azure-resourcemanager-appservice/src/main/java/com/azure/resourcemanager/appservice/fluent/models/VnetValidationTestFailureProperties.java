@@ -5,15 +5,13 @@
 package com.azure.resourcemanager.appservice.fluent.models;
 
 import com.azure.core.annotation.Fluent;
-import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** VnetValidationTestFailure resource specific properties. */
+/**
+ * VnetValidationTestFailure resource specific properties.
+ */
 @Fluent
 public final class VnetValidationTestFailureProperties {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VnetValidationTestFailureProperties.class);
-
     /*
      * The name of the test that failed.
      */
@@ -21,15 +19,20 @@ public final class VnetValidationTestFailureProperties {
     private String testName;
 
     /*
-     * The details of what caused the failure, e.g. the blocking rule name,
-     * etc.
+     * The details of what caused the failure, e.g. the blocking rule name, etc.
      */
     @JsonProperty(value = "details")
     private String details;
 
     /**
+     * Creates an instance of VnetValidationTestFailureProperties class.
+     */
+    public VnetValidationTestFailureProperties() {
+    }
+
+    /**
      * Get the testName property: The name of the test that failed.
-     *
+     * 
      * @return the testName value.
      */
     public String testName() {
@@ -38,7 +41,7 @@ public final class VnetValidationTestFailureProperties {
 
     /**
      * Set the testName property: The name of the test that failed.
-     *
+     * 
      * @param testName the testName value to set.
      * @return the VnetValidationTestFailureProperties object itself.
      */
@@ -49,7 +52,7 @@ public final class VnetValidationTestFailureProperties {
 
     /**
      * Get the details property: The details of what caused the failure, e.g. the blocking rule name, etc.
-     *
+     * 
      * @return the details value.
      */
     public String details() {
@@ -58,7 +61,7 @@ public final class VnetValidationTestFailureProperties {
 
     /**
      * Set the details property: The details of what caused the failure, e.g. the blocking rule name, etc.
-     *
+     * 
      * @param details the details value to set.
      * @return the VnetValidationTestFailureProperties object itself.
      */
@@ -69,7 +72,7 @@ public final class VnetValidationTestFailureProperties {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {

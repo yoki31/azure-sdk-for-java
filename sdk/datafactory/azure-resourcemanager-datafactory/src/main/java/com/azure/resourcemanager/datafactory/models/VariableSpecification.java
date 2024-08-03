@@ -6,14 +6,13 @@ package com.azure.resourcemanager.datafactory.models;
 
 import com.azure.core.annotation.Fluent;
 import com.azure.core.util.logging.ClientLogger;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** Definition of a single variable for a Pipeline. */
+/**
+ * Definition of a single variable for a Pipeline.
+ */
 @Fluent
 public final class VariableSpecification {
-    @JsonIgnore private final ClientLogger logger = new ClientLogger(VariableSpecification.class);
-
     /*
      * Variable type.
      */
@@ -27,8 +26,14 @@ public final class VariableSpecification {
     private Object defaultValue;
 
     /**
+     * Creates an instance of VariableSpecification class.
+     */
+    public VariableSpecification() {
+    }
+
+    /**
      * Get the type property: Variable type.
-     *
+     * 
      * @return the type value.
      */
     public VariableType type() {
@@ -37,7 +42,7 @@ public final class VariableSpecification {
 
     /**
      * Set the type property: Variable type.
-     *
+     * 
      * @param type the type value to set.
      * @return the VariableSpecification object itself.
      */
@@ -48,7 +53,7 @@ public final class VariableSpecification {
 
     /**
      * Get the defaultValue property: Default value of variable.
-     *
+     * 
      * @return the defaultValue value.
      */
     public Object defaultValue() {
@@ -57,7 +62,7 @@ public final class VariableSpecification {
 
     /**
      * Set the defaultValue property: Default value of variable.
-     *
+     * 
      * @param defaultValue the defaultValue value to set.
      * @return the VariableSpecification object itself.
      */
@@ -68,14 +73,15 @@ public final class VariableSpecification {
 
     /**
      * Validates the instance.
-     *
+     * 
      * @throws IllegalArgumentException thrown if the instance is not valid.
      */
     public void validate() {
         if (type() == null) {
-            throw logger
-                .logExceptionAsError(
-                    new IllegalArgumentException("Missing required property type in model VariableSpecification"));
+            throw LOGGER.atError()
+                .log(new IllegalArgumentException("Missing required property type in model VariableSpecification"));
         }
     }
+
+    private static final ClientLogger LOGGER = new ClientLogger(VariableSpecification.class);
 }
